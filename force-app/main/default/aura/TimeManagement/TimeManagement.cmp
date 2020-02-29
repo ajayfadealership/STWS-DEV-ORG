@@ -1,6 +1,6 @@
 <aura:component controller="TimeManagementController" implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction" access="global" >
     <aura:attribute name="today" type="Date" />
-     <aura:attribute name="objTimeM" type="Time_Management__c" default="{'sobjectType' : 'BOATBUILDING__Time_Management__c'}"/>
+     <aura:attribute name="objTimeM" type="Time_Management__c" default="{'sobjectType' : 'Time_Management__c'}"/>
     <aura:handler name="init" action="{!c.init}" value="{!this}" />
     <aura:attribute name="enableDayIn" type="Boolean" default="true"/>
     <aura:attribute name="enableDayOut" type="Boolean" default="true"/>

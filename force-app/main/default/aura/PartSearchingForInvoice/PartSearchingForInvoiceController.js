@@ -68,15 +68,17 @@
         component.set("v.selectedRecord",label);
         component.set("v.showPill", true);
         component.set("v.selectedRecordId",value);
-        component.set("v.objInv.PartNumber",label);
+        //component.set("v.objInv.PartNumber",label);
         var searchResultArray = component.get("v.searchResults");
         console.log('searchResultArray',searchResultArray);
         for(var i = 0; i < searchResultArray.length; i++){
 
             if(searchResultArray[i].PartId == value ){
                 console.log('searchResultArraysearchResultArraysearchResultArraysearchResultArray',searchResultArray[i]);
-                component.set("v.objInv.PartId",searchResultArray[i].PartId); 
-                component.set("v.objInv.Quantity",searchResultArray[i].quantity); 
+                component.set("v.objInv.PartName",searchResultArray[i].PartName); 
+                component.set("v.objInv.PartNumber",searchResultArray[i].PartNumber);
+                component.set("v.objInv.PartId",searchResultArray[i].PartId);
+                component.set("v.objInv.Quantity",searchResultArray[i].quantity);
                 component.set("v.objInv.Cost", searchResultArray[i].Cost);
                 component.set("v.objInv.partMSRP", searchResultArray[i].partMSRP);
                 if(typeof searchResultArray[i].quantity != "undefined" && typeof searchResultArray[i].partMSRP != "undefined");

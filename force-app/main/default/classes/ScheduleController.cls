@@ -4,8 +4,10 @@ public with sharing class ScheduleController {
     public String timeZone { get; set; }
     public Boolean techCheck { get; set; }
     public String UId { get; set; }
+    public String currentUser { get; set; }
     public ScheduleController()  {
         objTM = new BOATBUILDING__Time_Management__c();
+        currentUser = UserInfo.getUserId();
         techCheck = false;
         String currentUserRoleId = UserInfo.getUserRoleId();
         List<UserRole> lstUR = [Select Id, Name From UserRole Where Id =: currentUserRoleId Limit 1];
@@ -16,11 +18,11 @@ public with sharing class ScheduleController {
             }
         }
         timeZone = UserInfo.getTimeZone().toString();
-        UId = '';
+        UId = UserInfo.getUserId();
         User u = [Select Id, UserRoleId, UserRole.Name From User Where Id =: UserInfo.getUserId()];
         if(u.UserRoleId != null && u.UserRole.Name == 'Service Tech') {
             
-            UId = u.Id;
+            //UId = u.Id;
         }
     }
     
@@ -557,5 +559,37 @@ public with sharing class ScheduleController {
         }
         return 'SUCCESS';
     }
-    
+    @AuraEnabled
+    public static string getrecordType(){
+        String recTypeId = Schema.SObjectType.BOATBUILDING__Time_Management__c.getRecordTypeInfosByName().get('Schedule').getRecordTypeId();
+        return recTypeId;
+    }
+    @AuraEnabled
+    public static String updateTechOnALlJobs(String strTMId) {
+        try {
+            BOATBUILDING__Time_Management__c objTM = [SELECT 
+                                                                Id, Name, BOATBUILDING__Work_Order__c, BOATBUILDING__Technician__c, BOATBUILDING__Related_Work_Order_Job__c 
+                                                    FROM 
+                                                                BOATBUILDING__Time_Management__c Where Id =: strTMId];
+            if(objTM.BOATBUILDING__Related_Work_Order_Job__c != null) {
+                objTM.BOATBUILDING__Work_Order__c = null;
+                update objTM;
+            }
+            if(objTM.BOATBUILDING__Work_Order__c != null) {
+                List<BOATBUILDING__Work_Order_Job__c> lstJB = [SELECT Id FROM BOATBUILDING__Work_Order_Job__c WHERE BOATBUILDING__Completed__c = false AND BOATBUILDING__Work_Order_Warranty_Work_Order__c =: objTM.BOATBUILDING__Work_Order__c];  
+                if(!lstJB.isEmpty()) {
+                    for(BOATBUILDING__Work_Order_Job__c objJB: lstJB) {
+                        objJB.BOATBUILDING__Technician__c = objTM.BOATBUILDING__Technician__c;
+                    }
+                    update lstJB;
+                }
+            } 
+            
+            return 'SUCCESS';
+        } catch(Exception ex) {
+            System.debug('Error: '+ex.getMessage()+' Line Number: '+ex.getLineNumber());
+            return 'Error: '+ex.getMessage()+' Line Number: '+ex.getLineNumber()+' : '+ex.getStackTraceString();
+        }
+    }
+
 }

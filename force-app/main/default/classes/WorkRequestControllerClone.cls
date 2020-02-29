@@ -184,7 +184,10 @@ public with sharing class WorkRequestControllerClone {
         if(mapWrkReqValues.get('HIN') != null) {
             objWO.HIN_Number__c = mapWrkReqValues.get('HIN');
         }
-         if(mapWrkReqValues.get('HIN') != null && !lstItem.isEmpty() && String.isNotBlank(lstItem[0].BOATBUILDING__Boat_HIN_No__c))  {
+        if(mapWrkReqValues.get('Boat') != null) {
+            objWO.Boat__c = mapWrkReqValues.get('Boat');   
+        }
+        if(mapWrkReqValues.get('HIN') != null && !lstItem.isEmpty() && String.isNotBlank(lstItem[0].BOATBUILDING__Boat_HIN_No__c))  {
              objWO.BOATBUILDING__Boat__c = lstItem[0].Id;
         }
         if(mapWrkReqValues.get('vendors') != null) {
@@ -197,6 +200,7 @@ public with sharing class WorkRequestControllerClone {
             objWO.BOATBUILDING__WO_for__c = mapWrkReqValues.get('Wofors');
             
         }
+        
         if(mapWrkReqValues.get('invoicefors') != null) {
             objWO.BOATBUILDING__Invoice_for__c = mapWrkReqValues.get('invoicefors');
         }
@@ -310,8 +314,10 @@ public with sharing class WorkRequestControllerClone {
                                               Assigned_to__c,
                                               Assigned_to__r.Name,
                                               Status__c,
+                                              BOATBUILDING__Boat__c,
+                                              BOATBUILDING__Boat__r.Name,
                                               Request_Type__c
-                                              
+                                               
                                               FROM 
                                               BOATBUILDING__Work_Order__c
                                               WHERE  
@@ -326,5 +332,9 @@ public with sharing class WorkRequestControllerClone {
         
         
     }
-    
+    @RemoteAction
+	public static BOATBUILDING__Item__c fetchItem(String strItemId) {
+        List<BOATBUILDING__Item__c> lstItem = (List<BOATBUILDING__Item__c>)WorkRequestLightningCompController.fetchItem(strItemId);
+		return lstItem[0];
+	}
 }

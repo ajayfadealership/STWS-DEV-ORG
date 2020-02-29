@@ -13,6 +13,13 @@
     handleSuccess : function(component, event, helper) {
         var payload = event.getParams().response;
         console.log(payload.id);
+        var errorEvent = $A.get("e.force:showToast");
+        errorEvent.setParams({ 
+            "type" : "success",
+            "title": "Success!",
+            "message": "Work Request Created."
+        });
+        errorEvent.fire(); 
         component.set("v.showform", false);
         component.set("v.showlist", true);
         var action = component.get("c.cpOfWR");

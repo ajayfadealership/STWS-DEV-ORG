@@ -35,7 +35,7 @@
             <aura:if isTrue="{!v.showPill}">
                 <label class="slds-form-element__label">Technician</label>
                 <div class="slds-form-element__control">
-                    <lightning:pill label="{!v.objUser.Name}" title="{!v.objUser.Name}" onremove="{!c.removeUser}">
+                    <lightning:pill label="{!v.objUser.Name}" title="{!v.objUser.Name}"  onremove="{!c.removeUser}">
                         <aura:set attribute="media">
                             <lightning:icon iconName="standard:account"  alternativeText="Account"/>
                         </aura:set>

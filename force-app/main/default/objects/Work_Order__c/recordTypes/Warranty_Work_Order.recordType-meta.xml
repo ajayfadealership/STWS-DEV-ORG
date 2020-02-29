@@ -203,6 +203,10 @@
             <default>false</default>
         </values>
         <values>
+            <fullName>Warranty Review</fullName>
+            <default>false</default>
+        </values>
+        <values>
             <fullName>Warranty Waiting on Approval</fullName>
             <default>false</default>
         </values>

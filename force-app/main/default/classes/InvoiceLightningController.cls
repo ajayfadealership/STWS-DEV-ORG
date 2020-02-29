@@ -103,10 +103,10 @@ public class InvoiceLightningController {
                 
                 PartSearchResult objPSR = new PartSearchResult();
                 objPSR.PartId = objInv.Id;
-                objPSR.partName =   objInv.Name;
-                objPSR.partNumber = objInv.BOATBUILDING__Part_Number__c;
+                objPSR.PartName =   objInv.Name;
+                objPSR.PartNumber = objInv.BOATBUILDING__Part_Number__c;
                 objPSR.isInventoryPart = false;
-                objPSR.partNumber = objInv.BOATBUILDING__Part_Number__c;
+                //objPSR.partNumber = objInv.BOATBUILDING__Part_Number__c;
                 
                 objPSR.partMSRP = objInv.BOATBUILDING__Retail_Price__c;
                 objPSR.Cost = objInv.BOATBUILDING__Part_Cost__c;
@@ -147,8 +147,8 @@ public class InvoiceLightningController {
                 if(dataNode.containsKey('PartId')){
                     objInLI.BOATBUILDING__Part__c = String.valueOf(dataNode.get('PartId'));
                 }
-                if(dataNode.containsKey('partName')){
-                    objInLI.Name = String.valueOf(dataNode.get('partName'));
+                if(dataNode.containsKey('PartName')){
+                    objInLI.Name = String.valueOf(dataNode.get('PartName'));
                 }
                 if(dataNode.containsKey('Id') && dataNode.get('Id') != null){
                     objInLI.Id = String.valueOf(dataNode.get('Id'));
@@ -156,20 +156,20 @@ public class InvoiceLightningController {
                 if(dataNode.containsKey('PartNumber')){
                     objInLI.BOATBUILDING__Part_Number__c = String.valueOf(dataNode.get('PartNumber'));
                 }
-                if(dataNode.containsKey('Quantity')){
+                if(dataNode.containsKey('Quantity') && dataNode.get('Quantity') != null){
                     objInLI.BOATBUILDING__Quantity__c = Integer.valueOf(dataNode.get('Quantity'));
                 }
-                if(dataNode.containsKey('partMSRP')){
-                    objInLI.BOATBUILDING__Part_Cost__c = Integer.valueOf(dataNode.get('partMSRP'));
+                if(dataNode.containsKey('partMSRP') && String.isNotBlank(String.valueOf(dataNode.get('partMSRP')))){
+                    objInLI.BOATBUILDING__Part_Cost__c = Decimal.valueOf(String.valueOf(dataNode.get('partMSRP')));
                 }
-                if(dataNode.containsKey('Cost')){
-                    objInLI.BOATBUILDING__Dealer_Price__c = Integer.valueOf(dataNode.get('Cost'));
+                if(dataNode.containsKey('Cost') && String.isNotBlank(String.valueOf(dataNode.get('Cost')))){
+                    objInLI.BOATBUILDING__Dealer_Price__c = Decimal.valueOf(String.valueOf(dataNode.get('Cost')));
                 }
-                if(dataNode.containsKey('discountPer')){
-                    objInLI.BOATBUILDING__Discount_in_Percent__c = Integer.valueOf(dataNode.get('discountPer'));
+                if(dataNode.containsKey('discountPer') && String.isNotBlank(String.valueOf(dataNode.get('discountPer')))){
+                    objInLI.BOATBUILDING__Discount_in_Percent__c = Decimal.valueOf(String.valueOf(dataNode.get('discountPer')));
                 }
-                if(dataNode.containsKey('discount')){
-                    objInLI.BOATBUILDING__Discount_Price__c =  Integer.valueOf(dataNode.get('discount'));
+                if(dataNode.containsKey('discount') && String.isNotBlank(String.valueOf(dataNode.get('discount')))){
+                    objInLI.BOATBUILDING__Discount_Price__c =  Decimal.valueOf(String.valueOf(dataNode.get('discount')));
                 }
                 
                 lstInLi.add(objInLI); 

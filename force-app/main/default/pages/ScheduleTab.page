@@ -1,0 +1,8 @@
+<apex:page id="pge" lightningStylesheets="True" standardStylesheets="false">
+    <apex:slds />
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" />
+    <apex:includeScript value="{!URLFOR($Resource.FC, 'fullcalendar-3.4.0/FC/lib/jquery.min.js')}"/>
+    <apex:form id="frm">
+        <c:ScheduleLightning id="schdlCompCall"/>
+    </apex:form>
+</apex:page>

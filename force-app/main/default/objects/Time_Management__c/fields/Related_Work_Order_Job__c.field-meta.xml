@@ -5,6 +5,15 @@
     <deprecated>false</deprecated>
     <externalId>false</externalId>
     <label>Related Work Order Job</label>
+    <lookupFilter>
+        <active>false</active>
+        <filterItems>
+            <field>Work_Order_Job__c.Work_Order_Warranty_Work_Order__c</field>
+            <operation>equals</operation>
+            <valueField>$Source.Work_Order__c</valueField>
+        </filterItems>
+        <isOptional>true</isOptional>
+    </lookupFilter>
     <referenceTo>Work_Order_Job__c</referenceTo>
     <relationshipLabel>Time Management</relationshipLabel>
     <relationshipName>Time_Management</relationshipName>

@@ -77,6 +77,8 @@ public with sharing class ServicePageController {
         //to Refresh apex elements of vf page
     }
     
+    
+    
     @RemoteAction
     public static Boolean storeLocationStatus() {
         Store_Location__c objSL = Store_Location__c.getOrgDefaults();
@@ -84,9 +86,13 @@ public with sharing class ServicePageController {
     }
     
     public String baseUrlINV { get; set; }
-    
+    public Boolean partRequest { get; set; }
     // Constructor
     public ServicePageController() { 
+    	partRequest = true;
+    	if(UserInfo.getOrganizationId().contains('00D46000000Y3Kl')) {
+    		partRequest = false;
+    	}
         UR = ''; 
         User u = [Select Id, UserRoleId, UserRole.Name From User Where Id =: UserInfo.getUserId()];
         if(u.UserRoleId != null) {

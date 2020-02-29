@@ -3,7 +3,9 @@
     <fullName>Part_description__c</fullName>
     <deprecated>false</deprecated>
     <externalId>false</externalId>
-    <inlineHelpText>If the work request has multiple jobs please separate them with , The warranty job name must end with _w</inlineHelpText>
+    <inlineHelpText>Please enter work order jobs names separated by ( , ) (Comma). The Warranty should should have _w at their end.
+For Example :
+Job 1,Job 2_w</inlineHelpText>
     <label>Work Description</label>
     <length>131072</length>
     <trackFeedHistory>false</trackFeedHistory>

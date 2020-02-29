@@ -69,7 +69,15 @@
     <picklistValues>
         <picklist>Type__c</picklist>
         <values>
+            <fullName>Drop</fullName>
+            <default>false</default>
+        </values>
+        <values>
             <fullName>Event</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Pickup</fullName>
             <default>false</default>
         </values>
         <values>

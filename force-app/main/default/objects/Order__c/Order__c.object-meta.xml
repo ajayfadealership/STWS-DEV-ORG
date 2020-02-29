@@ -86,16 +86,20 @@
     </actionOverrides>
     <actionOverrides>
         <actionName>New</actionName>
-        <type>Default</type>
-    </actionOverrides>
-    <actionOverrides>
-        <actionName>New</actionName>
+        <content>OrderDetail</content>
         <formFactor>Large</formFactor>
-        <type>Default</type>
+        <skipRecordTypeSelect>true</skipRecordTypeSelect>
+        <type>LightningComponent</type>
     </actionOverrides>
     <actionOverrides>
         <actionName>New</actionName>
+        <content>OrderDetail</content>
         <formFactor>Small</formFactor>
+        <skipRecordTypeSelect>true</skipRecordTypeSelect>
+        <type>LightningComponent</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>New</actionName>
         <type>Default</type>
     </actionOverrides>
     <actionOverrides>
@@ -146,7 +150,7 @@
         <actionName>View</actionName>
         <type>Default</type>
     </actionOverrides>
-    <allowInChatterGroups>false</allowInChatterGroups>
+    <allowInChatterGroups>true</allowInChatterGroups>
     <compactLayoutAssignment>SYSTEM</compactLayoutAssignment>
     <deploymentStatus>Deployed</deploymentStatus>
     <deprecated>false</deprecated>
@@ -154,7 +158,7 @@
 Child Relationship with: Accounts and Contacts</description>
     <enableActivities>true</enableActivities>
     <enableBulkApi>false</enableBulkApi>
-    <enableFeeds>false</enableFeeds>
+    <enableFeeds>true</enableFeeds>
     <enableHistory>true</enableHistory>
     <enableLicensing>false</enableLicensing>
     <enableReports>true</enableReports>
@@ -166,10 +170,12 @@ Child Relationship with: Accounts and Contacts</description>
     <nameField>
         <displayFormat>Order No-{0000}</displayFormat>
         <label>Order No#</label>
+        <trackFeedHistory>false</trackFeedHistory>
         <trackHistory>false</trackHistory>
         <type>AutoNumber</type>
     </nameField>
     <pluralLabel>Orders</pluralLabel>
+    <recordTypeTrackFeedHistory>false</recordTypeTrackFeedHistory>
     <recordTypeTrackHistory>false</recordTypeTrackHistory>
     <searchLayouts>
         <customTabListAdditionalFields>RECORDTYPE</customTabListAdditionalFields>

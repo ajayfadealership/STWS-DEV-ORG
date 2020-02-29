@@ -24,7 +24,7 @@
                 onchange="{!c.handleKeyUp}"/>
                 <aura:iteration items="{!v.searchResults}" var="item" indexVar="i">
                     
-                    <li role="presentation" class="slds-listbox__item" data-value="{!item.PartId}" data-label="{!item.partName+'---'+item.partNumber}" data-selectedIndex="{#i}" 
+                    <li role="presentation" class="slds-listbox__item" data-value="{!item.PartId}" data-label="{!item.PartName+'---'+item.PartNumber}" data-selectedIndex="{#i}" 
                     onclick="{!c.itemSelected}">
                         <span id="{#'listbox-option-unique-id-'+i+1}"  
                               class="slds-media slds-listbox__option slds-listbox__option_entity 
@@ -38,7 +38,7 @@
                             <span class="slds-media__body singleRow">
                                 <span 
                                       class="optionTitle slds-listbox__option-text 
-                                    slds-listbox__option-text_entity" style="overflow:visible;">{!item.partName+'--'+item.partNumber+'--$'+item.partMSRP}</span>
+                                    slds-listbox__option-text_entity" style="overflow:visible;">{!item.PartName+'--'+item.PartNumber+'--$'+item.partMSRP}</span>
                             </span>
                         </span>
                     </li>
@@ -48,8 +48,8 @@
         <aura:if isTrue="{!v.showPill}">
             <label class="slds-form-element__label">Part Number</label>
             <div class="slds-form-element__control">
-                <lightning:pill label="{!v.objInv.PartNumber}" title="{!v.objInv.PartNumber}" onremove="{!c.removePart}">
-                    <aura:set attribute="media">
+                <lightning:pill label="{!v.objInv.PartName +' - '+ v.objInv.PartNumber}" title="{!v.objInv.PartName +' - '+ v.objInv.PartNumber}" onremove="{!c.removePart}">
+                    <aura:set attribute="media"> 
                         <lightning:icon iconName="standard:account"  alternativeText="Part"/>
                     </aura:set>
                 </lightning:pill>
@@ -60,7 +60,7 @@
 <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-7 slds-col--padded">
     <div class="slds-form-element">
         <div class="slds-form-element__control">
-            <lightning:input label="Quantity" type="number" messageWhenRangeUnderflow="Quantity should be greater than 0!" step="1" value="{!v.objInv.Quantity}" onchange="{!c.updateTotal}"/> 
+            <lightning:input label="Quantity" type="number"  dafault ="1"  step="1" messageWhenRangeUnderflow="Quantity should be greater than 0!"  value="{!v.objInv.Quantity}" onchange="{!c.updateTotal}"/> 
         </div> 
     </div>
 </div>
@@ -85,7 +85,7 @@
             <lightning:input label="Discount($)" aura:id="disdollar" type="currency" min="0.00"  value="{!v.objInv.discount}" onkeyup="{!c.disCalculationInDollar}" /> 
         </div> 
     </div>
-</div>
+</div> 
 <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-7 slds-col--padded">
     <div class="slds-form-element">
         <div class="slds-form-element__control">

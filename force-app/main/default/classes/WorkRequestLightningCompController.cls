@@ -128,5 +128,13 @@ public class WorkRequestLightningCompController {
 	public static Object fetchItem(String strItemId){
 		return [SELECT Id, Boat_HIN_No__c, Engine_SN__c, BOATBUILDING__Engine_1_Serial_Number__c, BOATBUILDING__Engine_2_Serial_Number__c, BOATBUILDING__Engine_3_Serial_Number__c, BOATBUILDING__Engine_4_Serial_Number__c, Boat_Manufacture_Date__c, Trailer_VIN__c, Boat_Manufacturer__c, Boat_Manufacturer__r.Name, Boat_Model__c, M_Boat_Year__c FROM BOATBUILDING__Item__c where Id =: strItemId];
 	}
-
+	@AuraEnabled
+	public static string cpOfWR(String wrId){
+		BOATBUILDING__Work_Order__c objWO = [Select Id, Name, BOATBUILDING__Assigned_to__c, CreatedDate, LastModifiedDate From BOATBUILDING__Work_Order__c Where Id =: wrId];
+		if(objWO.BOATBUILDING__Assigned_to__c != null
+			&& objWO.CreatedDate == objWO.LastModifiedDate) {
+			//PartRequestLightningCompController.doChatterPost(objWO.BOATBUILDING__Assigned_to__c, 'Work Request', objWO.Id);
+		}
+		return 'SUCCESS';
+	}
 }

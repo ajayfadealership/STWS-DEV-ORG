@@ -1,13 +1,15 @@
 public class TechWorkOrderHomeController {
     public TechWorkOrderHomeController() { }
     @AuraEnabled
-    public static List<WorkOrderWrapper> getTechnicianJobByDate(Integer dateRange){
+    public static List<WorkOrderWrapper> getTechnicianJobByDate(Integer dateRange, String technician){
         Set<String> setWOId = new Set<String>();
         List<BOATBUILDING__Time_Management__c> lstTimeMgmt = new List<BOATBUILDING__Time_Management__c>();
         Date dateRange1 = Date.Today().addDays(-dateRange) ;
         lstTimeMgmt = [SELECT Id, BOATBUILDING__Schedule_Date_Time__c, BOATBUILDING__Technician__c, 
                        BOATBUILDING__Related_Work_Order_Job__c,BOATBUILDING__Related_Work_Order_Job__r.BOATBUILDING__Work_Order_Warranty_Work_Order__c,
-                       BOATBUILDING__Work_Order__c,BOATBUILDING__Work_Order__r.Name,BOATBUILDING__Work_Order__r.BOATBUILDING__Contact__r.Name,BOATBUILDING__Work_Order__r.BOATBUILDING__BOAT__r.BOATBUILDING__Boat_HIN_No__c FROM BOATBUILDING__Time_Management__c WHERE BOATBUILDING__Technician__c =:UserInfo.getUserId() 
+                       BOATBUILDING__Work_Order__c,BOATBUILDING__Work_Order__r.Name,BOATBUILDING__Work_Order__r.BOATBUILDING__Contact__r.Name,
+                       BOATBUILDING__Work_Order__r.BOATBUILDING__BOAT__r.BOATBUILDING__Boat_HIN_No__c FROM BOATBUILDING__Time_Management__c 
+                       WHERE BOATBUILDING__Technician__c =:technician 
                        AND BOATBUILDING__Schedule_Date_Time__c <= TODAY AND BOATBUILDING__Schedule_Date_Time__c >= :dateRange1];   
         System.debug('>>>>>lstTimeMgmt'+ lstTimeMgmt);
         

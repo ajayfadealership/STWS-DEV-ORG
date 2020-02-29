@@ -6,7 +6,7 @@
     <formula>ROUND(Total_Amt_No_Shipping__c + Sales_Tax__c + Total_Shipping_Charges__c -  Discount__c,2)</formula>
     <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
     <inlineHelpText>Formula : Total Amount Due + Sales Tax + Total Shipping Charges</inlineHelpText>
-    <label>Deducted Total Due Amount</label>
+    <label>Total Amount</label>
     <precision>18</precision>
     <required>false</required>
     <scale>2</scale>

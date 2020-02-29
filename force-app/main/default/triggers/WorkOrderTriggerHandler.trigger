@@ -55,10 +55,98 @@ trigger WorkOrderTriggerHandler on Work_Order__c (before insert, after insert, b
             }
             update lstDF;
         }
+        if(trigger.isUpdate) {
+        	String strUsrId = '';
+        	String roleId = '';
+        	List<UserRole> lstRolePWM = [SELECT Id,Name FROM UserRole Where Name = 'Parts and Warranty Manager'];
+        	if(lstRolePWM.isEmpty()) {
+        		List<UserRole> lstRoleSM = [SELECT Id,Name FROM UserRole Where Name = 'Service Manager'];
+        		if(lstRoleSM.isEmpty()) {
+        			List<UserRole> lstRoleGM = [SELECT Id,Name FROM UserRole Where Name = 'GM'];
+        			if(!lstRoleGM.isEmpty()) {
+        				roleId = lstRoleGM[0].Id;
+        			}
+        		} else {
+        			roleId = lstRoleSM[0].Id;
+        		}
+        	} else {
+        		roleId = lstRolePWM[0].Id;
+        	}
+        	if(String.isNotBlank(roleId)) {
+        		List<User> lstU = [Select Id From User Where UserRoleId =: roleId];
+        		if(!lstU.isEmpty()) {
+        			strUsrId = lstU[0].Id;
+        		}
+        	}
+        	System.debug('>>>>: strUsrId  '+ strUsrId);
+        	List<ConnectApi.BatchInput> batchInputs = new List<ConnectApi.BatchInput>();
+    		String woRT = Schema.SObjectType.BOATBUILDING__Work_Order__c.getRecordTypeInfosByName().get('Work Order').getRecordTypeId();
+    		String wwoRT = Schema.SObjectType.BOATBUILDING__Work_Order__c.getRecordTypeInfosByName().get('Warranty Work Order').getRecordTypeId();
+    		List<Event> lstTask = new List<Event>();
+        	for(Work_Order__c objWO: trigger.new) {
+        		if(String.isBlank(strUsrId)) {
+        			strUsrId = objWO.OwnerId; 
+        		}
+        		if(objWO.RecordTypeId == woRT || objWO.RecordTypeId == wwoRT) {
+        			if(objWO.BOATBUILDING__Status__c != null && objWO.BOATBUILDING__Status__c.equalsIgnoreCase('Warranty Review') && objWO.BOATBUILDING__Status__c != trigger.oldMap.get(objWO.Id).BOATBUILDING__Status__c) {
+	                	ConnectApi.FeedItemInput feedItemInput = new ConnectApi.FeedItemInput();
+			            ConnectApi.MentionSegmentInput mentionSegmentInput = new ConnectApi.MentionSegmentInput();
+			            ConnectApi.MessageBodyInput messageBodyInput = new ConnectApi.MessageBodyInput();
+			            ConnectApi.TextSegmentInput textSegmentInput = new ConnectApi.TextSegmentInput();
+			            ConnectApi.EntityLinkSegmentInput entityLinkSegmentInput = new ConnectApi.EntityLinkSegmentInput();
+			            messageBodyInput.messageSegments = new List<ConnectApi.MessageSegmentInput>();
+		                //Mention user here
+		                mentionSegmentInput.id = strUsrId;  
+		                messageBodyInput.messageSegments.add(mentionSegmentInput);
+		                String strTC = objWO.Name+' is available for warranty review';
+		                strTC += '\n\n';
+		                textSegmentInput.text = strTC;
+		                messageBodyInput.messageSegments.add(textSegmentInput);
+		                
+		                entityLinkSegmentInput.entityId = objWO.Id;
+		                messageBodyInput.messageSegments.add(entityLinkSegmentInput);
+	                	ConnectApi.LinkCapabilityInput linkInput = new ConnectApi.LinkCapabilityInput();
+	                	if(objWO.RecordTypeId == woRT) {
+	                		
+	                		linkInput.url = System.Url.getSalesforceBaseURL().toExternalForm()+'/'+objWO.Id+'\n\n';
+	                	} else {
+	                		
+	                		linkInput.url = System.Url.getSalesforceBaseURL().toExternalForm()+'/'+objWO.Id+'\n\n';
+	                	}
+	                	linkInput.urlName = 'Click here to open in Service App';
+						ConnectApi.FeedElementCapabilitiesInput feedElementCapabilitiesInput = new ConnectApi.FeedElementCapabilitiesInput();
+						feedElementCapabilitiesInput.link = linkInput;
+						feedItemInput.capabilities = feedElementCapabilitiesInput;
+		                feedItemInput.body = messageBodyInput;
+		                feedItemInput.feedElementType = ConnectApi.FeedElementType.FeedItem;
+		                feedItemInput.subjectId = objWO.Id;
+		                
+		                ConnectApi.BatchInput batchInput = new ConnectApi.BatchInput(feedItemInput);
+		                batchInputs.add(batchInput);
+		                Event objTask = new Event();
+		                objTask.OwnerId = strUsrId;
+						objTask.Subject = objWO.Name+' is available for warranty review';
+						objTask.ActivityDate = Date.today();
+						objTask.WhatId = objWO.Id;
+						objTask.Description = System.Url.getSalesforceBaseURL().toExternalForm()+'/'+objWO.Id+'\n\n';
+						objTask.DurationInMinutes = 0;
+						objTask.ActivityDateTime = datetime.now();
+						lstTask.add(objTask);
+	                }
+        		}	
+        	}
+        	ConnectApi.BatchResult[] objCA_BR;
+            if(!Test.isRunningTest() && !batchInputs.isEmpty()) {
+				objCA_BR = ConnectApi.ChatterFeeds.postFeedElementBatch(Network.getNetworkId(), batchinputs);
+            } 
+        	insert lstTask;
+	        System.debug('Debug Log For objCA_BR: '+objCA_BR);
+        }
         if(trigger.isInsert) {
         	List<ConnectApi.BatchInput> batchInputs = new List<ConnectApi.BatchInput>();
         	String woRT = Schema.SObjectType.BOATBUILDING__Work_Order__c.getRecordTypeInfosByName().get('Work Order').getRecordTypeId();
         	String wwoRT = Schema.SObjectType.BOATBUILDING__Work_Order__c.getRecordTypeInfosByName().get('Warranty Work Order').getRecordTypeId();
+            String wrRT = Schema.SObjectType.BOATBUILDING__Work_Order__c.getRecordTypeInfosByName().get('Work Request').getRecordTypeId();
         	List<Event> lstTask = new List<Event>();
         	for(Work_Order__c objWO: trigger.new) {
         		if(objWO.RecordTypeId == woRT || objWO.RecordTypeId == wwoRT) {
@@ -86,10 +174,10 @@ trigger WorkOrderTriggerHandler on Work_Order__c (before insert, after insert, b
                 	ConnectApi.LinkCapabilityInput linkInput = new ConnectApi.LinkCapabilityInput();
                 	if(objWO.RecordTypeId == woRT) {
                 		
-                		linkInput.url = System.Url.getSalesforceBaseURL().toExternalForm()+'/apex/BOATBUILDING__ServicePage?type=WO&WOId='+objWO.Name+'\n\n';
+                		linkInput.url = System.Url.getSalesforceBaseURL().toExternalForm()+'/'+objWO.Id+'\n\n';
                 	} else {
                 		
-                		linkInput.url = System.Url.getSalesforceBaseURL().toExternalForm()+'/apex/BOATBUILDING__ServicePage?type=WWO&WWOId='+objWO.Name+'\n\n';
+                		linkInput.url = System.Url.getSalesforceBaseURL().toExternalForm()+'/'+objWO.Id+'\n\n';
                 	}
                 	linkInput.urlName = 'Click here to open in Service App';
 					ConnectApi.FeedElementCapabilitiesInput feedElementCapabilitiesInput = new ConnectApi.FeedElementCapabilitiesInput();
@@ -102,7 +190,7 @@ trigger WorkOrderTriggerHandler on Work_Order__c (before insert, after insert, b
 	                ConnectApi.BatchInput batchInput = new ConnectApi.BatchInput(feedItemInput);
 	                batchInputs.add(batchInput);
 	                
-	                if(objWO.BOATBUILDING__Account__c != null) {
+	                if(objWO.BOATBUILDING__Account__c != null) { 
 		                Event objTask = new Event();
 						objTask.Subject = 'New Work Order is created, Work Order Number: ' + objWO.Name;
 						if(objWO.RecordTypeId == woRT) {
@@ -113,21 +201,26 @@ trigger WorkOrderTriggerHandler on Work_Order__c (before insert, after insert, b
 						objTask.ActivityDate = Date.today();
 						objTask.WhatId = objWO.BOATBUILDING__Account__c;
 						if(objWO.RecordTypeId == woRT) {
-	                		
-	                		objTask.Description = System.Url.getSalesforceBaseURL().toExternalForm()+'/apex/BOATBUILDING__ServicePage?type=WO&WOId='+objWO.Name+'\n\n';
+	                		objTask.Description = System.Url.getSalesforceBaseURL().toExternalForm()+'/'+objWO.Id+'\n\n';
 	                	} else {
 	                		
-	                		objTask.Description = System.Url.getSalesforceBaseURL().toExternalForm()+'/apex/BOATBUILDING__ServicePage?type=WWO&WWOId='+objWO.Name+'\n\n';
+	                		objTask.Description = System.Url.getSalesforceBaseURL().toExternalForm()+'/'+objWO.Id+'\n\n';
 	                	}
 						objTask.DurationInMinutes = 0;
 						objTask.ActivityDateTime = datetime.now();
 						lstTask.add(objTask);
 	                }
-        		}
+	                
+	                
+	                
+        		} 
+                else if(objWO.RecordTypeId == wrRT && objWO.BOATBUILDING__Assigned_to__c != null) {
+                    PartRequestLightningCompController.doChatterPost(objWO.BOATBUILDING__Assigned_to__c, 'Work Request', objWO.Id);
+                }
 		                
         	}
             ConnectApi.BatchResult[] objCA_BR;
-            if(!Test.isRunningTest()) {
+            if(!Test.isRunningTest() && !batchInputs.isEmpty()) {
 				objCA_BR = ConnectApi.ChatterFeeds.postFeedElementBatch(Network.getNetworkId(), batchinputs);
             } 
         	insert lstTask;

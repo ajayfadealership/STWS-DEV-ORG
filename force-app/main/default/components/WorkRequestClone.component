@@ -109,7 +109,14 @@
                         </div>
                     </div>
                 </div>
-                
+                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                    <div class="slds-form-element">
+                        <label class="slds-form-element__label">Boat</label>
+                        <div class="slds-form-element__control">
+                            <apex:inputField value="{!objWO.Boat__c}" styleClass="slds-input" id="BoatLkup" onchange="getBoatInfo();"/>
+                        </div>
+                    </div>
+                </div>
                 <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
                     <div class="slds-form-element">
                         <label class="slds-form-element__label">Boat Make</label>
@@ -395,6 +402,7 @@
                 var EngineYear =   document.getElementById("pge:frm:WorkRequestCompCall:wrkReqComp:engyear").value;   
                 var WorkRequestStatus =   document.getElementById("pge:frm:WorkRequestCompCall:wrkReqComp:status").value;
                 var HIN =   document.getElementById("pge:frm:WorkRequestCompCall:wrkReqComp:hin").value;
+                var boatId =   document.getElementById("pge:frm:WorkRequestCompCall:wrkReqComp:BoatLkup_lkid").value;
                 var assingedTo = '';
                 console.log(document.getElementById("pge:frm:WorkRequestCompCall:wrkReqComp:Assignedto_lkid").value)
                 if(document.getElementById("pge:frm:WorkRequestCompCall:wrkReqComp:Assignedto_lkid").value != '000000000000000') {
@@ -426,6 +434,7 @@
                     mapWorkRequest["assingedTo"] = assingedTo != "000000000000000" ? assingedTo : null;
                     mapWorkRequest["WorkRequestStatus"] = WorkRequestStatus;
                     mapWorkRequest["prtReq"] = 'Work Request';
+                    mapWorkRequest["Boat"] = boatId
                     $('.popup').addClass('active');
                     BOATBUILDING.WorkRequestControllerClone.createWorkRequest(mapWorkRequest,strBase64, files[0].name,function(result, event) {
                         $('.popup').removeClass('active');
@@ -594,6 +603,11 @@
                     if(result[0].BOATBUILDING__Status__c != undefined) {
                         document.getElementById("pge:frm:WorkRequestCompCall:wrkReqComp:status").value = result[0].BOATBUILDING__Status__c;
                     }
+                    if(result[0].BOATBUILDING__Boat__c != undefined) {
+                        //document.getElementById("pge:frm:WorkRequestCompCall:wrkReqComp:status").value = result[0].BOATBUILDING__Status__c;
+                        document.getElementById("pge:frm:WorkRequestCompCall:wrkReqComp:BoatLkup_lkid").value = result[0].BOATBUILDING__Boat__c;
+                        document.getElementById("pge:frm:WorkRequestCompCall:wrkReqComp:BoatLkup").value = result[0].BOATBUILDING__Boat__r.Name;
+                    }
                     
                     createWRFormCall();
                     document.getElementById("crtWrkReq1").innerHTML = "Update";
@@ -619,7 +633,26 @@
             
         },{buffer: true, escape: true, timeout: 120000});
     }
-    
+    function getBoatInfo() {
+        var boatId = document.getElementById("pge:frm:WorkRequestCompCall:wrkReqComp:BoatLkup_lkid").value;
+        var boatName = document.getElementById("pge:frm:WorkRequestCompCall:wrkReqComp:BoatLkup").value;
+        if(boatId != '000000000000000' && boatName != '')  {
+            BOATBUILDING.WorkRequestControllerClone.fetchItem(boatId, function(result, event) {
+                console.log(result);
+                if(event.status) {
+                    document.getElementById("pge:frm:WorkRequestCompCall:wrkReqComp:Boatmake").value = result.BOATBUILDING__Boat_Manufacturer__c != undefined ? result.BOATBUILDING__Boat_Manufacturer__r.Name : '';
+                    document.getElementById("pge:frm:WorkRequestCompCall:wrkReqComp:boatmodle").value = result.BOATBUILDING__Boat_Model__c != undefined ? result.BOATBUILDING__Boat_Model__c : '';
+                    document.getElementById("pge:frm:WorkRequestCompCall:wrkReqComp:boatyear").value = result.BOATBUILDING__M_Boat_Year__c != undefined ? result.BOATBUILDING__M_Boat_Year__c : '';
+                    document.getElementById("pge:frm:WorkRequestCompCall:wrkReqComp:hin").value = result.BOATBUILDING__Boat_HIN_No__c != undefined ? result.BOATBUILDING__Boat_HIN_No__c : '';
+                }
+            });
+        } else {
+            document.getElementById("pge:frm:WorkRequestCompCall:wrkReqComp:Boatmake").value = '';
+            document.getElementById("pge:frm:WorkRequestCompCall:wrkReqComp:boatmodle").value = '';
+            document.getElementById("pge:frm:WorkRequestCompCall:wrkReqComp:boatyear").value = ''; 
+            document.getElementById("pge:frm:WorkRequestCompCall:wrkReqComp:hin").value = '';
+        }
+    }
     </script>
     
     <script>

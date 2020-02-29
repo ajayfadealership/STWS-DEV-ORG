@@ -40,8 +40,15 @@
                     });
                     errorEvent.fire(); 
                     if(component.get("v.objRecId") == null || component.get("v.objRecId") == "" || component.get("v.objRecId") == undefined) {
-                        component.set("v.showform", false);
-                        component.set("v.showlist", true); 
+                        //component.set("v.showform", false);
+                        //component.set("v.showlist", true); 
+                        var urlEvent = $A.get("e.force:navigateToURL");
+                        var urlStr = "/"+payload.id;
+                        urlEvent.setParams({
+                            "url": urlStr
+                        });
+                        urlEvent.fire();
+                        $A.get("e.force:closeQuickAction").fire();
                     } else {
                         helper.getLineItemHelper(component, component.get("v.objRecId"));
                     }

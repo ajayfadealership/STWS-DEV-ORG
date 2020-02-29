@@ -271,9 +271,14 @@ public with sharing class TechWorkOrderControllerClone {
                                                             Clock_In__c, 
                                                             Clock_Out__c, 
                                                             Number_of_Hours_Worked__c,
-                                                            Related_to_Job__c,
+                                                            Related_Work_Order_Job__c,
                                                             Related_to_Job__r.Worked_Hours__c,
-                                                            Status__c,Service_writer_comment__c,Related_Work_Order_Job__r.Worked_Hours__c
+                                                            Status__c,Service_writer_comment__c,Related_Work_Order_Job__r.Worked_Hours__c,
+                                                            Related_Work_Order_Job__r.Name,
+                                                            Related_Work_Order_Job__r.Job_Name__c,
+                                                            Related_Work_Order_Job__r.BOATBUILDING__Work_Order_Warranty_Work_Order__c,
+                                                            Related_Work_Order_Job__r.BOATBUILDING__Work_Order_Warranty_Work_Order__r.BOATBUILDING__Account__c,
+                                                            Related_Work_Order_Job__r.BOATBUILDING__Work_Order_Warranty_Work_Order__r.BOATBUILDING__Contact__c
                                                     From 
                                                             BOATBUILDING__Time_Management__c 
                                                     where 
@@ -287,9 +292,15 @@ public with sharing class TechWorkOrderControllerClone {
                 SelectedTimeEntry.Service_writer_comment__c = (servicewritercom != null ? servicewritercom :'');
                 try{
                     update SelectedTimeEntry;
+                	RecordEventActivityController.addCustomerComment('Tech Comment @ '+SelectedTimeEntry.Related_Work_Order_Job__r.Job_Name__c,
+							                    						servicewritercom, 
+							                    							SelectedTimeEntry.Related_Work_Order_Job__c, 
+							                    								SelectedTimeEntry.Related_Work_Order_Job__r.BOATBUILDING__Work_Order_Warranty_Work_Order__r.BOATBUILDING__Contact__c, 
+							                    									SelectedTimeEntry.Related_Work_Order_Job__r.BOATBUILDING__Work_Order_Warranty_Work_Order__r.BOATBUILDING__Account__c, 'Tech Comment');
+                    
                 }
                 catch(Exception ex) {
-                    System.debug('Debug Log for Exception while updating Comment on TimeSheet' +ex);
+                    System.debug('Debug Log for Exception while updating Comment on TimeSheet' +ex.getMessage()+' : '+ex.getLineNumber()+' : '+ex.getStackTraceString());
                     return null;
                 }
                 return SelectedTimeEntry;

@@ -657,6 +657,8 @@
                 </div>     
                 <div style="padding: 1%; border-bottom: 1px solid #ccc;" >
                     <c:ServiceGlobalSearch />
+<!--                     <marquee behavior="scroll" direction="left" style="color: red;">This service module is going to be outdated soon. Please reach out to us to schedule your trainings for new Service App.</marquee> -->
+                    
                 </div>
                 
                 <script>
@@ -774,7 +776,13 @@
                                         </ul>
                                         <!-- tab section     -->
                                         <div id="tab-default-13" class="slds-tabs--default__content slds-show" role="tabpanel" aria-labelledby="tab-default-13__item" style="padding: 2%;">
-                                            <c:PartRequestComponent id="PartRequestCompCall"/>
+                                        
+                                         	<apex:outputPanel rendered="{!partRequest}">
+                                            	<c:PartRequestComponent id="PartRequestCompCall"/>
+                                            </apex:outputPanel>
+                                            <apex:outputPanel rendered="{!NOT(partRequest)}">
+                                            	It is an old system, kindly use the new module.
+                                            </apex:outputPanel>
                                         </div>
                                         <div id="tab-default-1" class="slds-tabs--default__content slds-hide" role="tabpanel" aria-labelledby="tab-default-1__item">
                                             <c:Vendor id="vndrCompCall" />
@@ -1270,8 +1278,13 @@
                                             
                                         </ul>
                                         <div id="tab-default-7" class="slds-tabs--default__content slds-show" role="tabpanel" aria-labelledby="tab-default-7__item" style="padding: 2%;">
-                                            <c:WorkRequestClone id="WorkRequestCompCall"/>
                                             
+                                            <apex:outputPanel rendered="{!partRequest}">
+                                            	<c:WorkRequestClone id="WorkRequestCompCall"/>
+                                            </apex:outputPanel>
+                                            <apex:outputPanel rendered="{!NOT(partRequest)}">
+                                            	It is an old system, kindly use the new module.
+                                            </apex:outputPanel>
                                         </div>
                                         <div id="tab-default-8" class="slds-tabs--default__content slds-hide" role="tabpanel" aria-labelledby="tab-default-8__item">
                                             <c:WorkOrderClone id="wrkOrdrCompCall"/> 
@@ -1467,6 +1480,11 @@
                                 
                             } else if(windowURL.indexOf("schedule") !== -1) {
                                openCity(event, 'schedule');
+//                                if(windowURL.indexOf("scheduleWOId") !== -1 && if(windowURL.indexOf("scheduleWOName") !== -1) {) {
+// 	                               	var woId = "{!$CurrentPage.parameters.scheduleWOId}";
+// 	                               	var woName = "{!$CurrentPage.parameters.scheduleWOId}";
+// 	                               	redirectToScedule(woId, woName); 
+//                                }
                             } else if(windowURL.indexOf("WWO") !== -1) {
                                 console.log('WWO')
                                openCity(event, 'workReq');

@@ -1,0 +1,17 @@
+<aura:component implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction" access="global" controller="RefundInvoiceLightning" >
+    <aura:attribute name="recordId" type="String" />
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    <lightning:recordEditForm aura:id="InvoID"  recordTypeId="{!v.InvRecordTypeId}" recordId="{!v.recordId}" objectApiName="BOATBUILDING__Invoice__c" >
+        <div class=" slds-border_top slds-box slds-theme_default">
+            <div class="slds-grid slds-grid--vertical-align-center slds-grid--align-center">
+                <div class="slds-col slds-size--1-of-1 slds-medium-size--2-of-6 slds-col--padded">
+                    <div class="slds-form-element">
+                        <div class="slds-form-element__control">
+                            <lightning:input aura:id="rfndAmt" type="number" name="input7" label="Refund Amount"  /> 
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </lightning:recordEditForm>
+</aura:component>

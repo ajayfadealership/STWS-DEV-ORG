@@ -26,7 +26,7 @@ public with sharing class RefundProcessController {
         if(ApexPages.currentPage().getParameters().get('Id') != null) {
             objInvoice = [SELECT 
                                     Id,
-                                    
+                                    Name,
                                     Customer_Name__c,
                                     Phone_Number__c,
                                     Email__c,

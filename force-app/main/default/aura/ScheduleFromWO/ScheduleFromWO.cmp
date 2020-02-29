@@ -1,0 +1,58 @@
+<aura:component access="global" controller="ScheduleController" implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction">
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    <aura:attribute name="recordTypeId" type="String" default=""/>
+    <aura:attribute name="type" type="String" default=""/>
+    <aura:attribute name="isPD" type="Boolean" default=""/>
+    <aura:attribute name="showSpinner" type="boolean" default="false" access="global"/>
+    <aura:if isTrue="{!v.showSpinner}">
+        <lightning:spinner  variant= "brand"/>
+    </aura:if>
+    <lightning:recordEditForm objectApiName="BOATBUILDING__Time_Management__c" recordTypeId="{!v.recordTypeId}" aura:id="scheduleForm"  onsuccess="{!c.onRecordSuccess}">
+        <div class = "slds-col slds-size--1-of-1">
+            <div class = "slds-grid slds-wrap" >
+                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-2 slds-large-size--1-of-2 slds-p-top_small">
+                    <span style="display: none;">
+                        <lightning:inputField fieldName="BOATBUILDING__Type__c" value="{!v.type}" variant="label-stacked"/>
+                    </span>
+                    <lightning:select value="{!v.type}" label="Type" required="true" aura:id="type" onchange="{!c.updateCustomerlookup}"> 
+                        <Option value="Standard">Standard</Option>
+                        <Option value="Pickup">Pickup</Option>
+                        <Option value="Drop">Drop</Option>
+                    </lightning:select> 
+                </div>
+                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-2 slds-large-size--1-of-2 slds-p-top_small">
+                    <aura:if isTrue="{!v.isPD}">
+                        <lightning:inputField fieldName="BOATBUILDING__Contact__c" variant="label-stacked"/>
+                    </aura:if>           
+                </div>
+                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-2 slds-large-size--1-of-2 slds-p-top_small">
+                    <lightning:inputField fieldName="BOATBUILDING__Work_Order__c" disabled="true" required="true" value="{!v.recordId}" variant="label-stacked"/>
+                </div>
+                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-2 slds-large-size--1-of-2 slds-p-top_small">
+                    <lightning:inputField fieldName="BOATBUILDING__Related_Work_Order_Job__c" variant="label-stacked"/>
+                </div>
+                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-2 slds-large-size--1-of-2 slds-p-top_small">
+                    <lightning:inputField fieldName="BOATBUILDING__Technician__c" variant="label-stacked" required="true"/>
+                </div>
+                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-2 slds-large-size--1-of-2 slds-p-top_small">
+                    &nbsp;
+                </div>
+                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-2 slds-large-size--1-of-2 slds-p-top_small">
+                    <lightning:inputField fieldName="BOATBUILDING__Schedule_Date_Time__c" variant="label-stacked" required="true"/>
+                </div>
+                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-2 slds-large-size--1-of-2 slds-p-top_small">
+                    <lightning:inputField fieldName="BOATBUILDING__End_Schedule_Date_Time__c" variant="label-stacked" required="true"/>
+                </div>
+                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-2 slds-large-size--1-of-2 slds-p-top_small">
+                    <lightning:inputField fieldName="BOATBUILDING__Description__c" variant="label-stacked"/>
+                </div>
+                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-2 slds-large-size--1-of-2 slds-p-top_small">
+                    <lightning:inputField fieldName="BOATBUILDING__Service_Location__c" variant="label-stacked"/>
+                </div>
+                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-2 slds-large-size--1-of-2 slds-p-top_small">
+                    <lightning:button label="Save" type="submit" variant="brand"/>
+                </div>
+            </div>
+        </div>
+    </lightning:recordEditForm>
+</aura:component>

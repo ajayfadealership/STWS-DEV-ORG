@@ -174,7 +174,7 @@ public with sharing class OrderEditController {
     }
     
     @AuraEnabled
-    public static String addToInventoryWithBackOrderApex(String strOrderId, List<OrderEditWrapper> lstlistItem){
+    public static String addToInventoryWithBackOrder(String strOrderId, List<OrderEditWrapper> lstlistItem){
         String strResponse = addInventory(strOrderId, lstlistItem);
         if(!strResponse.containsIgnoreCase('error')) {
             try {
@@ -186,7 +186,7 @@ public with sharing class OrderEditController {
                         setPartNumbers.add(objOrderEditWrapper.partNo);
                     }
                 }
-                
+                 
                 if(isBackOrder) {
                     List<BOATBUILDING__Part__c> lstPart = [Select 
                                                             Bin__c, Vendor_Name__c,  Retail_Price__c,  Part_Number__c,  Name,  Id, Dealer_Price__c, Part_Cost__c, Category1__c, 

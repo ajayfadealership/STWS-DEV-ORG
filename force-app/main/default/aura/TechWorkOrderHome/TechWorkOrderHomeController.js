@@ -11,7 +11,9 @@
     },
     findWO : function(component, event, helper) {
         var selectedUser = component.get("v.objUserP");
-        console.log('>>>>>>>>>>findWO: ',selectedUser); 
+         var action = component.get("c.getTechnicianJobByDate");
+        action.setParams({"technician" : selectedUser.Id});
+        console.log('>>>>>>>>>>findWO>>selectedUser: ',selectedUser.Id); 
     },
     getWOList : function(component, event, helper){
         var action = component.get("c.getTechnicianJobByDate");

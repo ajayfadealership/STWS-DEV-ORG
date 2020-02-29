@@ -56,20 +56,54 @@ System.debug('Debug Log For Exception: ' + ex);
     }
        
     public static void addInventoryByPart( list<Part__c> lstPart){
-        for (Part__c objPart : lstPart) {
-            if(objPart.Add_Inventory__c == true){
+        List<BOATBUILDING__Inventory__c> lstLst = new List<BOATBUILDING__Inventory__c>();
+        for (Part__c objPrt : lstPart) {
+            if(objPrt.Add_Inventory__c == true){
                 BOATBUILDING__Inventory__c objInv = new BOATBUILDING__Inventory__c();
-                objInv.BOATBUILDING__Part__c = objPart.Id;
+                objInv.BOATBUILDING__Part__c = objPrt.Id;
                 objInv.RecordTypeId = Schema.SObjectType.BOATBUILDING__Inventory__c.getRecordTypeInfosByName().get('Inventory for Parts').getRecordTypeId();
-                if (objPart.BOATBUILDING__Vendor_Name__c != null) { 
-                    objInv.BOATBUILDING__Vendor__c = objPart.BOATBUILDING__Vendor_Name__c;
-                    objInv.BOATBUILDING__Category__c = objPart.BOATBUILDING__Category1__c;
-                    objInv.BOATBUILDING__Cost__c =  objPart.BOATBUILDING__Part_Cost__c;
-                    objInv.BOATBUILDING__Part_Number__c = objPart.BOATBUILDING__Part_Number__c;
+                if (objPrt.BOATBUILDING__Vendor_Name__c != null) { 
+                    objInv.Part_Name__c = objPrt.Name;
+                    objInv.BOATBUILDING__Part_MSRP_Price__c = objPrt.Retail_Price__c;
+                    objInv.Part_Number__c = objPrt.Part_Number__c;
+                    objInv.BOATBUILDING__Vendor__c = objPrt.Vendor_Name__c;
+                    objInv.Cost__c = objPrt.Part_Cost__c;
+                    objInv.Bin__c = objPrt.Bin__c;
+                    objInv.BOATBUILDING__Category__c = objPrt.Category1__c;
+                    objInv.Discount__c = objPrt.Discount__c;
+                    objInv.Family__c = objPrt.Family1__c;
+                    objInv.Location__c = objPrt.Location__c;
+                    objInv.Map_Price__c = objPrt.Map_Price__c;
+                    objInv.Minimum_Amount__c = objPrt.Minimum_Amount__c;
+                    objInv.Color__c = objPrt.Part_Color__c;
+                    objInv.Size__c = objPrt.Part_Size__c;
+                    objInv.Taxable__c = objPrt.Taxable__c;
+                    if(objPrt.Weight__c != null && objPrt.Weight__c != ''){
+                        objInv.Weight__c = objPrt.Weight__c; 
+                    }
                 }
-                insert objInv;
+                //insert objInv;
+                lstLst.add(objInv);
             }
         }
+        insert lstLst;
+        List<String> pickListValuesList= new List<String>();
+        Schema.DescribeFieldResult fieldResult = Order__c.Store_Location__c.getDescribe();
+        List<Schema.PicklistEntry> ple = fieldResult.getPicklistValues();
+        for( Schema.PicklistEntry pickListVal : ple){
+            pickListValuesList.add(pickListVal.getLabel());
+        }  
+        List<BOATBUILDING__Parts_Availability__c> lstPA = new List<BOATBUILDING__Parts_Availability__c>();
+        for(BOATBUILDING__Inventory__c objInv: lstLst) {
+            for(String str: pickListValuesList) {
+                BOATBUILDING__Parts_Availability__c objPAIN = new BOATBUILDING__Parts_Availability__c();
+                objPAIN.BOATBUILDING__Store_Location__c = str;
+                objPAIN.BOATBUILDING__Inventory__c = objInv.Id;
+                objPAIN.BOATBUILDING__Quantity__c = 0;
+                lstPA.add(objPAIN);
+            } 
+        }
+        insert lstPA;
     }
     private static boolean run = true;
     public static boolean runOnce(){
