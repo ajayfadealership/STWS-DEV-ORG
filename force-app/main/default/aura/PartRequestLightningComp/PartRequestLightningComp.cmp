@@ -11,6 +11,8 @@
    <aura:if isTrue="{!v.showSpinner}">
         <lightning:spinner />
     </aura:if>
+
+    <!--test comment for test branch-->
     <lightning:recordEditForm aura:id="partreqId" recordId="{!v.recordId}" onload="{!c.handleLoad}" onsubmit="{!c.handleSubmit}"  onsuccess="{!c.handleSuccess}" recordTypeId="{!v.attrRecordType}" objectApiName="BOATBUILDING__Order__c">      
         <div class = "slds-col slds-size--1-of-1 slds-p-top_x-large">
             <div class = "slds-grid slds-wrap" >
