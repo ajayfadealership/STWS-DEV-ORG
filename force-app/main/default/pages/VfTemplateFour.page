@@ -1,0 +1,8 @@
+<apex:page controller="VfTemplateContrl">
+    <apex:pageblock >
+        <apex:pageblockTable value="{!CSTemp}" var="c">
+            <apex:column value="{!c.TemplateInfo__c}"/>
+        </apex:pageblockTable>
+       <apex:image url="{!URLFOR($Action.Attachment.Download, listInventory[0].attachments[0].id)}" />
+    </apex:pageblock>
+</apex:page>

@@ -1,0 +1,10 @@
+<aura:component > 
+	<aura:attribute name="objDO" type="DealerOptionWraper" />
+    <aura:attribute name="DealerOptionIdListCCCC" type="String[]"/>
+    <aura:attribute name="objDOCheck" type="BOOLEAN" />
+	<aura:registerEvent name="PPDOIdEvent" type="c:PPDOIdEvent"/> 
+    <aura:attribute name="newPLstDealerOptionWraperC" type="DealerOptionWraper[]"/>
+    
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/> 
+    <ui:inputCheckbox aura:id="ppdocheck" class="myCheckbox"  change="{!c.changePPDOOption}" value="{!v.objDOCheck}"/> 
+</aura:component>

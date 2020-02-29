@@ -1,0 +1,78 @@
+<aura:component controller="TimeManagementController" implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction" access="global" >
+    <aura:attribute name="today" type="Date" />
+     <aura:attribute name="objTimeM" type="Time_Management__c" default="{'sobjecttype' : 'BOATBUILDING__Time_Management__c'}"/>
+    <aura:handler name="init" action="{!c.init}" value="{!this}" />
+    <aura:attribute name="enableDayIn" type="Boolean" default="true"/>
+    <aura:attribute name="enableDayOut" type="Boolean" default="true"/>
+    <aura:attribute name="enableLunchIn" type="Boolean" default="true"/>
+    <aura:attribute name="enableLunchOut" type="Boolean" default="true"/>
+    <div class="background_img img-responsive">
+        <div class="slds-card login_box">
+            <div class="slds-card__header slds-grid">
+                <header class="slds-media slds-media--center slds-has-flexi-truncate">
+                    <div class="slds-media__body slds-truncate">
+                        <h2>
+                            <a href="javascript:void(0);" class="slds-text-link--reset">
+                                <span class="slds-text-heading--small">Time Management</span>
+                            </a>
+                        </h2>
+                        
+                    </div>
+                </header>
+                 <lightning:formattedDateTime aura:id="dt"
+                                     value="{!v.today}"
+                                     month="short"
+                                     day="numeric"
+                                     year="numeric"
+                                     hour="2-digit"
+                                     minute="2-digit"
+                                     second="2-digit"
+                                     hour12="true"
+                                     timeZone="{!$Locale.timezone}"/>
+            </div>
+            
+            <div class="slds-card__body">
+                <div class="slds-form-element slds-m-bottom--x-large">
+                    <div class="slds-form-element tab_mid">
+                        <center>
+                        <!--<a class="slds-button slds-button-brand" id="day_in_btn">Day In</a>
+                        <a class="slds-button slds-button-brand" id="lunch_out_btn">Lunch Out</a>
+                        <a class="slds-button slds-button-brand" id="lunch_in_btn">Lunch In</a>
+                        <a class="slds-button slds-button-brand" id="day_out_btn">Day Out</a> -->
+                        <lightning:buttonGroup>
+                            <lightning:button variant="brand" label="Day IN" onclick="{! c.foo }" disabled="{!v.enableDayIn}" />
+                            <lightning:button variant="brand" label="Lunch Out" onclick="{! c.foo }" disabled="{!v.enableLunchOut}" />
+                            <lightning:button variant="brand" label="Lunch IN" onclick="{! c.foo }" disabled="{!v.enableLunchIn}" />
+                            <lightning:button variant="brand" label="Dat Out" onclick="{! c.foo }" disabled="{!v.enableDayOut}" />
+                        </lightning:buttonGroup>
+                            </center>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="slds-card__body" id="asdasd"> 
+                <div class="slds-form-element slds-m-bottom--x-large">
+                    <div class="slds-form-element tab_mid">
+                        <table width="100%">
+                            <tr>
+                                <th>Day In</th>
+                                <th>Lunch Out</th>
+                                <th>Lunch In</th>
+                                <th>Day Out</th>
+                                <th>Total Working Hours</th>
+                            </tr>
+                            <tr>
+                                <td><span id="dinSpan">{!v.objTimeM.Day_In__c}</span></td>
+                                <td><span id="loutSpan">{!v.objTimeM.Lunch_Out__c}</span></td>
+                                <td><span id="linSpan">{!v.objTimeM.Lunch_In__c}</span></td>
+                                <td><span id="doutSpan">{!v.objTimeM.Day_Out__c}</span></td>
+                                <td><span id="tWH">{!v.objTimeM.Working_Hours__c}</span></td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+    </div>
+</aura:component>

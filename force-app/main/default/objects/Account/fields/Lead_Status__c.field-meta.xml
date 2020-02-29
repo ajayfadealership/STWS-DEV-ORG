@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Lead_Status__c</fullName>
+    <deprecated>false</deprecated>
+    <externalId>false</externalId>
+    <label>Lead Status</label>
+    <required>false</required>
+    <trackFeedHistory>false</trackFeedHistory>
+    <type>Picklist</type>
+    <valueSet>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Interested</fullName>
+                <default>false</default>
+                <label>Interested</label>
+            </value>
+            <value>
+                <fullName>Waiting on Customer to come in</fullName>
+                <default>false</default>
+                <label>Waiting on Customer to come in</label>
+            </value>
+            <value>
+                <fullName>Quoted</fullName>
+                <default>false</default>
+                <label>Quoted</label>
+            </value>
+            <value>
+                <fullName>Waiting on Test Drive</fullName>
+                <default>false</default>
+                <label>Waiting on Test Drive</label>
+            </value>
+            <value>
+                <fullName>Waiting on Credit app</fullName>
+                <default>false</default>
+                <label>Waiting on Credit app</label>
+            </value>
+            <value>
+                <fullName>Waiting on Finance Approval</fullName>
+                <default>false</default>
+                <label>Waiting on Finance Approval</label>
+            </value>
+            <value>
+                <fullName>Waiting on Customer Approval</fullName>
+                <default>false</default>
+                <label>Waiting on Customer Approval</label>
+            </value>
+            <value>
+                <fullName>Waiting on Order Boat to Arrive</fullName>
+                <default>false</default>
+                <label>Waiting on Order Boat to Arrive</label>
+            </value>
+            <value>
+                <fullName>Schedule to Delivered</fullName>
+                <default>false</default>
+                <label>Schedule to Delivered</label>
+            </value>
+            <value>
+                <fullName>Customer Credit Declined</fullName>
+                <default>false</default>
+                <label>Customer Credit Declined</label>
+            </value>
+            <value>
+                <fullName>Customer Bought Something Else</fullName>
+                <default>false</default>
+                <label>Customer Bought Something Else</label>
+            </value>
+            <value>
+                <fullName>Dead Lead</fullName>
+                <default>false</default>
+                <label>Dead Lead</label>
+            </value>
+            <value>
+                <fullName>Delivered</fullName>
+                <default>false</default>
+                <label>Delivered</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

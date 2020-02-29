@@ -1,0 +1,308 @@
+<aura:component controller="BBWizardController" implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction,lightning:isUrlAddressable" access="global">
+	<aura:attribute name="ObjQuoteC"  type="Quote__c" access="global" default="{'sobjectType ': 'BOATBUILDING__Quote__c'}"/>
+    <aura:handler  event="c:QuoteEvent" action="{!c.HandelQE}"/> 
+    <aura:attribute name="StateSelect" type="Key_Value[]"/>
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    <div class="slds-grid slds-wrap slds-col--padded">
+        <h1><b>Quote Info</b></h1>
+        <div class="slds-col slds-size--1-of-1">
+            <div class="slds-grid slds-wrap" >
+                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-2 slds-col--padded">
+                    <div class="slds-form-element">
+                        <label class="slds-form-element__label">Quote Name:</label>
+                        <div class="slds-form-element__control">
+                            <input type="text"  value="{!v.ObjQuoteC.Name}" class="slds-input" disabled="disabled"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-2 slds-col--padded">
+                    <div class="slds-form-element">
+                        <label class="slds-form-element__label">Quote Number:</label>
+                        <div class="slds-form-element__control">
+                            <input type="text"  value="{!v.ObjQuoteC.BOATBUILDING__Quote_Number__c}" class="slds-input" disabled="disabled"/>
+
+                        </div> 
+                    </div>
+                </div>
+                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-2 slds-col--padded">
+                    <div class="slds-form-element">
+                        <label class="slds-form-element__label">Account Name:</label>
+                        <div class="slds-form-element__control">
+                            <input type="text"  value="{!v.ObjQuoteC.BOATBUILDING__Account_Name__r.Name}" class="slds-input" disabled="disabled"/>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-2 slds-col--padded">
+                    <div class="slds-form-element">
+                        <label class="slds-form-element__label">Contact Name:</label>
+                        <div class="slds-form-element__control">
+                            <input type="text"  value="{!v.ObjQuoteC.BOATBUILDING__Contact_Name__r.Name}" class="slds-input" disabled="disabled"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-2 slds-col--padded">
+                    <div class="slds-form-element">
+                        <label class="slds-form-element__label">State:</label>
+                        <div class="slds-form-element__control">
+                            <select id="stateQuoteSelect" class="slds-select" onchange="{!c.updateState}">
+                                <option value="">--None--</option>
+                                <aura:iteration items="{!v.StateSelect}" var="item">
+                                    <option value="{!item.key}">{!item.value}</option>
+                                </aura:iteration>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-2 slds-col--padded">
+                    <div class="slds-form-element">
+                        <label class="slds-form-element__label">Booked Sale Price:</label>
+                        <div class="slds-form-element__control">
+                            <input type="text"  value="{!v.ObjQuoteC.BOATBUILDING__Booked_Sale_Price__c}" class="slds-input" disabled="disabled"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-2 slds-col--padded">
+                    <div class="slds-form-element">
+                        <label class="slds-form-element__label">Email:</label>
+                        <div class="slds-form-element__control">
+                            <input type="text"  value="{!v.ObjQuoteC.BOATBUILDING__Email__c}" class="slds-input" disabled="disabled"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-2 slds-col--padded">
+                    <div class="slds-form-element">
+                        <label class="slds-form-element__label">Booked ACV:</label>
+                        <div class="slds-form-element__control">
+                            <input type="text"  value="{!v.ObjQuoteC.BOATBUILDING__Email__c}" class="slds-input" disabled="disabled"/>
+                            
+                        </div>
+                    </div>
+                </div>
+                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-2 slds-col--padded">
+                    <div class="slds-form-element">
+                        <label class="slds-form-element__label">CO Buyer Name:</label>
+                        <div class="slds-form-element__control">
+                            <input type="text"  value="{!v.ObjQuoteC.BOATBUILDING__CO_Buyer_Name__c}" class="slds-input" disabled="disabled"/>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-2 slds-col--padded">
+                    <div class="slds-form-element">
+                        <label class="slds-form-element__label">Sold Boat Account:</label>
+                        <div class="slds-form-element__control">
+                            <input type="text"  value="{!v.ObjQuoteC.BOATBUILDING__Sold_Boat_Account__c}" class="slds-input" disabled="disabled"/>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-2 slds-col--padded">
+                    <div class="slds-form-element">
+                        <label class="slds-form-element__label">Phone:</label>
+                        <div class="slds-form-element__control">
+                            <input type="text"  value="{!v.ObjQuoteC.BOATBUILDING__Phone__c}" class="slds-input" disabled="disabled"/>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-2 slds-col--padded">
+                    <div class="slds-form-element">
+                        <label class="slds-form-element__label">Expiration Date:</label>
+                        <div class="slds-form-element__control">
+                            <input type="text"  value="{!v.ObjQuoteC.BOATBUILDING__Expiration_Date__c}" class="slds-input" disabled="disabled"/>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-2 slds-col--padded">
+                    <div class="slds-form-element">
+                        <label class="slds-form-element__label">Status:</label>
+                        <div class="slds-form-element__control">
+                            <input type="text"  value="{!v.ObjQuoteC.BOATBUILDING__Status__c}" class="slds-input" disabled="disabled"/>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-2 slds-col--padded">
+                    <div class="slds-form-element">
+                        <label class="slds-form-element__label">ACV Form:</label>
+                        <div class="slds-form-element__control">
+                            <input type="text"  value="{!v.ObjQuoteC.BOATBUILDING__ACV_FORM__r.Name}" class="slds-input" disabled="disabled"/>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-2 slds-col--padded">
+                    <div class="slds-form-element">
+                        <label class="slds-form-element__label">APPROVED ACV:</label>
+                        <div class="slds-form-element__control">
+                            <input type="text"  value="{!v.ObjQuoteC.BOATBUILDING__APPROVED_ACV__c}" class="slds-input" disabled="disabled"/>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-2 slds-col--padded">
+                    <div class="slds-form-element">
+                        <label class="slds-form-element__label">Dealer Price Total:</label>
+                        <div class="slds-form-element__control">
+                            <input type="text"  value="{!v.ObjQuoteC.BOATBUILDING__Dealer_Price_Total__c}" class="slds-input" disabled="disabled"/>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-2 slds-col--padded">
+                    <div class="slds-form-element">
+                        <label class="slds-form-element__label">Commission:</label>
+                        <div class="slds-form-element__control">
+                            <input type="text"  value="{!v.ObjQuoteC.BOATBUILDING__Commission__c}" class="slds-input" disabled="disabled"/>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-2 slds-col--padded">
+                    <div class="slds-form-element">
+                        <label class="slds-form-element__label">Costline Divider:</label>
+                        <div class="slds-form-element__control">
+                            <input type="text"  value="{!v.ObjQuoteC.BOATBUILDING__Costline_Divider__c}" class="slds-input" disabled="disabled"/>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-2 slds-col--padded">
+                    <div class="slds-form-element">
+                        <label class="slds-form-element__label">Costline Sell Price:</label>
+                        <div class="slds-form-element__control">
+                            <input type="text"  value="{!v.ObjQuoteC.BOATBUILDING__Costline_Sell_Price__c}" class="slds-input" disabled="disabled"/>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <hr/>
+    <div class="slds-grid slds-wrap slds-col--padded">
+        <h2><b>Product Information</b></h2>
+        <div class="slds-col slds-size--1-of-1">
+            <div class="slds-grid slds-wrap" >
+                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-2 slds-col--padded">
+                    <div class="slds-form-element">
+                        <label class="slds-form-element__label">HIN No.:</label>
+                        <div class="slds-form-element__control">
+                            <input type="text"  value="{!v.ObjQuoteC.BOATBUILDING__Mapped_HIN__c}" class="slds-input" disabled="disabled"/>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-2 slds-col--padded">
+                    <div class="slds-form-element">
+                        <label class="slds-form-element__label">Engine SN:</label>
+                        <div class="slds-form-element__control">
+                            <input type="text"  value="{!v.ObjQuoteC.BOATBUILDING__Mapped_Engine_SN__c}" class="slds-input" disabled="disabled"/>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-2 slds-col--padded">
+                    <div class="slds-form-element">
+                        <label class="slds-form-element__label">Trailer VIN:</label>
+                        <div class="slds-form-element__control">
+                            <input type="text"  value="{!v.ObjQuoteC.BOATBUILDING__Mapped_Trailer_VIN__c}" class="slds-input" disabled="disabled"/>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-2 slds-col--padded">
+                    <div class="slds-form-element">
+                        <label class="slds-form-element__label">Transmission/Gearbox SN:</label>
+                        <div class="slds-form-element__control">
+                            <input type="text"  value="{!v.ObjQuoteC.BOATBUILDING__Transmission_Gearbox_SN__c}" class="slds-input" disabled="disabled"/>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <hr/>
+    <div class="slds-grid slds-wrap slds-col--padded">
+        <h2><b>Quote Related Detail</b></h2>
+        <div class="slds-col slds-size--1-of-1">
+            <div class="slds-grid slds-wrap" >
+                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-2 slds-col--padded">
+                    <div class="slds-form-element">
+                        <label class="slds-form-element__label">MSRP:</label>
+                        <div class="slds-form-element__control">
+                            <input type="text"  value="{!v.ObjQuoteC.BOATBUILDING__Total_Price_Quote__c}" class="slds-input" disabled="disabled"/>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-2 slds-col--padded">
+                    <div class="slds-form-element">
+                        <label class="slds-form-element__label" for="form-element-01">Boat Costline:</label>
+                        <div class="slds-form-element__control">
+                            <input type="text"  value="{!v.ObjQuoteC.BOATBUILDING__Boat_Costline__c}" class="slds-input" disabled="disabled"/>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-2 slds-col--padded">
+                    <div class="slds-form-element">
+                        <label class="slds-form-element__label" for="form-element-01">Discount On Quote</label>
+                        <div class="slds-form-element__control">
+                            <input type="text"  value="{!v.ObjQuoteC.BOATBUILDING__Discount_On_Quote__c}" class="slds-input" disabled="disabled"/>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-2 slds-col--padded">
+                    <div class="slds-form-element">
+                        <label class="slds-form-element__label" for="form-element-01">Quote Trade ACV</label>
+                        <div class="slds-form-element__control">
+                            <input type="text"  value="{!v.ObjQuoteC.BOATBUILDING__Quote_Trade_ACV__c}" class="slds-input" disabled="disabled"/>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-2 slds-col--padded">
+                    <div class="slds-form-element">
+                        <label class="slds-form-element__label">Quote Sale Price</label>
+                        <div class="slds-form-element__control">
+                            <input type="text"  value="{!v.ObjQuoteC.BOATBUILDING__Quote_Sale_Price__c}" class="slds-input" disabled="disabled"/>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-2 slds-col--padded">
+                    <div class="slds-form-element">
+                        <label class="slds-form-element__label">Boat Sales Tax</label>
+                        <div class="slds-form-element__control">
+                            <input type="text"  value="{!v.ObjQuoteC.BOATBUILDING__Boat_Sales_Tax2__c}" class="slds-input" disabled="disabled"/>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-2 slds-col--padded">
+                    <div class="slds-form-element">
+                        <label class="slds-form-element__label">Quote Net Selling Price(Calculated)</label>
+                        <div class="slds-form-element__control">
+                            <input type="text"  value="{!v.ObjQuoteC.BOATBUILDING__Quote_Net_Selling_Price_Calculated__c}" class="slds-input" disabled="disabled"/>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-2 slds-col--padded">
+                    <div class="slds-form-element">
+                        <label class="slds-form-element__label">For more details please visite quote page.</label>
+                        <div class="slds-form-element__control">
+                            <a class="slds-button slds-button_brand" onclick="{!c.navigateToRecord}">Quote Page</a>    
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</aura:component>

@@ -1,0 +1,56 @@
+<aura:component>
+    <aura:attribute name="objTWO" type="Object" access="global"/>
+    <lightning:layout multipleRows="true">
+        <lightning:layoutItem padding="around-small" size="4">
+            <lightning:input type="text" value="{!v.objTWO.Name}"  label="Work Order Number" readonly=""/>
+        </lightning:layoutItem>
+        <lightning:layoutItem padding="around-small" size="4">
+            <lightning:input type="text" value="{!v.objTWO.RecordType.Name}"  label="Type" readonly=""/>
+        </lightning:layoutItem>
+        <lightning:layoutItem padding="around-small" size="4">
+            <lightning:input type="text" value="{!v.objTWO.BOATBUILDING__Status__c}"  label="Status" readonly=""/>
+        </lightning:layoutItem>
+        <lightning:layoutItem padding="around-small" size="4">
+            <lightning:input type="text" value="{!v.objTWO.BOATBUILDING__Hours__c}"  label="Hours" readonly=""/>
+        </lightning:layoutItem>
+        <lightning:layoutItem padding="around-small" size="4">
+            <lightning:input type="text" value="{!v.objTWO.BOATBUILDING__Contact__r.Name}"  label="Customer Name" readonly=""/>
+        </lightning:layoutItem>
+        <lightning:layoutItem padding="around-small" size="4">
+            <lightning:input type="text" value="{!v.objTWO.BOATBUILDING__Contact__r.MailingStreet}"  label="Address" readonly=""/>
+        </lightning:layoutItem>
+        <lightning:layoutItem padding="around-small" size="4">
+            <lightning:input type="text" value="{!v.objTWO.BOATBUILDING__Contact__r.MailingCity}"  label="City" readonly=""/>
+        </lightning:layoutItem>
+        <lightning:layoutItem padding="around-small" size="4">
+            <lightning:input type="text" value="{!v.objTWO.BOATBUILDING__Contact__r.MailingPostalCode}"  label="Zip" readonly=""/>
+        </lightning:layoutItem>
+        <lightning:layoutItem padding="around-small" size="4">
+            <lightning:input type="text" value="{!v.objTWO.BOATBUILDING__ContactPhone__c}"  label="Phone Number" readonly=""/>
+        </lightning:layoutItem>
+        <lightning:layoutItem padding="around-small" size="4">
+            <lightning:input type="text" value="{!v.objTWO.BOATBUILDING__ContactEmail__c}"  label="Email" readonly=""/>
+        </lightning:layoutItem>
+        <lightning:layoutItem padding="around-small" size="4">
+            <lightning:input type="text" value="{!v.objTWO.BOATBUILDING__Boat__r.BOATBUILDING__Boat_HIN_No__c}"  label="Boat HIN" readonly=""/>
+        </lightning:layoutItem>
+        <lightning:layoutItem padding="around-small" size="4">
+            <lightning:input type="text" value="{!v.objTWO.BOATBUILDING__Boat__r.BOATBUILDING__Boat_Model__c}"  label="Boat Model" readonly=""/>
+        </lightning:layoutItem>
+        <lightning:layoutItem padding="around-small" size="4">
+            <lightning:input type="text" value="{!v.objTWO.BOATBUILDING__Boat__r.BOATBUILDING__M_Boat_Year__c}"  label="Boat Year" readonly=""/>
+        </lightning:layoutItem>
+        <lightning:layoutItem padding="around-small" size="4">
+            <lightning:input type="text" value="{!v.objTWO.BOATBUILDING__Boat__r.BOATBUILDING__CreatedDateCustom__c}"  label="Created Date" readonly=""/>
+        </lightning:layoutItem>
+        <lightning:layoutItem padding="around-small" size="4">
+            <lightning:input type="text" value="{!v.objTWO.BOATBUILDING__Boat__r.BOATBUILDING__Engine_SN__c}"  label="Engine SN" />
+        </lightning:layoutItem>
+        <lightning:layoutItem padding="around-small" size="4">
+            <lightning:input type="text" value="{!v.objTWO.BOATBUILDING__Store_Location__c}"  label="Store Location" readonly=""/>
+        </lightning:layoutItem>
+        <lightning:layoutItem padding="around-small" size="4">
+            <lightning:input type="text" value="{!v.objTWO.BOATBUILDING__Boat__r.BOATBUILDING__Engine_Model__c}"  label="Engine Model" readonly=""/>
+        </lightning:layoutItem>
+    </lightning:layout>
+</aura:component>

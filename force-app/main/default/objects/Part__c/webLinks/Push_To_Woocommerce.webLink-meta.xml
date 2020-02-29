@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<WebLink xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Push_To_Woocommerce</fullName>
+    <availability>online</availability>
+    <displayType>button</displayType>
+    <linkType>javascript</linkType>
+    <masterLabel>Push To Woocommerce</masterLabel>
+    <openType>onClickJavaScript</openType>
+    <protected>false</protected>
+    <url>{!REQUIRESCRIPT(&quot;/soap/ajax/30.0/connection.js&quot;)}
+{!REQUIRESCRIPT(&quot;/soap/ajax/30.0/apex.js&quot;)}
+
+alert(&#39;We have initiated the process.&#39;);
+var res = sforce.apex.execute(&quot;BOATBUILDING.WooCommerce_Connect&quot;,&quot;savePartsToWooCommerce&quot;,{strPartId:&quot;{!Part__c.Id}&quot;});
+console.log(res);</url>
+</WebLink>

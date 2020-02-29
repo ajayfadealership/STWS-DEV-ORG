@@ -1,0 +1,13 @@
+.THIS .rightElement{
+    position: absolute;
+    right: 0;
+    bottom: 0;
+} 
+.THIS .leftElement {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+}
+.THIS .colorIcon {
+    color: rgba(27, 82, 151, 1.0);
+}

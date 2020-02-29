@@ -1,0 +1,11 @@
+<apex:page controller="AccountToBBController" showHeader="false" sidebar="false">
+	<h1><b>Redirecting please wait...</b></h1>
+	<apex:form >
+		<apex:actionFunction name="toBB" action="{!redirectToBB}"/>
+	</apex:form>
+	<script>
+		onload = function() {
+			toBB();
+		} 
+	</script>
+</apex:page>

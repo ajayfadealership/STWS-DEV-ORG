@@ -1,0 +1,16 @@
+<aura:component implements="flexipage:availableForRecordHome,force:hasRecordId" access="global" controller="WorkOrderPhotoPreviewCtrl" >
+    <aura:attribute name="fileList" type="ContentDocumentLink[]" access="global" />
+    <aura:attribute name="recordId" type="String" access="global" />
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    <aura:method name="refreshChild" action="{!c.doInit}">
+    </aura:method>
+		<div class="slds-grid slds-wrap slds-p-top_large">
+                 
+                 <aura:iteration items="{!v.fileList}" var="item">
+                        <div class="slds-col slds-size_1-of-1  slds-medium-size_1-of-1 slds-large-size_2-of-4 slds-p-bottom_medium">
+                            <lightning:fileCard fileId="{!item.ContentDocument.Id}"  />
+                        </div>
+                </aura:iteration>
+              
+    </div>
+</aura:component>

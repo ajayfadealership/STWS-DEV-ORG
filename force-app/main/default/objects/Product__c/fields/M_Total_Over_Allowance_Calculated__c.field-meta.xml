@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>M_Total_Over_Allowance_Calculated__c</fullName>
+    <deprecated>false</deprecated>
+    <description>Specifies the Total Trade Over Allowance,calculated by summing up Boat Trade Over Allowance and Trailer Trade Over Allowance</description>
+    <externalId>false</externalId>
+    <formula>M_Boat_Trade_Over_Allowance_Calculated__c +   Trailer_Trade_Over_Allowance_Calculated__c</formula>
+    <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+    <label>Total Over Allowance (Calculated)</label>
+    <precision>18</precision>
+    <required>false</required>
+    <scale>0</scale>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Currency</type>
+</CustomField>

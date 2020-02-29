@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Prospect_Address_Line_2__c</fullName>
+    <deprecated>false</deprecated>
+    <description>Address Line 2 Address for the Prospect Account Type.</description>
+    <externalId>false</externalId>
+    <inlineHelpText>Address Line 2 Address for the Prospect Account Type.</inlineHelpText>
+    <label>Address Line 2</label>
+    <required>false</required>
+    <trackFeedHistory>false</trackFeedHistory>
+    <type>TextArea</type>
+</CustomField>

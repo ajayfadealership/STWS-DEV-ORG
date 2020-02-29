@@ -1,0 +1,298 @@
+<apex:page standardController="Part__c" extensions="WoocommerceVariationConfigController" sidebar="false" showHeader="false" id="pg">
+    <apex:slds />
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.12/css/jquery.dataTables.min.css"/>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"/>
+    <script src="https://cdn.datatables.net/1.10.12/js/jquery.dataTables.min.js"/>
+    <style>
+    	.lookupInput a.slds-input {
+	        width: 28px !important;
+	        margin: 0;
+	        display: inline-block;
+	        background: url('/resource/BOATBUILDING__BoatBuilderSR/assets/icons/utility/search_60.png');
+	        background-size: contain;
+	        background-repeat: no-repeat; 
+	        border: none;
+	        margin-left: 5px;
+	        position: relative; 
+	    	bottom: 18px;
+        }
+    </style>
+    <apex:form id="frm">
+    	<apex:actionFunction name="saveAtt" action="{!saveAttribute}" reRender="attListOp" oncomplete="loadDataTableAtt();"/>
+    	<apex:actionFunction name="addAttToList" action="{!addNewAttToVarList}" reRender="newAttList"/>
+    	<apex:actionFunction name="saveVariantWithAttributes" action="{!saveVariantWithAttributesApex}" reRender="varListHome,newAttList,newVarNameOP" oncomplete="completeOfSaveVar();"/>
+    	<apex:actionFunction name="deleteAttFromVarListVF" action="{!deleteAttFromVarListApex}" reRender="newAttList" > 
+    		<apex:param name="attId" assignTo="{!dltPartId}" value=""/>
+    	</apex:actionFunction> 
+    	<apex:actionFunction name="deleteVarFromHomeListVF" action="{!deleteVarFromHomeListApex}" reRender="varListHome" > 
+    		<apex:param name="attId" assignTo="{!dltPartId}" value=""/>
+    	</apex:actionFunction>
+        <div class="slds-page-header">
+            <div class="slds-media">
+                <div class="slds-media__figure">
+                    <span class="slds-icon_container slds-icon-standard-opportunity" title="Description of icon when needed">
+                        <svg class="slds-icon slds-page-header__icon" aria-hidden="true">
+<!--                             <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="{!URLFOR($Resource.BoatBuilderSR, '/icons/standard-sprite/svg/symbols.svg#custom3')}" /> -->
+                        </svg>
+                    </span>
+                </div> 
+                <div class="slds-media__body">
+                    <h1 class="slds-page-header__title slds-truncate slds-align-middle" title="Rohde Corp - 80,000 Widgets">Woocommerce Config</h1>
+                    <p class="slds-text-body_small slds-line-height_reset" id="creditDetailsId">Part variation &amp; Attributes</p>
+<!--                     <a class="slds-button slds-button_brand" href="/" style="position: absolute; right: 1%; top: 3%;">Home</a> -->
+                </div>
+            </div>
+        </div>
+        <hr/>
+        <a id="attTab" class="slds-button slds-button_brand" style="position: relative; left: 1%;">Attributes (+)</a>
+        
+        <div style="padding: 1%;display: none;" id="attSection">
+            <div class="slds-card" style="padding: 1%; ">
+            	<a id="newAttBTN" class="slds-button slds-button_brand" style="position: relative; left:44%;">New</a>
+            	
+                <div style="padding: 1%; display: none;" id="newAttSecId">
+                	<span id="attMessageSec">
+						
+					</span><br/>
+                	<table width="100%">
+                		<tr>
+                			<td>
+                				Attribute Name:
+                			</td>
+                			<td>
+                				<apex:inputText value="{!strNewAttName}" styleClass="slds-input" id="inputAttName"/>
+                			</td>
+                			<td style="text-align: right;">
+                				<a class="slds-button slds-button_brand" id="saveAttBTNId">Save</a> 
+                			</td>
+                		</tr>
+                	</table>
+                </div>
+                <div id="existAttSecId">
+                	<apex:outputPanel id="attListOp">
+		                <table id="woocomListId">
+		                	<thead>
+		                		<tr>
+		                			<th>Name</th>
+		                			<th>Woocommerce Id</th>
+		                		</tr>
+		                	</thead>
+		                	<tbody> 
+		                		<apex:repeat value="{!lstWooComAtt}" var="obj">
+			                		<tr>
+			                			<td>
+			                				{!obj.Name}
+			                			</td>
+			                			<td>
+			                				{!obj.WooCom_Attribute_Id__c}
+			                			</td>
+			                		</tr>
+		                		</apex:repeat>
+		                	</tbody>
+		                </table>
+	                </apex:outputPanel>
+                </div>
+            </div>
+        </div>
+        <hr/>
+        <a id="varTab" class="slds-button slds-button_brand" style="position: relative; left: 1%;">Variations (+)</a>
+        
+        <div style="padding: 1%;display: none;" id="varSection">
+        	<a id="addVariationAtt" class="slds-button slds-button_brand" style="position: relative; left: 86%;">Add Variation</a>
+            <div class="slds-card" style="padding: 1%; margin-top: 1%;" id="existingVar">
+	            <apex:outputPanel id="varListHome">
+	            	<apex:repeat value="{!lstPart}" var="objP">
+	            		<table>
+	            			<tr>
+	            				<td>
+					        		<div style="background: rgb(243, 242, 242); border: 1px solid rgb(221, 219, 218); padding: 4px; border-radius: .25rem; box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.10);" onclick="showHideAtt('{!objP.Id}');">
+					        			<b>{!objP.Name}</b>
+					        		</div>
+				        		</td>
+				        		<td style="text-align: center;">
+				        			<a onclick="deleteVarFromHomeList('{!objP.Id}');"><b>[X]</b></a>
+				        		</td>
+			        		</tr>
+		        		</table>
+		        		<div id="{!objP.Id}" style="border: 1px solid rgb(221, 219, 218); border-radius: .25rem; padding: 1%; display:none;">
+			        		<table style=" width: 39% !important; position: relative; left: 22%;">
+			        			<apex:repeat value="{!objP.BOATBUILDING__Woocom_Variant_Options__r}" var="objVA">
+				        			<tr>
+				        				<td style="text-align: left;">
+				        					{!objVA.BOATBUILDING__Woocommerce_Attribute__r.Name}
+				        				</td>
+				        				<td style="text-align: right;">
+				        					{!objVA.Option__c}
+				        				</td>
+				        			</tr>
+			        			</apex:repeat>
+			        		</table>
+		        		</div>
+		        		<br/>
+	        		</apex:repeat>
+	        	</apex:outputPanel>	
+            </div>
+            <div class="slds-card" style="padding: 1%; display: none;" id="newVar">
+            	<br/>
+            	<table>
+	            	<tr>
+		            	<td style="text-align: left;">
+		            		<apex:outputPanel id="newVarNameOP">
+		            			<b>Variant Name:</b> &nbsp;<apex:inputText value="{!strNewVriationName}" id="strVarName" styleClass="slds-input" style="width: 60%;"/>
+	            			</apex:outputPanel>
+		            	</td>
+		            	<td style="text-align: right;">
+		            		<a id="addAttToVar" class="slds-button slds-button_brand">Add Attribute</a>
+		            	</td>
+	            	</tr>
+            	</table>
+            	<br/>
+            	<br/>
+            	<span id="mssgrDis"></span>
+            	<apex:outputPanel id="newAttList">
+	            	<apex:repeat value="{!lstVCW}" var="obj">
+		            	<table style="border-top: 2px solid #dddbda;border-bottom: 2px solid #dddbda;">
+		            		<tr>
+		            			<td colspan="2" style="text-align: right;">
+		            				<a onclick="deleteAttFromVarList('{!obj.strTempId}');"><b>[X]</b></a>
+		            			</td>
+		            		</tr>
+		            		<tr>
+		            			<td style="text-align: left;">
+		            				<br/><b>Attribute:</b> <apex:inputField value="{!obj.objWVO.Woocommerce_Attribute__c}" styleClass="slds-input" style="width: 80%;"/>
+		            			</td>
+		            			<td style="text-align: right;">
+		            				<b style="position: relative; right: 76%;">Option:</b><br/> 
+		            				<apex:inputText value="{!obj.objWVO.Option__c}" styleClass="slds-input optionTemp" style="width: 88%;"/>
+		            			</td>
+		            		</tr>
+		            	</table>
+		            	<br/>
+	            	</apex:repeat>
+            	</apex:outputPanel>
+            	<br/>
+            	<a id="saveVariationAtt" class="slds-button slds-button_brand" style="position: relative; left: 83.5%;">Save Variation</a>
+            </div>
+        </div>
+    </apex:form>
+    <script>
+    	$(document).ready(function() {
+	        $("#woocomListId").DataTable( {
+	          "pageLength": 5,
+	          "lengthMenu": [[5, 10, -1], [5, 10, "All"]],
+	          "order": [[ 0, "desc" ]]
+	        });
+	     });
+	     $("#attTab").click(function() {
+	     	$("#attSection").slideToggle('slow');
+	     	if($("#attTab").html() == "Attributes (+)") {
+	     		$("#attTab").html('Attributes (-)');
+	     	} else if($("#attTab").html() == "Attributes (-)") {
+	     		$("#attTab").html('Attributes (+)');
+	     	}
+	     });
+	     $("#varTab").click(function() {
+	     	$("#varSection").slideToggle('slow');
+	     	if($("#varTab").html() == "Variations (+)") {
+	     		$("#varTab").html('Variations (-)');
+	     	} else if($("#varTab").html() == "Variations (-)") {
+	     		$("#varTab").html('Variations (+)');
+	     	}
+	     });
+	     $("#newAttBTN").click(function(){
+	     	if($("#newAttBTN").html() == "New") {
+	     		$("#newAttSecId").show();
+	     		$("#existAttSecId").hide();
+	     		$("#newAttBTN").html("Back");
+	     	} else if($("#newAttBTN").html() == "Back") {
+	     		$("#newAttSecId").hide();
+	     		$("#existAttSecId").show();
+	     		$("#newAttBTN").html("New");
+	     	}
+	     });
+	     
+	     $("#addVariationAtt").click(function(){
+	     	if($("#addVariationAtt").html() == "Add Variation") {
+	     		$("#newVar").show();
+	     		$("#existingVar").hide();
+	     		$("#addVariationAtt").html("Back");
+	     	} else if($("#addVariationAtt").html() == "Back") {
+	     		$("#newVar").hide();
+	     		$("#existingVar").show();
+	     		$("#addVariationAtt").html("Add Variation");
+	     	}
+	     });
+	     
+	     $("#saveAttBTNId").click(function() {
+	     	var val = document.getElementById("pg:frm:inputAttName").value;
+	     	if(val != "") {
+	     		$("#attMessageSec").html("");
+	     		saveAtt();
+	     	} else {
+	     		var htmlVal = 'Please Enter Attribute Name.';
+	     		$("#attMessageSec").html("<span style='color: red'><b>Error: </b>"+htmlVal+"</span>");
+	     	}
+	     	
+	     });
+	     function loadDataTableAtt() {
+	     	$("#attMessageSec").html("<span style='color: rgb(0, 255, 117)'>Attribute Created.</span>");
+	     	$("#woocomListId").delay(1000).DataTable( {
+	          "pageLength": 5,
+	          "lengthMenu": [[5, 10, -1], [5, 10, "All"]],
+	          "order": [[ 0, "desc" ]]
+	        });
+	        $("#newAttSecId").hide();
+     		$("#existAttSecId").show();
+     		$("#newAttBTN").html("New");
+     		document.getElementById("pg:frm:inputAttName").value = '';
+	     }
+	     function showHideAtt(prtId) {
+	     	$("#"+prtId).slideToggle('slow');
+	     }
+	     $("#addAttToVar").click(function() {
+	     	$("#mssgrDis").html("");
+	     	addAttToList();
+	     })
+	     $("#saveVariationAtt").click(function() {
+	     	console.log('{!objPart.BOATBUILDING__Part__c}');
+	     	if('{!objPart.BOATBUILDING__Part__c}' == '') {
+	     	if(document.getElementById("pg:frm:newAttList") != null && document.getElementById("pg:frm:newAttList").innerHTML != "") {
+	     		$("#mssgrDis").html("");
+	     		
+	     		var optionSec = document.getElementsByClassName("optionTemp");
+	     		var flag = false;
+	     		if(optionSec.length > 0) {
+	     			for(var i = 0; i < optionSec.length; i++) {
+	     				if(optionSec[i].value == "") {
+	     					flag = true;
+	     				}
+	     			}
+	     		}
+	     		if(!flag) {
+	     			saveVariantWithAttributes();
+	     		} else {
+	     			$("#mssgrDis").html("<span style='color: Red;'>Please Enter Options.</span>");
+	     		}
+	     		//saveVariantWithAttributes();
+	     	} else {
+	     		$("#mssgrDis").html("<span style='color: Red;'>Please add attributes.</span>");
+	     	}
+	     	} else {
+	     		alert('Please go to parent part and create part variation.');
+	     	}
+	     });
+	     function completeOfSaveVar() {
+	     	$("#newVar").hide();
+     		$("#existingVar").show();
+     		$("#addVariationAtt").html("Add Variation");
+	     }
+	     function deleteAttFromVarList(dltId) {
+	     	console.log('Deletion Method: '+dltId);
+	     	deleteAttFromVarListVF(dltId);
+	     }
+	     function deleteVarFromHomeList(dltId) {
+	     	console.log('Deletion Method: '+dltId);
+	     	deleteVarFromHomeListVF(dltId);
+	     }
+    </script>
+</apex:page>

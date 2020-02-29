@@ -1,0 +1,163 @@
+<aura:component >
+    <aura:registerEvent name="ParentToChild" type="c:InventoryChildToParent"/>
+	<aura:attribute name="objInvPD" type="Inventory__c" default="{'sobjectType': 'Inventory__c'}"/>
+    <div class="slds-grid slds-wrap slds-col--padded">
+        <h1><b>Product Details</b></h1>
+        <div class="slds-col slds-size--1-of-1">
+            <div class="slds-grid slds-wrap" >
+                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-3 slds-col--padded">
+                    <div class="slds-form-element">
+                        <label class="slds-form-element__label">Order Number:</label>
+                        <div class="slds-form-element__control">
+                            <force:inputField value="{!v.objInvPD.BOATBUILDING__Order_Number_Text__c}" class="slds-input"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-3 slds-col--padded">
+                    <div class="slds-form-element">
+                        <label class="slds-form-element__label">Invoice Number:</label>
+                        <div class="slds-form-element__control">
+                            <force:inputField value="{!v.objInvPD.BOATBUILDING__Invoice_Number_Text__c }" class="slds-input"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-3 slds-col--padded">
+                    <div class="slds-form-element">
+                        <label class="slds-form-element__label">Engine Year:</label>
+                        <div class="slds-form-element__control">
+                            <force:inputField value="{!v.objInvPD.BOATBUILDING__Engine_Year__c}" class="slds-input"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-3 slds-col--padded">
+                    <div class="slds-form-element">
+                        <label class="slds-form-element__label">Engine Make:</label>
+                        <div class="slds-form-element__control">
+                            <force:inputField value="{!v.objInvPD.BOATBUILDING__Engine_Make__c}" class="slds-input"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-3 slds-col--padded">
+                    <div class="slds-form-element">
+                        <label class="slds-form-element__label">Engine Model:</label>
+                        <div class="slds-form-element__control">
+                            <force:inputField value="{!v.objInvPD.BOATBUILDING__Engine_Model__c}" class="slds-input"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-3 slds-col--padded">
+                    <div class="slds-form-element">
+                        <label class="slds-form-element__label">Engine SN:</label>
+                        <div class="slds-form-element__control">
+                            <force:inputField value="{!v.objInvPD.BOATBUILDING__Engine_SN__c}" class="slds-input"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-3 slds-col--padded">
+                    <div class="slds-form-element">
+                        <label class="slds-form-element__label">Transmission/Gearbox SN:</label>
+                        <div class="slds-form-element__control">
+                            <force:inputField value="{!v.objInvPD.BOATBUILDING__Transmission_Gearbox_SN__c}" class="slds-input"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-3 slds-col--padded">
+                    <div class="slds-form-element">
+                        <label class="slds-form-element__label">HIN Number:</label>
+                        <div class="slds-form-element__control">
+                            <force:inputField value="{!v.objInvPD.BOATBUILDING__HIN_Number__c}" class="slds-input"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-3 slds-col--padded">
+                    <div class="slds-form-element">
+                        <label class="slds-form-element__label">Boat Length (in feets):</label>
+                        <div class="slds-form-element__control">
+                            <force:inputField value="{!v.objInvPD.BOATBUILDING__Boat_Length_in_feets__c}" class="slds-input"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-3 slds-col--padded">
+                    <div class="slds-form-element">
+                        <label class="slds-form-element__label">Trailer VIN:</label>
+                        <div class="slds-form-element__control">
+                            <force:inputField value="{!v.objInvPD.BOATBUILDING__Trailer_VIN__c}" class="slds-input"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-3 slds-col--padded">
+                    <div class="slds-form-element">
+                        <label class="slds-form-element__label">Trailer Year:</label>
+                        <div class="slds-form-element__control">
+                            <force:inputField value="{!v.objInvPD.BOATBUILDING__Trailer_Year__c}" class="slds-input"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-3 slds-col--padded">
+                    <div class="slds-form-element">
+                        <label class="slds-form-element__label">Trailer Make:</label>
+                        <div class="slds-form-element__control">
+                            <force:inputField value="{!v.objInvPD.BOATBUILDING__Trailer_Make__c}" class="slds-input"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-3 slds-col--padded">
+                    <div class="slds-form-element">
+                        <label class="slds-form-element__label">Trailer Model:</label>
+                        <div class="slds-form-element__control">
+                            <force:inputField value="{!v.objInvPD.BOATBUILDING__Trailer_Model__c}" class="slds-input"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-3 slds-col--padded">
+                    <div class="slds-form-element">
+                        <label class="slds-form-element__label">Trailer Axles:</label>
+                        <div class="slds-form-element__control">
+                            <force:inputField value="{!v.objInvPD.BOATBUILDING__Trailer_Axles__c}" class="slds-input"/>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-3 slds-col--padded">
+                    <div class="slds-form-element">
+                        <label class="slds-form-element__label">Dealer Boat Stock #:</label>
+                        <div class="slds-form-element__control">
+                            <force:inputField value="{!v.objInvPD.BOATBUILDING__Dealer_Boat_Stock__c}" class="slds-input"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-3 slds-col--padded">
+                    <div class="slds-form-element">
+                        <label class="slds-form-element__label">Dealer Engine Stock #:</label>
+                        <div class="slds-form-element__control">
+                            <force:inputField value="{!v.objInvPD.BOATBUILDING__Dealer_Engine_Stock__c}" class="slds-input"/>
+                        </div>
+                    </div> 
+                </div>
+                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-3 slds-col--padded">
+                    <div class="slds-form-element">
+                        <label class="slds-form-element__label">Dealer Trailer Stock #:</label>
+                        <div class="slds-form-element__control">
+                            <force:inputField value="{!v.objInvPD.BOATBUILDING__Dealer_Trailer_Stock__c}" class="slds-input"/>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <hr/>
+	<table>
+        <tr>
+            <td>
+                <div data-value="3" style="height:0px;max-width:auto;" onclick="{!c.previousClick}">
+                    <lightning:button variant="brand" label="Previous" iconName="utility:chevronleft" iconPosition="left" class="leftElement"/>
+                </div>
+            </td>
+            <td>
+                <div data-value="3" style="height:0px;max-width:auto;" onclick="{!c.handleClick}">
+                    <lightning:button variant="brand" label="Next" iconName="utility:chevronright" iconPosition="right" class="rightElement" value="2" />
+                </div>
+            </td>
+        </tr>
+    </table>
+</aura:component>

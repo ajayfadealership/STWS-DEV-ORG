@@ -1,0 +1,859 @@
+<apex:page docType="html-5.0" controller="BoatBuilderController"  sidebar="false" id="p" showHeader="false" action="{!checkAccess}">
+    <apex:stylesheet value="{!URLFOR($Resource.BoatBuilderSR, '/css/styles.css')}"/>
+    <apex:stylesheet value="{!URLFOR($Resource.BoatBuilderSR, '/assets/styles/salesforce-lightning-design-system.min.css')}"/>  
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"/>
+    <script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
+    <script src="/soap/ajax/33.0/connection.js" type="text/javascript"></script>
+    <script src="/soap/ajax/33.0/apex.js" type="text/javascript"></script>
+<html>
+    <head>
+        <title>Boat Builder</title>
+        <style>
+        		.popupDiv{
+	            position: fixed;
+	            top: 0;
+	            bottom: 0;
+	            left: 0;
+	            right: 0;
+	            background: rgba(0,0,0,0.5);
+	            display: none;
+	            z-index: 999;
+	        }
+            .slds-button--brand[disabled] {cursor: no-drop;}
+            .card-wrapper_Purchase {
+                max-width: 1000px;
+                margin: 2rem auto;
+            }    
+            .card-wrapper_Purchase .slds-select {
+                padding: 0 0.5rem;
+            }       
+    
+            .card-wrapper_Purchase .slds-card__body {
+                overflow: auto;
+            }
+            .card-wrapper_Purchase .slds-text-heading--small {
+                font-weight: 600;
+            }       
+    
+            .card-wrapper_Purchase .slds-card__body{
+                background: #fff;
+                border-top:1px solid #d8dde6;
+            }
+            .card-wrapper_Purchase .slds-form-element__label{
+                font-size: 1rem;
+            }
+            .card-wrapper_Purchase .slds-card__body {
+                background: #fff;
+                border-top: 1px solid #d8dde6;
+                padding: 2rem 0.75rem;
+            }
+            .slds-form-element {
+                margin-bottom: 1rem;
+            }
+            .lookupInput {
+                display: inline-flex;
+                width: 100%;
+            }
+            .lookupInput a.slds-input {
+                width: 28px;
+                margin: 0;
+                display: inline-block;
+                background: url('/resource/BOATBUILDING__BoatBuilderSR/assets/icons/utility/search_60.png');
+                background-size: contain;
+                background-repeat: no-repeat;
+                border: none;
+                margin-left: 5px;
+            }
+            .Heading_Trade{
+                border-bottom: 1px solid #d8dde6;
+            }
+            .Customer-Heading{
+                border-top: 1px solid #e0e5ee;
+                padding-top: 1rem;
+                margin: 1rem -0.75rem;
+            }
+            .slds-input{
+                padding: 0px 0px 0px 12px !important;
+            }
+            .lookupIcon{
+                display:none;
+            }
+        </style>
+        
+    </head>
+    <body>
+        <script>
+        		$(document).ready(function() {
+        			console.log("{!$CurrentPage.parameters.conId}");
+        			console.log("{!$CurrentPage.parameters.conName}");
+        			var conId = "{!$CurrentPage.parameters.conId}";
+        			var conName = "{!$CurrentPage.parameters.conName}";
+        			if(conId != "" && conId != undefined 
+        				&& conName != "" && conName != undefined) {
+        				document.getElementById("existingCID").checked = true;
+	        				document.getElementById('errorSpanId').style.display = "none";
+	                if(document.getElementById("existingCID").checked == true){
+	                    document.getElementById('Customer_Datails').style.display = "none";
+	                    document.getElementById('nameLookUpId').style.display = "block";
+	                }else if(document.getElementById("existingCID").checked == false){
+	                    document.getElementById('Customer_Datails').style.display = "block";
+	                    document.getElementById('nameLookUpId').style.display = "none";
+	                }
+	                document.getElementById("p:frm:lookupInputId_lkid").value = conId;
+	                document.getElementById("p:frm:lookupInputId").value = conName;
+	                document.getElementById("p:frm:lookupInputId_lkold").value = conName;
+        			} else {
+        				document.getElementById('stockInvtryId').checked = false;
+	                document.getElementById('existingCID').checked = false;
+	                document.getElementById('Customer_Datails').style.display = "block";
+	                document.getElementById('nameLookUpId').style.display = "none";
+	                document.getElementById('opfromsDivId').style.display = "block";
+	                document.getElementById('opforsDivId').style.display = "none";
+        			}
+        		});
+            function existingCheck(obj){
+                //alert('Checked Status: '+document.getElementById(obj.id).checked);
+                document.getElementById('errorSpanId').style.display = "none";
+                if(document.getElementById(obj.id).checked == true){
+                    document.getElementById('Customer_Datails').style.display = "none";
+                    document.getElementById('nameLookUpId').style.display = "block";
+                }else if(document.getElementById(obj.id).checked == false){
+                    document.getElementById('Customer_Datails').style.display = "block";
+                    document.getElementById('nameLookUpId').style.display = "none";
+                }
+            }
+            function orderForDealerCheck(obj){
+//              alert(obj.id);
+                document.getElementById('errorSpanId').style.display = "none";
+                if(document.getElementById(obj.id).checked == true) {
+                    document.getElementById('Customer_Datails').style.display = "none";
+                    document.getElementById('nameLookUpId').style.display = "none";
+                    document.getElementById('existCheckDivId').style.display = "none";
+                    document.getElementById('existingCID').checked = false;
+                    document.getElementById('opforsDivId').style.display = "block";
+                    document.getElementById('opfromsDivId').style.display = "none";
+                    
+                    document.getElementById('p:frm:lookupInputId').value = '';
+                    document.getElementById('inputEmail').value = '';
+                    document.getElementById('inputName').value = '';
+                    
+                }else if(document.getElementById(obj.id).checked == false){
+                    document.getElementById('Customer_Datails').style.display = "block";
+                    document.getElementById('nameLookUpId').style.display = "none";
+                    document.getElementById('existCheckDivId').style.display = "block";
+                    document.getElementById('existingCID').checked = false;
+                    document.getElementById('opforsDivId').style.display = "none";
+                    document.getElementById('opfromsDivId').style.display = "block";
+                }
+            }
+            function hideError(){
+                var strManName = document.getElementById('p:frm:sl1').options[document.getElementById('p:frm:sl1').selectedIndex].text;
+                
+                if(strManName.indexOf('Moomba') != -1){
+                    document.getElementById('errorSpanId').style.display = "none";
+                }else if(strManName.indexOf('Supra') != -1 || strManName.indexOf('Malibu') != -1){
+                    if(document.getElementById('p:frm:sl4').options[document.getElementById('p:frm:sl4').selectedIndex].text != null
+                        && document.getElementById('p:frm:sl4').options[document.getElementById('p:frm:sl4').selectedIndex].text != ''
+                            && document.getElementById('p:frm:sl4').options[document.getElementById('p:frm:sl4').selectedIndex].text != '--None--'){
+                            document.getElementById('errorSpanId').style.display = "none";
+                        }
+                }
+            }
+            onload = function(){
+                /*document.getElementById('stockInvtryId').checked = false;
+                document.getElementById('existingCID').checked = false;
+                document.getElementById('Customer_Datails').style.display = "block";
+                document.getElementById('nameLookUpId').style.display = "none";
+                document.getElementById('opfromsDivId').style.display = "block";
+                document.getElementById('opforsDivId').style.display = "none";*/
+            }
+            
+        </script>
+        <apex:form id="frm" >
+            <a class="slds-button slds-button--neutral slds-button--brand" style="border: 1px solid white; box-shadow: 3px 5px 15px #888888; position: fixed; z-index: 99; left: 1%; top: 2%;" href="/home/home.jsp">Home</a> 
+            <apex:messages style="color : red;"></apex:messages>
+                
+                <apex:inputHidden value="{!objAccount.Name}" id="onjAccNameId"/>
+                <apex:inputHidden value="{!objAccount.Email__c}" id="onjAccEmailId"/>
+                <apex:inputHidden value="{!objAccount.Phone}" id="onjAccPhoneId"/>
+                <apex:inputHidden value="{!objAccount.BillingStreet}" id="onjAccBSId"/>
+                <apex:inputHidden value="{!objAccount.BillingCity}" id="onjAccBCId"/>
+                <apex:inputHidden value="{!objAccount.BillingState}" id="onjAccBStId"/>  
+                <apex:inputHidden value="{!objAccount.BillingPostalCode}" id="onjAccBPCId"/>
+                              
+<!--                 <apex:inputHidden value="{!objAccount.Desired_Boat_Manufacturer__c}" id="onjAccDBMId"/> -->
+                <apex:inputHidden value="{!objAccount.Desire_boat_model__c}" id="onjAccDBModId"/>
+                <apex:inputHidden value="{!objAccount.Prospect_Desired_Boat_Length__c}" id="onjAccPDBLId"/>
+                <apex:inputHidden value="{!objAccount.Desire_Price_low__c}" id="onjAccDPLId"/>
+                <apex:inputHidden value="{!objAccount.Desire_price_high__c}" id="onjAccDPHId"/>
+                
+                <apex:inputHidden value="{!buttonRenderForPlaceOrder}" id="buttonRenderForPlaceOrderId"/>
+                <apex:inputHidden value="{!buttonRenderForSaveAndReCal}" id="buttonRenderForSaveAndReCalId"/>
+                
+                <apex:actionFunction name="callCancelPage" action="{!cancelPage}" id="af1"/>
+<!--                 <apex:actionFunction name="CallSecondPage" action="{!secondPage}" id="af2"/> -->
+                <apex:actionFunction name="callNextPage" action="{!callThirdPage}"/>
+                <apex:actionFunction name="callUsedBoat" action="{!directToUsedBoat}"/>
+                
+                <div class="popupDiv" id="doId" >
+					<div style="border: 5px solid #d9dee6; padding: 2%; position: fixed; top: 20%; left: 30%; z-index: 999; background: #fff; border-radius: 14px; height: auto; width: 500px;">
+						<apex:outputPanel id="pnlComp">
+							<c:Create_Manufacture_Product id="popComp" SelectedTypee="{!selectedType}"/>
+						</apex:outputPanel>
+					</div> 
+				</div>
+                
+                <article class="slds-card card-wrapper_Purchase">
+                    <header class="slds-card__header slds-grid"> 
+                        <div class="slds-media slds-media--center slds-has-flexi-truncate">
+                            <div class="slds-media__body slds-truncate" id="opfromsDivId">
+                                <h2>
+                                    <span class="slds-text-heading--small">Order Product From Stock</span>
+                                </h2>
+                            </div>
+                            <div class="slds-media__body slds-truncate" id="opforsDivId">
+                                <h2> 
+                                    <span class="slds-text-heading--small">Order Product For Stock</span>
+                                </h2>
+                            </div>
+                        </div>
+                        <span style="color:red;display:none;" id="errorSpanId"></span>
+                    </header>
+                    <div class="slds-card__body">
+                        <div class="slds-grid slds-wrap">
+                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-1 slds-col--padded">
+                                
+                                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                                        <div class="slds-form-element">
+                                            <label class="slds-form-element__label">Order Product For Stock</label>
+                                            <div class="slds-form-element__control">
+                                                <label class="slds-checkbox--toggle slds-grid slds-grid--vertical-align-center">
+                                                    <input name="checkbox" type="checkbox" id="stockInvtryId" onchange="orderForDealerCheck(this);"/>
+                                                    <span class="slds-checkbox--faux" data-check-on="Yes" data-check-off="No"></span>
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                
+                                <div class="slds-grid slds-wrap">
+                                    <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded" id="existCheckDivId">
+                                        <div class="slds-form-element">
+                                            <label class="slds-form-element__label">Existing User</label>
+                                            <div class="slds-form-element__control">
+                                                <label class="slds-checkbox--toggle slds-grid slds-grid--vertical-align-center">
+                                                    <input name="checkbox" type="checkbox" id="existingCID" onchange="existingCheck(this);" />
+                                                    <span class="slds-checkbox--faux" data-check-on="Yes" data-check-off="No"></span>
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+									<div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                                            <div class="slds-form-element">
+                                                <div class="slds-form-element">
+                                                     <span style="color: red;">*</span> 
+                                                    <label class="slds-form-element__label" >Type:</label>
+                                                    <div class="slds-form-element__control">
+                                                        <apex:selectList size="1" value="{!selectedType}" label="Type:"   id="slType" styleClass="slds-select">
+                                                            <apex:selectOptions value="{!lstType}"/>
+                                                            <apex:actionSupport event="onchange"  action="{!getManufacturer}" reRender="pnlComp,manuPanelid,yearPanelid,modelPanelid,modelvariantPanelid"/>
+                                                        </apex:selectList> 
+                                                    </div>
+                                                </div>
+                                            </div> 
+                                    </div>
+                                    <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                                    		<apex:outputPanel id="manuPanelid">
+                                        <div class="slds-form-element">
+                                            <span style="color:red;">*</span>
+                                            <label class="slds-form-element__label">Manufacture:</label>
+                                            <div class="slds-form-element__control">
+                                                <apex:selectList size="1" style="width: 90%;" value="{!selectedManufacture}" disabled="{!if(selectedType != '0' && selectedType != 'Used Boat' , false, true)}" label="Manufacture: " id="sl1" styleClass="slds-select">
+                                                    <apex:selectOptions value="{!lstManufacture}" id="so1"/>
+                                                    <apex:actionSupport event="onchange"  action="{!getYearAndModel}" reRender="yearPanelid,modelPanelid,modelvariantPanelid"/>
+                                                </apex:selectList>
+                                                &nbsp;
+                                                <a onclick="showPopup();">
+                                                		<i class="fa fa-plus" style="color: #0070d2;"></i>
+                                                </a>
+                                            </div>
+                                        </div>
+                                        </apex:outputPanel>
+                                    </div>
+                                    <script>
+                                    		function showPopup() {
+                                    			if(document.getElementById("p:frm:slType").value != "0") {
+                                    				document.getElementById("doId").style.display = "block";
+                               				} else {
+                               					alert("Please select type first");
+                               				}
+                                    		}
+                                    </script>
+                                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                                    <apex:outputPanel id="yearPanelid">
+                                        <div class="slds-form-element">
+                                            <span style="color:red;">*</span>
+                                            <label class="slds-form-element__label" >Year:</label>
+                                            <div class="slds-form-element__control">
+                                               <apex:selectList size="1" value="{!selectedYear}" disabled="{!if(selectedType != '0' && selectedType != 'Used Boat' && selectedManufacture != null, false, true)}" id="sl2" styleClass="slds-select">
+                                                    <apex:selectOptions value="{!setYear}" id="so2"/>
+                                                    <apex:actionSupport event="onchange" action="{!getModel}" reRender="modelPanelid"/>
+                                                </apex:selectList>
+                                            </div>
+                                          
+                                        </div>
+                                    </apex:outputPanel>
+                                  </div>
+                                
+                                    <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                                        <apex:outputPanel id="modelPanelid">
+                                            <div class="slds-form-element">
+                                                <div class="slds-form-element">
+                                                    <label class="slds-form-element__label" >Model:</label> 
+                                                    <div class="slds-form-element__control">
+                                                        <apex:selectList size="1" value="{!selectedModel}" label="Model: " disabled="{!if(selectedType != '0' && selectedType != 'Used Boat' && selectedManufacture != null && selectedYear != null , false, true)}" id="sl3" styleClass="slds-select">
+                                                            <apex:selectOptions value="{!setModel}"/>
+                                                            <apex:actionSupport event="onchange" action="{!getModelVariant}" reRender="modelvariantPanelid" oncomplete="hideError();"/>
+                                                        </apex:selectList>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                         </apex:outputPanel>   
+                                    </div>
+                                    
+                                    <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                                        <apex:outputPanel id="modelvariantPanelid">
+                                            <div class="slds-form-element">
+                                                <div class="slds-form-element">
+                                                    <apex:outputPanel rendered="{!if( selectedType != '0' && selectedType != 'Used Boat' && selectedManufacture != null && selectedYear != null && selectedModel != null && nameCheck == true, true, false)}">
+                                                        <span style="color:red;">*</span>
+                                                    </apex:outputPanel>
+                                                    <label class="slds-form-element__label" >Model Variant:</label>
+                                                    <div class="slds-form-element__control">
+                                                        <apex:selectList size="1" value="{!selectedModelVariant}" label="Model Variant: " disabled="{!if(selectedManufacture != null && selectedYear != null && selectedModel != null && nameCheck == true, false, true)}" id="sl4" styleClass="slds-select">
+                                                            <apex:selectOptions value="{!setModelVariant}"/>
+                                                            <apex:actionSupport event="onchange" reRender="modelvariantPanelid" oncomplete="hideError();"/>
+                                                        </apex:selectList>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                         </apex:outputPanel>   
+                                    </div>
+                                    
+                                    
+                                 
+                                </div>
+                            </div>
+
+                             <!--  Customer Component ---->
+
+                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-1" id="Customer_Datails">
+                                <div class="slds-grid slds-wrap">
+                                    <div class="slds-col slds-size--1-of-1 slds-col--padded Customer-Heading" >
+                                        <h2 class="slds-col--padded">
+                                            <span class="slds-text-heading--small slds-col--padded">Customer Details</span>
+                                        </h2>
+                                      </div>
+                                  </div>
+                                
+                                <div class="slds-grid slds-wrap">
+                                    <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-1 slds-col--padded">
+                                       <div class="slds-grid slds-wrap">
+                                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                                                <div class="slds-form-element">
+                                                    <label class="slds-form-element__label" >Name</label>
+                                                    <div class="slds-form-element__control">
+                                                       <input type="text" class="slds-input" id="inputName" />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            
+                                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                                                <div class="slds-form-element">
+                                                    <label class="slds-form-element__label" >Email</label>
+                                                    <div class="slds-form-element__control">
+                                                       <input type="text" class="slds-input" id="inputEmail" />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            
+                                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                                                <div class="slds-form-element">
+                                                    <label class="slds-form-element__label" >Lead source</label>
+                                                    <div class="slds-form-element__control">
+<!--                                                        <input type="text" class="slds-input" /> -->
+                                                       <apex:inputField value="{!objAccount.Lead_Source__c}" id="lsId" styleClass="slds-select"/>
+                                                    </div>
+                                                </div>
+                                            </div>   
+                                             
+                                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                                               <div class="slds-form-element">
+                                                    <label class="slds-form-element__label" >Desired boat Manufacture</label>
+                                                    <div class="slds-form-element__control">
+<!--                                                        <input type="text" id="inputDBM" class="slds-input" /> -->
+<!--                                                        <select id="inputDBM" class="slds-select"> -->
+<!--                                                                 <option>Skiers Choice(Moomba)</option> -->
+<!--                                                                 <option>Skiers Choice(Supra)</option>     -->
+<!--                                                        </select> -->
+                                                       <apex:inputField value="{!objAccount.Desired_Boat_Manufacturer__c}" id="inputDBM"  styleClass="slds-select" />
+                                                    </div>
+                                                </div> 
+                                            </div>
+                                        </div>
+                                    </div>
+            
+                                    <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-1 slds-col--padded">
+                                        <div class="slds-grid slds-wrap">
+                                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                                                <div class="slds-form-element">
+                                                    <label class="slds-form-element__label" >Address</label>
+                                                    <div class="slds-form-element__control">
+                                                       <input type="text" class="slds-input" id="inputAdd1"/>
+                                                    </div>
+                                                </div>    
+                                            </div>
+                                            
+                                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                                                <div class="slds-form-element">
+                                                    <label class="slds-form-element__label" >City</label>
+                                                    <div class="slds-form-element__control">
+                                                       <input type="text" id="inputCity" class="slds-input" />
+                                                    </div>
+                                                </div>    
+                                            </div>
+                                            
+                                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                                                <div class="slds-form-element">
+                                                    <label class="slds-form-element__label" >Desired boat model</label>
+                                                    <div class="slds-form-element__control">
+                                                       <input type="text" id="inputDBMod" class="slds-input" />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            
+                                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                                                <div class="slds-form-element">
+                                                    <label class="slds-form-element__label" >Desired boat length</label>
+                                                    <div class="slds-form-element__control">
+                                                       <input type="number" id="inputDBLen" class="slds-input"  />
+                                                    </div>
+                                                </div>
+                                            </div>  
+                                        </div>
+                                    </div>
+                                    
+                                    
+                                    <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-1 slds-col--padded">
+                                        <div class="slds-grid slds-wrap">
+                                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                                                <div class="slds-form-element">
+                                                    <label class="slds-form-element__label" >State</label>
+                                                    <div class="slds-form-element__control">
+                                                       <input type="text" id="inputState" class="slds-input" />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            
+                                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                                                <div class="slds-form-element">
+                                                    <label class="slds-form-element__label" >Phone number</label>
+                                                    <div class="slds-form-element__control">
+                                                       <input type="text" class="slds-input" id="inputPhone"/>
+                                                    </div>
+                                                </div>    
+                                            </div>
+                                            
+                                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                                                <div class="slds-form-element">
+                                                    <label class="slds-form-element__label" >Desired Price low</label>
+                                                    <div class="slds-form-element__control">
+                                                       <input type="number" class="slds-input" id="inputDPL"/>
+                                                    </div>
+                                                </div>
+                                            </div>  
+                                            
+                                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                                                <div class="slds-form-element">
+                                                    <label class="slds-form-element__label" >Desired price high</label>
+                                                    <div class="slds-form-element__control">
+                                                       <input type="number" class="slds-input" id="inputDPH"/>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    
+                                    
+                                    <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-1 slds-col--padded">
+                                        <div class="slds-grid slds-wrap">
+                                            <div class="slds-col slds-size--1-of-2 slds-col--padded">
+                                                
+                                            </div>
+                                            
+                                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-2 slds-col--padded">
+                                               <div class="slds-form-element">
+                                                    <label class="slds-form-element__label" for="select-01">Do they have a trade?</label>
+                                                    <div class="slds-form-element__control">
+                                                        <div class="slds-select_container">
+                                                            <select id="select-DTHAT" class="slds-select" onchange="tradeChange(this);">
+                                                                <option value="Yes">Yes</option>
+                                                                <option value="No" selected="true">No</option> 
+                                                            </select>
+                                                        </div>
+                                                        <div class="slds-form-element" id="tdId" style="display:none;">
+                                                            <label class="slds-form-element__label" >Trade Description</label>
+                                                            <div class="slds-form-element__control">
+                                                                <apex:inputField value="{!objAccount.Do_they_have_a_Trade2__c}" styleClass="slds-input" id="doTHID"/>
+                                                            </div>
+                                                        </div>
+                                                    </div> 
+                                                 </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            
+                            </div>
+                            
+                            <!--  Existing Customer ---->
+                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-1" id="nameLookUpId">
+                                <div class="slds-grid slds-wrap">
+                                    <div class="slds-col slds-size--1-of-1 slds-col--padded Customer-Heading" >
+                                        <h2 class="slds-col--padded">
+                                            <span class="slds-text-heading--small slds-col--padded">Existing Customer </span>
+                                        </h2>
+                                      </div>
+                                  </div>
+                            
+                                <span>
+                                    <div class="slds-grid slds-wrap slds-col--padded">
+                                        <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-2 slds-small-size--1-of-2 slds-col--padded">
+                                            <div class="slds-form-element">
+                                                <label class="slds-form-element__label" >Name Lookup</label>
+                                                <div class="slds-form-element__control">
+<!--                                                     <input type="text" class="slds-input" /> -->
+                                                    <apex:inputField value="{!objOrder.ContactName__c}" styleClass="slds-input" id="lookupInputId"/>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="slds-col slds-size--1-of-2 slds-col--padded">
+                                        
+                                        </div>
+                                    </div>
+                                </span>
+                                
+                            </div>
+                            <div class="slds-col slds-size--1-of-2 slds-medium-size--1-of-2 slds-col--padded">
+                                
+                            </div>
+                        </div>
+                        <div class="slds-grid slds-wrap" style="margin-top:1rem">
+                            <div class="slds-col slds-size--1-of-1 slds-align--absolute-center">      
+                                <button class="slds-button slds-button--neutral slds-button--brand slds-m-right--xx-large" type="button" onclick="callCancel();">Cancel</button>
+                                <button class="slds-button slds-button--neutral slds-button--brand btn-next" type="button" onclick="callNext();" >Next</button>    <!-- disabled="true" -->
+                            </div> 
+                        </div>
+                    </div>
+                </article>
+            </apex:form>
+            
+            
+           
+            
+           
+            
+            
+            
+        </body>
+    </html>
+      <script>
+        var objModVarStatus = new Object();
+        var jq$ = jQuery.noConflict();
+        jq$(document).ready(function() {                         
+            try{
+                sforce.connection.sessionId = '{!$Api.Session_ID}';
+                var qr = sforce.connection.query("Select Id, Name, BOATBUILDING__Model_Variant__c From BOATBUILDING__Manufacturer__c");
+                var records = qr.getArray("records");
+                for(var i = 0; i < records.length ; i++) {
+                    console.log(records[i].Name +" :: "+records[i].BOATBUILDING__Model_Variant__c);
+                    if(records[i].BOATBUILDING__Model_Variant__c == "true") {
+                        objModVarStatus[records[i].Id] = true;    
+                    }
+                    else {
+                        objModVarStatus[records[i].Id] = false;
+                    }   
+                }
+                console.log(objModVarStatus);
+             }
+            catch(err){
+                alert(err.message);
+            }
+        });
+
+        function tradeChange(obj){
+            document.getElementById('errorSpanId').style.display = "none";
+            if(document.getElementById(obj.id).value == 'Yes'){
+                document.getElementById('tdId').style.display = 'block';
+            }else if(document.getElementById(obj.id).value == 'No'){
+                document.getElementById('tdId').style.display = 'none';
+            }
+        }
+      
+        function callCancel(){
+            document.getElementById('errorSpanId').style.display = "none";
+            callCancelPage();
+        }
+       
+        function callNext(){
+  			var typeOfBoat = document.getElementById("p:frm:slType").value;
+  			if(typeOfBoat != '0' && typeOfBoat != 'Used Boat' ) {//&& typeOfBoat != 'Trailer'      	
+        	
+	            var manuId = document.getElementById('p:frm:sl1').value;
+	            var modVarStatus = objModVarStatus[manuId];
+	            console.log(modVarStatus);
+	            if(document.getElementById('stockInvtryId').checked == false) {
+	                document.getElementById('p:frm:buttonRenderForPlaceOrderId').value = false;
+	                document.getElementById('p:frm:buttonRenderForSaveAndReCalId').value = true;
+	                if(document.getElementById('p:frm:sl1').value != '' && document.getElementById('p:frm:sl1').value != null
+	                    && document.getElementById('p:frm:sl2').value != '' && document.getElementById('p:frm:sl2').value != null
+	                        && document.getElementById('p:frm:sl3').value != '' && document.getElementById('p:frm:sl3').value != null){
+	                    
+	                    if(modVarStatus){
+	                        if(document.getElementById('p:frm:sl4').value != '' && document.getElementById('p:frm:sl4').value != null){
+	                            
+	                            if(document.getElementById('existingCID').checked == true){
+	                                if(document.getElementById('p:frm:lookupInputId').value != ''){
+	                                    document.getElementById('errorSpanId').style.display = "none";
+	                                    callNextPage();
+	                                }else{
+	                                    //alert('Please Select Your Name');
+	                                    document.getElementById('errorSpanId').style.display = "block";
+	                                    document.getElementById('errorSpanId').innerHTML = 'Error: Please Select Your Name';
+	                                }
+	                            }else if(document.getElementById('existingCID').checked == false){
+	                                if(document.getElementById('inputName').value != ''){
+	                                
+	                                    var filter = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+	                                    
+	                                    document.getElementById('p:frm:onjAccNameId').value     = document.getElementById('inputName').value;
+	                                    document.getElementById('p:frm:onjAccPhoneId').value    = document.getElementById('inputPhone').value;
+	                                    document.getElementById('p:frm:onjAccBSId').value       = document.getElementById('inputAdd1').value;
+	                                    document.getElementById('p:frm:onjAccBCId').value       = document.getElementById('inputCity').value;
+	                                    document.getElementById('p:frm:onjAccBStId').value      = document.getElementById('inputState').value;
+	                                    
+	//                                     var sm                                                  = document.getElementById('inputDBM');
+	//                                     document.getElementById('p:frm:onjAccDBMId').value      = sm.options[sm.selectedIndex].text;
+	                                    document.getElementById('p:frm:onjAccDBModId').value    = document.getElementById('inputDBMod').value;
+	                                    document.getElementById('p:frm:onjAccPDBLId').value     = document.getElementById('inputDBLen').value;
+	                                    document.getElementById('p:frm:onjAccDPLId').value      = document.getElementById('inputDPL').value;
+	                                    document.getElementById('p:frm:onjAccDPHId').value      = document.getElementById('inputDPH').value;
+	                                    if(filter.test(document.getElementById('inputEmail').value) || document.getElementById('inputEmail').value == ''){
+	                                        if(document.getElementById('inputEmail').value != ''){
+	                                            document.getElementById('p:frm:onjAccEmailId').value = document.getElementById('inputEmail').value;
+	                                            document.getElementById('errorSpanId').style.display = "none";
+	                                            callNextPage();
+	                                        }else{
+	//                                             alert('Please Enter Email.');
+	                                            document.getElementById('errorSpanId').style.display = "block";
+	                                            document.getElementById('errorSpanId').innerHTML = 'Error: Please Enter Email';
+	                                        }
+	                                    }else{
+	//                                         alert('Please Enter Valid Email');
+	                                        document.getElementById('errorSpanId').style.display = "block";
+	                                        document.getElementById('errorSpanId').innerHTML = 'Error: Please Enter Valid Email';
+	                                    }
+	                                }else{
+	//                                     alert('Please Enter Your Name');
+	                                    document.getElementById('errorSpanId').style.display = "block";
+	                                    document.getElementById('errorSpanId').innerHTML = 'Error: Please Enter Your Name';
+	                                }
+	                            }
+	                        }else{
+	                            document.getElementById('errorSpanId').style.display = "block";
+	                            document.getElementById('errorSpanId').innerHTML = 'Error: Please Enter All The Details';
+	                            //alert('Please Enter All The Details.');
+	                        }
+	                                    
+	                    }else{
+	                        
+	                        if(document.getElementById('existingCID').checked == true){
+	                            if(document.getElementById('p:frm:lookupInputId').value != ''){
+	                                document.getElementById('errorSpanId').style.display = "none";
+	                                callNextPage();
+	                            }else{
+	//                                 alert('Please Select Your Name');
+	                                document.getElementById('errorSpanId').style.display = "block";
+	                                document.getElementById('errorSpanId').innerHTML = 'Error: Please Select Your Name';
+	                            }
+	                        }else if(document.getElementById('existingCID').checked == false){
+	                            if(document.getElementById('inputName').value != ''){
+	                            
+	                                var filter = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+	                                
+	                                document.getElementById('p:frm:onjAccNameId').value     = document.getElementById('inputName').value;
+	                                document.getElementById('p:frm:onjAccPhoneId').value    = document.getElementById('inputPhone').value;
+	                                document.getElementById('p:frm:onjAccBSId').value       = document.getElementById('inputAdd1').value;
+	                                document.getElementById('p:frm:onjAccBCId').value       = document.getElementById('inputCity').value;
+	                                document.getElementById('p:frm:onjAccBStId').value      = document.getElementById('inputState').value;
+	                                
+	//                                 var sm                                                  = document.getElementById('inputDBM');
+	//                                 document.getElementById('p:frm:onjAccDBMId').value      = sm.options[sm.selectedIndex].text;
+	                                document.getElementById('p:frm:onjAccDBModId').value    = document.getElementById('inputDBMod').value;
+	                                document.getElementById('p:frm:onjAccPDBLId').value     = document.getElementById('inputDBLen').value;
+	                                document.getElementById('p:frm:onjAccDPLId').value      = document.getElementById('inputDPL').value;
+	                                document.getElementById('p:frm:onjAccDPHId').value      = document.getElementById('inputDPH').value;
+	                                if(filter.test(document.getElementById('inputEmail').value) || document.getElementById('inputEmail').value == ''){
+	                                    if(document.getElementById('inputEmail').value != ''){
+	                                        document.getElementById('p:frm:onjAccEmailId').value = document.getElementById('inputEmail').value;
+	                                            document.getElementById('errorSpanId').style.display = "none";
+	                                        callNextPage();
+	                                    }else{
+	                                        //alert('Please Enter Email.');
+	                                        document.getElementById('errorSpanId').style.display = "block";
+	                                        document.getElementById('errorSpanId').innerHTML = 'Error: Please Enter Email.';
+	                                    }
+	                                }else{
+	                                    //alert('Please Enter Valid Email');
+	                                    document.getElementById('errorSpanId').style.display = "block";
+	                                    document.getElementById('errorSpanId').innerHTML = 'Error: Please Enter Valid Email';
+	                                }
+	                            }else{
+	                                //alert('Please Enter Your Name');
+	                                document.getElementById('errorSpanId').style.display = "block";
+	                                document.getElementById('errorSpanId').innerHTML = 'Error: Please Enter Your Name';
+	                            }
+	                        }
+	                    
+	                    }
+	                    
+	                }else{
+	                    //alert('Please Enter All The Details');
+	                    document.getElementById('errorSpanId').style.display = "block";
+	                    document.getElementById('errorSpanId').innerHTML = 'Error: Please Enter All The Details'; 
+	                    
+	                }
+	            }else{
+	                document.getElementById('p:frm:buttonRenderForPlaceOrderId').value = true;
+	                document.getElementById('p:frm:buttonRenderForSaveAndReCalId').value = false;
+	                
+	                if(document.getElementById('p:frm:sl1').value != '' && document.getElementById('p:frm:sl1').value != null
+	                    && document.getElementById('p:frm:sl2').value != '' && document.getElementById('p:frm:sl2').value != null
+	                        && document.getElementById('p:frm:sl3').value != '' && document.getElementById('p:frm:sl3').value != null){
+	                         
+	                        if(modVarStatus){
+	                            if(document.getElementById('p:frm:sl4').value != '' && document.getElementById('p:frm:sl4').value != null){
+	                                //alert('Going Right'); 
+	                                callNextPage();
+	                            }else{
+	                                document.getElementById('errorSpanId').style.display = "block";
+	                                document.getElementById('errorSpanId').innerHTML = 'Error: Please Enter All The Details';
+	                                //alert('Please Enter All The Details.');
+	                            }       
+	                        }else{
+	                            //alert('Going Right');
+	                                document.getElementById('errorSpanId').style.display = "none";
+	                            callNextPage();
+	                        }   
+	                }else{
+	                    document.getElementById('errorSpanId').style.display = "block";
+	                    document.getElementById('errorSpanId').innerHTML = 'Error: Please Enter All The Details';
+	                    //alert('Please Enter All The Details');
+	                }
+	                
+	            }
+            } 
+            else if(typeOfBoat == 'Used Boat') {
+            		callUsedBoat();
+            }
+            /*else if(typeOfBoat == 'Trailer') { 
+            		      	
+        			console.log('Trailer is in film now');
+        			
+	            var manuId = document.getElementById('p:frm:sl1').value;
+	            var modVarStatus = objModVarStatus[manuId];
+	            console.log(modVarStatus);
+	            if(document.getElementById('stockInvtryId').checked == false) {
+	                document.getElementById('p:frm:buttonRenderForPlaceOrderId').value = false;
+	                document.getElementById('p:frm:buttonRenderForSaveAndReCalId').value = true;
+	                if(document.getElementById('p:frm:sl1').value != '' && document.getElementById('p:frm:sl1').value != null
+	                    && document.getElementById('p:frm:sl2').value != '' && document.getElementById('p:frm:sl2').value != null){
+	                     
+	                            if(document.getElementById('existingCID').checked == true) {
+	                                if(document.getElementById('p:frm:lookupInputId').value != '') {
+	                                    document.getElementById('errorSpanId').style.display = "none";
+	                                    callNextPage();
+	                                } else {
+	                                    //alert('Please Select Your Name');
+	                                    document.getElementById('errorSpanId').style.display = "block";
+	                                    document.getElementById('errorSpanId').innerHTML = 'Error: Please Select Your Name';
+	                                }
+	                            }else if(document.getElementById('existingCID').checked == false){
+	                                if(document.getElementById('inputName').value != ''){
+	                                
+	                                    var filter = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+	                                    
+	                                    document.getElementById('p:frm:onjAccNameId').value     = document.getElementById('inputName').value;
+	                                    document.getElementById('p:frm:onjAccPhoneId').value    = document.getElementById('inputPhone').value;
+	                                    document.getElementById('p:frm:onjAccBSId').value       = document.getElementById('inputAdd1').value;
+	                                    document.getElementById('p:frm:onjAccBCId').value       = document.getElementById('inputCity').value;
+	                                    document.getElementById('p:frm:onjAccBStId').value      = document.getElementById('inputState').value;
+	                                    
+	//                                     var sm                                                  = document.getElementById('inputDBM');
+	//                                     document.getElementById('p:frm:onjAccDBMId').value      = sm.options[sm.selectedIndex].text;
+	                                    document.getElementById('p:frm:onjAccDBModId').value    = document.getElementById('inputDBMod').value;
+	                                    document.getElementById('p:frm:onjAccPDBLId').value     = document.getElementById('inputDBLen').value;
+	                                    document.getElementById('p:frm:onjAccDPLId').value      = document.getElementById('inputDPL').value;
+	                                    document.getElementById('p:frm:onjAccDPHId').value      = document.getElementById('inputDPH').value;
+	                                    if(filter.test(document.getElementById('inputEmail').value) || document.getElementById('inputEmail').value == ''){
+	                                        if(document.getElementById('inputEmail').value != ''){
+	                                            document.getElementById('p:frm:onjAccEmailId').value = document.getElementById('inputEmail').value;
+	                                            document.getElementById('errorSpanId').style.display = "none";
+	                                            callNextPage();
+	                                        }else{
+	//                                             alert('Please Enter Email.');
+	                                            document.getElementById('errorSpanId').style.display = "block";
+	                                            document.getElementById('errorSpanId').innerHTML = 'Error: Please Enter Email';
+	                                        }
+	                                    }else{
+	//                                         alert('Please Enter Valid Email');
+	                                        document.getElementById('errorSpanId').style.display = "block";
+	                                        document.getElementById('errorSpanId').innerHTML = 'Error: Please Enter Valid Email';
+	                                    }
+	                                }else{
+	//                                     alert('Please Enter Your Name');
+	                                    document.getElementById('errorSpanId').style.display = "block";
+	                                    document.getElementById('errorSpanId').innerHTML = 'Error: Please Enter Your Name';
+	                                }
+	                            }
+	                    
+	                }else{
+	                    //alert('Please Enter All The Details');
+	                    document.getElementById('errorSpanId').style.display = "block";
+	                    document.getElementById('errorSpanId').innerHTML = 'Error: Please Enter All The Details'; 
+	                    
+	                }
+	            }else{
+	                document.getElementById('p:frm:buttonRenderForPlaceOrderId').value = true;
+	                document.getElementById('p:frm:buttonRenderForSaveAndReCalId').value = false;
+	                
+	                if(document.getElementById('p:frm:sl1').value != '' && document.getElementById('p:frm:sl1').value != null
+	                    && document.getElementById('p:frm:sl2').value != '' && document.getElementById('p:frm:sl2').value != null) {
+	                          
+	                                callNextPage();   
+	                } else{
+	                    document.getElementById('errorSpanId').style.display = "block";
+	                    document.getElementById('errorSpanId').innerHTML = 'Error: Please Enter All The Details';
+	                    //alert('Please Enter All The Details');
+	                }
+	                
+	            }
+            }*/
+            else { 
+            		document.getElementById('errorSpanId').style.display = "block";
+                document.getElementById('errorSpanId').innerHTML = 'Error: Please select the type.';
+            } 
+        }
+      </script>
+</apex:page>

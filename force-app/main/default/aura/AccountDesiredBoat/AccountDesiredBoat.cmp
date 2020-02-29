@@ -1,0 +1,90 @@
+<aura:component >
+    <aura:attribute name="objAccountDB" type="Account" default="{'sobjectType': 'Account'}"/>
+    <aura:registerEvent name="ParentToChild" type="c:AccountParentToChild"/>
+    <div class="slds-grid slds-wrap slds-col--padded"> 
+        <h1><b>Desired Boat Information</b></h1>
+        <div class="slds-col slds-size--1-of-1">
+            <div class="slds-grid slds-wrap" >
+                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-3 slds-col--padded">
+                    <div class="slds-form-element">
+                        <label class="slds-form-element__label">Desired Boat Manufacturer:</label>
+                        <div class="slds-form-element__control">
+                            <force:inputField value="{!v.objAccountDB.BOATBUILDING__Desired_Boat_Manufacturer__c}" class="slds-input"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-3 slds-col--padded">
+                    <div class="slds-form-element">
+                        <label class="slds-form-element__label">Desired Boat model:</label>
+                        <div class="slds-form-element__control">
+                            <force:inputField value="{!v.objAccountDB.BOATBUILDING__Desire_boat_model__c}" class="slds-input"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-3 slds-col--padded">
+                    <div class="slds-form-element">
+                        <label class="slds-form-element__label">Desired Boat Length:</label>
+                        <div class="slds-form-element__control">
+                            <force:inputField value="{!v.objAccountDB.BOATBUILDING__Prospect_Desired_Boat_Length__c}" class="slds-input"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-3 slds-col--padded">
+                    <div class="slds-form-element">
+                        <label class="slds-form-element__label">Desired Price High:</label>
+                        <div class="slds-form-element__control">
+                            <force:inputField value="{!v.objAccountDB.BOATBUILDING__Desire_price_high__c}" class="slds-input"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-3 slds-col--padded">
+                    <div class="slds-form-element">
+                        <label class="slds-form-element__label">Desired Price Low:</label>
+                        <div class="slds-form-element__control">
+                            <force:inputField value="{!v.objAccountDB.BOATBUILDING__Desire_Price_low__c}" class="slds-input"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-3 slds-col--padded">
+                    <div class="slds-form-element">
+                        <label class="slds-form-element__label">Desired Payment:</label>
+                        <div class="slds-form-element__control">
+                            <force:inputField value="{!v.objAccountDB.BOATBUILDING__Desired_PaymentBB__c}" class="slds-input"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-3 slds-col--padded">
+                    <div class="slds-form-element">
+                        <label class="slds-form-element__label">Customer Also Shopping Brand A:</label>
+                        <div class="slds-form-element__control">
+                            <force:inputField value="{!v.objAccountDB.BOATBUILDING__Customer_Also_Shopping_Brand_A__c}" class="slds-input"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-3 slds-col--padded">
+                    <div class="slds-form-element">
+                        <label class="slds-form-element__label">Customer Also Shopping Brand B:</label>
+                        <div class="slds-form-element__control">
+                            <force:inputField value="{!v.objAccountDB.BOATBUILDING__Customer_Also_Shopping_Brand_B__c}" class="slds-input"/>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <hr/>
+    <table>
+        <tr>
+            <td>
+                <div data-value="3" style="height:0px;max-width:auto;" onclick="{!c.previousClick}">
+                    <lightning:button variant="brand" label="Previous" iconName="utility:chevronleft" iconPosition="left" class="leftElement"/>
+                </div>
+            </td>
+            <td>
+                <div data-value="3" style="height:0px;max-width:auto;" onclick="{!c.handleClick}">
+                    <lightning:button variant="brand" label="Next" iconName="utility:chevronright" iconPosition="right" class="rightElement" value="2" />
+                </div>
+            </td>
+        </tr>
+    </table>
+</aura:component>

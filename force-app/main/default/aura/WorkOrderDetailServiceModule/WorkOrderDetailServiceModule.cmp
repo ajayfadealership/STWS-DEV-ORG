@@ -1,0 +1,17 @@
+<aura:component access="global" implements="force:appHostable,flexipage:availableForAllPageTypes" >
+    <aura:attribute name="woRecordTypeId" type="String" access="global"/>
+    <aura:attribute name="objRecId" type="String" access="global"/>
+    <lightning:recordEditForm aura:id="woRecEF" recordTypeId="{!v.woRecordTypeId}" recordId="{!v.objRecId}" objectApiName="BOATBUILDING__Work_Order__c" >
+        <div class="slds-col slds-size--1-of-1"> 
+            <div class="slds-grid slds-wrap" >
+                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-3 slds-col--padded">
+                    <!--variant="label-stacked"-->
+                    <lightning:inputField fieldName="Owner" />
+                </div>
+                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-3 slds-col--padded">
+                    <lightning:inputField fieldName="Name" /> 
+                </div>
+            </div>
+        </div>
+    </lightning:recordEditForm>
+</aura:component>

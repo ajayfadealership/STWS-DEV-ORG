@@ -1,0 +1,288 @@
+<apex:page controller="GenerateOrderController" showHeader="false" applyHtmlTag="false" >
+      <head>
+      
+        <style type="text/css">
+            .content{
+                font-family: "Times New Roman", Georgia, Serif;
+                max-width:1000px;
+                margin: 0 auto;
+            }
+ 
+            div.header {
+                padding: 10px;
+                position: running(header);
+            }
+            
+            div.footer {
+                display: block;
+                padding: 5px;
+                position: running(footer);
+            }
+ 
+            .pagenumber:before {
+                content: counter(page);
+            }
+            
+            .pagecount:before {
+                content: counter(pages);
+            }
+            table, td, th {
+                border-collapse: collapse;
+            }
+            .listTable td, .listTable th {
+                border: 1px solid #666;
+            }
+ 
+            .listTable thead th {
+                background: #eee;
+                text-align: center;
+                font-weight: bold;
+            }
+ 
+            .listTable tbody td {
+                border: none;
+                border-left: 1px solid #666;
+                border-right: 1px solid #666;
+            }
+ 
+            .listTable tbody tr:last-child td {
+                border-bottom: 1px solid #666;
+            }
+ 
+            .listTable tbody tr.odd td {
+                background: #eee;
+            }
+ 
+            .listTable td.no-border {
+                border: none;
+            }
+ 
+            .listTable tbody {
+                border: 1px solid #666
+            }
+        </style>
+        <style type="text/css" media="print">
+            @page {
+                @top-center {
+                    content: element(header);
+                }
+                
+                @bottom-left {
+                    content: element(footer);
+                }
+            }
+            .content{
+                font-family: "Times New Roman", Georgia, Serif;
+            }
+            
+            div.header {
+                padding: 10px;
+                position: running(header);
+            }
+            
+            div.footer {
+                display: block;
+                padding: 5px;
+                position: running(footer);
+            }
+ 
+            .pagenumber:before {
+                content: counter(page);
+            }
+            
+            .pagecount:before {
+                content: counter(pages);
+            }
+            table, td, th {
+                border-collapse: collapse;
+                border: 1px solid #666;
+            }
+            .listTable td, .listTable th {
+                border: 1px solid #666;
+            }
+ 
+            .listTable thead th {
+                background: #eee;
+                text-align: center;
+                font-weight: bold;
+            }
+ 
+            .listTable tbody td {
+                border: none;
+                border-left: 1px solid #666;
+                border-right: 1px solid #666;
+            }
+ 
+            .listTable tbody tr:last-child td {
+                border-bottom: 1px solid #666;
+            }
+ 
+            .listTable tbody tr.odd td {
+                background: #eee;
+            }
+ 
+            .listTable td.no-border {
+                border: none;
+            }
+ 
+            .listTable tbody {
+                border: 1px solid #666
+            }
+        </style>
+    </head>
+     <apex:form >
+     <apex:pageBlock >
+      <img src="/servlet/servlet.FileDownload?file={!strDocId}" width="100%" height="40%" style="border-bottom:10px solid #00B0F0" />
+    <div class="content" style = "page-break-inside:avoid;">
+    <table width="100%" border="0">
+            <tr>
+                <td>
+                    <p style="font-size: 13px;">
+                        <strong>Vendor Details</strong><br/>
+                        <apex:outputText >{!objOrder.Vendor_Name__r.Name}</apex:outputText> <br/>
+                        <apex:outputText value="{!objOrder.Vendor_Name__r.Street__c}"> </apex:outputText> <br/>
+                        <apex:outputText value="{!objOrder.Vendor_Name__r.City__c}"></apex:outputText> , <apex:outputText value="{!objOrder.Vendor_Name__r.State__c}"></apex:outputText> <br/>
+                        <apex:outputText >{!objOrder.Vendor_Name__r.Phone__c}</apex:outputText> , <apex:outputText value="{!objOrder.Vendor_Name__r.Zip__c}" ></apex:outputText> <br/>
+                        <apex:outputText >{!objOrder.Vendor_Name__r.Email__c}</apex:outputText> <br/>
+                    </p>
+                </td>
+                <td >&nbsp;</td>
+                <td>
+                    <p style="font-size: 13px;">
+                        <b>Order:</b> &nbsp;<apex:outputText >{!objOrder.Name}</apex:outputText><br/>
+                        <b>Date:</b> &nbsp;<apex:outputText value="{0, date, MMMM d','  yyyy}">
+                                <apex:param value="{!objOrder.CreatedDate}" /> 
+                            </apex:outputText><br/>
+                         <br/>
+                         <br/>
+                    </p>
+                </td>
+            </tr>
+    </table>
+    <table class="listTable" style="border-collapse: collapse; margin-top:20px; ">
+            <thead>
+                <tr>
+                    <th style="font-size: 13px; border-collapse: collapse; border: 1px solid #666; padding: 6px;width: 15%">Part Number</th>
+                    <th style="font-size: 13px; border-collapse: collapse; border: 1px solid #666; padding: 6px;width: 40%">Description</th>
+                    <th style="font-size: 13px; border-collapse: collapse; border: 1px solid #666; padding: 6px;width: 15%">Part Cost</th>
+                    <th style="font-size: 13px; border-collapse: collapse; border: 1px solid #666; padding: 6px;width: 15%">Quantity</th>
+                    <th style="font-size: 13px; border-collapse: collapse; border: 1px solid #666; padding: 6px;width: 15%">Total Price</th>
+                    <!--<th style="font-size: 13px; border-collapse: collapse; border: 1px solid #666; padding: 6px;width: 15%">Shipping Cost</th>-->
+                </tr>
+            </thead>
+            <tbody>
+            <apex:repeat var="a" value="{!objOrder.LineItems__r}">
+                <tr style="border-collapse: collapse; border: 0.5px solid #666; font-size: 13px;">
+                    <td style="padding: 6px; border: 1px solid #666;"><apex:outputText value="{!a.Part_Number_del__c}"/></td>
+                    <td style="border-collapse: collapse; padding: 6px; border: 1px solid #666;"><apex:outputText value="{!a.Name__c}"/></td>
+                    <td style="border-collapse: collapse; padding: 6px; border: 1px solid #666;">$<apex:outputText value="{!a.Cost__c}"/></td>
+                    <td style="border-collapse: collapse; padding: 6px; border: 1px solid #666;"><apex:outputText value="{!a.Quantity__c}"/></td>
+                    <td style="border-collapse: collapse; padding: 6px; border: 1px solid #666;">$<apex:outputText value="{!a.Total_Cost__c}"/></td>
+                    <!--<td style="border-collapse: collapse; padding: 6px; border: 1px solid #666;">$<apex:outputText value="{!a.Shipping_Charge__c}"/></td>-->
+                    
+                </tr>
+            </apex:repeat>
+            <tr style="border-collapse: collapse; border: 0.5px solid #666; font-size: 13px;">
+                    <td style="padding: 6px; border: 1px solid #666;"></td>
+                    <td style="border-collapse: collapse; padding: 6px; border: 1px solid #666;">&nbsp;</td>
+                    <td style="border-collapse: collapse; padding: 6px; border: 1px solid #666;">&nbsp;</td>
+                    <td style="border-collapse: collapse; padding: 6px; border: 1px solid #666;">&nbsp;</td>
+                    <td style="border-collapse: collapse; padding: 6px; border: 1px solid #666;">&nbsp;</td>
+                    <!--<td style="border-collapse: collapse; padding: 6px; border: 1px solid #666;">&nbsp;</td>-->
+                    
+                </tr>
+                <tr style="border-collapse: collapse; border: 0.5px solid #666; font-size: 13px;">
+                    <td style="padding: 6px; border: 1px solid #666;"></td>
+                    <td style="border-collapse: collapse; padding: 6px; border: 1px solid #666;">&nbsp;</td>
+                    <td style="border-collapse: collapse; padding: 6px; border: 1px solid #666;">&nbsp;</td>
+                    <td style="border-collapse: collapse; padding: 6px; border: 1px solid #666;">&nbsp;</td>
+                    <td style="border-collapse: collapse; padding: 6px; border: 1px solid #666;">&nbsp;</td>
+                    <!--<td style="border-collapse: collapse; padding: 6px; border: 1px solid #666;">&nbsp;</td>-->
+                    
+                </tr>
+                <tr style="border-collapse: collapse; border: 0.5px solid #666; font-size: 13px;">
+                    <td style="padding: 6px; border: 1px solid #666;"></td>
+                    <td style="border-collapse: collapse; padding: 6px; border: 1px solid #666;">&nbsp;</td>
+                    <td style="border-collapse: collapse; padding: 6px; border: 1px solid #666;">&nbsp;</td>
+                    <td style="border-collapse: collapse; padding: 6px; border: 1px solid #666;">&nbsp;</td>
+                    <td style="border-collapse: collapse; padding: 6px; border: 1px solid #666;">&nbsp;</td>
+                    <!--<td style="border-collapse: collapse; padding: 6px; border: 1px solid #666;">&nbsp;</td>-->
+                </tr>
+                
+            </tbody>
+            <tfoot>
+                <tr >
+                    <td style="" class="no-border">&nbsp;</td>
+                    <td class="no-border">&nbsp;</td>
+                    <td style="" class="no-border">&nbsp;</td>
+                    <td style="font-size: 13px;" class="no-border">TOTAL</td>
+                    <td style="font-size: 13px; border-collapse: collapse; padding: 6px; border: 1px solid #666;" >$<apex:outputText value="{!grandTotal}"/></td> 
+                    <!--<td style="font-size: 13px; border-collapse: collapse; padding: 6px; border: 1px solid #666;" >$<apex:outputText value="{!shippingTotal}"/></td> -->
+                </tr>
+                <tr >
+                    <td style="" class="no-border">&nbsp;</td>
+                    <td class="no-border">&nbsp;</td>
+                    <td style="" class="no-border">&nbsp;</td>
+                    <td style="font-size: 13px;" class="no-border">SHIPPING CHARGES</td>
+                    <td style="font-size: 13px; border-collapse: collapse; padding: 6px; border: 1px solid #666;" >$<apex:outputText value="{!objOrder.Shipping_Charges__c}"/></td> 
+                    <!--<td style="font-size: 13px; border-collapse: collapse; padding: 6px; border: 1px solid #666;" >$<apex:outputText value="{!shippingTotal}"/></td> -->
+                </tr>
+                <tr >
+                    <td style="" class="no-border">&nbsp;</td>
+                    <td class="no-border">&nbsp;</td>
+                    <td style="" class="no-border">&nbsp;</td>
+                    <td style="font-size: 13px;" class="no-border">DISCOUNT PRICE</td>
+                    <td style="font-size: 13px; border-collapse: collapse; padding: 6px; border: 1px solid #666;" >$<apex:outputText value="{!objOrder.Discount_Price__c}"/></td> 
+                    <!--<td style="font-size: 13px; border-collapse: collapse; padding: 6px; border: 1px solid #666;" >$<apex:outputText value="{!shippingTotal}"/></td> -->
+                </tr>
+                <tr >
+                    <td style="" class="no-border">&nbsp;</td>
+                    <td class="no-border">&nbsp;</td>
+                    <td style="" class="no-border">&nbsp;</td>
+                    <td style="font-size: 13px;" class="no-border">GRAND TOTAL</td>
+                    <td style="font-size: 13px; border-collapse: collapse; padding: 6px; border: 1px solid #666;" >$<apex:outputText value="{!objOrder.Grand_Total__c}"/></td> 
+                    <!--<td style="font-size: 13px; border-collapse: collapse; padding: 6px; border: 1px solid #666;" >$<apex:outputText value="{!shippingTotal}"/></td> -->
+                </tr>
+            </tfoot>
+        </table>
+   
+    <table style="margin-top:20px;">
+        <tr>
+           <td style="font-size: 13px;" width="30%">Customer Signature</td>
+           <td style="width:25%; border-bottom:1px solid #666; font-size: 13px;">&nbsp;</td>
+           <td style="width:02%; font-size: 13px;">&nbsp;</td>
+           <td style="font-size: 13px;" width="10%">Date</td>
+           <td style="width:32%; border-bottom:1px solid #666; font-size: 13px;"></td>
+        </tr>
+        <tr>
+            <td style="">&nbsp;</td>
+        </tr>
+        <tr>
+          <td style="font-size: 13px;" width="30%">Co-Buyer Signature</td>
+            <td style="width:25%; border-bottom:1px solid #666; font-size: 13px;"></td>
+            <td style="width:02%; font-size: 13px;">&nbsp;</td>
+            <td style="width:10%; font-size: 13px;">Date</td>
+            <td style="width:32%; font-size: 13px; border-bottom:1px solid #666;">&nbsp;</td>
+        </tr>
+        
+          
+           <tr>
+              <td style="">&nbsp;</td>
+           </tr>
+           <tr>
+              <td style="font-size: 13px;" width="30%">Salesperson Signature</td>
+              <td style="width:25%; border-bottom:1px solid #666; font-size: 13px;"></td>
+              <td style="width:02%; font-size: 13px;">&nbsp;</td>
+              <td style="font-size: 13px;" width="10%">Date</td>
+              <td style="width:32%; border-bottom:1px solid #666; font-size: 13px;"></td>
+           </tr>
+    </table>    
+    </div>
+
+        <apex:pageBlockButtons location="bottom">
+            <apex:commandButton value="Print" action="{!saveOrderasPDF}" rendered="{!if(($CurrentPage.parameters.btnStatus)=='Print',true,false)}"/>
+            <apex:commandButton value="Send Order" action="{!saveAndSendOrder}" rendered="{!if(($CurrentPage.parameters.btnStatus)=='SendOrder',true,false)}"/>
+        </apex:pageBlockButtons>
+          </apex:pageBlock>              
+          </apex:form>
+</apex:page>

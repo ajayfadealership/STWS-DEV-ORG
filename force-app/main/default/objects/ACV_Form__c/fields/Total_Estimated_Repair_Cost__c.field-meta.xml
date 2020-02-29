@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Total_Estimated_Repair_Cost__c</fullName>
+    <deprecated>false</deprecated>
+    <externalId>false</externalId>
+    <formula>Ballast_Pumps_Estimated_Repair_Cost__c  +  Bilge_Pump_Estimated_Repair_Cost__c  +   Blower_Estimated_Repair_Cost__c  +  Cover_Estimated_Repair_Cost__c  +  Dash_Estimated_Repair_Cost__c  +   Decals_and_Striping_Estimated_Repair_Cos__c  +  Engine_Belts_Estimated_Repair_Cost__c  +  Engine_Oil_Estimated_Repair_Cost__c  +  Engine_Running_Estimated_Repair_Cost__c  +  Engine_Service_Estimated_Repair_Cost__c  +  auges_Screen_Comments__c  +  Horn_Estimated_Repair_Cost__c  +  Hull_and_Deck_Estimated_Repair_Amount__c  +  Outdrive_Estimated_Repairs_Cost__c  +  Speed_Control_Estimated_Repair_Cost__c  +  Stereo_Speakers_Estimated_Repair_Cost__c  +  Swim_Platform_Estimated_Repair_Cost__c  +  Trailer_Estimated_Repair_Cost__c  +  Upholstery_Carpet_Estimated_Repair_Cost__c +  Boat_Detail_Cost__c</formula>
+    <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+    <label>Total Estimated Repair Cost</label>
+    <precision>18</precision>
+    <required>false</required>
+    <scale>2</scale>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Currency</type>
+</CustomField>

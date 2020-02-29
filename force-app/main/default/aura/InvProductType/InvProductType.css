@@ -1,0 +1,8 @@
+.THIS .checkClass{
+    fill : white
+} 
+.THIS .rightElement{
+    position: absolute;
+    right: 0;
+    bottom: 0;
+}

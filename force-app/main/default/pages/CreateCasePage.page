@@ -1,0 +1,242 @@
+<!--
+@Page Name          : CreateCasePage.page
+@Description        : 
+@Author             : phUser@phDomain.com
+@Group              : 
+@Last Modified By   : phUser@phDomain.com
+@Last Modified On   : 2/11/2019, 4:01:17 AM
+@Modification Log   : 
+==============================================================================
+Ver         Date                     Author                 Modification
+==============================================================================
+1.0    2/10/2019, 12:43:52 PM   phUser@phDomain.com     Initial Version
+-->
+<apex:page controller="CreateCaseController" showHeader="false" id="pageId">
+    <apex:slds />
+    
+    <style>
+        .labelsize{
+        font-size: 15px !Important;
+        }
+    </style>
+    
+    <apex:form id="formId">
+        <div class="slds-page-header">
+            <div class="slds-media">
+                <div class="slds-media__figure">
+                    <span class="slds-icon_container slds-icon-standard-opportunity" title="Description of icon when needed">
+                        <svg class="slds-icon slds-page-header__icon" aria-hidden="true">
+                            <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="{!URLFOR($Resource.BoatBuilderSR, '/icons/standard-sprite/svg/symbols.svg#campaign')}" />
+                        </svg>
+                    </span>
+                </div>
+                <span style = "font-size: 25px; font-weight: 700;">
+                    Request Help
+                </span>
+            </div>
+        </div>
+        <br/>
+        <apex:pageMessages id="showmsg" />
+        <div class="slds-form" id= "frm">
+            <div class="slds-grid slds-wrap slds-col--padded">
+                <div class="slds-col slds-size--1-of-3"/>
+                <div class="slds-col slds-size--1-of-3">
+                    <div class="slds-grid slds-wrap" >
+                        
+                        <div class="slds-col slds-size--1-of-1 ">
+                            <div class="slds-form-element">
+                                <label class="slds-form-element__label labelsize">Subject:</label>
+                                <div class="slds-form-element__control">
+                                    <apex:inputText id="subject" value="{!objCase.Subject}" styleclass="slds-input"/>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="slds-col slds-size--1-of-1 ">
+                            <div class="slds-form-element">
+                                <label class="slds-form-element__label labelsize">Type:</label>
+                                <div class="slds-form-element__control">
+                                    <apex:inputField id="type" value="{!objCase.Type}" styleclass="slds-input"/>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="slds-col slds-size--1-of-1 ">
+                            <div class="slds-form-element">
+                                <label class="slds-form-element__label labelsize">Priority:</label>
+                                <div class="slds-form-element__control">
+                                    <apex:inputField id="priority" value="{!objCase.Priority}" styleclass="slds-input"/>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="slds-col slds-size--1-of-1 ">
+                            <div class="slds-form-element">
+                                <label class="slds-form-element__label labelsize">Description:</label>
+                                <div class="slds-form-element__control">
+                                    <apex:inputText id="Description" value="{!objCase.Description}" styleclass="slds-input"/>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="slds-col slds-size--1-of-1 ">
+                            <div class="slds-form-element">
+                                <label class="slds-form-element__label labelsize">Add Files:</label>
+                                <div class="slds-form-element__control">
+                                    <input type="file" id="file1" class="slds-file-selector__input"/>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="slds-col slds-size--1-of-1 ">
+                            <div class="slds-form-element">
+                                <label class="slds-form-element__label labelsize"></label>
+                                <div class="slds-form-element__control">
+                                    <input type="file" id="file2" class="slds-file-selector__input"/>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="slds-col slds-size--1-of-1 ">
+                            <div class="slds-form-element">
+                                <label class="slds-form-element__label labelsize"></label>
+                                <div class="slds-form-element__control">
+                                    <input type="file" id="file3" class="slds-file-selector__input"/>
+                                </div>
+                            </div>
+                        </div>
+                        
+                    </div>
+                </div>
+                <div class="slds-col slds-size--1-of-3"/>
+            </div>
+            <br/> <br/>
+            <div style="text-align: center">
+                <input type="button" Class="slds-button slds-button_brand" onclick="createCase()" value="Save" style="float:center"/> 
+            </div>
+        </div>
+        <script>
+        function createCase()
+        {
+            var subject = document.getElementById("pageId:formId:subject").value;
+            var description = document.getElementById("pageId:formId:Description").value;
+            var type = document.getElementById("pageId:formId:type").value;
+            var priority = document.getElementById("pageId:formId:priority").value;
+            
+            var file1 = document.getElementById("file1").files[0];
+            var file2 = document.getElementById("file2").files[0];
+            var file3 = document.getElementById("file3").files[0];
+            
+            console.log(file1);
+            console.log(file2);
+            console.log(file3);
+            
+            BOATBUILDING.CreateCaseController.createCasefromJS(
+                subject,description,type,priority,
+                function(result, event) {
+                    console.log(result);
+                    if(event.type === 'exception') {
+                        console.log("exception");
+                        console.log(event);
+                    } else if(event.status) {
+                        console.log(result);
+                        uploadFile(file1,result);
+                        uploadFile(file2,result);
+                        uploadFile(file3,result);
+                    } else {
+                        console.log(event.message);
+                    }
+                },
+                {buffer: true, escape: true, timeout: 120000}
+            );
+        }
+        </script> 
+        <script type="text/javascript">
+        var maxStringSize = 6000000;    //Maximum String size is 6,000,000 characters
+        var maxFileSize = 4350000;      //After Base64 Encoding, this is the max file size
+        var chunkSize = 950000;         //Maximum Javascript Remoting message size is 1,000,000 characters
+        var attachment;
+        //var attachmentName;
+        var fileSize;
+        var positionIndex;
+        var doneUploading;
+        var caseId;
+        
+        //Method to prepare a file to be attached to the Account bound to the page by the standardController
+        function uploadFile(inputFile,parentId) {
+            var file = inputFile;
+            caseId = parentId;
+            //console.log(file);
+            if(file != undefined) {
+                console.log('file.name---'+file.name);
+                if(file.size <= maxFileSize) {
+                    //attachmentName = file.name;
+                    var fileReader = new FileReader();
+                    fileReader.onloadend = function(e) {
+                        attachment = window.btoa(this.result);  //Base 64 encode the file before sending it
+                        positionIndex=0;
+                        fileSize = attachment.length;
+                        console.log("Total Attachment Length: " + fileSize);
+                        doneUploading = false;
+                        if(fileSize < maxStringSize) {
+                            uploadAttachment(file.name);
+                        } else {
+                            alert("Base 64 Encoded file is too large.  Maximum size is " + maxStringSize + " your file is " + fileSize + ".");
+                        }
+                        
+                    }
+                    fileReader.onerror = function(e) {
+                        alert("There was an error reading the file.  Please try again.");
+                    }
+                    fileReader.onabort = function(e) {
+                        alert("There was an error reading the file.  Please try again.");
+                    }
+                    
+                    fileReader.readAsBinaryString(file);  //Read the body of the file
+                    
+                } else {
+                    alert("File must be under 4.3 MB in size.  Your file is too large.  Please try again.");
+                }
+            }
+        }
+        
+        //Method to send a file to be attached to the Account bound to the page by the standardController
+        //Sends parameters: Account Id, Attachment (body), Attachment Name, and the Id of the Attachment if it exists to the controller   
+        function uploadAttachment(attName) {
+            console.log('file.name-11--'+attName);
+            var attachmentBody = "";
+            if(fileSize <= positionIndex + chunkSize) {
+                attachmentBody = attachment.substring(positionIndex);
+                doneUploading = true;
+            } else {
+                attachmentBody = attachment.substring(positionIndex, positionIndex + chunkSize);
+            }
+            //console.log('---attachmentBody--',attachmentBody);
+            console.log("Uploading " + attachmentBody.length + " chars of " + fileSize);
+            BOATBUILDING.CreateCaseController.doUploadAttachment(
+                caseId, attachmentBody, attName, 
+                function(result, event) {
+                    console.log(result);
+                    if(event.type === 'exception') {
+                        console.log("exception");
+                        console.log(event);
+                    } else if(event.status) {
+                        if(result.substring(0,3) == '00P') {
+                            if(doneUploading == true) {
+                                //window.open("/"+caseId, "_blank");
+                                //window.location.reload();
+                            } else {
+                                positionIndex += chunkSize;
+                                uploadAttachment(result);
+                            }
+                        }
+                    } else {
+                        console.log(event.message);
+                    }
+                },
+                {buffer: true, escape: true, timeout: 120000}
+            );
+        }
+        </script>       
+    </apex:form>
+</apex:page>

@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Sub_Family__c</fullName>
+    <deprecated>false</deprecated>
+    <externalId>false</externalId>
+    <label>Sub-Family</label>
+    <required>false</required>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <controllingField>Family1__c</controllingField>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>A</fullName>
+                <default>false</default>
+                <label>A</label>
+            </value>
+            <value>
+                <fullName>B</fullName>
+                <default>false</default>
+                <label>B</label>
+            </value>
+            <value>
+                <fullName>C</fullName>
+                <default>false</default>
+                <label>C</label>
+            </value>
+            <value>
+                <fullName>D</fullName>
+                <default>false</default>
+                <label>D</label>
+            </value>
+            <value>
+                <fullName>Wakesurf Boards</fullName>
+                <default>false</default>
+                <label>Wakesurf Boards</label>
+            </value>
+            <value>
+                <fullName>Wakeboards</fullName>
+                <default>false</default>
+                <label>Wakeboards</label>
+            </value>
+            <value>
+                <fullName>Ropes &amp; Handles</fullName>
+                <default>false</default>
+                <label>Ropes &amp; Handles</label>
+            </value>
+            <value>
+                <fullName>Pants</fullName>
+                <default>false</default>
+                <label>Pants</label>
+            </value>
+        </valueSetDefinition>
+        <valueSettings>
+            <controllingFieldValue>Steering</controllingFieldValue>
+            <controllingFieldValue>Stereo</controllingFieldValue>
+            <controllingFieldValue>Surf Boards</controllingFieldValue>
+            <controllingFieldValue>Surf Pads</controllingFieldValue>
+            <controllingFieldValue>Surf Ropes</controllingFieldValue>
+            <controllingFieldValue>Swimsuits</controllingFieldValue>
+            <controllingFieldValue>Tee Shirts</controllingFieldValue>
+            <controllingFieldValue>Tower</controllingFieldValue>
+            <controllingFieldValue>Trans</controllingFieldValue>
+            <controllingFieldValue>Travel Bags</controllingFieldValue>
+            <controllingFieldValue>Engine</controllingFieldValue>
+            <controllingFieldValue>Tubes</controllingFieldValue>
+            <controllingFieldValue>Fat Sacs</controllingFieldValue>
+            <controllingFieldValue>Upholstery</controllingFieldValue>
+            <controllingFieldValue>Gel</controllingFieldValue>
+            <controllingFieldValue>V-Drive</controllingFieldValue>
+            <controllingFieldValue>Handles</controllingFieldValue>
+            <controllingFieldValue>Wake Boards</controllingFieldValue>
+            <controllingFieldValue>Hats</controllingFieldValue>
+            <controllingFieldValue>Wake Skates</controllingFieldValue>
+            <controllingFieldValue>Hoodies</controllingFieldValue>
+            <controllingFieldValue>Walk Shorts</controllingFieldValue>
+            <controllingFieldValue>Life Jackets</controllingFieldValue>
+            <controllingFieldValue>Lighting</controllingFieldValue>
+            <controllingFieldValue>Trailer</controllingFieldValue>
+            <controllingFieldValue>Lower Unit</controllingFieldValue>
+            <controllingFieldValue>Ropes</controllingFieldValue>
+            <controllingFieldValue>Back Packs</controllingFieldValue>
+            <controllingFieldValue>Bindings</controllingFieldValue>
+            <controllingFieldValue>Board Racks</controllingFieldValue>
+            <controllingFieldValue>Boards</controllingFieldValue>
+            <controllingFieldValue>Board Shorts</controllingFieldValue>
+            <controllingFieldValue>Boots</controllingFieldValue>
+            <controllingFieldValue>Canvas</controllingFieldValue>
+            <controllingFieldValue>Dash</controllingFieldValue>
+            <controllingFieldValue>Electrical</controllingFieldValue>
+            <controllingFieldValue>Men&#39;s Wakesurf Equipment</controllingFieldValue>
+            <controllingFieldValue>Rub Rail</controllingFieldValue>
+            <controllingFieldValue>Running Gear</controllingFieldValue>
+            <valueName>B</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Steering</controllingFieldValue>
+            <controllingFieldValue>Stereo</controllingFieldValue>
+            <controllingFieldValue>Engine</controllingFieldValue>
+            <controllingFieldValue>Fat Sacs</controllingFieldValue>
+            <controllingFieldValue>Gel</controllingFieldValue>
+            <controllingFieldValue>Handles</controllingFieldValue>
+            <controllingFieldValue>Hats</controllingFieldValue>
+            <controllingFieldValue>Hoodies</controllingFieldValue>
+            <controllingFieldValue>Life Jackets</controllingFieldValue>
+            <controllingFieldValue>Lighting</controllingFieldValue>
+            <controllingFieldValue>Lower Unit</controllingFieldValue>
+            <controllingFieldValue>Ropes</controllingFieldValue>
+            <controllingFieldValue>Bindings</controllingFieldValue>
+            <controllingFieldValue>Board Racks</controllingFieldValue>
+            <controllingFieldValue>Boards</controllingFieldValue>
+            <controllingFieldValue>Board Shorts</controllingFieldValue>
+            <controllingFieldValue>Boots</controllingFieldValue>
+            <controllingFieldValue>Canvas</controllingFieldValue>
+            <controllingFieldValue>Dash</controllingFieldValue>
+            <controllingFieldValue>Electrical</controllingFieldValue>
+            <controllingFieldValue>Rub Rail</controllingFieldValue>
+            <controllingFieldValue>Running Gear</controllingFieldValue>
+            <valueName>C</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Surf Boards</controllingFieldValue>
+            <controllingFieldValue>Surf Pads</controllingFieldValue>
+            <controllingFieldValue>Surf Ropes</controllingFieldValue>
+            <controllingFieldValue>Swimsuits</controllingFieldValue>
+            <controllingFieldValue>Tee Shirts</controllingFieldValue>
+            <controllingFieldValue>Tower</controllingFieldValue>
+            <controllingFieldValue>Trans</controllingFieldValue>
+            <controllingFieldValue>Travel Bags</controllingFieldValue>
+            <controllingFieldValue>Tubes</controllingFieldValue>
+            <controllingFieldValue>Upholstery</controllingFieldValue>
+            <controllingFieldValue>V-Drive</controllingFieldValue>
+            <controllingFieldValue>Wake Boards</controllingFieldValue>
+            <controllingFieldValue>Wake Skates</controllingFieldValue>
+            <controllingFieldValue>Walk Shorts</controllingFieldValue>
+            <controllingFieldValue>Trailer</controllingFieldValue>
+            <controllingFieldValue>Back Packs</controllingFieldValue>
+            <controllingFieldValue>Men&#39;s Wakesurf Equipment</controllingFieldValue>
+            <valueName>A</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Men&#39;s Wakesurf Equipment</controllingFieldValue>
+            <valueName>Wakesurf Boards</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Men&#39;s Wakesurf Equipment</controllingFieldValue>
+            <valueName>Wakeboards</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Men&#39;s Wakesurf Equipment</controllingFieldValue>
+            <valueName>Ropes &amp; Handles</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Men&#39;s Snowboard Equipment &amp; Apparel</controllingFieldValue>
+            <valueName>Pants</valueName>
+        </valueSettings>
+    </valueSet>
+</CustomField>

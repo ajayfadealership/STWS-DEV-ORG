@@ -1,0 +1,311 @@
+<apex:page controller="GenerateInvoiceController" showHeader="false" applyHtmlTag="false" > 
+      <title>Southtown Watersports</title>
+      <head>
+      
+        <style type="text/css">
+            .content{
+                font-family: "Times New Roman", Georgia, Serif;
+                max-width:1000px;
+                margin: 0 auto;
+            }
+ 
+            div.header {
+                padding: 10px;
+                position: running(header);
+            }
+            
+            div.footer {
+                display: block;
+                padding: 5px;
+                position: running(footer);
+            }
+ 
+            .pagenumber:before {
+                content: counter(page);
+            }
+            
+            .pagecount:before {
+                content: counter(pages);
+            }
+            table, td, th {
+                border-collapse: collapse;
+            }
+            .listTable td, .listTable th {
+                border: 1px solid #666;
+            }
+ 
+            .listTable thead th {
+                background: #eee;
+                text-align: center;
+                font-weight: bold;
+            }
+ 
+            .listTable tbody td {
+                border: none;
+                border-left: 1px solid #666;
+                border-right: 1px solid #666;
+            }
+ 
+            .listTable tbody tr:last-child td {
+                border-bottom: 1px solid #666;
+            }
+ 
+            .listTable tbody tr.odd td {
+                background: #eee;
+            }
+ 
+            .listTable td.no-border {
+                border: none;
+            }
+ 
+            .listTable tbody {
+                border: 1px solid #666
+            }
+        </style>
+        <style type="text/css" media="print">
+            @page {
+                @top-center {
+                    content: element(header);
+                }
+                
+                @bottom-left {
+                    content: element(footer);
+                }
+            }
+            .content{
+                font-family: "Times New Roman", Georgia, Serif;
+            }
+            
+            div.header {
+                padding: 10px;
+                position: running(header);
+            }
+            
+            div.footer {
+                display: block;
+                padding: 5px;
+                position: running(footer);
+            }
+ 
+            .pagenumber:before {
+                content: counter(page);
+            }
+            
+            .pagecount:before {
+                content: counter(pages);
+            }
+            table, td, th {
+                border-collapse: collapse;
+                border: 1px solid #666;
+            }
+            .listTable td, .listTable th {
+                border: 1px solid #666;
+            }
+ 
+            .listTable thead th {
+                background: #eee;
+                text-align: center;
+                font-weight: bold;
+            }
+ 
+            .listTable tbody td {
+                border: none;
+                border-left: 1px solid #666;
+                border-right: 1px solid #666;
+            }
+ 
+            .listTable tbody tr:last-child td {
+                border-bottom: 1px solid #666;
+            }
+ 
+            .listTable tbody tr.odd td {
+                background: #eee;
+            }
+ 
+            .listTable td.no-border {
+                border: none;
+            }
+ 
+            .listTable tbody {
+                border: 1px solid #666
+            }
+        </style>
+    </head>
+     <apex:form >
+     <apex:pageBlock >
+      <img src="/servlet/servlet.FileDownload?file={!strDocId}" width="100%" height="40%" style="border-bottom:10px solid #00B0F0" />
+    <div class="content" style = "page-break-inside:avoid;">
+    <table width="100%" border="0">
+            <tr>
+                <td>
+                    <p style="font-size: 13px;">
+                        <strong>Bill To:</strong><br/>
+                        <apex:outputText >{!objInvoice.Customer_Name__c}</apex:outputText> <br/>
+                        <apex:outputText value="{!objInvoice.Customer_Address__c}"> </apex:outputText> <br/>
+                        <apex:outputText value="{!objInvoice.City__c}"></apex:outputText> , <apex:outputText value="{!objInvoice.Billing_State_Province__c}"></apex:outputText> <br/>
+                        <apex:outputText >{!objInvoice.Phone_Number__c}</apex:outputText> , <apex:outputText value="{!objInvoice.Zip_Code__c}" ></apex:outputText> <br/>
+                        <apex:outputText >{!objInvoice.Email__c}</apex:outputText> <br/>
+                    </p>
+                </td>
+                <td width="30%">&nbsp;</td>
+                <td>
+                    <p style="font-size: 13px;">
+                    	<b>Invoice Number:</b> &nbsp;<apex:outputText >{!objInvoice.Invoice_Number__c}</apex:outputText><br/>
+                        <b>Invoice:</b> &nbsp;<apex:outputText >{!objInvoice.Name}</apex:outputText><br/>
+                        <b>Date:</b> &nbsp;<apex:outputText value="{0, date, MMMM d','  yyyy}">
+                                <apex:param value="{!objInvoice.Created_Date__c}" /> 
+                            </apex:outputText><br/>
+                         <br/>
+                         <br/>
+                    </p>
+                </td>
+            </tr>
+    </table>
+    <table class="listTable" style="border-collapse: collapse; margin-top:20px; ">
+            <thead>
+                <tr>
+                    <th style="font-size: 13px; border-collapse: collapse; border: 1px solid #666; padding: 6px;width: 15%">Part Number</th>
+                    <th style="font-size: 13px; border-collapse: collapse; border: 1px solid #666; padding: 6px;width: 40%">Description</th>
+                    <th style="font-size: 13px; border-collapse: collapse; border: 1px solid #666; padding: 6px;width: 15%">Unit Price</th>
+                    <th style="font-size: 13px; border-collapse: collapse; border: 1px solid #666; padding: 6px;width: 15%">Quantity</th>
+                    <th style="font-size: 13px; border-collapse: collapse; border: 1px solid #666; padding: 6px;width: 15%">Total Price</th>
+                    <th style="font-size: 13px; border-collapse: collapse; border: 1px solid #666; padding: 6px;width: 15%">Discount Price</th>
+                    <th style="font-size: 13px; border-collapse: collapse; border: 1px solid #666; padding: 6px;width: 15%">Grand Total</th>
+                </tr>
+            </thead>
+            <tbody>
+            <apex:repeat var="a" value="{!objInvoice.Invoice_Line_Items__r}">
+                <tr style="border-collapse: collapse; border: 0.5px solid #666; font-size: 13px;">
+                    <td style="padding: 6px; border: 1px solid #666;"><apex:outputText value="{!a.Part_Number__c}"/></td>
+                    <td style="border-collapse: collapse; padding: 6px; border: 1px solid #666;"><apex:outputText value="{!a.Name}"/></td>
+                    <td style="border-collapse: collapse; padding: 6px; border: 1px solid #666;">$<apex:outputText value="{!a.Part_Cost__c}"/></td>
+                    <td style="border-collapse: collapse; padding: 6px; border: 1px solid #666;"><apex:outputText value="{!a.Quantity__c}"/></td>
+                    <td style="border-collapse: collapse; padding: 6px; border: 1px solid #666;">$<apex:outputText value="{!a.Total_Price__c}"/></td>
+                    <td style="border-collapse: collapse; padding: 6px; border: 1px solid #666;">$<apex:outputText value="{!a.Discount_Price__c}"/></td>
+                    <td style="border-collapse: collapse; padding: 6px; border: 1px solid #666;">$<apex:outputText value="{!a.Grand_Total__c}"/></td>
+                    
+                </tr>
+            </apex:repeat>
+            <tr style="border-collapse: collapse; border: 0.5px solid #666; font-size: 13px;">
+                    <td style="padding: 6px; border: 1px solid #666;"></td>
+                    <td style="border-collapse: collapse; padding: 6px; border: 1px solid #666;">&nbsp;</td>
+                    <td style="border-collapse: collapse; padding: 6px; border: 1px solid #666;">&nbsp;</td>
+                    <td style="border-collapse: collapse; padding: 6px; border: 1px solid #666;">&nbsp;</td>
+                    <td style="border-collapse: collapse; padding: 6px; border: 1px solid #666;">&nbsp;</td>
+                    <td style="border-collapse: collapse; padding: 6px; border: 1px solid #666;">&nbsp;</td>
+                    <td style="border-collapse: collapse; padding: 6px; border: 1px solid #666;">&nbsp;</td>
+                    
+                </tr>
+                <tr style="border-collapse: collapse; border: 0.5px solid #666; font-size: 13px;">
+                    <td style="padding: 6px; border: 1px solid #666;"></td>
+                    <td style="border-collapse: collapse; padding: 6px; border: 1px solid #666;">&nbsp;</td>
+                    <td style="border-collapse: collapse; padding: 6px; border: 1px solid #666;">&nbsp;</td>
+                    <td style="border-collapse: collapse; padding: 6px; border: 1px solid #666;">&nbsp;</td>
+                    <td style="border-collapse: collapse; padding: 6px; border: 1px solid #666;">&nbsp;</td>
+                    <td style="border-collapse: collapse; padding: 6px; border: 1px solid #666;">&nbsp;</td>
+                    <td style="border-collapse: collapse; padding: 6px; border: 1px solid #666;">&nbsp;</td>
+                    
+                </tr>
+                <tr style="border-collapse: collapse; border: 0.5px solid #666; font-size: 13px;">
+                    <td style="padding: 6px; border: 1px solid #666;">&nbsp;</td>
+                    <td style="border-collapse: collapse; padding: 6px; border: 1px solid #666;">SUBTOTAL</td>
+                    <td style="border-collapse: collapse; padding: 6px; border: 1px solid #666;">$<apex:outputText value="{!objInvoice.Total_Parts_MSRP_ILI__c}"/></td>
+                    <td style="border-collapse: collapse; padding: 6px; border: 1px solid #666;"><apex:outputText value="{!objInvoice.Total_Quantity_ILI__c}"/></td>
+                    <td style="border-collapse: collapse; padding: 6px; border: 1px solid #666;">$<apex:outputText value="{!objInvoice.Total_Price_ILI__c}"/></td>
+                    <td style="border-collapse: collapse; padding: 6px; border: 1px solid #666;">$<apex:outputText value="{!objInvoice.Discount_Price_ILI__c}"/></td>
+                    <td style="border-collapse: collapse; padding: 6px; border: 1px solid #666;">$<apex:outputText value="{!objInvoice.Payment__c}"/></td>
+                    
+                </tr>
+                
+            </tbody>
+            <tfoot>
+                <tr >
+                    <td style="" class="no-border">&nbsp;</td>
+                    <td class="no-border">Notes:</td>
+                    <td style="" class="no-border">&nbsp;</td>
+                    <td style="" class="no-border">&nbsp;</td>
+                    <td style="" class="no-border">&nbsp;</td>
+                    <td style="font-size: 13px;" class="no-border">&nbsp;</td>
+                    <!-- <td style="font-size: 10px; border-collapse: collapse; padding: 6px; border: 1px solid #666;" ><apex:outputText value="{!objInvoice.Total_Parts_del1__c}"/></td>
+                    <td style="font-size: 10px; border-collapse: collapse; padding: 6px; border: 1px solid #666;" >$<apex:outputText value="{!objInvoice.Sum_Price_Line_Items__c}"/></td>
+                    <td style="font-size: 10px; border-collapse: collapse; padding: 6px; border: 1px solid #666;" >$<apex:outputText value="{!objInvoice.Sum_Discount_Availed_on_Line_Items__c}"/></td>-->
+                    <td style="" >&nbsp;</td> 
+                </tr>
+                
+                <tr>
+                    <td style="" class="no-border">&nbsp;</td>
+                    <td style="padding: 6px; border-collapse: collapse; padding: 6px; border: 1px solid #666;" colspan="2" rowspan="5"><apex:outputField value="{!objInvoice.Comments_Notes__c}"/></td>
+                    <td style="" class="no-border">&nbsp;</td>
+                    <td style="" class="no-border">&nbsp;</td>
+                    <td style="font-size: 13px;" class="no-border">Promo Code Discount</td>
+                    <td style="font-size: 13px; border-collapse: collapse; padding: 6px; border: 1px solid #666;" >$<apex:outputText value="{!objInvoice.Discount_With_Promocode__c}"/></td>
+                </tr>
+                
+                <tr>
+                    <td style="" class="no-border">&nbsp;</td>
+                    <td style="" class="no-border">&nbsp;</td>
+                    <td style="" class="no-border">&nbsp;</td>
+                    <td style="font-size: 13px;" class="no-border">Total Due </td>
+                    <td style="font-size: 13px; border-collapse: collapse; padding: 6px; border: 1px solid #666;" >$<apex:outputText value="{!objInvoice.Total_Due_After_Promo__c}"/></td>
+                </tr>
+                
+                <tr>
+                    <td style="" class="no-border">&nbsp;</td>
+                    <td style="" class="no-border">&nbsp;</td>
+                    <td style="" class="no-border">&nbsp;</td>
+                    <td style="font-size: 13px;" class="no-border">SALES TAX @ <apex:outputField value="{!objInvoice.Sales_TaxPer__c}"/></td>
+                    <td style="font-size: 13px; border-collapse: collapse; padding: 6px; border: 1px solid #666;" >$<apex:outputText value="{!objInvoice.Sales_Tax_Formula__c}"/></td>
+                </tr>
+                
+                <tr>
+                    <td style="" class="no-border">&nbsp;</td>
+                    <td style="" class="no-border" >&nbsp;</td>
+                    <td style="" class="no-border">&nbsp;</td>
+                    <td style="font-size: 13px;" class="no-border" >Shipping Charge</td>
+                    <td style="font-size: 13px; border-collapse: collapse; padding: 6px; border: 1px solid #666;">$<apex:outputText value="{!objInvoice.Shipping_Charge__c}"/></td>
+                    
+                </tr>
+                
+                <tr>
+                    <td style="" class="no-border">&nbsp;</td>
+                    <td style="" class="no-border" >&nbsp;</td>
+                    <td style="" class="no-border">&nbsp;</td>
+                    <td style="font-size: 13px;" class="no-border" >TOTAL</td>
+                    <td style="font-size: 13px; border-collapse: collapse; padding: 6px; border: 1px solid #666;">$<apex:outputText value="{!objInvoice.Total_Amount_on_Invoice__c}"/></td>
+                    
+                </tr>
+                <tr>
+                    <td style="" class="no-border">&nbsp;</td>
+                    <td style="" class="no-border" >&nbsp;</td>
+                    <td style="" class="no-border">&nbsp;</td>
+                    <td style="font-size: 13px;" class="no-border">PAID</td>
+                    <td style="font-size: 13px; border-collapse: collapse; padding: 6px; border: 1px solid #666;">$<apex:outputText value="{!objInvoice.Total_Payment_Formula__c}"/></td>
+                </tr>
+                <tr>
+                    <td style="" class="no-border">&nbsp;</td>
+                    <td style="" class="no-border" >&nbsp;</td>
+                    <td style="" class="no-border">&nbsp;</td>
+                    <td style="font-size: 13px;" class="no-border">TOTAL DUE</td>
+                    <td style="font-size: 13px; border-collapse: collapse; padding: 6px; border: 1px solid #666;">$<apex:outputText value="{!objInvoice.Balance__c}"/></td>
+                </tr>
+            </tfoot>
+        </table>
+   
+    <table style="margin-top:20px;">
+        <tr>
+           <td style="font-size: 13px;" width="30%">Customer Signature</td>
+           <td style="width:25%; border-bottom:1px solid #666; font-size: 13px;">&nbsp;</td>
+           <td style="width:02%; font-size: 13px;">&nbsp;</td>
+           <td style="font-size: 13px;" width="10%">Date</td>
+           <td style="width:32%; border-bottom:1px solid #666; font-size: 13px;"></td>
+        </tr>
+    </table>    
+    </div>
+
+        <apex:pageBlockButtons location="bottom">
+            <apex:commandButton value="Print" action="{!saveQuoteasPDF}" rendered="{!if(($CurrentPage.parameters.btnStatus)=='Print',true,false)}"/>
+            <apex:commandButton value="Send Invoice" action="{!saveAndSendInvoice}" rendered="{!if(($CurrentPage.parameters.btnStatus)=='SendInvoice',true,false)}"/>
+        </apex:pageBlockButtons>
+          </apex:pageBlock>              
+          </apex:form>
+</apex:page>

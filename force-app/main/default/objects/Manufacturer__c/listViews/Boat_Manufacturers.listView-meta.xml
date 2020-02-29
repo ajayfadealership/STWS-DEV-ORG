@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ListView xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Boat_Manufacturers</fullName>
+    <columns>NAME</columns>
+    <columns>Email__c</columns>
+    <columns>Phone__c</columns>
+    <columns>Boat_Builder__c</columns>
+    <columns>Model_Variant__c</columns>
+    <columns>Street__c</columns>
+    <columns>City__c</columns>
+    <columns>State__c</columns>
+    <columns>Zip__c</columns>
+    <filterScope>Everything</filterScope>
+    <filters>
+        <field>RECORDTYPE</field>
+        <operation>equals</operation>
+        <value>Manufacturer__c.Boat_Manufacturer</value>
+    </filters>
+    <label>Boat Manufacturers</label>
+</ListView>

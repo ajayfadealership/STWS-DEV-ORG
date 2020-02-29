@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Part_Number_Required_Rule</fullName>
+    <active>true</active>
+    <errorConditionFormula>(RecordType.Name = &#39;Inventory for Parts&#39;) &amp;&amp;  ISBLANK(Part_Number__c )</errorConditionFormula>
+    <errorMessage>Part Number is Mandatory</errorMessage>
+</ValidationRule>

@@ -1,0 +1,181 @@
+<apex:page controller="VfTemplateContrl" standardStylesheets="false" showHeader="false">
+
+
+    <head>
+        <meta charset="utf-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <!-- Description / Keywords -->
+        <meta name="description" content="" />
+        <meta name="keywords" content="" />
+        <!-- Mobile web app capable -->
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-touch-fullscreen" content="yes" />
+        <meta name="format-detection" content="telephone=no" />
+        <meta name="mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+        <meta name="HandheldFriendly" content="true" />
+
+        <!-- Facebook Open Graph -->
+        <meta property="og:title" content="" />
+        <meta property="og:url" content="" />
+        <meta property="og:image" content="" />
+        <meta property="og:site_name" content="" />
+        <meta property="og:description" content="" />
+        <!-- Bootstrap and core app CSS -->
+        <link rel="stylesheet" href="{!URLFOR($Resource.STWSPRINT,
+                                     'assets/css/bootstrap.css')}" />
+        <link rel="stylesheet" href="{!URLFOR($Resource.STWSPRINT,
+                                     'assets/css/style.css')}" />
+        <link rel="stylesheet" href="{!URLFOR($Resource.STWSPRINT,
+                                     'assets/css/malibu_print.css')}" />
+
+    </head>
+
+    <body>
+        <div class="wrapper page-malibu">
+            <section class="specification-price">
+                <div class="container">
+                    <div class="flex-row">
+                        <div class="flex-col left-side">
+                            <div class="image-cover">
+                                <img src="{!LogoURL}" alt="" />
+                            </div>
+                            <span class="boat-name">{!listInventory[0].BOATBUILDING__Web_Product_Name__c}</span>
+                            <div class="specification-block">
+                                <h4 class="hd">Specs:</h4>
+                                <ul class="list-block">
+                                    <li>Length: {!listInventory[0].BOATBUILDING__Boat_Length_in_feets__c} Ft</li>
+                                    <li>Ballast: {!listInventory[0].BOATBUILDING__Boat_Ballast_Weight__c} LBS</li>
+                                    <li>Capacity: {!listInventory[0].BOATBUILDING__Boat_Seating_Capacity__c} People</li>
+                                    <li>Weight: {!listInventory[0].BOATBUILDING__Boat_Ballast_Weight__c} LBS</li>
+                                    <li>Fuel Capacity: {!listInventory[0].BOATBUILDING__Boat_Fuel_Capacity__c } Gals</li>
+                                    <li>Overall Length: {!listInventory[0].BOATBUILDING__Boat_Overall_Length__c}</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="flex-col right-side">
+                            <div class="image-cover product-img">
+                                <apex:outputPanel rendered="{!imageavailableInterior}">
+                                    <apex:image url="{!URLFOR($Action.Attachment.Download,Interiorimageid)}" />
+                                </apex:outputPanel>
+                            </div>
+                            <h4 class="boat-price">
+                                MSRP Price:
+                                <span class="price">$ {!listInventory[0].BOATBUILDING__Window_Sticker_MSRP__c} </span>
+                            </h4>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <!-- specification-price -->
+            <section class="malibu-products-banner">
+                <div class="container">
+                    <div id="malibu-products" class="carousel slide" data-ride="carousel" data-interval="3000">
+                        <!-- Wrapper for slides -->
+                        <div class="carousel-inner">
+                            <div class="item active">
+                                <apex:outputPanel rendered="{!imageavailableSide}">
+
+                                    <apex:image url="{!URLFOR($Action.Attachment.Download,sideimageid)}" />
+                                </apex:outputPanel>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <!-- carousel  -->
+            <section class="our-price">
+                <div class="container">
+                    <div class="content-cover">
+                        <div class="flex-row">
+                            <div class="col-flex left-side">
+                                <h1 class="hd">Our Price: $
+                                    {!listInventory[0].BOATBUILDING__Window_Sticker_Your_Price__c}</h1>
+                                <span class="dealer-discount">Dealer discounted:
+                                    ${!listInventory[0].BOATBUILDING__Window_Sticker_Our_Discount__c}</span>
+                            </div>
+                            <div class="col-flex right-side">
+                                <span class="price">$ {!listInventory[0].BOATBUILDING__Window_Sticker_Payment__c}
+                                    <em>per month</em></span>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- // content-cover -->
+                </div>
+            </section>
+            <section class="our-price our-price-second">
+                <div class="container">
+                    <div class="content-cover">
+                        <div class="flex-row">
+                            <div class="col-flex" style="text-align: left">Dealer discount: $
+                                {!listInventory[0].BOATBUILDING__Window_Sticker_Our_Discount__c}</div>
+                            <div class="col-flex" style="text-align: center">Down payment: $ 
+                                {!listInventory[0].BOATBUILDING__Web_Down_Payment__c}</div>
+                            <div class="col-flex" style="text-align: center">Interest Rate:
+                                {!listInventory[0].BOATBUILDING__Window_Sticker_Interest_Rate__c}</div>
+                            <div class="col-flex" style="text-align: right">Term:
+                                {!listInventory[0].BOATBUILDING__Window_sticker_Term__c}</div>
+                        </div>
+                    </div>
+                </div>
+            </section> <!-- our-price -->
+            <footer class="footer">
+                <div class="container">
+                    <div class="flex-row">
+                        <div class="flex-col why-us">
+                            <h4 class="heading">Why buy from us?</h4>
+                            <ul class="list-block">
+                                <li>{!tempInfoList[0]}</li>
+                                <li>{!tempInfoList[1]}</li>
+                                <li>{!tempInfoList[2]}</li>
+                                <li>{!tempInfoList[3]}</li>
+                                <li>{!tempInfoList[4]}</li>
+                            </ul>
+                        </div>
+                        <div class="flex-col address-block">
+                            <i class="icon ion-ios-location"></i>
+                            <address class="address">
+                                <p>{!CSTemp.BOATBUILDING__Company_Address__c}</p>
+                            </address>
+                        </div>
+                        <div class="flex-col mobile-no">
+                            <i class="icon ion-iphone"></i>
+                            <address class="address">
+                                <a href="#">{!CSTemp.BOATBUILDING__Company_Phone__c}</a>
+                            </address>
+                        </div>
+                        <div class="flex-col boat-identities">
+                            <div class="image-cover">
+                                <img src="{!LogoURL}" alt="" />
+                            </div>
+                            <a href="#" style="font-size: 16px;" class="website-link">{!CSTemp.BOATBUILDING__Company_Website__c}</a>
+                        </div>
+                    </div>
+                </div>
+            </footer>
+            <!-- footer -->
+        </div>
+
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+        <script>window.jQuery || document.write('<script src="assets/js/jquery-3.2.1.min.js"><\/script>')</script>
+        <!-- Latest compiled and minified JavaScript -->
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+        <script type="text/javascript">
+            $(document).ready(function () {
+                $(".usd-price").each(function () {
+                    var price = $(this).text();
+                    price = parseInt(price);
+                    function commafy(n) {
+                        var str = n.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, "$1,");
+                        str = str.split(".");
+                        return str[0];
+                    }
+                    price = commafy(price);
+                    $(this).text(price);
+                });
+            });
+        </script>
+    </body>
+</apex:page>

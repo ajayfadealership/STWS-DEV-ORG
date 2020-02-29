@@ -1,0 +1,75 @@
+<aura:component controller="InventorySelectionController">
+    
+    
+    <aura:attribute name="InvIdC" type="sObject" default=""/>
+    <aura:attribute name="ProIdC" type="sObject" default=""/>
+    
+    <aura:attribute name="InvLstAfterSearch" type="InventoryListWrapper[]" />
+    <aura:attribute name="ProductPriceIdListC" type="String[]"/>
+    <aura:attribute name="DealerOptionIdListC" type="String[]"/>
+	<aura:attribute name="NoSalesmanWithoutCostC" type="boolean" />
+
+    <aura:attribute name="lstDealerOptionWraperC" type="DealerOptionWraper[]"/>
+
+    <div style="padding: 0%;">
+        <div class="slds-card" style="padding: 1%; border: 1px solid rgb(221, 219, 218); box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.10);">
+            <div class="slds-p-around_medium" id="toglSectionForNewORExProduct">  
+                <div class="slds-grid slds-wrap slds-col--padded">
+                    <div class="slds-col slds-size--1-of-1">
+                        <div class="slds-grid slds-wrap" id="TestToHide">
+                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-col--padded">
+                                <div class="slds-form-element">
+                                    <lightning:input aura:id="inputToggleInv" type="toggle"
+                                                     label="Existing Inventory" name="togglevalue"   
+                                                     value="ToggleValue"  onchange="{!c.changeToggle}"/>
+                                    
+                                </div>
+                            </div>
+                        </div>
+                    </div> 
+                </div>
+            </div>
+            <div class="slds-p-around_medium" id="ExistigInvList" style="display: none;">
+                <hr/>
+                <div>
+                    <label>
+                        Search Inventory:&nbsp;
+                    </label>
+                    
+                    <input type="text" style="width: 18%;" class="slds-input" id="invSearchInpText" />&nbsp;
+                    <input type="button" class="slds-button slds-button_brand" value="Search" onclick="{!c.getInventoryLst}"/>
+                </div>
+                <br/>
+                <br/>
+                <div class="slds-grid slds-wrap slds-col--padded" style="display: none;" id="InvListResult">
+                    <table style="width: 100%;  margin-bottom: 1rem; background-color: transparent; " >
+                        <thead >
+                            <tr>
+                                <th scope="col" style="padding: .75rem; color: #fff; background-color: rgba(27, 82, 151, 1.0);border-color: rgba(27, 82, 151, 1.0);">Name</th>
+                                <th scope="col" style="padding: .75rem; color: #fff; background-color: rgba(27, 82, 151, 1.0);border-color: rgba(27, 82, 151, 1.0);">View</th>
+                                <th scope="col" style="padding: .75rem; color: #fff; background-color: rgba(27, 82, 151, 1.0);border-color: rgba(27, 82, 151, 1.0);">Status</th>
+                                <th scope="col" style="padding: .75rem; color: #fff; background-color: rgba(27, 82, 151, 1.0);border-color: rgba(27, 82, 151, 1.0);">Manufacturer</th>
+                                <th scope="col" style="padding: .75rem; color: #fff; background-color: rgba(27, 82, 151, 1.0);border-color: rgba(27, 82, 151, 1.0);">Model</th>
+                                <th scope="col" style="padding: .75rem; color: #fff; background-color: rgba(27, 82, 151, 1.0);border-color: rgba(27, 82, 151, 1.0);">Model Variant</th>
+                                <th scope="col" style="padding: .75rem; color: #fff; background-color: rgba(27, 82, 151, 1.0);border-color: rgba(27, 82, 151, 1.0);">Year</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <aura:iteration items="{!v.InvLstAfterSearch}" var="item">
+                                <c:InventorySelectionTable lstDealerOptionWraperCC="{!v.lstDealerOptionWraperC}" objInvW="{!item}" InvIdCC="{!v.InvIdC}"/>
+                            </aura:iteration>
+                        </tbody>
+                    </table>
+                </div> 
+            </div>
+            
+            <div class="slds-p-around_medium" id="newInvCreate">
+                <c:NewProduct ProIdCC="{!v.ProIdC}"/>
+            </div>
+            <hr/>
+            <div class="slds-p-around_medium" id="ProductPriceSectionDiv" >
+                <c:ProdcutPriceSection lstDealerOptionWraperCC="{!v.lstDealerOptionWraperC}" PrntAttP="Quote" NoSalesmanWithoutCostCC="{!v.NoSalesmanWithoutCostC}" ProductPriceIdListCC="{!v.ProductPriceIdListC}" DealerOptionIdListCC="{!v.DealerOptionIdListC}"/>
+            </div>
+        </div>
+    </div>
+</aura:component>

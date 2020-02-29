@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>lead_Source__c</fullName>
+    <deprecated>false</deprecated>
+    <externalId>false</externalId>
+    <label>PC Lead Source</label>
+    <required>false</required>
+    <trackFeedHistory>false</trackFeedHistory>
+    <type>Picklist</type>
+    <valueSet>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Boat Trader</fullName>
+                <default>false</default>
+                <label>Boat Trader</label>
+            </value>
+            <value>
+                <fullName>Dealer Spike</fullName>
+                <default>false</default>
+                <label>Dealer Spike</label>
+            </value>
+            <value>
+                <fullName>Mali Buboats</fullName>
+                <default>false</default>
+                <label>Mali Buboats</label>
+            </value>
+            <value>
+                <fullName>Only Inboards</fullName>
+                <default>false</default>
+                <label>Only Inboards</label>
+            </value>
+            <value>
+                <fullName>Skiers Choice</fullName>
+                <default>false</default>
+                <label>Skiers Choice</label>
+            </value>
+            <value>
+                <fullName>Boat.com</fullName>
+                <default>false</default>
+                <label>Boat.com</label>
+            </value>
+            <value>
+                <fullName>Boat Show</fullName>
+                <default>false</default>
+                <label>Boat Show</label>
+            </value>
+            <value>
+                <fullName>Event</fullName>
+                <default>false</default>
+                <label>Event</label>
+            </value>
+            <value>
+                <fullName>Phone</fullName>
+                <default>false</default>
+                <label>Phone</label>
+            </value>
+            <value>
+                <fullName>Surf Night</fullName>
+                <default>false</default>
+                <label>Surf Night</label>
+            </value>
+            <value>
+                <fullName>Wakeboard Camp</fullName>
+                <default>false</default>
+                <label>Wakeboard Camp</label>
+            </value>
+            <value>
+                <fullName>Walk-in</fullName>
+                <default>false</default>
+                <label>Walk-in</label>
+            </value>
+            <value>
+                <fullName>South Town Water Sports</fullName>
+                <default>false</default>
+                <label>South Town Water Sports</label>
+            </value>
+            <value>
+                <fullName>Boats Monitor</fullName>
+                <default>false</default>
+                <label>Boats Monitor</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

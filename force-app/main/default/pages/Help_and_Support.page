@@ -1,0 +1,9 @@
+<apex:page sidebar="false" showHeader="false" lightningStylesheets="true">
+    <apex:slds />
+    <a href="https://fadsite.secure.force.com/SupportCaseList?username={!$User.Username}&userid={!$User.Id}" class="slds-button slds-button_success" >Help and Support</a>
+    <br/>
+    <br/>
+    <span>
+	    <b>Contact Us: <a href="tel:+17044123049">(704)-412-3049</a></b>
+    </span> 
+</apex:page>

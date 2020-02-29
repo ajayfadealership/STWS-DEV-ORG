@@ -1,0 +1,116 @@
+<apex:page controller="QuotePaymentRedirectController" showHeader="false" sidebar="false" title="Quote Payment" id="pge">
+	<apex:slds /> 
+	<style>
+		.modal {
+        position: fixed; /* Stay in place */
+        z-index: 1; /* Sit on top */
+        left: 0;
+        top: 0;
+        width: 100%; /* Full width */
+        height: 100%; /* Full height */
+        /*overflow: auto;  Enable scroll if needed */
+        background-color: rgb(0,0,0); /* Fallback color */
+        background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+        padding-top: 60px;
+        }
+        
+        /* Modal Content/Box */
+        .modal-content {
+        background-color: #fefefe;
+        margin: 1% auto 15% auto; /* 5% from the top, 15% from the bottom and centered */
+        border: 10px solid #888; 
+        }
+        
+	</style>
+	<apex:form id="frm">
+	<div id="id02" class="modal" >
+            <div class="modal-content animate" style="height: 50%; width: 80%;overflow: auto;">
+                <div class="slds-grid slds-wrap slds-col--padded slds-m-top--medium slds-align--absolute-center">
+                    <div class="slds-col slds-size--1-of-1">
+                        <apex:commandButton id="createPaymentBtn1" style="margin-left: 37%;" styleClass="slds-button slds-button--brand" value="Create Payment" action="{!generatePayment}"/>
+                        <a href="/{!objQuote.Id}" class="slds-button slds-button--brand">Back to Quote</a>
+                    </div>
+                </div>
+                
+                <section style="padding: 2%;">
+                    <div class="slds-col slds-size--1-of-1">
+                        <div class="slds-grid slds-wrap">
+                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-2 slds-col--padded">
+                                <div class="slds-form-element">
+                                    <label class="slds-form-element__label">Quote:</label>
+                                    <div class="slds-form-element__control">
+                                        <label class="slds-form-element__label">{!objQuote.Name}( {!objQuote.Quote_Number__c} )</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-2 slds-col--padded">
+                                <div class="slds-form-element">
+                                    <label class="slds-form-element__label">Total Amount Due</label>
+                                    <div class="slds-form-element__control">
+                                        <input type="text" value="{!objQuote.BOATBUILDING__Quote_Sale_Price__c}" class="slds-input" id="TotalAmountDue1" disabled="disabled"/>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-2 slds-col--padded">
+                                <div class="slds-form-element">
+                                    <label class="slds-form-element__label">Payment Type</label>
+                                    <div class="slds-form-element__control">
+                                        <apex:inputField value="{!objQTP.Payment_Type__c}" styleClass="slds-select" id="PaymentType1" onchange="onChangePayment(this.value);"/>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-2 slds-col--padded">
+                                <div class="slds-form-element">
+                                    <label class="slds-form-element__label">Amount</label>
+                                    <div class="slds-form-element__control">
+                                        <apex:inputField value="{!objQTP.Amount__c}" styleClass="slds-input" id="PaymentAmount1"  onkeyup="UpdateBalance(this.value);" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-2 slds-col--padded">
+                                <div class="slds-form-element">
+                                    <label class="slds-form-element__label">Check Number</label>
+                                    <div class="slds-form-element__control">
+                                        <apex:inputField value="{!objQTP.Check_Number__c}" styleClass="slds-input" id="CheckNumber1" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-2 slds-col--padded">
+                                <div class="slds-form-element">
+                                    <label class="slds-form-element__label">Balance</label>
+                                    <div class="slds-form-element__control">
+                                        <input type="text" class="slds-input" value="{!objQuote.BOATBUILDING__Quote_Sale_Price__c}" id="paymentBalance1" disabled="disabled"/>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-2 slds-col--padded">
+                                <div class="slds-form-element">
+                                    <label class="slds-form-element__label">Credit Card Type</label>
+                                    <div class="slds-form-element__control">
+                                        <apex:inputField value="{!objQTP.Credit_Card_Type__c}" styleClass="slds-select" /> 
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </div>
+        <script>
+        	function onChangePayment(strPaymentType) {
+		        if(strPaymentType == "Credit Card"){
+		            document.getElementById('pge:frm:createPaymentBtn1').value = "Proceed to Gateway";
+		        } else {
+		            document.getElementById('pge:frm:createPaymentBtn1').value = "Create Payment";
+		        }
+		    }
+		    function UpdateBalance(amount){
+		    	amt = 0;
+		    	if(amount != '') {
+		    		amt = amount;
+		    	}
+		        document.getElementById('paymentBalance1').value = parseFloat(document.getElementById('TotalAmountDue1').value - amount).toFixed(2);
+		    } 
+        </script>
+	</apex:form>
+</apex:page>

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Status_for_Days_on_the_Lot__c</fullName>
+    <deprecated>false</deprecated>
+    <externalId>false</externalId>
+    <formula>if(
+	   Days_on_Lot__c &lt;= 90, IMAGE(&quot;/servlet/servlet.FileDownload?file=0156F00000CfLfU&quot;, &quot;Green&quot;),
+	   if(
+			Days_on_Lot__c &gt; 90 &amp;&amp; Days_on_Lot__c &lt;= 180, IMAGE(&quot;/servlet/servlet.FileDownload?file=0156F00000CfLfW&quot;, &quot;Yellow&quot;),
+			if(
+				Days_on_Lot__c &gt; 180 &amp;&amp; Days_on_Lot__c &lt;= 360, IMAGE(&quot;/servlet/servlet.FileDownload?file=0156F00000CfLfV&quot;, &quot;Red&quot;),
+				if(Days_on_Lot__c &gt;= 361, IMAGE(&quot;/servlet/servlet.FileDownload?file=0156F00000CfLfT&quot;, &quot;Black&quot;),&quot;&quot;
+				
+				)
+		    )
+	   )
+)</formula>
+    <label>Status for Days on the Lot</label>
+    <required>false</required>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Text</type>
+    <unique>false</unique>
+</CustomField>

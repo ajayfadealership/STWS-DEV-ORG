@@ -1,0 +1,91 @@
+<aura:component controller="PaymentCalculatorController"  access="global" >
+    
+    <aura:attribute name="PrntAtt" type="String" />
+    <aura:attribute name="ProductDealerPrice" type="Decimal" default="0.00"/>
+    <aura:attribute name="ProductRetailPrice" type="Decimal" default="0.00"/>
+    <aura:attribute name="MfgOptionDealerPrice" type="Decimal" default="0.00"/>
+    <aura:attribute name="MfgOptionRetailPrice" type="Decimal" default="0.00"/>
+    <aura:attribute name="DlrOptionDealerPrice" type="Decimal" default="0.00"/>
+    <aura:attribute name="DlrOptionRetailPrice" type="Decimal" default="0.00"/>
+    <aura:attribute name="TotalMSRPDealerPrice" type="Decimal" default="0.00"/>
+    <aura:attribute name="TotalMSRPRetailPrice" type="Decimal" default="0.00"/>
+    <aura:attribute name="NoSalesmanWithoutCostCCC" type="boolean" />
+    <aura:handler  event="c:ProductPriceForPaymentCalculator" action="{!c.HandelPPFPCEvent}"/>
+    <aura:handler  event="c:PPIdEvent" action="{!c.HandelPPIdEvent}"/> 
+     <aura:handler  event="c:PPDOIdEvent" action="{!c.HandelPPDOIdEvent}"/> 
+    <aura:handler  event="c:AssignBlank" action="{!c.handelBlank}"/> 
+    
+	<div class="slds-col--padded slds-size--2-of-5">
+            <article class="slds-card card-wrapper Sidebar" style="background-color: #f4f6f9;border: 1px solid #d8dde6;">
+                <header class="slds-card__header slds-grid">
+                    <div class="slds-media slds-media--center slds-has-flexi-truncate">
+                        <div class="slds-media__body slds-truncate">
+                            <h2><b>Price Summary</b></h2>
+                        </div>
+                    </div>
+                    
+                    <div class="slds-no-flex">
+                        &nbsp;
+                    </div>
+                </header>
+                <div class="slds-card__body" id="pcDiv" style="padding-bottom: 30px; padding-right: 2px; padding-left: 2px;padding-top: 2px;">                
+                    <table class="slds-table slds-table--bordered" style="border: 1px solid #d8dde6;border-radius: .25rem;">
+                        <thead>
+                            <tr class="slds-text-heading--label">
+                                <th style="padding: .5rem; white-space: nowrap; position: relative;" scope="col"><b>Payment Calculator</b></th>
+                                <th style="padding: .5rem; white-space: nowrap; position: relative;" scope="col">&nbsp;</th>
+                                <th style="padding: .5rem; white-space: nowrap; position: relative;" scope="col">
+                                    <aura:if isTrue="{!v.NoSalesmanWithoutCostCCC}">
+                                        <b>Dealer Cost</b>
+                                    </aura:if>
+                                </th>
+                                    
+                                <th style="padding: .5rem; white-space: nowrap; position: relative;" scope="col"><b>Retail Price</b></th> 
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="slds-hint-parent">
+                                <td style="padding: .5rem; white-space: nowrap; position: relative;"><label>Product Price:</label></td>
+                                <td style="padding: .5rem; white-space: nowrap; position: relative;" scope="col">&nbsp;</td>
+                                <td style="padding: .5rem; white-space: nowrap; position: relative;">
+                                    <aura:if isTrue="{!v.NoSalesmanWithoutCostCCC}">
+                                        $&nbsp;{!v.ProductDealerPrice}
+                                    </aura:if>
+                                </td>
+                                <td style="padding: .5rem; white-space: nowrap; position: relative;">$&nbsp;{!v.ProductRetailPrice}</td>
+                            </tr>
+                            <tr class="slds-hint-parent"> 
+                                <td style="padding: .5rem; white-space: nowrap; position: relative;"><label>Mfg Opt. Total:</label></td>
+                                <td style="padding: .5rem; white-space: nowrap; position: relative;" scope="col">&nbsp;</td>
+                                <td style="padding: .5rem; white-space: nowrap; position: relative;">
+                                    <aura:if isTrue="{!v.NoSalesmanWithoutCostCCC}">$&nbsp;{!v.MfgOptionDealerPrice}
+                                    </aura:if>
+                                </td>
+                                <td style="padding: .5rem; white-space: nowrap; position: relative;">$&nbsp;{!v.MfgOptionRetailPrice}</td>
+                            </tr>
+                            <tr class="slds-hint-parent">
+                                <td style="padding: .5rem; white-space: nowrap; position: relative;"><label>Dealer Opt. Total:</label></td>
+                                <td style="padding: .5rem; white-space: nowrap; position: relative;" scope="col">&nbsp;</td>
+                                <td style="padding: .5rem; white-space: nowrap; position: relative;">
+                                    <aura:if isTrue="{!v.NoSalesmanWithoutCostCCC}">
+                                        $&nbsp;{!v.DlrOptionDealerPrice}
+                                    </aura:if>
+                                </td>
+                                <td style="padding: .5rem; white-space: nowrap; position: relative;">$&nbsp;{!v.DlrOptionRetailPrice}</td>
+                            </tr>
+                            <tr class="slds-text-heading--label">
+                                <th style="background-color: rgb(250, 250, 249); padding: .5rem; white-space: nowrap; position: relative;"><b>Total MSRP Price:</b></th>
+                                <th style="background-color: rgb(250, 250, 249); padding: .5rem; white-space: nowrap; position: relative;" scope="col">&nbsp;</th>
+                                <th style="background-color: rgb(250, 250, 249); padding: .5rem; white-space: nowrap; position: relative;">
+                                    <aura:if isTrue="{!v.NoSalesmanWithoutCostCCC}">
+                                        <b>$&nbsp;{!v.TotalMSRPDealerPrice}</b>
+                                    </aura:if>
+                                </th>
+                                <th style="background-color: rgb(250, 250, 249); padding: .5rem; white-space: nowrap; position: relative;"><b>$&nbsp;{!v.TotalMSRPRetailPrice}</b></th>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>  
+            </article>
+        </div>
+</aura:component>

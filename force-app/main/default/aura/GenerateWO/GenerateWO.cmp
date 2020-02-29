@@ -1,0 +1,13 @@
+<aura:component controller="WorkRequestLightningCompController" implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction" access="global" >
+    <aura:handler name="init" value="{!this}" action="{!c.doinit}"/>
+    <aura:attribute name="attrRecordId" type="String" access="global" />
+    <div class="slds-grid slds-grid--vertical-align-center slds-grid--align-center">
+        <div class = "slds-col--padded">
+            <div class = "slds-form-element">
+                <div class = "slds-form-element__control">
+                    <lightning:button onclick="{!c.generateWorkOrder}" label="Generate Work Order" iconName="utility:save" class = "slds-m-top_medium"/>
+                </div>
+            </div>
+        </div>
+    </div>
+</aura:component>

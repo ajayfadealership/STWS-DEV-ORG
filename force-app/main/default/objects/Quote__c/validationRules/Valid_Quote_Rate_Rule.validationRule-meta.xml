@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Valid_Quote_Rate_Rule</fullName>
+    <active>true</active>
+    <errorConditionFormula>Quote_Rate__c &gt;100</errorConditionFormula>
+    <errorDisplayField>Quote_Rate__c</errorDisplayField>
+    <errorMessage>Quote Rate cannot exceed 100%</errorMessage>
+</ValidationRule>

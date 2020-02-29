@@ -1,0 +1,432 @@
+<aura:component controller="ACVController" access="global" >
+    <aura:attribute name="objACV1" type="ACV_Form__c" default="{'sobjectType': 'ACV_Form__c'}" access="global"/> 
+    <aura:attribute name="selectedLookUpRecordACVCC" type="sObject" default="{}" access="global"/> 
+    <div class="slds-grid slds-wrap slds-col--padded">
+        <h1><b>Boat Info</b></h1>
+        <div class="slds-col slds-size--1-of-1">
+            <div class="slds-grid slds-wrap" >
+                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-2 slds-col--padded">
+                    <div class="slds-form-element">
+                        <label class="slds-form-element__label"><span style="color: red;">*</span>ACV Form Name:</label>
+                        <div class="slds-form-element__control">
+                            <force:inputField value="{!v.objACV1.Name}" class="slds-input"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-2 slds-col--padded">
+                    <div class="slds-form-element">
+                        <label class="slds-form-element__label">Boat Type:</label>
+                        <div class="slds-form-element__control">
+                            <force:inputField value="{!v.objACV1.BOATBUILDING__Boat_Type__c}" class="slds-input"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-2 slds-col--padded">
+                    <div class="slds-form-element">
+                        <label class="slds-form-element__label">Source 1:</label>
+                        <div class="slds-form-element__control">
+                            <force:inputField value="{!v.objACV1.BOATBUILDING__Source_1__c}" class="slds-input"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-2 slds-col--padded">
+                    <div class="slds-form-element">
+                        <label class="slds-form-element__label"><span style="color: red;">*</span>High Comp 1 Amount:</label>
+                        <div class="slds-form-element__control">
+                            <force:inputField value="{!v.objACV1.BOATBUILDING__High_Comp_1_Amount__c}" class="slds-input"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-2 slds-col--padded">
+                    <div class="slds-form-element">
+                        <label class="slds-form-element__label">&nbsp;</label>
+                        <div class="slds-form-element__control">
+							&nbsp;
+                        </div>
+                    </div>
+                </div>
+                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-2 slds-col--padded">
+                    <div class="slds-form-element">
+                        <label class="slds-form-element__label"><span style="color: red;">*</span>Low Comp 1 Amount:</label>
+                        <div class="slds-form-element__control">
+                            <force:inputField value="{!v.objACV1.BOATBUILDING__Low_Comp_1_Amount__c}" class="slds-input"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-2 slds-col--padded">
+                    <div class="slds-form-element">
+                        <label class="slds-form-element__label">Source 2:</label>
+                        <div class="slds-form-element__control">
+                            <force:inputField value="{!v.objACV1.BOATBUILDING__Source_2__c}" class="slds-input"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-2 slds-col--padded">
+                    <div class="slds-form-element">
+                        <label class="slds-form-element__label"><span style="color: red;">*</span>High Comp 2 Amount:</label>
+                        <div class="slds-form-element__control">
+                            <force:inputField value="{!v.objACV1.BOATBUILDING__High_Comp_2_Amount__c }" class="slds-input"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-2 slds-col--padded">
+                    <div class="slds-form-element">
+                        <label class="slds-form-element__label">&nbsp;</label>
+                        <div class="slds-form-element__control">
+							&nbsp;
+                        </div>
+                    </div>
+                </div>
+                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-2 slds-col--padded">
+                    <div class="slds-form-element">
+                        <label class="slds-form-element__label"><span style="color: red;">*</span>Low Comp 2 Amount:</label>
+                        <div class="slds-form-element__control">
+                            <force:inputField value="{!v.objACV1.BOATBUILDING__Low_Comp_2_Amount__c  }" class="slds-input"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-2 slds-col--padded">
+                    <div class="slds-form-element">
+                        <label class="slds-form-element__label">Source 3:</label>
+                        <div class="slds-form-element__control">
+                            <force:inputField value="{!v.objACV1.BOATBUILDING__Source_3__c}" class="slds-input"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-2 slds-col--padded">
+                    <div class="slds-form-element">
+                        <label class="slds-form-element__label"><span style="color: red;">*</span>High Comp 3 Amount:</label>
+                        <div class="slds-form-element__control">
+                            <force:inputField value="{!v.objACV1.BOATBUILDING__High_Comp_3_Amount__c }" class="slds-input"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-2 slds-col--padded">
+                    <div class="slds-form-element">
+                        <label class="slds-form-element__label">&nbsp;</label>
+                        <div class="slds-form-element__control">
+							&nbsp;
+                        </div>
+                    </div>
+                </div>
+                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-2 slds-col--padded">
+                    <div class="slds-form-element">
+                        <label class="slds-form-element__label"><span style="color: red;">*</span>Low Comp 3 Amount:</label>
+                        <div class="slds-form-element__control">
+                            <force:inputField value="{!v.objACV1.BOATBUILDING__Low_Comp_3_Amount__c  }" class="slds-input"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-2 slds-col--padded">
+                    <div class="slds-form-element">
+                        <label class="slds-form-element__label">Online 90 Day Selling %:</label>
+                        <div class="slds-form-element__control">
+                            <force:inputField value="{!v.objACV1.BOATBUILDING__Online_90_Day_Selling__c}" class="slds-input"/>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <hr/>
+    <div class="slds-grid slds-wrap slds-col--padded">
+        <h2><b>Trade Condition</b></h2>
+        <div class="slds-col slds-size--1-of-1">
+            <div class="slds-grid slds-wrap" >
+                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-2 slds-col--padded">
+                    <div class="slds-form-element">
+                        <label class="slds-form-element__label">Cover:</label>
+                        <div class="slds-form-element__control">
+                            <force:inputField value="{!v.objACV1.BOATBUILDING__Cover__c}" class="slds-input"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-2 slds-col--padded">
+                    <div class="slds-form-element">
+                        <label class="slds-form-element__label">Cover Element:</label>
+                        <div class="slds-form-element__control">
+                            <force:inputField value="{!v.objACV1.BOATBUILDING__Cover_Comments__c}" class="slds-input"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-2 slds-col--padded">
+                    <div class="slds-form-element">
+                        <label class="slds-form-element__label">Cover Estimated Repair Cost:</label>
+                        <div class="slds-form-element__control">
+                            <force:inputField value="{!v.objACV1.BOATBUILDING__Cover_Estimated_Repair_Cost__c}" class="slds-input"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-2 slds-col--padded">
+                    <div class="slds-form-element">
+                        <label class="slds-form-element__label">Blower:</label>
+                        <div class="slds-form-element__control">
+                            <force:inputField value="{!v.objACV1.BOATBUILDING__Blower__c}" class="slds-input"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-2 slds-col--padded">
+                    <div class="slds-form-element">
+                        <label class="slds-form-element__label">Blower Comments:</label>
+                        <div class="slds-form-element__control">
+                            <force:inputField value="{!v.objACV1.BOATBUILDING__Blower_Comments__c}" class="slds-input"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-2 slds-col--padded">
+                    <div class="slds-form-element">
+                        <label class="slds-form-element__label">Blower Estimated Repair Cost:</label>
+                        <div class="slds-form-element__control">
+                            <force:inputField value="{!v.objACV1.BOATBUILDING__Blower_Estimated_Repair_Cost__c}" class="slds-input"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-2 slds-col--padded">
+                    <div class="slds-form-element">
+                        <label class="slds-form-element__label">Dash Condition:</label>
+                        <div class="slds-form-element__control">
+                            <force:inputField value="{!v.objACV1.BOATBUILDING__Dash_Condition__c}" class="slds-input"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-2 slds-col--padded">
+                    <div class="slds-form-element">
+                        <label class="slds-form-element__label">Dash Comments</label>
+                        <div class="slds-form-element__control">
+                            <force:inputField value="{!v.objACV1.BOATBUILDING__Dash_Comments__c}" class="slds-input"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-2 slds-col--padded">
+                    <div class="slds-form-element">
+                        <label class="slds-form-element__label">Dash Estimated Repair Cost</label>
+                        <div class="slds-form-element__control">
+                            <force:inputField value="{!v.objACV1.BOATBUILDING__Dash_Estimated_Repair_Cost__c}" class="slds-input"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-2 slds-col--padded">
+                    <div class="slds-form-element">
+                        <label class="slds-form-element__label">Engine Oil</label>
+                        <div class="slds-form-element__control">
+                            <force:inputField value="{!v.objACV1.BOATBUILDING__Engine_Oil__c}" class="slds-input"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-2 slds-col--padded">
+                    <div class="slds-form-element">
+                        <label class="slds-form-element__label">Engine Oil Comments</label>
+                        <div class="slds-form-element__control">
+                            <force:inputField value="{!v.objACV1.BOATBUILDING__Engine_Oil_Comments__c}" class="slds-input"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-2 slds-col--padded">
+                    <div class="slds-form-element">
+                        <label class="slds-form-element__label">Engine Oil Estimated Repair Cost</label>
+                        <div class="slds-form-element__control">
+                            <force:inputField value="{!v.objACV1.BOATBUILDING__Engine_Oil_Estimated_Repair_Cost__c}" class="slds-input"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-2 slds-col--padded">
+                    <div class="slds-form-element">
+                        <label class="slds-form-element__label">Engine Running Comments</label>
+                        <div class="slds-form-element__control">
+                            <force:inputField value="{!v.objACV1.BOATBUILDING__Engine_Running_Comments__c}" class="slds-input"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-2 slds-col--padded">
+                    <div class="slds-form-element">
+                        <label class="slds-form-element__label">Engine Running Condition</label>
+                        <div class="slds-form-element__control">
+                            <force:inputField value="{!v.objACV1.BOATBUILDING__Engine_Running_Condition__c}" class="slds-input"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-2 slds-col--padded">
+                    <div class="slds-form-element">
+                        <label class="slds-form-element__label" for="form-element-01">Engine Running Estimated Repair Cost</label>
+                        <div class="slds-form-element__control">
+                            <force:inputField value="{!v.objACV1.BOATBUILDING__Engine_Running_Estimated_Repair_Cost__c}" class="slds-input"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-2 slds-col--padded">
+                     <div class="slds-form-element">
+                        <label class="slds-form-element__label" for="form-element-01">Gauges/Screen</label>
+                        <div class="slds-form-element__control">
+                            <force:inputField value="{!v.objACV1.BOATBUILDING__Gauges_Screen__c}" class="slds-input"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-2 slds-col--padded">
+                     <div class="slds-form-element">
+                        <label class="slds-form-element__label" for="form-element-01">Gauges/Screen Comments</label>
+                        <div class="slds-form-element__control">
+                            <force:inputField value="{!v.objACV1.BOATBUILDING__Gauges_Screen_Comments__c}" class="slds-input"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-2 slds-col--padded">
+                     <div class="slds-form-element">
+                        <label class="slds-form-element__label" for="form-element-01">Gauges/Screen Estimated Repair Cost</label>
+                        <div class="slds-form-element__control">
+                            <force:inputField value="{!v.objACV1.BOATBUILDING__auges_Screen_Comments__c	}" class="slds-input"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-2 slds-col--padded">
+                     <div class="slds-form-element">
+                        <label class="slds-form-element__label" for="form-element-01">Hull and Deck</label>
+                        <div class="slds-form-element__control">
+                            <force:inputField value="{!v.objACV1.BOATBUILDING__Hull_and_Deck__c}" class="slds-input"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-2 slds-col--padded">
+                     <div class="slds-form-element">
+                        <label class="slds-form-element__label" for="form-element-01">Hull and Deck Comments</label>
+                        <div class="slds-form-element__control">
+                            <force:inputField value="{!v.objACV1.BOATBUILDING__Hull_and_Deck_Comments__c}" class="slds-input"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-2 slds-col--padded">
+                     <div class="slds-form-element">
+                        <label class="slds-form-element__label" for="form-element-01">Hull and Deck Estimated Repair Amount</label>
+                        <div class="slds-form-element__control">
+                            <force:inputField value="{!v.objACV1.BOATBUILDING__Hull_and_Deck_Estimated_Repair_Amount__c}" class="slds-input"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-2 slds-col--padded">
+                     <div class="slds-form-element">
+                        <label class="slds-form-element__label" for="form-element-01">Speed Control</label>
+                        <div class="slds-form-element__control">
+                            <force:inputField value="{!v.objACV1.BOATBUILDING__Speed_Control__c}" class="slds-input"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-2 slds-col--padded">
+                     <div class="slds-form-element">
+                        <label class="slds-form-element__label" for="form-element-01">Speed Control Comments</label>
+                        <div class="slds-form-element__control">
+                            <force:inputField value="{!v.objACV1.BOATBUILDING__Speed_Control_Comments__c}" class="slds-input"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-2 slds-col--padded">
+                     <div class="slds-form-element">
+                        <label class="slds-form-element__label" for="form-element-01">Speed Control Estimated Repair Cost</label>
+                        <div class="slds-form-element__control">
+                            <force:inputField value="{!v.objACV1.BOATBUILDING__Speed_Control_Estimated_Repair_Cost__c}" class="slds-input"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-2 slds-col--padded">
+                     <div class="slds-form-element">
+                        <label class="slds-form-element__label" for="form-element-01">Upholstery/Carpet </label>
+                        <div class="slds-form-element__control">
+                            <force:inputField value="{!v.objACV1.BOATBUILDING__Upholstery__c}" class="slds-input"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-2 slds-col--padded">
+                     <div class="slds-form-element">
+                        <label class="slds-form-element__label" for="form-element-01">Upholstery/Carpet Comments </label>
+                        <div class="slds-form-element__control">
+                            <force:inputField value="{!v.objACV1.BOATBUILDING__Upholstery_Carpet_Comments__c}" class="slds-input"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-2 slds-col--padded">
+                     <div class="slds-form-element">
+                        <label class="slds-form-element__label" for="form-element-01">Upholstery/Carpet Estimated Repair Cost </label>
+                        <div class="slds-form-element__control">
+                            <force:inputField value="{!v.objACV1.BOATBUILDING__Upholstery_Carpet_Estimated_Repair_Cost__c}" class="slds-input"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-2 slds-col--padded">
+                     <div class="slds-form-element">
+                        <label class="slds-form-element__label" for="form-element-01">Boat Detail Cost</label>
+                        <div class="slds-form-element__control">
+                            <force:inputField value="{!v.objACV1.BOATBUILDING__Boat_Detail_Cost__c}" class="slds-input"/>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <hr/>
+    <div class="slds-grid slds-wrap slds-col--padded">
+        <h2><b>ACV Requested</b></h2>
+        <div class="slds-col slds-size--1-of-1">
+            <div class="slds-grid slds-wrap" >
+                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-2 slds-col--padded">
+                    <div class="slds-form-element">
+                        <label class="slds-form-element__label" for="form-element-01">Requested ACV</label>
+                        <div class="slds-form-element__control">
+                            <force:inputField value="{!v.objACV1.BOATBUILDING__Requested_ACV__c}" class="slds-input"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-2 slds-col--padded">
+                    <div class="slds-form-element">
+                        <label class="slds-form-element__label" for="form-element-01">Approved ACV</label>
+                        <div class="slds-form-element__control">
+                            <force:inputField value="{!v.objACV1.BOATBUILDING__Approved_ACV__c}" class="slds-input"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-2 slds-col--padded">
+                    <div class="slds-form-element">
+                        <label class="slds-form-element__label" for="form-element-01">Desire Boat Margin</label>
+                        <div class="slds-form-element__control">
+                            <force:inputField value="{!v.objACV1.BOATBUILDING__Desire_Boat_Margin__c}" class="slds-input"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-2 slds-col--padded">
+                    <div class="slds-form-element">
+                        <label class="slds-form-element__label" for="form-element-01">Recommended ACV</label>
+                        <div class="slds-form-element__control">
+                            <force:inputField value="{!v.objACV1.BOATBUILDING__Recommended_ACV__c}" class="slds-input"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-2 slds-col--padded">
+                    <div class="slds-form-element">
+                        <label class="slds-form-element__label">&nbsp;</label>
+                        <div class="slds-form-element__control">
+                            &nbsp;
+                        </div>
+                    </div>
+                </div>
+                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-2 slds-col--padded">
+                    <div class="slds-form-element">
+                        <label class="slds-form-element__label">&nbsp;</label>
+                        <div class="slds-form-element__control">
+                            <a class="slds-button slds-button_brand rightElement" onclick="{!c.Submit}">Create ACV</a>   	
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+              
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+    
+</aura:component>

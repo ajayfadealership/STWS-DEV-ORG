@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Discount_Price_ILI__c</fullName>
+    <deprecated>false</deprecated>
+    <externalId>false</externalId>
+    <label>Discount Price (ILI)</label>
+    <summarizedField>Invoice_Line_Item__c.Discount_Price__c</summarizedField>
+    <summaryForeignKey>Invoice_Line_Item__c.Related_To_Invoice__c</summaryForeignKey>
+    <summaryOperation>sum</summaryOperation>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Summary</type>
+</CustomField>

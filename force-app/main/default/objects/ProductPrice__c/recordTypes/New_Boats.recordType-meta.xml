@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<RecordType xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>New_Boats</fullName>
+    <active>true</active>
+    <description>This record type stores the details of the new boats.</description>
+    <label>New Boats</label>
+    <picklistValues>
+        <picklist>Boat_Type__c</picklist>
+        <values>
+            <fullName>Inboard</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Inboard%2FOutboard</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Outboard</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>V-drive</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Location__c</picklist>
+        <values>
+            <fullName>Over Flow Lot</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Showroom</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Used Boat Lot</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Options__c</picklist>
+        <values>
+            <fullName>Canvas</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Electronics</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Entertainment</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Fishing</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Gallery</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Jet Drives</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Misc</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Personal Watercraft</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Pontoon Boat</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Ski Boats</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Owner__c</picklist>
+        <values>
+            <fullName>Consignment</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Dealership</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Select_Category__c</picklist>
+        <values>
+            <fullName>Bimini Top</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Boat Cover - 15 ft%2E thru 19 ft%2E</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Boat Cover - 20 ft%2E thru 25 ft%2E</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Boat Cover - 26 ft%2E thru 31 ft%2E</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Boat Cover - 32 ft%2E thru 42 ft%2E</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Boat Cover - 7 ft%2E thru 14 ft%2E</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Boat Cover - Custom - 18 ft%2E thru 25 ft%2E</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Bow Cover</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Bridge Enclosure</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Cockpit Cover</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Salon Enclosures</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Status__c</picklist>
+        <values>
+            <fullName>Cleaning</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Inspection</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Marketing</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Service</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Showroom</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Vehicle_Type__c</picklist>
+        <values>
+            <fullName>4 Wheeler</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Jet Ski</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Pontoon</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>RV</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Runabout</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Sailboat</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Ski Boat</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+</RecordType>

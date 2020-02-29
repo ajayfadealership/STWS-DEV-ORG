@@ -1,0 +1,252 @@
+<apex:component id="vndr" controller="VendorController">
+  <div class="slds-grid slds-wrap">
+        <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-1 slds-col--padded">
+            <div class="slds-grid slds-wrap">
+                <div id="venTable" class="slds-col slds-size--1-of-1 slds-medium-size--1-of-1 slds-col--padded slds-m-top--x-large">
+                    <div class="slds-card__body slds-col--padded">
+                        <div >
+                            <div class="slds-col slds-size--1-of-1 slds-align--absolute-center Create_button">
+                                <p id="buttonPnl">
+                                    <button class="slds-button slds-button--neutral slds-button--brand" type="button" value="New Vendor" onclick="displayForm(this);">Create Vendor</button>
+                                </p>
+                            </div>
+                            <apex:outputPanel id="tableOPPanle">
+                                <table id="Table2" class="slds-table slds-table--bordered slds-no-row-hover slds-table--cell-buffer slds-m-top--x-large Table1 slds-card">
+                                    <thead>
+                                        <tr class="slds-text-heading--label">
+                                            <th scope="col">Vendor</th>
+                                            <th scope="col">Address</th>
+                                            <th scope="col">Phone</th>
+                                            <th scope="col">Amount On Order</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <apex:repeat value="{!lstOfManu}" var="objMan">
+                                            <tr>
+                                                <td>
+                                                    <a href="/{!objMan.Id}">
+                                                        <apex:outputField value="{!objMan.Name}" />
+                                                    </a>
+                                                    &nbsp; <a href="/{!objMan.Id}" target="blank"><img src="https://image.flaticon.com/icons/png/512/376/376007.png" style="height: 10px; width: 10px;"/></a>
+                                                </td>
+                                                <td>
+                                                    <apex:outputField value="{!objMan.Street__c}" />&nbsp;
+                                                    <apex:outputField value="{!objMan.City__c}" />&nbsp;
+                                                    <apex:outputField value="{!objMan.State__c}" />&nbsp;
+                                                    <apex:outputField value="{!objMan.Zip__c}" />
+                                                </td>
+                                                <td>
+                                                    <apex:outputField value="{!objMan.Phone__c}" />
+                                                </td>
+                                                <td><apex:outputField value="{!objMan.Oustanding_Amount_on_Orders__c}" /></td>
+                                            </tr>
+                                        </apex:repeat>
+                                    </tbody>
+                                </table>
+                            </apex:outputPanel>
+                        </div>
+                    </div>
+                </div>
+                <div id="infoDiv" style="display:none;margin-top:1%;padding-top: 10px;">
+                            <div class="slds-grid slds-wrap">
+                                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-1">
+                                    <div class="slds-grid slds-wrap">
+                                        <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-1 ">
+                                                <div class="slds-grid slds-wrap">
+                                                    <div class="slds-col slds-size--1-of-1 slds-align--absolute-center Create_button">
+                                                        <div class="slds-form-element__control">
+                                                            <button class="slds-button slds-button--neutral slds-button--brand inside_row_button " type="button" onclick="saveVendor(this);">Create Vendor</button>
+                                                            <button class="slds-button slds-button--neutral slds-button--brand inside_row_button " type="button" onclick="cancelButton(this);">Back to List</button>
+                                                        </div>
+                                                    </div>
+                                                </div>  
+                                            </div>
+                                        
+                                        <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-1 slds-col--padded">
+                                                <div class="slds-grid slds-wrap">
+                                                    <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                                                        <div class="slds-form-element">
+                                                            <label class="slds-form-element__label">Vendor Name</label>
+                                                            <div class="slds-form-element__control">
+                                                                <input type="text" class="slds-input" id="ifName" onclick="document.getElementById('nameSpanId').innerHTML = '';" />
+                                                                <span id="nameSpanId" style="color:red;font-weight: bold;"></span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                                                        <div class="slds-form-element">
+                                                        <label class="slds-form-element__label">Vendor Phone Number</label>
+                                                            <div class="slds-form-element__control">
+                                                                <input type="text" class="slds-input" id="ifPhone" />
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                                                        <div class="slds-form-element">
+                                                            <label class="slds-form-element__label">Vendor Email</label>
+                                                            <div class="slds-form-element__control">
+                                                                <input type="text" class="slds-input" id="ifEmail" onclick="document.getElementById('emailSpanId').innerHTML = '';"/>
+                                                                <span id="emailSpanId" style="color:red;font-weight: bold;"></span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                                                        <div class="slds-form-element">
+                                                            <label class="slds-form-element__label">Vendor Contact Person</label>
+                                                            <div class="slds-form-element__control">
+                                                                <apex:inputField value="{!objManufacturer.Contact_Person__c}" id="ifConPer" styleClass="slds-input"/>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>  
+                                            </div>
+                                        
+                                        <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-1 slds-col--padded">
+                                                <div class="slds-grid slds-wrap">
+                                                    <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                                                        <div class="slds-form-element">
+                                                            <label class="slds-form-element__label">Vendor Address</label>
+                                                            <div class="slds-form-element__control">
+                                                                <input type="text" class="slds-input" id="ifStreet" />
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                                                        <div class="slds-form-element">
+                                                            <label class="slds-form-element__label">Vendor City</label>
+                                                            <div class="slds-form-element__control">
+                                                                <input type="text" class="slds-input" id="ifCity" />
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                                                        <div class="slds-form-element">
+                                                            <label class="slds-form-element__label">Vendor State</label>
+                                                            <div class="slds-form-element__control">
+                                                                <input type="text" class="slds-input" id="ifState" />
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                                                        <div class="slds-form-element">
+                                                            <label class="slds-form-element__label">Vendor Zip</label>
+                                                            <div class="slds-form-element__control">
+                                                                <input type="text" class="slds-input" id="ifZip" /> 
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>  
+                                            </div>
+                                        <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-1 slds-col--padded">
+                                    
+                                            <div class="slds-grid slds-wrap">
+                                                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                                                    <div class="slds-form-element">
+                                                        <label class="slds-form-element__label">Vendor Terms</label>
+                                                        <div class="slds-form-element__control">
+                                                            <apex:inputField value="{!objManufacturer.Terms__c}" id="ifTerms" styleClass="slds-select"/>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                                                    <div class="slds-form-element">
+                                                        
+                                                    </div>
+                                                </div>
+                                                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                                                    <div class="slds-form-element">
+                                                        
+                                                    </div>
+                                                </div>
+                                                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                                                    <div class="slds-form-element">
+                                                        
+                                                    </div>
+                                                </div>
+                                            </div>  
+                                        </div>
+                                    </div>
+                                    </div>
+                            </div>
+                        </div>
+                            
+            </div>
+        </div>
+    </div>
+
+    <script>
+    $(document).ready(function() {
+        $('#Table2').DataTable( {
+          "pageLength": 25,
+          "lengthMenu": [[25, 50, -1], [25, 50, "All"]]
+        } );
+    });
+    </script>
+
+    <script>
+        function displayForm(obj){
+            document.getElementById("infoDiv").style.display = "block";
+            document.getElementById("venTable").style.display = "none";
+            
+        }
+
+        function saveVendor(obj) {      
+            if(document.getElementById("ifName").value != null && document.getElementById("ifName").value != "") {
+                document.getElementById("nameSpanId").innerHTML = "";
+                mapManuVal = new Object();
+                mapManuVal["Name"] = document.getElementById("ifName").value;
+                mapManuVal["Phone"] = document.getElementById("ifPhone").value;
+                var conId = document.getElementById("pge:frm:vndrCompCall:vndr:ifConPer_lkid").value;
+                var conName = document.getElementById("pge:frm:vndrCompCall:vndr:ifConPer").value;
+                if(conName != null && conName != "" 
+                   && conId != null && conId != "" && conId != "000000000000000") {
+                    mapManuVal["ContactPerson"] = conId;
+                }
+                mapManuVal["Street"] = document.getElementById("ifStreet").value;
+                mapManuVal["City"] = document.getElementById("ifCity").value;
+                mapManuVal["State"] = document.getElementById("ifState").value;
+                mapManuVal["Zip"] = document.getElementById("ifZip").value;
+                mapManuVal["Terms"] = document.getElementById("pge:frm:vndrCompCall:vndr:ifTerms").value;
+                
+                var mailTest = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+                var email = document.getElementById("ifEmail");
+                mapManuVal["Email"] = email.value;
+                if (mailTest.test(email.value) || email.value == "") {
+                    document.getElementById("emailSpanId").innerHTML = "";
+                    BOATBUILDING.VendorController.saveDetails(mapManuVal, function(result, event) {
+                        if(event.status) {
+                            if(result != null) {
+                                window.top.location = '/apex/BOATBUILDING__ServicePage';
+                            }else {
+                                alert("Something went wrong. Please Try Again!!");
+                            }
+                        }
+                    });
+                } else {
+                    document.getElementById("emailSpanId").innerHTML = "Enter a valid email.";
+                }
+            } else {
+                document.getElementById("nameSpanId").innerHTML = "You must enter name.";
+            }
+        }
+
+        function cancelButton(obj) {
+            document.getElementById("ifName").value = "";
+            document.getElementById("ifPhone").value = "";
+            document.getElementById("pge:frm:vndrCompCall:vndr:ifConPer_lkid").value = "";
+            document.getElementById("pge:frm:vndrCompCall:vndr:ifConPer").value = "";
+            document.getElementById("ifStreet").value = "";
+            document.getElementById("ifCity").value = "";
+            document.getElementById("ifState").value = "";
+            document.getElementById("ifZip").value ="";
+            document.getElementById("ifEmail").value = "";
+            document.getElementById("pge:frm:vndrCompCall:vndr:ifTerms").value="";
+            document.getElementById("infoDiv").style.display = "none";
+            document.getElementById("venTable").style.display = "block";
+            document.getElementById("nameSpanId").innerHTML = "";
+            document.getElementById("emailSpanId").innerHTML = "";
+        }
+        
+    </script>
+
+</apex:component>

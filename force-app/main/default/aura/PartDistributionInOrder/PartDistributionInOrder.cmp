@@ -1,0 +1,15 @@
+<aura:component implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction" access="global" >
+    <aura:attribute name ="pa" type="Object"  access="global"/>    
+    <aura:attribute name="locations" type="String[]" access="global"/>
+    
+        <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-3 slds-large-size--1-of-3 slds-p-top_small">
+            <lightning:select value="{!v.pa.BOATBUILDING__Store_Location__c}">
+                <aura:iteration items="{!v.locations}" var="loc">
+                    <option value="{!loc}">{!loc}</option> 
+                </aura:iteration>
+            </lightning:select>
+        </div>
+        <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-3 slds-large-size--1-of-3 slds-p-top_small">
+            <lightning:input type="number" value="{!v.pa.BOATBUILDING__Quantity__c}" min="0"/> 
+        </div>     
+</aura:component>

@@ -1,0 +1,31 @@
+<apex:page standardController="Inventory__c" docType="html-5.0" showHeader="false"  sidebar="false" standardStylesheets="false">
+    
+    <div id="div1">
+    
+    <h1>Bow__c.jpg</h1>
+    <c:DragDropBow parentId="{!$CurrentPage.parameters.id}" DragDropHeight="500px" />
+    
+    </div>
+    
+    
+    
+    <div id = "Cabin">
+    
+    <h1>Cabin__c.jpg</h1>
+    <c:DragDropSide parentId="{!$CurrentPage.parameters.id}" DragDropHeight="100px" />
+    
+    </div>
+    <div id ="Cooler">
+    <h1>Cooler__c.jpg</h1>
+    <c:DragnDropCooler parentId="{!$CurrentPage.parameters.id}" DragDropHeight="100px" />
+    
+    </div>
+    
+    <div id ="Dashcluster">
+    <h1>Dash_cluster__c.jpg</h1>
+    <c:DragnDropDashcluster parentId="{!$CurrentPage.parameters.id}" DragDropHeight="100px" />
+    
+    </div>
+ 
+    
+</apex:page>

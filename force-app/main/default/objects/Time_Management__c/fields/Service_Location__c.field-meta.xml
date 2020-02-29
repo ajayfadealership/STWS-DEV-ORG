@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Service_Location__c</fullName>
+    <deprecated>false</deprecated>
+    <externalId>false</externalId>
+    <label>Service Location</label>
+    <required>false</required>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Slot 1</fullName>
+                <default>false</default>
+                <label>Slot 1</label>
+            </value>
+            <value>
+                <fullName>Slot 2</fullName>
+                <default>false</default>
+                <label>Slot 2</label>
+            </value>
+            <value>
+                <fullName>Slot 3</fullName>
+                <default>false</default>
+                <label>Slot 3</label>
+            </value>
+            <value>
+                <fullName>Slot 4</fullName>
+                <default>false</default>
+                <label>Slot 4</label>
+            </value>
+            <value>
+                <fullName>Slot 5</fullName>
+                <default>false</default>
+                <label>Slot 5</label>
+            </value>
+            <value>
+                <fullName>Slot 6</fullName>
+                <default>false</default>
+                <label>Slot 6</label>
+            </value>
+            <value>
+                <fullName>Slot 7</fullName>
+                <default>false</default>
+                <label>Slot 7</label>
+            </value>
+            <value>
+                <fullName>Slot 8</fullName>
+                <default>false</default>
+                <label>Slot 8</label>
+            </value>
+            <value>
+                <fullName>Slot 9</fullName>
+                <default>false</default>
+                <label>Slot 9</label>
+            </value>
+            <value>
+                <fullName>Slot 10</fullName>
+                <default>false</default>
+                <label>Slot 10</label>
+            </value>
+            <value>
+                <fullName>Slot 11</fullName>
+                <default>false</default>
+                <label>Slot 11</label>
+            </value>
+            <value>
+                <fullName>Slot 12</fullName>
+                <default>false</default>
+                <label>Slot 12</label>
+            </value>
+            <value>
+                <fullName>Slot 13</fullName>
+                <default>false</default>
+                <label>Slot 13</label>
+            </value>
+            <value>
+                <fullName>Slot 14</fullName>
+                <default>false</default>
+                <label>Slot 14</label>
+            </value>
+            <value>
+                <fullName>Slot 15</fullName>
+                <default>false</default>
+                <label>Slot 15</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

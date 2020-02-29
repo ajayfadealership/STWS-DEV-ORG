@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Valid_Clock_In_Clock_Out_Time</fullName>
+    <active>true</active>
+    <errorConditionFormula>Clock_In__c &gt; Clock_Out__c</errorConditionFormula>
+    <errorMessage>Clock In Time should be before Clock Out Time.</errorMessage>
+</ValidationRule>

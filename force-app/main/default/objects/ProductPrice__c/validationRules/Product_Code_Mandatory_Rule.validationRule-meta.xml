@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Product_Code_Mandatory_Rule</fullName>
+    <active>true</active>
+    <description>Product code must be entered while creating a record for New Boats.</description>
+    <errorConditionFormula>ISBLANK( Product_Code__c ) &amp;&amp;  RecordType.Name ==&#39;New Boats&#39;</errorConditionFormula>
+    <errorDisplayField>Product_Code__c</errorDisplayField>
+    <errorMessage>Product code must be entered while creating a record for New Boats.</errorMessage>
+</ValidationRule>

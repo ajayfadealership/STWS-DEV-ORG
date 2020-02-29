@@ -1,0 +1,1087 @@
+<apex:page controller="CreateAccountController" id="pge" sidebar="false" showHeader="false" standardStylesheets="false" docType="html-5.0">
+    <apex:stylesheet value="{!URLFOR($Resource.BoatBuilderSR, 'assets/styles/salesforce-lightning-design-system.min.css')}" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"/>
+    <apex:includeScript value="{!URLFOR($Resource.Signature, 'jquery.min.js')}"/>
+    <html>   
+        <title>Create Account</title> 
+    </html> 
+    <style>
+        .isa_error {
+        color: #D8000C;
+        background-color: #FFBABA;
+        margin: 10px 0px;
+        padding: 12px;
+        z-index:999; 
+        }
+        .lookupInput a.slds-input {
+        width: 28px !important;
+        margin: 0;
+        display: inline-block;
+        background: url('/resource/BOATBUILDING__BoatBuilderSR/assets/icons/utility/search_60.png');
+        background-size: contain;
+        background-repeat: no-repeat;
+        border: none;
+        margin-left: 5px;
+        }
+        /* The Modal (background) */ 
+        .modal {
+        display: none; /* Hidden by default */
+        position: fixed; /* Stay in place */
+        z-index: 1; /* Sit on top */
+        left: 0;
+        top: 0;
+        width: 100%; /* Full width */
+        height: 100%; /* Full height */
+        overflow: auto; /* Enable scroll if needed */
+        background-color: rgb(0,0,0); /* Fallback color */
+        background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+        padding-top: 60px;
+        }
+        
+        /* Modal Content/Box */
+        .modal-content {
+        background-color: #fefefe;
+        margin: 1% auto 15% auto; /* 5% from the top, 15% from the bottom and centered */
+        border: 10px solid #888;
+        }
+        .popup{
+        position: fixed;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background: rgba(0,0,0,0.5);
+        display: none;
+        z-index: 999;
+        }
+        .popup.active{ display: block; }
+        .popup img{ margin: 15% auto; } 
+    </style>
+    <body>
+        <apex:form id="frm">
+            <div  class="popup">
+                <apex:image id="theImage2" value="{!$Resource.Process}" style="display:block;" width="40" height="40"/>
+            </div>
+            <div class="slds-grid slds-wrap slds-col--padded " style="margin-top: 2%; border-top: solid 1px #ccc!important;">
+                <div class="slds-col--padded slds-col slds-size--1-of-1 Customer-Heading">
+                    <h2 class=" heading"><br/>
+                        <span class="slds-text-heading--small"><b>New Account</b></span>
+                    </h2>
+                </div>
+            </div>
+            <div class="isa_error" id="errorDiv" style="display: none;">
+                <i class="fa fa-times-circle"></i>
+                <span id="errSnap"></span> 
+            </div>
+            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-1 slds-col--padded" style="padding: 1%; margin-top: 2%; border-bottom: solid 1px #ccc!important; border-top: solid 1px #ccc!important;">
+                <div class="slds-grid slds-wrap">
+                    <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-1 slds-col--padded">
+                        <div class="slds-grid slds-wrap">
+                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                                <div class="slds-form-element">
+                                    <label class="slds-form-element__label">Customer Name</label>
+                                    <div class="slds-form-element__control">
+                                        <!--                                             <input type="text" class="slds-input" id="accName"/> -->
+                                        <apex:inputField value="{!objItm.Contact__c}" onchange="fetchDetails();" styleClass="slds-input" id="accName" style="width: 87%;"/> 
+                                    </div>
+                                </div> 
+                            </div>
+                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                                <div class="slds-form-element">
+                                    <label class="slds-form-element__label">First Name</label>
+                                    <div class="slds-form-element__control">
+                                        <input type="text" class="slds-input" id="frstName"/>
+                                    </div>
+                                </div> 
+                            </div>
+                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                                <div class="slds-form-element">
+                                    <label class="slds-form-element__label">Last Name<span style="color: red;">*</span></label>
+                                    <div class="slds-form-element__control">
+                                        <input type="text" class="slds-input" id="lstName"/>
+                                    </div>
+                                </div> 
+                            </div>
+                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                                <div class="slds-form-element">
+                                    <label class="slds-form-element__label">Email<span style="color: red;">*</span></label>
+                                    <div class="slds-form-element__control">
+                                        <input type="text" class="slds-input" id="email"/>
+                                    </div>
+                                </div> 
+                            </div>
+                        </div>
+                        <div class="slds-grid slds-wrap" style="margin-top: 1%;">
+                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                                <div class="slds-form-element">
+                                    <label class="slds-form-element__label">Phone Number</label>
+                                    <div class="slds-form-element__control">
+                                        <input type="text" class="slds-input" id="phone"/>
+                                    </div>
+                                </div> 
+                            </div>
+                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                                <div class="slds-form-element">
+                                    <label class="slds-form-element__label">Lead Source</label>
+                                    <div class="slds-form-element__control">
+                                        <!--  <input type="text" class="slds-input" id="ldSrc"/> -->
+                                        <apex:inputField value="{!objAccount.Lead_Source__c}" styleClass="slds-select" id="ldSrc"/>
+                                    </div>
+                                </div> 
+                            </div>
+                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                                <div class="slds-form-element">
+                                    <label class="slds-form-element__label">Account Customer Type</label>
+                                    <div class="slds-form-element__control">
+                                        <apex:inputField value="{!objAccount.Account_Customer_Type__c}" styleClass="slds-select" id="custType"/>
+                                    </div>
+                                </div> 
+                            </div>
+                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                                <div class="slds-form-element">
+                                    <label class="slds-form-element__label">Store Location</label>
+                                    <div class="slds-form-element__control">
+                                        <apex:inputField value="{!objAccount.Store_Location__c}" styleClass="slds-select" id="storelocation"/>
+                                    </div>
+                                </div> 
+                            </div>
+                        </div>
+                        <hr/>
+                        <div class="slds-grid slds-wrap">
+                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                                <div class="slds-form-element">
+                                    <label class="slds-form-element__label">Billing Address</label>
+                                    <div class="slds-form-element__control">
+                                        <input type="text" class="slds-input" id="blngAddrs"/>
+                                    </div>
+                                </div> 
+                            </div>
+                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                                <div class="slds-form-element">
+                                    <label class="slds-form-element__label">Billing Zip</label>
+                                    <div class="slds-form-element__control">
+                                        <input type="text" class="slds-input" id="blngZip"/>
+                                    </div>
+                                </div> 
+                            </div>
+                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                                <div class="slds-form-element">
+                                    <label class="slds-form-element__label">Billing City</label>
+                                    <div class="slds-form-element__control">
+                                        <input type="text" class="slds-input" id="blngCity"/>
+                                    </div>
+                                </div> 
+                            </div>
+                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                                <div class="slds-form-element">
+                                    <label class="slds-form-element__label">Billing State</label>
+                                    <div class="slds-form-element__control">
+                                        <input type="text" class="slds-input" id="blngState"/>
+                                    </div>
+                                </div> 
+                            </div>
+                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                                <div class="slds-form-element">
+                                    <label class="slds-form-element__label"></label>
+                                    <div class="slds-form-element__control">
+                                    </div>
+                                </div> 
+                            </div>
+                        </div>
+                        <hr/>
+                        <div class="slds-grid slds-wrap">
+                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                                <div class="slds-form-element">
+                                    <label class="slds-form-element__label">Shipping Address</label>
+                                    <div class="slds-form-element__control">
+                                        <input type="text" class="slds-input" id="shpngAddrs"/>
+                                    </div>
+                                </div> 
+                            </div>
+                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                                <div class="slds-form-element">
+                                    <label class="slds-form-element__label">Shipping Zip</label>
+                                    <div class="slds-form-element__control">
+                                        <input type="text" class="slds-input" id="shpngZip"/>
+                                    </div>
+                                </div> 
+                            </div>
+                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                                <div class="slds-form-element">
+                                    <label class="slds-form-element__label">Shipping City</label>
+                                    <div class="slds-form-element__control">
+                                        <input type="text" class="slds-input" id="shpngCity"/>
+                                    </div>
+                                </div> 
+                            </div>
+                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                                <div class="slds-form-element">
+                                    <label class="slds-form-element__label">Shipping State</label>
+                                    <div class="slds-form-element__control">
+                                        <input type="text" class="slds-input" id="shpngState"/>
+                                    </div>
+                                </div> 
+                            </div>
+                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                                <div class="slds-form-element">
+                                    <label class="slds-form-element__label"></label>
+                                    <div class="slds-form-element__control">
+                                    </div>
+                                </div> 
+                            </div>
+                        </div>
+                        <hr/>
+                        <div class="slds-grid slds-wrap">
+                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                                <div class="slds-form-element">
+                                    <label class="slds-form-element__label">Create Custom Boat</label>
+                                    <div class="slds-form-element__control">
+                                        <label class="slds-checkbox--toggle slds-grid slds-grid--vertical-align-center">
+                                            <input name="checkbox" type="checkbox" id="checkCreateCustomBoat" />
+                                            <span class="slds-checkbox--faux" data-check-on="Yes" data-check-off="No"></span>
+                                        </label>
+                                    </div>
+                                </div> 
+                            </div>
+                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                                <div class="slds-form-element">
+                                    <label class="slds-form-element__label"> Create Custom Engine</label>
+                                    <div class="slds-form-element__control">
+                                        <label class="slds-checkbox--toggle slds-grid slds-grid--vertical-align-center">
+                                            <input name="checkbox" type="checkbox" id="customEngineId" />
+                                            <span class="slds-checkbox--faux" data-check-on="Yes" data-check-off="No"></span>
+                                        </label>
+                                        
+                                    </div>
+                                </div> 
+                            </div>
+                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                                <div class="slds-form-element">
+                                    <label class="slds-form-element__label"></label>
+                                    <div class="slds-form-element__control">
+                                    </div>
+                                </div> 
+                            </div>
+                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                                <div class="slds-form-element">
+                                    <label class="slds-form-element__label"></label>
+                                    <div class="slds-form-element__control">
+                                    </div>
+                                </div> 
+                            </div>
+                        </div>
+                        <div id="customBoatForm" style="margin-top: 1%; padding: 1%; width: 100%; border: solid 1px #d8dde6!important; border-radius: .25rem; display: none;">
+                            <div class="slds-grid slds-wrap"> 
+                                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                                    <div class="slds-form-element">
+                                        <label class="slds-form-element__label">Boat Name<span style="color: red;">*</span></label>
+                                        <div class="slds-form-element__control">
+                                            <input type="text" class="slds-input" id="btName"/>
+                                        </div>
+                                    </div> 
+                                </div>
+                                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                                    <div class="slds-form-element">
+                                        <label class="slds-form-element__label">Boat HIN<span style="color: red;">*</span></label>
+                                        <div class="slds-form-element__control">
+                                            <input type="text" class="slds-input" id="btHIN"/>
+                                        </div>
+                                    </div> 
+                                </div>
+                                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                                    <div class="slds-form-element">
+                                        <label class="slds-form-element__label">Engine SN</label>
+                                        <div class="slds-form-element__control">
+                                            <input type="text" class="slds-input" id="engnSN"/>
+                                        </div>
+                                    </div> 
+                                </div>
+                                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                                    <div class="slds-form-element">
+                                        <label class="slds-form-element__label">Trailer VIN</label>
+                                        <div class="slds-form-element__control">
+                                            <input type="text" class="slds-input" id="trlrVIN"/>
+                                        </div>
+                                    </div> 
+                                </div>
+                            </div>
+                            <div class="slds-grid slds-wrap" style="margin-top: .5%;"> 
+                                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                                    <div class="slds-form-element">
+                                        <label class="slds-form-element__label">Boat Make<span style="color: red;">*</span></label>
+                                        <div class="slds-form-element__control">
+                                            <!--                                                 <input type="text" class="slds-input" id="btMake"/> -->
+                                            <apex:inputField value="{!objItm.Boat_Manufacturer__c}" style="width: 87%;" styleClass="slds-input" id="btMake"/>
+                                        </div>
+                                    </div> 
+                                </div>
+                                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                                    <div class="slds-form-element">
+                                        <label class="slds-form-element__label"><span style="color: red;"></span></label>
+                                        <div class="slds-form-element__control">
+                                            <a class="slds-button slds-button--brand" style="width: 55%;" id="createManufac" onClick = "createManufacturer()" >Create Manufacturer</a>
+                                        </div>
+                                    </div> 
+                                </div>
+                                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                                    <div class="slds-form-element">
+                                        <label class="slds-form-element__label">Boat Model<span style="color: red;">*</span></label>
+                                        <div class="slds-form-element__control">
+                                            <input type="text" class="slds-input" id="btMdl"/>
+                                        </div>
+                                    </div> 
+                                </div>
+                                
+                                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                                    <div class="slds-form-element">
+                                        <label class="slds-form-element__label">Boat Year<span style="color: red;">*</span></label>
+                                        <div class="slds-form-element__control">
+                                            <input type="text" class="slds-input" id="btYear"/>
+                                        </div>
+                                    </div> 
+                                </div>
+                                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                                    <div class="slds-form-element">
+                                        <label class="slds-form-element__label">Boat Registration Number</label>
+                                        <div class="slds-form-element__control">
+                                            <input type="text" class="slds-input" id="btRegNumber"/>
+                                        </div>
+                                    </div> 
+                                </div>     
+                                <div class="slds-col slds-size--1-of-1 slds-medium-size--3-of-4 slds-small-size--1-of-2 slds-col--padded"> 
+                                </div>   
+                            </div>     
+                        </div>
+                        
+                        
+                        
+                        <div id="customEngineForm" style="margin-top: 1%; padding: 1%; width: 100%; border: solid 1px #d8dde6!important; border-radius: .25rem; display: none;">
+                            <div class="slds-grid slds-wrap"> 
+                                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                                    <div class="slds-form-element">
+                                        <label class="slds-form-element__label">Engine Name<span style="color: red;">*</span></label>
+                                        <div class="slds-form-element__control">
+                                            <input type="text" class="slds-input" id="engName"/>
+                                        </div>
+                                    </div> 
+                                </div>
+                                   <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                                    <div class="slds-form-element">
+                                        <label class="slds-form-element__label">Engine Modle</label>
+                                        <div class="slds-form-element__control">
+                                            <input type="text" class="slds-input" id="engModle"/>
+                                        </div>
+                                    </div> 
+                                </div>
+                                 <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                                    <div class="slds-form-element">
+                                        <label class="slds-form-element__label">Engine Year</label>
+                                        <div class="slds-form-element__control">
+                                            <input type="text" class="slds-input" id="engYear"/>
+                                        </div>
+                                    </div> 
+                                </div>
+                              
+                                 <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                                    <div class="slds-form-element">
+                                        <label class="slds-form-element__label">Engine Manufacture Date</label>
+                                        <div class="slds-form-element__control">
+                                            <input type="text" class="slds-input" id="engManufDate"/>
+                                        </div>
+                                    </div> 
+                                </div>
+                                
+                                
+                                
+                                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                                    <div class="slds-form-element">
+                                        <label class="slds-form-element__label">Engine SN</label>
+                                        <div class="slds-form-element__control">
+                                            <input type="text" class="slds-input" id="engSN1"/>
+                                        </div>
+                                    </div> 
+                                </div>
+                                
+                            </div>
+                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                                <div class="slds-form-element">
+                                    <label class="slds-form-element__label">Engine Make<span style="color: red;">*</span></label>
+                                    <div class="slds-form-element__control">
+                                        <!--                                                 <input type="text" class="slds-input" id="btMake"/> -->
+                                        <apex:inputField value="{!objItm.Boat_Manufacturer__c}" style="width: 87%;" styleClass="slds-input" id="EngMake"/>
+                                    </div>
+                                </div> 
+                            </div>
+                            <div class="slds-grid slds-wrap" style="margin-top: .5%;"> 
+                                
+                                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                                    <div class="slds-form-element">
+                                        <label class="slds-form-element__label"><span style="color: red;"></span></label>
+                                        <div class="slds-form-element__control">
+                                            <a class="slds-button slds-button--brand" style="width: 55%;" id="createManufac" onClick = "createManufacturer()" >Create Manufacturer</a>
+                                        </div>
+                                    </div> 
+                                </div>
+                                
+                                <div class="slds-col slds-size--1-of-1 slds-medium-size--3-of-4 slds-small-size--1-of-2 slds-col--padded"> 
+                                </div>   
+                            </div>     
+                        </div>
+                    </div>
+                    <div style="padding-top: 1%; width: 100%;">
+                        <a class="slds-button slds-button--brand" style="left: 45%;" id="createAccnt">Save</a>
+                        <a class="slds-button slds-button--brand" style="left: 45%;" onclick="window.top.location = '/apex/ServicePage';" id="cncl">Cancel</a>
+                    </div>
+                </div>
+            </div>  
+            
+            <!-- -- for Create Maufacturer --- -->       
+            <div id="id03" class="modal" >
+                <div class="isa_error" id="errorDivManu" style="display: none;">
+                    <i class="fa fa-times-circle"></i>
+                    <span id="errSnapManu"></span> 
+                </div>
+                <div class="modal-content animate" style="height: 90%; width: 80%;overflow: auto;">
+                    <div class="slds-grid slds-wrap slds-col--padded slds-m-top--medium slds-align--absolute-center" id="createManufButton">
+                        <div class="slds-col slds-size--1-of-1">
+                            <a id="createPaymentBtnWO" style="margin-left: 45%;" class="slds-button slds-button--brand" onClick = "saveManufacturer()">Create Manufacturer</a>
+                        </div>
+                    </div>
+                    
+                    <a style="position: absolute;left: 86.8%;" id="closeSignWO"><i class="fa fa-times fa-lg __web-inspector-hide-shortcut__" aria-hidden="true"></i></a>
+                    <div class="isa_error" id="errorDiv1" style="display: none;">
+                        <i class="fa fa-times-circle"></i>
+                        <span id="errSnap1"></span> 
+                    </div>
+                    <section style="padding: 2%;" id="ManufacturerDetail">
+                        <div class="slds-col slds-size--1-of-1">
+                            <div class="slds-grid slds-wrap">
+                                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-2 slds-col--padded">
+                                    <div class="slds-form-element">
+                                        <label class="slds-form-element__label">Manufacturer Name<span style="color: red;">*</span></label>
+                                        <div class="slds-form-element__control">
+                                            <apex:inputField value="{!objManuf.Name}" styleClass="slds-input" id="manufName" />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-2 slds-col--padded">
+                                    <div class="slds-form-element">
+                                        <label class="slds-form-element__label">Manufacturer Id<span style="color: red;">*</span></label>
+                                        <div class="slds-form-element__control">
+                                            <apex:inputField value="{!objManuf.Manufacturer_name__c}" styleClass="slds-input" id="manufId" />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-2 slds-col--padded">
+                                    <div class="slds-form-element">
+                                        <label class="slds-form-element__label"> Terms</label>
+                                        <div class="slds-form-element__control">
+                                            <apex:inputField value="{!objManuf.Terms__c}" styleClass="slds-input" id="manufTerms" />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-2 slds-col--padded">
+                                    <div class="slds-form-element">
+                                        <label class="slds-form-element__label"> Model Variant</label>
+                                        <div class="slds-form-element__control">
+                                            <apex:inputField value="{!objManuf.Model_Variant__c}" styleClass="slds-input" id="manufMV" />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-2 slds-col--padded">
+                                    <div class="slds-form-element">
+                                        <label class="slds-form-element__label"> Phone</label>
+                                        <div class="slds-form-element__control">
+                                            <apex:inputField value="{!objManuf.Phone__c}" styleClass="slds-input" id="manufPhone" />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-2 slds-col--padded">
+                                    <div class="slds-form-element">
+                                        <label class="slds-form-element__label"> Email</label>
+                                        <div class="slds-form-element__control">
+                                            <apex:inputField value="{!objManuf.Email__c}" styleClass="slds-input" id="manufEmail" />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-2 slds-col--padded">
+                                    <div class="slds-form-element">
+                                        <label class="slds-form-element__label"> Street</label>
+                                        <div class="slds-form-element__control">
+                                            <apex:inputText value="{!objManuf.Street__c}" styleClass="slds-input" id="manufStreet" />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-2 slds-col--padded">
+                                    <div class="slds-form-element">
+                                        <label class="slds-form-element__label"> City</label>
+                                        <div class="slds-form-element__control">
+                                            <apex:inputField value="{!objManuf.City__c}" styleClass="slds-input" id="manufCity" />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-2 slds-col--padded">
+                                    <div class="slds-form-element">
+                                        <label class="slds-form-element__label"> State</label>
+                                        <div class="slds-form-element__control">
+                                            <apex:inputField value="{!objManuf.State__c}" styleClass="slds-input" id="manufState" />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-2 slds-col--padded">
+                                    <div class="slds-form-element">
+                                        <label class="slds-form-element__label"> Zip</label>
+                                        <div class="slds-form-element__control">
+                                            <apex:inputField value="{!objManuf.Zip__c}" styleClass="slds-input" id="manufZip" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+            </div>
+        </apex:form>
+        <script>
+        var modal = document.getElementById('id03');
+        window.onclick = function(event) {
+            if (event.target == modal) {
+                $('#id03').fadeOut();
+            }
+        }
+        $("#closeSignWO").click(function() {
+            $('#id03').fadeOut();
+        });
+        
+        
+        function saveManufacturer(){
+            
+            //Manufacturer details 
+            console.log("----");
+            
+            mapAccountFieldValues = new Object();
+            
+            //Manufacturer Name
+            if(document.getElementById("pge:frm:manufName").value != "") {
+                mapAccountFieldValues["ManufName"] = document.getElementById("pge:frm:manufName").value;
+            } 
+            else
+            {
+                document.getElementById("errSnapManu").innerHTML = "Please Enter Manufacturer Name.";
+                $("#errorDivManu").slideDown();
+                $("#errorDivManu").delay(5000).slideUp();
+                return;
+            }
+            
+            //Manufacturer Id
+            if(document.getElementById("pge:frm:manufId").value != "") {
+                mapAccountFieldValues["ManufId"] = document.getElementById("pge:frm:manufId").value;
+            } 
+            else
+            {
+                document.getElementById("errSnapManu").innerHTML = "Please Enter Manufacturer Name.";
+                $("#errorDivManu").slideDown();
+                $("#errorDivManu").delay(5000).slideUp();
+                return;
+            }
+            
+            //Manufacturer Terms
+            if(document.getElementById("pge:frm:manufTerms").value != "") {
+                mapAccountFieldValues["manufTerms"] = document.getElementById("pge:frm:manufTerms").value;
+            } 
+            else
+            {
+                mapAccountFieldValues["manufTerms"] = " ";
+            }
+            
+            //Manufacturer Model Variant
+            if(document.getElementById("pge:frm:manufMV").value != "") {
+                mapAccountFieldValues["manufMV"] = document.getElementById("pge:frm:manufMV").value;
+            } 
+            else
+            {
+                mapAccountFieldValues["manufMV"] = "False";
+            }
+            
+            //Manufacturer Phone
+            if(document.getElementById("pge:frm:manufPhone").value != "") {
+                mapAccountFieldValues["manufPhone"] = document.getElementById("pge:frm:manufPhone").value;
+            } 
+            else
+            {
+                mapAccountFieldValues["manufPhone"] = " ";
+            }
+            
+            //Manufacturer Email
+            if(document.getElementById("pge:frm:manufEmail").value != "") {
+                mapAccountFieldValues["manufEmail"] = document.getElementById("pge:frm:manufEmail").value;
+            } 
+            else
+            {
+                mapAccountFieldValues["manufEmail"] = " ";
+            }
+            
+            //Manufacturer Street
+            if(document.getElementById("pge:frm:manufStreet").value != "") {
+                mapAccountFieldValues["manufStreet"] = document.getElementById("pge:frm:manufStreet").value;
+            } 
+            else
+            {
+                mapAccountFieldValues["manufStreet"] = " ";
+            }
+            
+            //Manufacturer City
+            if(document.getElementById("pge:frm:manufCity").value != "") {
+                mapAccountFieldValues["manufCity"] = document.getElementById("pge:frm:manufCity").value;
+            } 
+            else
+            {
+                mapAccountFieldValues["manufCity"] = " ";
+            }
+            
+            //Manufacturer State
+            if(document.getElementById("pge:frm:manufState").value != "") {
+                mapAccountFieldValues["manufState"] = document.getElementById("pge:frm:manufState").value;
+            } 
+            else
+            {
+                mapAccountFieldValues["manufState"] = " ";
+            }
+            
+            //Manufacturer Zip
+            if(document.getElementById("pge:frm:manufZip").value != "") {
+                mapAccountFieldValues["manufZip"] = document.getElementById("pge:frm:manufZip").value;
+            } 
+            else
+            {
+                mapAccountFieldValues["manufZip"] = " ";
+            }
+            
+            BOATBUILDING.CreateAccountController.createManufacturer(mapAccountFieldValues, function(result, event) {
+                if(event.status) {
+                    if(result != null) {
+                        console.log('result--'+result);
+                        $('#id03').fadeOut();
+                        document.getElementById("pge:frm:btMake_lkid").value = result.Id;
+                        document.getElementById("pge:frm:btMake_lkold").value = result.Name;
+                        document.getElementById("pge:frm:btMake").value = result.Name;
+                        document.getElementById("pge:frm:EngMake_lkid").value = result.Id;
+                        document.getElementById("pge:frm:EngMake_lkold").value = result.Name;
+                        document.getElementById("pge:frm:EngMake").value = result.Name;
+                        
+                    }
+                    else{
+                        console.log(result);
+                    }
+                }
+            });
+        }
+        
+        function createManufacturer(){
+            document.getElementById('id03').style.display="block";
+        }
+        
+        function fetchDetails() {
+            var conId = document.getElementById("pge:frm:accName_lkid").value;
+            var conName = document.getElementById("pge:frm:accName").value;
+            if(conId != null && conId != "" && conId != "000000000000000") {
+                if(conName != null && conName != "") {
+                    BOATBUILDING.CreateAccountController.fetchContact(conId, function(result, event) {
+                        if(event.status) {
+                            var lst = [];
+                            lst = result;
+                            if(lst.length > 0) {
+                                document.getElementById("frstName").value = lst[0].FirstName;
+                                document.getElementById("lstName").value = lst[0].LastName;
+                                document.getElementById("phone").value = lst[0].Phone;
+                                document.getElementById("email").value = lst[0].Email;
+                                if(lst[0].Account != undefined) {
+                                    if(lst[0].Account.BOATBUILDING__Lead_Source__c != undefined) 
+                                        document.getElementById("pge:frm:ldSrc").value = lst[0].Account.BOATBUILDING__Lead_Source__c;
+                                    
+                                    if(lst[0].Account.BillingStreet != undefined) 
+                                        document.getElementById("blngAddrs").value = lst[0].Account.BillingStreet;
+                                    
+                                    if(lst[0].Account.BillingPostalCode != undefined) 
+                                        document.getElementById("blngZip").value = lst[0].Account.BillingPostalCode;
+                                    
+                                    if(lst[0].Account.BillingState != undefined) 
+                                        document.getElementById("blngState").value = lst[0].Account.BillingState;
+                                    
+                                    if(lst[0].Account.BillingCity != undefined) 
+                                        document.getElementById("blngCity").value = lst[0].Account.BillingCity;
+                                    
+                                    if(lst[0].Account.ShippingStreet != undefined) 
+                                        document.getElementById("shpngAddrs").value = lst[0].Account.ShippingStreet;
+                                    
+                                    if(lst[0].Account.ShippingPostalCode != undefined) 
+                                        document.getElementById("shpngZip").value = lst[0].Account.ShippingPostalCode; 
+                                    
+                                    if(lst[0].Account.ShippingState != undefined)  
+                                        document.getElementById("shpngState").value = lst[0].Account.ShippingState;
+                                    
+                                    if(lst[0].Account.ShippingCity != undefined)  
+                                        document.getElementById("shpngCity").value = lst[0].Account.ShippingCity;
+                                    if(lst[0].BOATBUILDING__Customer_Type__c != undefined)  
+                                        document.getElementById("pge:frm:custType").value = lst[0].BOATBUILDING__Customer_Type__c;  
+                                    if(lst[0].BOATBUILDING__Customer_Type__c != undefined)  
+                                        document.getElementById("pge:frm:storelocation").value = lst[0].BOATBUILDING__Store_Location__c;    
+                                }  
+                            } 
+                        }
+                    });
+                }
+            }
+        }
+        
+        $("#checkCreateCustomBoat").change(function() {
+            if(this.checked == true) {
+                $("#customBoatForm").slideDown();
+    		
+               
+                $('#customEngineId').prop('checked', false);
+                 $("#customEngineForm").slideUp();
+            }
+            else {
+                $("#customBoatForm").slideUp();
+                // $("#customEngineForm").slideDown();
+            }
+        });
+        $("#customEngineId").change(function() {
+            if(this.checked == true) {
+                $("#customEngineForm").slideDown();
+                $('#checkCreateCustomBoat').prop('checked', false);
+                 $("#customBoatForm").slideUp();
+               
+               
+            }
+            else {
+                $("#customEngineForm").slideUp();
+                //2    $("#customBoatForm").slideDown();
+            }
+        });
+        
+        
+        
+        $("#createAccnt").click(function() {
+            console.log("Creating Account Please Wait...");
+            var invParam = "{!$CurrentPage.parameters.redType}";
+            console.log(invParam);
+            var invParamAssign = '';
+            if(invParam != null && invParam != undefined && invParam != '') {
+                invParamAssign = invParam;
+            }
+            mapAccountFieldValues = new Object();
+            //Customer Name
+            
+            var conId = document.getElementById("pge:frm:accName_lkid").value;
+            var conName = document.getElementById("pge:frm:accName").value;
+            
+            if(conId != null && conId != "" && conId != "000000000000000") {
+                if(conName != null && conName != "") {
+                    mapAccountFieldValues["AccountName"] = conId;
+                }
+                else {
+                    mapAccountFieldValues["AccountName"] = "";
+                }
+            }
+            else{
+                mapAccountFieldValues["AccountName"] = "";
+            }
+            
+            //First Number 
+            if($("#frstName").val().trim() != "") {
+                mapAccountFieldValues["FirstName"] = $("#frstName").val(); 
+            }
+            else {
+                mapAccountFieldValues["FirstName"] = " ";
+            }
+            
+            //Last Name
+            if($("#lstName").val().trim() != "") {
+                mapAccountFieldValues["LastName"] = $("#lstName").val(); 
+            }
+            else {
+                document.getElementById("errSnap").innerHTML = "Please Enter Last Name.";
+                $("#errorDiv").slideDown();
+                $("#errorDiv").delay(8000).slideUp();
+                return;
+            }
+            
+            //Email
+            if($("#email").val().trim() != "") {
+                
+                var mailTest = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+                if (mailTest.test($("#email").val().trim())) {
+                    mapAccountFieldValues["Email"] = $("#email").val();
+                } 
+                else {
+                    document.getElementById("errSnap").innerHTML = "Please Valid Enter Email.";
+                    $("#errorDiv").slideDown();
+                    $("#errorDiv").delay(8000).slideUp();
+                    return;
+                }
+            }
+            else {
+                document.getElementById("errSnap").innerHTML = "Please Enter Email.";
+                $("#errorDiv").slideDown();
+                $("#errorDiv").delay(8000).slideUp();
+                return;
+            }
+            
+            //Phone Number
+            if($("#phone").val().trim() != "") {
+                mapAccountFieldValues["Phone"] = $("#phone").val(); 
+            }
+            else {
+                mapAccountFieldValues["Phone"] = " ";
+            }
+            
+            //Lead Source
+            if(document.getElementById("pge:frm:ldSrc").value != null) {
+                mapAccountFieldValues["LeadSource"] = document.getElementById("pge:frm:ldSrc").value; 
+            }
+            else {
+                mapAccountFieldValues["LeadSource"] = "";
+            }
+            
+            //Customer Type
+            if(document.getElementById("pge:frm:custType").value != null) {
+                mapAccountFieldValues["CustmerType"] = document.getElementById("pge:frm:custType").value; 
+            }
+            else {
+                mapAccountFieldValues["CustmerType"] = "";
+            }
+            //store location
+            if(document.getElementById("pge:frm:storelocation").value != null) {
+                mapAccountFieldValues["storeLocation"] = document.getElementById("pge:frm:storelocation").value; 
+            }
+            else {
+                mapAccountFieldValues["storeLocation"] = "";
+            }
+            
+            //Billing Address
+            if($("#blngAddrs").val().trim() != "") {
+                mapAccountFieldValues["BillingStreet"] = $("#blngAddrs").val(); 
+            }
+            else {
+                mapAccountFieldValues["BillingStreet"] = " ";
+            }
+            
+            //Billing Zip
+            if($("#blngZip").val().trim() != "") {
+                mapAccountFieldValues["BillingPostalCode"] = $("#blngZip").val(); 
+            }
+            else {
+                mapAccountFieldValues["BillingPostalCode"] = " ";
+            }
+            
+            //Billing State
+            if($("#blngState").val().trim() != "") {
+                mapAccountFieldValues["BillingState"] = $("#blngState").val(); 
+            }
+            else {
+                mapAccountFieldValues["BillingState"] = " ";
+            }
+            
+            //Billing City
+            if($("#blngCity").val().trim() != "") {
+                mapAccountFieldValues["BillingCity"] = $("#blngCity").val(); 
+            }
+            else {
+                mapAccountFieldValues["BillingCity"] = " ";
+            }
+            
+            //Shipping Address
+            if($("#shpngAddrs").val().trim() != "") {
+                mapAccountFieldValues["ShippingStreet"] = $("#shpngAddrs").val(); 
+            }
+            else {
+                mapAccountFieldValues["ShippingStreet"] = " ";
+            }
+            
+            //Shipping Zip
+            if($("#shpngZip").val().trim() != "") {
+                mapAccountFieldValues["ShippingZip"] = $("#shpngZip").val(); 
+            }
+            else {
+                mapAccountFieldValues["ShippingZip"] = " ";
+            }
+            
+            //Shipping State
+            if($("#shpngState").val().trim() != "") {
+                mapAccountFieldValues["ShippingState"] = $("#shpngState").val(); 
+            }
+            else {
+                mapAccountFieldValues["ShippingState"] = " ";
+            }
+            
+            //Shipping City
+            if($("#shpngCity").val().trim() != "") {
+                mapAccountFieldValues["ShippingCity"] = $("#shpngCity").val(); 
+            }
+            else {
+                mapAccountFieldValues["ShippingCity"] = " ";
+            }
+            
+            //Item Status
+            if(document.getElementById("customEngineId").checked == true) {
+                 if(document.getElementById("pge:frm:EngMake_lkid").value != ""
+                   && document.getElementById("pge:frm:EngMake_lkid").value != null
+                   && document.getElementById("pge:frm:EngMake_lkid").value != "000000000000000") {
+                    mapAccountFieldValues["EngMake"] = document.getElementById("pge:frm:EngMake_lkid").value; 
+                }
+                else {
+                    //mapAccountFieldValues["BoatMake"] = " ";
+                    document.getElementById("errSnap").innerHTML = "Please Select Boat Make.";
+                    $("#errorDiv").slideDown();
+                    $("#errorDiv").delay(8000).slideUp();
+                    return;
+                }
+                
+                if($("#engName").val().trim() != "") {
+                
+                    mapAccountFieldValues["engName"] = $("#engName").val(); 
+                }
+                else {
+                    document.getElementById("errSnap").innerHTML = "Please Enter Engine Name.";
+                    $("#errorDiv").slideDown();
+                    $("#errorDiv").delay(8000).slideUp();
+                    return;
+                }
+                 if($("#engSN1").val().trim() != "") {
+                    mapAccountFieldValues["EngSN"] = $("#engSN1").val(); 
+                }
+                 if($("#engModle").val().trim() != "") {
+                    mapAccountFieldValues["Engmodle"] = $("#engModle").val(); 
+                }
+                 if($("#engYear").val().trim() != "") {
+                    mapAccountFieldValues["EngYear"] = $("#engYear").val(); 
+                }
+               
+                if($("#engManufDate").val().trim() != "") {
+                    mapAccountFieldValues["EngManuDate"] = $("#engManufDate").val(); 
+                }
+                  mapAccountFieldValues["ItemStatus"] = "Yes";
+                
+            	
+            }
+            if(document.getElementById("checkCreateCustomBoat").checked == true) {
+                
+                    mapAccountFieldValues["ItemStatus"] = "YES";
+                
+                
+                
+                //Boat Name
+                if($("#btName").val().trim() != "") {
+                    mapAccountFieldValues["BoatName"] = $("#btName").val(); 
+                }
+                else {
+                    document.getElementById("errSnap").innerHTML = "Please Enter Boat Name.";
+                    $("#errorDiv").slideDown();
+                    $("#errorDiv").delay(8000).slideUp();
+                    return;
+                }
+                
+                //Boat HIN
+                if($("#btHIN").val().trim() != "") {
+                    mapAccountFieldValues["BoatHIN"] = $("#btHIN").val(); 
+                }
+                else { 
+                    document.getElementById("errSnap").innerHTML = "Please Enter Boat HIN.";
+                    $("#errorDiv").slideDown();
+                    $("#errorDiv").delay(8000).slideUp();
+                    return;
+                }
+                
+                //Engine SN
+                if($("#engnSN").val().trim() != "") {
+                    mapAccountFieldValues["EngineSN"] = $("#engnSN").val(); 
+                }
+                else {
+                    mapAccountFieldValues["EngineSN"] = " ";
+                }
+                
+                //Trailer VIN
+                if($("#trlrVIN").val().trim() != "") {
+                    mapAccountFieldValues["TrailerVIN"] = $("#trlrVIN").val(); 
+                }
+                else {
+                    mapAccountFieldValues["TrailerVIN"] = " ";
+                }
+                
+                //Boat Make
+                if(document.getElementById("pge:frm:btMake_lkid").value != ""
+                   && document.getElementById("pge:frm:btMake_lkid").value != null
+                   && document.getElementById("pge:frm:btMake_lkid").value != "000000000000000") {
+                    mapAccountFieldValues["BoatMake"] = document.getElementById("pge:frm:btMake_lkid").value; 
+                }
+                else {
+                    //mapAccountFieldValues["BoatMake"] = " ";
+                    document.getElementById("errSnap").innerHTML = "Please Select Boat Make.";
+                    $("#errorDiv").slideDown();
+                    $("#errorDiv").delay(8000).slideUp();
+                    return;
+                }
+                
+                //Boat Model
+                if($("#btMdl").val().trim() != "") {
+                    mapAccountFieldValues["BoatModel"] = $("#btMdl").val(); 
+                }
+                else {
+                    //mapAccountFieldValues["BoatModel"] = " ";
+                    document.getElementById("errSnap").innerHTML = "Please Enter Boat Model.";
+                    $("#errorDiv").slideDown();
+                    $("#errorDiv").delay(8000).slideUp();
+                    return;
+                }
+                
+                //Boat Year
+                if($("#btYear").val().trim() != "") {
+                    mapAccountFieldValues["BoatYear"] = $("#btYear").val(); 
+                }
+                else {
+                    //mapAccountFieldValues["BoatYear"] = " "; 
+                    document.getElementById("errSnap").innerHTML = "Please Enter Boat Year.";
+                    $("#errorDiv").slideDown();
+                    $("#errorDiv").delay(8000).slideUp();
+                    return;
+                }
+                
+                //Boat Registration Number
+                if($("#btRegNumber").val().trim() != "") {
+                    mapAccountFieldValues["BoatRegistrationNumber"] = $("#btRegNumber").val(); 
+                }
+                
+                
+            }
+            else {
+                if(mapAccountFieldValues["ItemStatus"] != "Yes"){
+                mapAccountFieldValues["ItemStatus"] = "NO";
+                    }
+            }
+            $('.popup').addClass('active');
+            BOATBUILDING.CreateAccountController.SaveAccount(mapAccountFieldValues, function(result, event) {
+                console.log(JSON.stringify(event));
+                console.log('result',JSON.stringify(result));
+                if(event.status) {
+                    
+                    if(result != null) {
+                        if(invParamAssign != '' && invParamAssign == 'PartInvoiceTab') {
+                            console.log(result);
+                              window.top.location = '/apex/ServicePage?subTabName=tab-default-6&&condetails='+result;
+                        } else { 
+                             window.top.location = '/apex/ServicePage';
+                        }
+                        
+                    }
+                    else {  
+                        $('.popup').removeClass('active');
+                        console.log(result);
+                    }
+                }
+            });
+        });
+        </script>
+    </body>
+</apex:page>

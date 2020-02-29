@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>M_Total_Price_Calculated__c</fullName>
+    <deprecated>false</deprecated>
+    <description>Uses a formula to calculate the total price of the product.</description>
+    <externalId>false</externalId>
+    <formula>M_Net_Selling_Price_Calculated__c  +   M_Boat_Sales_Tax_Calculated__c +  M_Trailer_Sales_Tax__c  +  M_Boat_Reg_Fee__c  +  M_Trailer_Reg_Fee__c  +  M_Doc_Fee__c  +  M_Trade_PayOFF__c</formula>
+    <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+    <label>Total Price (Calculated)</label>
+    <precision>18</precision>
+    <required>false</required>
+    <scale>0</scale>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Currency</type>
+</CustomField>

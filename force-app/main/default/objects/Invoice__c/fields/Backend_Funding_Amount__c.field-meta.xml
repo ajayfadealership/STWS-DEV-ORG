@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Backend_Funding_Amount__c</fullName>
+    <deprecated>false</deprecated>
+    <description>This is the amount of the funding that goes to the amount you make on the loan</description>
+    <externalId>false</externalId>
+    <label>Backend Funding Amount</label>
+    <precision>8</precision>
+    <required>false</required>
+    <scale>2</scale>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Currency</type>
+</CustomField>

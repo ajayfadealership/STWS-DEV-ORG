@@ -1,0 +1,14 @@
+<aura:component controller="OrderDetailController" implements="flexipage:availableForRecordHome,flexipage:availableForAllPageTypes,lightning:actionOverride,force:hasRecordId" access="global">
+    <aura:attribute name="showPO" type="Boolean" default="false" access="global"/>
+    <aura:attribute name="showO" type="Boolean" default="false" access="global"/>
+    <aura:attribute name="recordId" type="String" default="" access="global" />
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    <aura:if isTrue="{!v.showPO}"> 
+        <!--<c:PurchaseOrderEdit objRecId="{!v.recordId}"/>-->
+        <c:PurchaseOrderEditForm objRecId="{!v.recordId}"/>
+    </aura:if>   
+    <aura:if isTrue="{!v.showO}"> 
+        <c:OrderEdit attrRecordId="{!v.recordId}"/> 
+    </aura:if>
+   
+</aura:component>

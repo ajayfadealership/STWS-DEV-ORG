@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<RecordType xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Time_Management_for_Jobs</fullName>
+    <active>true</active>
+    <label>Time Management for Jobs</label>
+    <picklistValues>
+        <picklist>Service_Location__c</picklist>
+        <values>
+            <fullName>Slot 1</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Slot 10</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Slot 11</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Slot 12</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Slot 13</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Slot 14</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Slot 15</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Slot 2</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Slot 3</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Slot 4</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Slot 5</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Slot 6</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Slot 7</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Slot 8</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Slot 9</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Type__c</picklist>
+        <values>
+            <fullName>Event</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Sales</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Test Drive</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Work Order%2FJobs</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+</RecordType>

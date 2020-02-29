@@ -1,0 +1,448 @@
+<apex:page id="pge" sidebar="false" controller="ServicePageController" showHeader="false" standardStylesheets="false" docType="html-5.0">
+	<link rel="stylesheet" href="https://cdn.datatables.net/1.10.12/css/jquery.dataTables.min.css"/>
+    
+    <script type="text/javascript" src="/js/functions.js"></script>
+    <script src="/soap/ajax/11.1/connection.js"></script>
+    <script src="/soap/ajax/10.0/apex.js"></script>
+    
+    
+    <apex:includeScript value="{!URLFOR($Resource.Signature, 'jquery.min.js')}"/>
+    <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.0/jquery.min.js"/>-->
+    <script src="https://cdn.datatables.net/1.10.12/js/jquery.dataTables.min.js"/>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <apex:stylesheet value="{!URLFOR($Resource.BoatBuilderSR, 'assets/styles/salesforce-lightning-design-system.min.css')}" />
+     
+    <apex:includeScript value="{!URLFOR($Resource.Signature, 'jquery.jqscribble.js')}"/> 
+    <apex:includeScript value="{!URLFOR($Resource.Signature, 'jqscribble.extrabrushes.js')}"/>
+    
+    
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" />
+    <title>Create Purchase Order</title>
+    <style> 
+            .popup{
+                position: fixed;
+                top: 0; 
+                bottom: 0;
+                left: 0;
+                right: 0;
+                background: rgba(0,0,0,0.5);
+                display: none;
+                z-index: 999;
+            }
+            .popup.active {
+                background-color: rgba(0,0,0,0.5);
+                display:block;
+            }
+            .popup img {
+                margin: 15% auto;
+            }
+
+            body {font-family: "Lato", sans-serif;}
+            
+            .slds-button--brand:hover {
+                background-color: rgba(21, 137, 238, 0.75);
+            }
+            
+            .slds-button--brand {
+                background-color : #29abe2;
+                border : 1px solid #29abe2;
+            }
+            
+            /*  time management style sheet */
+            .disablebtn{
+            disabled: disabled;
+            background-color: #e0e5ee;
+            border-color: #a8b7c7;
+            cursor: not-allowed;
+            user-select: none;
+            color: #16325c
+            
+            }
+            /*  time management style sheet */
+            .disablebtn:hover{
+            background-color: #e0e5ee;
+            border-color: #a8b7c7;
+            cursor: not-allowed;
+            user-select: none;
+            color: #16325c
+            
+            }
+            
+            
+            
+            .slds-tabs--default__item.slds-active .slds-tabs--default__link:focus {
+                
+                color: #fff;
+            }
+            .slds-tabs--default__link:focus, .slds-tabs--default__link:hover {
+                text-decoration: none;
+                color: #fff;
+                background-color: rgba(21, 137, 238, 0.75);
+            }
+            .slds-tabs--default__item.slds-active .slds-tabs--default__link {
+                border-color: #fff;
+                color: #fff;
+                background-color: rgba(21, 137, 238, 0.75);
+            }
+
+            .slds-tabs--default__nav {
+                background-color: #29abe2;
+            }
+
+            .slds-tabs--default__link {
+                color : #fff;
+            }
+
+            .slds-icon-standard-recent {
+                background-color: #29abe2;
+            }
+
+            ul.tab {
+                list-style-type: none;
+                margin: 0px;
+                padding: 0px;
+                overflow: hidden;
+                max-width: 1280px;
+                margin: 0 auto;
+            }
+            
+            /* Float the list items side by side */
+            ul.tab li {
+                float: left;
+                width: 25%;
+            }
+            
+            /* Style the links inside the list items */
+            ul.tab li a {
+                display: inline-block;
+                color: black;
+                text-align: center; 
+                padding: 8px 16px;
+                text-decoration: none;
+                transition: 0.1s;
+                font-size: 17px;
+            }
+            
+            /* Change background color of links on hover */
+            ul.tab li a:hover {
+                background-color: rgba(21, 137, 238, 0.75);;
+                color: #fff;
+            }
+            
+            /* Create an active/current tablink class */
+            ul.tab li a:focus, .active {
+                background-color: #29abe2;
+                color: #fff !important;
+                //box-shadow: inset 0 0 7px 0px rgba(0, 0, 0, 0.31);
+                box-shadow: none !important;
+                
+            }
+            ul.tab li a:focus .slds-icon-standard-recent, .active .slds-icon-standard-recent {
+                background: transparent !important;
+            }
+            .tab div {
+                background: none !important;
+            }
+            
+            
+            /* Style the tab content */
+            .tabcontent {
+            display: none;
+            padding: 6px 12px;
+            border: 1px solid #ccc;
+            border-top: none;
+            }
+            /*  time management style sheet */
+            .slds-form--inline.main_page{
+            text-align: center;
+            padding-top: 10%;
+            color: #fff;
+            overflow: 
+            }
+            .slds-box{
+            margin: 5% auto;
+            max-width: 600px;
+            padding: 0;
+            }
+            .slds-form-element__control .slds-button{
+            box-shadow: 0 0 10px 0px #ddd;
+            color: #fff;
+            }
+            .login_box {
+            margin: 5% auto;
+            max-width: 600px;
+            box-shadow: 0 0 10px 0px #ddd;
+            border: 1px solid #ccc;
+            }
+            
+            .login_box .slds-card__body {
+            padding: 1.5rem 1.5rem 0;
+            }
+            
+            .login_box .slds-card__header {
+            background: #29abe2;
+            padding-bottom: .5rem;
+            }
+            
+            .login_box .slds-text-heading--small {
+            color : #fff;
+            font-weight: 600;
+            }
+            .tab_mid{
+            text-align: center;
+            }
+            .timer{
+            float:right;
+            }
+            
+            .margin-top {
+            margin: 1rem 0 0;
+            }
+            
+            .slds-input,
+            .slds-select {
+            max-width: 25rem;
+            }
+            
+            .slds-select {
+            padding: 0 0.5rem;
+            }
+            
+            .slds-card__body {
+            overflow: auto;
+            }
+            
+            table.slds-table--custom tr th:last-child,
+            table.slds-table--custom tr td:last-child,
+            table.payment-cal tr th:last-child,
+            table.payment-cal tr td:last-child {
+            width: 200px;
+            text-align: right;
+            }
+            
+            table.payment-cal .slds-input {
+            margin-bottom: 0;
+            }
+            
+            .slds-card .slds-card__header h2 {
+            font-size: 1.25em;
+            font-weight: 600;
+            color: #6f809c;
+            }
+            
+            .slds-card__body .slds-table--bordered {
+            border-bottom: 0;
+            }
+            
+            .slds-table th {
+            font-weight: 600;
+            }
+            /* style for lookup field */
+            
+            .lookupInput {
+            display: flex
+            }
+            
+            .lookupInput .slds-input {
+            margin: 0
+            }
+            
+            .lookupInput a.slds-input {
+            width: 28px;
+            margin: 0;
+            display: inline-block;
+            background: url('/resource/BOATBUILDING__BoatBuilderSR/assets/icons/utility/search_60.png');
+            background-size: contain;
+            background-repeat: no-repeat;
+            border: none;
+            margin-left: 5px;
+            }
+            
+            a.slds-input:active,
+            a.slds-input:focus {
+            box-shadow: none
+            }
+            
+            .Modal_border {
+            border-bottom: 1px solid #aaa;
+            padding-top: 10px;
+            padding-bottom: 10px;
+            }
+            
+            
+            
+            .slds-table--cell-buffer tr>td:first-child,
+            .slds-table--cell-buffer tr>th:first-child {
+            padding-left: 1.5rem;
+            }
+            
+            .Sidebar {
+            position: fixed;
+            margin-right: 15px;
+            overflow: auto;
+            height: 95vh;
+            }
+            
+            .card-wrapper {
+            max-width: 1280px;
+            margin: 1rem auto;
+            }
+            
+            .slds-input,
+            .slds-select {
+            overflow: hidden
+            }
+            
+            .slds-grid>span {
+            width: 100%
+            }
+            
+            .slds-button--brand {
+            padding-left: 0.5rem;
+            padding-right: 0.5rem;
+            }
+            
+            label.slds-input {
+            padding: 0.5rem 1rem 0.5rem .75rem;
+            line-height: 1rem;
+            }
+            
+            #tab-default-6 .dataTables_filter,#tab-default-1 .dataTables_filter, #tab-default-2 .dataTables_filter, #tab-default-7 .dataTables_filter,
+            #tab-default-6 .dataTables_length,#tab-default-1 .dataTables_length, #tab-default-2 .dataTables_length, #tab-default-7 .dataTables_length{
+            font-size: 0.85rem;
+            margin: 10px 0px;
+            }
+            
+            #tab-default-6 .dataTables_filter input,#tab-default-1 .dataTables_filter input, #tab-default-2 .dataTables_filter input, #tab-default-7 .dataTables_filter input {
+            height: 34px;
+            border-radius: 5px;
+            border: 1px solid rgb(169, 169, 169);
+            padding: 10px;
+            }
+            
+            #tab-default-6 .dataTables_length select,#tab-default-2 .dataTables_length select, #tab-default-1 .dataTables_length select, #tab-default-7 .dataTables_length select {
+            height: 34px;
+            border-radius: 5px;
+            border: 1px solid rgb(169, 169, 169);
+            }
+            .slds-tabs--default__content{
+            background :#fff !important;
+            }
+            #prtTblId{
+            border: 1px solid #d8dde6;
+            }
+            #purchaseVendorId1{
+            margin: 20px 0px;
+            }
+            table#prtTblId input#t1{
+            width: 60px;
+            }
+            #tab-default-3 tfoot{
+            border-bottom: 1px solid #d8dde6;
+            }
+            #tab-default-6 table{
+                border: 1px solid #d8dde6;
+            }
+            ul.tab .slds-media__body{
+                flex: inherit;
+            }
+            ul.tab .slds-page-header__title {
+                font-size: 1rem !important;
+                text-transform: uppercase;
+            }
+            ul.tab li a {
+                width: 100%;
+                min-width: 170px;
+            }
+            ul.tab li a p{
+                margin-top: 4px;
+            }
+            .slds-table--bordered{
+                border-bottom: 1px solid #d8dde6 !important;
+            }
+            .slds-checkbox{display: inline-block;}
+            .slds-form-element__label {
+                display: inline-block;
+                color: #54698d;
+                font-size: .75rem;
+                line-height: 1.5;
+                margin-right: .75rem;
+                margin-bottom: .25rem;
+                padding-top: 1rem;
+            }
+            ul.tab li{
+                line-height: 0rem;
+            }
+            .border_row{
+                border-bottom: 1px solid #ddd;
+            }
+            .TECH_WORK_ORDER.slds-card__header {
+                background: #29abe2;
+                padding-bottom: .5rem;
+            }
+            .TECH_WORK_ORDER .slds-text-heading--small {
+                color: #fff;
+                font-weight: 600;
+            }
+            /*changes by design team*/
+            table.dataTable thead th, table.dataTable thead td {
+                border-bottom: none;
+            }
+            
+            .dataTables_wrapper .dataTables_paginate .paginate_button.current, 
+            .dataTables_wrapper .dataTables_paginate .paginate_button.current:hover,
+            .dataTables_wrapper .dataTables_paginate .paginate_button:hover {
+                color: #fff !important;
+                border: 1px solid #29abe2;
+                background: #29abe2;
+            }
+            
+            .dataTables_wrapper .dataTables_paginate .paginate_button.disabled, 
+            .dataTables_wrapper .dataTables_paginate .paginate_button.disabled:hover, 
+            .dataTables_wrapper .dataTables_paginate .paginate_button.disabled:active {
+                cursor: no-drop;
+            }
+            
+            #signDiv { 
+                border: 1px dashed #aaa;
+                border-radius: 3px;
+                height: 130px;
+                width: 300px;
+            }
+            
+            /* The Modal (background) */
+            .modal {
+                display: none; /* Hidden by default */
+                position: fixed; /* Stay in place */
+                z-index: 1; /* Sit on top */
+                left: 0;
+                top: 0;
+                width: 100%; /* Full width */
+                height: 100%; /* Full height */
+                overflow: auto; /* Enable scroll if needed */
+                background-color: rgb(0,0,0); /* Fallback color */
+                background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+                padding-top: 60px;
+            }
+            
+            /* Modal Content/Box */
+            .modal-content {
+                background-color: #fefefe;
+                margin: 1% auto 15% auto; /* 5% from the top, 15% from the bottom and centered */
+                border: 10px solid #888;
+            }
+        </style>
+        <script>
+        		var StoreLocationRequired = false;
+        		$(document).ready(function() {
+            BOATBUILDING.ServicePageController.storeLocationStatus(function(result, event) {
+                console.log("Store Location: "+result);
+                StoreLocationRequired = result; 
+            });
+        }); 
+        </script>
+    <apex:form id="frm">
+    		<a class="slds-button slds-button--neutral slds-button--brand" href="/" style="position: absolute; left: 2.5%; top: 2%;">Home</a>
+    		<c:CompanyPuchaseOrder id="prchsOrdrCompCall"/>
+    </apex:form> 
+</apex:page>

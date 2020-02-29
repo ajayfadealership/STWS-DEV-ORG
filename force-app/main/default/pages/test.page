@@ -1,0 +1,6 @@
+<apex:page id="pageId" >
+    <apex:slds >**********TEST PAGE************</apex:slds>
+    <apex:form id="frm">
+  <!--  <c:PartRequestComponent id="workreqclone"/> -->
+   </apex:form>
+</apex:page>

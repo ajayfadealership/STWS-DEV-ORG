@@ -1,0 +1,115 @@
+<apex:page showHeader="false" sidebar="false" standardStylesheets="false" applyBodyTag="false" applyHtmlTag="false">
+    <html>
+
+    <head>
+        <apex:stylesheet value="{!URLFOR($Resource.WindowSticker, 'styles/window-style.css')}"/>
+    </head>
+
+    <body>
+        <div id="page1">
+
+            <!-- Header Block -->
+            <div class="row" id="header-block">
+                <div class="col-7 no-margin">
+                    <div class="header-image" style="background-image: url({!URLFOR($Resource.WindowSticker, 'images/Side__c_MS.jpg')});"></div>
+                </div>
+                <div class="col-5 center">
+                    <div class="header-logo">
+                        <img src="{!URLFOR($Resource.WindowSticker, 'images/LOGO.png')}" width="100%" />
+                        <h1 class="boat-model">SUPRA SA400 2019</h1>
+                    </div>
+                </div>
+            </div>
+
+            <div class="container">
+
+                <!-- MSRP Block -->
+                <div class="row" id="msrp-block">
+                    <div class="col-4 msrp">
+                        <span>MSRP PRICE: </span>
+                    </div>
+                    <div class="col-8 price">
+                        <span>$207,401.88</span>
+                    </div>
+                </div>
+
+                <!-- Why buy from Us, Specs -->
+                <div class="row" id="why-buy-spec-block">
+                    <div class="col-6">
+                        <div id="why-buy-block">
+                            <div class="desc-header">
+                                <span>WHY BUY FROM US</span>
+                            </div>
+                            <ul>
+                                <li>99.6 CSI Rating</li>
+                                <li>#1 Supra dealer in the WORLD</li>
+                                <li>Home of the SouthTown Riders</li>
+                                <li>Fire in the Core Tour</li>
+                                <li>A Company of riders for riders.</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div id="spec-block">
+                            <div class="desc-header right">
+                                <span>SPECS</span>
+                            </div>
+                            <ul class="right" style="list-style-type:none;">
+                                <li>Length: 22 Ft</li>
+                                <li>Ballast: 3500 LBS</li>
+                                <li>Capacity: 16 People</li>
+                                <li>Weight: 5450 LBS</li>
+                                <li>Fuel Capacity: 65 Gals</li>
+                                <li>Overall Length: 25 Ft</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Our Price, Payment -->
+                <div class="row" id="price-payment-block">
+                    <div class="col-6">
+                        <span>OUR PRICE: <span>$207,401.88</span></span>
+                    </div>
+                    <div class="col-6 right">
+                        <span class="total title">PAYMENT: <span>$600</span></span>
+                    </div>
+                </div>
+
+                <!-- Dealer Disc, Down Payment, Int rate, Term -->
+                <div class="row" id="dealer-disc-down-int-term-block">
+                    <div class="col-3">
+                        <span>Dealer Discount: $6,000</span>
+                    </div>
+                    <div class="col-3">
+                        <span>Down Payment: $1,000</span>
+                    </div>
+                    <div class="col-3 right">
+                        <span>Interest Rate: 6.99%</span>
+                    </div>
+                    <div class="col-3 right">
+                        <span>Term: 240 months</span>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Footer Block -->
+            <div class="row" id="footer-block">
+                <div class="col-5 center">
+                    <div class="footer-logo">
+                        <img src="{!URLFOR($Resource.WindowSticker, 'images/LOGO.png')}" width="100%" />
+                        <h3 class="boat-model">3333 Scott Futrell Dr, Charlotte, NC 28208, USA</h3>
+                        <h3>www.southtownwatersports.com</h3>
+                    </div>
+                </div>
+                <div class="col-7 ">
+                    <div class="header-image" style="background-image: url({!URLFOR($Resource.WindowSticker, 'images/Interior_Design_Bow__c_MS.jpg')});"></div>
+                </div>
+            </div>
+
+        </div>
+    </body>
+
+    </html>
+</apex:page>

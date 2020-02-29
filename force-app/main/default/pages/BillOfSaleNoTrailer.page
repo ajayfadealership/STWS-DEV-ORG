@@ -1,0 +1,439 @@
+<apex:page controller="BoatBuilderController" showHeader="false" docType="html-5.0" applyHtmlTag="true"> 
+    <apex:form >
+        
+        <apex:pageBlock >
+            <img src="/servlet/servlet.FileDownload?file={!strDocId}" width="100%" height="40%" style="border-bottom:10px solid #00B0F0" />
+            <div style = "page-break-inside:avoid;">
+                <table width="100%">
+                    <tr>
+                        <td Colspan="2">
+                            <table width="95%" style="border-collapse: collapse;">
+                                <tr>
+                                    <td style="border-top: 1px solid #000; border-left: 1px solid #000; border-bottom: 1px solid #000; width:20%;  font-size: 10px;"><b>Customer Name:</b></td>
+                                    <td style="border-top: 1px solid #000; border-right: 1px solid #000; border-bottom: 1px solid #000;width:30%; font-size: 10px;" Colspan="2">
+                                        <apex:outputPanel id="cusName">
+                                            {!objQuote2.Contact_Name__r.Name}
+                                        </apex:outputPanel>  
+                                    </td>
+                                    <td style="border-top: 1px solid #000; border-left: 1px solid #000; border-bottom: 1px solid #000; width:10%; font-size: 10px;"><b >Date:</b></td>
+                                    <td style="border-top: 1px solid #000; border-right: 1px solid #000; border-bottom: 1px solid #000; width:10%; font-size: 10px;">
+                                        <!-- 	            				<apex:outputText value="{0,date,MM'/'dd'/'yyyy}"> -->
+                                        <!-- 								    <apex:param value="{!objQuote2.CreatedDate}" />  -->
+                                        <!-- 								</apex:outputText> -->
+                                        
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="border-top: 1px solid #000; border-left: 1px solid #000; border-bottom: 1px solid #000; width:20%;  font-size: 10px;">
+                                        <apex:outputPanel rendered="{!checkBoxExist}">
+                                            <b>CO Buyer Name:</b>
+                                        </apex:outputPanel>  
+                                    </td>
+                                    
+                                    <td style="border-top: 1px solid #000; border-right: 1px solid #000; border-bottom: 1px solid #000;width:30%; font-size: 10px;" Colspan="2">
+                                        <apex:outputPanel id="coName" rendered="{!checkBoxExist}">
+                                            {!objQuote2.CO_Buyer_Name__r.Name}
+                                        </apex:outputPanel>
+                                    </td>
+                                    
+                                    <td style="border-top: 1px solid #000; border-left: 1px solid #000; border-bottom: 1px solid #000; width:10%; font-size: 10px;"><b>Phone:</b></td>
+                                    <td style="border-top: 1px solid #000; border-right: 1px solid #000; border-bottom: 1px solid #000; width:15%; font-size: 10px;"><apex:outputText >{!objQuote2.Phone__c}</apex:outputText></td>
+                                </tr>
+                                <tr>
+                                    <td style="border-top: 1px solid #000; border-left: 1px solid #000; border-bottom: 1px solid #000; width:20%;  font-size: 10px;" Colspan="2"><b>Address:</b>&nbsp;<apex:outputText value="{!objAccount.BillingStreet}"> </apex:outputText></td>
+                                    <td style="border: 1px solid #000; width:30%; font-size: 10px;" ><b>City:</b>&nbsp;<apex:outputText value="{!objAccount.BillingCity}"></apex:outputText></td>
+                                    <td style="border-top: 1px solid #000; border-left: 1px solid #000; border-bottom: 1px solid #000; width:10%; font-size: 10px;"><b>State:</b></td>
+                                    <td style="border-top: 1px solid #000; border-right: 1px solid #000; border-bottom: 1px solid #000; width:10%; font-size: 10px;"><apex:outputText value="{!objAccount.BillingState}"></apex:outputText></td>
+                                </tr>
+                                <tr>
+                                    <td style="border-top: 1px solid #000; border-left: 1px solid #000; border-bottom: 1px solid #000; width:20%;  font-size: 10px;"><b>Email:</b></td>
+                                    <td style="border-top: 1px solid #000; border-right: 1px solid #000; border-bottom: 1px solid #000;width:30%; font-size: 10px;" Colspan="2"><apex:outputText >{!objQuote2.Email__c}</apex:outputText></td>
+                                    <td style="border-top: 1px solid #000; border-left: 1px solid #000; border-bottom: 1px solid #000; width:10%; font-size: 10px;"><b >Zip:</b></td>
+                                    <td style="border-top: 1px solid #000; border-right: 1px solid #000; border-bottom: 1px solid #000; width:15%; font-size: 10px;"><apex:outputText value="{!objAccount.BillingPostalCode}" ></apex:outputText></td>
+                                </tr>
+                                <tr>
+                                    <td colspan="5" style="border: 1px solid #000; width: 100%;font-size: 10px;">
+                                        &nbsp;
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="5" style="border: 1px solid #000; width: 100%;color: #f8f8f8;background: black;font-size: 10px;">
+                                        <b>Boat Information</b>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="border-top: 1px solid #000; border-left: 1px solid #000; border-bottom: 1px solid #000; width:20%;  font-size: 10px;" Colspan="2"><b>Inventory ID:</b>&nbsp;<apex:outputtext >{!objQuote2.Test_2__r.Name}</apex:outputtext></td>
+                                    <td style="border: 1px solid #000; width:30%; font-size: 10px;" ><b>Year:</b>&nbsp;{!yearForQuotePDF}</td>
+                                    <td style="border-top: 1px solid #000; border-left: 1px solid #000; border-bottom: 1px solid #000; width:10%; font-size: 10px;"><b>Make:</b></td>
+                                    <td style="border-top: 1px solid #000; border-right: 1px solid #000; border-bottom: 1px solid #000; width:10%; font-size: 10px;">{!getManufacturerName}</td>
+                                </tr>
+                                <tr>
+                                    <td style="border-top: 1px solid #000; border-left: 1px solid #000; border-bottom: 1px solid #000; width:20%;  font-size: 10px;" Colspan="2"><b>Model:</b>&nbsp;{!modelForQuotePDF}</td>
+                                    <td style="border-top: 1px solid #000; border-left: 1px solid #000; border-bottom: 1px solid #000; width:30%; font-size: 10px;" ><b>Model Variant:</b> &nbsp; {!modelVarForQuotePDF}</td>
+                                    <td style="border-top: 1px solid #000; border-left: 1px solid #000; border-bottom: 1px solid #000; width:30%; font-size: 10px;" ><b>HIN Number:</b></td>
+                                    <td style="border-top: 1px solid #000; border-right: 1px solid #000; border-bottom: 1px solid #000; width:10%; font-size: 10px;"><apex:outputText >{!objQuote2.Mapped_HIN__c}</apex:outputText></td>
+                                </tr>
+                                <tr>
+                                    <td colspan="5" style="border: 1px solid #000; width: 100%;font-size: 10px;">
+                                        &nbsp;
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="5" style="border: 1px solid #000; width: 100%;color: #f8f8f8;background: black;font-size: 10px;">
+                                        <b>Engine Information</b>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="border-top: 1px solid #000; border-left: 1px solid #000; border-bottom: 1px solid #000; width:20%;  font-size: 10px;" Colspan="2"><b>Make:</b>&nbsp;
+                                        <apex:outputPanel rendered="{!EngineInfoQuote}">
+                                            {!objQuote2.Engine__r.Manufacturer__c}
+                                        </apex:outputPanel>
+                                        <apex:outputPanel rendered="{!if(EngineInfoQuote == false, true, false)}">
+                                            {!objQuote2.Test_2__r.Engine_Make__c}
+                                        </apex:outputPanel>
+                                    </td>
+                                    <td style="border: 1px solid #000; width:30%; font-size: 10px;" ><b>Year:</b>&nbsp;
+                                        <apex:outputPanel rendered="{!EngineInfoQuote}">
+                                            {!objQuote2.Engine__r.Year__c}
+                                        </apex:outputPanel>
+                                        <apex:outputPanel rendered="{!if(EngineInfoQuote == false, true, false)}">
+                                            {!objQuote2.Test_2__r.Engine_Year__c}
+                                        </apex:outputPanel>
+                                    </td>
+                                    <td style="border-top: 1px solid #000; border-left: 1px solid #000; border-bottom: 1px solid #000; width:10%; font-size: 10px;"><b>Model:</b></td>
+                                    <td style="border-top: 1px solid #000; border-right: 1px solid #000; border-bottom: 1px solid #000; width:10%; font-size: 10px;">&nbsp;
+                                        <apex:outputPanel rendered="{!EngineInfoQuote}">
+                                            {!objQuote2.Engine__r.Model__c}
+                                        </apex:outputPanel>
+                                        <apex:outputPanel rendered="{!if(EngineInfoQuote == false, true, false)}">
+                                            {!objQuote2.Test_2__r.Engine_Model__c}
+                                        </apex:outputPanel>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="border-top: 1px solid #000; border-left: 1px solid #000; border-bottom: 1px solid #000; width:20%;  font-size: 10px;" Colspan="2"><b>Serial Number1:</b>&nbsp;
+                                        <apex:outputPanel rendered="{!EngineInfoQuote}">
+                                            {!objQuote2.Engine__r.Engine_SN__c}
+                                        </apex:outputPanel>
+                                        <apex:outputPanel rendered="{!if(EngineInfoQuote == false, true, false)}">
+                                            {!objQuote2.Test_2__r.Engine_SN__c}
+                                        </apex:outputPanel>
+                                    </td>
+                                    <td style="border: 1px solid #000; width:30%; font-size: 10px;" ><b>Serial Number2:</b>&nbsp;
+                                        <apex:outputPanel rendered="{!EngineInfoQuote}">
+                                            {!objQuote2.Engine__r.Serial_Number_2__c}
+                                        </apex:outputPanel>
+                                        <apex:outputPanel rendered="{!if(EngineInfoQuote == false, true, false)}">
+                                            {!objQuote2.Test_2__r.Serial_Number_2__c}
+                                        </apex:outputPanel>
+                                    </td>
+                                    <td style="border-top: 1px solid #000; border-left: 1px solid #000; border-bottom: 1px solid #000; width:10%; font-size: 10px;"><b>Trans Number:</b></td>
+                                    <td style="border-top: 1px solid #000; border-right: 1px solid #000; border-bottom: 1px solid #000; width:10%; font-size: 10px;">
+                                        <apex:outputPanel rendered="{!EngineInfoQuote}">
+                                            {!objQuote2.Engine__r.Transmission_Gearbox_SN__c}
+                                        </apex:outputPanel>
+                                        <apex:outputPanel rendered="{!if(EngineInfoQuote == false, true, false)}">
+                                            {!objQuote2.Test_2__r.Transmission_Gearbox_SN__c} 
+                                        </apex:outputPanel>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="5" style="border: 1px solid #000; width: 100%;font-size: 10px;">
+                                        &nbsp;
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="5" style="border: 1px solid #000; width: 100%;color: #f8f8f8;background: black;font-size: 10px;">
+                                        <b>Trade -In Info</b>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="border-top: 1px solid #000; border-left: 1px solid #000; border-bottom: 1px solid #000; width:20%;  font-size: 10px;" Colspan="2"><b>Make:</b>&nbsp;{!objQuote2.ACV_FORM__r.Boat_Make__c}</td>
+                                    <td style="border: 1px solid #000; width:30%; font-size: 10px;" ><b>Model:</b>&nbsp;{!objQuote2.ACV_FORM__r.Boat_Model__c}</td>
+                                    <td style="border-top: 1px solid #000; border-left: 1px solid #000; border-bottom: 1px solid #000; width:10%; font-size: 10px;"><b>Year:</b></td>
+                                    <td style="border-top: 1px solid #000; border-right: 1px solid #000; border-bottom: 1px solid #000; width:10%; font-size: 10px;">{!objQuote2.ACV_FORM__r.BOATBUILDING__Boat_Year__c}</td>
+                                </tr>
+                                <tr>
+                                    <td style="border-top: 1px solid #000; border-left: 1px solid #000; border-bottom: 1px solid #000; width:20%;  font-size: 10px;" Colspan="2"><b>HIN:</b>&nbsp;{!objQuote2.ACV_FORM__r.Boat_HIN__c}</td>
+                                    <td style="border: 1px solid #000; width:30%; font-size: 10px;" ><b>Engine SN:</b>&nbsp;{!objQuote2.ACV_FORM__r.Engine_SN__c}</td>
+                                    <td style="border-top: 1px solid #000; border-left: 1px solid #000; border-bottom: 1px solid #000; width:10%; font-size: 10px;"><b>Engine Model:</b> &nbsp;{!objQuote2.ACV_FORM__r.BOATBUILDING__Engine_Model__c}</td>
+                                    <td style="border-top: 1px solid #000; border-right: 1px solid #000; border-bottom: 1px solid #000; width:10%; font-size: 10px;">&nbsp;</td>
+                                </tr>
+                                <tr>
+                                    <td style="border: 1px solid #000; width:30%; font-size: 10px;" ><b>Lien Holder:</b>&nbsp;{!objQuote2.Account_Name__r.BOATBUILDING__Trade_Lien_Bank__c}</td>
+                                    <td style="border-top: 1px solid #000; border-left: 1px solid #000; border-bottom: 1px solid #000; width:10%; font-size: 10px;"><b>Lien Amount:</b>&nbsp;{!objQuote2.Account_Name__r.BOATBUILDING__Trade_Pay_Off__c}</td>
+                                    <td style="border-top: 1px solid #000; border-right: 1px solid #000; border-bottom: 1px solid #000; width:10%; font-size: 10px;">&nbsp;</td>
+                                </tr>
+                                <tr>
+                                    <td colspan="5" style="border: 1px solid #000; width: 100%;color: #f8f8f8;background: black;font-size: 10px;">
+                                    <apex:outputPanel rendered="{!if(objQuote2.Dealer_Comments_and_Notes__c != '', true, false)}">
+                                        <b>Dealer Comments and Notes</b>
+                                        </apex:outputPanel>
+                                    </td>
+                                    
+                                </tr>
+                                <tr>
+                                    <td colspan="5" rowspan="3" style="border: 1px solid #000; width: 100%; height: auto;font-size: 10px;">
+                                    	<apex:outputPanel rendered="{!if(objQuote2.Dealer_Comments_and_Notes__c != '', true, false)}">
+                                        	&nbsp;{!objQuote2.Dealer_Comments_and_Notes__c}
+                                        </apex:outputPanel>
+                                    </td>
+                                </tr>
+                                <tr></tr>
+                                <tr></tr>
+                            </table>
+                        </td>
+                        <td Colspan="1">
+                            <table  >
+                                <tr>
+                                    <td style="text-align: right; font-size: 10px; "><b>Bill Of Sale</b></td>
+                                    <td style="font-size: 10px;"><apex:outputText >{!objQuote2.Quote_Number__c}</apex:outputText></td>
+                                </tr>
+                                <tr>
+                                    <td style="text-align: right; color:red; font-size: 10px;"><b>YOUR PRICE</b></td>
+                                    <td style="border: 1px solid #000; font-size: 10px;"><apex:outputText >${!objQuote2.Quote_Your_Price_Formula__c}</apex:outputText></td>
+                                </tr>
+                                <tr>
+                                    <td style="text-align: right; color:red; font-size: 10px;"><b>PAYMENT</b></td>
+                                    <td style="border: 1px solid #000; font-size: 10px;"><apex:outputText >${!objQuote2.Quote_Payment__c}</apex:outputText></td>
+                                </tr>
+                                <tr>
+                                    <td style="text-align: right; font-size: 10px;"><b>MSRP</b></td>
+                                    <td style="border: 1px solid #000; font-size: 10px;">${!objQuote2.Total_Price_Quote__c}</td>
+                                </tr>
+                                <tr>
+                                    <td style="text-align: right; font-size: 10px;"><apex:outputPanel rendered="{!showDiscount}"><b>DISCOUNT</b></apex:outputPanel></td>
+                                    <td style="{!if(showDiscount == true, 'border: 1px solid #000; font-size: 10px;', '')}"><apex:outputPanel rendered="{!showDiscount}"><apex:outputText >${!objQuote2.Discount_On_Quote__c}</apex:outputText></apex:outputPanel></td>
+                                </tr>
+                                <tr>
+                                    <td style="text-align: right; font-size: 10px;"><b>SELL PRICE</b></td>
+                                    <td style="border: 1px solid #000; font-size: 10px;">${!objQuote2.Quote_Sale_Price__c}</td>
+                                </tr>
+                                <tr>
+                                    <td style="text-align: right;width:200px; font-size: 10px;">TRADE ALLOWANCE</td>
+                                    <td style="border: 1px solid #000; width:200px; font-size: 10px;">${!objQuote2.Quote_Trade_Allowance__c}</td>
+                                </tr>
+                                
+                                <tr>
+                                    <td style="text-align: right; font-size: 10px;">NET SELLING PRICE</td>
+                                    <td style="border: 1px solid #000; font-size: 10px;">${!objQuote2.Quote_Net_Selling_Price_Calculated__c}</td>
+                                </tr>
+                                <tr>
+                                    <td style="text-align: right; font-size: 10px;">BOAT SALES TAX</td>
+                                    <td style="border: 1px solid #000; font-size: 10px;">${!objQuote2.Boat_Sales_Tax2__c}</td>
+                                </tr>
+                                <tr>
+                                    <td style="text-align: right; font-size: 10px;" > <apex:outputpanel rendered="{!NOT(ISBLANK(objQuote2.Tyre_Tax__c))}">TIRE TAX</apex:outputpanel></td>
+                                    <td style="{!if(NOT(ISBLANK(objQuote2.Tyre_Tax__c)), 'border: 1px solid #000;','')} font-size: 10px;"> <apex:outputpanel rendered="{!NOT(ISBLANK(objQuote2.Tyre_Tax__c))}"> ${!objQuote2.Tyre_Tax__c} </apex:outputpanel></td>
+                                </tr>                 
+           
+                                <tr class="alt-row">
+                                    <td style="text-align: right; font-size: 10px;">BOAT REG FEES</td>
+                                    <td style="border: 1px solid #000; font-size: 10px;">${!objQuote2.Quote_Boat_Reg_Fee__c}</td>
+                                </tr>
+                                
+                                <tr class="alt-row">
+                                    <td style="text-align: right; font-size: 10px;">DOC FEES</td>
+                                    <td style="border: 1px solid #000; font-size: 10px;">${!objQuote2.Quote_Doc_Fee__c}</td>
+                                </tr>
+                                
+                                
+                                <tr class="alt-row">
+                                    <td style="text-align: right; font-size: 10px;">TRADE PAYOFF</td>
+                                    <td style="border: 1px solid #000; font-size: 10px;">${!objQuote2.Quote_Trade_Payoff__c}</td>
+                                </tr>
+                                
+                                <tr class="alt-row">
+                                    <td style="text-align: right; font-size: 10px;">TOTAL PRICE</td>
+                                    <td style="border: 1px solid #000; font-size: 10px;">${!objQuote2.Quote_Total_Price_Calculated__c}</td>
+                                </tr>
+                                
+                                <tr>
+                                    <td>&nbsp;</td>
+                                </tr>  
+                                
+                                <tr class="alt-row">
+                                    <td style="text-align: right; font-size: 10px;">DOWN PAYMENT</td>
+                                    <td style="border: 1px solid #000; font-size: 10px;">${!objQuote2.Quote_Down_Payment__c}</td>
+                                </tr>
+                                
+                                <tr class="alt-row">
+                                    <td style="text-align: right; font-size: 10px;">AMOUNT DUE</td>
+                                    <td style="border: 1px solid #000; font-size: 10px;">${!objQuote2.Quote_Total_Amount_Financed_Calculated__c}</td>
+                                </tr>
+                                
+                                <tr class="alt-row">
+                                    <td style="text-align: right; font-size: 10px;">RATE</td>
+                                    <td style="border: 1px solid #000; font-size: 10px;">{!objQuote2.Quote_Rate__c}%</td>
+                                </tr>
+                                
+                                <tr class="alt-row">
+                                    <td style="text-align: right; font-size: 10px;">TERM</td>
+                                    <td style="border: 1px solid #000; font-size: 10px;">{!objQuote2.Quote_Term__c}</td>
+                                </tr>
+                                
+                                <tr class="alt-row" style = "page-break-inside:avoid;page-break-after:auto">
+                                    <td style="text-align: right; font-size: 10px;">PAYMENT</td>
+                                    <td style="border: 1px solid #000; font-size: 10px;">${!objQuote2.Quote_Payment__c}</td>
+                                </tr>
+                                
+                            </table>
+                        </td>
+                    </tr>
+                </table>  
+                
+                <table width="100%" style="display: {!if(BoatDis != '', 'block', 'none')}">
+                    <tr>
+                        <td>
+                            <div style="border: 1px solid #000; width: 97%; height:200px; background: white;">
+                                <div style="width: 100%; height: auto;font-size: 10px; background: black; color: white;">
+                                    <b>Dealer Disclaimer:</b>
+                                </div>
+                                <div style="padding: 2px; font-size: 10px;">{!BoatDis}</div>
+                            </div>
+                        </td>
+                        <td style="width: 39.5%; text-align: center">
+                            <apex:outputPanel rendered="{!if(quoteImg1 != '', true, false)}">
+                                <img src="/servlet/servlet.FileDownload?file={!quoteImg1}" style="height: 200px; width: 300px; border: 5px solid #5cb2ea;    padding: 6px;"/>
+                            </apex:outputPanel>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <table style="margin-top: 20px;">
+                <tr>
+                    <td style="font-size: 10px;" width="20%">CUSTOMER SIGNATURE</td>
+                    <td style="width:40%; border-bottom:1px solid #000; font-size: 10px;">&nbsp;</td> 
+                    <td style="width:02%; font-size: 10px;">&nbsp;</td>
+                    <td style="font-size: 10px;" width="10%">DATE</td>
+                    <td style="width:40%; border-bottom:1px solid #000; font-size: 10px;"></td>
+                </tr>
+                <tr>
+                    <td style="">&nbsp;</td>
+                </tr>
+                <apex:outputPanel rendered="{!checkBoxExist}">
+                    <tr>
+                        <td style="font-size: 10px;" width="20%">Co-Buyer SIGNATURE</td>
+                        <td style="width:40%; border-bottom:1px solid #000; font-size: 10px;"></td>
+                        <td style="width:02%; font-size: 10px;">&nbsp;</td>
+                        <td style="width:10%; font-size: 10px;">DATE</td>
+                        <td style="width:30%; font-size: 10px; border-bottom:1px solid #000;">&nbsp;</td>
+                    </tr>
+                </apex:outputPanel>
+                
+                <tr>
+                    <td style="">&nbsp;</td>
+                </tr>
+                <tr>
+                    <td style="font-size: 10px;" width="20%">SALESPERSON SIGNATURE</td>
+                    <td style="width:40%; border-bottom:1px solid #000; font-size: 10px;"></td>
+                    <td style="width:02%; font-size: 10px;">&nbsp;</td>
+                    <td style="font-size: 10px;" width="10%">DATE</td>
+                    <td style="width:30%; border-bottom:1px solid #000; font-size: 10px;"></td>
+                </tr>
+            </table>
+            <table width="100%" style="margin-top: 300px;border:1px solid #000;vertical-align: top;padding:06px; width:100%; font-size: 10px;">
+                <tr>
+                    <td colspan="3"><b>BOAT OPTIONS</b>
+                        <table >
+                            <tr class="alt-row" >
+                                <td style="font-size: 10px;">
+                                    <apex:repeat var="objQOCW" value="{!lstQLIDis1}">
+                                        <apex:outputText value="{!objQOCW.strOptionCategory}"/>
+                                        <table style="width: 100%;">
+                                            <apex:repeat var="objSOC" value="{!objQOCW.lstSelectedOptionCategory}">
+                                                <tr>
+                                                    <td>
+                                                        &rarr; <apex:outputText value="{!objSOC.Name__c}" style="margin-left: 50px"/>
+                                                    </td>
+                                                    <td style="text-align: right;">
+                                                        <apex:outputPanel rendered="{!objQuote2.Show_MSRP_Option_Pricing__c}">
+                                                            <apex:outputText value="{!objSOC.Total_Price__c}"/>
+                                                        </apex:outputPanel>
+                                                    </td>
+                                                    
+                                                </tr>
+                                            </apex:repeat>
+                                        </table>
+                                    </apex:repeat>
+                                </td>
+                                
+                            </tr>
+                        </table>
+                    </td>
+                    <td colspan="3" >
+                        <table >
+                            <tr class="alt-row" >
+                                <td style="font-size: 10px;">
+                                    <apex:repeat var="objQOCW" value="{!lstQLIDis2}">
+                                        <apex:outputText value="{!objQOCW.strOptionCategory}"/>
+                                        <table style="width: 100%;">
+                                            <apex:repeat var="objSOC" value="{!objQOCW.lstSelectedOptionCategory}">
+                                                <tr>
+                                                    <td>
+                                                        &rarr; <apex:outputText value="{!objSOC.Name__c}" style="margin-left: 50px"/>
+                                                    </td>
+                                                    <td style="text-align: right;">
+                                                        <apex:outputPanel rendered="{!objQuote2.Show_MSRP_Option_Pricing__c}">
+                                                            <apex:outputText value="{!objSOC.Total_Price__c}"/>
+                                                        </apex:outputPanel>
+                                                    </td>
+                                                    
+                                                </tr>
+                                            </apex:repeat>
+                                        </table>
+                                    </apex:repeat>
+                                </td>
+                                
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+            </table>
+            <apex:outputPanel id="popupId">
+                <apex:outputPanel rendered="{!showPopup}">
+                    <div style="width: 28%; height: 7%; position: fixed; z-index: 999; top: 28%; left: 34%; padding: 2%; border: 1px solid black; background: white; box-shadow: 7px 9px 6px #888888;">
+                        <table width="100%">
+                            <tr>
+                                <th>
+                                    Customer Name:
+                                </th>   
+                                <td>
+                                    {!objQuote2.Contact_Name__r.Name} 
+                                </td>
+                                <td>
+                                    <apex:inputCheckbox value="{!checkCustomer}"> 
+                                        <apex:actionSupport event="onchange" action="{!changeCustomer}" rerender="cusName,coName,popupId"/> 
+                                    </apex:inputCheckbox>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>
+                                    CO Buyer Name:
+                                </th>   
+                                <td>
+                                    {!objQuote2.CO_Buyer_Name__r.Name}
+                                </td>
+                                <td>
+                                    <apex:inputCheckbox value="{!checkCoBuyer}"> 
+                                        <apex:actionSupport event="onchange" action="{!changeCoBuyer}" rerender="cusName,coName,popupId"/> 
+                                    </apex:inputCheckbox>
+                                </td>  
+                            </tr>
+                        </table>  
+                    </div>
+                </apex:outputPanel>
+            </apex:outputPanel>
+            <apex:pageBlockButtons location="bottom">
+                
+                <apex:commandButton value="Print" action="{!saveQuoteasPDF}" /> 
+                
+                <apex:outputPanel rendered="{!checkBoxExist}"> 
+                    <apex:commandButton value="Chaneg Co Buyer" action="{!showpopup1}" rerender="popupId"/>  
+                </apex:outputPanel> 
+                
+                <apex:commandButton value="Send Quote" action="{!saveAndSendQuote}" />
+            </apex:pageBlockButtons>
+        </apex:pageBlock>              
+    </apex:form>
+</apex:page>

@@ -1,0 +1,179 @@
+<aura:component controller="NewProductController">
+    
+    <aura:attribute name="ManuList" type="Manufacturer__c[]"/>
+    <aura:attribute name="ManuListB" type="Manufacturer__c[]"/>
+    <aura:attribute name="YearList" type="String[]"/>
+    <aura:attribute name="YearListB" type="String[]"/>
+    <aura:attribute name="ModelList" type="Key_Value[]"/>
+    <aura:attribute name="ModelListB" type="Key_Value[]"/>
+    <aura:attribute name="ModelVList" type="Key_Value[]"/>
+    <aura:attribute name="ModelVListB" type="Key_Value[]"/>
+    
+    <aura:attribute name="ModelVariantStatus" type="String"/>
+    
+    <aura:attribute name="ProductIdTOSearch" type="String"/>
+    
+	<aura:attribute name="ProIdCC" type="sObject" default=""/>
+    
+    
+    <aura:registerEvent name="inCompNewProduct" type="c:ProductPriceEvent"/>
+    <aura:registerEvent name="inCompNewPDProduct" type="c:DealerOptionEvent"/>
+	
+    <aura:registerEvent name="inCompNewPPFPCProduct" type="c:ProductPriceForPaymentCalculator"/>
+    
+    <hr/>
+    <input type="hidden" id="hiddenTypeForSearchCheck" value="NewProduct"/>
+    <span>Boat Details:</span><br/><br/>
+    <div class="slds-grid slds-wrap slds-col--padded">
+        <div class="slds-col slds-size--1-of-1">
+            <div class="slds-grid slds-wrap" >
+                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-5 slds-col--padded">
+                    <div class="slds-form-element">
+                        <label class="slds-form-element__label">Boat Type:</label>
+                        <div class="slds-form-element__control">
+                            <select class="slds-select" id="BoatTypeList" onchange="{!c.getManufacturerDropDown}">
+                                <option value="0">--None--</option>
+                                <option value="New Boat">New Boat</option>
+                                <option value="Trailer">Trailer</option>
+                                <option value="Engine">Engine</option>
+                                <option value="Used Boat">Used Boat</option>
+                            </select> 
+                        </div>
+                    </div>
+                </div>
+                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-5 slds-col--padded">
+                    <div class="slds-form-element">
+                        <label class="slds-form-element__label">Manufacturer:</label>
+                        <div class="slds-form-element__control">
+                            <select class="slds-select" id="BoatManufacturerList" onchange="{!c.getYearDropDown}" disabled="disabled">
+                                <option value="0">--None--</option> 
+                                <aura:iteration items="{!v.ManuList}" var="item">
+                                    <option value="{!item.Id}">{!item.Name}</option> 
+                                </aura:iteration>
+                            </select> 
+                        </div>
+                    </div>
+                </div>
+                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-5 slds-col--padded">
+                    <div class="slds-form-element">
+                        <label class="slds-form-element__label">Year:</label>
+                        <div class="slds-form-element__control">
+                            <select class="slds-select" id="BoatYearList" onchange="{!c.getModelDropDown}" disabled="disabled">
+                                <option value="0">--None--</option> 
+                                <aura:iteration items="{!v.YearList}" var="item">
+                                    <option value="{!item}">{!item}</option> 
+                                </aura:iteration>
+                            </select> 
+                        </div>
+                    </div>
+                </div>
+                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-5 slds-col--padded">
+                    <div class="slds-form-element">
+                        <label class="slds-form-element__label">Model:</label>
+                        <div class="slds-form-element__control">
+                            <select class="slds-select" id="BoatModelList" onchange="{!c.getModelVariant}" disabled="disabled">
+                                <option value="0">--None--</option>
+                                <aura:iteration items="{!v.ModelList}" var="item">
+                                    <option value="{!item.key}">{!item.value}</option> 
+                                </aura:iteration>
+                            </select> 
+                        </div>
+                    </div>
+                </div>
+                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-5 slds-col--padded">
+                    <div class="slds-form-element">
+                        <label class="slds-form-element__label">Model Variant:</label>
+                        <div class="slds-form-element__control">
+                            <select class="slds-select" id="BoatModelVariantList" disabled="disabled" onchange="{!c.assignId}">
+                                <option value="0">--None--</option>
+                                <aura:iteration items="{!v.ModelVList}" var="item">
+                                    <option value="{!item.key}">{!item.value}</option> 
+                                </aura:iteration>
+                            </select> 
+                        </div>
+                    </div>
+                </div>
+                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-5 slds-col--padded">
+                    <div class="slds-form-element">
+                        <label class="slds-form-element__label">&nbsp;</label>
+                        <div class="slds-form-element__control">
+                            &nbsp;
+                        </div>
+                    </div>
+                </div>
+                 <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-5 slds-col--padded">
+                    <div class="slds-form-element">
+                        <label class="slds-form-element__label">&nbsp;</label>
+                        <div class="slds-form-element__control">
+                            &nbsp;
+                        </div>
+                    </div>
+                </div>
+                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-5 slds-col--padded">
+                    <div class="slds-form-element">
+                        <label class="slds-form-element__label">&nbsp;</label>
+                        <div class="slds-form-element__control">
+                            &nbsp;
+                        </div>
+                    </div>
+                </div>
+                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-5 slds-col--padded">
+                    <div class="slds-form-element">
+                        <label class="slds-form-element__label">&nbsp;</label>
+                        <div class="slds-form-element__control">
+                            &nbsp;
+                        </div>
+                    </div>
+                </div>
+                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-5 slds-col--padded">
+                    <div class="slds-form-element">
+                        <label class="slds-form-element__label">&nbsp;</label>
+                        <div class="slds-form-element__control">
+                            &nbsp;
+                        </div>
+                    </div>
+                </div>
+                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-5 slds-col--padded">
+                    <div class="slds-form-element">
+                        <label class="slds-form-element__label">&nbsp;</label>
+                        <div class="slds-form-element__control">
+                            &nbsp;
+                        </div>
+                    </div>
+                </div>
+                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-5 slds-col--padded">
+                    <div class="slds-form-element">
+                        <label class="slds-form-element__label">&nbsp;</label>
+                        <div class="slds-form-element__control">
+                            &nbsp;
+                        </div>
+                    </div>
+                </div>
+                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-5 slds-col--padded">
+                    <div class="slds-form-element">
+                        <label class="slds-form-element__label">&nbsp;</label>
+                        <div class="slds-form-element__control">
+                            &nbsp;
+                        </div>
+                    </div>
+                </div>
+                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-5 slds-col--padded">
+                    <div class="slds-form-element">
+                        <label class="slds-form-element__label">&nbsp;</label>
+                        <div class="slds-form-element__control">
+                            &nbsp;
+                        </div>
+                    </div>
+                </div>
+                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-5 slds-col--padded">
+                    <div class="slds-form-element">
+                        <label class="slds-form-element__label">&nbsp;</label>
+                        <div class="slds-form-element__control">
+                            <input type="Button" id="SearchBtsForPP" value="Search" class="slds-button slds-button_brand rightElement" onclick="{!c.searchProductPriceForNewProduct}"/> 
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</aura:component>

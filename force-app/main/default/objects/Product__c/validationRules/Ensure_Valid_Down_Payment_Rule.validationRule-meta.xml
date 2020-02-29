@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Ensure_Valid_Down_Payment_Rule</fullName>
+    <active>false</active>
+    <description>Down Payment must be a valid number.</description>
+    <errorConditionFormula>M_Total_Price_Calculated__c &lt;  M_Down_Payment__c</errorConditionFormula>
+    <errorDisplayField>M_Down_Payment__c</errorDisplayField>
+    <errorMessage>Values of Down Payment  is too large to calculate Total Amount Financed</errorMessage>
+</ValidationRule>

@@ -1,0 +1,4 @@
+<aura:component implements="force:appHostable,lightning:isUrlAddressable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction" access="global" >
+    <aura:attribute name="fromBBNav2" type="Boolean" default="false"/>
+    <lightning:button variant="brand" iconName="action:join_group" label="Create an account" onclick="{!c.createRecord}" />
+</aura:component>

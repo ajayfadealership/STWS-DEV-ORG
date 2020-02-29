@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ListView xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>All</fullName>
+    <columns>Clock_In__c</columns>
+    <columns>Clock_Out__c</columns>
+    <columns>Day_In__c</columns>
+    <columns>Day_Out__c</columns>
+    <columns>CREATED_DATE</columns>
+    <columns>Logged_In_User__c</columns>
+    <columns>Working_Hours__c</columns>
+    <columns>Number_of_Hours_Worked__c</columns>
+    <columns>Billed_Hour__c</columns>
+    <columns>NAME</columns>
+    <columns>Allowed_hours_on_JOB__c</columns>
+    <columns>Related_Work_Order_Job__c</columns>
+    <columns>RECORDTYPE</columns>
+    <filterScope>Everything</filterScope>
+    <label>All</label>
+</ListView>

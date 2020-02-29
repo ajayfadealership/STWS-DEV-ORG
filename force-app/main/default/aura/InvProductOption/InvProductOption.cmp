@@ -1,0 +1,25 @@
+<aura:component >
+    <aura:attribute name="ProductPriceIdListC" type="String[]"/>
+    <aura:attribute name="DealerOptionIdListC" type="String[]"/>
+    <aura:attribute name="NoSalesmanWithoutCostC" type="boolean" />
+    
+    <aura:attribute name="lstDealerOptionWraperC" type="DealerOptionWraper[]"/>
+    <aura:registerEvent name="cl_evnt" type="c:InvCostLineEvent"/>
+    
+    <c:ProdcutPriceSection lstDealerOptionWraperCC="{!v.lstDealerOptionWraperC}" NoSalesmanWithoutCostCC="{!v.NoSalesmanWithoutCostC}" PrntAttP="Inventory" ProductPriceIdListCC="{!v.ProductPriceIdListC}" DealerOptionIdListCC="{!v.DealerOptionIdListC}"/>
+    <hr/>
+	<table>
+        <tr>
+            <td>
+                <div data-value="2" style="height:0px;max-width:auto;" onclick="{!c.previousClick}">
+                    <lightning:button variant="brand" label="Previous" iconName="utility:chevronleft" iconPosition="left" class="leftElement"/>
+                </div>
+            </td>
+            <td>
+                <div data-value="2" style="height:0px;max-width:auto;" onclick="{!c.handleClick}">
+                    <lightning:button variant="brand" label="Next" iconName="utility:chevronright" iconPosition="right" class="rightElement" value="2" />
+                </div>
+            </td>
+        </tr>
+    </table>
+</aura:component>

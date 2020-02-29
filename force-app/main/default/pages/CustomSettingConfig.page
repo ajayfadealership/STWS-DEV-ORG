@@ -1,0 +1,709 @@
+<apex:page id="pge" controller="CustomSettingConfigController"  tabStyle="Custom_Setting_Configuration__tab" sideBar="false">
+    <apex:pageMessages />
+    <apex:stylesheet value="/sCSS/21.0/sprites/1297816277000/Theme3/default/gc/versioning.css" />
+    <apex:tabPanel switchType="server" selectedTab="name1   " id="theTabPanel" styleClass="theTabPanel" tabClass="theTabPanel" contentClass="tabContent" activeTabClass="activeTab" inactiveTabClass="inactiveTab">
+        <apex:sectionHeader title="Configuration" subtitle="Custom Setting Configuraion" />
+        
+        <apex:tab label="Boat Builder" name="name1" id="tabOne">
+                <apex:form >
+                	<apex:commandButton action="{!refreshAccess}" value="Refresh Access" /><br/>
+                    <apex:pageBlock id="pbbb" title="Boat Builder Configuration">
+                        <apex:pageBlockSection title="Sales Tax" columns="2" collapsible="true" >
+                            <apex:commandButton action="{!deleteSalesTaxRecord}" value="Delete" /><br/>
+                            <apex:pageBlockTable value="{!LstSTC}" var="tbl">
+                                <apex:column >
+                                    <apex:inputCheckBox value="{!tbl.isChecked}"/>
+                                </apex:column>
+                                <apex:column value="{!tbl.objSTW.Name}"/>
+                                <apex:column value="{!tbl.objSTW.Regular_Sales_Tax__c}"/>
+                                <apex:column value="{!tbl.objSTW.Vehicle_Sales_Tax__c}"/>
+                                <apex:column value="{!tbl.objSTW.Tax_Capping_Amount__c}"/>
+                                
+                                <apex:column value="{!tbl.objSTW.Labor_Tax__c}"/>
+                                <apex:column value="{!tbl.objSTW.Part_Tax__c}"/>
+                                <apex:column value="{!tbl.objSTW.Shop_Supplies_Tax__c}"/>
+                            </apex:pageBlockTable> 
+                            <apex:outputPanel >
+                                <table style="position: relative; left: 23%;">
+                                    <tr style="text-align: center; ">
+                                        <td colspan="2" style="color: #78b4cd;">New</td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="2"><hr/></td>
+                                    </tr>
+                                    <tr>
+                                        <td>State:</td> <td><apex:inputText value="{!objSTC.Name}"/></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Regular Sales Tax:</td> <td><apex:inputField value="{!objSTC.Regular_Sales_Tax__c}"/></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Vehicle Sales Tax:</td> <td><apex:inputField value="{!objSTC.Vehicle_Sales_Tax__c}"/></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Cap Amount:</td> <td><apex:inputField value="{!objSTC.Tax_Capping_Amount__c}"/></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Labor Tax:</td> <td><apex:inputField value="{!objSTC.Labor_Tax__c}"/></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Part Tax:</td> <td><apex:inputField value="{!objSTC.Part_Tax__c}"/></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Shop Supplies Tax:</td> <td><apex:inputField value="{!objSTC.Shop_Supplies_Tax__c}"/></td>
+                                    </tr>
+                                    <tr style="text-align: right;">
+                                        <td colspan="2"><apex:commandButton action="{!saveSalesTax}" value="Save"/></td>
+                                    </tr>
+                                </table> 
+                            </apex:outputPanel>
+                        </apex:pageBlockSection>
+                        <apex:pageBlockSection title="Dealer Option" columns="2" collapsible="true" >
+                            <apex:commandButton action="{!deleteDORecord}" value="Delete" /><br/>
+                            <apex:pageBlockTable value="{!LstDO}" var="tbl">
+                                <apex:column >
+                                    <apex:inputCheckBox value="{!tbl.isChecked}"/>
+                                </apex:column>
+                                <apex:column value="{!tbl.objDO.Name}"/>
+                                <apex:column value="{!tbl.objDO.Cost__c}"/>
+                                <apex:column value="{!tbl.objDO.Retail_Price__c}"/>
+                                <apex:column value="{!tbl.objDO.Part_Number__c}"/>
+                            </apex:pageBlockTable>
+                            <apex:outputPanel >
+                                <table style="position: relative; left: 30%;">
+                                    <tr style="text-align: center; ">
+                                        <td colspan="2" style="color: #78b4cd;">New</td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="2"><hr/></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Name:</td> <td><apex:inputText value="{!objDO.Name}"/></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Dealer Price:</td> <td><apex:inputField value="{!objDO.Cost__c}"/></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Retail Price:</td> <td><apex:inputField value="{!objDO.Retail_Price__c}"/></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Part Number:</td> <td><apex:inputText value="{!objDO.Part_Number__c}"/></td>
+                                    </tr>
+                                    <tr style="text-align: right;">
+                                        <td colspan="2"><apex:commandButton action="{!saveDealerOption}" value="Save"/></td>
+                                    </tr>
+                                </table> 
+                            </apex:outputPanel>
+                        </apex:pageBlockSection>
+                        <apex:pageBlockSection title="Credite App URLs" columns="2" collapsible="true">
+                            <apex:inputText value="{!objFDC.Save_URL__c}" rendered="{!if(forceDotComBool == true, false, true)}"/>
+                            <apex:outputField value="{!objFDC.Save_URL__c}" rendered="{!forceDotComBool}"/>
+                            <apex:inputText value="{!objFDC.Cancel_URL__c}" rendered="{!if(forceDotComBool == true, false, true)}"/>
+                            <apex:outputField value="{!objFDC.Cancel_URL__c}" rendered="{!forceDotComBool}"/>
+                            <apex:commandButton action="{!saveCreditAppURLs}" value="Save" rendered="{!if(forceDotComBool == true, false, true)}"/>
+                            <apex:pageBlockSectionItem >
+                                <apex:commandButton action="{!editCreditAppURLs}" value="Edit" style="font-size: 1em;" rendered="{!forceDotComBool}"/>
+                                <apex:commandButton action="{!deleteCreditAppURLs}" value="Delete" rendered="{!forceDotComBool}"/>
+                            </apex:pageBlockSectionItem>
+                        </apex:pageBlockSection>
+                        <apex:pageBlockSection title="Lead Source To Account RecordType" columns="2" collapsible="true">
+                            <apex:commandButton action="{!deleteLSTARTRecord}" value="Delete" /><br/>
+                            <apex:pageBlockTable value="{!LstLSTART}" var="tbl">
+                                <apex:column >
+                                    <apex:inputCheckBox value="{!tbl.isChecked}"/>
+                                </apex:column>
+                                <apex:column value="{!tbl.objLSTART.Name}"/>
+                                <apex:column value="{!tbl.objLSTART.Account_Record_Type__c}"/>
+                                <apex:column value="{!tbl.objLSTART.Acount_Record_Type_Id__c}"/>
+                                <apex:column value="{!tbl.objLSTART.Lead_Source__c}"/>
+                            </apex:pageBlockTable>
+                            <apex:outputPanel >
+                                <table style="position: relative; left: 23%;">
+                                    <tr style="text-align: center; ">
+                                        <td colspan="2" style="color: #78b4cd;">New</td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="2"><hr/></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Name:</td> <td><apex:inputText value="{!objLSTART.Name}"/></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Account Record Type:</td> <td><apex:inputField value="{!objLSTART.Account_Record_Type__c}"/></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Account Record Type Id:</td> <td><apex:inputField value="{!objLSTART.Acount_Record_Type_Id__c}"/></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Lead Source:</td> <td><apex:inputField value="{!objLSTART.Lead_Source__c}"/></td>
+                                    </tr>
+                                    <tr style="text-align: right;">
+                                        <td colspan="2"><apex:commandButton action="{!saveLSTART}" value="Save"/></td>
+                                    </tr>
+                                </table> 
+                            </apex:outputPanel>
+                        </apex:pageBlockSection>
+                        <apex:pageBlockSection title="MasterCraft Work Order Notifications" columns="2" collapsible="true">
+                            <apex:commandButton action="{!deleteENERecord}" value="Delete" /><br/>
+                            <apex:pageBlockTable value="{!LstENE}" var="tbl">
+                                <apex:column >
+                                    <apex:inputCheckBox value="{!tbl.isChecked}"/>
+                                </apex:column>
+                                <apex:column headerValue="Customer Type" value="{!tbl.objENE.Name}"/>
+                                <apex:column value="{!tbl.objENE.Email__c}"/>
+                            </apex:pageBlockTable>
+                            <apex:outputPanel >
+                                <table style="position: relative; left: 23%;">
+                                    <tr style="text-align: center; ">
+                                        <td colspan="2" style="color: #78b4cd;">New</td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="2"><hr/></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Customer Type:</td> <td>
+                                        <apex:selectList id="countries" value="{!objENE.Name}" size="1" required="true">
+                                            <apex:selectOptions value="{!listENEAccountCustomerType}"/>
+                                        </apex:selectList>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Additional Emails(Comma Separated):</td> <td><apex:inputField value="{!objENE.Email__c}"/></td>
+                                    </tr>
+                                    <tr style="text-align: right;">
+                                        <td colspan="2"><apex:commandButton action="{!saveENE}" value="Save"/></td>
+                                    </tr>
+                                </table> 
+                            </apex:outputPanel>
+                        </apex:pageBlockSection>
+                    </apex:pageBlock>
+                </apex:form>
+        </apex:tab>
+        
+        <apex:tab label="Service Module" name="name2" id="tabTwo">
+                <apex:form >
+                    
+                
+                    <apex:pageBlock id="pbsm" title="Service Module Configuration">
+                        <apex:pageBlockSection title="Shop Supplies" columns="2" collapsible="true" >
+                            <apex:inputText value="{!objSS.Percentage__c}" rendered="{!if(ShopSupliesBool == true, false, true)}"/>
+                            <apex:outputField value="{!objSS.Percentage__c}" rendered="{!ShopSupliesBool}"/>                            
+                            <apex:inputText value="{!objSS.Cap_Amount_for_percent__c}" rendered="{!if(ShopSupliesBool == true, false, true)}"/>
+                            <apex:outputField value="{!objSS.Cap_Amount_for_percent__c}" rendered="{!ShopSupliesBool}"/>
+                            <apex:commandButton action="{!saveShopSupplies}" value="Save" rendered="{!if(ShopSupliesBool == true, false, true)}"/>
+                            <apex:pageBlockSectionItem >
+                                <apex:commandButton action="{!editShopSupplies}" value="Edit" style="font-size: 1em;" rendered="{!ShopSupliesBool}"/>
+                                <apex:commandButton action="{!deleteShopSupplies}" value="Delete" rendered="{!ShopSupliesBool}"/>
+                            </apex:pageBlockSectionItem> 
+                        </apex:pageBlockSection>
+                        
+                        <apex:pageBlockSection title="Store Location" columns="2" collapsible="true">
+                            <apex:inputCheckBox value="{!objSL.Enable_Multiple_Org__c}" rendered="{!if(storeLocationBool == true, false, true)}"/>
+                            <apex:outputField value="{!objSL.Enable_Multiple_Org__c}" rendered="{!storeLocationBool}"/>
+                            <apex:commandButton action="{!saveStoreLocation}" value="Save" rendered="{!if(storeLocationBool == true, false, true)}"/>
+                            <apex:pageBlockSectionItem >
+                                <apex:commandButton action="{!editStoreLocation}" value="Edit" style="font-size: 1em;" rendered="{!storeLocationBool}"/>
+                                <apex:commandButton action="{!deleteStoreLocation}" value="Delete" rendered="{!storeLocationBool}"/>
+                            </apex:pageBlockSectionItem>
+                        </apex:pageBlockSection>
+                        
+                        <apex:pageBlockSection title="Schedule Color Code" columns="1" collapsible="true">
+                            <apex:pageBlockSectionItem >
+                                <apex:commandButton action="{!editUserRecord}" value="Edit" />
+                                <apex:commandButton action="{!updateUser}" value="Update" />
+                            </apex:pageBlockSectionItem>
+                            <apex:pageBlockTable value="{!lstUserW}" var="tbl">
+                                <apex:column >
+                                    <apex:inputCheckBox value="{!tbl.isChecked}"/>
+                                </apex:column> 
+                                <apex:column value="{!tbl.objUser.Name}"/>
+                                <apex:column headerValue="Color Code">
+                                    <apex:inputText value="{!tbl.objUser.Schedule_Color_Code__c}"  rendered="{!tbl.isEdited}"/>
+                                    <apex:outputField value="{!tbl.objUser.Schedule_Color_Code__c}"  rendered="{!if(tbl.isEdited == false, true, false)}"/>
+                                </apex:column>
+                                <apex:column headerValue="Text Color Code">
+                                    <apex:inputText value="{!tbl.objUser.Schedule_Texted_Color_Code__c}" rendered="{!tbl.isEdited}"/>
+                                    <apex:outputField value="{!tbl.objUser.Schedule_Texted_Color_Code__c}"  rendered="{!if(tbl.isEdited == false, true, false)}"/>
+                            </apex:column>
+                            </apex:pageBlockTable> 
+                        </apex:pageBlockSection>
+                        
+                        <apex:pageBlockSection title="Update Customer Notification" columns="2" collapsible="true">
+                            <apex:commandButton action="{!deleteUCNRecord}" value="Delete" /><br/>
+                            <apex:pageBlockTable value="{!LstUCN}" var="tbl">
+                                <apex:column >
+                                    <apex:inputCheckBox value="{!tbl.isChecked}"/>
+                                </apex:column> 
+                                <apex:column value="{!tbl.objUCN.Name}"/>
+                                <apex:column value="{!tbl.objUCN.Email_Notification__c}"/>
+                                <apex:column value="{!tbl.objUCN.Email_Template_Id__c}"/>
+                                <apex:column value="{!tbl.objUCN.Frequency_of_Reminder__c}"/>
+                                <apex:column value="{!tbl.objUCN.Task_Notification__c}"/>
+                            </apex:pageBlockTable> 
+                            <apex:outputPanel >
+                                <table style="position: relative; left: 23%;">
+                                    <tr style="text-align: center; ">
+                                        <td colspan="2" style="color: #78b4cd;">New</td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="2"><hr/></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Name:</td> <td><apex:inputText value="{!objUCN.Name}"/></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Email Notification:</td> <td><apex:inputField value="{!objUCN.Email_Notification__c}"/></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Email Template Id:</td> <td><apex:inputField value="{!objUCN.Email_Template_Id__c}"/></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Frequency of Reminder:</td> <td><apex:inputField value="{!objUCN.Frequency_of_Reminder__c}"/></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Task Notification:</td> <td><apex:inputField value="{!objUCN.Task_Notification__c}"/></td>
+                                    </tr>
+                                    <tr style="text-align: right;">
+                                        <td colspan="2"><apex:commandButton action="{!saveUCN}" value="Save"/></td>
+                                    </tr>
+                                </table> 
+                            </apex:outputPanel>
+                        </apex:pageBlockSection>
+                    
+                        <apex:pageBlockSection title="User Data Role For Schedule" columns="2" collapsible="true">
+                            <apex:commandButton action="{!deleteUDRRecord}" value="Delete" /><br/>
+                            <apex:pageBlockTable value="{!LstUDR}" var="tbl">
+                                <apex:column >
+                                    <apex:inputCheckBox value="{!tbl.isChecked}"/>
+                                </apex:column> 
+                                <apex:column value="{!tbl.objURD.Name}"/>
+                            </apex:pageBlockTable> 
+                            <apex:outputPanel >
+                                <table style="position: relative; left: 23%;">
+                                    <tr style="text-align: center; ">
+                                        <td colspan="2" style="color: #78b4cd;">New</td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="2"><hr/></td>
+                                    </tr>
+                                    <tr>
+                                        <td>User Role Name:</td> <td><apex:inputText value="{!objUDR.Name}"/></td>
+                                    </tr>
+                                    <tr style="text-align: right;">
+                                        <td colspan="2"><apex:commandButton action="{!saveUDR}" value="Save"/></td>
+                                    </tr>
+                                </table> 
+                            </apex:outputPanel>
+                        </apex:pageBlockSection>
+                        
+                        <apex:pageBlockSection title="Work Type Pricing" columns="2" collapsible="true">
+                            <apex:commandButton action="{!deleteWTPRecord}" value="Delete" /><br/>
+                            <apex:pageBlockTable value="{!LstWTP}" var="tbl">
+                                <apex:column >
+                                    <apex:inputCheckBox value="{!tbl.isChecked}"/>
+                                </apex:column> 
+                                <apex:column value="{!tbl.objWTP.Name}"/>
+                                <apex:column value="{!tbl.objWTP.Price__c}"/>
+                                <apex:column value="{!tbl.objWTP.Active__c}"/>
+                            </apex:pageBlockTable> 
+                            <apex:outputPanel >
+                                <table style="position: relative; left: 23%;"> 
+                                    <tr style="text-align: center; ">
+                                        <td colspan="2" style="color: #78b4cd;">New</td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="2"><hr/></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Name:</td> <td><apex:inputText value="{!objWTP.Name}"/></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Price:</td> <td><apex:inputText value="{!objWTP.Price__c}"/></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Active:</td> <td><apex:inputCheckbox value="{!objWTP.Active__c}"/></td>
+                                    </tr>
+                                    <tr style="text-align: right;">
+                                        <td colspan="2"><apex:commandButton action="{!saveWTP}" value="Save"/></td> 
+                                    </tr>
+                                    
+                                </table> 
+                            </apex:outputPanel>
+                        </apex:pageBlockSection>
+                    </apex:pageBlock>
+                </apex:form>
+        </apex:tab>
+        
+        <apex:tab label="External Integrations" name="name3" id="tabThree">
+                <apex:form >
+                    <apex:pageBlock id="pbei" title="Integrations Configuration">
+                        
+                        <apex:pageBlockSection title="Endpoint URLs" columns="2" collapsible="true" >
+                            <apex:commandButton action="{!deleteENURecord}" value="Delete" /><br/>
+                            <apex:pageBlockTable value="{!LstENU}" var="tbl">
+                                <apex:column >
+                                    <apex:inputCheckBox value="{!tbl.isChecked}"/>
+                                </apex:column>
+                                <apex:column value="{!tbl.objENU.Name}"/>
+                                <apex:column value="{!tbl.objENU.URL__c}"/>
+                            </apex:pageBlockTable>
+                            <apex:outputPanel >
+                                <table style="position: relative; left: 23%;">
+                                    <tr style="text-align: center; ">
+                                        <td colspan="2" style="color: #78b4cd;">New</td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="2"><hr/></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Name:</td> <td><apex:inputText value="{!objENU.Name}"/></td>
+                                    </tr>
+                                    <tr>
+                                        <td>URL:</td> <td><apex:inputField value="{!objENU.URL__c}"/></td>
+                                    </tr>
+                                    <tr style="text-align: right;">
+                                        <td colspan="2"><apex:commandButton action="{!saveENU}" value="Save"/></td>
+                                    </tr>
+                                </table> 
+                            </apex:outputPanel>
+                        </apex:pageBlockSection>
+                        
+                        <apex:pageBlockSection title="External Database" columns="2" collapsible="true" >
+                            <apex:commandButton action="{!deleteEDRecord}" value="Delete" /><br/>
+                            <apex:pageBlockTable value="{!LstED}" var="tbl">
+                                <apex:column >
+                                    <apex:inputCheckBox value="{!tbl.isChecked}"/>
+                                </apex:column>
+                                <apex:column value="{!tbl.objED.Name}"/>
+                                <apex:column value="{!tbl.objED.Dealer_Id__c}"/>
+                                <apex:column value="{!tbl.objED.Manufactor_Id__c}"/>
+                                <apex:column value="{!tbl.objED.Password__c}"/>
+                                <apex:column value="{!tbl.objED.Token__c}"/>
+                                <apex:column value="{!tbl.objED.UserName__c}"/>
+                            </apex:pageBlockTable>
+                            <apex:outputPanel >
+                                <table style="position: relative; left: 23%;">
+                                    <tr style="text-align: center; ">
+                                        <td colspan="2" style="color: #78b4cd;">New</td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="2"><hr/></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Name:</td> <td><apex:inputText value="{!objED.Name}"/></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Dealer Id:</td> <td><apex:inputText value="{!objED.Dealer_Id__c}"/></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Manufacturer Id:</td> <td><apex:inputText value="{!objED.Manufactor_Id__c}"/></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Password:</td> <td><apex:inputText value="{!objED.Password__c}"/></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Token:</td> <td><apex:inputText value="{!objED.Token__c}"/></td>
+                                    </tr>
+                                    <tr>
+                                        <td>User Name:</td> <td><apex:inputText value="{!objED.UserName__c}"/></td>
+                                    </tr>
+                                    <tr style="text-align: right;">
+                                        <td colspan="2"><apex:commandButton action="{!saveED}" value="Save"/></td>
+                                    </tr>
+                                </table> 
+                            </apex:outputPanel>
+                        </apex:pageBlockSection>
+                        
+                        <apex:pageBlockSection columns="1" title="Salesman Goal Configuration" collapsible="true">
+                            <a href="/apex/SalesmanGoal__SystemConfigSalesman">Setup</a>
+                        </apex:pageBlockSection>
+                        
+                        <apex:pageBlockSection columns="1" title="World Pay Configuration" collapsible="true">
+                            <a href="/apex/FADPAY__SystemConfigurationWorldPay">Setup</a> 
+                        </apex:pageBlockSection>
+                        
+                        <apex:pageBlockSection columns="1" title="Web Configuration" collapsible="true">
+                            <a href="/apex/BBWM__SystemConfigurationWebConfig">Setup</a> 
+                        </apex:pageBlockSection>
+                        
+                        <apex:pageBlockSection title="Quickbook Configuration" columns="2" collapsible="true" >
+                            <apex:outputPanel >
+                                <b>Quickbook Product Service:</b><br/><br/>
+                                <apex:commandButton action="{!deleteQBPSCRecord}" value="Delete" /><br/>
+                                <apex:pageBlockTable value="{!LstQBPSC}" var="tbl">
+                                    <apex:column >
+                                        <apex:inputCheckBox value="{!tbl.isChecked}"/>
+                                    </apex:column>
+                                    <apex:column value="{!tbl.objQBPSC.Name}"/>
+                                    <apex:column value="{!tbl.objQBPSC.Product_Name__c}"/>
+                                    <apex:column value="{!tbl.objQBPSC.QBID__c}"/>
+                                </apex:pageBlockTable>
+                            </apex:outputPanel>
+                            <apex:outputPanel >
+                                <table style="position: relative; left: 23%;">
+                                    <tr style="text-align: center; ">
+                                        <td colspan="2" style="color: #78b4cd;">New</td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="2"><hr/></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Name:</td> <td><apex:inputText value="{!objQBPSC.Name}"/></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Product Name:</td> <td><apex:inputField value="{!objQBPSC.Product_Name__c}"/></td>
+                                    </tr>
+                                    <tr>
+                                        <td>QB ID:</td> <td><apex:inputField value="{!objQBPSC.QBID__c}"/></td>
+                                    </tr>
+                                    <tr style="text-align: right;">
+                                        <td colspan="2"><apex:commandButton action="{!saveQBPSC}" value="Save"/></td>
+                                    </tr>
+                                </table> 
+                            </apex:outputPanel>
+                            
+                        </apex:pageBlockSection>
+                        
+                        <apex:pageBlockSection columns="1" title="Quickbook OAuthService" collapsible="true">
+                            <apex:commandButton action="{!deleteQBAuthRecord}" value="Delete" />
+                            <apex:pageBlockTable value="{!LstQBAuth}" var="tbl">
+                                <apex:column >
+                                    <apex:inputCheckBox value="{!tbl.isChecked}"/>
+                                </apex:column>
+                                <apex:column value="{!tbl.objQBAuth.Name}"/>
+                                <apex:column value="{!tbl.objQBAuth.Access_Token_URL__c}"/>
+                                <apex:column value="{!tbl.objQBAuth.Application_Token__c}"/>
+                                <apex:column value="{!tbl.objQBAuth.Authorization_URL__c}"/>
+                                <apex:column value="{!tbl.objQBAuth.Company_ID__c}"/>
+                                <apex:column value="{!tbl.objQBAuth.Consumer_Key__c}"/>
+                                <apex:column value="{!tbl.objQBAuth.Consumer_Secret__c}"/>
+                                <apex:column value="{!tbl.objQBAuth.OAuth_Token__c}"/>
+                                <apex:column value="{!tbl.objQBAuth.OAuth_Token_Secret__c}"/>
+                                <apex:column value="{!tbl.objQBAuth.Request_Token_URL__c}"/>
+                                <apex:column value="{!tbl.objQBAuth.Temporary_Token_Secret__c}"/>
+                            </apex:pageBlockTable>
+                            <apex:outputPanel >
+                                <table style="position: relative; left: 0%;">
+                                    <tr style="text-align: center; ">
+                                        <td colspan="2" style="color: #78b4cd;">New</td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="2"><hr/></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Name:</td> <td><apex:inputText value="{!objQBAuth.Name}"/></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Access Token URL:</td> <td><apex:inputField value="{!objQBAuth.Access_Token_URL__c}"/></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Application Token:</td> <td><apex:inputField value="{!objQBAuth.Application_Token__c}"/></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Authorization URL:</td> <td><apex:inputField value="{!objQBAuth.Authorization_URL__c}"/></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Company ID:</td> <td><apex:inputField value="{!objQBAuth.Company_ID__c}"/></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Consumer Key:</td> <td><apex:inputField value="{!objQBAuth.Consumer_Key__c}"/></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Consumer Secret:</td> <td><apex:inputField value="{!objQBAuth.Consumer_Secret__c}"/></td>
+                                    </tr>
+                                    <tr>
+                                        <td>OAuth Token:</td> <td><apex:inputField value="{!objQBAuth.OAuth_Token__c}"/></td>
+                                    </tr>
+                                    <tr>
+                                        <td>OAuth Token Secret:</td> <td><apex:inputField value="{!objQBAuth.OAuth_Token_Secret__c}"/></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Request Token URL:</td> <td><apex:inputField value="{!objQBAuth.Request_Token_URL__c}"/></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Temporary Token Secret:</td> <td><apex:inputField value="{!objQBAuth.Temporary_Token_Secret__c}"/></td>
+                                    </tr>
+                                    <tr style="text-align: right;">
+                                        <td colspan="2"><apex:commandButton action="{!saveQBAuth}" value="Save"/></td>
+                                    </tr>
+                                </table> 
+                            </apex:outputPanel>
+                        </apex:pageBlockSection>
+                    
+                    </apex:pageBlock>
+            </apex:form>
+        </apex:tab>
+        
+        <apex:tab label="Round Robin" name="name4" id="tabFour">
+                <apex:form >
+                    <apex:pageBlock id="pbrr" title="Round Robin Configuration">
+                        <apex:pageBlockSection title="Round Robin Configurations">
+                            <apex:commandButton action="{!deleteRRRecord}" value="Delete" /><br/>
+                            <apex:pageBlockTable value="{!LstRR}" var="tbl">
+                                <apex:column >
+                                    <apex:inputCheckBox value="{!tbl.isChecked}"/>
+                                </apex:column>
+                                <apex:column value="{!tbl.objRR.Name}"/>
+                                <apex:column value="{!tbl.objRR.Lead_Source__c}"/>
+                                <apex:column value="{!tbl.objRR.Record_Type_Id__c}"/>
+                                <apex:column value="{!tbl.objRR.User_Role_Name__c}"/> 
+                            </apex:pageBlockTable>
+                            <apex:outputPanel >
+                                <table style="position: relative; left: 23%;">
+                                    <tr style="text-align: center; ">
+                                        <td colspan="2" style="color: #78b4cd;">New</td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="2"><hr/></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Name:</td> <td><apex:inputText value="{!objRR.Name}"/></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Lead Source:</td> <td><apex:inputField value="{!objRR.Lead_Source__c}"/></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Record Type Id:</td> <td><apex:inputField value="{!objRR.Record_Type_Id__c}"/></td>
+                                    </tr>
+                                    <tr>
+                                        <td>User Role Name:</td> <td><apex:inputField value="{!objRR.User_Role_Name__c}"/></td>
+                                    </tr>
+                                    <tr style="text-align: right;">
+                                        <td colspan="2"><apex:commandButton action="{!saveRR}" value="Save"/></td>
+                                    </tr>
+                                </table> 
+                            </apex:outputPanel>
+                        </apex:pageBlockSection>
+                    </apex:pageBlock>
+                </apex:form>
+        </apex:tab>
+        
+        <apex:tab label="Trigger Configuration" name="name6" id="tabSix">
+                <apex:form >
+                    <apex:pageBlock id="pbtc" title="Trigger Setup">
+                        <apex:pageBlockSection title="Trigger Configuration" columns="2" collapsible="true" >
+                            <apex:inputText value="{!objTC.Customer_Notification_Frequency__c}" rendered="{!if(triggerBool == true, false, true)}"/>
+                            <apex:outputField value="{!objTC.Customer_Notification_Frequency__c}" rendered="{!triggerBool}"/>
+                            
+                            <apex:inputCheckbox value="{!objTC.Lead_Trigger__c}" rendered="{!if(triggerBool == true, false, true)}"/>
+                            <apex:outputField value="{!objTC.Lead_Trigger__c}" rendered="{!triggerBool}"/>
+                            
+                            <apex:inputCheckbox value="{!objTS.AccountProspectTriggerChackBox__c}" rendered="{!if(triggerBool == true, false, true)}"/>
+                            <apex:outputField value="{!objTS.AccountProspectTriggerChackBox__c}" rendered="{!triggerBool}"/>
+                            
+                            <apex:inputCheckbox value="{!objTS.ChangeInventoryQuantityCheckBox__c}" rendered="{!if(triggerBool == true, false, true)}"/>
+                            <apex:outputField value="{!objTS.ChangeInventoryQuantityCheckBox__c}" rendered="{!triggerBool}"/>
+                            
+                            <apex:inputCheckbox value="{!objTS.ContactTriggerCheckbox__c}" rendered="{!if(triggerBool == true, false, true)}"/>
+                            <apex:outputField value="{!objTS.ContactTriggerCheckbox__c}" rendered="{!triggerBool}"/>
+                            
+                            <apex:inputCheckbox value="{!objTS.EventTriggerCheckBox__c}" rendered="{!if(triggerBool == true, false, true)}"/>
+                            <apex:outputField value="{!objTS.EventTriggerCheckBox__c}" rendered="{!triggerBool}"/>
+                            
+                            <apex:inputCheckbox value="{!objTS.InventoryTriggerCheckBox__c}" rendered="{!if(triggerBool == true, false, true)}"/>
+                            <apex:outputField value="{!objTS.InventoryTriggerCheckBox__c}" rendered="{!triggerBool}"/>
+                            
+                            <apex:inputCheckbox value="{!objTS.InvoiceTriggerCheckBox__c}" rendered="{!if(triggerBool == true, false, true)}"/>
+                            <apex:outputField value="{!objTS.InvoiceTriggerCheckBox__c}" rendered="{!triggerBool}"/>
+                            
+                            <apex:inputCheckbox value="{!objTS.ItemTrigger__c}" rendered="{!if(triggerBool == true, false, true)}"/>
+                            <apex:outputField value="{!objTS.ItemTrigger__c}" rendered="{!triggerBool}"/>
+                            
+                            <apex:inputCheckbox value="{!objTS.JLITriggerCheckBox__c}" rendered="{!if(triggerBool == true, false, true)}"/>
+                            <apex:outputField value="{!objTS.JLITriggerCheckBox__c}" rendered="{!triggerBool}"/>
+                            
+                            <apex:inputCheckbox value="{!objTS.LeadTriggerCheckBox__c}" rendered="{!if(triggerBool == true, false, true)}"/>
+                            <apex:outputField value="{!objTS.LeadTriggerCheckBox__c}" rendered="{!triggerBool}"/>
+                            
+                            <apex:inputCheckbox value="{!objTS.PaymentTriggerCheckBox__c}" rendered="{!if(triggerBool == true, false, true)}"/>
+                            <apex:outputField value="{!objTS.PaymentTriggerCheckBox__c}" rendered="{!triggerBool}"/>
+                            
+                            <apex:inputCheckbox value="{!objTS.ProductPriceTriggerCheckBox__c}" rendered="{!if(triggerBool == true, false, true)}"/>
+                            <apex:outputField value="{!objTS.ProductPriceTriggerCheckBox__c}" rendered="{!triggerBool}"/>
+                            
+                            <apex:inputCheckbox value="{!objTS.QuoteTriggerCheckBox__c}" rendered="{!if(triggerBool == true, false, true)}"/>
+                            <apex:outputField value="{!objTS.QuoteTriggerCheckBox__c}" rendered="{!triggerBool}"/>
+                            
+                            <apex:inputCheckbox value="{!objTS.TMRollUpTriggerCheckBox__c}" rendered="{!if(triggerBool == true, false, true)}"/>
+                            <apex:outputField value="{!objTS.TMRollUpTriggerCheckBox__c}" rendered="{!triggerBool}"/>
+                            
+                            <apex:inputCheckbox value="{!objTS.TMTriggerCheckBox__c}" rendered="{!if(triggerBool == true, false, true)}"/>
+                            <apex:outputField value="{!objTS.TMTriggerCheckBox__c}" rendered="{!triggerBool}"/>
+                            
+                            <apex:inputCheckbox value="{!objTS.UserTriggerCheckBox__c}" rendered="{!if(triggerBool == true, false, true)}"/>
+                            <apex:outputField value="{!objTS.UserTriggerCheckBox__c}" rendered="{!triggerBool}"/>
+                            
+                            <apex:inputCheckbox value="{!objTS.WorkOrderJobTriggerCheckBox__c}" rendered="{!if(triggerBool == true, false, true)}"/>
+                            <apex:outputField value="{!objTS.WorkOrderJobTriggerCheckBox__c}" rendered="{!triggerBool}"/>
+                            
+                            <apex:inputCheckbox value="{!objTS.WorkOrderPaymentTriggerCheckBox__c}" rendered="{!if(triggerBool == true, false, true)}"/>
+                            <apex:outputField value="{!objTS.WorkOrderPaymentTriggerCheckBox__c}" rendered="{!triggerBool}"/>
+                            
+                            <apex:inputCheckbox value="{!objTS.WorkOrderTriggerHandlerChecBox__c}" rendered="{!if(triggerBool == true, false, true)}"/>
+                            <apex:outputField value="{!objTS.WorkOrderTriggerHandlerChecBox__c}" rendered="{!triggerBool}"/>
+                            
+                            <apex:commandButton action="{!saveTriggerConfig}" value="Save" rendered="{!if(triggerBool == true, false, true)}"/>
+                            <apex:pageBlockSectionItem >
+                                <apex:commandButton action="{!editTriggerConfiguration}" value="Edit" style="font-size: 1em;" rendered="{!triggerBool}"/>
+                                <apex:commandButton action="{!deleteTriggerConfig}" value="Delete" rendered="{!triggerBool}"/>
+                            </apex:pageBlockSectionItem> 
+                            
+                        </apex:pageBlockSection> 
+                    </apex:pageBlock>
+            </apex:form>
+        </apex:tab>
+        
+        <apex:tab label="Web and Marketing" name="name7" id="tabSeven">
+                <apex:form >
+                    <apex:pageBlock id="pbwam" title="Web And Marketing Configuration">
+                        <apex:pageBlockSection title="Template Why Buy From US" columns="2" collapsible="true" >
+                            <apex:commandButton action="{!deleteTWBFURecord}" value="Delete" /><br/>
+                            <apex:pageBlockTable value="{!LstTWBFU}" var="tbl">
+                                <apex:column >
+                                    <apex:inputCheckBox value="{!tbl.isChecked}"/>
+                                </apex:column>
+                                <apex:column value="{!tbl.objTWBFU.Name}"/>
+                                <apex:column value="{!tbl.objTWBFU.Company_Address__c}"/>
+                                <apex:column value="{!tbl.objTWBFU.Company_Name__c}"/>
+                                <apex:column value="{!tbl.objTWBFU.Company_Phone__c}"/>
+                                <apex:column value="{!tbl.objTWBFU.Company_Website__c}"/>
+                                <apex:column value="{!tbl.objTWBFU.TemplateInfo__c}"/>
+                            </apex:pageBlockTable> 
+                            <apex:outputPanel >
+                                <table style="position: relative; left: 23%;">
+                                    <tr style="text-align: center; ">
+                                        <td colspan="2" style="color: #78b4cd;">New</td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="2"><hr/></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Name:</td> <td><apex:inputText value="{!objTWBFU.Name}"/></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Company Address:</td> <td><apex:inputField value="{!objTWBFU.Company_Address__c}"/></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Company Name:</td> <td><apex:inputField value="{!objTWBFU.Company_Name__c}"/></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Company Phone:</td> <td><apex:inputField value="{!objTWBFU.Company_Phone__c}"/></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Company Website:</td> <td><apex:inputField value="{!objTWBFU.Company_Website__c}"/></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Template Info:</td> <td><apex:inputField value="{!objTWBFU.TemplateInfo__c}"/></td>
+                                    </tr>
+                                    <tr style="text-align: right;">
+                                        <td colspan="2"><apex:commandButton action="{!saveTWBFU}" value="Save"/></td>
+                                    </tr>
+                                </table> 
+                            </apex:outputPanel>
+                        </apex:pageBlockSection>
+                    </apex:pageBlock>
+                </apex:form>
+        </apex:tab>     
+    </apex:tabPanel>
+    
+</apex:page>

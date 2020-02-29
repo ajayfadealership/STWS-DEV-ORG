@@ -1,0 +1,24 @@
+<apex:page controller="DoAuthentication" title="DoMySqlDataImport">
+<apex:pageBlock title="External Data lmporter">
+<apex:form >
+Select Manufactur to export data from external database: <apex:selectList value="{!Manufacturers}" label="Manufacturer" multiselect="false" size="1">
+            <apex:selectOptions value="{!items}"/>
+
+        </apex:selectList><br></br><br></br>
+Year:<apex:selectList value="{!year}" label="year" multiselect="false" size="1">
+            <apex:selectOptions value="{!yearvalues}"/>
+
+        </apex:selectList><br></br><br></br>
+        
+        Object:<apex:selectList value="{!objecttoimport}" label="year" multiselect="false" size="1">
+            <apex:selectOptions value="{!objectvalues}"/>
+
+        </apex:selectList><br></br><br></br>
+
+
+<apex:commandButton value="ImportData" action="{!docallouttoImport}" reRender="msgid"/><br></br>
+<apex:outputText value="{!Importmsg}" id="msgid"></apex:outputText>
+
+</apex:form>
+ </apex:pageBlock>
+</apex:page>

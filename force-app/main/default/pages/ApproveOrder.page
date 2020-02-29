@@ -1,0 +1,428 @@
+<apex:page id="pge" sidebar="false" standardController="Order__c" extensions="ApproveOrderController"  showHeader="false" standardStylesheets="false" docType="html-5.0" action="{!checkAccess}">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.12/css/jquery.dataTables.min.css"/>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.0/jquery.min.js"/>
+    <script src="https://cdn.datatables.net/1.10.12/js/jquery.dataTables.min.js"/>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"/> 
+    <apex:stylesheet value="{!URLFOR($Resource.BoatBuilderSR, 'assets/styles/salesforce-lightning-design-system.min.css')}" />
+    <style >
+        .popup{
+            position: fixed;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(0,0,0,0.5);
+            display: none;
+            z-index: 999; 
+        }
+        .popup.active{display:block}
+        .popup img{margin: 15% auto}
+        .popupDiv{
+            position: fixed;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(0,0,0,0.5);
+            display: none;
+            z-index: 999;
+        }
+    </style>
+    <html>
+        <head>
+            <title>ORDER DETAILS </title>
+        </head>
+        
+        <body>
+            <apex:form id="frm">    
+                <div  class="popup">
+                    <apex:image id="theImage2" value="{!$Resource.Process}" style="display:block;" width="40" height="40"/>
+                </div>    
+                
+                <div class="popupDiv" id="doId">
+                <input type="hidden" id="prtNumHide"/>
+				<div style="border: 5px solid #d9dee6; padding: 2%; position: fixed; top: 20%; left: 30%; z-index: 999; background: #fff; border-radius: 14px; height: 500px; width: 500px; overflow: scroll;">
+					<div>
+						<i id="closeIcn" onclick="$('#doId').fadeOut();" class="fa fa-close" style="font-size:24px; position: absolute; top: 1%; right: 3%;"></i>
+					</div> 
+					<table>
+						<tr>
+							<td colspan="3" style="text-align: center;">
+								<h2 style="font-size: 1.25em; font-weight: 600; color: #6f809c;">Distribute Part&nbsp;[<a style="font-size: .75em;" onclick="addLocation();">Add Location</a>]</h2>
+							</td>
+						</tr>
+						<tr>
+							<td colspan="3" style="text-align: center;">
+								
+								<apex:outputPanel id="sLocationList">
+									<table>
+									<apex:repeat value="{!lstSlocationWrapper}" var="lst">
+										<tr>
+											<td>Store Location:<apex:inputField value="{!lst.objPA.Store_Location__c}" styleClass="slds-select"/></td>
+											<td>&nbsp;</td>
+											<td>Quantity:<apex:inputField value="{!lst.objPA.Quantity__c}" styleClass="slds-input"/></td> 
+										</tr>
+										<tr>
+											<td colspan="3">&nbsp;</td>
+										</tr>
+									</apex:repeat>
+									</table>
+								</apex:outputPanel>
+							</td>
+						</tr>
+						<tr>
+							<td colspan="3">
+								<hr/>
+							</td>
+						</tr>
+						<tr>
+							<td colspan="3" style="text-align: center;">
+								<a class="slds-button slds-button--neutral slds-button--brand" onclick="addPartAvlblty(this);">Save</a>
+							</td>
+						</tr>
+					</table>
+				</div>        
+        		</div>
+        			<apex:actionFunction name="distPrt" action="{!distributeTheParts}" id="af9" rerender="sLocationList">
+                    <apex:param name="pN" assignTo="{!prtNum}" value=""/>
+                </apex:actionFunction>
+                <apex:actionFunction name="addPrtLoc" action="{!addSlocation}" id="af10" rerender="sLocationList">
+                    <apex:param name="pN" assignTo="{!prtNum}" value=""/>
+                </apex:actionFunction>
+                <apex:actionFunction name="saveAddedPrtLoc" action="{!SaveLocationsToInv}" id="af11" rerender="sLocationList" oncomplete="$('#doId').fadeOut();">
+                    <apex:param name="pN" assignTo="{!prtNum}" value=""/>
+                </apex:actionFunction>
+              <script>
+              	function addPartAvlblty(obj) {
+                		console.log(obj);
+                		var strPNum = $("#prtNumHide").val();
+                		saveAddedPrtLoc(strPNum);
+                }
+                
+                function addLocation() {
+                		var strPNum = $("#prtNumHide").val();
+                		addPrtLoc(strPNum);
+                }
+                function distributeParts(strPrtNumber, rcvd) {
+                		$("#prtNumHide").val(strPrtNumber);
+                		if(parseInt(rcvd) > 0) {
+	                		$('#doId').fadeIn();
+	                		distPrt(strPrtNumber);
+                		} else {
+                			alert('Please fill the quantity in received');
+                		}
+                }
+              </script>      
+                <div class="slds-grid slds-wrap slds-col--padded">
+                    <div class="slds-col--padded slds-col slds-size--1-of-1 Customer-Heading">
+                        <h2 class=" heading"><br/>
+                            <span class="slds-text-heading--small">ORDER DETAILS</span>
+                        </h2>
+                    </div>
+                </div>
+
+                <div class="slds-grid slds-wrap slds-col--padded ">
+                    <div class="slds-col--padded slds-col slds-size--1-of-1 Customer-Heading">
+                        <h2 class=" heading"><br/>
+                            <span class="slds-text-heading--small"><b>Order Number : {!objOrder.Name}</b></span>
+                        </h2>
+                    </div>
+                </div>
+
+                <div id="infoDiv" style="margin-top:1%;padding-top: 30px;">
+                    <div class="slds-grid slds-wrap">
+                        <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-1 slds-col--padded">
+                            <div class="slds-grid slds-wrap">
+                                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                                    <div class="slds-form-element">
+                                        <label class="slds-form-element__label">Vendor Name</label>
+                                        <div class="slds-form-element__control">
+                                            <apex:inputText value="{!objManufacturer.Name}" id="ifName" styleClass="slds-input" disabled="true"/>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                                    <div class="slds-form-element">
+                                        <label class="slds-form-element__label">Vendor Phone Number</label>
+                                        <div class="slds-form-element__control">
+                                            <apex:inputText value="{!objManufacturer.Phone__c}" styleClass="slds-input" id="ifPhone" disabled="true"/>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                                    <div class="slds-form-element">
+                                        <label class="slds-form-element__label">Vendor Email</label>
+                                        <div class="slds-form-element__control">
+                                            <apex:inputText value="{!objManufacturer.Email__c}" styleClass="slds-input" id="ifEmail" disabled="true"/>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                                    <div class="slds-form-element">
+                                        <label class="slds-form-element__label">Vendor Contact Person</label>
+                                        <div class="slds-form-element__control">
+                                            <apex:inputText value="{!objManufacturer.Contact_Person__r.Name}" styleClass="slds-input" id="ifCon" disabled="true"/>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-1 slds-col--padded">
+                            <div class="slds-grid slds-wrap">
+                                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                                    <div class="slds-form-element">
+                                        <label class="slds-form-element__label">Vendor Address</label>
+                                        <div class="slds-form-element__control">
+                                            <apex:inputText value="{!objManufacturer.Street__c}" styleClass="slds-input" id="ifStreet" disabled="true"/>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                                    <div class="slds-form-element">
+                                        <label class="slds-form-element__label">Vendor City</label>
+                                        <div class="slds-form-element__control">
+                                            <apex:inputText value="{!objManufacturer.City__c}" styleClass="slds-input" id="ifCity" disabled="true"/>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                                    <div class="slds-form-element">
+                                        <label class="slds-form-element__label">Vendor State</label>
+                                        <div class="slds-form-element__control">
+                                            <apex:inputText value="{!objManufacturer.State__c}" styleClass="slds-input" id="ifState" disabled="true"/>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                                    <div class="slds-form-element">
+                                        <label class="slds-form-element__label">Vendor Zip</label>
+                                        <div class="slds-form-element__control">
+                                            <apex:inputText value="{!objManufacturer.Zip__c}" styleClass="slds-input" id="ifZip" disabled="true"/> 
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-1 slds-col--padded">
+                            <div class="slds-grid slds-wrap">
+                                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                                    <div class="slds-form-element">
+                                        <label class="slds-form-element__label">Vendor Terms</label>
+                                        <div class="slds-form-element__control">
+                                            <apex:inputText value="{!objManufacturer.Terms__c}" styleClass="slds-input" id="ifTerm" disabled="true"/>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                                    <div class="slds-form-element">
+                                        <label class="slds-form-element__label">Order Status</label>
+                                        <div class="slds-form-element__control">
+                                            <apex:inputField value="{!objOrder.Order_Status__c}" styleClass="slds-select" id="orderStatus"/>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                                    <div class="slds-form-element">
+                                    </div>
+                                </div>
+                                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                                    <div class="slds-form-element">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div id="pTable" class="slds-col slds-size--1-of-1 slds-medium-size--1-of-1 slds-col--padded">
+                    <apex:outputPanel id="prtTblId">
+                        <table id="opTable" class="slds-table slds-table--bordered slds-no-row-hover slds-table--cell-buffer slds-m-top--x-large Table1 slds-card">
+                            <tr>
+                                <th>Part Number</th>
+                                <th>Decription</th>
+                                <th>Quantity</th>
+                                <th>Cost</th>
+                                <th>Total</th>
+                                <th>Received</th>
+                                <th>Amount</th>
+                                <th>Back Order</th>
+                                <th>Back Order Amount</th>
+                                <th>&nbsp;</th>
+                            </tr>
+                            <tbody>
+                                <apex:repeat value="{!lstOrderLineItemsWrapper}" var="objPrt">
+                                    <tr>
+                                        <td>{!objPrt.objOrderLineItem.Part_Number_del__c}</td>
+                                        <td>{!objPrt.objOrderLineItem.Name__c}</td>
+                                        <td>{!objPrt.objOrderLineItem.Quantity__c}</td> 
+                                        <td>${!objPrt.objOrderLineItem.Cost__c}</td>
+                                        <!--<td>${!objPrt.objOrderLineItem.Shipping_Charge__c}</td>-->
+                                        <td>${!objPrt.total}</td>
+                                        <td><apex:inputText value="{!objPrt.received}" styleClass="slds-input" id="recId" onchange="calclateTotal(this, '{!objPrt.objOrderLineItem.Part_Number_del__c}', '{!objPrt.objOrderLineItem.Quantity__c}');"/></td>
+                                        <td>${!objPrt.ammount}</td>
+                                        <td>{!objPrt.backOrderQuantity}</td>
+                                        <td>${!objPrt.backOrderAmount}</td>
+                                        <td>
+                                        	<apex:outputPanel rendered="{!boolPDStatus}">
+                                        		<a onclick="distributeParts('{!objPrt.objOrderLineItem.Part_Number_del__c}', '{!objPrt.received}');">Distribute parts</a>
+                                       		</apex:outputPanel>
+                                        </td>
+                                    </tr>
+                                </apex:repeat>
+                            </tbody> 
+                            <tfoot>
+                                <tr class="slds-hint-parent">
+                                    <th></th>
+                                    <th></th>
+                                    <th>{!totalQuantity}</th>
+                                    <!--<th>&nbsp;</th>-->
+                                    <th>Total: </th>
+                                    <th>${!totalOfTotal}</th>
+                                    <th>{!totalOfReceived}</th>
+                                    <th>$<apex:outputText value="{!totalOfAmount}" id="tamt"/></th>
+                                    <th>{!totalOfBackOrder}</th>
+                                    <th>${!totalOfBackOrderAmount}</th>
+                                    <th></th>
+                                </tr>   
+                                <tr class="slds-hint-parent">
+                                    <th></th>
+                                    <th></th>
+                                    <th></th>
+                                    <!--<th>&nbsp;</th>-->
+                                    <th></th>
+                                    <th></th>
+                                    <th>Shipping Charge:</th>
+                                    <th><apex:inputText value="{!decShippingCharge}" onchange="calclateTotal(this, '', '');" styleClass="slds-input" id="shpngCId"/></th>
+                                    <th></th>
+                                    <th></th>
+                                    <th></th>
+                                </tr>  
+                                <tr class="slds-hint-parent">
+                                    <th></th>
+                                    <th></th>
+                                    <th></th>
+                                    <th></th>
+                                    <th></th>
+                                    <th>Discount:</th>
+                                    <th><apex:inputText value="{!decDiscount}" onchange="calclateTotal(this, '', '');" styleClass="slds-input" id="dscntId"/></th>
+                                    <th></th>
+                                    <th></th>
+                                    <th></th>
+                                </tr>   
+                                <tr class="slds-hint-parent">
+                                    <th></th>
+                                    <th></th>
+                                    <th></th>
+                                    <th></th>
+                                    <th></th>
+                                    <th>Grand Total:</th>
+                                    <th>${!decGrandTotal}</th>
+                                    <th></th>
+                                    <th></th>
+                                    <th></th>
+                                </tr>                              
+                            </tfoot>        
+                        </table>
+                    </apex:outputPanel>             
+                </div> 
+               
+                <div style="padding: 10px; margin-left: 35%; margin-top: 2%;">      
+                    <a class="slds-button slds-button--neutral slds-button--brand inside_row_button " type="button" onclick="acfUpdateStatus(this);">Update Status</a>
+                    <a class="slds-button slds-button--neutral slds-button--brand inside_row_button " type="button" onclick="generateOrder(this);">Add Inventory</a>
+                    <a class="slds-button slds-button--neutral slds-button--brand inside_row_button " type="button" onclick="printOrder(this);">Print Order</a>
+                    <a class="slds-button slds-button--neutral slds-button--brand inside_row_button " type="button" onclick="sendOrder(this);">Send Order</a>
+                    <a class="slds-button slds-button--neutral slds-button--brand inside_row_button " type="button" onclick="generateBackOrder(this);">Add Inventory with Back Order</a>
+                    <a class="slds-button slds-button--neutral slds-button--brand inside_row_button " type="button" onclick="window.top.location='/apex/ServicePage?subTabName=tab-default-3'">Cancel</a>
+
+                </div>                
+                <apex:actionFunction name="calculateTotal" action="{!calculateAllValues}" id="af1" rerender="prtTblId" oncomplete="completedTask();">
+                    <apex:param name="pN" assignTo="{!prtNum}" value=""/>
+                </apex:actionFunction>
+                <apex:actionFunction name="updateStatus" action="{!updateStatus}" id="af2" oncomplete="completedTask();"/>
+                <apex:actionFunction name="generateBackOrderAndOrderLineItem" action="{!createBackOrder}" id="af3" oncomplete="completedTask();"/>
+                <apex:actionFunction name="addItemsToInventory" action="{!addToInventory}" id="af4" oncomplete="completedTask();"/>
+                <apex:actionFunction name="printOrderContent" action="{!printOrder}" id="af5" oncomplete="completedTask();"/>
+                <apex:actionFunction name="sendOrderContent" action="{!sendOrder}" id="af6" oncomplete="completedTask();"/>
+            </apex:form>
+            <script>
+             
+                
+                function calclateTotal(obj, partNumber, quantity) {
+                    console.log("Value Changed : "+obj.value+" *** Part Number : "+partNumber+" *** Quantity : "+quantity);
+                    if(/^\d*$/.test(obj.value) && partNumber != '' && quantity != '') {
+                        if(obj.value != null && obj.value != "" && parseInt(quantity) >= parseInt(obj.value)) {
+                            $('.popup').addClass('active');
+                            calculateTotal(partNumber);
+                        } 
+                        else if(obj.value == "") {
+                            obj.value = 0;
+                        }
+                        else {
+                            obj.value = 0;
+                            alert("Received cannot be greater than base quantity.");
+                        }
+                    }
+                    else if(partNumber != '' && quantity != ''){
+                        obj.value = 0;
+                        alert("You can use only number.")
+                    }
+                    if(partNumber == '' && quantity == '') {
+                        if(/^\d*$/.test(obj.value) || /^\d+\.\d{0,2}$/.test(obj.value) || /^\.\d{0,2}$/.test(obj.value)) {
+                            var totalOfAmount = document.getElementById("pge:frm:tamt").innerHTML;  
+                            $('.popup').addClass('active');
+                            calculateTotal(partNumber);
+                        }
+                        else { 
+                            obj.value = "0.00";
+                            alert("Invalid value for Currency (Enter in 0.00 Format)");
+                        }
+                    }
+                }
+                
+                function completedTask() {
+                    $('.popup').removeClass('active');
+                    console.log("Task Completed");
+                }
+                
+                function acfUpdateStatus(obj){
+                    console.log("Update Satus...");
+                    $('.popup').addClass('active');
+                    updateStatus(); 
+                }
+                
+                function generateOrder(obj) {
+                    console.log("Generating Order Please Wait...");
+                    $('.popup').addClass('active');
+                    addItemsToInventory();
+                }
+                
+                function printOrder(obj) {
+                    console.log("Printing Order Please Wait...");
+                    $('.popup').addClass('active');
+                    printOrderContent();  
+                }
+
+                function sendOrder(obj) {
+                    console.log("Sending Order Please Wait...");
+                    $('.popup').addClass('active');
+                    sendOrderContent(); 
+                }
+                
+                function generateBackOrder(obj) {
+                    console.log("Generating Back Order Please Wait...");
+                    $('.popup').addClass('active');
+                    generateBackOrderAndOrderLineItem();    
+                }
+            </script>
+        </body>
+    </html>
+</apex:page>

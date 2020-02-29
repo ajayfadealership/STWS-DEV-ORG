@@ -1,0 +1,40 @@
+<apex:page standardController="Inventory__c" extensions="MultipleUploadController">
+    <apex:form >
+        <apex:pageBlock title="Upload Multiple Attachment to Object">
+            
+            <apex:pageBlockButtons >
+                <apex:commandButton value="Upload"  action="{!SaveAttachments}"/>
+                <apex:commandButton value="Go Back To Inventory"  action="{!cancel}"/>
+
+            </apex:pageBlockButtons>
+            
+            <apex:pageMessages id="MSG"/>
+            
+            <apex:pageblocksection >
+                            
+                <apex:pageBlockSectionItem >
+                   <!-- <apex:outputLabel value="How many files you want to upload?"/>
+                    <apex:selectList onchange="ChangeCount() ;" multiselect="false" size="1" value="{!FileCount}">
+                        <apex:selectOption itemLabel="--None--" itemValue=""/>
+                        <apex:selectOptions value="{!filesCountList}"/>
+                    </apex:selectList>-->
+                </apex:pageBlockSectionItem>
+            
+            </apex:pageblocksection>
+            
+            <apex:pageBlockSection title="Select Files" >
+                <!--<apex:repeat value="{!allFileList}" var="AFL">-->
+                    
+                    
+                    <apex:inputfile value="{!filebody}"  />
+                    <apex:selectList multiselect="false" size="1" value="{!filename}">
+                        <apex:selectOption itemLabel="--None--" itemValue=""/>
+                        <apex:selectOptions value="{!fileNameList}"/>
+                    </apex:selectList>
+                    
+                <!--</apex:repeat>-->
+            </apex:pageBlockSection>
+            
+        </apex:pageBlock>
+    </apex:form>
+</apex:page>

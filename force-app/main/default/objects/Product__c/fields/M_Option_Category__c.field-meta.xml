@@ -1,0 +1,901 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>M_Option_Category__c</fullName>
+    <deprecated>false</deprecated>
+    <description>Dependent on Manufacturer</description>
+    <externalId>false</externalId>
+    <label>Option Category</label>
+    <required>false</required>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <controllingField>MModel2__c</controllingField>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Engine</fullName>
+                <default>false</default>
+                <label>Engine</label>
+            </value>
+            <value>
+                <fullName>Engine Options</fullName>
+                <default>false</default>
+                <label>Engine Options</label>
+            </value>
+            <value>
+                <fullName>Gelcoat Spray Pattern (1A)</fullName>
+                <default>false</default>
+                <label>Gelcoat Spray Pattern (1A)</label>
+            </value>
+            <value>
+                <fullName>Gelcoat Main Color (1D)</fullName>
+                <default>false</default>
+                <label>Gelcoat Main Color (1D)</label>
+            </value>
+            <value>
+                <fullName>Gelcoat Accent Color (1C)</fullName>
+                <default>false</default>
+                <label>Gelcoat Accent Color (1C)</label>
+            </value>
+            <value>
+                <fullName>Gelcoat Deck Color  (1B)</fullName>
+                <default>false</default>
+                <label>Gelcoat Deck Color  (1B)</label>
+            </value>
+            <value>
+                <fullName>Audio Options (7A)</fullName>
+                <default>false</default>
+                <label>Audio Options (7A)</label>
+            </value>
+            <value>
+                <fullName>Lighting Options (7B) -</fullName>
+                <default>false</default>
+                <label>Lighting Options (7B) -</label>
+            </value>
+            <value>
+                <fullName>Miscellaneous Options (8A)</fullName>
+                <default>false</default>
+                <label>Miscellaneous Options (8A)</label>
+            </value>
+            <value>
+                <fullName>Base Trailer (9A).</fullName>
+                <default>false</default>
+                <label>Base Trailer (9A).</label>
+            </value>
+            <value>
+                <fullName>Trailer Axle Options.</fullName>
+                <default>false</default>
+                <label>Trailer Axle Options.</label>
+            </value>
+            <value>
+                <fullName>Trailer Color Selections</fullName>
+                <default>false</default>
+                <label>Trailer Color Selections</label>
+            </value>
+            <value>
+                <fullName>Trailer Base Color (9B)</fullName>
+                <default>false</default>
+                <label>Trailer Base Color (9B)</label>
+            </value>
+            <value>
+                <fullName>Trailer Pinstripe Color (9C)</fullName>
+                <default>false</default>
+                <label>Trailer Pinstripe Color (9C)</label>
+            </value>
+            <value>
+                <fullName>Trailer Fender Options (9D)</fullName>
+                <default>false</default>
+                <label>Trailer Fender Options (9D)</label>
+            </value>
+            <value>
+                <fullName>Two Tone Fender Color (9E)</fullName>
+                <default>false</default>
+                <label>Two Tone Fender Color (9E)</label>
+            </value>
+            <value>
+                <fullName>Trailer Wheel Options (9F)</fullName>
+                <default>false</default>
+                <label>Trailer Wheel Options (9F)</label>
+            </value>
+            <value>
+                <fullName>Trailer Light Options (9G)</fullName>
+                <default>false</default>
+                <label>Trailer Light Options (9G)</label>
+            </value>
+            <value>
+                <fullName>Trailer Other Options (9H)</fullName>
+                <default>false</default>
+                <label>Trailer Other Options (9H)</label>
+            </value>
+            <value>
+                <fullName>Package Options</fullName>
+                <default>false</default>
+                <label>Package Options</label>
+            </value>
+            <value>
+                <fullName>Package and Trim Level Options (1A)</fullName>
+                <default>false</default>
+                <label>Package and Trim Level Options (1A)</label>
+            </value>
+            <value>
+                <fullName>Engines (5A)</fullName>
+                <default>false</default>
+                <label>Engines (5A)</label>
+            </value>
+            <value>
+                <fullName>Engine Options (5B)</fullName>
+                <default>false</default>
+                <label>Engine Options (5B)</label>
+            </value>
+            <value>
+                <fullName>Gelcoat Options</fullName>
+                <default>false</default>
+                <label>Gelcoat Options</label>
+            </value>
+            <value>
+                <fullName>Gelcoat Deck Color (1B)</fullName>
+                <default>false</default>
+                <label>Gelcoat Deck Color (1B)</label>
+            </value>
+            <value>
+                <fullName>Gelcoat Deck Forward Accent (1BB)</fullName>
+                <default>false</default>
+                <label>Gelcoat Deck Forward Accent (1BB)</label>
+            </value>
+            <value>
+                <fullName>Gelcoat Upper Accent Color  (1C)</fullName>
+                <default>false</default>
+                <label>Gelcoat Upper Accent Color  (1C)</label>
+            </value>
+            <value>
+                <fullName>Gelcoat Main Panel Color (1D)</fullName>
+                <default>false</default>
+                <label>Gelcoat Main Panel Color (1D)</label>
+            </value>
+            <value>
+                <fullName>Gelcoat Hull Forward Accent (1DD)</fullName>
+                <default>false</default>
+                <label>Gelcoat Hull Forward Accent (1DD)</label>
+            </value>
+            <value>
+                <fullName>Gelcoat Hull Middle Accent</fullName>
+                <default>false</default>
+                <label>Gelcoat Hull Middle Accent</label>
+            </value>
+            <value>
+                <fullName>Gelcoat Lower Accent Color (1E)</fullName>
+                <default>false</default>
+                <label>Gelcoat Lower Accent Color (1E)</label>
+            </value>
+            <value>
+                <fullName>Gelcoat Hull Color (1F)</fullName>
+                <default>false</default>
+                <label>Gelcoat Hull Color (1F)</label>
+            </value>
+            <value>
+                <fullName>Graphic Name Options (for Worlds, do not choose)</fullName>
+                <default>false</default>
+                <label>Graphic Name Options (for Worlds, do not choose)</label>
+            </value>
+            <value>
+                <fullName>Graphic Background Options &amp; Other Graphic Options</fullName>
+                <default>false</default>
+                <label>Graphic Background Options &amp; Other Graphic Options</label>
+            </value>
+            <value>
+                <fullName>Upholstery Color Selections</fullName>
+                <default>false</default>
+                <label>Upholstery Color Selections</label>
+            </value>
+            <value>
+                <fullName>Vinyl Base Color (2A)</fullName>
+                <default>false</default>
+                <label>Vinyl Base Color (2A)</label>
+            </value>
+            <value>
+                <fullName>Vinyl Main Color (2B)</fullName>
+                <default>false</default>
+                <label>Vinyl Main Color (2B)</label>
+            </value>
+            <value>
+                <fullName>Vinyl Back Color (2C)</fullName>
+                <default>false</default>
+                <label>Vinyl Back Color (2C)</label>
+            </value>
+            <value>
+                <fullName>Vinyl Accent Color (2D)</fullName>
+                <default>false</default>
+                <label>Vinyl Accent Color (2D)</label>
+            </value>
+            <value>
+                <fullName>Welt Color (2E)</fullName>
+                <default>false</default>
+                <label>Welt Color (2E)</label>
+            </value>
+            <value>
+                <fullName>Insert Panel Accent Color (2F) (2 Tone)</fullName>
+                <default>false</default>
+                <label>Insert Panel Accent Color (2F) (2 Tone)</label>
+            </value>
+            <value>
+                <fullName>Carpet Base Color Options (2G) - Must Select 1</fullName>
+                <default>false</default>
+                <label>Carpet Base Color Options (2G) - Must Select 1</label>
+            </value>
+            <value>
+                <fullName>Carpet Snap-In Options (2G) - Must Select 1</fullName>
+                <default>false</default>
+                <label>Carpet Snap-In Options (2G) - Must Select 1</label>
+            </value>
+            <value>
+                <fullName>Appearance Options</fullName>
+                <default>false</default>
+                <label>Appearance Options</label>
+            </value>
+            <value>
+                <fullName>Other Appearance Options (3C)</fullName>
+                <default>false</default>
+                <label>Other Appearance Options (3C)</label>
+            </value>
+            <value>
+                <fullName>Tower Options (3D)</fullName>
+                <default>false</default>
+                <label>Tower Options (3D)</label>
+            </value>
+            <value>
+                <fullName>Tower Main Color Options (3E)</fullName>
+                <default>false</default>
+                <label>Tower Main Color Options (3E)</label>
+            </value>
+            <value>
+                <fullName>Tower Contrast Color Options (3F)</fullName>
+                <default>false</default>
+                <label>Tower Contrast Color Options (3F)</label>
+            </value>
+            <value>
+                <fullName>Canvas Options</fullName>
+                <default>false</default>
+                <label>Canvas Options</label>
+            </value>
+            <value>
+                <fullName>Canvas Options (4A)</fullName>
+                <default>false</default>
+                <label>Canvas Options (4A)</label>
+            </value>
+            <value>
+                <fullName>Performance Options</fullName>
+                <default>false</default>
+                <label>Performance Options</label>
+            </value>
+            <value>
+                <fullName>Prop Options (5C)</fullName>
+                <default>false</default>
+                <label>Prop Options (5C)</label>
+            </value>
+            <value>
+                <fullName>Wake Enhancement Options (6C)</fullName>
+                <default>false</default>
+                <label>Wake Enhancement Options (6C)</label>
+            </value>
+            <value>
+                <fullName>Audio and Video Options</fullName>
+                <default>false</default>
+                <label>Audio and Video Options</label>
+            </value>
+            <value>
+                <fullName>Audio and Video Options (7A)</fullName>
+                <default>false</default>
+                <label>Audio and Video Options (7A)</label>
+            </value>
+            <value>
+                <fullName>Trailer Options.</fullName>
+                <default>false</default>
+                <label>Trailer Options.</label>
+            </value>
+            <value>
+                <fullName>Base Trailer (9A)</fullName>
+                <default>false</default>
+                <label>Base Trailer (9A)</label>
+            </value>
+            <value>
+                <fullName>Trailer Pinstrip Color (9C)</fullName>
+                <default>false</default>
+                <label>Trailer Pinstrip Color (9C)</label>
+            </value>
+            <value>
+                <fullName>Gelcoat Hull Color  (1F)</fullName>
+                <default>false</default>
+                <label>Gelcoat Hull Color  (1F)</label>
+            </value>
+            <value>
+                <fullName>Graphic Name Selections (1G)</fullName>
+                <default>false</default>
+                <label>Graphic Name Selections (1G)</label>
+            </value>
+            <value>
+                <fullName>Graphic Background Options (1H)</fullName>
+                <default>false</default>
+                <label>Graphic Background Options (1H)</label>
+            </value>
+            <value>
+                <fullName>Base Color  (2A)</fullName>
+                <default>false</default>
+                <label>Base Color  (2A)</label>
+            </value>
+            <value>
+                <fullName>Panel Color   (2B)</fullName>
+                <default>false</default>
+                <label>Panel Color   (2B)</label>
+            </value>
+            <value>
+                <fullName>Welt Color   (2C)</fullName>
+                <default>false</default>
+                <label>Welt Color   (2C)</label>
+            </value>
+            <value>
+                <fullName>Upholstery Options  (2D)</fullName>
+                <default>false</default>
+                <label>Upholstery Options  (2D)</label>
+            </value>
+            <value>
+                <fullName>Tower Accessories (3F)</fullName>
+                <default>false</default>
+                <label>Tower Accessories (3F)</label>
+            </value>
+            <value>
+                <fullName>Tower Canvas (Oz) (4A)</fullName>
+                <default>false</default>
+                <label>Tower Canvas (Oz) (4A)</label>
+            </value>
+            <value>
+                <fullName>Prop Options  (5C)</fullName>
+                <default>false</default>
+                <label>Prop Options  (5C)</label>
+            </value>
+            <value>
+                <fullName>Performance Package Options - MD,MG,ME (6D)</fullName>
+                <default>false</default>
+                <label>Performance Package Options - MD,MG,ME (6D)</label>
+            </value>
+        </valueSetDefinition>
+        <valueSettings>
+            <controllingFieldValue>Mondo(MD)</controllingFieldValue>
+            <controllingFieldValue>Craz(MG)</controllingFieldValue>
+            <controllingFieldValue>Mojo(ME)</controllingFieldValue>
+            <valueName>Engine</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Mondo(MD)</controllingFieldValue>
+            <controllingFieldValue>Craz(MG)</controllingFieldValue>
+            <controllingFieldValue>Mojo(ME)</controllingFieldValue>
+            <controllingFieldValue>SC</controllingFieldValue>
+            <controllingFieldValue>SA</controllingFieldValue>
+            <controllingFieldValue>SG</controllingFieldValue>
+            <controllingFieldValue>SE</controllingFieldValue>
+            <controllingFieldValue>SER</controllingFieldValue>
+            <valueName>Engine Options</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Mondo(MD)</controllingFieldValue>
+            <controllingFieldValue>Craz(MG)</controllingFieldValue>
+            <controllingFieldValue>Mojo(ME)</controllingFieldValue>
+            <valueName>Gelcoat Spray Pattern (1A)</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Mondo(MD)</controllingFieldValue>
+            <controllingFieldValue>Craz(MG)</controllingFieldValue>
+            <controllingFieldValue>Mojo(ME)</controllingFieldValue>
+            <valueName>Gelcoat Main Color (1D)</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Mondo(MD)</controllingFieldValue>
+            <controllingFieldValue>Craz(MG)</controllingFieldValue>
+            <controllingFieldValue>Mojo(ME)</controllingFieldValue>
+            <valueName>Gelcoat Accent Color (1C)</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Mondo(MD)</controllingFieldValue>
+            <controllingFieldValue>Craz(MG)</controllingFieldValue>
+            <controllingFieldValue>Mojo(ME)</controllingFieldValue>
+            <valueName>Gelcoat Deck Color  (1B)</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Mondo(MD)</controllingFieldValue>
+            <controllingFieldValue>Craz(MG)</controllingFieldValue>
+            <controllingFieldValue>Mojo(ME)</controllingFieldValue>
+            <valueName>Audio Options (7A)</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Mondo(MD)</controllingFieldValue>
+            <controllingFieldValue>Craz(MG)</controllingFieldValue>
+            <controllingFieldValue>Mojo(ME)</controllingFieldValue>
+            <valueName>Lighting Options (7B) -</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Mondo(MD)</controllingFieldValue>
+            <controllingFieldValue>Craz(MG)</controllingFieldValue>
+            <controllingFieldValue>Mojo(ME)</controllingFieldValue>
+            <controllingFieldValue>SC</controllingFieldValue>
+            <controllingFieldValue>SA</controllingFieldValue>
+            <controllingFieldValue>SG</controllingFieldValue>
+            <controllingFieldValue>SE</controllingFieldValue>
+            <controllingFieldValue>SER</controllingFieldValue>
+            <valueName>Miscellaneous Options (8A)</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Mondo(MD)</controllingFieldValue>
+            <controllingFieldValue>Craz(MG)</controllingFieldValue>
+            <controllingFieldValue>Mojo(ME)</controllingFieldValue>
+            <controllingFieldValue>SC</controllingFieldValue>
+            <controllingFieldValue>SA</controllingFieldValue>
+            <controllingFieldValue>SG</controllingFieldValue>
+            <controllingFieldValue>SE</controllingFieldValue>
+            <controllingFieldValue>SER</controllingFieldValue>
+            <valueName>Base Trailer (9A).</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Mondo(MD)</controllingFieldValue>
+            <controllingFieldValue>Craz(MG)</controllingFieldValue>
+            <controllingFieldValue>Mojo(ME)</controllingFieldValue>
+            <valueName>Trailer Axle Options.</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Mondo(MD)</controllingFieldValue>
+            <controllingFieldValue>Craz(MG)</controllingFieldValue>
+            <controllingFieldValue>Mojo(ME)</controllingFieldValue>
+            <valueName>Trailer Color Selections</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Mondo(MD)</controllingFieldValue>
+            <controllingFieldValue>Craz(MG)</controllingFieldValue>
+            <controllingFieldValue>Mojo(ME)</controllingFieldValue>
+            <controllingFieldValue>SC</controllingFieldValue>
+            <controllingFieldValue>SA</controllingFieldValue>
+            <controllingFieldValue>SG</controllingFieldValue>
+            <controllingFieldValue>SE</controllingFieldValue>
+            <controllingFieldValue>SER</controllingFieldValue>
+            <valueName>Trailer Base Color (9B)</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Mondo(MD)</controllingFieldValue>
+            <controllingFieldValue>Craz(MG)</controllingFieldValue>
+            <controllingFieldValue>Mojo(ME)</controllingFieldValue>
+            <valueName>Trailer Pinstripe Color (9C)</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Mondo(MD)</controllingFieldValue>
+            <controllingFieldValue>Craz(MG)</controllingFieldValue>
+            <controllingFieldValue>Mojo(ME)</controllingFieldValue>
+            <controllingFieldValue>SC</controllingFieldValue>
+            <controllingFieldValue>SA</controllingFieldValue>
+            <controllingFieldValue>SG</controllingFieldValue>
+            <controllingFieldValue>SE</controllingFieldValue>
+            <controllingFieldValue>SER</controllingFieldValue>
+            <valueName>Trailer Fender Options (9D)</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Mondo(MD)</controllingFieldValue>
+            <controllingFieldValue>Craz(MG)</controllingFieldValue>
+            <controllingFieldValue>Mojo(ME)</controllingFieldValue>
+            <valueName>Two Tone Fender Color (9E)</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Mondo(MD)</controllingFieldValue>
+            <controllingFieldValue>Craz(MG)</controllingFieldValue>
+            <controllingFieldValue>Mojo(ME)</controllingFieldValue>
+            <controllingFieldValue>SC</controllingFieldValue>
+            <controllingFieldValue>SA</controllingFieldValue>
+            <controllingFieldValue>SG</controllingFieldValue>
+            <controllingFieldValue>SE</controllingFieldValue>
+            <controllingFieldValue>SER</controllingFieldValue>
+            <valueName>Trailer Wheel Options (9F)</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Mondo(MD)</controllingFieldValue>
+            <controllingFieldValue>Craz(MG)</controllingFieldValue>
+            <controllingFieldValue>Mojo(ME)</controllingFieldValue>
+            <controllingFieldValue>SC</controllingFieldValue>
+            <controllingFieldValue>SA</controllingFieldValue>
+            <controllingFieldValue>SG</controllingFieldValue>
+            <controllingFieldValue>SE</controllingFieldValue>
+            <controllingFieldValue>SER</controllingFieldValue>
+            <valueName>Trailer Light Options (9G)</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Mondo(MD)</controllingFieldValue>
+            <controllingFieldValue>Craz(MG)</controllingFieldValue>
+            <controllingFieldValue>Mojo(ME)</controllingFieldValue>
+            <controllingFieldValue>SC</controllingFieldValue>
+            <controllingFieldValue>SA</controllingFieldValue>
+            <controllingFieldValue>SG</controllingFieldValue>
+            <controllingFieldValue>SE</controllingFieldValue>
+            <controllingFieldValue>SER</controllingFieldValue>
+            <valueName>Trailer Other Options (9H)</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Mondo(MD)</controllingFieldValue>
+            <controllingFieldValue>Craz(MG)</controllingFieldValue>
+            <controllingFieldValue>Mojo(ME)</controllingFieldValue>
+            <controllingFieldValue>SC</controllingFieldValue>
+            <controllingFieldValue>SA</controllingFieldValue>
+            <controllingFieldValue>SG</controllingFieldValue>
+            <controllingFieldValue>SE</controllingFieldValue>
+            <controllingFieldValue>SER</controllingFieldValue>
+            <valueName>Other Appearance Options (3C)</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Mondo(MD)</controllingFieldValue>
+            <controllingFieldValue>Craz(MG)</controllingFieldValue>
+            <controllingFieldValue>Mojo(ME)</controllingFieldValue>
+            <controllingFieldValue>SC</controllingFieldValue>
+            <controllingFieldValue>SA</controllingFieldValue>
+            <controllingFieldValue>SG</controllingFieldValue>
+            <controllingFieldValue>SE</controllingFieldValue>
+            <controllingFieldValue>SER</controllingFieldValue>
+            <valueName>Tower Options (3D)</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Mondo(MD)</controllingFieldValue>
+            <controllingFieldValue>Craz(MG)</controllingFieldValue>
+            <controllingFieldValue>Mojo(ME)</controllingFieldValue>
+            <valueName>Gelcoat Hull Color  (1F)</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Mondo(MD)</controllingFieldValue>
+            <controllingFieldValue>Craz(MG)</controllingFieldValue>
+            <controllingFieldValue>Mojo(ME)</controllingFieldValue>
+            <valueName>Graphic Name Selections (1G)</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Mondo(MD)</controllingFieldValue>
+            <controllingFieldValue>Craz(MG)</controllingFieldValue>
+            <controllingFieldValue>Mojo(ME)</controllingFieldValue>
+            <valueName>Graphic Background Options (1H)</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Mondo(MD)</controllingFieldValue>
+            <controllingFieldValue>Craz(MG)</controllingFieldValue>
+            <controllingFieldValue>Mojo(ME)</controllingFieldValue>
+            <valueName>Base Color  (2A)</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Mondo(MD)</controllingFieldValue>
+            <controllingFieldValue>Craz(MG)</controllingFieldValue>
+            <controllingFieldValue>Mojo(ME)</controllingFieldValue>
+            <valueName>Panel Color   (2B)</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Mondo(MD)</controllingFieldValue>
+            <controllingFieldValue>Craz(MG)</controllingFieldValue>
+            <controllingFieldValue>Mojo(ME)</controllingFieldValue>
+            <valueName>Welt Color   (2C)</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Mondo(MD)</controllingFieldValue>
+            <controllingFieldValue>Craz(MG)</controllingFieldValue>
+            <controllingFieldValue>Mojo(ME)</controllingFieldValue>
+            <valueName>Upholstery Options  (2D)</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Mondo(MD)</controllingFieldValue>
+            <controllingFieldValue>Craz(MG)</controllingFieldValue>
+            <controllingFieldValue>Mojo(ME)</controllingFieldValue>
+            <valueName>Tower Accessories (3F)</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Mondo(MD)</controllingFieldValue>
+            <controllingFieldValue>Craz(MG)</controllingFieldValue>
+            <controllingFieldValue>Mojo(ME)</controllingFieldValue>
+            <valueName>Tower Canvas (Oz) (4A)</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Mondo(MD)</controllingFieldValue>
+            <controllingFieldValue>Craz(MG)</controllingFieldValue>
+            <controllingFieldValue>Mojo(ME)</controllingFieldValue>
+            <valueName>Prop Options  (5C)</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Mondo(MD)</controllingFieldValue>
+            <controllingFieldValue>Craz(MG)</controllingFieldValue>
+            <controllingFieldValue>Mojo(ME)</controllingFieldValue>
+            <valueName>Performance Package Options - MD,MG,ME (6D)</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>SC</controllingFieldValue>
+            <controllingFieldValue>SA</controllingFieldValue>
+            <controllingFieldValue>SG</controllingFieldValue>
+            <controllingFieldValue>SE</controllingFieldValue>
+            <controllingFieldValue>SER</controllingFieldValue>
+            <valueName>Package Options</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>SC</controllingFieldValue>
+            <controllingFieldValue>SA</controllingFieldValue>
+            <controllingFieldValue>SG</controllingFieldValue>
+            <controllingFieldValue>SE</controllingFieldValue>
+            <controllingFieldValue>SER</controllingFieldValue>
+            <valueName>Package and Trim Level Options (1A)</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>SC</controllingFieldValue>
+            <controllingFieldValue>SA</controllingFieldValue>
+            <controllingFieldValue>SG</controllingFieldValue>
+            <controllingFieldValue>SE</controllingFieldValue>
+            <controllingFieldValue>SER</controllingFieldValue>
+            <valueName>Engines (5A)</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>SC</controllingFieldValue>
+            <controllingFieldValue>SA</controllingFieldValue>
+            <controllingFieldValue>SG</controllingFieldValue>
+            <controllingFieldValue>SE</controllingFieldValue>
+            <controllingFieldValue>SER</controllingFieldValue>
+            <valueName>Engine Options (5B)</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>SC</controllingFieldValue>
+            <controllingFieldValue>SA</controllingFieldValue>
+            <controllingFieldValue>SG</controllingFieldValue>
+            <controllingFieldValue>SE</controllingFieldValue>
+            <controllingFieldValue>SER</controllingFieldValue>
+            <valueName>Gelcoat Options</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>SC</controllingFieldValue>
+            <controllingFieldValue>SA</controllingFieldValue>
+            <controllingFieldValue>SG</controllingFieldValue>
+            <controllingFieldValue>SE</controllingFieldValue>
+            <controllingFieldValue>SER</controllingFieldValue>
+            <valueName>Gelcoat Deck Color (1B)</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>SC</controllingFieldValue>
+            <controllingFieldValue>SA</controllingFieldValue>
+            <controllingFieldValue>SG</controllingFieldValue>
+            <controllingFieldValue>SE</controllingFieldValue>
+            <controllingFieldValue>SER</controllingFieldValue>
+            <valueName>Gelcoat Deck Forward Accent (1BB)</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>SC</controllingFieldValue>
+            <controllingFieldValue>SA</controllingFieldValue>
+            <controllingFieldValue>SG</controllingFieldValue>
+            <controllingFieldValue>SE</controllingFieldValue>
+            <controllingFieldValue>SER</controllingFieldValue>
+            <valueName>Gelcoat Upper Accent Color  (1C)</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>SC</controllingFieldValue>
+            <controllingFieldValue>SA</controllingFieldValue>
+            <controllingFieldValue>SG</controllingFieldValue>
+            <controllingFieldValue>SE</controllingFieldValue>
+            <controllingFieldValue>SER</controllingFieldValue>
+            <valueName>Gelcoat Main Panel Color (1D)</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>SC</controllingFieldValue>
+            <controllingFieldValue>SA</controllingFieldValue>
+            <controllingFieldValue>SG</controllingFieldValue>
+            <controllingFieldValue>SE</controllingFieldValue>
+            <controllingFieldValue>SER</controllingFieldValue>
+            <valueName>Gelcoat Hull Forward Accent (1DD)</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>SC</controllingFieldValue>
+            <controllingFieldValue>SA</controllingFieldValue>
+            <controllingFieldValue>SG</controllingFieldValue>
+            <controllingFieldValue>SE</controllingFieldValue>
+            <controllingFieldValue>SER</controllingFieldValue>
+            <valueName>Gelcoat Hull Middle Accent</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>SC</controllingFieldValue>
+            <controllingFieldValue>SA</controllingFieldValue>
+            <controllingFieldValue>SG</controllingFieldValue>
+            <controllingFieldValue>SE</controllingFieldValue>
+            <controllingFieldValue>SER</controllingFieldValue>
+            <valueName>Gelcoat Lower Accent Color (1E)</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>SC</controllingFieldValue>
+            <controllingFieldValue>SA</controllingFieldValue>
+            <controllingFieldValue>SG</controllingFieldValue>
+            <controllingFieldValue>SE</controllingFieldValue>
+            <controllingFieldValue>SER</controllingFieldValue>
+            <valueName>Gelcoat Hull Color (1F)</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>SC</controllingFieldValue>
+            <controllingFieldValue>SA</controllingFieldValue>
+            <controllingFieldValue>SG</controllingFieldValue>
+            <controllingFieldValue>SE</controllingFieldValue>
+            <controllingFieldValue>SER</controllingFieldValue>
+            <valueName>Graphic Name Options (for Worlds, do not choose)</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>SC</controllingFieldValue>
+            <controllingFieldValue>SA</controllingFieldValue>
+            <controllingFieldValue>SG</controllingFieldValue>
+            <controllingFieldValue>SE</controllingFieldValue>
+            <controllingFieldValue>SER</controllingFieldValue>
+            <valueName>Graphic Background Options &amp; Other Graphic Options</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>SC</controllingFieldValue>
+            <controllingFieldValue>SA</controllingFieldValue>
+            <controllingFieldValue>SG</controllingFieldValue>
+            <controllingFieldValue>SE</controllingFieldValue>
+            <controllingFieldValue>SER</controllingFieldValue>
+            <valueName>Upholstery Color Selections</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>SC</controllingFieldValue>
+            <controllingFieldValue>SA</controllingFieldValue>
+            <controllingFieldValue>SG</controllingFieldValue>
+            <controllingFieldValue>SE</controllingFieldValue>
+            <controllingFieldValue>SER</controllingFieldValue>
+            <valueName>Vinyl Base Color (2A)</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>SC</controllingFieldValue>
+            <controllingFieldValue>SA</controllingFieldValue>
+            <controllingFieldValue>SG</controllingFieldValue>
+            <controllingFieldValue>SE</controllingFieldValue>
+            <controllingFieldValue>SER</controllingFieldValue>
+            <valueName>Vinyl Main Color (2B)</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>SC</controllingFieldValue>
+            <controllingFieldValue>SA</controllingFieldValue>
+            <controllingFieldValue>SG</controllingFieldValue>
+            <controllingFieldValue>SE</controllingFieldValue>
+            <controllingFieldValue>SER</controllingFieldValue>
+            <valueName>Vinyl Back Color (2C)</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>SC</controllingFieldValue>
+            <controllingFieldValue>SA</controllingFieldValue>
+            <controllingFieldValue>SG</controllingFieldValue>
+            <controllingFieldValue>SE</controllingFieldValue>
+            <controllingFieldValue>SER</controllingFieldValue>
+            <valueName>Vinyl Accent Color (2D)</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>SC</controllingFieldValue>
+            <controllingFieldValue>SA</controllingFieldValue>
+            <controllingFieldValue>SG</controllingFieldValue>
+            <controllingFieldValue>SE</controllingFieldValue>
+            <controllingFieldValue>SER</controllingFieldValue>
+            <valueName>Welt Color (2E)</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>SC</controllingFieldValue>
+            <controllingFieldValue>SA</controllingFieldValue>
+            <controllingFieldValue>SG</controllingFieldValue>
+            <controllingFieldValue>SE</controllingFieldValue>
+            <controllingFieldValue>SER</controllingFieldValue>
+            <valueName>Insert Panel Accent Color (2F) (2 Tone)</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>SC</controllingFieldValue>
+            <controllingFieldValue>SA</controllingFieldValue>
+            <controllingFieldValue>SG</controllingFieldValue>
+            <controllingFieldValue>SE</controllingFieldValue>
+            <controllingFieldValue>SER</controllingFieldValue>
+            <valueName>Carpet Base Color Options (2G) - Must Select 1</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>SC</controllingFieldValue>
+            <controllingFieldValue>SA</controllingFieldValue>
+            <controllingFieldValue>SG</controllingFieldValue>
+            <controllingFieldValue>SE</controllingFieldValue>
+            <controllingFieldValue>SER</controllingFieldValue>
+            <valueName>Carpet Snap-In Options (2G) - Must Select 1</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>SC</controllingFieldValue>
+            <controllingFieldValue>SA</controllingFieldValue>
+            <controllingFieldValue>SG</controllingFieldValue>
+            <controllingFieldValue>SE</controllingFieldValue>
+            <controllingFieldValue>SER</controllingFieldValue>
+            <valueName>Appearance Options</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>SC</controllingFieldValue>
+            <controllingFieldValue>SA</controllingFieldValue>
+            <controllingFieldValue>SG</controllingFieldValue>
+            <controllingFieldValue>SE</controllingFieldValue>
+            <controllingFieldValue>SER</controllingFieldValue>
+            <valueName>Tower Main Color Options (3E)</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>SC</controllingFieldValue>
+            <controllingFieldValue>SA</controllingFieldValue>
+            <controllingFieldValue>SG</controllingFieldValue>
+            <controllingFieldValue>SE</controllingFieldValue>
+            <controllingFieldValue>SER</controllingFieldValue>
+            <valueName>Tower Contrast Color Options (3F)</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>SC</controllingFieldValue>
+            <controllingFieldValue>SA</controllingFieldValue>
+            <controllingFieldValue>SG</controllingFieldValue>
+            <controllingFieldValue>SE</controllingFieldValue>
+            <controllingFieldValue>SER</controllingFieldValue>
+            <valueName>Canvas Options</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>SC</controllingFieldValue>
+            <controllingFieldValue>SA</controllingFieldValue>
+            <controllingFieldValue>SG</controllingFieldValue>
+            <controllingFieldValue>SE</controllingFieldValue>
+            <controllingFieldValue>SER</controllingFieldValue>
+            <valueName>Canvas Options (4A)</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>SC</controllingFieldValue>
+            <controllingFieldValue>SA</controllingFieldValue>
+            <controllingFieldValue>SG</controllingFieldValue>
+            <controllingFieldValue>SE</controllingFieldValue>
+            <controllingFieldValue>SER</controllingFieldValue>
+            <valueName>Performance Options</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>SC</controllingFieldValue>
+            <controllingFieldValue>SA</controllingFieldValue>
+            <controllingFieldValue>SG</controllingFieldValue>
+            <controllingFieldValue>SE</controllingFieldValue>
+            <controllingFieldValue>SER</controllingFieldValue>
+            <valueName>Prop Options (5C)</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>SC</controllingFieldValue>
+            <controllingFieldValue>SA</controllingFieldValue>
+            <controllingFieldValue>SG</controllingFieldValue>
+            <controllingFieldValue>SE</controllingFieldValue>
+            <controllingFieldValue>SER</controllingFieldValue>
+            <valueName>Wake Enhancement Options (6C)</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>SC</controllingFieldValue>
+            <controllingFieldValue>SA</controllingFieldValue>
+            <controllingFieldValue>SG</controllingFieldValue>
+            <controllingFieldValue>SE</controllingFieldValue>
+            <controllingFieldValue>SER</controllingFieldValue>
+            <valueName>Audio and Video Options</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>SC</controllingFieldValue>
+            <controllingFieldValue>SA</controllingFieldValue>
+            <controllingFieldValue>SG</controllingFieldValue>
+            <controllingFieldValue>SE</controllingFieldValue>
+            <controllingFieldValue>SER</controllingFieldValue>
+            <valueName>Audio and Video Options (7A)</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>SC</controllingFieldValue>
+            <controllingFieldValue>SA</controllingFieldValue>
+            <controllingFieldValue>SG</controllingFieldValue>
+            <controllingFieldValue>SE</controllingFieldValue>
+            <controllingFieldValue>SER</controllingFieldValue>
+            <valueName>Trailer Options.</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>SC</controllingFieldValue>
+            <controllingFieldValue>SA</controllingFieldValue>
+            <controllingFieldValue>SG</controllingFieldValue>
+            <controllingFieldValue>SE</controllingFieldValue>
+            <controllingFieldValue>SER</controllingFieldValue>
+            <valueName>Base Trailer (9A)</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>SC</controllingFieldValue>
+            <controllingFieldValue>SA</controllingFieldValue>
+            <controllingFieldValue>SG</controllingFieldValue>
+            <controllingFieldValue>SE</controllingFieldValue>
+            <controllingFieldValue>SER</controllingFieldValue>
+            <valueName>Trailer Pinstrip Color (9C)</valueName>
+        </valueSettings>
+    </valueSet>
+</CustomField>

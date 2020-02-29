@@ -1,0 +1,191 @@
+<aura:component implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,lightning:actionOverride,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction" access="global"  controller="InvoiceLightningController">
+    <aura:attribute name="Section" type="boolean" default="false" access="global"/>
+    <aura:attribute name="objCon" type="Contact" default="{'sobjectType': 'Contact'}" access="global"/>  
+    <aura:attribute name="showSpinner" type="boolean" default="false" access="global"/>
+    <aura:attribute name="searchResults" type="Object[]" access="global"/>
+    <aura:attribute name="ItemPopTotal" type="Double" default="0.00" access="global"/>
+    <aura:attribute name="items" type="Object[]" access="global"/>
+    <aura:attribute name="lineItemPopTotal" type="Double" default="0.00" access="global"/>
+    <aura:attribute name="recordId" type="String"/>
+    <aura:attribute name="InvRecordTypeId" type="String" access="global" /> 
+    <aura:attribute name="salesTaxConfig" type="object" access="global"/>
+    <aura:attribute name="showform" type="boolean" default="false" access="global"/>
+    <aura:attribute name="showlist" type="boolean" default="true" access="global"/>
+    <aura:attribute name="showTotal" type="boolean" default="false" access="global"/>
+    <aura:attribute name="invTotal" type="decimal" default="0.00" access="global"/>
+    <aura:attribute name="showPartTotal" type="boolean"  access="global"/>
+    <aura:attribute name="salesTaxAmount" type="decimal" default="0.00" access="global"/>
+    <aura:attribute name="shipingcharge" type="decimal" default="0.00" access="global"/>
+    <aura:attribute name="Spinner" type="boolean" default="false" access="global"/>
+    <aura:attribute name="invoiceTotalWithoutTax" type="decimal" default="0.00" access="global"/>
+    <aura:handler name="change" value="{!v.invTotal}" action="{!c.calculateGrandTotal}" />
+    <aura:attribute name="invoiceGrandTotal" type="decimal" default="0.00" access="global"/>
+    <!--<aura:handler event="aura:waiting" action="{!c.showSpinner}"/>
+    <aura:handler event="aura:doneWaiting" action="{!c.hideSpinner}"/> -->
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    <aura:handler event="c:CalculateInvoice" action="{!c.calculateInvoiceTotal}"/>
+    <aura:if isTrue="{!v.Spinner}">
+        <div aura:id="spinnerId" class="slds-spinner_container">
+            <div class="slds-spinner--brand  slds-spinner slds-spinner--large slds-is-relative" role="alert">
+                <span class="slds-assistive-text">Loading</span>
+                <div class="slds-spinner__dot-a"></div>
+                <div class="slds-spinner__dot-b"></div>
+            </div>
+        </div>
+    </aura:if>
+    <lightning:recordEditForm aura:id="InvoID"  recordTypeId="{!v.InvRecordTypeId}" recordId="{!v.recordId}"  onsuccess="{!c.handleSuccess}" onload="{!c.calculateGrandTotal}"  objectApiName="BOATBUILDING__Invoice__c" >
+   <!-- <div class="slds-grid slds-gutters slds-wrap slds-box slds-theme_default">-->
+    <div class="slds-col slds-size--1-of-1 slds-p-bottom_medium slds-p-top_x-large">
+        <div class="slds-grid slds-wrap" >
+            <aura:if isTrue="{!and(v.recordId != '', v.recordId != null)}">
+            <div class="slds-col slds-size--1-of-1 slds-medium-size--2-of-6 slds-col--padded">
+                <div class="slds-form-element">
+                    <div class="slds-form-element__control">
+                        <lightning:inputField fieldName="BOATBUILDING__Invoice_Number__c" disabled="true"/>
+                    </div>
+                </div>
+            </div>
+            </aura:if> 
+            <aura:if isTrue="{!and(v.recordId != '', v.recordId != null)}">
+            <div class="slds-col slds-size--1-of-1 slds-medium-size--2-of-6 slds-col--padded">
+                <div class="slds-form-element">
+                    <div class="slds-form-element__control">
+                        <lightning:inputField fieldName="Name" disabled="true" />
+                    </div>
+                </div>
+            </div>  
+        </aura:if>    
+            <div class="slds-col slds-size--1-of-1 slds-medium-size--2-of-6 slds-col--padded">
+                <div class="slds-form-element">
+                    <div class="slds-form-element__control">
+                        <lightning:inputField fieldName="BOATBUILDING__Related_to_Contact__c" aura:id="relConId"  />
+                    </div>
+                </div>
+            </div>
+            <div class="slds-col slds-size--1-of-1 slds-medium-size--2-of-6 slds-col--padded">
+                <div class="slds-form-element">
+                    <div class="slds-form-element__control">
+                        <lightning:inputField fieldName="BOATBUILDING__Sold_By_Ref__c" aura:id="soldById" required = "true" />
+                    </div>
+                </div>
+            </div>
+            <div class="slds-col slds-size--1-of-1 slds-medium-size--2-of-6 slds-col--padded">
+                <div class="slds-form-element">
+                    <div class="slds-form-element__control">
+                        <lightning:inputField fieldName="BOATBUILDING__Promo_Code__c"  />
+                    </div>
+                </div>
+            </div>
+            <div class="slds-col slds-size--1-of-1 slds-medium-size--2-of-6 slds-col--padded">
+                <div class="slds-form-element">
+                    <div class="slds-form-element__control">
+                        <lightning:inputField fieldName="BOATBUILDING__Billing_State_Province__c" aura:id="billingState" onchange="{!c.calculateInvoiceTotal}" />
+                    </div>
+                </div>
+            </div>
+            <div class="slds-col slds-size--1-of-1 slds-medium-size--2-of-6 slds-col--padded">
+                <div class="slds-form-element">
+                    <div class="slds-form-element__control">
+                        <lightning:inputField fieldName="BOATBUILDING__Store_Location__c" aura:id="storeLocId"  required="true"/>
+                    </div>
+                </div>
+            </div>        
+
+            <div class="slds-col slds-size--1-of-1 slds-medium-size--2-of-6 slds-col--padded">
+                <div class="slds-form-element">
+                    <div class="slds-form-element__control">
+                        <lightning:inputField fieldName="BOATBUILDING__Shipping_Charge__c" aura:id="shippingCharge"  onchange="{!c.calculateGrandTotal}"/>                
+                    </div>
+                </div>
+            </div> 
+            <div class="slds-col slds-size--1-of-1 slds-medium-size--2-of-6 slds-col--padded">
+                <div class="slds-form-element">
+                    <div class="slds-form-element__control">
+                        <lightning:inputField fieldName="BOATBUILDING__Invoice_Status__c" aura:id="status" />                
+                    </div>
+                </div>
+            </div> 
+            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-1 slds-col--padded">
+                <div class="slds-form-element">
+                    <div class="slds-form-element__control">
+                        <span style="float: right;">
+                            <lightning:button variant="base"  label="Add Parts" title="Add Parts"  iconName="action:add_relationship" iconPosition="right" onclick="{!c.addParts}"/>
+                        </span>
+                    </div> 
+                </div> 
+            </div>
+            <aura:iteration items="{!v.items}" var="obj" indexVar="i">
+            <c:PartSearchingForInvoice  objInv="{!obj}" showPill="{!obj.showPill}"/>
+            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-7 slds-col--padded"> 
+                <div class="slds-form-element"> 
+                    <label class="slds-form-element__label">&nbsp;</label>
+                    <div class="slds-form-element__control">
+                        <a data-index="{!i}" data-value="{!obj.Id}" onclick="{!c.handleRemoveLineItem}" >
+                            <lightning:icon iconName="action:delete" alternativeText="Delete" size="xx-small" />
+                        </a>  
+                    </div> 
+                </div>
+            </div>
+            </aura:iteration> 
+            
+        </div>
+        
+    </div>
+    <aura:if isTrue="{!v.items.length > 0}">
+            <div class=" slds-border_top">
+                <div class="slds-grid slds-grid--vertical-align-center slds-grid--align-center">
+             <div class = "slds-col--padded">
+                <div class = "slds-form-element">
+                    <div class = "slds-form-element__control">
+                        
+                            <lightning:input aura:id="SalesTaxId" type="number" name="input7" label="Parts Total" value="{!v.invTotal}"  step="0.01" formatter="currency" disabled="true"/>
+                      
+                    </div> 
+                </div> 
+            </div>
+            
+            <div class = "slds-col--padded">
+                <div class = "slds-form-element">
+                    <div class = "slds-form-element__control">
+                        
+                            <lightning:input aura:id="SalesTaxId" type="number" name="input7" label="Salse Tax" value="{!v.salesTaxAmount}"  step="0.01" formatter="currency" disabled="true"/>
+                       
+                    </div> 
+                </div> 
+            </div>
+             <div class = "slds-col--padded">
+                <div class = "slds-form-element">
+                    <div class = "slds-form-element__control">
+                       
+                            <lightning:input  type="number" name="input7" fieldLevelHelp="Part's Total + Sales Tax + Shpping Charge" label="Grand Total" value="{!v.invoiceGrandTotal}" formatter="currency" step="0.01" disabled="true"/>
+                        
+                    </div> 
+                </div> 
+            </div>
+        </div>
+                </div>
+        </aura:if>
+   <!-- </div>-->
+         <div class="slds-grid slds-grid--vertical-align-center slds-grid--align-center">
+            <div class = "slds-col--padded">
+                <div class = "slds-form-element">
+                    <div class = "slds-form-element__control">
+                        <aura:if isTrue="{!and(v.recordId != '', v.recordId != null)}">
+                            <lightning:button  iconName="utility:save" type = "submit" label="Update Invoice" class = "slds-m-top_medium"/>
+                            <aura:set attribute="else">
+                                <lightning:button iconName="utility:save" type = "submit"  label="Create Invoice" class = "slds-m-top_medium"/>
+                            </aura:set>
+                        </aura:if>
+                    </div>
+                </div>
+            </div>
+            <div class = "slds-col--padded">
+                <div class = "slds-form-element">
+                    <div class = "slds-form-element__control">
+                        <lightning:button onclick="{!c.backToList}" label="Back To List" iconName="utility:back" class = "slds-m-top_medium"/>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </lightning:recordEditForm>
+</aura:component>

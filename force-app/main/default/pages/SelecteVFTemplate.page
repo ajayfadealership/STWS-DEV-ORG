@@ -1,0 +1,15 @@
+<apex:page controller="VfTemplateContrl">
+   <apex:form >
+   
+   <h1><apex:outputLabel value="Select Template: "></apex:outputLabel></h1><br/>
+    <!--<apex:selectList size="1" value="{!selectedTemplate}"> 
+        <apex:selectOptions value="{!selectTemplate}"/>  
+    </apex:selectList>
+    <apex:commandButton value="Continue" action="{!ContinueAfterSelection}"/><br/>-->
+    <h1>Template-1</h1><a href="/apex/BOATBUILDING__WindowSticker?invId={!listInventory[0].id}" target="_blank"> <apex:image url="{!URLFOR($Resource.Template1)}"  width="300" height="300"/> </a>
+    <!--<h1>Template-2</h1><a href="/apex/BOATBUILDING__VfTemplateTwo?invId={!listInventory[0].id}" target="_blank"><apex:image url="{!URLFOR($Resource.Template2)}"  width="300" height="300"/> </a><br/>
+    <h1>Template-3</h1><a href="/apex/BOATBUILDING__VfTemplateThree?invId={!listInventory[0].id}" target="_blank"><apex:image url="{!URLFOR($Resource.Template3)}"  width="300" height="300"/> </a>-->
+
+
+   </apex:form>
+</apex:page>

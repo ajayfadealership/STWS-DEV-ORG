@@ -1,0 +1,96 @@
+<aura:component controller="InvoiceLightningController" implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes" access="global">
+<aura:attribute name="selectedRecord" type="Object" access="global"/>
+<aura:attribute name="JLI" type="Object" access="global"/>
+<aura:attribute name="searchResults" type="Object[]" access="global"/>
+<aura:attribute name="dis" type="boolean" default="True" access="global"/>
+<aura:attribute name="showPill" type="boolean" default="false" access="global"/>
+<aura:attribute name="lineItemTotal" type="double" access="global"/> 
+<aura:attribute name="ItemTotal" type="double" access="global"/> 
+<aura:attribute name="discount" type="double" access="global"/> 
+<aura:attribute name="objInv" type="Object" access="global"/>
+<aura:attribute name="isSearchLoading" type="Boolean" default="false" access="global" />
+<aura:registerEvent name="CalculateInvoice" type="c:CalculateInvoice"/>
+<aura:handler name="change" value="{!v.objInv.Total}" action="{!c.fireInvoiceTotalEvent}"/>
+<div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-7 slds-col--padded">
+    <div class="slds-form-element"> 
+        <aura:if isTrue="{!!v.showPill}">
+            <div class="slds-form-element__control">
+                <lightning:input aura:id="enter-search" 
+                label="Search parts"
+                name="enter-search" 
+                type="search"
+                isLoading="{!v.isSearchLoading}"
+                onfocus="{!c.handlonfocus}"  
+                onchange="{!c.handleKeyUp}"/>
+                <aura:iteration items="{!v.searchResults}" var="item" indexVar="i">
+                    
+                    <li role="presentation" class="slds-listbox__item" data-value="{!item.partId}" data-label="{!item.partName+'---'+item.partNumber}" data-selectedIndex="{#i}" 
+                    onclick="{!c.itemSelected}">
+                        <span id="{#'listbox-option-unique-id-'+i+1}"  
+                              class="slds-media slds-listbox__option slds-listbox__option_entity 
+                                     slds-listbox__option_has-meta" 
+                              role="option">
+                            <span class="slds-media__figure optionIcon">
+                                <span class="slds-icon_container" >
+                                    <lightning:icon iconName="standard:work_order_item" size="xx-small"/>
+                                </span>
+                            </span>
+                            <span class="slds-media__body singleRow">
+                                <span 
+                                      class="optionTitle slds-listbox__option-text 
+                                    slds-listbox__option-text_entity" style="overflow:visible;">{!item.partName+'--'+item.partNumber}</span>
+                            </span>
+                        </span>
+                    </li>
+                </aura:iteration>
+            </div> 
+        </aura:if>
+        <aura:if isTrue="{!v.showPill}">
+            <label class="slds-form-element__label">Part Number</label>
+            <div class="slds-form-element__control">
+                <lightning:pill label="{!v.objInv.PartNumber}" title="{!v.objInv.PartNumber}" onremove="{!c.removePart}">
+                    <aura:set attribute="media">
+                        <lightning:icon iconName="standard:account"  alternativeText="Part"/>
+                    </aura:set>
+                </lightning:pill>
+            </div> 
+        </aura:if>
+    </div>  
+</div>
+<div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-7 slds-col--padded">
+    <div class="slds-form-element">
+        <div class="slds-form-element__control">
+            <lightning:input label="Quantity" type="number" messageWhenRangeUnderflow="Quantity should be greater than 0!" step="1" value="{!v.objInv.Quantity}" onchange="{!c.updateTotal}"/> 
+        </div> 
+    </div>
+</div>
+
+<div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-7 slds-col--padded">
+    <div class="slds-form-element">
+        <div class="slds-form-element__control">
+            <lightning:input label="Price" type="number" formatter="currency" value="{!v.objInv.partMSRP}" disabled="true"/> 
+        </div> 
+    </div>
+</div>
+<div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-7 slds-col--padded">
+    <div class="slds-form-element">
+        <div class="slds-form-element__control">
+            <lightning:input label="Discount(%)" type="currency" min="0.00"  value="{!v.objInv.discountPer}" onkeyup="{!c.discountCalculation}" /> 
+        </div> 
+    </div>
+</div> 
+<div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-7 slds-col--padded">
+    <div class="slds-form-element">
+        <div class="slds-form-element__control">
+            <lightning:input label="Discount($)" aura:id="disdollar" type="currency" min="0.00"  value="{!v.objInv.discount}" onkeyup="{!c.disCalculationInDollar}" /> 
+        </div> 
+    </div>
+</div>
+<div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-7 slds-col--padded">
+    <div class="slds-form-element">
+        <div class="slds-form-element__control">
+            <lightning:input label=" Grand Total" type="number" formatter="currency" value="{!v.objInv.Total}" disabled="true"/> 
+        </div> 
+    </div>
+</div>
+</aura:component>

@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Lending_Bank__c</fullName>
+    <deprecated>false</deprecated>
+    <externalId>false</externalId>
+    <label>Lending Bank</label>
+    <required>false</required>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Bank of the West</fullName>
+                <default>false</default>
+                <label>Bank of the West</label>
+            </value>
+            <value>
+                <fullName>Huntington Bank</fullName>
+                <default>false</default>
+                <label>Huntington Bank</label>
+            </value>
+            <value>
+                <fullName>US Bank</fullName>
+                <default>false</default>
+                <label>US Bank</label>
+            </value>
+            <value>
+                <fullName>Aqua Finance</fullName>
+                <default>false</default>
+                <label>Aqua Finance</label>
+            </value>
+            <value>
+                <fullName>South State Bank</fullName>
+                <default>false</default>
+                <label>South State Bank</label>
+            </value>
+            <value>
+                <fullName>USAA</fullName>
+                <default>false</default>
+                <label>USAA</label>
+            </value>
+            <value>
+                <fullName>State Farm</fullName>
+                <default>false</default>
+                <label>State Farm</label>
+            </value>
+            <value>
+                <fullName>Marathon Bank</fullName>
+                <default>false</default>
+                <label>Marathon Bank</label>
+            </value>
+            <value>
+                <fullName>Medalion Bank</fullName>
+                <default>false</default>
+                <label>Medalion Bank</label>
+            </value>
+            <value>
+                <fullName>Merrick Bank</fullName>
+                <default>false</default>
+                <label>Merrick Bank</label>
+            </value>
+            <value>
+                <fullName>BB&amp;T</fullName>
+                <default>false</default>
+                <label>BB&amp;T</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

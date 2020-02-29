@@ -1,0 +1,13 @@
+<aura:component implements="force:appHostable,flexipage:availableForAllPageTypes" access="global" >
+    <aura:attribute name="showform" type="boolean" default="false" access="global"/>
+    <aura:attribute name="showlist" type="boolean" default="true" access="global"/>
+    <aura:attribute name="tabName" type="String" default="one" access="global"/>
+    <aura:attribute name="subTabName" type="String" default="workRequest" access="global"/>
+	 <lightning:tabset selectedTabId="two" variant="scoped">
+        <lightning:tab label="Part" id="two">
+            <c:PartTabSection/>
+        </lightning:tab>
+        
+    </lightning:tabset>
+        
+</aura:component>

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Boat_Model__c</fullName>
+    <deprecated>false</deprecated>
+    <description>Specifies the model of the boat</description>
+    <externalId>false</externalId>
+    <inlineHelpText>Please specify your Boat Model</inlineHelpText>
+    <label>Boat Model</label>
+    <length>255</length>
+    <required>false</required>
+    <trackFeedHistory>false</trackFeedHistory>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Text</type>
+    <unique>false</unique>
+</CustomField>

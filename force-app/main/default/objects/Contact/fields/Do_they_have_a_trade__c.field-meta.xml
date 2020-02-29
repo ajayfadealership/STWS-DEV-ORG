@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Do_they_have_a_trade__c</fullName>
+    <deprecated>false</deprecated>
+    <externalId>false</externalId>
+    <label>PC Trade Details</label>
+    <required>false</required>
+    <trackFeedHistory>false</trackFeedHistory>
+    <type>Picklist</type>
+    <valueSet>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Trade  Make</fullName>
+                <default>false</default>
+                <label>Trade  Make</label>
+            </value>
+            <value>
+                <fullName>Trade  Model</fullName>
+                <default>false</default>
+                <label>Trade  Model</label>
+            </value>
+            <value>
+                <fullName>Trade  Year</fullName>
+                <default>false</default>
+                <label>Trade  Year</label>
+            </value>
+            <value>
+                <fullName>Trade   length</fullName>
+                <default>false</default>
+                <label>Trade   length</label>
+            </value>
+            <value>
+                <fullName>Do they have a loan on the trade</fullName>
+                <default>false</default>
+                <label>Do they have a loan on the trade</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<WebLink xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Push_To_Shopify</fullName>
+    <availability>online</availability>
+    <displayType>button</displayType>
+    <linkType>javascript</linkType>
+    <masterLabel>Push To Shopify</masterLabel>
+    <openType>onClickJavaScript</openType>
+    <protected>false</protected>
+    <url>{!REQUIRESCRIPT(&quot;/soap/ajax/30.0/connection.js&quot;)}
+{!REQUIRESCRIPT(&quot;/soap/ajax/30.0/apex.js&quot;)}
+var res = sforce.apex.execute(&quot;BOATBUILDING.Shopify_Connect&quot;,&quot;savePartsToShopify&quot;,{strPartId:&quot;{!Part__c.Id}&quot;});
+console.log(res);
+if(res == &#39;SUCCESS&#39;) {
+  alert(&#39;Product has been pushed to shopify successfully.&#39;);
+  location.reload();
+} else {
+  alert(res);
+}</url>
+</WebLink>

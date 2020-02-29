@@ -1,0 +1,24 @@
+<aura:component implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction,lightning:isUrlAddressable" access="global" >
+     <!--declare handler for render the JS method for Progress bar-->
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+     <!--declare attributes for progress bar value-->
+    <aura:attribute name="progress" type="Integer" default="0"/>
+    <div class="slds-m-around_xx-large">
+        <!--Lightning Progress Bar-->
+       
+    </div>  
+    <div>
+      <div class="slds-grid slds-grid_align-spread slds-p-bottom_x-small" id="progress-bar-label-id-1">
+        
+        <span aria-hidden="true">
+          <strong>{!v.progress}% Complete</strong>
+        </span>
+      </div>
+      <div class="slds-progress-bar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="25" aria-labelledby="progress-bar-label-id-1" role="progressbar">
+        
+             <lightning:progressBar value="{!v.progress}" size="large" variant="base"/>
+          <span class="slds-assistive-text">Progress: 25%</span>
+        
+      </div>
+    </div>
+</aura:component>

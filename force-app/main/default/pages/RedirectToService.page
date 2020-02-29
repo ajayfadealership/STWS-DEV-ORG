@@ -1,0 +1,23 @@
+<apex:page standardController="Work_Order__c" extensions="RedirectToServiceController" sidebar="false" showHeader="false">
+    <apex:form title="Redirecting...">
+    <b><h1>Please wait...</h1></b>  
+    <apex:actionFunction name="redirectTo" action="{!redirectToService}"/>
+    <apex:actionFunction name="redirectToL" action="{!inLightning}"/>
+    <script>
+        onload = function() {
+            	//console.log("{!$User.UIThemeDisplayed}");
+            	redirectTo();
+            	
+            	/*
+            	if("{!$User.UIThemeDisplayed}" == "Theme3") {
+            		redirectTo();
+            	} else {
+            		redirectToL();
+            	} 
+            	*/
+             	 
+        }
+        
+    </script>
+    </apex:form>
+</apex:page>

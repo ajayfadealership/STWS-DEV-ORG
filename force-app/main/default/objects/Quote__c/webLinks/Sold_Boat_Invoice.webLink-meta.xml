@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<WebLink xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Sold_Boat_Invoice</fullName>
+    <availability>online</availability>
+    <displayType>button</displayType>
+    <linkType>page</linkType>
+    <masterLabel>Sold Boat Invoice</masterLabel>
+    <openType>replace</openType>
+    <page>Sold_Boat_Invoice</page>
+    <protected>false</protected>
+</WebLink>

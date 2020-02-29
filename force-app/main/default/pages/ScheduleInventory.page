@@ -1,0 +1,241 @@
+<apex:page showHeader="false" sidebar="false" controller="ScheduleInventoryController" id="pge">
+    <html>
+        <apex:stylesheet value="{!URLFOR($Resource.BoatBuilderSR, 'assets/styles/salesforce-lightning-design-system.min.css')}" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"/>
+        <apex:includeScript value="{!URLFOR($Resource.Signature, 'jquery.min.js')}"/> 
+        <title>Schedule Event</title>
+        <style>
+            .lookupInput a.slds-input {
+                width: 28px;
+                margin: 0;
+                display: inline-block;
+                background: url('/resource/BOATBUILDING__BoatBuilderSR/assets/icons/utility/search_60.png');
+                background-size: contain;
+                background-repeat: no-repeat;
+                border: none;
+                margin-left: 5px;
+            }
+        </style>
+        <body>
+            <apex:form id="frm">
+                <div class="slds-grid slds-wrap slds-col--padded " style="margin-top: 2%; border-top: solid 1px #ccc!important;">
+                    <div class="slds-col--padded slds-col slds-size--1-of-1 Customer-Heading">
+                        <h2 class="heading"><br/>
+                            <span class="slds-text-heading--small"><b>New Event</b></span>
+                        </h2>
+                    </div>
+                </div> 
+                <hr/>
+                <div>  
+                    <table style="width: 92%;">
+                        <tr>
+                            <td style="text-align: center; padding: 15px;">
+                                    <b>Event Type</b><span style="color: red;">*</span>
+                            </td>
+                            <td style="text-align: center; padding: 15px;">
+                                    <apex:inputField value="{!objTM.Type__c}" onchange="checktestDrive(this);" styleClass="slds-select" id="eventType"/>
+                            </td>
+                            <td style="text-align: center; padding: 15px;">
+                                    <b>Customer</b><span style="color: red;">*</span>
+                            </td>
+                            <td style="text-align: center; padding: 15px;">
+                                    <apex:inputField value="{!objTM.Contact__c}" styleClass="slds-input" id="customer"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="text-align: center; padding: 15px;" id="tecname">
+                                    <b>Technician</b>
+                            </td>
+                            <td style="text-align: center; padding: 15px;">
+                                    <span id="tec">
+                                        <apex:inputField value="{!objTM.Technician__c}" styleClass="slds-input" id="technician"/>
+                                    </span>
+                            </td> 
+                            <td style="text-align: center; padding: 15px;" id="InvText">
+                                    <b>Inventory</b><span style="color: red;">*</span>
+                            </td>
+                            <td style="text-align: center; padding: 15px;">
+                                    <span id="qtId">
+                                        <apex:inputField value="{!objTM.Inventory__c}" styleClass="slds-input" id="inventory"/>
+                                    </span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="text-align: center; padding: 15px;">
+                                <b>Start Date</b><span style="color: red;">*</span>
+                            </td >
+                            <td style="text-align: center; padding: 15px;">
+                                <input type="datetime-local" class="slds-input" id="swsd"/>
+                            </td>
+                            <td style="text-align: center; padding: 15px;">
+                                <b>End Date</b><span style="color: red;">*</span>
+                            </td>
+                            <td style="text-align: center; padding: 15px;">
+                                <input type="datetime-local" class="slds-input" id="swed"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td rowspan="3" colspan="1" style="text-align: center; padding: 15px;"><b>Description</b></td>
+                            <td rowspan="3" colspan="3" style="text-align: center; padding: 15px;"><textarea value="" id="swta" style="resize: none;" rows="3" cols="50" class="slds-input"></textarea></td>
+                        </tr>
+                    </table>
+                </div>
+                <hr/>
+                <div>
+                    <input type="button" style="position: relative; left: 47%;" value="Save" id="svEvnt" class="slds-button slds-button--brand" />
+                    <input type="button" style="position: relative; left: 47%;" value="Cancel" id="cnEvnt" class="slds-button slds-button--brand" />
+                </div>
+            </apex:form>
+            <script>
+            
+            		
+                var objType = "";
+                $(document).ready(function() {
+                    var windowURL = String(window.top.location); 
+                    
+                    if(windowURL.indexOf("type=") !== -1) {
+                        if(windowURL.indexOf("inventory") !== -1) {
+                            var inId = "{!$CurrentPage.parameters.invId}";
+                            objType = "INVENTORY";
+                            document.getElementById("pge:frm:technician").value = "{!CurrentUserName}";
+			            		document.getElementById("pge:frm:technician_lkid").value = "{!CurrentUserId}";
+			            		document.getElementById("pge:frm:technician_lkold").value = "{!CurrentUserName}";
+                           //BOATBUILDING.ScheduleInventoryController.getInventory(inId, function(result, event) {
+                               //if(event.status) {
+                                   //if(result != null) {
+                                       //document.getElementById("pge:frm:inventory_lkid").value = result.Id;
+                                       //document.getElementById("pge:frm:inventory").value = result.Name;
+                                   //}
+                               //}
+                           //}); 
+                        } else if(windowURL.indexOf("quote") !== -1) {
+                            var qId = "{!$CurrentPage.parameters.quoteId}";
+                            objType = "QUOTE"; 
+                            $("#InvText").html("&nbsp;");
+                            $("#qtId").hide(); 
+                        }
+                    }
+                    //if(history.replaceState) {
+                      //  history.replaceState({}, "", "/apex/ServicePage");
+                    //}
+                });
+                
+                $("#cnEvnt").click(function() {
+             		if('{!$CurrentPage.parameters.quoteId}' != null && '{!$CurrentPage.parameters.quoteId}' != "") {
+                      	window.location = '/'+'{!$CurrentPage.parameters.quoteId}';  
+                     } else if('{!$CurrentPage.parameters.invId}' != null && '{!$CurrentPage.parameters.invId}' != "") {
+                     	window.location = '/'+'{!$CurrentPage.parameters.invId}';
+                     }
+                     
+                });
+                
+                function checktestDrive(obj) {
+                    if(document.getElementById("pge:frm:eventType").value == 'Test Drive') {
+                        $("#tec").hide();
+                        $("#tecname").html("&nbsp;");
+                    } else {
+                        $("#tec").show();
+                        $("#tecname").html("<b>Technician</b>");
+                    }
+                }
+                
+                 $("input#svEvnt").click(function() {
+                    var erroStatus = false;
+                    var EventDetails = new Object();
+                    console.log("Event Saving...");
+                    EventDetails["EventObject"] = objType;
+                    if(document.getElementById("pge:frm:eventType").value != null 
+                        && document.getElementById("pge:frm:eventType").value != "") {
+                        EventDetails["EventType"] = document.getElementById("pge:frm:eventType").value;
+                    } else {
+                        erroStatus = true;
+                        alert("Please select Event Type.\nThank you!!");
+                        return false;
+                    }
+                    
+                    
+                    var customerId = document.getElementById("pge:frm:customer_lkid").value; 
+                    var customerName = document.getElementById("pge:frm:customer").value; 
+                    if(customerName != null && customerName != "" && customerId != "000000000000000"  ) {
+                        EventDetails["CustomerId"] = customerId;
+                    } else {
+                        erroStatus = true;
+                        alert("Please select The Customer.\nThank you!!");
+                        return false;
+                    }
+                    
+                    var technicianId = document.getElementById("pge:frm:technician_lkid").value; 
+                    var technicianName = document.getElementById("pge:frm:technician").value; 
+                    if(document.getElementById("pge:frm:eventType").value != 'Test Drive') {
+                        if(technicianName != null && technicianName != "" && technicianId != "000000000000000"  ) {
+                            EventDetails["Technician"] = technicianId;
+                        } else {
+                            erroStatus = true;
+                            alert("Please select The Technician.\nThank you!!");
+                            return false;
+                        }
+                    } else {
+                        EventDetails["Technician"] = "";    
+                    }
+                    
+                    if(objType == "INVENTORY") {
+                        EventDetails["QuoteId"] = ""; 
+                        var inventoryId = document.getElementById("pge:frm:inventory_lkid").value;
+                        var inventoryName = document.getElementById("pge:frm:inventory").value;
+                        if(inventoryName != null && inventoryName != "" && inventoryId != "000000000000000"  ) {
+                            EventDetails["InventoryId"] = inventoryId;
+                        } else {
+                            erroStatus = true;
+                            alert("Please select Inventory.\nThank you!!");
+                            return false;
+                        }
+                    } else if(objType == "QUOTE") {
+                        EventDetails["InventoryId"] = ""; 
+                        EventDetails["QuoteId"] = "{!$CurrentPage.parameters.quoteId}";
+                        console.log("{!$CurrentPage.parameters.quoteId}");
+                    }
+                    
+                    
+                    
+                    var StartDate = document.getElementById("swsd").value;
+                    if(StartDate != null && StartDate != "") {
+                        EventDetails["StartDate"] = StartDate;
+                    } else {
+                        erroStatus = true;
+                        alert("Please enter start date and time.\nThank you!!");
+                        return false;
+                    }
+                    
+                    var EndDate = document.getElementById("swed").value; 
+                    if(EndDate != null && EndDate != "") {
+                        EventDetails["EndDate"] = EndDate;
+                    } else {
+                        erroStatus = true;
+                        alert("Please enter end date and time.\nThank you!!");
+                        return false;
+                    }
+                    
+                    var Description= document.getElementById("swta").value;
+                    if(Description != null && Description != "") {
+                        EventDetails["Description"] = Description;
+                    } else {
+                        EventDetails["Description"] = "";
+                    }
+                    
+                    BOATBUILDING.ScheduleInventoryController.saveEvent(EventDetails, function(result, event) {
+                        if(event.status) {
+                            if(result == "SUCCESS") {
+                                console.log(result);
+                                window.top.location = "/apex/ServicePage?type=schedule";
+                            } else {
+                                alert("Error: "+result);
+                            }
+                        }
+                    });
+                    
+                });
+                
+            </script>
+        </body>
+    </html>
+</apex:page>

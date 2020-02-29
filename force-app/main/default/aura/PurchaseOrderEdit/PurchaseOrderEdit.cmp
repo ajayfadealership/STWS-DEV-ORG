@@ -1,0 +1,76 @@
+<aura:component controller="PurchaseOrderEditController" access="global"> 
+    <aura:attribute name="objRecId" type="String"/>
+    <aura:attribute name="lineItems" type="Object[]" access="global"/>
+    <aura:attribute name="lineItemTotal" type="Double" default="0.00" access="global"/>
+    <aura:handler name="change" value="{!v.lineItemTotal}" action="{!c.calculateTotal}"/>
+    <aura:attribute name="lineItemPopTotal" type="Double" default="0.00" access="global"/>
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    <lightning:recordEditForm aura:id="refPurchaseOrder" onload="{!c.handleLoad}"
+                                                        onsubmit="{!c.handleSubmit}"
+                                                        onsuccess="{!c.handleSuccess}"
+                                                        onerror="{!c.handleError}" 
+                                                        recordId="{!v.objRecId}"  
+                                                        objectApiName="BOATBUILDING__Order__c" > 
+        <div class="slds-col slds-size--1-of-1">
+            <div class="slds-grid slds-wrap" >
+                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-2 slds-col--padded">
+                    <div class="slds-form-element">
+                        <div class="slds-form-element__control">
+                            <lightning:inputField fieldName="BOATBUILDING__Vendor_Name__c" aura:id="opVendorName" /> 
+                        </div>
+                    </div>
+                </div>
+                <div class="slds-col slds-size--1-of-1 slds-medium-size--2-of-4 slds-col--padded">
+                    <div class="slds-form-element">
+                        <div class="slds-form-element__control">
+                            <lightning:inputField fieldName="BOATBUILDING__Store_Location__c" aura:id="opStoreLocation"/>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </lightning:recordEditForm> 
+    <lightning:accordion aura:id="lineItem" activeSectionName="LineItem" allowMultipleSectionsOpen="true" >
+        <lightning:accordionSection name="LineItem" label="{!'Line Items (' + v.lineItems.length + ')' + ' ( Total: $'+v.lineItemPopTotal+' ) '}">
+            <div class="slds-col slds-size--1-of-1"> 
+                <div class="slds-grid slds-wrap" >
+                    <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-1 slds-col--padded">
+                        <div class="slds-form-element">
+                            <div class="slds-form-element__control">
+                                <span style="float: right;">
+                                    <lightning:button variant="base"  label="Add Parts" title="Add Parts"  iconName="action:add_relationship" iconPosition="right" onclick="{!c.addPartsToPO}"/>
+                                </span>
+                            </div> 
+                        </div> 
+                    </div>
+                    <aura:iteration items="{!v.lineItems}" var="objPOLI" indexVar="i">
+                        <c:PurchaseOrderLineItems objPOLI="{!objPOLI}" lineItemTotal="{!v.lineItemTotal}" showPill="{!objPOLI.showPill}"/>
+                        <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-6 slds-col--padded"> 
+                            <div class="slds-form-element"> 
+                                <label class="slds-form-element__label">&nbsp;</label>
+                                <div class="slds-form-element__control">
+                                    <a data-index="{!i}"  onclick="{!c.handleRemoveLineItem}">
+                                        <lightning:icon iconName="action:delete" alternativeText="Delete" size="xx-small" />
+                                    </a> 
+                                </div> 
+                            </div>
+                        </div>
+                    </aura:iteration>
+                    <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-1 slds-col--padded">
+                        &nbsp;
+                    </div>
+                    <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-1 slds-col--padded">
+                        <div class="slds-form-element">
+                            
+                            <div class="slds-form-element__control">
+                                <span style="float: right;">
+                                    <lightning:button variant="brand" label="Update Purchase Order" title="Update Purchase Order"  iconName="utility:record_create" iconPosition="right" onclick="{!c.updatePO}"/>
+                                </span>
+                            </div> 
+                        </div> 
+                    </div> 
+                </div> 
+            </div>
+        </lightning:accordionSection>
+    </lightning:accordion>
+</aura:component>

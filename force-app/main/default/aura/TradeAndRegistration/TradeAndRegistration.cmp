@@ -1,0 +1,28 @@
+<aura:component implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction" access="global" >
+    <aura:attribute name="selectedLookUpRecord" type="sObject" default="{}" access="global"/>
+    <div >
+        <span>Trade</span>
+        <div class="slds-form-element">
+            <lightning:input aura:id="inputToggle" type="toggle"
+                             label="Create new ACV" name="togglevalue"   
+                             value="ToggleValue" onchange="{!c.changeToggle}" />
+        </div>
+        <hr/>
+        <div id="existingACVDiv" style="height:auo;">
+            <br/>
+            <span>
+                
+                <c:CustomLookup objectAPIName="BOATBUILDING__ACV_Form__c" IconName="standard:partner_marketing_budget" selectedRecord="{!v.selectedLookUpRecord}" label="Search ACV:"/>
+                
+            </span>
+        </div>
+        <div id="newACVDiv" style="display:none; height:auto">
+            <span>
+                <c:CreateACV selectedLookUpRecordACVC="{!v.selectedLookUpRecord}"/> 
+            </span>
+        </div>
+        
+        
+    </div>
+    <hr/>
+</aura:component>

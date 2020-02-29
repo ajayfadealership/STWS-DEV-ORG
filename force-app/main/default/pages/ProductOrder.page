@@ -1,0 +1,2151 @@
+<apex:page docType="html-5.0" controller="BoatBuilderController" showHeader="false" sidebar="false" standardStylesheets="false" id="p1" action="{!checkAccess}">
+<html xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" >
+<head>
+    <title>Boat Builder</title>
+    <apex:stylesheet value="{!URLFOR($Resource.BoatBuilderSR, 'assets/styles/salesforce-lightning-design-system.min.css')}"/>
+    <apex:stylesheet value="{!URLFOR($Resource.BoatBuilderSR, 'css/style.css')}"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"/>
+    <apex:includeScript value="{!URLFOR($Resource.BoatBuilderSR, 'js/jquery.min.js')}"/>
+    <style>
+        table tr th:last-child, table tr td:last-child{
+            text-align:right;
+            width:200px;
+        }
+        table tr td:nth-child(3), table tr th:nth-child(3){
+            text-align:right;
+            width:200px;
+        }
+        .random {
+        	    position: absolute;
+		    top: 102%;
+		    border: 1px solid #ddd;
+		    width: 100%;
+		    height: 133%;
+		    padding: 6px;
+		    border-radius: .25rem;
+		    background: #fff;
+        }
+    </style>
+    <script>
+        /* Script for Tabs */
+        $(function() {
+            $('.slds-tabs--default__item').on('click', function(){
+                $(this).addClass('slds-active');
+                $(this).find('a').attr('aria-selected', true);
+                var $contentToShow = $('#'+$(this).find('a').attr('aria-controls'));
+                $contentToShow.removeClass('slds-hide');
+                $contentToShow.addClass('slds-show');
+
+                $(this).siblings().removeClass('slds-active');
+                $(this).siblings().find('a').attr('aria-selected', false);
+                $contentToShow.siblings('.slds-tabs--default__content').removeClass('slds-show');
+                $contentToShow.siblings('.slds-tabs--default__content').addClass('slds-hide');
+            });
+        });
+    
+    </script>
+    <style type="text/css">
+        
+        .margin-top{margin: 1rem 0 0;}
+        .slds-input, .slds-select {
+            max-width: 25rem;
+        }
+
+        .slds-select {
+            padding: 0 0.5rem;
+        }       
+
+        .slds-card__body {
+            overflow: auto;
+        }
+        table.slds-table--custom tr th:last-child,
+        table.slds-table--custom tr td:last-child,
+        table.payment-cal tr th:last-child,
+        table.payment-cal tr td:last-child {
+            width: 200px;
+            text-align: right;
+        }
+
+        table.payment-cal .slds-input {
+            margin-bottom: 0;   
+        }
+
+        .slds-card .slds-card__header h2 {
+            font-size: 1.25em;
+            font-weight: 600;
+            color: #6f809c;
+        }
+
+        .slds-card__body .slds-table--bordered {
+            border-bottom: 0; 
+        }
+
+        .slds-table th {
+            font-weight: 600;
+        }
+        
+        /* style for lookup field */
+        .lookupInput {display: flex}
+        .lookupInput .slds-input {margin:0}
+        .lookupInput a.slds-input {
+            width: 28px;
+            margin: 0;
+            display: inline-block;
+            background: url('/resource/BOATBUILDING__BoatBuilderSR/assets/icons/utility/search_60.png');
+            background-size: contain;
+            background-repeat: no-repeat;
+            border: none;
+            margin-left: 5px;
+        }
+        
+        
+        a.slds-input:active, a.slds-input:focus {box-shadow:none}
+        .Modal_border{
+            border-bottom: 1px solid #aaa;
+            padding-top: 10px;
+            padding-bottom: 10px;
+            
+        }
+        .popup{
+            position: fixed;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(0,0,0,0.5);
+            display: none;
+            z-index: 999;
+        }
+        .popupDiv{
+            position: fixed;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(0,0,0,0.5);
+            display: none;
+            z-index: 999;
+        }
+        .popup.active{display:block}
+        .popup img{margin: 15% auto}
+        .slds-table--cell-buffer tr>td:first-child, .slds-table--cell-buffer tr>th:first-child {
+            padding-left: 1.5rem;
+        }
+        .Sidebar{        
+            position: fixed;
+            margin-right: 15px;
+            overflow: auto;
+            height: 95vh;
+        }
+        .card-wrapper {
+            max-width: 1280px;
+            margin: 1rem auto;
+        }
+        .slds-input, .slds-select {overflow:hidden}
+        .slds-grid>span {width: 100%}
+        
+        /*
+        .Sidebar::-webkit-scrollbar {
+            width: 12px;
+        }
+        .Sidebar::-webkit-scrollbar {
+            width: 12px;
+        }     
+        
+        .Sidebar::-webkit-scrollbar-track {
+            -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3); 
+            -webkit-border-radius: 10px;
+            border-radius: 10px;
+        }
+         
+        .Sidebar::-webkit-scrollbar-thumb {
+            -webkit-border-radius: 10px;
+            border-radius: 10px;
+            background: #; 
+            -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.5); 
+        }
+        .Sidebar::-webkit-scrollbar-thumb:window-inactive {
+            background: rgba(255,0,0,0.4); 
+        }
+        
+        */
+        .slds-button--brand {
+            padding-left: 0.5rem;
+            padding-right: 0.5rem;
+        }
+        
+        label.slds-input {
+            padding: 0.5rem 1rem 0.5rem .75rem;
+            line-height: 1rem;
+        }
+    </style>
+</head>
+<body>
+<apex:form id="f1">
+    <apex:messages style="color : red;" id="m1"></apex:messages>
+    <script>
+        function openSpinner() {
+            $('.popup').addClass('active');
+        }
+        
+       
+        function closeSpinner() {
+            $('.popup').removeClass('active');
+        }
+        
+        function callThirdPageSave(){      
+            var s = window.location.href;
+            var s1 = s.includes("invId");
+            
+            if(s1 == true)
+            {
+            if(document.getElementById('existingCID').checked == true){
+                      if(document.getElementById('p1:f1:lookupInputId').value == ''){
+                          alert('Please Select Your Name');
+                      }
+                       else{
+                         document.getElementById('p1:f1:onjAccNameId').value     = '';
+                         document.getElementById('p1:f1:onjAccPhoneId').value    = '';
+                         document.getElementById('p1:f1:onjAccBSId').value       = '';
+                         document.getElementById('p1:f1:onjAccBCId').value       = '';
+                         document.getElementById('p1:f1:onjAccBStId').value      = '';
+                         document.getElementById('p1:f1:onjAccDBModId').value    = '';
+                         document.getElementById('p1:f1:onjAccPDBLId').value     = '';
+                         document.getElementById('p1:f1:onjAccDPLId').value      = '';
+                         document.getElementById('p1:f1:onjAccDPHId').value      = '';
+                         var at                                                  = '';
+                         document.getElementById('p1:f1:onjAccDTHATId').value    = '';
+                         document.getElementById('p1:f1:onjAccEmailId').value    = '';
+                         
+                            thirdPageSavingFun();
+                         }
+                      
+                      }
+                 
+                 else
+                 if(document.getElementById('existingCID').checked != true){
+                     if(document.getElementById('inputName').value != ''){
+                         document.getElementById('p1:f1:lookupInputId').value == '';
+                         var filter = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+                         document.getElementById('p1:f1:onjAccNameId').value     = document.getElementById('FinputName').value + " " + document.getElementById('inputName').value;
+                         document.getElementById('p1:f1:onjAccPhoneId').value    = document.getElementById('inputPhone').value;
+                         document.getElementById('p1:f1:onjAccBSId').value       = document.getElementById('inputAdd1').value;
+                         document.getElementById('p1:f1:onjAccBCId').value       = document.getElementById('inputCity').value;
+                         document.getElementById('p1:f1:onjAccBStId').value      = document.getElementById('inputState').value;
+                         document.getElementById('p1:f1:onjAccDBModId').value    = document.getElementById('inputDBMod').value;
+                         document.getElementById('p1:f1:onjAccPDBLId').value     = document.getElementById('inputDBLen').value;
+                         document.getElementById('p1:f1:onjAccDPLId').value      = document.getElementById('inputDPL').value;
+                         document.getElementById('p1:f1:onjAccDPHId').value      = document.getElementById('inputDPH').value;
+                         var at                                                  = document.getElementById('select-DTHAT');
+                         document.getElementById('p1:f1:onjAccDTHATId').value    = at.options[at.selectedIndex].text;
+                                   if(filter.test(document.getElementById('inputEmail').value) || document.getElementById('inputEmail').value == ''){
+                                        if(document.getElementById('inputEmail').value != ''){
+                                            document.getElementById('p1:f1:onjAccEmailId').value = document.getElementById('inputEmail').value; 
+                                           thirdPageSavingFun();
+                                        }else{
+                                            alert('Please Enter Email.');
+                                        }
+                                    }else{
+                                        alert('Please Enter Valid Email');
+                                    }
+                                }
+                         
+                         else{
+                         	alert('Please Enter Your Last Name');
+                     }
+                        
+                 }
+            }
+           else{
+               thirdPageSavingFun();
+           }
+
+
+        }
+        
+        
+        
+        var Category = [];
+        var selectedCat = []; 
+        function changeIncheckBox(rowNum,jsSelectedOption, objCheckbox){
+            //for spinner
+            $('.popup').addClass('active');
+			if(document.getElementById(objCheckbox.id).checked){
+				//alert('Checked');
+				callChangeIncheckBox(rowNum,jsSelectedOption);
+			}else{
+				//alert ('UnChecked');
+				callChangeIncheckBoxSub(rowNum,jsSelectedOption);
+			}
+        }
+
+        function callRecalculatePrice(obj){
+            document.getElementById('p1:f1:theImage').style.display='block';
+            saveAndRecalculatingPrice();
+        }
+
+                function sendQuotation(obj){
+        
+                    var s = window.location.href;
+                    var s1 = s.includes("invId");
+                    
+                    if(s1 == true)
+                    {
+                    
+                    
+                        if(document.getElementById('existingCID').checked == true){
+                              if(document.getElementById('p1:f1:lookupInputId').value == ''){
+                                  alert('Please Select Your Name');
+                              }
+                               else{
+                                 document.getElementById('p1:f1:onjAccNameId').value     = '';
+                                 document.getElementById('p1:f1:onjAccPhoneId').value    = '';
+                                 document.getElementById('p1:f1:onjAccBSId').value       = '';
+                                 document.getElementById('p1:f1:onjAccBCId').value       = '';
+                                 document.getElementById('p1:f1:onjAccBStId').value      = '';
+                                 document.getElementById('p1:f1:onjAccDBModId').value    = '';
+                                 document.getElementById('p1:f1:onjAccPDBLId').value     = '';
+                                 document.getElementById('p1:f1:onjAccDPLId').value      = '';
+                                 document.getElementById('p1:f1:onjAccDPHId').value      = '';
+                                 var at                                                  = '';
+                                 document.getElementById('p1:f1:onjAccDTHATId').value    = '';
+                                 document.getElementById('p1:f1:onjAccEmailId').value    = '';
+                                 
+                                  callSendQuote();
+                                 }
+                              
+                              }
+                         
+                         else
+                         if(document.getElementById('existingCID').checked != true){
+                             if(document.getElementById('inputName').value != ''){
+                                 document.getElementById('p1:f1:lookupInputId').value == '';
+                                 var filter = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+                                 var phoneno = /^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/;
+                                 document.getElementById('p1:f1:onjAccNameId').value     = document.getElementById('FinputName').value + " " + document.getElementById('inputName').value;
+                                 //document.getElementById('p1:f1:onjAccPhoneId').value    = document.getElementById('inputPhone').value;
+                                 document.getElementById('p1:f1:onjAccBSId').value       = document.getElementById('inputAdd1').value;
+                                 document.getElementById('p1:f1:onjAccBCId').value       = document.getElementById('inputCity').value;
+                                 document.getElementById('p1:f1:onjAccBStId').value      = document.getElementById('inputState').value;
+                                 document.getElementById('p1:f1:onjAccDBModId').value    = document.getElementById('inputDBMod').value;
+                                 document.getElementById('p1:f1:onjAccPDBLId').value     = document.getElementById('inputDBLen').value;
+                                 document.getElementById('p1:f1:onjAccDPLId').value      = document.getElementById('inputDPL').value;
+                                 document.getElementById('p1:f1:onjAccDPHId').value      = document.getElementById('inputDPH').value;
+                                 var at                                                  = document.getElementById('select-DTHAT');
+                                 document.getElementById('p1:f1:onjAccDTHATId').value    = at.options[at.selectedIndex].text;
+                                           if(filter.test(document.getElementById('inputEmail').value) || document.getElementById('inputEmail').value == ''){
+                                                if(document.getElementById('inputEmail').value != ''){
+                                                    document.getElementById('p1:f1:onjAccEmailId').value = document.getElementById('inputEmail').value; 
+                                                   //callSendQuote();
+                                                   
+                                                    
+                                                        if(document.getElementById('inputPhone').value != ''){
+                                                            document.getElementById('p1:f1:onjAccPhoneId').value = document.getElementById('inputPhone').value; 
+                                                           callSendQuote();
+                                                        }else{
+                                                            alert('Please Enter Phone Number.'); 
+                                                        }
+                                                    
+                                                   
+                                                }else{
+                                                    alert('Please Enter Email.');
+                                                }
+                                            }else{
+                                                alert('Please Enter Valid Email');
+                                            }
+                                            
+                                            
+                                        }
+                                 
+                                 else{
+                                 alert('Please Enter Your Last Name');
+                             }
+                                
+                         }
+                    }
+                   else{
+                       callSendQuote();
+                   }
+      }
+             
+        
+//         function discountCheck(obj){
+//             if(document.getElementById(obj.id).checked == false){
+//                 document.getElementById('p1:f1:ifPCD').disabled = true;
+//                 document.getElementById('p1:f1:ifPCPRP').disabled = false;
+//             }
+//             if(document.getElementById(obj.id).checked == true){
+//                 document.getElementById('p1:f1:ifPCD').disabled = false;
+//                 document.getElementById('p1:f1:ifPCPRP').disabled = true;
+//             }
+//         }
+
+        function tradeChange(obj){
+            if(document.getElementById(obj.id).value == 'Yes'){
+                document.getElementById('tdId').style.display = 'block';
+            }else if(document.getElementById(obj.id).value == 'No'){
+                document.getElementById('tdId').style.display = 'none';
+            }
+        }
+        function completedTask(){
+             document.getElementById('p1:f1:theImage').style.display='none';
+//             if(document.getElementById('p1:f1:ifPCDC').checked == false){
+//                 document.getElementById('p1:f1:ifPCD').disabled = true;
+//                 document.getElementById('p1:f1:ifPCPRP').disabled = false;      
+                
+//             }
+//             if(document.getElementById('p1:f1:ifPCDC').checked == true){
+//                 document.getElementById('p1:f1:ifPCD').disabled = false;
+//                 document.getElementById('p1:f1:ifPCPRP').disabled = true;
+//             }
+            //for spinner
+            $('.popup').removeClass('active');
+            
+        }
+        
+        //function callplaceOrder(){
+            //placeOredCallAction();
+        //}
+        function callplaceOrder2(){
+            placeOredCallAction2();
+        }
+//         function close(){
+//          alert();
+//          
+//         }
+        function changeDealerOption(partNumber, obj){
+            console.log('All Values : '+ partNumber + ' ' + obj);
+            $('.popup').addClass('active');
+            if(document.getElementById(obj.id).checked){
+                callDealerOptionCheckBox(partNumber);
+            }else{
+                callDealerOptionCheckBoxSub(partNumber);
+            }
+        }
+
+        
+        onload = function(){
+//             document.getElementById('p1:f1:ifPCD').disabled = true;
+//             document.getElementById('p1:f1:ifPCPRP').disabled = false;
+               if(document.getElementById('existingCID') != null){
+                    document.getElementById('existingCID').checked = false;
+               }
+               if(document.getElementById('Customer_Datails') != null){
+                    document.getElementById('Customer_Datails').style.display = "block";
+               }
+               if(document.getElementById('nameLookUpId') != null){
+                    document.getElementById('nameLookUpId').style.display = "none";
+               }   
+        }    
+    </script>
+    <a class="slds-button slds-button--neutral slds-button--brand" style="border: 1px solid white; box-shadow: 3px 5px 15px #888888; position: fixed; z-index: 99; left: 1%; top: 2%;" href="/home/home.jsp">Home</a> 
+    <apex:inputHidden value="{!objAccount.Name}" id="onjAccNameId"/>
+    <apex:inputHidden value="{!objAccount.Email__c}" id="onjAccEmailId"/>
+    <apex:inputHidden value="{!objAccount.Phone}" id="onjAccPhoneId"/>
+    <apex:inputHidden value="{!objAccount.BillingStreet}" id="onjAccBSId"/>
+    <apex:inputHidden value="{!objAccount.BillingCity}" id="onjAccBCId"/>
+    <apex:inputHidden value="{!objAccount.BillingState}" id="onjAccBStId"/>  
+    <apex:inputHidden value="{!objAccount.BillingPostalCode}" id="onjAccBPCId"/>              
+<!--     <apex:inputHidden value="{!objAccount.Lead_Source__c}" id="onjAccLSId"/> -->
+<!--     <apex:inputHidden value="{!objAccount.Desired_Boat_Manufacturer__c}" id="onjAccDBMId"/> -->
+    <apex:inputHidden value="{!objAccount.Desire_boat_model__c}" id="onjAccDBModId"/>
+    <apex:inputHidden value="{!objAccount.Prospect_Desired_Boat_Length__c}" id="onjAccPDBLId"/>
+    <apex:inputHidden value="{!objAccount.Desire_Price_low__c}" id="onjAccDPLId"/>
+    <apex:inputHidden value="{!objAccount.Desire_price_high__c}" id="onjAccDPHId"/>
+    <apex:inputHidden value="{!objAccount.Do_they_have_a_trade__c}" id="onjAccDTHATId"/>
+    <apex:actionFunction name="thirdPageSavingFun" action="{!thirdPageSave}" id="af1"/>
+    
+     
+    
+    <apex:actionFunction name="callDealerOptionCheckBox" action="{!getDealerOptionPrice}" id="af4" rerender="pcDiv1,pcDiv2" oncomplete="completedTask();">
+        <apex:param name="rN" assignTo="{!dealerPartNumber}" value=""/>
+<!--         <apex:param name="sOC" assignTo="{!selectedOptionCategory}" value=""/> -->
+    </apex:actionFunction>
+    
+    <apex:actionFunction name="callDealerOptionCheckBoxSub" action="{!getDealerOptionPriceSub}" id="af5" rerender="pcDiv1,pcDiv2" oncomplete="completedTask();">
+        <apex:param name="rN" assignTo="{!dealerPartNumber}" value=""/>
+<!--         <apex:param name="sOC" assignTo="{!selectedOptionCategory}" value=""/> -->
+    </apex:actionFunction>
+    
+    
+    <apex:actionFunction name="callChangeIncheckBox" action="{!getMFGPrice}" id="af2" rerender="pcDiv1,pcDiv2" oncomplete="completedTask();">
+        <apex:param name="rN" assignTo="{!rowNumber}" value=""/>
+        <apex:param name="sO" assignTo="{!selectedOptionString}" value=""/>
+<!--         <apex:param name="sOC" assignTo="{!selectedOptionCategory}" value=""/> -->
+    </apex:actionFunction>
+    <apex:actionFunction name="callChangeIncheckBoxSub" action="{!getMFGPriceSubtrct}" id="af3" rerender="pcDiv1,pcDiv2" oncomplete="completedTask();">
+        <apex:param name="rN" assignTo="{!rowNumber}" value=""/>
+        <apex:param name="sO" assignTo="{!selectedOptionString}" value=""/>
+<!--         <apex:param name="sOC" assignTo="{!selectedOptionCategory}" value=""/> -->
+    </apex:actionFunction>
+    
+    
+    <apex:actionFunction name="saveAndRecalculatingPrice" action="{!saveAndRecaculate}" id="afSAR" oncomplete="completedTask();" rerender="pcDiv1"/>
+    <apex:actionFunction name="callSendQuote" action="{!sendQuote}" id="afSQ"/>
+    
+    <apex:actionFunction name="placeOredCallAction2" action="{!placeOrderForInventory}" id="afPO2"/>
+    <div class="slds-grid slds-wrap">
+      <div class="slds-col--padded slds-size--3-of-5">
+          
+            <div  class="popup">
+               <apex:image id="theImage2" value="{!$Resource.Process}" style="display:block;" width="40" height="40"/>
+            </div>
+            <div class="slds-page-header" role="banner">
+                <div class="slds-grid">
+                    <div class="slds-col slds-has-flexi-truncate">  
+                        <div class="slds-media slds-media--center slds-no-space slds-grow">
+                            <div class="slds-media__figure">
+                                <svg aria-hidden="true" class="slds-icon slds-icon-standard-user">
+                                    <use xlink:href="/assets/icons/standard-sprite/svg/symbols.svg#user"></use>
+                                </svg>
+                            </div>
+                            <div class="slds-media__body">
+                                <h1 class="slds-page-header__title slds-m-right--small slds-truncate slds-align-middle" title="Record Title">Product</h1>
+                                <apex:outputPanel id="pcDIdd" rendered="{!buttonRenderForSaveAndReCal}">
+                                    <p class="slds-text-heading--label">Order Product From Stock</p>
+                                </apex:outputPanel>
+                                <apex:outputPanel id="pcDIdd2" rendered="{!buttonRenderForPlaceOrder}">
+                                    <p class="slds-text-heading--label">Order Product For Stock</p>
+                                </apex:outputPanel>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="slds-col slds-no-flex slds-grid slds-align-bottom">
+                        <div class="slds-button-group" role="group">
+                        <apex:outputPanel rendered="{!buttonRenderForSaveAndReCal}">
+                            <a class="slds-button slds-button--neutral" onclick="callThirdPageSave();">Save</a>
+<!--                             <a class="slds-button slds-button--neutral" >Place Order</a> -->
+<!--                             <button class="slds-button slds-button--neutral">Delete</button> -->
+                            <a class="slds-button slds-button--neutral" onclick="window.location.href = '/home/home.jsp';">Close</a>
+                        </apex:outputPanel>
+                            <a class="slds-button slds-button--neutral" onclick="window.location.href = '/apex/Purchase_Item2';">Cancel</a>
+                            <apex:outputPanel rendered="{!InvUpdateStatus}">
+                              <a class="slds-button slds-button--neutral" style="background: #9db8ec;" onclick="callUpdateInventory();">Update Inventory</a>
+                            </apex:outputPanel>
+                            <apex:actionFunction name="callUpdateInventory" action="{!updateInventory}" id="af222"/>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        
+            <article class="slds-card card-wrapper">
+                <div class="slds-card__body slds-col--padded">
+                    <div class="slds-tabs--default">
+                        <ul class="slds-tabs--default__nav" role="tablist">
+                            <li class="slds-tabs--default__item slds-text-heading--label slds-active" title="Customer Information" role="presentation"><a class="slds-tabs--default__link" href="javascript:void(0);" role="tab" tabindex="0" aria-selected="true" aria-controls="tab-default-3" id="tab-default-3__item">Customer Information</a></li>
+                            <li class="slds-tabs--default__item slds-text-heading--label" title="Product Info" role="presentation"><a class="slds-tabs--default__link" href="javascript:void(0);" role="tab" tabindex="-1" aria-selected="false" aria-controls="tab-default-1" id="tab-default-1__item">Product Info</a></li>
+                            <li class="slds-tabs--default__item slds-text-heading--label" title="Important Details" role="presentation"><a class="slds-tabs--default__link" href="javascript:void(0);" role="tab" tabindex="-1" aria-selected="false" aria-controls="tab-default-2" id="tab-default-2__item">Important Dates</a></li>
+                        </ul>
+                        
+                        
+                        <div id="tab-default-3" class="slds-tabs--default__content slds-show" role="tabpanel" aria-labelledby="tab-default-3__item">
+                            <!-- important details -->
+                            <div class="slds-grid slds-wrap">
+                                <div class="slds-col slds-size--1-of-1 slds-col--padded"><h1 class="heading">Product Information</h1></div>
+                                
+                                
+                                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-5 slds-col--padded">
+                                     <div class="slds-form-element">
+                                       <label class="slds-form-element__label" for="text-input-01">Manufacture:</label>
+                                       <div class="slds-form-element__control">
+                                             <apex:outputLabel value="{!selectedManufacturerThirdPage}" id="ol12"/>
+                                       </div>
+                                     </div>
+                                 </div>
+                                 <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-5 slds-col--padded">
+                                     <div class="slds-form-element">
+                                       <label class="slds-form-element__label" for="text-input-01">Year:</label>
+                                       <div class="slds-form-element__control">
+ <!--                                         <input id="text-input-01" class="slds-input" type="text" /> -->
+                                             <apex:outputLabel value="{!selectedYearSecondPage}" id="ol24" />
+                                       </div>
+                                     </div>
+                                 </div>
+                                 <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-5 slds-col--padded">
+                                     <div class="slds-form-element">
+                                       <label class="slds-form-element__label" for="text-input-01">Model:</label>
+                                       <div class="slds-form-element__control">
+ <!--                                         <input id="text-input-01" class="slds-input" type="text" /> -->
+                                             <apex:outputLabel value="{!selectedModelThirdPage}" id="ol22"/>
+                                       </div> 
+                                     </div>
+                                 </div>
+                                 <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-5 slds-col--padded">
+                                    <div class="slds-form-element">
+                                      <label class="slds-form-element__label" for="text-input-01">Model Variant:</label>
+                                      <div class="slds-form-element__control">
+<!--                                         <input id="text-input-01" class="slds-input" type="text" /> -->
+                                            <apex:outputLabel value="{!smVrnt}" id="ol23" />
+                                      </div>
+                                    </div>
+                                </div>
+                                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-5 slds-col--padded">
+                                    <div class="slds-form-element">
+                                      <label class="slds-form-element__label" for="text-input-01">Type:</label>
+                                      <div class="slds-form-element__control">
+<!--                                         <input id="text-input-01" class="slds-input" type="text" /> -->
+                                            <apex:outputLabel value="{!selectedType}" id="ol234" />
+                                      </div>
+                                    </div>
+                                </div>
+                                <apex:outputPanel rendered="{!buttonRenderForCustomerDetail}" id="custDetail">
+                                <div class="slds-col slds-size--1-of-1 slds-col--padded">
+                                    <h2 class="heading">Customer Details</h2>
+                                </div>
+                                <div class="slds-grid slds-wrap">
+                                    <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded"   id="existCheckDivId">
+                                        <div class="slds-form-element">
+                                            <label class="slds-form-element__label">Existing Customer</label>
+                                                <div class="slds-form-element__control">
+                                                    <label class="slds-checkbox--toggle slds-grid slds-grid--vertical-align-center">
+                                                        <input name="checkbox" type="checkbox" id="existingCID" onchange="existingCheck(this);" />
+                                                            <span class="slds-checkbox--faux" data-check-on="Yes" data-check-off="No"></span>
+                                                    </label>
+                                                </div>
+                                        </div>
+                                    </div>
+                                    
+                                     <!--  Customer Component ---->
+
+                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-1" id="Customer_Datails">
+                                <div class="slds-grid slds-wrap">
+                                    <div class="slds-col--padded slds-col slds-size--1-of-1  Customer-Heading" >
+                                        <h2 class=" heading"><br/>
+                                            <span class="slds-text-heading--small">Customer Details</span>
+                                        </h2>
+                                      </div>
+                                  </div>
+                                
+                                <div class="slds-grid slds-wrap">
+                                    <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-1 slds-col--padded">
+                                       <div class="slds-grid slds-wrap">
+                                            
+                                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-5 slds-small-size--1-of-2 ">
+                                                <div class="slds-form-element">
+                                                    <label class="slds-form-element__label" >First Name</label>
+                                                    <div class="slds-form-element__control">
+                                                       <input type="text" class="slds-input" id="FinputName"  style="width: 95%;"/>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            
+                                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-5 slds-small-size--1-of-2 ">
+                                                <div class="slds-form-element">
+                                                    <label class="slds-form-element__label" >Last Name</label>
+                                                    <div class="slds-form-element__control">
+                                                       <input type="text" class="slds-input" id="inputName" style="width: 95%;"/>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            
+                                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-5 slds-small-size--1-of-2 ">
+                                                <div class="slds-form-element">
+                                                    <label class="slds-form-element__label" >Email</label>
+                                                    <div class="slds-form-element__control">
+                                                       <input type="text" class="slds-input" id="inputEmail" style="width: 95%;"/>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            
+                                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-5 slds-small-size--1-of-2 ">
+                                                <div class="slds-form-element">
+                                                    <label class="slds-form-element__label" >Lead source</label>
+                                                    <div class="slds-form-element__control">
+                                                        <apex:inputField value="{!objAccount.Lead_Source__c}" id="lsId" styleClass="slds-select" style="width: 95%;"/>
+                                                    </div>
+                                                </div>
+                                            </div>  
+                                            
+                                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-5 slds-small-size--1-of-2 ">
+                                               <div class="slds-form-element">
+                                                    <label class="slds-form-element__label" >Desire boat Manufacture</label>
+                                                    <div class="slds-form-element__control">
+<!--                                                        <input type="text" id="inputDBM" class="slds-input" /> -->
+<!--                                                        <select id="inputDBM" class="slds-select"> -->
+<!--                                                                 <option>Skiers Choice(Moomba)</option> -->
+<!--                                                                 <option>Skiers Choice(Supra)</option>     -->
+<!--                                                        </select> -->
+                                                       <apex:inputField value="{!objAccount.Desired_Boat_Manufacturer__c}" id="inputDBM"  styleClass="slds-select" />
+                                                    </div>
+                                                </div> 
+                                            </div>
+                                        </div>
+                                    </div>
+            
+                                    <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-1 slds-col--padded">
+                                        <div class="slds-grid slds-wrap">
+                                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 ">
+                                                <div class="slds-form-element">
+                                                    <label class="slds-form-element__label" >Address</label>
+                                                    <div class="slds-form-element__control">
+                                                       <input type="text" class="slds-input" id="inputAdd1"/>
+                                                    </div>
+                                                </div>    
+                                            </div>
+                                            
+                                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                                                <div class="slds-form-element">
+                                                    <label class="slds-form-element__label" >City</label>
+                                                    <div class="slds-form-element__control">
+                                                       <input type="text" id="inputCity" class="slds-input" />
+                                                    </div>
+                                                </div>    
+                                            </div>
+                                            
+                                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                                                <div class="slds-form-element">
+                                                    <label class="slds-form-element__label" >Desired boat model</label>
+                                                    <div class="slds-form-element__control">
+                                                       <input type="text" id="inputDBMod" class="slds-input" />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            
+                                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                                                <div class="slds-form-element">
+                                                    <label class="slds-form-element__label" >Desired boat length</label>
+                                                    <div class="slds-form-element__control">
+                                                       <input type="number" id="inputDBLen" class="slds-input"  />
+                                                    </div>
+                                                </div>
+                                            </div>  
+                                        </div>
+                                    </div>
+                                    
+                                    
+                                    <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-1 slds-col--padded">
+                                        <div class="slds-grid slds-wrap">
+                                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 ">
+                                                <div class="slds-form-element">
+                                                    <label class="slds-form-element__label" >State</label>
+                                                    <div class="slds-form-element__control">
+                                                       <input type="text" id="inputState" class="slds-input" />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            
+                                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                                                <div class="slds-form-element">
+                                                    <label class="slds-form-element__label" >Phone number</label>
+                                                    <div class="slds-form-element__control">
+                                                       <input type="text" class="slds-input" id="inputPhone"/>
+                                                    </div>
+                                                </div>    
+                                            </div>
+                                            
+                                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                                                <div class="slds-form-element">
+                                                    <label class="slds-form-element__label" >Desired Price low</label>
+                                                    <div class="slds-form-element__control">
+                                                       <input type="number" class="slds-input" id="inputDPL"/>
+                                                    </div>
+                                                </div>
+                                            </div>  
+                                            
+                                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                                                <div class="slds-form-element">
+                                                    <label class="slds-form-element__label" >Desired price high</label>
+                                                    <div class="slds-form-element__control">
+                                                       <input type="number" class="slds-input" id="inputDPH"/>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    
+                                    
+                                    <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-1 slds-col--padded">
+                                        <div class="slds-grid slds-wrap">
+                                            <div class="slds-col slds-size--1-of-2 slds-col--padded">
+                                                
+                                            </div>
+                                            
+                                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-2 slds-col--padded">
+                                               <div class="slds-form-element">
+                                                    <label class="slds-form-element__label" for="select-01">Do they have a trade?</label>
+                                                    <div class="slds-form-element__control">
+                                                        <div class="slds-select_container">
+                                                            <select id="select-DTHAT" class="slds-select" onchange="tradeChange(this);">
+                                                                <option value="Yes">Yes</option>
+                                                                <option value="No" selected="true">No</option> 
+                                                            </select>
+                                                        </div>
+                                                        <div class="slds-form-element" id="tdId" style="display:none;">
+                                                            <label class="slds-form-element__label" >Trade Description</label>
+                                                            <div class="slds-form-element__control">
+                                                                <apex:inputField value="{!objAccount.Do_they_have_a_Trade2__c}" styleClass="slds-input" id="doTHID"/>
+                                                            </div>
+                                                        </div> 
+                                                    </div> 
+                                                 </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>  
+                            
+                            </div>
+                            
+                            
+                          <!--  Existing Customer ---->
+
+                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-1" id="nameLookUpId">
+                                <div class="slds-grid slds-wrap">
+                                    <div class="slds-col slds-size--1-of-1 Customer-Heading" >
+                                        <h2 class="slds-col--padded"><br/>
+                                            <span class="slds-text-heading--small ">Existing Customer</span>
+                                        </h2>
+                                      </div>
+                                  </div>
+                            
+                                <span>
+                                    <div class="slds-grid slds-wrap slds-col--padded">
+                                        <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-2 slds-small-size--1-of-2 ">
+                                            <div class="slds-form-element">
+                                                <label class="slds-form-element__label" >Name Lookup</label>
+                                                <div class="slds-form-element__control">
+<!--                                                     <input type="text" class="slds-input" /> -->
+                                                    <apex:inputField value="{!objOrder.ContactName__c}" styleClass="slds-input" id="lookupInputId"/>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="slds-col slds-size--1-of-2 slds-col--padded">
+                                        
+                                        </div>
+                                    </div>
+                                </span>
+                                
+                            </div>
+        
+                         </div> 
+                                </apex:outputPanel>
+                                
+                                <apex:outputPanel rendered="{!if(buttonRenderForCustomerDetail , false, true)}">
+                                <div class="slds-col slds-size--1-of-1 slds-col--padded">
+                                    <h2 class="heading">Customer Information</h2>
+                                </div>
+                                
+                                
+                                <div class="slds-col slds-size--1-of-1">
+                                    <div class="slds-grid slds-wrap">
+                                        <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-3 slds-col--padded">
+                                            <div class="slds-form-element">
+                                              <label class="slds-form-element__label" for="text-input-01">Name </label>
+                                              <div class="slds-form-element__control">
+        <!--                                         <input id="text-input-01" class="slds-input" type="text" /> -->
+        <!--                                         <apex:inputText styleClass="slds-input" value="{!objAccount.Name}"  id="it1"/>  -->
+                                                <apex:outputLabel value="{!objAccount.Name}" styleClass="slds-input" id="olC1"/>
+                                              </div>
+                                            </div>
+                                        </div>
+                                        <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-3 slds-col--padded">
+                                            <div class="slds-form-element">
+                                              <label class="slds-form-element__label" for="text-input-01">Address </label>
+                                              <div class="slds-form-element__control">
+        <!--                                         <input id="text-input-01" class="slds-input" type="text" /> -->
+        <!--                                             <apex:inputText styleClass="slds-input" value="{!objAccount.BillingStreet}" id="it2"/> -->
+                                                    <apex:outputLabel value="{!objAccount.BillingStreet}" styleClass="slds-input" id="olC2"/> 
+                                              </div>
+                                            </div>
+                                        </div>
+                                        <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-3 slds-col--padded">
+                                            <div class="slds-form-element">
+                                              <label class="slds-form-element__label" for="text-input-01">City </label>
+                                              <div class="slds-form-element__control">
+        <!--                                         <input id="text-input-01" class="slds-input" type="text" /> -->
+        <!--                                             <apex:inputText styleClass="slds-input" value="{!objAccount.ShippingStreet}" id="it3"/> -->
+                                                    <apex:outputLabel value="{!objAccount.BillingCity}" styleClass="slds-input" id="olC3"/> 
+                                              </div>
+                                            </div>
+                                        </div>
+                                        <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-3 slds-col--padded">
+                                            <div class="slds-form-element">
+                                              <label class="slds-form-element__label" for="text-input-01">State</label>
+                                              <div class="slds-form-element__control">
+        <!--                                         <input id="text-input-01" class="slds-input" type="text" /> -->
+        <!--                                             <apex:inputField styleClass="slds-input" value="{!objAccount.BillingPostalCode}" id="if8"/> -->
+                                                    <apex:outputLabel value="{!objAccount.BillingState}" styleClass="slds-input" id="olC4"/> 
+                                              </div>
+                                            </div>
+                                        </div>
+                                        <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-3 slds-col--padded">
+                                            <div class="slds-form-element">
+                                              <label class="slds-form-element__label">Phone</label>
+                                              <div class="slds-form-element__control">
+        <!--                                         <input id="text-input-01" class="slds-input" type="text" /> -->
+        <!--                                             <apex:inputField styleClass="slds-input" value="{!objAccount.Phone}" id="if9"/>  -->
+                                                    <apex:outputLabel value="{!objAccount.Phone}" styleClass="slds-input" id="olC5"/>
+                                              </div>
+                                            </div>
+                                        </div>
+                                        <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-3 slds-col--padded">
+                                            <div class="slds-form-element">
+                                              <label class="slds-form-element__label">Email</label>
+                                              <div class="slds-form-element__control">
+        <!--                                         <input id="text-input-01" class="slds-input" type="text" /> -->
+        <!--                                             <apex:inputField styleClass="slds-input" value="{!objAccount.Email__c}" id="if10"/> -->
+                                                    <apex:outputLabel value="{!objAccount.Email__c}" styleClass="slds-input" id="olC6"/> 
+                                              </div>
+                                            </div>
+                                        </div>
+                                        
+                                    </div>
+                                </div>
+                                </apex:outputPanel>
+                                <div class="slds-col slds-size--1-of-1 slds-col--padded">
+                                    <h2 class="heading">Product Salesperson</h2>
+                                </div>
+                                <div class="slds-col slds-size--1-of-1">
+                                    <div class="slds-wrap slds-grid">
+                                        <div class="slds-col slds-size--1-of-3 slds-col--padded">
+                                            <div class="slds-form-element">
+                                              <label class="slds-form-element__label">Salesperson</label>
+                                              <div class="slds-form-element__control">
+                                                <apex:inputField value="{!objProduct.M_Product_Salesperson_new__c}" id="if11" styleClass="slds-input"/>
+                                              </div>
+                                            </div>
+                                        </div>
+                                        <div class="slds-col slds-size--1-of-3 slds-col--padded">
+                                            <div class="slds-form-element">
+                                              <label class="slds-form-element__label">Order By</label>
+                                              <div class="slds-form-element__control">
+                                                <input type="text" class="slds-input" />
+                                              </div>
+                                            </div>
+                                        </div>
+                                        <div class="slds-col slds-size--1-of-3 slds-col--padded">
+                                            <div class="slds-form-element">
+                                              <label class="slds-form-element__label">Interest Start Date</label>
+                                              <div class="slds-form-element__control">
+                                                <input type="text" class="slds-input" />
+                                              </div>
+                                            </div>
+                                        </div>
+                                        <div class="slds-col slds-size--1-of-3 slds-col--padded">
+                                            <div class="slds-form-element">
+                                              <label class="slds-form-element__label">Curtailment start date</label>
+                                              <div class="slds-form-element__control">
+                                                <input type="text" class="slds-input" />
+                                              </div>
+                                            </div>
+                                        </div>
+                                        <div class="slds-col slds-size--1-of-3 slds-col--padded">
+                                            <div class="slds-form-element">
+                                              <label class="slds-form-element__label">Date First Available For Sale</label>
+                                              <div class="slds-form-element__control">
+                                                <input type="text" class="slds-input" />
+                                              </div>
+                                            </div>
+                                        </div>
+<!--                                         <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-3 slds-col--padded"> -->
+<!--                                             <div class="slds-form-element"> -->
+<!--                                               <label class="slds-form-element__label">&nbsp;</label> -->
+<!--                                               <div class="slds-form-element__control random"> -->
+<!--        			                                 <input id="text-input-01" class="slds-input" type="text" /> -->
+<!--			                                             <apex:inputField styleClass="slds-input" value="{!objAccount.Email__c}" id="if10"/> -->
+<!--                                                     <label class="slds-form-element__label">No Trailer:</label>&nbsp;<apex:inputCheckbox value="{!noTrailer}"  id="olC7"/>  -->
+<!--                                               </div> -->
+<!--                                             </div> -->
+<!--                                         </div> -->
+                                    </div>
+                                </div>
+                            </div> 
+                        </div>
+                        
+                        
+                        <div id="tab-default-1" class="slds-tabs--default__content slds-hide" role="tabpanel" aria-labelledby="tab-default-2__item">
+                            <!-- product information -->
+                            <div class="slds-grid slds-wrap">
+                                <div class="slds-col slds-size--1-of-1 slds-col--padded"><h1 class="heading">Product Info</h1></div>
+                                <div class="slds-col slds-size--1-of-1">
+                                    <div class="slds-grid slds-wrap">
+                                        <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-5 slds-col--padded">
+                                            <div class="slds-form-element">
+                                              <label class="slds-form-element__label" for="text-input-01">Manufacturer:</label>
+                                              <div class="slds-form-element__control">
+        <!--                                         <input id="text-input-01" class="slds-input" type="text" /> -->
+                                                    <apex:outputLabel value="{!selectedManufacturerThirdPage}" id="ol1" />
+                                              </div>
+                                            </div>
+                                        </div>
+                                        <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-5 slds-col--padded">
+                                            <div class="slds-form-element">
+                                              <label class="slds-form-element__label" for="text-input-01">Model:</label>
+                                              <div class="slds-form-element__control">
+        <!--                                         <input id="text-input-01" class="slds-input" type="text" /> -->
+                                                    <apex:outputLabel value="{!selectedModelThirdPage}" id="ol2" />
+                                              </div>
+                                            </div>
+                                        </div>
+                                        <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-5 slds-col--padded">
+                                            <div class="slds-form-element">
+                                              <label class="slds-form-element__label" for="text-input-01">First Available Date</label>
+                                              <div class="slds-form-element__control">
+                                                <input id="text-input-01" class="slds-input" type="text" />
+                                              </div>
+                                            </div>
+                                        </div>
+                                        
+                                        <!--<div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-5 slds-col--padded">
+                                            <div class="slds-form-element">
+                                                <label class="slds-form-element__label" for="text-input-01">DC ID:</label>
+                                                <div class="slds-form-element__control">
+                                                     <input id="text-input-01" class="slds-input" type="text" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                        -->
+                                        <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-5 slds-col--padded">
+                                            <div class="slds-form-element">
+                                              <label class="slds-form-element__label" for="text-input-01">Hull ID:</label>
+                                              <div class="slds-form-element__control">
+                                                    <apex:outputLabel value="{!objProduct.Hull_Id__c}" styleClass="slds-input" id="ol4"/>
+                                                    <!--<apex:inputField value="{!objProduct.Hull_Id__c}" styleClass="slds-input"/> -->
+                                              </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="slds-col slds-size--1-of-1">
+                                    <div class="slds-grid slds-wrap">
+                                        <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-5 slds-col--padded">
+                                            <div class="slds-form-element">
+                                              <label class="slds-form-element__label" for="text-input-01">Eng. 1 SN:</label>
+                                              <div class="slds-form-element__control">
+        <!--                                         <input id="text-input-01" class="slds-input" type="text" /> -->
+                                                    <apex:inputField value="{!objItem.Engine_1_Serial_Number__c}" styleClass="slds-input" id="if1"/> 
+                                              </div>
+                                            </div>
+                                        </div>
+                                        <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-5 slds-col--padded">
+                                            <div class="slds-form-element">
+                                              <label class="slds-form-element__label" for="text-input-01">Eng. 2 SN:</label>
+                                              <div class="slds-form-element__control">
+        <!--                                         <input id="text-input-01" class="slds-input" type="text" /> -->
+                                                    <apex:inputField value="{!objItem.Engine_2_Serial_Number__c}" styleClass="slds-input" id="if2"/>
+                                              </div>
+                                            </div>
+                                        </div>
+                                        <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-5 slds-col--padded">
+                                            <div class="slds-form-element">
+                                              <label class="slds-form-element__label" for="text-input-01">Eng. 3 SN:</label>
+                                              <div class="slds-form-element__control">
+        <!--                                         <input id="text-input-01" class="slds-input" type="text" /> -->
+                                                    <apex:inputField value="{!objItem.Engine_3_Serial_Number__c}" styleClass="slds-input" id="if3"/>
+                                              </div>
+                                            </div>
+                                        </div>
+                                        <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-5 slds-col--padded">
+                                            <div class="slds-form-element">
+                                              <label class="slds-form-element__label" for="text-input-01">Eng. 4 SN:</label>
+                                              <div class="slds-form-element__control">
+        <!--                                         <input id="text-input-01" class="slds-input" type="text" /> -->
+                                                    <apex:inputField value="{!objItem.Engine_4_Serial_Number__c}" styleClass="slds-input" id="if4"/>
+                                              </div>
+                                            </div>
+                                        </div>
+                                        <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-5 slds-col--padded">
+                                            <div class="slds-form-element">
+                                              <label class="slds-form-element__label" for="text-input-01">Trans. 1 SN:</label>
+                                              <div class="slds-form-element__control">
+        <!--                                         <input id="text-input-01" class="slds-input" type="text" /> -->
+                                                    <apex:inputField value="{!objItem.Transmission_Gearbox_HIN_No__c}" styleClass="slds-input" id="if5"/>
+                                              </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="slds-col slds-size--1-of-1">
+                                    <div class="slds-grid slds-wrap">
+                                        <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-5 slds-col--padded">
+                                            <div class="slds-form-element">
+                                              <label class="slds-form-element__label" for="text-input-01">Trailer SN:</label>
+                                              <div class="slds-form-element__control">
+        <!--                                         <input id="text-input-01" class="slds-input" type="text" /> -->
+                                                    <apex:inputField value="{!objItem.Trailer_HIN_No__c}" styleClass="slds-input" id="if6"/>
+                                              </div>
+                                            </div>
+                                        </div>
+                                        <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-5 slds-col--padded">
+                                            <div class="slds-form-element">
+                                              <label class="slds-form-element__label" for="text-input-01">Order #:</label>
+                                              <div class="slds-form-element__control">
+                                                <input id="text-input-01" class="slds-input" type="text" />
+                                              </div>
+                                            </div>
+                                        </div>
+                                        <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-5 slds-col--padded">
+                                            <div class="slds-form-element">
+                                              <label class="slds-form-element__label" for="text-input-01">Dealer Stock #:</label>
+                                              <div class="slds-form-element__control">
+        <!--                                         <input id="text-input-01" class="slds-input" type="text" /> -->
+                                                <apex:inputField value="{!objProduct.M_Dealer_Stock__c}" styleClass="slds-input" id="if7"/>
+                                              </div>
+                                            </div>
+                                        </div>
+                                        <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-5 slds-col--padded">
+                                            <div class="slds-form-element">
+                                                <label class="slds-form-element__label" for="text-input-01"></label>
+                                                <div class="slds-form-element__control">
+                                                    <label class="slds-checkbox">
+                                                        <input type="checkbox" name="options" id="checkbox-01" />
+                                                        <span class="slds-checkbox--faux"></span>
+                                                        <span class="slds-form-element__label">Show Dir Cost</span>
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-5 slds-col--padded"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+        
+                        <div id="tab-default-2" class="slds-tabs--default__content slds-hide" role="tabpanel" aria-labelledby="tab-default-2__item">
+                            <!-- important details -->
+                            <div class="slds-grid slds-wrap">
+                                <div class="slds-col slds-size--1-of-1 slds-col--padded"><h1 class="heading">Important Dates</h1></div>
+                                <div class="slds-col slds-size--1-of-1">
+                                    <div class="slds-grid slds-wrap">
+                                        <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-5 slds-col--padded">
+                                            <div class="slds-form-element">
+                                              <label class="slds-form-element__label" for="text-input-01">Requested Ship Date:</label>
+                                              <div class="slds-form-element__control">
+                                                <input id="text-input-01" class="slds-input" type="text" />
+                                              </div>
+                                            </div>
+                                        </div>
+                                        <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-5 slds-col--padded">
+                                            <div class="slds-form-element">
+                                              <label class="slds-form-element__label" for="text-input-01">Quote Date:</label>
+                                              <div class="slds-form-element__control">
+                                                <input id="text-input-01" class="slds-input" type="text" />
+                                              </div>
+                                            </div>
+                                        </div>
+                                        <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-5 slds-col--padded">
+                                            <div class="slds-form-element">
+                                              <label class="slds-form-element__label" for="text-input-01">Order Date:</label>
+                                              <div class="slds-form-element__control">
+                                                <input id="text-input-01" class="slds-input" type="text" />
+                                              </div>
+                                            </div>
+                                        </div>
+                                        <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-5 slds-col--padded">
+                                            <div class="slds-form-element">
+                                              <label class="slds-form-element__label" for="text-input-01">Pre-Prod Unconfirmed Date:</label>
+                                              <div class="slds-form-element__control">
+                                                <input id="text-input-01" class="slds-input" type="text" />
+                                              </div>
+                                            </div>
+                                        </div>
+                                        <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-5 slds-col--padded">
+                                            <div class="slds-form-element">
+                                              <label class="slds-form-element__label" for="text-input-01">Pre-Prod Confirmed Date:</label>
+                                              <div class="slds-form-element__control">
+                                                <input id="text-input-01" class="slds-input" type="text" />
+                                              </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="slds-col slds-size--1-of-1">
+                                    <div class="slds-grid slds-wrap">
+                                        <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-5 slds-col--padded">
+                                            <div class="slds-form-element">
+                                              <label class="slds-form-element__label" for="text-input-01">Build Date:</label>
+                                              <div class="slds-form-element__control">
+                                                <input id="text-input-01" class="slds-input" type="text" />
+                                              </div>
+                                            </div>
+                                        </div>
+                                        <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-5 slds-col--padded">
+                                            <div class="slds-form-element">
+                                              <label class="slds-form-element__label" for="text-input-01">Est. Ship Date:</label>
+                                              <div class="slds-form-element__control">
+                                                <input id="text-input-01" class="slds-input" type="text" />
+                                              </div>
+                                            </div>
+                                        </div>
+                                        <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-5 slds-col--padded">
+                                            <div class="slds-form-element">
+                                              <label class="slds-form-element__label" for="text-input-01">Shipped Date:</label>
+                                              <div class="slds-form-element__control">
+                                                <input id="text-input-01" class="slds-input" type="text" />
+                                              </div>
+                                            </div>
+                                        </div>
+                                        <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-5 slds-col--padded">
+                                            <div class="slds-form-element">
+                                              <label class="slds-form-element__label" for="text-input-01">Received Date:</label>
+                                              <div class="slds-form-element__control">
+                                                <input id="text-input-01" class="slds-input" type="text" />
+                                              </div>
+                                            </div>
+                                        </div>
+                                        <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-5 slds-col--padded">
+                                            <div class="slds-form-element">
+                                                <label class="slds-checkbox">
+                                                    <input type="checkbox" name="options" id="checkbox-01" />
+                                                    <span class="slds-checkbox--faux"></span>
+                                                    <span class="slds-form-element__label">Ext Warranty:</span>
+                                                </label>
+                                                <div class="slds-form-element__control">
+                                                    <input id="text-input-01" class="slds-input" type="text" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="slds-col slds-size--1-of-1">
+                                    <div class="slds-grid slds-wrap">
+                                        <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-5 slds-col--padded">
+                                            <div class="slds-form-element">
+                                              <label class="slds-form-element__label" for="text-input-01">Delivered/Wty Start Date:</label>
+                                              <div class="slds-form-element__control">
+                                                <input id="text-input-01" class="slds-input" type="text" />
+                                              </div>
+                                            </div>
+                                        </div>
+                                        <div class="slds-col slds-size--1-of-1 slds-medium-size--4-of-5 slds-col--padded"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        
+                    </div>
+                </div>
+            </article>
+            <apex:outputPanel rendered="{!TrailerInfo}">
+            <article class="slds-card card-wrapper">
+               <header class="slds-card__header slds-grid">
+                   <div class="slds-media slds-media--center slds-has-flexi-truncate">
+                       <div class="slds-media__body slds-truncate">
+                           <h2>Quote Trailer Information</h2>
+                       </div>
+                   </div>
+               </header>
+               <div class="slds-card__body" style="padding: 1%;">
+                   <div class="slds-wrap slds-grid slds-col--padded">
+                       <div class="slds-size--1-of-2 slds-col--padded">
+                           <div class="slds-form-element">
+                               <label class="slds-form-element__label"><b>Manufacturer:</b></label>
+                               <div class="slds-form-element__control">
+                                  &nbsp;&nbsp;&nbsp;&nbsp;{!objQuote3.Trailer__r.Manufacturer__c}
+                                   
+                               </div>
+                           </div>
+                       </div>
+                       <div class="slds-size--1-of-2 slds-col--padded">
+                           <div class="slds-form-element">
+                               <label class="slds-form-element__label"><b>Price:</b></label>
+                               <div class="slds-form-element__control">
+                                  &nbsp;&nbsp;&nbsp;&nbsp;$&nbsp;{!objQuote3.Trailer__r.Total_MSRP_Price__c}
+                               </div>
+                           </div>
+                       </div>
+                       <div class="slds-size--1-of-2 slds-col--padded">
+                           <div class="slds-form-element">
+                               <label class="slds-form-element__label"><b>Model:</b></label>
+                               <div class="slds-form-element__control">
+                                    &nbsp;&nbsp;&nbsp;&nbsp;{!objQuote3.Trailer__r.Model__c}
+                               </div>
+                           </div>
+                       </div>
+                       <div class="slds-size--1-of-2 slds-col--padded">
+                           <div class="slds-form-element">
+                               <label class="slds-form-element__label"><b>Year:</b></label>
+                               <div class="slds-form-element__control">
+      							 &nbsp;&nbsp;&nbsp;&nbsp;{!objQuote3.Trailer__r.Year__c}
+                               </div>
+                           </div>
+                       </div>
+                   </div>
+               </div>  
+           </article>
+           </apex:outputPanel>
+           <apex:outputPanel rendered="{!EngineInfo}">
+           <article class="slds-card card-wrapper">
+               <header class="slds-card__header slds-grid">
+                   <div class="slds-media slds-media--center slds-has-flexi-truncate">
+                       <div class="slds-media__body slds-truncate">
+                           <h2>Quote Engine Information</h2>
+                       </div>
+                   </div>
+               </header>
+               <div class="slds-card__body" style="padding: 1%;">
+                   <div class="slds-wrap slds-grid slds-col--padded">
+                       <div class="slds-size--1-of-2 slds-col--padded">
+                           <div class="slds-form-element">
+                               <label class="slds-form-element__label"><b>Manufacturer:</b></label>
+                               <div class="slds-form-element__control">
+                                  &nbsp;&nbsp;&nbsp;&nbsp;{!objQuote3.Engine__r.Manufacturer__c}
+                                   
+                               </div>
+                           </div>
+                       </div>
+                       <div class="slds-size--1-of-2 slds-col--padded">
+                           <div class="slds-form-element">
+                               <label class="slds-form-element__label"><b>Price:</b></label>
+                               <div class="slds-form-element__control">
+                                  &nbsp;&nbsp;&nbsp;&nbsp;$&nbsp;{!objQuote3.Engine__r.Total_MSRP_Price__c}
+                               </div>
+                           </div>
+                       </div>
+                       <div class="slds-size--1-of-2 slds-col--padded">
+                           <div class="slds-form-element">
+                               <label class="slds-form-element__label"><b>Model:</b></label>
+                               <div class="slds-form-element__control">
+                                    &nbsp;&nbsp;&nbsp;&nbsp;{!objQuote3.Engine__r.Model__c}
+                               </div>
+                           </div>
+                       </div>
+                       <div class="slds-size--1-of-2 slds-col--padded">
+                           <div class="slds-form-element">
+                               <label class="slds-form-element__label"><b>Year:</b></label>
+                               <div class="slds-form-element__control">
+      							 &nbsp;&nbsp;&nbsp;&nbsp;{!objQuote3.Engine__r.Year__c}
+                               </div>
+                           </div>
+                       </div>
+                   </div>
+               </div>  
+           </article>
+           </apex:outputPanel> 
+            
+            <!-- Second Section Product -->
+            <article class="slds-card card-wrapper">
+                <div class="slds-card__body slds-col--padded">
+                    <div class="slds-tabs--default">
+                        <ul class="slds-tabs--default__nav" role="tablist">
+                            <li class="slds-tabs--default__item slds-text-heading--label slds-active" title="Item One" role="presentation"><a class="slds-tabs--default__link" href="javascript:void(0);" role="tab" tabindex="0" aria-selected="true" aria-controls="tab-default-1a" id="tab-default-1a__item">Price &amp; Options</a></li>
+                            <li class="slds-tabs--default__item slds-text-heading--label" title="Item Two"
+                          role="presentation"><a class="slds-tabs--default__link" href="javascript:void(0);" role="tab" tabindex="-1" aria-selected="false" aria-controls="tab-default-2a" id="tab-default-2a__item">Commments</a></li>
+                            <li class="slds-tabs--default__item slds-text-heading--label" title="Item Three"
+                          role="presentation"><a class="slds-tabs--default__link" href="javascript:void(0);" role="tab" tabindex="-1" aria-selected="false" aria-controls="tab-default-3a" id="tab-default-3a__item">Notes(1)</a></li>
+                          <li class="slds-tabs--default__item slds-text-heading--label" title="Item Four"
+                          role="presentation">
+                            <a class="slds-tabs--default__link" href="javascript:void(0);" role="tab" tabindex="-1" aria-selected="false" aria-controls="tab-default-4a" id="tab-default-4a__item">Attachments</a>
+                          </li>
+                          <li class="slds-tabs--default__item slds-text-heading--label" title="Item Five"
+                          role="presentation"><a class="slds-tabs--default__link" href="javascript:void(0);" role="tab" tabindex="-1" aria-selected="false" aria-controls="tab-default-5a" id="tab-default-5a__item">History(1)</a></li>
+                        </ul>
+                        
+                        
+                        <div id="tab-default-1a" class="slds-tabs--default__content slds-show" role="tabpanel" aria-labelledby="tab-default-2a__item">
+                        
+                        <apex:repeat value="{!lstPriceAndProductOptionWraperClass}" var="lscM" id="rv0"> 
+                            <article class="slds-card">
+                                <header class="slds-card__header slds-grid">
+                                    <div class="slds-media slds-media--center slds-has-flexi-truncate"> 
+                                        <div class="slds-media__body slds-truncate">
+                                            <h2>Manufacturer option for {!lscM.strSelectedOption}</h2>
+                                            
+                                        </div>  
+                                    </div>
+                                    
+                                    <!-- <div class="slds-no-flex">
+                                        <button class="slds-button slds-button--neutral slds-col--bump-left">New</button>
+                                    </div> -->
+                                </header>
+                                <div class="slds-card__body">
+                                    <table class="slds-table slds-table--bordered slds-no-row-hover slds-table--cell-buffer">
+                                        <thead>
+                                            <tr class="slds-text-heading--label">
+                                                <th scope="col">Description</th>
+                                                <th scope="col">&nbsp;</th>
+                                                <apex:outputPanel rendered="{!buttonRenderForPlaceOrder}">
+                                                    <th scope="col">Dealer Price</th>
+                                                </apex:outputPanel>
+                                                <th scope="col">Retail Price</th>
+                                                <th scope="col">Part Number</th>
+                                            </tr>
+                                        </thead>
+                                        
+                                        <tbody>
+                                        <apex:variable value="{!1}" var="rowNumber"/>
+                                            <apex:repeat value="{!lscM.lstProductPriceForSelectedCategory}" var="lsc" id="rv1">
+                                                <tr class="slds-hint-parent">   
+                                                    <td>
+                                                        <div class="slds-form-element">
+                                                            <div class="slds-form-element__control">
+                                                                <label class="slds-checkbox">
+        <!--                                                             <input type="checkbox" name="options" id="checkbox-01" /> -->
+                                                                    <apex:inputCheckbox value="{!lsc.checkBox}" id="ic1" onchange="changeIncheckBox('{!rowNumber}','{!lscM.strSelectedOption}', this)"/>
+                                                                    <span class="slds-checkbox--faux"></span>
+                                                                    <span class="slds-form-element__label">  {!lsc.objProductPriceForSelectedCategory.ProductSelected_Category__c} </span>
+                                                                </label>
+                                                            </div>
+                                                        </div>
+                                                    </td>
+                                                    <td>&nbsp;</td>
+                                                    <apex:outputPanel rendered="{!buttonRenderForPlaceOrder}">
+                                                        <td ><apex:outputField value="{!lsc.objProductPriceForSelectedCategory.Dealer_Price__c}" id="ot10"/></td>
+                                                    </apex:outputPanel>                                                     
+                                                    <td ><apex:outputField value="{!lsc.objProductPriceForSelectedCategory.ProductRetail_Price__c}" id="ot0"/></td>
+                                                    <td>{!lsc.objProductPriceForSelectedCategory.Product_Code__c}</td> 
+                                                    <apex:variable value="{!rowNumber+1}" var="rowNumber"/>
+                                                </tr>
+                                            </apex:repeat>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </article>
+                        </apex:repeat>
+                        </div>
+        
+                        <div id="tab-default-2a" class="slds-tabs--default__content slds-hide" role="tabpanel" aria-labelledby="tab-default-2a__item">
+                            two
+                        </div>
+                        <div id="tab-default-3a" class="slds-tabs--default__content slds-hide" role="tabpanel" aria-labelledby="tab-default-3a__item">
+                            three
+                        </div>
+                        <div id="tab-default-4a" class="slds-tabs--default__content slds-hide" role="tabpanel" aria-labelledby="tab-default-4a__item">
+                            four
+                        </div>
+                        <div id="tab-default-5a" class="slds-tabs--default__content slds-hide" role="tabpanel" aria-labelledby="tab-default-5a__item">
+                            five
+                        </div>
+                    </div>
+                </div>
+            </article>
+            
+            
+            <!-- payment calculator -->
+            <article class="slds-card card-wrapper">
+                <header class="slds-card__header slds-grid">
+                    <div class="slds-media slds-media--center slds-has-flexi-truncate">
+                        <div class="slds-media__body slds-truncate">
+                            <h2>Custom Write-in Options &amp; Adjustments (visible to mfg)</h2>
+                        </div>
+                    </div>
+                </header>
+          
+                <div class="slds-card__body">
+                    <table class="slds-table slds-table--bordered slds-no-row-hover slds-table--cell-buffer slds-table--custom">
+                        <thead>
+                            <tr class="slds-text-heading--label">
+                                <th scope="col">Description</th>
+                                <th scope="col">&nbsp;</th>
+                                <apex:outputPanel rendered="{!buttonRenderForPlaceOrder}">
+                                    <th scope="col">Dealer Price</th>
+                                </apex:outputPanel>
+                                <th scope="col">Retail Price</th>
+                                <th scope="col">Taxable</th>
+                            </tr>
+                        </thead>
+                    </table>
+                </div>  
+            </article>
+			<div class="popupDiv" id="doId">
+				<div style="border: 5px solid #d9dee6; padding: 2%; position: fixed; top: 20%; left: 30%; z-index: 999; background: #fff; border-radius: 14px; height: auto; width: 500px;">
+					<div>
+						<i id="closeIcn" class="fa fa-close" style="font-size:24px; position: absolute; bottom: 85%; right: 3%;"></i>
+					</div>
+					<table>
+						<tr>
+							<td colspan="2" style="text-align: center;">
+								<h2 style="font-size: 1.25em; font-weight: 600; color: #6f809c;">Add Dealer Option</h2>
+							</td>
+						</tr>
+						<tr>
+							<td colspan="2" style="text-align: center;">
+								&nbsp;
+							</td>
+						</tr>
+						<tr>
+							<td>
+								Description
+							</td>
+							<td>
+								<input type="text" id="decId"  class="slds-input"/>
+							</td> 
+						</tr>
+						<tr>
+							<td>
+								Dealer Price
+							</td>
+							<td>
+								<input type="text" id="delId" onkeypress="return isNumberKey(event);" value="0.00" class="slds-input"/>
+							</td>
+						</tr>
+						<tr>
+							<td>
+								Retail Price
+							</td>
+							<td>
+								<input type="text" id="retId" onkeypress="return isNumberKey(event);" value="0.00" class="slds-input"/>
+							</td>
+						</tr>
+						<tr>
+							<td>
+								Non Taxable
+							</td>
+							<td>
+								<input type="checkbox" id="taxcheckDO"/>
+							</td>
+						</tr>
+						<tr>
+							<td colspan="2" style="text-align: center;">
+								<a class="slds-button slds-button--neutral slds-button--brand" onclick="addDealerOptionToList(this);">Add</a>
+							</td>
+						</tr>
+					</table>
+				</div>        
+        		</div>
+            <article class="slds-card card-wrapper">
+                <header class="slds-card__header slds-grid">
+                    <div class="slds-media slds-media--center slds-has-flexi-truncate">
+                        <div class="slds-media__body slds-truncate">
+                        		<table>
+	                        		<tr>
+	                        			<td>
+		                            		<h2>Dealer Options</h2>
+		                            </td>
+		                            <td>
+		                            		<a onclick="addDealerOption(this);"><i class="fa fa-plus-square" style="font-size: 30px; color: #1a6fd3;"></i></a>
+		                            </td>
+	                            </tr>
+                            </table>
+                        </div>
+                    </div>
+                </header>
+                <apex:actionFunction name="addDealOptToLst" action="{!updateDealerOptionList}" id="doLU" rerender="dealOptOP,pcDiv1,pcDiv2" oncomplete="completedTaskListUpdate();">
+			        <apex:param name="desDOPP" assignTo="{!decDO}" value=""/>
+			        <apex:param name="delDOPP" assignTo="{!delDO}" value=""/>
+			        <apex:param name="recDOPP" assignTo="{!retDO}" value=""/> 
+			        <apex:param name="prtNoDOPP" assignTo="{!pnDO}" value=""/>
+			        <apex:param name="tc" assignTo="{!tcDo}" value=""/>
+			    </apex:actionFunction>
+          		<script>
+          			function addDealerOption(obj) {
+          				$("#doId").fadeIn();
+          				//document.getElementById("doId").style.display = 'block';
+          			}
+          			
+          			$("#closeIcn").click(function() {
+          				$("#doId").fadeOut();
+          			});
+          			
+          			function addDealerOptionToList(obj) {
+          				console.log(obj);
+          				var dec = '';
+          				var retPrice = 0.00;
+          				var dealPrice = 0.00;
+          				var prtNo = Math.floor(Math.random()*100000);
+          				
+          				if($("#decId").val() != null && $("#decId").val() != '') {
+          					dec = $("#decId").val();
+          				}
+          				if($("#retId").val() != null && $("#retId").val() != '') {
+          					retPrice = $("#retId").val();
+          				}
+          				if($("#delId").val() != null && $("#delId").val() != '') {
+          					dealPrice = $("#delId").val();
+          				}
+          				var taxcheck = '0';
+          				if(document.getElementById("taxcheckDO").checked) {
+          					taxcheck = '1';
+          				}
+          				
+          				if(dec != '' && retPrice != '' && dealPrice != '') {
+          					addDealOptToLst(dec, dealPrice, retPrice, prtNo, taxcheck);
+          				} else {
+          					alert("Please fill all the details.")
+          				}
+          			}
+          			function completedTaskListUpdate() {
+          				$("#decId").val("");
+          				$("#retId").val("");
+          				$("#delId").val("");
+          				document.getElementById("taxcheckDO").checked = false;
+          				$("#doId").fadeOut();
+          			} 
+          			function isNumberKey(evt) {
+			            var charCode = (evt.which) ? evt.which : evt.keyCode;
+			            if (charCode != 45 && charCode != 46 && charCode > 31 
+			                && (charCode < 48 || charCode > 57)){
+			                return false;  
+			            }
+			            return true;
+			        }
+          		</script>
+          		<apex:outputPanel id="dealOptOP">	
+	                <div class="slds-card__body">
+	                    <table class="slds-table slds-table--bordered slds-no-row-hover slds-table--cell-buffer slds-table--custom">
+	                        <thead>
+	                            <tr class="slds-text-heading--label">
+	                                <th scope="col">Description </th>
+	                                <th scope="col">&nbsp; </th>
+                                    <th scope="col">
+	                                    <apex:outputPanel rendered="{!buttonRenderForPlaceOrder}">Dealer Price</apex:outputPanel>
+	                                </th>
+	                                <th scope="col">Retail Price </th>
+	                                <th scope="col">Part Number</th>
+	                                <th scope="col">Non Taxable</th>
+	                            </tr>
+	                        </thead>
+	                        
+	                        <tbody>
+		                            <apex:repeat value="{!lstDealerOptionWraper}" var="varDO" >
+		                                <tr class="slds-hint-parent">   
+		                                    <td>
+		                                        <label class="slds-checkbox">
+		                                          <apex:inputCheckbox value="{!varDO.isSelect}" id="ic77"  onchange="changeDealerOption('{!varDO.objDealerOption.Part_Number__c}', this)"/>
+		                                          <span class="slds-checkbox--faux"></span>
+		                                          <span class="slds-form-element__label">{!varDO.objDealerOption.Name}</span>
+		                                        </label>
+		                                    </td>
+		                                    <td>&nbsp;</td>
+		                                    <td>
+			                                    	<apex:outputPanel rendered="{!buttonRenderForPlaceOrder}">
+			                                    		<apex:outputField value="{!varDO.objDealerOption.Cost__c}" id="ot22"/>
+			                                    	</apex:outputPanel>
+		                                    	</td>
+		                                      
+		                                    <td><apex:outputField value="{!varDO.objDealerOption.Retail_Price__c}" id="ot24"/></td>
+		                                    <td> 
+		                                    		{!varDO.objDealerOption.Part_Number__c} 
+		                                    		
+		                                    	</td>
+		                                    	<td> 
+		                                    		<apex:inputCheckbox value="{!varDO.Non_Taxable}" id="tb" />&nbsp;&nbsp;
+		                                    		<apex:outputPanel rendered="{!varDO.ShowRemoveIcon}">
+			                                    		 <a onclick="removeTheDealerOption('{!varDO.objDealerOption.Part_Number__c}');">
+			                                    		 	<i class="fa fa-close" style="font-size: 20px;"></i> 
+			                                    		 </a> 
+		                                    		 </apex:outputPanel>
+		                                    	</td> 
+		                                </tr>
+		                            </apex:repeat>
+	                        </tbody>
+	                    </table>
+	                </div>  
+                </apex:outputPanel> 
+            </article>
+            
+            <apex:actionFunction name="deleteDealerOptionCheckBoxSub" action="{!getDeleteDealerOptionPriceSub}" id="af6" rerender="pcDiv1,pcDiv2,dealOptOP" oncomplete="completedTask();">
+		        <apex:param name="rN" assignTo="{!dealerPartNumber}" value=""/>
+		    </apex:actionFunction>
+            
+			<script> 
+				function removeTheDealerOption(prtNum) {
+					$('.popup').addClass('active');
+					deleteDealerOptionCheckBoxSub(prtNum);	
+				} 
+			</script>            
+        
+            <!-- trailer information -->
+            <apex:outputPanel rendered="{!buttonRenderForSaveAndReCal}">
+            <article class="slds-card card-wrapper">
+                <header class="slds-card__header slds-grid">
+                    <div class="slds-media slds-media--center slds-has-flexi-truncate">
+                        <div class="slds-media__body slds-truncate">
+                            <h2>Trailer Information</h2>
+                        </div>
+                    </div>
+                </header>
+                <div class="slds-card__body">
+                    <div class="slds-wrap slds-grid slds-col--padded">
+                        <div class="slds-size--1-of-2 slds-col--padded">
+                            <div class="slds-form-element">
+                                <label class="slds-form-element__label">Manufacturer:</label>
+                                <div class="slds-form-element__control">
+        <!--                             <input class="slds-input" type="text" /> -->
+                                    <apex:inputField value="{!objItem.Trailer_Manufacturer__c}" styleClass="slds-input" id="ifTm"/>
+                                    
+                                </div>
+                            </div>
+                        </div>
+                        <div class="slds-size--1-of-2 slds-col--padded">
+                            <div class="slds-form-element">
+                                <label class="slds-form-element__label">Price:</label>
+                                <div class="slds-form-element__control">
+        <!--                             <input class="slds-input" type="text" /> -->
+                                    <apex:inputField value="{!objItem.Trailer_Price__c}" styleClass="slds-input" id="ifTTP"/>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="slds-size--1-of-2 slds-col--padded">
+                            <div class="slds-form-element">
+                                <label class="slds-form-element__label">Model:</label>
+                                <div class="slds-form-element__control">
+        <!--                             <input class="slds-input" type="text" /> -->
+                                    <apex:inputField value="{!objItem.Trailer_Model__c}" id="ifTMO" styleClass="slds-input"/>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="slds-size--1-of-2 slds-col--padded">
+                            <div class="slds-form-element">
+                                <label class="slds-form-element__label">Year:</label>
+                                <div class="slds-form-element__control">
+        <!--                             <select class="slds-select"> -->
+        <!--                                 <option>2014</option> -->
+        <!--                                 <option>2015</option> -->
+        <!--                                 <option>2016</option> -->
+        <!--                             </select> -->
+                                    <apex:inputField value="{!objItem.Trailer_Year__c}" styleClass="slds-select" id="ifTY"/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>  
+            </article>
+            </apex:outputPanel>
+            
+            <!-- Customer Trade-in information -->
+            <apex:outputPanel rendered="{!buttonRenderForSaveAndReCal}">
+            <article class="slds-card card-wrapper">
+                <header class="slds-card__header slds-grid">
+                    <div class="slds-media slds-media--center slds-has-flexi-truncate">
+                        <div class="slds-media__body slds-truncate">
+                            <h2>Customer Trade-in Information</h2>
+                        </div>
+                    </div>
+                </header>
+                <div class="slds-card__body">
+                    <div class="slds-wrap slds-grid slds-col--padded">
+                        <div class="slds-size--1-of-2 slds-col--padded">
+                            <div class="slds-form-element">
+                                <label class="slds-form-element__label">Manufacturer:</label>
+                                <div class="slds-form-element__control">
+        <!--                             <input class="slds-input" type="text" /> -->
+                                    <apex:inputField value="{!objItem.Trade_In_Manufacturer__c}" id="ifTIM" styleClass="slds-input"/>
+                                </div>
+                            </div> 
+                        </div>
+                        <div class="slds-size--1-of-2 slds-col--padded">
+                            <div class="slds-form-element">
+                                <label class="slds-form-element__label">Engine:</label>
+                                <div class="slds-form-element__control">
+        <!--                             <input class="slds-input" type="text" /> -->
+                                    <apex:inputField value="{!objItem.Trade_In_Engine__c}" id="ifTIE" styleClass="slds-input"/>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="slds-size--1-of-2 slds-col--padded">
+                            <div class="slds-form-element">
+                                <label class="slds-form-element__label">Value:</label>
+                                <div class="slds-form-element__control">
+        <!--                             <input class="slds-input" type="text" /> -->
+                                    <apex:inputField value="{!objItem.Trade_In_Price_Value__c}" id="ifTIV" styleClass="slds-input"/>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="slds-size--1-of-2 slds-col--padded">
+                            <div class="slds-form-element">
+                                <label class="slds-form-element__label">Model:</label>
+                                <div class="slds-form-element__control">
+        <!--                             <input class="slds-input" type="text" /> -->
+                                    <apex:inputField value="{!objItem.Trade_In_Model__c}" id="ifTIMo" styleClass="slds-input"/>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="slds-size--1-of-2 slds-col--padded">
+                            <div class="slds-form-element">
+                                <label class="slds-form-element__label">Trailer:</label>
+                                <div class="slds-form-element__control">
+        <!--                             <input class="slds-input" type="text" /> -->
+                                    <apex:inputField value="{!objItem.Trade_In_Trailer__c}" id="ifTITR" styleClass="slds-input"/>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="slds-size--1-of-2 slds-col--padded">
+                            <div class="slds-form-element">
+                                <label class="slds-form-element__label"> Year:</label>
+                                <div class="slds-form-element__control">
+        <!--                             <select class="slds-select"> -->
+        <!--                                 <option>2014</option> -->
+        <!--                                 <option>2015</option> -->
+        <!--                                 <option>2016</option> -->
+        <!--                             </select> -->
+                                    <apex:inputField value="{!objItem.Trade_In_Year__c}" id="ifTIYY" styleClass="slds-select"/>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="slds-size--1-of-2 slds-col--padded">
+                            <div class="slds-form-element">
+                                <label class="slds-form-element__label"> Comments:</label>
+                                <div class="slds-form-element__control">
+        <!--                             <input class="slds-input" type="text" /> -->
+                                    <apex:inputTextArea value="{!objItem.Trade_In_Comments__c}" id="ifTICC" styleClass="slds-input"/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>  
+            </article>
+            </apex:outputPanel>
+        
+            
+        
+            <!-- Dealer Network Inventory Trade Price -->
+<!--             <article class="slds-card card-wrapper"> -->
+<!--                 <header class="slds-card__header slds-grid"> -->
+<!--                     <div class="slds-media slds-media--center slds-has-flexi-truncate"> -->
+<!--                         <div class="slds-media__body slds-truncate"> -->
+<!--                             <h2>Dealer Network Inventory Trade Price</h2> -->
+<!--                         </div> -->
+<!--                     </div> -->
+<!--                 </header> -->
+<!--                 <div class="slds-card__body"> -->
+<!--                     <div class="slds-wrap slds-grid slds-col--padded"> -->
+<!--                         <div class="slds-size--1-of-1 slds-col--padded"> -->
+<!--                             <div class="slds-form-element"> -->
+<!--                                 <label class="slds-form-element__label">Trade Price:</label> -->
+<!--                                 <div class="slds-form-element__control"> -->
+<!--                                     <input class="slds-input" type="text" /> -->
+<!--                                 </div> -->
+<!--                                 <label class="slds-form-element__label">Any price entered here will show up on the Search Dealer Network screen and will be visible to other dealers that may be interested in trading inventory.</label> -->
+<!--                             </div> -->
+<!--                         </div> -->
+<!--                     </div> -->
+<!--                 </div>   -->
+<!--             </article>     -->
+      </div>
+      
+      
+      
+      <div class="slds-col--padded slds-size--2-of-5">
+          <article class="slds-card card-wrapper Sidebar">
+            <header class="slds-card__header slds-grid">
+                <div class="slds-media slds-media--center slds-has-flexi-truncate">
+                    <div class="slds-media__body slds-truncate">
+                        <h2>Price Summary</h2>
+                    </div>
+                     <apex:image id="theImage" value="{!$Resource.Process}" style="display:none;margin-right:10cm;" width="40" height="40"/>
+                </div>
+               
+                <div class="slds-no-flex">
+                    <apex:outputPanel rendered="{!buttonRenderForSaveAndReCal}">
+                        <a class="slds-button slds-button--neutral slds-button--brand" onclick="callRecalculatePrice(this);" >Save &amp; Recalculate Price</a>
+                        <a class="slds-button slds-button--neutral slds-button--brand" onclick="sendQuotation(this);">Generate Quote</a>
+                    </apex:outputPanel>
+                    <apex:outputPanel rendered="{!buttonRenderForPlaceOrder}">
+                        <a class="slds-button slds-button--neutral slds-button--brand" onclick="callplaceOrder2();">Place Order</a>
+                    </apex:outputPanel>
+                </div>
+            </header>
+            <apex:outputPanel id="pcDiv1" rendered="{!buttonRenderForSaveAndReCal}">
+            <div class="slds-card__body" id="pcDiv" style="padding-bottom: 30px;">                
+                <table class="slds-table slds-table--bordered slds-no-row-hover slds-table--cell-buffer payment-cal">
+                    <thead>
+                        <tr class="slds-text-heading--label">
+                            <th scope="col">Payment Calculator</th>
+                            <th scope="col">&nbsp;</th>
+                            <th scope="col">Retail Price </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="slds-hint-parent">
+                            <td><label>Product Price:</label></td>
+                            <td scope="col">&nbsp;</td>
+                            <td>${!yourPriceThirdPageForProductPrice}</td>
+                        </tr>
+                        <tr class="slds-hint-parent"> 
+                            <td><label>Mfg Opt. Total(minus base options):</label></td>
+                            <td scope="col">&nbsp;</td>
+                            <td>${!MfgOptTota}</td>
+                        </tr>
+                        <tr class="slds-hint-parent">
+                            <td><label>Dealer Opt. Total:</label></td>
+                            <td scope="col">&nbsp;</td>
+                            <td>${!dealerOptionTotal}</td>
+                        </tr>
+                        <tr class="slds-hint-parent">
+                            <td><label>Custom Opt. Price(taxable):</label></td>
+                            <td scope="col">&nbsp;</td>
+                            <td>$0.00</td>
+                        </tr>
+                        <tr class="slds-hint-parent">
+                            <td><label>Trailer Price:</label></td>
+                            <td scope="col">&nbsp;</td>
+                            <td>${!trailerPrice}</td>
+                        </tr>
+                        <tr class="slds-hint-parent">
+                            <td><label>Trade-In Value:</label></td>
+                            <td scope="col">&nbsp;</td>
+                            <td>${!tradInValue}</td>
+                        </tr>
+                        <tr class="slds-hint-parent">
+                            <td><label>Total Taxable MSRP Price:</label></td>
+                            <td scope="col">&nbsp;</td>
+                            <td>$0.00</td>
+                        </tr>
+                        <tr class="slds-hint-parent">
+                            <td><label>Custom Opt Price (non-taxable):</label></td>
+                            <td scope="col">&nbsp;</td>
+                            <td>$0.00</td>
+                        </tr>
+                        <tr class="slds-hint-parent">
+                            <td><label>Quote Trailer Price:</label></td>
+                            <td scope="col">&nbsp;</td>
+                            <td>${!QuoteTrailerPrice}</td>
+                        </tr>
+                        <tr class="slds-hint-parent">
+                            <td><label>Quote Engine Price:</label></td>
+                            <td scope="col">&nbsp;</td>
+                            <td>${!QuoteEnginePrice}</td>
+                        </tr>
+                        <tr class="slds-hint-parent">
+                            <td><label>Total MSRP Price:</label></td>
+                            <td scope="col">&nbsp;</td>
+                            <td>${!totalPrice}</td>
+                        </tr>
+<!--                         <tr class="slds-hint-parent"> -->
+<!--                             <td><label>Sales Tax:</label></td> -->
+<!--                             <td scope="col">&nbsp;</td> -->
+<!--                             <td> -->
+<!--                                 <a onclick="openModal()" href="#">Edit..</a> -->
+<!--                                 $0.00 -->
+<!--                             </td> -->
+<!--                         </tr> -->
+<!--                         <tr class="slds-hint-parent" style="position:fixed; bottom:0px; color:#fff;background: #0070d2;border: 1px solid #d8dde6;"> -->
+<!--                             <td width="44%"><label>Total Retail Price:</label></td> -->
+<!--                             <td scope="col">&nbsp;</td> -->
+<!--                             <td style=" padding-right: 42px;">${!totalRetailPrice}</td> -->
+<!--                         </tr> -->
+                    </tbody> 
+                </table>
+            </div> 
+            
+            <!--  Modal   ---  -->
+            
+            <div role="dialog" tabindex="-1" aria-labelledby="header43" class="slds-modal">
+              <div class="slds-modal__container">
+                <div class="slds-modal__header">
+                  <button class="slds-button slds-button--icon-inverse slds-modal__close" onclick="closeModal()">
+                    <img src="/resource/BOATBUILDING__BoatBuilderSR/assets/icons/utility/close_60.png" />
+                    <span class="slds-assistive-text">Close</span>
+                  </button>
+                  <h2 id="header43" class="slds-text-heading--medium">Default Tax Settings</h2>
+                </div>
+                <div class="slds-modal__content slds-p-around--medium">
+                  <div class="slds-grid slds-wrap slds-grid--pull-padded Modal_border">
+                      <div class="slds-col--padded slds-size--1-of-2 slds-medium-size--4-of-12 slds-large-size--4-of-12" style="text-align: right;">
+                          Sales Tax Rate :
+                      </div>
+                      <div class="slds-col--padded slds-size--1-of-2 slds-medium-size--2-of-12 slds-large-size--2-of-12">
+                         $%
+                      </div>
+                      <div class="slds-col--padded slds-size--1-of-1 slds-medium-size--6-of-12 slds-large-size--6-of-12">
+                        
+                      </div>
+                   </div>
+                   
+                   <div class="slds-grid slds-wrap slds-grid--pull-padded Modal_border">
+                      <div class="slds-col--padded slds-size--1-of-2 slds-medium-size--4-of-12 slds-large-size--4-of-12" style="text-align: right;">
+                          Sur Tax Rate :
+                      </div>
+                      <div class="slds-col--padded slds-size--1-of-2 slds-medium-size--2-of-12 slds-large-size--2-of-12">
+                         $%
+                      </div>
+                      <div class="slds-col--padded slds-size--1-of-1 slds-medium-size--6-of-12 slds-large-size--6-of-12">
+                         
+                      </div>
+                   </div>
+                   
+                   <div class="slds-grid slds-wrap slds-grid--pull-padded Modal_border">
+                      <div class="slds-col--padded slds-size--1-of-2 slds-medium-size--4-of-12 slds-large-size--4-of-12" style="text-align: right;">
+                          Sur Tax Cutoff($):
+                      </div>
+                      <div class="slds-col--padded slds-size--1-of-2 slds-medium-size--2-of-12 slds-large-size--2-of-12">
+                        123
+                      </div>
+                      <div class="slds-col--padded slds-size--1-of-1 slds-medium-size--6-of-12 slds-large-size--6-of-12">
+                         Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+                         tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+                         quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+                         consequat.
+                      </div>
+                   </div>
+                   
+                   <div class="slds-grid slds-wrap slds-grid--pull-padded Modal_border">
+                      <div class="slds-col--padded slds-size--1-of-2 slds-medium-size--4-of-12 slds-large-size--4-of-12" style="text-align: right;">
+                          Sales Tax Cap($):
+                      </div>
+                      <div class="slds-col--padded slds-size--1-of-2 slds-medium-size--2-of-12 slds-large-size--2-of-12">
+                        123
+                      </div>
+                      <div class="slds-col--padded slds-size--1-of-1 slds-medium-size--6-of-12 slds-large-size--6-of-12">
+                         Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+                         tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+                         quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+                         consequat.
+                      </div>
+                   </div>
+                   
+                   <div class="slds-grid slds-wrap slds-grid--pull-padded Modal_border">
+                      <div class="slds-col--padded slds-size--1-of-1">
+                            <label class="slds-checkbox">
+                                <input id="checkbox-01" name="options" type="checkbox" />
+                                <span class="slds-form-element__label">Apply to Freight Prep</span>
+                                <span class="slds-checkbox--faux"></span>
+                            </label>
+                      </div>
+                      
+                   </div>
+                   
+                   <div class="slds-grid slds-wrap slds-grid--pull-padded Modal_border">
+                      <div class="slds-col--padded slds-size--1-of-1">
+                            <label class="slds-checkbox">
+                                <input id="checkbox-01" name="options" type="checkbox" />
+                                <span class="slds-form-element__label">Apply Tax To Custom Line</span>
+                                <span class="slds-checkbox--faux"></span>
+                            </label>
+                      </div>
+                     
+                   </div>
+                </div>
+                <div class="slds-modal__footer">
+                  <button class="slds-button slds-button--neutral">Cancel</button>
+                  <button class="slds-button slds-button--neutral slds-button--brand">Save</button>
+                </div>
+              </div>
+            </div>
+            <div class="slds-backdrop"></div>
+            
+           </apex:outputPanel>  
+           
+           <apex:outputPanel id="pcDiv2" rendered="{!buttonRenderForPlaceOrder}">
+            <div class="slds-card__body" id="pcDiv" style="padding-bottom: 30px;">                
+                <table class="slds-table slds-table--bordered slds-no-row-hover slds-table--cell-buffer payment-cal">
+                    <thead>
+                        <tr class="slds-text-heading--label">
+                            <th scope="col">Payment Calculator</th>
+                            <th scope="col">&nbsp;</th>
+                            <th scope="col">Dealer Cost</th>
+                            <th scope="col">Retail Price</th> 
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="slds-hint-parent">
+                            <td><label>Product Price:</label></td>
+                            <td scope="col">&nbsp;</td>
+                            <td>${!yourPriceThirdPageForProductPriceDealer}</td>
+                            <td>${!yourPriceThirdPageForProductPrice}</td>
+                        </tr>
+                        <tr class="slds-hint-parent"> 
+                            <td><label>Mfg Opt. Total(minus base options):</label></td>
+                            <td scope="col">&nbsp;</td>
+                            <td>${!MfgOptDealerTota}</td>
+                            <td>${!MfgOptTota}</td>
+                        </tr>
+                        <tr class="slds-hint-parent">
+                            <td><label>Dealer Opt. Total:</label></td>
+                            <td scope="col">&nbsp;</td>
+                            <td>${!dealerOptionCostTotal}</td>
+                            <td>${!dealerOptionTotal}</td>
+                        </tr>
+                        <tr class="slds-hint-parent">
+                            <td><label>Custom Opt. Price(taxable):</label></td>
+                            <td scope="col">&nbsp;</td>
+                            <td>$0.00</td>
+                            <td>$0.00</td>
+                        </tr>
+<!--                         <tr class="slds-hint-parent"> -->
+<!--                             <td><label>Trailer Price:</label></td> -->
+<!--                             <td scope="col">&nbsp;</td> -->
+<!--                             <td>$123</td> -->
+<!--                         </tr> -->
+<!--                         <tr class="slds-hint-parent"> -->
+<!--                             <td><label>Trade-In Value:</label></td> -->
+<!--                             <td scope="col">&nbsp;</td> -->
+<!--                             <td>$123</td> -->
+<!--                         </tr> -->
+                        <tr class="slds-hint-parent">
+                            <td><label>Total Taxable MSRP Price:</label></td>
+                            <td scope="col">&nbsp;</td>
+                            <td>$0.00</td>
+                            <td>$0.00</td>
+                        </tr>
+                        <tr class="slds-hint-parent">
+                            <td><label>Custom Opt Price (non-taxable):</label></td>
+                            <td scope="col">&nbsp;</td>
+                            <td>$0.00</td>
+                            <td>$0.00</td>
+                        </tr>
+                        <tr class="slds-hint-parent">
+                            <td><label>Total MSRP Price:</label></td>
+                            <td scope="col">&nbsp;</td>
+                            <td>${!totalPriceDealer}</td>
+                            <td>${!totalPrice}</td>
+                        </tr>
+<!--                         <tr class="slds-hint-parent"> -->
+<!--                             <td><label>Sales Tax:</label></td> -->
+<!--                             <td scope="col">&nbsp;</td> -->
+<!--                             <td>$0.00</td> -->
+<!--                             <td>$0.00</td> -->
+<!--                         </tr> -->
+<!--                         <tr class="slds-hint-parent" style="position:fixed; bottom:0px; color:#fff;background: #0070d2;border: 1px solid #d8dde6;"> -->
+<!--                             <td width="44%"><label>Total Retail Price:</label></td> -->
+<!--                             <td scope="col">&nbsp;</td> -->
+<!--                             <td>${!totalRetailPrice}</td> -->
+<!--                         </tr> -->
+                    </tbody>
+                </table>
+            </div> 
+           </apex:outputPanel>  
+           
+           
+        </article>
+      </div>
+      
+    </div>
+    
+  
+
+    
+</apex:form>
+<script>
+    
+
+    function existingCheck(obj){
+       //alert('Checked Status: '+document.getElementById(obj.id).checked);
+         
+       if(document.getElementById(obj.id).checked == true){
+            
+           document.getElementById('Customer_Datails').style.display = "none";
+           document.getElementById('nameLookUpId').style.display = "block";
+           document.getElementById('inputName').value= '';
+           document.getElementById('FinputName').value= '';
+           document.getElementById('inputEmail').value='';
+            document.getElementById('inputPhone').value='';
+            document.getElementById('inputAdd1').value= '';
+            document.getElementById('inputCity').value= '';
+            document.getElementById('inputState').value= '';
+            //document.getElementById('select-lS')= '';
+            //ls.options[ls.selectedIndex].text= '';
+            // document.getElementById('inputDBM')= '';
+            //sm.options[sm.selectedIndex].text= '';
+            //document.getElementById('inputDBMod').value= '';
+            //document.getElementById('inputDBLen').value = '';
+            //document.getElementById('inputDPL').value = '';
+            //.getElementById('inputDPH').value = '';
+            //.getElementById('select-DTHAT')= '';
+            
+            
+            
+       }
+       else if(document.getElementById(obj.id).checked == false){
+           document.getElementById('p1:f1:lookupInputId').value ='';
+           document.getElementById('Customer_Datails').style.display = "block";
+           document.getElementById('nameLookUpId').style.display = "none";
+       }
+    }                          
+    function openModal() {
+      $(".slds-modal").addClass('slds-fade-in-open');
+      $(".slds-backdrop").addClass('slds-backdrop--open');
+    }
+
+    function closeModal() {
+      $(".slds-modal").removeClass('slds-fade-in-open');
+      $(".slds-backdrop").removeClass('slds-backdrop--open');
+      return false ;
+    }
+</script>
+</body>
+</html>
+</apex:page>

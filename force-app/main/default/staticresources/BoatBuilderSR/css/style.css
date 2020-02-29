@@ -1,0 +1,32 @@
+.text-danger, .text-success {
+	background: #ff4949;
+    display: inline-block;
+    padding: 2px 10px;
+    color: #fff;
+    margin-bottom: 5px;
+}
+.text-success {background: #4bc076;}
+.slds-input {
+	margin-bottom: 1rem;
+}
+.heading {
+	font-size: 1.25rem;
+}
+hr {
+	margin: 0rem 0 1.5rem;	
+}
+
+.card-wrapper {
+	max-width: 1280px;
+	margin: 2rem auto;
+}
+.slds-checkbox {
+	margin-bottom: 3px;
+}
+
+h2.heading {
+	font-size: 1rem;
+    text-transform: uppercase;
+    margin: 0.5rem 0;
+    border-bottom: 1px solid #bcc6cf;
+}

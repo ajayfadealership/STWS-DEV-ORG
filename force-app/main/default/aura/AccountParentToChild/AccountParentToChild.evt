@@ -1,0 +1,4 @@
+<aura:event type="APPLICATION" description="AccountPtoC" access="public">
+    <aura:attribute name="tab"  type="String" access="public"/>
+    <aura:attribute name="objAccount"  type="Account" access="public"/>
+</aura:event>

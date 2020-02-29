@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Credit_Card_Type__c</fullName>
+    <deprecated>false</deprecated>
+    <externalId>false</externalId>
+    <inlineHelpText>Specifies the Credit Card mode selected while making the Payment.</inlineHelpText>
+    <label>Credit Card Type</label>
+    <required>false</required>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <controllingField>Payment_Type__c</controllingField>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>American Express</fullName>
+                <default>false</default>
+                <label>American Express</label>
+            </value>
+            <value>
+                <fullName>Citibank</fullName>
+                <default>false</default>
+                <label>Citibank</label>
+            </value>
+            <value>
+                <fullName>MasterCard</fullName>
+                <default>false</default>
+                <label>MasterCard</label>
+            </value>
+            <value>
+                <fullName>USAA</fullName>
+                <default>false</default>
+                <label>USAA</label>
+            </value>
+            <value>
+                <fullName>Visa</fullName>
+                <default>false</default>
+                <label>Visa</label>
+            </value>
+        </valueSetDefinition>
+        <valueSettings>
+            <controllingFieldValue>Credit_Card</controllingFieldValue>
+            <valueName>American Express</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Credit_Card</controllingFieldValue>
+            <valueName>Citibank</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Credit_Card</controllingFieldValue>
+            <valueName>MasterCard</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Credit_Card</controllingFieldValue>
+            <valueName>USAA</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Credit_Card</controllingFieldValue>
+            <valueName>Visa</valueName>
+        </valueSettings>
+    </valueSet>
+</CustomField>

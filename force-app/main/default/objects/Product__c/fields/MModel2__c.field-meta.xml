@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>MModel2__c</fullName>
+    <deprecated>false</deprecated>
+    <externalId>false</externalId>
+    <label>Model</label>
+    <required>false</required>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <controllingField>M_Manufacturer1__c</controllingField>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Mondo(MD)</fullName>
+                <default>false</default>
+                <label>Mondo(MD)</label>
+            </value>
+            <value>
+                <fullName>Craz(MG)</fullName>
+                <default>false</default>
+                <label>Craz(MG)</label>
+            </value>
+            <value>
+                <fullName>Mojo(ME)</fullName>
+                <default>false</default>
+                <label>Mojo(ME)</label>
+            </value>
+            <value>
+                <fullName>SC</fullName>
+                <default>false</default>
+                <label>SC</label>
+            </value>
+            <value>
+                <fullName>SA</fullName>
+                <default>false</default>
+                <label>SA</label>
+            </value>
+            <value>
+                <fullName>SG</fullName>
+                <default>false</default>
+                <label>SG</label>
+            </value>
+            <value>
+                <fullName>SE</fullName>
+                <default>false</default>
+                <label>SE</label>
+            </value>
+            <value>
+                <fullName>SER</fullName>
+                <default>false</default>
+                <label>SER</label>
+            </value>
+        </valueSetDefinition>
+        <valueSettings>
+            <controllingFieldValue>Skiers Choice(Moomba)</controllingFieldValue>
+            <valueName>Mondo(MD)</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Skiers Choice(Moomba)</controllingFieldValue>
+            <valueName>Craz(MG)</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Skiers Choice(Moomba)</controllingFieldValue>
+            <valueName>Mojo(ME)</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Skiers Choice(Supra)</controllingFieldValue>
+            <valueName>SC</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Skiers Choice(Supra)</controllingFieldValue>
+            <valueName>SA</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Skiers Choice(Supra)</controllingFieldValue>
+            <valueName>SG</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Skiers Choice(Supra)</controllingFieldValue>
+            <valueName>SE</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Skiers Choice(Supra)</controllingFieldValue>
+            <valueName>SER</valueName>
+        </valueSettings>
+    </valueSet>
+</CustomField>

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Trailer_Trade_Over_Allowance_Calculated__c</fullName>
+    <deprecated>false</deprecated>
+    <description>Calculated field,by reducing Trailer ACV from Trailer Trade Allowance</description>
+    <externalId>false</externalId>
+    <formula>IF(M_Trailer_Actual_Cost_Value_ACV__c &lt; M_Trailer_Trade_Allowance__c  ,M_Trailer_Trade_Allowance__c  -  M_Trailer_Actual_Cost_Value_ACV__c ,0)</formula>
+    <label>Trailer Trade Over Allowance(Calculated)</label>
+    <precision>18</precision>
+    <required>false</required>
+    <scale>0</scale>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Currency</type>
+</CustomField>

@@ -1,0 +1,3 @@
+<apex:page standardController="Inventory__c" docType="html-5.0" showHeader="false"  sidebar="false" standardStylesheets="false" extensions="DradNUploadController">
+   
+</apex:page>

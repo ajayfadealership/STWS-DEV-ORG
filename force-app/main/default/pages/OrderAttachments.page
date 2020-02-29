@@ -1,0 +1,22 @@
+<apex:page standardController="Order__c" extensions="attachmentsample">
+<apex:slds />
+<apex:form >
+  <apex:sectionHeader title="Please select a file to upload"/>
+  <apex:pageblock >
+      <apex:pageblocksection columns="1">
+      
+                  <apex:inputfile styleclass="slds-input" value="{!myfile.body}" filename="{!myfile.Name}" style="margin-top: 30px;"/>
+                  
+          <apex:commandbutton value="Save" action="{!Savedoc}" onclick="callOnComplete();" style="    margin-top: 30px;
+" styleclass="slds-button slds-button_brand"/>
+          
+      </apex:pageblocksection>
+  </apex:pageblock>    
+  <script>
+  function callOnComplete(){
+      alert('Please do not refresh..... You will be redirected to record page once file is uplaoded');
+  }
+  </script>
+</apex:form> 
+
+</apex:page>

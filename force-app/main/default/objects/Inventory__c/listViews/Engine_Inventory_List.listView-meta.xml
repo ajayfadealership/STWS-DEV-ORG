@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ListView xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Engine_Inventory_List</fullName>
+    <columns>NAME</columns>
+    <columns>Manufacturer__c</columns>
+    <columns>Year__c</columns>
+    <columns>Model__c</columns>
+    <columns>Model_Variant__c</columns>
+    <columns>Stage__c</columns>
+    <columns>Total_MSRP_Price__c</columns>
+    <filterScope>Everything</filterScope>
+    <filters>
+        <field>RECORDTYPE</field>
+        <operation>equals</operation>
+        <value>Inventory__c.Engine</value>
+    </filters>
+    <label>Engine Inventory List</label>
+</ListView>

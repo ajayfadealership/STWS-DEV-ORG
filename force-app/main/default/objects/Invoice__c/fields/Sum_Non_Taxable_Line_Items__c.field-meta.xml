@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Sum_Non_Taxable_Line_Items__c</fullName>
+    <deprecated>false</deprecated>
+    <externalId>false</externalId>
+    <inlineHelpText>Roll up Summary : Sum of Grand Total of all the Non Taxable Line Items.</inlineHelpText>
+    <label>Sum : Non Taxable Line Items</label>
+    <summarizedField>Invoice_Line_Item__c.Grand_Total__c</summarizedField>
+    <summaryFilterItems>
+        <field>Invoice_Line_Item__c.Taxable__c</field>
+        <operation>equals</operation>
+        <value>False</value>
+    </summaryFilterItems>
+    <summaryForeignKey>Invoice_Line_Item__c.Related_To_Invoice__c</summaryForeignKey>
+    <summaryOperation>sum</summaryOperation>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Summary</type>
+</CustomField>

@@ -1,0 +1,131 @@
+<apex:page controller="SendInspectionFormController" id="pge" sidebar="false" showHeader="false">
+<html xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" style="background: #dadada;">
+        <head>
+            <title>Send Inspection Form</title>
+            <apex:stylesheet value="{!URLFOR($Resource.BoatBuilderSR, 'assets/styles/salesforce-lightning-design-system.min.css')}"/>
+            <apex:stylesheet value="{!URLFOR($Resource.BoatBuilderSR, 'css/style.css')}"/>
+            <apex:includeScript value="{!URLFOR($Resource.BoatBuilderSR, 'js/jquery.min.js')}"/>
+            <style>
+                body {font-family: "Lato", sans-serif;}
+                .slds-form--inline.main_page{ 
+                    text-align: center;
+                    padding-top: 10%;
+                    color: #fff;
+                    overflow: 
+                }
+                .slds-box{
+                    margin: 5% auto;
+                    max-width: 600px;
+                    padding: 0;
+                }
+                .slds-form-element__control .slds-button{
+                    box-shadow: 0 0 10px 0px #ddd;
+                    color: #fff;
+                }
+                .login_box {
+                    margin: 5% auto;
+                    max-width: 600px;
+                    box-shadow: 0 0 10px 0px #ddd;
+                    border: 1px solid #ccc;
+                }
+                
+                .login_box .slds-card__body {
+                    padding: 1.5rem 1.5rem 0;
+                }
+                
+                .login_box .slds-card__header {
+                    background: #29abe2;
+                    padding-bottom: .5rem;
+                }
+                
+                .login_box .slds-text-heading--small {
+                    color : #fff;
+                    font-weight: 600;
+                }
+                .tab_mid{
+                    text-align: center;
+                }
+                .timer{
+                    float:right;
+                }
+                
+                .margin-top {
+                    margin: 1rem 0 0;
+                }
+                .slds-button--brand {
+                    background-color: #29abe2;
+                    border: 1px solid #29abe2;
+                }
+            </style>
+        </head>
+    </html>
+    <body>
+        <apex:form id="frm">
+            <div class="background_img img-responsive">
+                    <div class="slds-card login_box" style="max-width: 800px;">
+                        <div class="slds-card__header slds-grid">
+                            <header class="slds-media slds-media--center slds-has-flexi-truncate">
+                                <div class="slds-media__body slds-truncate">
+                                    <h2>
+                                        <a href="javascript:void(0);" class="slds-text-link--reset">
+                                            <span class="slds-text-heading--small">Email Details</span>
+                                        </a>
+                                    </h2>
+                                </div>
+                            </header>
+                        </div>
+                        
+                        <div class="slds-card__body">
+                            <div class="slds-form-element slds-m-bottom--x-large">
+                                <div class="slds-form-element tab_mid">
+                                    <table>
+                                        <tr>
+                                            <td>To:</td>
+                                            <td>
+                                                <apex:inputText value="{!strTo}" styleClass="slds-input" id="emailId" />
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>CC:</td>
+                                            <td><apex:inputText value="{!strCC}" styleClass="slds-input" id="ccId"/></td>
+                                        </tr>
+                                        <tr>
+                                            <td>Subject:</td>
+                                            <td><apex:inputText value="{!strSubject}" styleClass="slds-input"/></td>
+                                        </tr>
+                                        <tr>
+                                            <td>Body:</td>
+                                            <td><apex:inputTextarea value="{!strBody}" styleClass="slds-input" rows="6"/></td>
+                                        </tr>
+                                    </table>
+                                </div>
+                                <div class="slds-form-element tab_mid">
+                                    <a class="slds-button slds-button--brand" id="sndif" onclick="sendJS(this);">Send Form</a>
+                                    <a class="slds-button slds-button--brand" id="cancel" onclick="window.top.location= '/{!objDF.Id}'">Cancel</a>
+                                </div>
+                            </div>
+                        </div> 
+                    </div>
+                </div>
+                <apex:actionFunction name="callIf" action="{!sendIF}"/>
+            </apex:form>
+            <script>
+                function sendJS(obj) {
+                    var email = document.getElementById("pge:frm:emailId").value;
+                    var filter = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+                    console.log("Email: "+email);
+                    if(email != null && email != '') {
+                        if(filter.test(email)) {
+                            callIf();
+                        }
+                        else {
+                            alert("Please enter valid email.");
+                        }
+                    }
+                    else {
+                        alert("Please enter email.");
+                    }
+                }
+            </script>
+    </body>
+</apex:page>

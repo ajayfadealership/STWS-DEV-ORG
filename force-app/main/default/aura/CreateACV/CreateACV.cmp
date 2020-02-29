@@ -1,0 +1,4 @@
+<aura:component controller="ACVController" implements="force:appHostable,lightning:isUrlAddressable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction" access="global" >
+    <aura:attribute name="selectedLookUpRecordACVC" type="sObject" access="global" default="{}"/>
+    <c:ACVFormComponent selectedLookUpRecordACVCC="{!v.selectedLookUpRecordACVC}"/>
+</aura:component>

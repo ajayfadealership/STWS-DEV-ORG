@@ -1,0 +1,7 @@
+<aura:component implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction" access="global" >
+    <aura:attribute name="recordIdOFRomVF" type="String" access="global" />
+    <aura:attribute name="callback" type="String" description="Call this to communicate results to visualforce page" access="global"/>
+
+    <lightning:button label="Create Order" onclick="{!c.createRecord}" />
+    
+</aura:component>

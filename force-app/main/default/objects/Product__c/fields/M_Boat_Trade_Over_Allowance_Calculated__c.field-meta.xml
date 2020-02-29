@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>M_Boat_Trade_Over_Allowance_Calculated__c</fullName>
+    <deprecated>false</deprecated>
+    <description>Specified the Boat Trade Over Allowance,Calculated by reducing ACV from Trade Allowance</description>
+    <externalId>false</externalId>
+    <formula>M_Boat_Trade_Allowance__c  -  M_Boat_Actual_Cost_Value_ACV__c</formula>
+    <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+    <label>Boat Trade Over Allowance (Calculated)</label>
+    <precision>18</precision>
+    <required>false</required>
+    <scale>0</scale>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Currency</type>
+</CustomField>

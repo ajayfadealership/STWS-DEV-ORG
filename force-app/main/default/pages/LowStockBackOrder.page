@@ -1,0 +1,67 @@
+<apex:page controller="LowStockBackOrderController" showHeader="false" sidebar="false" id="pg">
+    <apex:slds />
+    <apex:form id="frm">
+        <apex:includeScript value="{!URLFOR($Resource.Signature, 'jquery.min.js')}"/>
+        <html>
+            <head>
+            	<title>Back Order</title>
+            </head>
+            <body>
+                <hr/>
+                <div style="padding-left: 1%;">
+                    <a class="slds-button slds-button--neutral slds-button--brand" id="showLowStock">Search Low Stock</a> 
+                </div>
+                <hr/>
+                <div id="stockLst" style="padding-left: 2%; padding-right: 2%;">
+                    
+                </div>
+                
+                <script> 
+                    $("#showLowStock").click(function() {
+                        console.log("clicked");
+                        
+                        BOATBUILDING.LowStockBackOrderController.getLowStockPart(function(result, event) {
+                            if(event.status) {
+                                if(result != null && result.length > 0) {
+                				    console.log(result);
+                					var htmlTbl = '<table id="InvTable" class="show slds-table slds-table--bordered slds-no-row-hover slds-table--cell-buffer slds-m-top--x-large Table1 slds-card">';
+                				  	htmlTbl += '<thead> <tr class="slds-text-heading--label"> <th scope="col">Inventory</th> <th scope="col">Vendor</th> <th scope="col">Part Number</th> <th scope="col">Description</th> <th scope="col">Parts Available</th> <th scope="col">Parts On Order</th> <th scope="col">Category</th> <th scope="col">Price</th> </tr> </thead> <tbody>';
+                				  	for(var i = 0; i < result.length; i++) {
+                				  		var invId = '', invName = '', vendorName = '', prtNum = '', prtName = '', PrtsAvlbl = '0', prtsOnOrder = '0', ctgry = '', price = '0.00';
+                				  		invId = result[i].objInventory.Id;
+                				  		invName = result[i].objInventory.Name;
+                				  		if(result[i].objInventory.BOATBUILDING__Vendor__c !=undefined) {
+                				  			vendorName = result[i].objInventory.BOATBUILDING__Vendor__r.Name;
+                				  		}
+                				  		if(result[i].objInventory.BOATBUILDING__Part_Name__c !=undefined) {
+                				  			prtName = result[i].objInventory.BOATBUILDING__Part_Name__c;
+                				  		}
+                				  		if(result[i].objInventory.BOATBUILDING__Part_Number__c !=undefined) {
+                				  			prtNum = result[i].objInventory.BOATBUILDING__Part_Number__c;
+                				  		}
+                				  		if(result[i].objInventory.BOATBUILDING__Quantity__c !=undefined) {
+                				  			PrtsAvlbl = result[i].objInventory.BOATBUILDING__Quantity__c;
+                				  		}
+                				  		if(result[i].partsOnOrder !=undefined) { 
+                				  			prtsOnOrder = result[i].partsOnOrder;
+                				  		}
+                				  		if(result[i].objInventory.BOATBUILDING__Category__c !=undefined) {
+                				  			ctgry = result[i].objInventory.BOATBUILDING__Category__c;
+                				  		}
+                				  		if(result[i].objInventory.BOATBUILDING__Part_MSRP_Price__c !=undefined) {
+                				  			price = result[i].objInventory.BOATBUILDING__Part_MSRP_Price__c;
+                				  		} 
+                				  		htmlTbl += '<tr class="slds-hint-parent"> <td> <a onclick="window.open(\'/'+invId+'\');"> '+invName+' </a> </td> <td> '+vendorName+' </td> <td> '+prtNum+' </td> <td> '+prtName+' </td> <td> '+PrtsAvlbl+' </td> <td> '+prtsOnOrder+' </td> <td> '+ctgry+' </td> <td> '+price+' </td> </tr>';
+                				  	}
+                				  	htmlTbl += '</tbody> </table>';
+                				  	$("#stockLst").html(htmlTbl);
+                				}
+                            }
+                        });
+                        
+                    });
+                </script>
+            </body>
+        </html>
+    </apex:form>
+</apex:page>

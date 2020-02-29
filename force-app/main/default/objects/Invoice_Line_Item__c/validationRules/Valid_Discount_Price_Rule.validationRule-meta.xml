@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Valid_Discount_Price_Rule</fullName>
+    <active>true</active>
+    <errorConditionFormula>Discount_Price__c &gt;  Total_Price__c</errorConditionFormula>
+    <errorDisplayField>Discount_Price__c</errorDisplayField>
+    <errorMessage>Discount Price has to be less than the Total Price</errorMessage>
+</ValidationRule>

@@ -1,0 +1,918 @@
+<apex:page docType="html-5.0" controller="UsedBoatFormController" sidebar="false" showHeader="false" id="pge" action="{!checkAccess}">
+    <apex:stylesheet value="{!URLFOR($Resource.BoatBuilderSR, '/css/styles.css')}"/>
+    <apex:stylesheet value="{!URLFOR($Resource.BoatBuilderSR, '/assets/styles/salesforce-lightning-design-system.min.css')}"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"/>
+    <apex:includeScript value="{!URLFOR($Resource.BoatBuilderSR, 'js/jquery.min.js')}"/>
+    
+<html>
+    <head>
+        <title>Used Boat</title>
+        <style>
+        		.popupDiv{
+	            position: fixed;
+	            top: 0;
+	            bottom: 0;
+	            left: 0;
+	            right: 0;
+	            background: rgba(0,0,0,0.5);
+	            display: none;
+	            z-index: 999;
+	        }
+            * {font-family: "Salesforce Sans",Arial,sans-serif}
+            .popup{
+                position: fixed; 
+                top: 0;
+                bottom: 0;
+                left: 0;
+                right: 0;
+                background: rgba(0,0,0,0.5);
+                display: none;
+                z-index: 999;
+            }
+            .popup.active{display:block}
+            .popup img{margin: 15% auto}
+            .card-wrapper_Orderpage { 
+                max-width: 1000px;
+                margin: 2rem auto;
+            }
+            .card-wrapper_Orderpage .slds-input, .slds-select {
+                max-width: 25rem;
+            }
+    
+            .card-wrapper_Orderpage .slds-select {
+                padding: 0 0.5rem;
+            }       
+    
+            .card-wrapper_Orderpage .slds-card__body {
+                overflow: auto;
+            }
+            .card-wrapper_Orderpage .slds-text-heading--small {
+                font-weight: 600;
+                
+            }
+    
+            .card-wrapper_Orderpage .slds-card__body{
+                background: #fff;
+                border-top:1px solid #d8dde6;
+            }
+            .card-wrapper_Orderpage textarea{
+                width: 100%;
+                resize: none;
+                padding: 4px;
+            }
+            .card-wrapper_Orderpage .slds-form-element__label{
+                font-size: 1rem;
+                text-align: right;
+                display: block;
+                padding-right: 30px;
+            }
+            .dateOnlyInput input {
+             width: 8em;
+            }
+            .slds-form-element {
+            position: relative;
+            margin-bottom: 15px;
+            }
+            .card-wrapper_Orderpage  td .slds-form-element__label{
+                text-align: left;
+                display: inline;
+                
+            }            
+            .slds-table .slds-form-element {
+                margin-bottom: 0px;
+            }
+            .card-wrapper_Orderpage .slds-text-heading--small {
+                font-weight: 600;
+                font-size: 1.25em;
+                color: #6f809c;
+            }
+        </style>
+        
+    </head>
+    <body>
+    <script>
+    
+        function openSpinner() {
+            $('.popup').addClass('active');
+        }
+        function closeSpinner() {
+            $('.popup').removeClass('active');
+        }
+        function changeIncheckBox(rowNum,jsSelectedOption, objCheckbox){
+                //for spinner
+            $('.popup').addClass('active');
+                    if(document.getElementById(objCheckbox.id).checked){
+                        callChangeIncheckBox(rowNum,jsSelectedOption);
+                    }else{
+                        callChangeIncheckBoxSub(rowNum,jsSelectedOption);
+                    }
+        }
+        function completedTask(){
+            //for spinner
+            $('.popup').removeClass('active');
+            
+        }
+        function createBoat(obj){
+            document.getElementById('spanBeam').style.display = 'none';
+            document.getElementById('spanlen').style.display = 'none';
+            //document.getElementById(obj.id).disabled = true;
+            //slprice
+             console.log();
+            if(document.getElementById("pge:frm:slprice").value != null && document.getElementById("pge:frm:slprice").value != "") { 
+                    callCreateBoat();
+            } else {
+                    alert("Please enter the suggested list price");
+            }
+        }
+        function fieldValidation(obj){
+            var reg = /^[0-9]+$/;
+            var inputVal = document.getElementById(obj.id).value;
+            if((reg.test(inputVal) || inputVal.includes('\'') || inputVal.includes('\"') || inputVal == '') && (inputVal != '\'' && inputVal != '\""')){
+                document.getElementById('spanBeam').style.display = 'none';
+                document.getElementById('spanlen').style.display = 'none';
+            }else{
+                document.getElementById(obj.id).value = '';
+                if(obj.id == 'pge:frm:ifLen'){
+                    document.getElementById('spanlen').style.display = 'block';
+                    document.getElementById('spanBeam').style.display = 'none';
+                }else if(obj.id == 'pge:frm:ifBm'){
+                    document.getElementById('spanlen').style.display = 'none';
+                    document.getElementById('spanBeam').style.display = 'block';
+                } 
+            }
+            
+        }
+    </script>
+    <apex:form id="frm">
+    		
+    		<div class="popupDiv" id="doId">
+			<div style="border: 5px solid #d9dee6; padding: 2%; position: fixed; top: 20%; left: 30%; z-index: 999; background: #fff; border-radius: 14px; height: auto; width: 500px;">
+				<div>
+					<i id="closeIcn" class="fa fa-close" style="font-size:24px; position: absolute; bottom: 85%; right: 3%;"></i>
+				</div>
+				<table>
+					<tr>
+						<td colspan="2" style="text-align: center;">
+							<h2 style="font-size: 1.25em; font-weight: 600; color: #6f809c;">Add Dealer Option</h2>
+						</td>
+					</tr>
+					<tr>
+						<td colspan="2" style="text-align: center;">
+							&nbsp;
+						</td>
+					</tr>
+					<tr>
+						<td>
+							Description
+						</td>
+						<td>
+							<input type="text" id="decId"  class="slds-input"/>
+						</td> 
+					</tr>
+					<tr>
+						<td>
+							Dealer Price
+						</td>
+						<td>
+							<input type="text" id="delId" onkeypress="return isNumberKey(event);" value="0.00" class="slds-input"/>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							Retail Price
+						</td>
+						<td>
+							<input type="text" id="retId" onkeypress="return isNumberKey(event);" value="0.00" class="slds-input"/>
+						</td>
+					</tr>
+					<tr>
+						<td colspan="2" style="text-align: center;">
+							<a class="slds-button slds-button--neutral slds-button--brand" onclick="addDealerOptionToList(this);">Add</a>
+						</td>
+					</tr>
+				</table>
+			</div>        
+       		</div>
+    
+        <apex:messages style="color : red;" id="m1"></apex:messages>
+        <apex:actionFunction name="callChangeIncheckBox" action="{!getMFGPrice}" id="af2" rerender="pcDiv1,pcDiv2" oncomplete="completedTask();">
+        <apex:param name="rN" assignTo="{!rowNumber}" value=""/>
+        <apex:param name="sO" assignTo="{!selectedOptionString}" value=""/>
+<!--         <apex:param name="sOC" assignTo="{!selectedOptionCategory}" value=""/> -->
+        </apex:actionFunction>
+        <apex:actionFunction name="callChangeIncheckBoxSub" action="{!getMFGPriceSubtrct}" id="af3" rerender="pcDiv1,pcDiv2" oncomplete="completedTask();">
+            <apex:param name="rN" assignTo="{!rowNumber}" value=""/>
+            <apex:param name="sO" assignTo="{!selectedOptionString}" value=""/>
+<!--            <apex:param name="sOC" assignTo="{!selectedOptionCategory}" value=""/> -->
+        </apex:actionFunction>
+        <apex:actionFunction name="callCreateBoat" action="{!createBoat}" />
+        <div  class="popup">
+               <apex:image id="theImage2" value="{!$Resource.Process}" style="display:block;" width="40" height="40"/>
+        </div>
+        
+        <article class="slds-card card-wrapper_Orderpage ">
+          <header class="slds-card__header slds-grid">
+            <div class="slds-media slds-media--center slds-has-flexi-truncate">
+              <div class="slds-media__body slds-truncate">
+                <h2>
+                <span class="slds-text-heading--small">Used Boat</span>
+                </h2>
+              </div>
+            </div>
+          </header>
+          <button class="slds-button slds-button--neutral slds-button--brand " style="    position: absolute; top: 5%; left: 4%;" onclick="window.location.href = '/apex/BOATBUILDING__Purchase_Item2'" type="button">Boat Builder</button>
+          <div class="slds-card__body">
+            
+            <div class="slds-card__body slds-col--padded">  
+                <div class="slds-grid slds-wrap slds-p-top--large">
+                    <div class="slds-col slds-size--1-of-1">
+                        <div class="slds-grid slds-wrap">
+                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-2 slds-p-left--x-large">
+                                <div class="slds-grid slds-wrap">
+                                    <div class="slds-col slds-size--1-of-1 slds-size--1-of-2">
+                                        <label class="slds-form-element__label" for="text-input-01">Manufacture</label>
+                                    </div>
+                                    <div class="slds-col slds-size--1-of-2">
+                                        <div class="slds-form-element">
+                                            <div class="slds-form-element__control">
+<!--                                                <apex:inputField value="{!objInventory.Manufacturer__c}" styleClass="slds-input"/> -->
+                                               <apex:selectList size="1" value="{!selectedManufacture}" label="Manufacture: " id="sl1" styleClass="slds-select">
+                                                    <apex:selectOptions value="{!lstManufacture}" id="so1"/>
+                                                </apex:selectList>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            
+                            </div>
+                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-2 slds-p-left--x-large slds-p-right--x-large">
+                                <div class="slds-grid slds-wrap">
+                                    <div class="slds-col slds-size--1-of-1 slds-size--1-of-2">
+                                        <label class="slds-form-element__label" for="text-input-01">Vehicle Type</label>
+                                    </div>
+                                    <div class="slds-col slds-size--1-of-2">
+                                        <div class="slds-form-element">
+                                            <div class="slds-form-element__control">
+                                              <apex:inputField value="{!objInventory.Vehicle_Type__c}" styleClass="slds-select"/>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            
+                            </div>
+                        </div>
+                    </div>
+                    <div class="slds-col slds-size--1-of-1">
+                        <div class="slds-grid slds-wrap">
+                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-2 slds-p-left--x-large ">
+                                <div class="slds-grid slds-wrap">
+                                    <div class="slds-col slds-size--1-of-1 slds-size--1-of-2">
+                                        <label class="slds-form-element__label" for="text-input-01">Year</label>
+                                    </div>
+                                    <div class="slds-col slds-size--1-of-2">
+                                        <div class="slds-form-element">
+                                            <div class="slds-form-element__control">
+                                                <apex:selectList size="1" value="{!selectedYear}" id="sl2" styleClass="slds-select">
+                                                    <apex:selectOptions value="{!setYear}" id="so2"/>
+                                                </apex:selectList>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            
+                            </div>
+                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-2 slds-p-left--x-large slds-p-right--x-large">
+                                <div class="slds-grid slds-wrap">
+                                    <div class="slds-col slds-size--1-of-1 slds-size--1-of-2">
+                                        <label class="slds-form-element__label" for="text-input-01">Length</label>
+                                    </div>
+                                    <div class="slds-col slds-size--1-of-2">
+                                        <div class="slds-form-element">
+                                            <div class="slds-form-element__control">
+                                               <!-- <apex:outputLabel value="{!dealerStatus}"/>-->
+<!--                                                <input type="text" placeholder="Length" class="slds-input" /> -->
+                                                <apex:inputField value="{!objInventory.Boat_Length_in_feets__c}" id="ifLen" onchange="fieldValidation(this);" styleClass="slds-input"/>
+                                                <span id="spanlen" style="color:red;display:none;">Enter value in 0'00" format.</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            
+                            </div>
+                        </div>
+                    </div>
+    
+                    <div class="slds-col slds-size--1-of-1">
+                        <div class="slds-grid slds-wrap">
+                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-2 slds-p-left--x-large">
+                                <div class="slds-grid slds-wrap">
+                                    <div class="slds-col slds-size--1-of-1 slds-size--1-of-2">
+                                        <label class="slds-form-element__label" for="text-input-01">Model</label>
+                                    </div>
+                                    <div class="slds-col slds-size--1-of-2">
+                                        <div class="slds-form-element">
+                                            <div class="slds-form-element__control">
+                                               <!--<apex:outputLabel value="{!selectedModelSecondPage}"/>-->
+<!--                                                <input type="text" placeholder="Model" class="slds-input" /> -->
+                                               <apex:inputField value="{!objInventory.Model__c}" styleClass="slds-input"/>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            
+                            </div>
+                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-2 slds-p-left--x-large slds-p-right--x-large">
+                                <div class="slds-grid slds-wrap">
+                                    <div class="slds-col slds-size--1-of-1 slds-size--1-of-2">
+                                        <label class="slds-form-element__label" for="text-input-01">Boat Type</label>
+                                    </div>
+                                    <div class="slds-col slds-size--1-of-2">
+                                        <div class="slds-form-element">
+                                            <div class="slds-form-element__control">
+                                               <!-- <apex:inputField value="{!objProduct.M_Dealer_Comments__c}"/>-->
+<!--                                                <input type="text" placeholder="Boat Type" class="slds-input" /> -->
+                                               <apex:inputField value="{!objInventory.Boat_Type__c}" styleClass="slds-select"/>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="slds-col slds-size--1-of-1">
+                        <div class="slds-grid slds-wrap">
+                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-2 slds-p-left--x-large">
+                                <div class="slds-grid slds-wrap">
+                                    <div class="slds-col slds-size--1-of-1 slds-size--1-of-2">
+                                        <label class="slds-form-element__label" for="text-input-01">Hull Material</label>
+                                    </div>
+                                    <div class="slds-col slds-size--1-of-2">
+                                        <div class="slds-form-element">
+                                            <div class="slds-form-element__control">
+                                               <!--<apex:outputLabel value="{!selectedModelSecondPage}"/>-->
+<!--                                                <input type="text" placeholder="Hull Material" class="slds-input" /> -->
+                                               <apex:inputField value="{!objInventory.Hull_Material__c}" styleClass="slds-select"/>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            
+                            </div>
+                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-2 slds-p-left--x-large slds-p-right--x-large">
+                                <div class="slds-grid slds-wrap">
+                                    <div class="slds-col slds-size--1-of-1 slds-size--1-of-2">
+                                        <label class="slds-form-element__label" for="text-input-01">Beam</label>
+                                    </div>
+                                    <div class="slds-col slds-size--1-of-2">
+                                        <div class="slds-form-element">
+                                            <div class="slds-form-element__control">
+                                               <!-- <apex:inputField value="{!objProduct.M_Dealer_Comments__c}"/>-->
+<!--                                                <input type="text" placeholder="Beam" class="slds-input" /> -->
+                                               <apex:inputField value="{!objInventory.Beam__c}" id="ifBm" onchange="fieldValidation(this);" styleClass="slds-input"/>
+                                               <span id="spanBeam" style="color:red;display:none;">Enter value in 0'00" format.</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="slds-col slds-size--1-of-1">
+                        <div class="slds-grid slds-wrap">
+                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-2 slds-p-left--x-large">
+                                <div class="slds-grid slds-wrap">
+                                    <div class="slds-col slds-size--1-of-1 slds-size--1-of-2">
+                                        <label class="slds-form-element__label" for="text-input-01">Engine</label>
+                                    </div>
+                                    <div class="slds-col slds-size--1-of-2">
+                                        <div class="slds-form-element">
+                                            <div class="slds-form-element__control">
+                                               <!--<apex:outputLabel value="{!selectedModelSecondPage}"/>-->
+<!--                                                <input type="text" placeholder="Engine" class="slds-input" /> -->
+                                               <apex:inputField value="{!objInventory.Engine__c}" styleClass="slds-input"/>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            
+                            </div>
+                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-2 slds-p-left--x-large slds-p-right--x-large">
+                                <div class="slds-grid slds-wrap">
+                                    <div class="slds-col slds-size--1-of-1 slds-size--1-of-2">
+                                        <label class="slds-form-element__label" for="text-input-01">Net Weight</label>
+                                    </div>
+                                    <div class="slds-col slds-size--1-of-2">
+                                        <div class="slds-form-element">
+                                            <div class="slds-form-element__control">
+                                               <!-- <apex:inputField value="{!objProduct.M_Dealer_Comments__c}"/>-->
+<!--                                                <input type="text" placeholder="Net Weight" class="slds-input" /> -->
+                                               <apex:inputField value="{!objInventory.Net_Weight__c}" styleClass="slds-input"/>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                     
+                    <div class="slds-col slds-size--1-of-1">
+                        <div class="slds-grid slds-wrap">
+                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-2 slds-p-left--x-large">
+                                <div class="slds-grid slds-wrap">
+                                    <div class="slds-col slds-size--1-of-1 slds-size--1-of-2">
+                                        <label class="slds-form-element__label" for="text-input-01">Suggested List Price</label>
+                                    </div>
+                                    <div class="slds-col slds-size--1-of-2">
+                                        <div class="slds-form-element">
+                                            <div class="slds-form-element__control">
+                                               <!--<apex:outputLabel value="{!selectedModelSecondPage}"/>-->
+<!--                                                <input type="decimal" placeholder="Suggested List Price" class="slds-input" /> -->
+                                               <apex:inputField id="slprice" value="{!objInventory.Suggested_List_Price__c}" styleClass="slds-input"/>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            
+                            </div>
+                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-2 slds-p-left--x-large slds-p-right--x-large">
+                                <div class="slds-grid slds-wrap">
+                                    <div class="slds-col slds-size--1-of-1 slds-size--1-of-2">
+                                        <label class="slds-form-element__label" for="text-input-01">Cost</label>
+                                    </div>
+                                    <div class="slds-col slds-size--1-of-2">
+                                        <div class="slds-form-element">
+                                            <div class="slds-form-element__control">
+                                               <!-- <apex:inputField value="{!objProduct.M_Dealer_Comments__c}"/>-->
+<!--                                                <input type="decimal" placeholder="Cost" class="slds-input" /> -->
+                                               <apex:inputField value="{!objInventory.Cost__c}" styleClass="slds-input"/>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="slds-col slds-size--1-of-1">
+                        <div class="slds-grid slds-wrap">
+                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-2 slds-p-left--x-large">
+                                <div class="slds-grid slds-wrap">
+                                    <div class="slds-col slds-size--1-of-1 slds-size--1-of-2">
+                                        <label class="slds-form-element__label" for="text-input-01">ACV</label>
+                                    </div>
+                                    <div class="slds-col slds-size--1-of-2">
+                                        <div class="slds-form-element">
+                                            <div class="slds-form-element__control">
+                                               <!--<apex:outputLabel value="{!selectedModelSecondPage}"/>-->
+<!--                                                <input type="decimal" placeholder="ACV" class="slds-input" /> -->
+                                               <apex:inputField value="{!objInventory.ACV__c}" styleClass="slds-input"/>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            
+                            </div>
+                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-2 slds-p-left--x-large slds-p-right--x-large">
+                                <div class="slds-grid slds-wrap">
+                                    <div class="slds-col slds-size--1-of-1 slds-size--1-of-2">
+                                        <label class="slds-form-element__label" for="text-input-01">Date on Floorplan</label>
+                                    </div>
+                                    <div class="slds-col slds-size--1-of-2">
+                                        <div class="slds-form-element">
+                                            <div class="slds-form-element__control">
+                                               <!-- <apex:inputField value="{!objProduct.M_Dealer_Comments__c}"/>-->
+<!--                                                <input type="decimal" placeholder="Date on Floorplan" class="slds-input" /> -->
+                                                <apex:inputField value="{!objInventory.Date_on_FloorPlan__c}" styleClass="slds-input"/>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="slds-col slds-size--1-of-1">
+                        <div class="slds-grid slds-wrap">
+                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-2 slds-p-left--x-large">
+                                <div class="slds-grid slds-wrap">
+                                    <div class="slds-col slds-size--1-of-1 slds-size--1-of-2">
+                                        <label class="slds-form-element__label" for="text-input-01">Days on the Lot</label>
+                                    </div>
+                                    <div class="slds-col slds-size--1-of-2">
+                                        <div class="slds-form-element">
+                                            <div class="slds-form-element__control">
+                                               <!--<apex:outputLabel value="{!selectedModelSecondPage}"/>-->
+<!--                                                <input type="decimal" placeholder="Days on the Lot" class="slds-input" /> -->
+                                               <apex:inputField value="{!objInventory.Days_on_Lot__c}" styleClass="slds-input"/>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            
+                            </div>
+                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-2 slds-p-left--x-large slds-p-right--x-large">
+                                <div class="slds-grid slds-wrap">
+                                    <div class="slds-col slds-size--1-of-1 slds-size--1-of-2">
+                                        <label class="slds-form-element__label" for="text-input-01">Costline</label>
+                                    </div>
+                                    <div class="slds-col slds-size--1-of-2">
+                                        <div class="slds-form-element">
+                                            <div class="slds-form-element__control">
+                                               <!-- <apex:inputField value="{!objProduct.M_Dealer_Comments__c}"/>-->
+<!--                                                <input type="decimal" placeholder="Costline" class="slds-input" /> -->
+                                                <apex:inputField value="{!objInventory.Costline__c}" styleClass="slds-input"/>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                     <div class="slds-col slds-size--1-of-1">
+                        <div class="slds-grid slds-wrap">
+                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-2 slds-p-left--x-large">
+                                <div class="slds-grid slds-wrap">
+                                    <div class="slds-col slds-size--1-of-1 slds-size--1-of-2">
+                                        <label class="slds-form-element__label" for="text-input-01">Hull ID</label>
+                                    </div>
+                                    <div class="slds-col slds-size--1-of-2">
+                                        <div class="slds-form-element">
+                                            <div class="slds-form-element__control">
+                                               <!--<apex:outputLabel value="{!selectedModelSecondPage}"/>-->
+<!--                                                <input type="decimal" placeholder="Hull ID" class="slds-input" /> -->
+                                               <apex:inputField value="{!objInventory.HIN_Number__c}" styleClass="slds-input"/>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            
+                            </div>
+                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-2 slds-p-left--x-large slds-p-right--x-large">
+                                <div class="slds-grid slds-wrap">
+                                    <div class="slds-col slds-size--1-of-1 slds-size--1-of-2">
+                                        <label class="slds-form-element__label" for="text-input-01">Trailer VIN</label>
+                                    </div>
+                                    <div class="slds-col slds-size--1-of-2">
+                                        <div class="slds-form-element">
+                                            <div class="slds-form-element__control">
+                                               <apex:inputField value="{!objInventory.Trailer_VIN__c}" styleClass="slds-input"/>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="slds-col slds-size--1-of-1">
+                        <div class="slds-grid slds-wrap">
+                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-2 slds-p-left--x-large">
+                                <div class="slds-grid slds-wrap">
+                                    <div class="slds-col slds-size--1-of-1 slds-size--1-of-2">
+                                        <label class="slds-form-element__label" for="text-input-01">Engine SN</label>
+                                    </div>
+                                    <div class="slds-col slds-size--1-of-2">
+                                        <div class="slds-form-element">
+                                            <div class="slds-form-element__control">
+                                               <apex:inputField value="{!objInventory.Engine_SN__c}" styleClass="slds-input"/>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            
+                            </div>
+                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-2 slds-p-left--x-large slds-p-right--x-large">
+                                <div class="slds-grid slds-wrap">
+                                    <div class="slds-col slds-size--1-of-1 slds-size--1-of-2">
+                                        <label class="slds-form-element__label" for="text-input-01">Interest Start Date</label>
+                                    </div>
+                                    <div class="slds-col slds-size--1-of-2">
+                                        <div class="slds-form-element">
+                                            <div class="slds-form-element__control">
+                                               <apex:inputField value="{!objInventory.Interest_Start_Date__c}" styleClass="slds-input"/>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="slds-col slds-size--1-of-1">
+                        <div class="slds-grid slds-wrap">
+                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-2 slds-p-left--x-large">
+                                <div class="slds-grid slds-wrap">
+                                    <div class="slds-col slds-size--1-of-1 slds-size--1-of-2">
+                                        <label class="slds-form-element__label" for="text-input-01">Curtailments Start Date</label>
+                                    </div>
+                                    <div class="slds-col slds-size--1-of-2">
+                                        <div class="slds-form-element">
+                                            <div class="slds-form-element__control">
+                                               <apex:inputField value="{!objInventory.Curtailment_Start_Date__c}" styleClass="slds-input"/>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            
+                            </div>
+                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-2 slds-p-left--x-large slds-p-right--x-large">
+                                <div class="slds-grid slds-wrap">
+                                    <div class="slds-col slds-size--1-of-1 slds-size--1-of-2">
+                                        <label class="slds-form-element__label" for="text-input-01">Status</label>
+                                    </div>
+                                    <div class="slds-col slds-size--1-of-2">
+                                        <div class="slds-form-element">
+                                            <div class="slds-form-element__control">
+                                               <apex:inputField value="{!objInventory.UsedBoatStatus__c}" styleClass="slds-select"/>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="slds-col slds-size--1-of-1">
+                        <div class="slds-grid slds-wrap">
+                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-2 slds-p-left--x-large">
+                                <div class="slds-grid slds-wrap">
+                                    <div class="slds-col slds-size--1-of-1 slds-size--1-of-2">
+                                        <label class="slds-form-element__label" for="text-input-01">Location</label>
+                                    </div>
+                                    <div class="slds-col slds-size--1-of-2">
+                                        <div class="slds-form-element">
+                                            <div class="slds-form-element__control">
+                                               <!--<apex:outputLabel value="{!selectedModelSecondPage}"/>-->
+<!--                                                <input type="decimal" placeholder="Location" class="slds-input" /> -->
+                                               <apex:inputField value="{!objInventory.Location__c}" styleClass="slds-select"/>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            
+                            </div>
+                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-2 slds-p-left--x-large slds-p-right--x-large">
+                                <div class="slds-grid slds-wrap">
+                                    <div class="slds-col slds-size--1-of-1 slds-size--1-of-2">
+                                        <label class="slds-form-element__label" for="text-input-01">Dealer Prep</label>
+                                    </div>
+                                    <div class="slds-col slds-size--1-of-2">
+                                        <div class="slds-form-element">
+                                            <div class="slds-form-element__control">
+                                               <!-- <apex:inputField value="{!objProduct.M_Dealer_Comments__c}"/>-->
+<!--                                                <input type="decimal" placeholder="Dealer Prep" class="slds-input" /> -->
+                                               <apex:inputField value="{!objInventory.Dealer_Prep__c}" styleClass="slds-select"/>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="slds-col slds-size--1-of-1">
+                        <div class="slds-grid slds-wrap">
+                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-2 slds-p-left--x-large">
+                                <div class="slds-grid slds-wrap">
+                                    <div class="slds-col slds-size--1-of-1 slds-size--1-of-2">
+                                        <label class="slds-form-element__label" for="text-input-01">Owner</label>
+                                    </div>
+                                    <div class="slds-col slds-size--1-of-2">
+                                        <div class="slds-form-element">
+                                            <div class="slds-form-element__control">
+                                               <!--<apex:outputLabel value="{!selectedModelSecondPage}"/>-->
+<!--                                                <input type="decimal" placeholder="Owner" class="slds-input" /> -->
+                                               <apex:inputField value="{!objInventory.Owner__c}" styleClass="slds-select"/>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            
+                            </div>
+                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-2 slds-p-left--x-large slds-p-right--x-large">
+                                <div class="slds-grid slds-wrap">
+                                    <div class="slds-col slds-size--1-of-1 slds-size--1-of-2">
+                                        <label class="slds-form-element__label" for="text-input-01"></label>
+                                    </div>
+                                    <div class="slds-col slds-size--1-of-2">
+                                        <div class="slds-form-element">
+                                            <div class="slds-form-element__control">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    
+                    <div id="tab-default-1a" class="slds-tabs--default__content slds-show slds-col slds-size--1-of-1" role="tabpanel" aria-labelledby="tab-default-2a__item">
+                        
+                        <apex:repeat value="{!lstPriceAndProductOptionWraperClass}" var="lscM" id="rv0"> 
+                            <article class="slds-card">
+                                <header class="slds-card__header slds-grid">
+                                    <div class="slds-media slds-media--center slds-has-flexi-truncate"> 
+                                        <div class="slds-media__body slds-truncate">                                            
+                                            <h2><span class="slds-text-heading--small">Manufacture option for {!lscM.strSelectedOption}</span></h2>
+                                        </div> 
+                                    </div>
+                                    
+                                    <!-- <div class="slds-no-flex">
+                                        <button class="slds-button slds-button--neutral slds-col--bump-left">New</button>
+                                    </div> -->
+                                </header>
+                                <div class="slds-card__body">
+                                    <table class="slds-table slds-table--bordered slds-no-row-hover slds-table--cell-buffer">
+                                        <thead>
+                                            <tr class="slds-text-heading--label">
+                                                <th scope="col">Description</th>
+<!--                                                 <th scope="col">&nbsp;</th> -->
+<!--                                                 <th scope="col">Retail Price</th> -->
+<!--                                                 <th scope="col">Part Number</th> -->
+                                            </tr>
+                                        </thead>
+                                        
+                                        <tbody>
+                                        <apex:variable value="{!1}" var="rowNumber"/>
+                                            <apex:repeat value="{!lscM.lstProductPriceForSelectedCategory}" var="lsc" id="rv1">
+                                                <tr class="slds-hint-parent">   
+                                                    <td>
+                                                        <div class="slds-form-element">
+                                                            <div class="slds-form-element__control">
+                                                                <label class="slds-checkbox">
+<!--                                                                     <input type="checkbox" name="options" id="checkbox-01" /> -->
+                                                                       <apex:inputCheckbox value="{!lsc.checkBox}" id="ic1" onchange="changeIncheckBox('{!rowNumber}','{!lscM.strSelectedOption}', this)"/>
+                                                                    <span class="slds-checkbox--faux"></span>
+<!--                                                                        <span class="slds-form-element__label"> Category</span> -->
+                                                                    <span class="slds-form-element__label">  {!lsc.objProductPriceForSelectedCategory.ProductSelected_Category__c} </span>
+                                                                </label>
+                                                            </div>
+                                                        </div>
+                                                    </td>
+<!--                                                     <td>&nbsp;</td> -->
+<!--                                                     <td >Price</td> -->
+<!--                                                     <td >$<apex:outputText value="{!lsc.objProductPriceForSelectedCategory.ProductRetail_Price__c}" id="ot0"/></td> -->
+<!--                                                     <td>Code</td> -->
+<!--                                                     <td>{!lsc.objProductPriceForSelectedCategory.Product_Code__c}</td>  -->
+                                                    <apex:variable value="{!rowNumber+1}" var="rowNumber"/>
+                                                </tr>
+                                            </apex:repeat>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </article>
+                        </apex:repeat>
+                        
+                    <article class="slds-card card-wrapper">
+		                <header class="slds-card__header slds-grid">
+		                    <div class="slds-media slds-media--center slds-has-flexi-truncate">
+		                        <div class="slds-media__body slds-truncate">
+		                        		<table>
+			                        		<tr>
+			                        			<td>
+				                            		<h2>Dealer Options</h2>
+				                            </td>
+				                            <td style="text-align: right;">
+				                            		<a onclick="addDealerOption(this);"><i class="fa fa-plus-square" style="font-size: 30px; color: #1a6fd3;"></i></a>
+				                            </td>
+			                            </tr>
+		                            </table>
+		                        </div>
+		                    </div>
+		                </header>
+		                <apex:actionFunction name="addDealOptToLst" action="{!updateDealerOptionList}" id="doLU" rerender="dealOptOP" oncomplete="completedTaskListUpdate();">
+					        <apex:param name="desDOPP" assignTo="{!decDO}" value=""/>
+					        <apex:param name="delDOPP" assignTo="{!delDO}" value=""/>
+					        <apex:param name="recDOPP" assignTo="{!retDO}" value=""/> 
+					        <apex:param name="prtNoDOPP" assignTo="{!pnDO}" value=""/>
+					    </apex:actionFunction>
+					     <apex:actionFunction name="deleteDealerOptionCheckBoxSub" action="{!getDeleteDealerOptionPriceSub}" id="af6" rerender="dealOptOP" oncomplete="completedTask();">
+					        <apex:param name="rN" assignTo="{!dealerPartNumber}" value=""/>
+					    </apex:actionFunction>
+					    <apex:actionFunction name="callDealerOptionCheckBox" action="{!getDealerOptionPrice}" id="af4" rerender="pcDiv1,pcDiv2" oncomplete="completedTask();">
+						        <apex:param name="rN" assignTo="{!dealerPartNumber}" value=""/>
+						<!--         <apex:param name="sOC" assignTo="{!selectedOptionCategory}" value=""/> -->
+						    </apex:actionFunction>
+						    
+						    <apex:actionFunction name="callDealerOptionCheckBoxSub" action="{!getDealerOptionPriceSub}" id="af5" rerender="pcDiv1,pcDiv2" oncomplete="completedTask();">
+						        <apex:param name="rN" assignTo="{!dealerPartNumber}" value=""/>
+						<!--         <apex:param name="sOC" assignTo="{!selectedOptionCategory}" value=""/> -->
+						    </apex:actionFunction>
+		          		<script>
+		          			function addDealerOption(obj) {
+		          				$("#doId").fadeIn();
+		          				//document.getElementById("doId").style.display = 'block';
+		          			}
+		          			
+		          			$("#closeIcn").click(function() {
+		          				$("#doId").fadeOut();
+		          			});
+		          			function removeTheDealerOption(prtNum) {
+								$('.popup').addClass('active');
+								deleteDealerOptionCheckBoxSub(prtNum);	
+							}  
+		          			function addDealerOptionToList(obj) {
+		          				console.log(obj);
+		          				var dec = '';
+		          				var retPrice = 0.00;
+		          				var dealPrice = 0.00;
+		          				var prtNo = Math.floor(Math.random()*100000);
+		          				
+		          				if($("#decId").val() != null && $("#decId").val() != '') {
+		          					dec = $("#decId").val();
+		          				}
+		          				if($("#retId").val() != null && $("#retId").val() != '') {
+		          					retPrice = $("#retId").val();
+		          				}
+		          				if($("#delId").val() != null && $("#delId").val() != '') {
+		          					dealPrice = $("#delId").val();
+		          				}
+		          				
+		          				if(dec != '' && retPrice != '' && dealPrice != '') {
+		          					addDealOptToLst(dec, dealPrice, retPrice, prtNo);
+		          				} else {
+		          					alert("Please fill all the details.")
+		          				}
+		          			}
+		          			function completedTaskListUpdate() {
+		          				$("#doId").fadeOut(); 
+		          			} 
+		          			function isNumberKey(evt) {
+					            var charCode = (evt.which) ? evt.which : evt.keyCode;
+					            if (charCode != 45 && charCode != 46 && charCode > 31 
+					                && (charCode < 48 || charCode > 57)){
+					                return false;  
+					            }
+					            return true;
+					        }
+					        
+					        function changeDealerOption(partNumber, obj){
+					            console.log('All Values : '+ partNumber + ' ' + obj);
+					            $('.popup').addClass('active');
+					            if(document.getElementById(obj.id).checked){
+					                callDealerOptionCheckBox(partNumber);
+					            }else{
+					                callDealerOptionCheckBoxSub(partNumber);
+					            }
+					        }
+		          		</script>
+		          		<apex:outputPanel id="dealOptOP">	
+			                <div class="slds-card__body">
+			                    <table class="slds-table slds-table--bordered slds-no-row-hover slds-table--cell-buffer slds-table--custom">
+			                        <thead>
+			                            <tr class="slds-text-heading--label">
+			                                <th scope="col">Description </th>
+			                                <th scope="col">&nbsp; </th>
+		                                    <th scope="col">
+			                                    Dealer Price
+			                                </th>
+			                                <th scope="col">Retail Price </th>
+			                                <th scope="col">Part Number</th>
+			                            </tr>
+			                        </thead>
+			                        
+			                        <tbody>
+				                            <apex:repeat value="{!lstDealerOptionWraper}" var="varDO" >
+				                                <tr class="slds-hint-parent">   
+				                                    <td>
+				                                        <label class="slds-checkbox">
+				                                          <apex:inputCheckbox value="{!varDO.isSelect}" id="ic77"  onchange="changeDealerOption('{!varDO.objDealerOption.Part_Number__c}', this)"/>
+				                                          <span class="slds-checkbox--faux"></span>
+				                                          <span class="slds-form-element__label">{!varDO.objDealerOption.Name}</span>
+				                                        </label>
+				                                    </td>
+				                                    <td>&nbsp;</td>
+				                                    <td>
+				                                    		<apex:outputField value="{!varDO.objDealerOption.Cost__c}" id="ot22"/>
+				                                    	</td>
+				                                      
+				                                    <td><apex:outputField value="{!varDO.objDealerOption.Retail_Price__c}" id="ot24"/></td>
+				                                    <td> 
+				                                    		{!varDO.objDealerOption.Part_Number__c} &nbsp;
+				                                    		<apex:outputPanel rendered="{!varDO.ShowRemoveIcon}">
+				                                    		 <a onclick="removeTheDealerOption('{!varDO.objDealerOption.Part_Number__c}');">
+				                                    		 	<i class="fa fa-close" style="font-size: 20px;"></i> 
+				                                    		 </a> 
+				                                    		 </apex:outputPanel>
+				                                    	</td> 
+				                                </tr>
+				                            </apex:repeat>
+			                        </tbody>
+			                    </table>
+			                </div>  
+		                </apex:outputPanel>
+		            </article>
+                    </div>
+                    <div class="slds-col slds-size--1-of-1 slds-m-top--large slds-m-bottom--x-large slds-align--absolute-center">
+                        <div class="slds-grid slds-wrap">
+                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-2 slds-col--padded">
+                                <button class="slds-button slds-button--neutral slds-button--brand " type="button" onclick="window.location.href = '/home/home.jsp'" >Close</button>
+                                <button class="slds-button slds-button--neutral slds-button--brand " type="button" id="createId" onclick="createBoat(this);">Create Boat</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+          </div>
+        </article>
+        
+         
+        </apex:form>
+    </body>
+    </html>
+ 
+</apex:page>

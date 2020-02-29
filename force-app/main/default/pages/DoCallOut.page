@@ -1,0 +1,16 @@
+<apex:page ><!-- controller="DoAuthentication" title="DoMySqlAuthentication">
+
+<apex:form >
+<apex:selectList value="{!Manufacturers}" label="Manufacturer" multiselect="false" size="1">
+            <apex:selectOptions value="{!items}"/>
+
+        </apex:selectList>
+
+
+
+<apex:commandButton value="DoAuthentication" action="{!docallout}" reRender="tokenid"/>
+<apex:outputText value="{!tokentoshow}" id="tokenid"></apex:outputText>
+
+</apex:form>
+ -->
+</apex:page>

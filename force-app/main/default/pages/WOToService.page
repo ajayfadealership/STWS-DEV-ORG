@@ -1,0 +1,11 @@
+<apex:page controller="WOToServiceController" showHeader="false" sidebar="false">
+    <apex:form >
+        <b>Please wait...</b>
+        <apex:actionFunction name="toService" action="{!redirectTo}"/>
+    </apex:form>
+    <script>
+        onload = function() {
+            toService();
+        }
+    </script>
+</apex:page>

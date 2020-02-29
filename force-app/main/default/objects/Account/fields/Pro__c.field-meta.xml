@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Pro__c</fullName>
+    <deprecated>false</deprecated>
+    <externalId>false</externalId>
+    <label>Probability Of Closing Time Frame</label>
+    <required>false</required>
+    <trackFeedHistory>false</trackFeedHistory>
+    <type>Picklist</type>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Less than 30 days</fullName>
+                <default>false</default>
+                <label>Less than 30 days</label>
+            </value>
+            <value>
+                <fullName>Less than 60 days</fullName>
+                <default>false</default>
+                <label>Less than 60 days</label>
+            </value>
+            <value>
+                <fullName>Less than 90 days</fullName>
+                <default>false</default>
+                <label>Less than 90 days</label>
+            </value>
+            <value>
+                <fullName>Greater than 90 days</fullName>
+                <default>false</default>
+                <label>Greater than 90 days</label>
+            </value>
+            <value>
+                <fullName>Less than 6 Months</fullName>
+                <default>false</default>
+                <label>Less than 6 Months</label>
+            </value>
+            <value>
+                <fullName>Less than 1 Year</fullName>
+                <default>false</default>
+                <label>Less than 1 Year</label>
+            </value>
+            <value>
+                <fullName>More than 1 year</fullName>
+                <default>false</default>
+                <label>More than 1 year</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

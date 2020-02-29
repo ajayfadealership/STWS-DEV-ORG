@@ -1,0 +1,23 @@
+<aura:component >
+    <aura:attribute name="selectedLookUpRecord" type="sObject" default="{}"/>
+    <aura:attribute name="fromBBNav1" type="Boolean" default="false"/>
+    <aura:handler name="oSelectedRecordEvent" event="c:selectedsObjectRecordEvent" action="{!c.handleRecordSelectEvent}"/>
+    <div class="slds-form-element">
+        <lightning:input aura:id="inputToggle" type="toggle"
+                         label="Create New Customer" name="togglevalue"   
+                         value="ToggleValue" onchange="{!c.changeToggle}" />
+    </div>
+    <hr/>
+    <div class="slds-grid slds-gutters">
+        <div class="slds-col" id="existingCustomerDiv" style="height:200px">
+            <span>
+                <c:CustomLookup objectAPIName="Contact" IconName="standard:avatar" selectedRecord="{!v.selectedLookUpRecord}" label="Customer Name"/>
+            </span>
+        </div>
+        <div class="slds-col" id="newCustomerDiv" style="display:none; height:200px">
+            <span>
+                <c:CreateAccount fromBBNav2="{!v.fromBBNav1}"/>
+            </span>
+        </div>
+    </div>
+</aura:component>

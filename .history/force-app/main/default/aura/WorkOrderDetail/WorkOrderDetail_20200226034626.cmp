@@ -1,0 +1,383 @@
+<aura:component controller="WODetailPageController" implements="flexipage:availableForRecordHome,flexipage:availableForAllPageTypes,lightning:actionOverride,force:hasRecordId" access="global">
+    <aura:attribute name="disabled" type="Boolean" default="false" />
+    <aura:attribute name="layoutSections" type="List" />
+    <aura:attribute name="saved" type="Boolean" default="false" />
+    <aura:attribute name="removeSection" type="String" />
+    <aura:attribute name="showSpinner" type="Boolean" default="false" />
+    <aura:attribute name="fieldName" type="String" default="StageName" />
+    <aura:attribute name="woJobsWithWJL" type="Object[]" access="global"/>
+    <aura:attribute name="isDevOrg" type="Boolean" default="false" access="global"/>
+    <aura:attribute name="workOrderTotal" type="Decimal" default="0.00" access="global"/>
+    <aura:attribute name="workOrderTotalwTax" type="Decimal" default="0.00" access="global"/>
+    <aura:attribute name="taxableTotal" type="Decimal" default="0.00" access="global" />
+    <aura:attribute name="totalTaxonWO" type="Decimal" default="0.00" access="global" />
+    <aura:attribute name="taxableAmountDetails" type="String" default="" access="global"/>
+    <aura:attribute name="nontaxableItems" type="String" default="" access="global"/> 
+    <aura:attribute name="taxRate" type="Decimal" default="0.00" access="Global"/>
+    <lightning:notificationsLibrary aura:id="notifLib"/>
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    <aura:handler event="c:CalculateAllJobsTotal" action="{!c.calculateAllJobs}"/>
+
+
+    <aura:attribute name="partsTotalOnWorkOrder" type="Decimal" default="0.00" access="global" />
+    <aura:attribute name="totalLabor" type="Decimal" default="0.00" access="global" />
+    <aura:attribute name="totalMiscChargesWO" type="Decimal" default="0.00" access="global" />
+    <aura:attribute name="totalClaimPaid" type="Decimal" default="0.00" access="global" />
+    <aura:attribute name="totalShopSupplies" type="Decimal" default="0.00" access="global" />
+    <aura:attribute name="totalDiscountOnWorkOrderJobs" type="Decimal" default="0.00" access="global" />
+    <aura:attribute name="totalShippingCharges" type="Decimal" default="0.00" access="global" />
+    <!--<aura:handler name="change" value="{!workOrderTotal}" action="{!c.saveJobs}" /> -->
+    <aura:registerEvent name="calcTaxOnJob" type="c:CalculateTaxOnWOJObs"/>
+    <aura:registerEvent name="saveWOJobs" type="c:SaveWorkOrderJobs"/>
+    <aura:attribute name="woRecordData" type="Object" access="global"/>
+    <aura:attribute name="targetRecord" type="Object" access="global"/>
+    <aura:attribute name="recordLoadError" type="String" access="global"/>
+    <aura:attribute name="recordType" type="String" access="global"/>
+    <aura:attribute name="recordTypeId" type="String" access="global"/>
+    
+    <aura:attribute name="progress" type="Integer" default="0" access="public"/>
+    <aura:handler name="render" value="{!this}" action="{!c.onRender}"/>
+    <aura:attribute name="Type" type="String" access="global" default="" />
+    <aura:attribute name="activeSections" type="List" default="['A','C']" />
+    <aura:attribute name="toggleSpinner" type="Boolean" access="global" default="true"/> 
+    <lightning:overlayLibrary aura:id="popuplib"/>
+    
+    <force:recordData aura:id="recordLoader"
+    recordId="{!v.recordId}"
+    layoutType="FULL" 
+    targetFields="{!v.woRecordData}"
+    targetRecord="{!v.targetRecord}"
+    targetError="{!v.recordLoadError}"
+    recordUpdated="{!c.recordLoaded}"  
+    />
+    
+    
+    
+    
+        <aura:if isTrue="{!v.toggleSpinner}">
+            <div class="slds-spinner_container">
+               
+                  <lightning:spinner alternativeText="Loading" variant="brand" size="large" />
+                </div>
+             
+            
+        </aura:if>  
+   
+        <lightning:path aura:id="path" recordId="{!v.recordId}"
+                        variant="non-linear " hideUpdateButton="false"
+                        
+                        />
+        <lightning:accordion aura:id="accordion" activeSectionName="A"  allowMultipleSectionsOpen="true" onsectiontoggle="{! c.handleSectionToggle }">
+           <aura:if isTrue="{!v.recordType == 'Work Order' || v.recordType == 'Warranty Work Order'}">
+            <lightning:accordionSection name="A" label="Work Order Details">
+              
+                <lightning:button variant="brand" label="Save" class="saveJobs" title="Save Jobs" onclick="{! c.saveJobs }"  iconName="action:download" iconPosition="right"/>
+
+                        
+                        <lightning:recordEditForm
+                                            onload="{!c.handleLoad}"
+                                            onsubmit="{!c.handleSubmit}"
+                                            onsuccess="{!c.handleSuccess}" recordId="{!v.recordId}"
+                                            aura:id="woRecordEditForm"
+                                            objectApiName="BOATBUILDING__Work_Order__c">
+                        <!-- the messages component is for error messages -->
+                        
+                        <lightning:messages />
+                        
+                        <aura:iteration items="{!v.layoutSections}" var="section">
+                            <div class="slds-section slds-is-open">
+                                <h3 class="slds-section__title">
+                                    {!section.label}
+                                </h3>
+                                <div class="slds-section__content">
+                                    <lightning:layout multipleRows="{!section.totalColumns > 1 }">
+                                        
+                                        <aura:iteration items="{!section.lstFields}" var="field">
+                                            
+                                            <lightning:layoutItem size="{! 12/section.totalColumns }" flexibility="auto" padding="around-small">
+                                                <aura:if isTrue="{!(!field.isReadOnly)}">
+                                                    <aura:if isTrue="{!field.fieldName != 'BOATBUILDING__Store_Location__c'}">
+                                                        <lightning:inputField auraLid="{!field.fieldName}" fieldName="{!field.fieldName}" />	
+                                                        <aura:set attribute="else">
+                                                            <lightning:inputField aura:id="storeLocationWO" fieldName="BOATBUILDING__Store_Location__c" onchange="{!c.calculateAllJobs}"/>
+                                                        </aura:set>
+                                                    </aura:if>
+                                                    <aura:set attribute="else">
+                                                        <lightning:outputField fieldName="{!field.fieldName}" />	 
+                                                    </aura:set>
+                                                </aura:if>
+                                            </lightning:layoutItem>
+                                            
+                                        </aura:iteration>
+                                    </lightning:layout>
+                                </div>
+                            </div>
+                        </aura:iteration> 
+                        <div class="slds-m-top_medium"> 
+                          <!--<lightning:button variant="brand" type="submit" name="save" label="Save" />-->  
+                        </div>
+                    </lightning:recordEditForm>
+                    
+                    <lightning:accordionSection name="sectionName" label="View All Events">
+                        <lightning:select  label="Select Event Type" required="false" value="{!v.Type}">
+                            <option value="Email">Email</option>
+                            <option value="Meeting">Meeting</option>
+                            <option value="Other">Other</option>
+                            <option value="Call">Call</option>
+                            <option value="Comment for Customer">Comment for Customer</option>
+                            <option value="Comment for Technician">Comment for Technician</option>
+                            <option value="Customer Comment">Comment from Customer</option>
+                           
+                        </lightning:select>
+
+                        <c:RecordEventActivity whatId="{!v.recordId}" whoId="{!v.woRecordData.BOATBUILDING__Contact__c}" accountId="{!v.woRecordData.BOATBUILDING__Account__c}" commentSectionName="Work order Section"/>
+
+                    </lightning:accordionSection>
+            </lightning:accordionSection>
+            <lightning:accordionSection name="WOTotal" label="{!'Work Order Total:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;            $'+v.workOrderTotalwTax}">
+                <div class="slds-grid slds-gutters slds-wrap">
+
+                   <!-- <div class="slds-col slds-size_1-of-1">
+                        <div class="slds-form">
+                            <div class="slds-form-element slds-form-element_horizontal">
+                            <label class="slds-form-element__label" for="horizontal-input-id-01" >Taxable Total</label>
+                            <div class="slds-form-element__control">
+                                <div class="slds-grid">
+                                <div class="slds-col slds-size_11-of-12 slds-p-horizontal_none">
+                                    <ui:outputCurrency value="{!v.taxableTotal}" />
+                                </div>
+                                <div class="slds-col slds-size_1-of-12">
+                                    <lightning:helptext content="{!v.taxableAmountDetails}"/>
+                                </div>
+                            </div>
+                            </div>
+                            </div>
+                        </div>
+                    </div> -->
+
+                    <div class="slds-col slds-size_1-of-1  slds-medium-size_4-of-12 slds-large-size_4-of-12">
+                        
+                            
+                            <div class="slds-form-element__control">
+                                <lightning:badge label="Taxable Total"/>                        
+                            </div>
+                        
+                    </div>
+                    <div class="slds-col slds-size_3-of-4  slds-medium-size_4-of-12 slds-large-size_4-of-12 ">
+                        <ui:outputCurrency value="{!v.taxableTotal}" />
+                    </div>
+                    <div class="slds-col slds-size_1-of-4  slds-medium-size_4-of-12 slds-large-size_4-of-12">
+                        <lightning:helptext content="{!v.taxableAmountDetails}"/>
+                    </div>
+                    <div class="slds-col slds-size_1-of-1 slds-medium-size_4-of-12 slds-large-size_4-of-12  slds-m-top--x-small">
+                        
+                            
+                                <lightning:badge label="Non-Taxable Total"/>                        
+                            
+                        
+                    </div>
+                    <div class="slds-col slds-size_3-of-4  slds-medium-size_4-of-12 slds-large-size_4-of-12 slds-m-top--x-small">
+                        <ui:outputCurrency value="{!v.workOrderTotal - v.taxableTotal + v.totalShippingCharges}" />
+                    </div>
+                    <div class="slds-col slds-size_1-of-4  slds-medium-size_4-of-12 slds-large-size_4-of-12 slds-m-top--x-small">
+                        <lightning:helptext content="{!v.nontaxableItems}"/>
+                    </div>
+                    <div class="slds-col slds-size_1-of-1  slds-medium-size_4-of-12 slds-large-size_4-of-12  slds-m-top--x-small">
+                       
+                                <lightning:badge label="Total Tax"/>                        
+                            
+                    </div>
+                    <div class="slds-col slds-size_3-of-4  slds-medium-size_4-of-12 slds-large-size_4-of-12 slds-m-top--x-small">
+                        <ui:outputCurrency value="{!v.totalTaxonWO}" />
+                    </div>
+                    <div class="slds-col slds-size_1-of-4  slds-medium-size_4-of-12 slds-large-size_4-of-12 slds-m-top--x-small">
+                        <lightning:helptext content="{!v.taxRate}" />
+                    </div>
+
+                    <div class="slds-col slds-size_1-of-1  slds-medium-size_4-of-12 slds-large-size_4-of-12  slds-m-top--x-small">
+                       
+                                <lightning:badge label="Total Parts"/>                        
+                            
+                    </div>
+                    <div class="slds-col slds-size_3-of-4  slds-medium-size_4-of-12 slds-large-size_4-of-12 slds-m-top--x-small ">
+                        <ui:outputCurrency value="{!v.partsTotalOnWorkOrder}" />
+                    </div>
+                    <div class="slds-col slds-size_1-of-4  slds-medium-size_4-of-12 slds-large-size_4-of-12 slds-m-top--x-small">
+                        <lightning:helptext content="This is the total of all the parts on all of the jobs of work order" />
+                    </div>
+
+                    <div class="slds-col slds-size_1-of-1  slds-medium-size_4-of-12 slds-large-size_4-of-12  slds-m-top--x-small">
+                       
+                                <lightning:badge label="Total Labor"/>                        
+                           
+                    </div>
+                    <div class="slds-col slds-size_3-of-4  slds-medium-size_4-of-12 slds-large-size_4-of-12 slds-m-top--x-small ">
+                        <ui:outputCurrency value="{!v.totalLabor}" />
+                    </div>
+                    <div class="slds-col slds-size_1-of-4  slds-medium-size_4-of-12 slds-large-size_4-of-12 slds-m-top--x-small">
+                        <lightning:helptext content="Total labor on all of the Jobs of this Work Order" />
+                    </div>
+
+                    <div class="slds-col slds-size_1-of-1  slds-medium-size_4-of-12 slds-large-size_4-of-12  slds-m-top--x-small">
+                       
+                                <lightning:badge label="Total Misc"/>                        
+                            
+                    </div>
+                    <div class="slds-col slds-size_3-of-4  slds-medium-size_4-of-12 slds-large-size_4-of-12 slds-m-top--x-small">
+                        <ui:outputCurrency value="{!v.totalMiscChargesWO}" />
+                    </div>
+                    <div class="slds-col slds-size_1-of-4  slds-medium-size_4-of-12 slds-large-size_4-of-12 slds-m-top--x-small">
+                        <lightning:helptext content="Total MISC Charges on this work order" />
+                    </div>
+                    <aura:if isTrue="{!v.recordType == 'Warranty Work Order'}">
+                            <div class="slds-col slds-size_1-of-1  slds-medium-size_4-of-12 slds-large-size_4-of-12  slds-m-top--x-small">
+                       
+                                <lightning:badge label="Total Claim Paid"/>                        
+                        
+                            </div>
+                            <div class="slds-col slds-size_3-of-4  slds-medium-size_4-of-12 slds-large-size_4-of-12 slds-m-top--x-small">
+                                <ui:outputCurrency value="{!v.totalClaimPaid}" />
+                            </div>
+                            <div class="slds-col slds-size_1-of-4  slds-medium-size_4-of-12 slds-large-size_4-of-12 slds-m-top--x-small">
+                                <lightning:helptext content="Total claim paid on all jobs of this work order" />
+                            </div>
+                       
+                    </aura:if>
+
+                    <div class="slds-col slds-size_1-of-1  slds-medium-size_4-of-12 slds-large-size_4-of-12  slds-m-top--x-small">
+                      
+                                <lightning:badge label="Total Shop Supplies"/>                        
+                            
+                    </div>
+                    <div class="slds-col slds-size_3-of-4  slds-medium-size_4-of-12 slds-large-size_4-of-12 slds-m-top--x-small">
+                        <ui:outputCurrency value="{!v.totalShopSupplies}" />
+                    </div>
+                    <div class="slds-col slds-size_1-of-4  slds-medium-size_4-of-12 slds-large-size_4-of-12 slds-m-top--x-small">
+                        <lightning:helptext content="Total Shop Supplies" />
+                    </div>
+                    <div class="slds-col slds-size_1-of-1  slds-medium-size_4-of-12 slds-large-size_4-of-12  slds-m-top--x-small">
+                        
+                                <lightning:badge label="Total Discount"/>                        
+                           
+                    </div>
+                    <div class="slds-col slds-size_3-of-4  slds-medium-size_4-of-12 slds-large-size_4-of-12 slds-m-top--x-small">
+                        <ui:outputCurrency value="{!v.totalDiscountOnWorkOrderJobs}" />
+                    </div>
+                    <div class="slds-col slds-size_1-of-4  slds-medium-size_4-of-12 slds-large-size_4-of-12 slds-m-top--x-small">
+                        <lightning:helptext content="Total Discount on Work Order" />
+                    </div>
+                    <div class="slds-col slds-size_1-of-1  slds-medium-size_4-of-12 slds-large-size_4-of-12  slds-m-top--x-small">
+                       
+                                <lightning:badge label="Total Shipping Charges"/>                        
+                            
+                    </div>
+                    <div class="slds-col slds-size_3-of-4  slds-medium-size_4-of-12 slds-large-size_4-of-12 slds-m-top--x-small">
+                        <ui:outputCurrency value="{!v.totalShippingCharges}" />
+                    </div>
+                    <div class="slds-col slds-size_1-of-4  slds-medium-size_4-of-12 slds-large-size_4-of-12 slds-m-top--x-small">
+                        <lightning:helptext content="Total Shipping Charges on Work Order" />
+                    </div>
+                    
+
+
+                    
+                </div>
+                
+            </lightning:accordionSection>
+            <lightning:accordionSection name="B" label="{!('Work Order Jobs-('+v.woJobsWithWJL.length+')')}">
+                <div class="slds-grid slds-gutters slds-wrap slds-p-top_medium slds-p-bottom_medium">
+
+                    <div class="slds-col slds-size_1-of-1">
+                    <aura:if isTrue="{!v.woJobsWithWJL.length > 0}" > 
+                        <lightning:button variant="brand" label="Save Jobs" class="saveJobs" title="Save Jobs" onclick="{! c.saveJobs }"  iconName="action:download" iconPosition="right"/>
+                    </aura:if>  
+                    </div>
+                    <div class="slds-col slds-size_1-of-1">
+                        <lightning:button variant="base" label="Add New Job" class="addNewJob" title="New Job" onclick="{! c.addNewJob }"  iconName="action:new" iconPosition="right"/>
+                    </div>
+                </div>
+
+                <aura:iteration items="{!v.woJobsWithWJL}" var="woj" indexVar="i">
+                    <lightning:accordionSection title="Click to see the breakdown"  name="{!i}"  label="{!if(not(empty(woj.objWOJ.Name)),woj.objWOJ.Name+' =: '+woj.objWOJ.BOATBUILDING__Job_Name__c+'&nbsp;&nbsp;&nbsp;&nbsp;Technician:&nbsp;'+woj.objWOJ.BOATBUILDING__Technician__r.Name+if(v.recordType == 'Warranty Work Order','&nbsp;&nbsp;Claim Status : '+woj.objWOJ.BOATBUILDING__Claim_Status_New__c,''), 'New Job(click to open)')}">
+                        <div class="slds-box"> 
+                            
+                            <lightning:tile label="{!if(not(empty(woj.objWOJ.Name)),woj.objWOJ.Name,'New Job')}" href="{!if(not(empty(woj.objWOJ.Name)),'/lightning/r/'+woj.objWOJ.Id+'/view','javascript:void(0)')}">
+                                
+                                
+                                <aura:set attribute="media">
+                                    
+                                    <lightning:icon iconName="standard:service_contract" size="medium"/>
+                                </aura:set>
+                                <lightning:helptext
+                                                    content="This is an auto generated job number. For all the new jobs this number will be generated after you save the jobs."
+                                                    />
+                                <div class="slds-grid slds-gutters slds-wrap" style="margin-top:-3%;padding-bottom:3%">
+                                    <div class="slds-col slds-size_1-of-1  slds-medium-size_1-of-2 slds-large-size_1-of-4">
+                                        <aura:if isTrue="{!v.woRecordData.RecordType.Name != 'Warranty Work Order'}">
+                                            <lightning:input type="toggle" checked="{!woj.objWOJ.BOATBUILDING__Taxable__c}" label="Taxable" name="input1" aura:id="taxToggelBox" class="taxableToggle" onchange="{!c.recalculateTax}"/>
+                                        </aura:if>
+                                    </div>
+                                    <div class="slds-col slds-size_1-of-1  slds-medium-size_1-of-2 slds-large-size_2-of-4">
+                                        <lightning:input type="toggle" checked="{!woj.objWOJ.BOATBUILDING__Approved_By_Customer__c}" label="Approved By Customer" name="input1" aura:id="approvedByCustumer" class="taxableToggle"/>
+                                        
+                                    </div>
+                                    
+                                    <div class="slds-col">
+                                        <a data-index="{!i}" data-value = "{!woj.objWOJ.Id}" onclick="{!c.handleRemove}" style="float: right">
+                                            <lightning:icon iconName="action:delete" alternativeText="Delete" size="xx-small" />
+                                        </a>
+                                    </div>
+                                    
+                               
+                                
+                                <c:WorkOrderJobs mapWTP="{!woj.lstWorkType}" mapCannedJob="{!woj.mapCannedJob}" storeLocation="{!v.woRecordData.BOATBUILDING__Store_Location__c}" recordType="{!v.woRecordData.RecordType.Name}" WOJ="{!woj.objWOJ}" jobLI="{!woj.objWOJ.BOATBUILDING__Work_Order_Job_Line_Items__r}" shopSuppliePercent="{!woj.shopSuppliesPer}" wojWithJLI="{!woj}" shopSuppliesCapping="{!woj.shopSuppliesCap}" />
+                            </div>
+                            </lightning:tile>
+                        </div>
+                        <br/>
+                    </lightning:accordionSection>
+                </aura:iteration>
+                
+                <br/>
+                <br/>
+                <br/>
+                <br/>
+                <br/>
+                <br/>
+                <br/>
+                <div id="divTOScroll"></div>
+            </lightning:accordionSection>
+            
+            <lightning:accordionSection name="woPhotos" label="Upload Photos">
+                
+                
+                <lightning:fileUpload multiple="true" recordId="{!v.recordId}" accept=".pdf, .png, .jpeg, .jpg" label="Upload photos for this work order" onuploadfinished="{!c.uplaodFinished}" />
+                <lightning:button variant="base" label="Refresh Preview" class="saveJobs" title="Click to see file preview" onclick="{! c.uplaodFinished }"  iconName="action:preview" iconPosition="right"/>
+                <c:WorkOrderPhotoInspectionPreview recordId="{!v.recordId}" aura:id="photoCmp"/> 
+            </lightning:accordionSection>
+            <aura:set attribute="else">
+                <aura:if isTrue="{!v.recordType == 'Work Request'}">
+                <lightning:accordionSection name="A" label="Work Request Details">
+               <!--<lightning:recordForm
+                    recordId="{!v.recordId}"
+                    objectApiName="BOATBUILDING__Work_Order__c"
+                    layoutType="Full"
+                    mode="edit" columns="2" onload="{!c.handleLoad}" onsuccess="{!c.handleLoad}"/> --> 
+                    <c:WorkRequestLightningComp recordId="{!v.recordId}" />
+                    </lightning:accordionSection>
+                    <lightning:accordionSection name="woPhotos" label="Upload Photos">
+                
+                
+                <lightning:fileUpload multiple="true" recordId="{!v.recordId}" accept=".pdf, .png, .jpeg, .jpg" label="Upload photos for this work order" onuploadfinished="{!c.uplaodFinished}" />
+                <lightning:button variant="base" label="Refresh Preview" class="saveJobs" title="Click to see file preview" onclick="{! c.uplaodFinished }"  iconName="action:preview" iconPosition="right"/>
+                <c:WorkOrderPhotoInspectionPreview recordId="{!v.recordId}" aura:id="photoCmp"/> 
+                
+            </lightning:accordionSection>
+            </aura:if>
+
+            </aura:set>
+        </aura:if>
+        
+        </lightning:accordion>
+       
+</aura:component>

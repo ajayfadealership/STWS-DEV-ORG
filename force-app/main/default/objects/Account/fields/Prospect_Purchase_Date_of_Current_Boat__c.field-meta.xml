@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Prospect_Purchase_Date_of_Current_Boat__c</fullName>
+    <deprecated>false</deprecated>
+    <description>Specifies the purchase date of Current Boat</description>
+    <externalId>false</externalId>
+    <label>Purchase Date of Current Boat</label>
+    <required>false</required>
+    <trackFeedHistory>false</trackFeedHistory>
+    <type>Date</type>
+</CustomField>

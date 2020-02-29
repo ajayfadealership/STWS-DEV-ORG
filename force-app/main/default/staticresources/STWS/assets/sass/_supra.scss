@@ -1,0 +1,493 @@
+.page-home {
+    .flex-row-no-padding {
+        flex-wrap: nowrap;
+        justify-content: space-between;
+    }
+    .banner-section {
+        margin: 0;
+        padding: 0;
+        .carousel-home {
+            overflow: hidden;
+            display: flex;
+            flex-wrap: nowrap;
+            align-items: stretch;
+            .boat-details {
+                background: black !important;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                padding-right: 15px;
+                padding-left: 15px;
+                text-align: right;
+                z-index: 500;
+                width: 55%; // &:before {
+                //   background: black;
+                //   content: '';
+                //   display: none;
+                //   width: 154%;
+                //   height: 100%;
+                //   position: absolute;
+                //   top: 0px;
+                //   left: -87%;
+                //   -webkit-transform: skew(-40deg);
+                //   -moz-transform: skew(-40deg);
+                //   -ms-transform: skew(-40deg);
+                //   -o-transform: skew(-40deg);
+                //   transform: skew(-40deg);
+                //   z-index: 10;
+                // }
+                .image-cover {
+                    position: relative;
+                    z-index: 200;
+                    img {
+                        max-width: 273px;
+                        margin-left: -66%;
+                        @media screen and (max-width: 767px) {
+                            max-width: 194px;
+                            margin: 0;
+                        }
+                        @media screen and (max-width: 413px) {
+                            max-width: 155px;
+                        }
+                        @media screen and (min-width: 1152px) {
+                            max-width: calc(100% - 20px);
+                        }
+                    }
+                }
+                .modal-name {
+                    color: white;
+                    display: block;
+                    font-size: 20px;
+                    margin-top: 10px;
+                    font-family: "Open Sans", sans-serif;
+                    font-weight: 700;
+                    position: relative;
+                    text-transform: uppercase;
+                    text-align: right;
+                    z-index: 200;
+                    @media screen and (min-width: 1152px) {
+                        font-size: 36px;
+                    }
+                }
+                @media screen and (max-width: 767px) {
+                    height: calc(100% - 1px);
+                }
+                @media screen and (min-width: 768px) {
+                    padding-right: 35px;
+                    padding-left: 0;
+                    width: 30%;
+                    &:before {
+                        display: block;
+                    }
+                }
+            }
+            .carousel-inner {
+                width: 70%;
+            }
+        }
+        .price-block {
+            background: white;
+            padding-top: 10px;
+            padding-bottom: 10px;
+            @media screen and (min-width: 991px) {
+                padding-top: 17px;
+                padding-bottom: 17px;
+            }
+            @media screen and (max-width: 767px) {
+                padding: 8px 0;
+            }
+            .heading {
+                font-size: 30px;
+                padding: 16px;
+                font-family: "Open Sans", sans-serif;
+                font-weight: 700;
+                text-transform: uppercase;
+                @media screen and (min-width: 991px) {
+                    font-size: 50px;
+                }
+                @media screen and (max-width: 767px) {
+                    font-size: 18px;
+                    padding: 8px;
+                }
+                @media screen and (max-width: 413px) {
+                    font-size: 16px;
+                }
+            }
+            .price {
+                color: black;
+                font-size: 70px;
+                margin-left: 25px;
+                font-family: "Open Sans", sans-serif;
+                font-weight: 700;
+                @media screen and (max-width: 767px) {
+                    font-size: 36px;
+                }
+                @media screen and (min-width: 991px) {
+                    font-size: 124px;
+                    line-height: 124px;
+                    margin-left: 40px;
+                }
+                @media print {
+                    font-size: 60px;
+                }
+            }
+        }
+    }
+    .why-buy-from-us .container {
+        .content-cover {
+            background: #6a6b6a !important;
+            padding-top: 25px;
+            padding-bottom: 25px;
+            @media print {
+                padding-bottom: 0px;
+                padding-top: 0px;
+            }
+            .flex-row {
+                @media screen and (max-width: 767px) {
+                    flex-direction: column;
+                }
+            }
+            .list-block li {
+                font-size: 20px;
+            }
+            .left-side {
+                flex: 1;
+                .list-block li {
+                    align-items: center;
+                    display: flex;
+                }
+                .heading {
+                    @media screen and (min-width: 767px) {
+                        min-width: 320px;
+                    }
+                }
+            }
+            .right-side {
+                flex: 1;
+                margin-top: 20px;
+                @media screen and (min-width: 767px) {
+                    text-align: right;
+                    margin-top: 0;
+                }
+                .heading {
+                    text-align: left;
+                    display: inline-block;
+                    @media screen and (min-width: 767px) {
+                        min-width: 320px;
+                    }
+                }
+                .list-block li {
+                    font-family: "Open Sans", sans-serif;
+                    font-weight: 100;
+                    &:before {
+                        display: none;
+                    }
+                    @media screen and (min-width: 767px) {
+                        padding-right: 10px;
+                        padding-left: 0;
+                    }
+                }
+            }
+        }
+    }
+    .banner-section .carousel-home-footer {
+        .carousel-inner {
+            margin-left: auto;
+            margin-right: 0px;
+            .item img {
+                margin-right: 0;
+                margin-left: auto;
+            }
+            @media screen and (max-width: 767px) {
+                display: none;
+            }
+        }
+        .wender-address {
+            left: 0px;
+            padding-right: 15px;
+            padding-left: 15px;
+            right: auto;
+            @media screen and (min-width: 1152px) {
+                padding-top: 63px;
+            }
+            @media screen and (max-width: 767px) {
+                padding-top: 30px;
+                padding-bottom: 20px;
+                position: relative;
+                width: 100%;
+            }
+            @media print {
+                padding: 40px 10px 0px;
+            }
+            .image-cover {
+                @media screen and (max-width: 1152px) {
+                    text-align: center;
+                }
+                img {
+                    @media screen and (max-width: 1152px) {
+                        margin: 0;
+                    }
+                    @media screen and (max-width: 1152px) and (max-width: 767px) {
+                        max-width: 210px;
+                    }
+                }
+            }
+            .sales-name {
+                margin-top: 15px;
+                text-align: center;
+                text-transform: capitalize;
+                @media screen and (min-width: 1152px) {
+                    margin-top: 38px;
+                }
+                @media print {
+                    font-size: 24px;
+                }
+            }
+            .address {
+                font-size: 24px;
+                margin-top: 25px;
+                text-align: left;
+                @media screen and (min-width: 1152px) {
+                    margin-top: 60px;
+                }
+                @media print {
+                    font-size: 20px;
+                }
+                a {
+                    @media print {
+                        font-size: 16px;
+                    }
+                }
+            }
+        }
+    }
+    .our-price {
+        &.our-price-second {
+            margin-top: 5px;
+            .flex-row {
+                -webkit-box-pack: justify;
+                -ms-flex-pack: justify;
+                justify-content: space-between;
+            }
+            .col-flex {
+                color: #fff !important;
+                @media print {
+                    font-size: 20px;
+                }
+            }
+        }
+        .flex-row{
+            justify-content: space-between;
+            .col-flex {
+                flex: auto;
+            }
+        }
+        .content-cover {
+            .right-side {
+                text-align: right;
+                .price {
+                    padding-right: 0;
+                }
+            }
+            .hd {
+                font-size: 35px;
+                display: inline-block;
+                vertical-align: middle;
+                @media print {
+                    font-size: 26px;
+                }
+            }
+            .price {
+                display: inline-block;
+                font-size: 40px;
+                line-height: 50px;
+                vertical-align: middle;
+                @media print {
+                    font-size: 60px;
+                    margin-left: 5px;
+                }
+            }
+            .table {
+                background: #29abe2;
+                margin-top: 20px;
+                margin-bottom: 0;
+                tr {
+                    display: flex;
+                    flex-wrap: nowrap;
+                    justify-content: space-between;
+                    align-items: center;
+                }
+                tr> {
+                    td,
+                    th {
+                        padding-top: 0;
+                        padding-bottom: 0;
+                        border: 0px;
+                        color: white !important;
+                        font-size: 18px;
+                        display: inline-flex;
+                        flex-wrap: nowrap;
+                        span {
+                            white-space: nowrap;
+                            &:last-child {
+                                margin-left: 10px;
+                                display: inline-block;
+                            }
+                        }
+                    }
+                    td:first-child,
+                    th:first-child {
+                        font-size: 35px;
+                        padding-left: 0px;
+                        width: 687px;
+                        font-family: "Open Sans", sans-serif;
+                        font-weight: 700;
+                        text-transform: uppercase;
+                        @media print {
+                            font-size: 26px;
+                        }
+                    }
+                    td:first-child span,
+                    th:first-child span {
+                        color: white !important;
+                        font-size: 50px;
+                        @media print {
+                            font-size: 26px;
+                        }
+                    }
+                    td:nth-child(2),
+                    th:nth-child(2) {
+                        text-align: right;
+                    }
+                    td:last-child,
+                    th:last-child {
+                        text-align: right;
+                    }
+                }
+            }
+        }
+    }
+}
+
+@media screen and (min-width: 1152px) {
+    .page-home .banner-section .carousel-home .boat-details .modal-name {
+        font-size: 36px;
+    }
+}
+
+@media print {
+    .page-home .our-price .content-cover .table tr> {
+        td,
+        th {
+            background: transparent !important;
+        }
+    }
+}
+
+@media print {
+    .page-home .our-price .content-cover .table tr> {
+        td:first-child span,
+        th:first-child span {
+            color: white;
+        }
+    }
+}
+
+@media print {
+    .page-home {
+        * {
+            -webkit-print-color-adjust: exact !important;
+            color-adjust: exact !important;
+        }
+        .banner-section .carousel-home .boat-details {
+            .modal-name {
+                font-size: 50px;
+            }
+        }
+        .banner-section {
+            .carousel-home .carousel-inner {
+                background-color: #000 !important; 
+                img {
+                    width: auto;
+                    max-height: 310px;
+                }
+            }
+        }
+        .heading {
+            background: #29abe2 !important;
+            color: #ffffff !important;
+        }
+        .modal-name {
+            color: #ffffff !important;
+            b {
+                color: #ffffff !important;
+            }
+        }
+        .why-buy-from-us {
+            .container .content-cover {
+                background: #6a6b6a !important;
+            }
+            .col-flex {
+                width: 570px !important;
+                min-height: 280px !important;
+            }
+            li {
+                color: #ffffff !important;
+            }
+            .left-side li {
+                text-align: left !important;
+            }
+            .right-side li {
+                text-align: right !important;
+                padding-right: 10px !important;
+            }
+            .left-side .heading {
+                width: 320px !important;
+            }
+            .right-side .heading {
+                width: 320px !important;
+                margin-left: 250px !important;
+                margin-top: 0 !important;
+                margin-top: -15px !important;
+            }
+        }
+        .why-us .list-block li:before {
+            background: white !important;
+            content: '' !important;
+            display: inline-block !important;
+            height: 3px !important;
+            margin-right: 7px !important;
+            vertical-align: middle !important;
+            width: 5px !important;
+        }
+        .our-price {
+            .content-cover {
+                background: #29abe2 !important;
+                padding: 14px 10px;
+                .hd {
+                    color: #ffffff !important;
+                }
+                .dealer-discount {
+                    color: #ffffff !important;
+                    margin-left: 120px !important;
+                }
+                // .price {
+                //     margin-left: 80px !important;
+                // }
+            }
+        }
+        .banner-section .carousel-home .boat-details .modal-name {
+            color: #ffffff !important;
+        }
+        .address {
+            text-align: center;
+            p,
+            a {
+                color: #ffffff !important;
+                width: 100%;
+                text-align: center;
+                display: block;
+            }
+        }
+    }
+}

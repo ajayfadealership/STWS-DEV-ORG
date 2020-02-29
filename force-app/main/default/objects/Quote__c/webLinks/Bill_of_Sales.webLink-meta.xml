@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<WebLink xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Bill_of_Sales</fullName>
+    <availability>online</availability>
+    <displayType>button</displayType>
+    <linkType>page</linkType>
+    <masterLabel>Bill of Sales</masterLabel>
+    <openType>replace</openType>
+    <page>PrintButtonPage3</page>
+    <protected>false</protected>
+</WebLink>

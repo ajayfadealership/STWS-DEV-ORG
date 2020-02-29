@@ -1,0 +1,42 @@
+<aura:component >
+    <aura:attribute name="ProductPriceIdListCC" type="String[]"/>
+    <aura:attribute name="DealerOptionIdListCC" type="String[]"/>
+    <aura:attribute name="NoSalesmanWithoutCostCC" type="boolean" />
+
+    <aura:attribute name="lstDealerOptionWraperCC" type="DealerOptionWraper[]"/>
+    <aura:registerEvent name="searchAgain" type="c:AssignBlank"/> 
+    <aura:attribute name="PrntAttP" type="String" />
+    <div style="display: none;" id="PPSectionBBWizard">
+        
+        <div class="slds-grid slds-wrap" style="padding-top: 1px; "> 
+            <div class="slds-col--padded " style="max-height: 700px; overflow: scroll; max-width: 60%; border: 1px solid #d8dde6; padding-top: 10px; padding-bottom: 10px;">
+                <div class="slds-page-header" role="banner" style="border: 1px solid #d8dde6;">
+                    <div class="slds-grid"> 
+                        <div class="slds-col slds-has-flexi-truncate">  
+                            <div class="slds-media slds-media--center slds-no-space slds-grow">
+                                <div class="slds-media__figure">
+                                </div>
+                                <div class="slds-media__body">
+                                    <h1 class="slds-page-header__title slds-m-right--small slds-truncate slds-align-middle" title="Record Title">Product</h1>
+                                    
+                                    <p class="slds-text-heading--label">Order Product From Stock</p>
+                                    
+                                    
+                                </div>
+                            </div>
+                        </div>
+                        <div class="slds-col slds-no-flex slds-grid slds-align-bottom">
+                            <div class="slds-button-group" role="group">
+                                <a style="position: fixed; left: 49%; z-index: 999; top: 27%;" class="slds-button slds-button--neutral" id="srchAgnBlock" onclick="{!c.searchBack}">Search Again</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <hr/>
+                <c:ProductPriceRepeatSectionBBWizard newPLstDealerOptionWraper="{!v.lstDealerOptionWraperCC}" NoSalesmanWithoutCostCCC="{!v.NoSalesmanWithoutCostCC}" ProductPriceIdListCCC="{!v.ProductPriceIdListCC}" DealerOptionIdListCCC="{!v.DealerOptionIdListCC}"/>
+            </div>
+            
+            <c:PaymentCalculatorBBWizard PrntAtt="{!v.PrntAttP}" NoSalesmanWithoutCostCCC="{!v.NoSalesmanWithoutCostCC}"/>
+        </div>
+    </div>
+</aura:component>

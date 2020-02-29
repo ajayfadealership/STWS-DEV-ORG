@@ -1,0 +1,371 @@
+<apex:page sidebar="false" showHeader="false" standardStylesheets="false" id="pg" docType="html-5.0" Controller="Part_DetailController">
+        <link rel="stylesheet" href="https://cdn.datatables.net/1.10.12/css/jquery.dataTables.min.css"/>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.0/jquery.min.js"/>
+        <script src="https://cdn.datatables.net/1.10.12/js/jquery.dataTables.min.js"/>
+            <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+        <apex:stylesheet value="{!URLFOR($Resource.BoatBuilderSR, 'assets/styles/salesforce-lightning-design-system.min.css')}" />
+        <style >
+            .popup{ 
+            position: fixed; 
+            top: 0;
+            bottom: 0; 
+            left: 0;
+            right: 0;
+            background: rgba(0,0,0,0.5);
+            display: none; 
+            z-index: 999; 
+            } 
+            .popup.active{display:block}
+            .popup img{margin: 15% auto} 
+        </style>
+        <script>
+    window.onload = function() {
+        var editHide= document.getElementById("editBtn");
+        editHide.style.display = "inline-block";
+        var cancelHide= document.getElementById("cancelBtn");
+        cancelHide.style.display = "none";
+        var updateHide= document.getElementById("pg:PartFrm:updateBtn");
+        updateHide.style.display = "none";
+    }
+        function edit(){
+            var editHide= document.getElementById("editBtn");
+            editHide.style.display = "none";
+            var cancelHide= document.getElementById("cancelBtn");
+             cancelHide.style.display = "inline-block";
+             var updateHide= document.getElementById("pg:PartFrm:updateBtn");
+             updateHide.style.display = "inline-block";
+            var itClassName=document.getElementsByClassName('partDetailEdit');
+            var i;
+            for(i = 0; i < itClassName.length; i++)
+            {
+                itClassName[i].disabled=false;
+            }
+        }
+        function cancel(){
+             var cancelHide= document.getElementById("cancelBtn");
+             cancelHide.style.display = "none";
+             var updateHide= document.getElementById("pg:PartFrm:updateBtn");
+             updateHide.style.display = "none";
+             var editHide= document.getElementById("editBtn");
+             editHide.style.display = "inline-block";
+            
+            var itClassName=document.getElementsByClassName('partDetailEdit');
+            var i;
+            for(i = 0; i < itClassName.length; i++)
+            {
+                itClassName[i].disabled=true;
+            }
+        }
+       
+        </script>
+        <title>Part Name: {!objPart.Name} </title>
+        <apex:form id="PartFrm">    
+            <div  class="popup">
+                <apex:image id="theImage2" value="" style="display:block;" width="40" height="40"/>
+            </div>      
+            <div class="slds-grid slds-wrap slds-col--padded">
+                <div class="slds-col--padded slds-col slds-size--1-of-1 Customer-Heading">
+                    <h2 class=" heading"><br/>
+                        <span class="slds-text-heading--small">PART</span>
+                    </h2>
+                </div>
+            </div>
+            
+            <div class="slds-grid slds-wrap slds-col--padded ">
+                <div class="slds-col--padded slds-col slds-size--1-of-1 Customer-Heading">
+                    <h2 class=" heading"><br/>
+                        <span class="slds-text-heading--small">Part:{!objPart.Name} </span>
+                    </h2>
+                </div>
+            </div>
+            <div style="padding: 10px; margin-left: 45%;">
+                <a class="slds-button slds-button--neutral slds-button--brand inside_row_button " type="button" onclick="cancel();" id="cancelBtn">Cancel</a>           
+<!--                 <a class="slds-button slds-button--neutral slds-button--brand inside_row_button " type="button" onclick="edit(this);" id="editBtn">Edit</a> -->
+            <apex:commandButton action="{!updatePartDetail}" value="Update" id="updateBtn" style="background-color: #0070d2;padding:0 1rem 0 1rem; color: white" styleClass="slds-button slds-button_brand" />                            
+
+                <!--  <a class="slds-button slds-button--neutral slds-button--brand inside_row_button " type="button" onclick="save();" id="saveBtn">Save Changes</a>-->            </div> 
+            <div id="infoDiv" style="margin-top:1%;padding-top: 30px;">
+                <div class="slds-grid slds-wrap">
+                     
+                    <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-1 slds-col--padded">
+                        <div class="slds-grid slds-wrap">
+                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                                <div class="slds-form-element">
+                                    <label class="slds-form-element__label">Part</label>
+                                    <div class="slds-form-element__control">
+                                        <apex:inputText value="{!objPart.BOATBUILDING__Part__r.Name}" id="itPart" styleClass="slds-input partDetailEdit" disabled="true"/>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                                <div class="slds-form-element">
+                                    <label class="slds-form-element__label">Part Number</label>
+                                    <div class="slds-form-element__control">
+                                        <apex:inputText value="{!objPart.Part_Number__c}" styleClass="slds-input partDetailEdit" id="itPartNumber" disabled="true"/>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                                <div class="slds-form-element">
+                                    <label class="slds-form-element__label">Vendor Name</label>
+                                    <div class="slds-form-element__control">
+                                        <apex:inputText value="{!objPart.BOATBUILDING__Vendor_Name__r.Name}" styleClass="slds-input partDetailEdit" id="itVendorName" disabled="true"/>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                                <div class="slds-form-element">
+                                    <label class="slds-form-element__label">Location</label>
+                                    <div class="slds-form-element__control">
+                                        <apex:inputText value="{!objPart.Location__c}" styleClass="slds-input partDetailEdit" id="itLocation" disabled="true"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-1 slds-col--padded">
+                        <div class="slds-grid slds-wrap">
+                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                                <div class="slds-form-element">
+                                    <label class="slds-form-element__label">Bin</label>
+                                    <div class="slds-form-element__control">
+                                        <apex:inputText value="{!objPart.Bin__c}" styleClass="slds-input partDetailEdit" id="itBin" disabled="true"/>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                                <div class="slds-form-element">
+                                    <label class="slds-form-element__label">Minimum Amount</label>
+                                    <div class="slds-form-element__control">
+                                        <apex:inputText value="{!objPart.Minimum_Amount__c}" styleClass="slds-input partDetailEdit" id="itMinimumAmount" disabled="true"/>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                                <div class="slds-form-element">
+                                    <label class="slds-form-element__label">Category</label>
+                                    <div class="slds-form-element__control">
+                                        <apex:inputText value="{!objPart.Category1__c}" styleClass="slds-input partDetailEdit" id="itCategory" disabled="true"/>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                                <div class="slds-form-element">
+                                    <label class="slds-form-element__label">Family</label>
+                                    <div class="slds-form-element__control">
+                                        <apex:inputText value="{!objPart.Family1__c}" styleClass="slds-input partDetailEdit" id="itFamily" disabled="true"/> 
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-1 slds-col--padded">
+                        <div class="slds-grid slds-wrap">
+                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                                <div class="slds-form-element">
+                                    <label class="slds-form-element__label">Sub-Family</label>
+                                    <div class="slds-form-element__control">
+                                        <apex:inputText value="{!objPart.Sub_Family__c}" styleClass="slds-input partDetailEdit" id="itSubFamily" disabled="true"/>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                                <div class="slds-form-element">
+                                    <label class="slds-form-element__label">Part Size</label>
+                                    <div class="slds-form-element__control">
+                                        <apex:inputText value="{!objPart.Part_Size__c}" styleClass="slds-input partDetailEdit" id="itPartSize" disabled="true"/>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                                <div class="slds-form-element">
+                                    <label class="slds-form-element__label">Taxable</label>
+                                    <div class="slds-form-element__control">
+                                        <apex:inputText value="{!objPart.Taxable__c}" styleClass="slds-input partDetailEdit" id="itTaxable" disabled="true"/>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                                <div class="slds-form-element">
+                                    <label class="slds-form-element__label">Discount %</label>
+                                    <div class="slds-form-element__control">
+                                        <apex:inputText value="{!objPart.Discount__c}" styleClass="slds-input partDetailEdit" id="itDiscount" disabled="true"/> 
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-1 slds-col--padded">
+                        <div class="slds-grid slds-wrap">
+                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                                <div class="slds-form-element">
+                                    <label class="slds-form-element__label">Retail Price</label>
+                                    <div class="slds-form-element__control">
+                                        <apex:inputText value="{!objPart.Retail_Price__c}" styleClass="slds-input partDetailEdit" id="itRetailPrice" disabled="true"/>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                                <div class="slds-form-element">
+                                    <label class="slds-form-element__label">Map Price</label>
+                                    <div class="slds-form-element__control">
+                                        <apex:inputText value="{!objPart.Name}" styleClass="slds-input partDetailEdit" id="itMapPrice" disabled="true"/>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                                <div class="slds-form-element">
+                                    <label class="slds-form-element__label">Part Cost</label>
+                                    <div class="slds-form-element__control">
+                                        <apex:inputText value="{!objPart.Part_Cost__c}" styleClass="slds-input partDetailEdit" id="itPartCost" disabled="true"/>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                                <div class="slds-form-element">
+                                    <label class="slds-form-element__label">Dealer Price</label>
+                                    <div class="slds-form-element__control">
+                                        <apex:inputText value="{!objPart.Dealer_Price__c}" styleClass="slds-input partDetailEdit" id="itDealerPrice" disabled="true"/> 
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-1 slds-col--padded">
+                        <div class="slds-grid slds-wrap">
+                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                                <div class="slds-form-element">
+                                    <label class="slds-form-element__label">Part Color</label>
+                                    <div class="slds-form-element__control">
+                                        <apex:inputText value="{!objPart.Part_Color__c}" styleClass="slds-input partDetailEdit" id="itPartColor" disabled="true"/>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                                <div class="slds-form-element">
+                                    <label class="slds-form-element__label">Weight</label>
+                                    <div class="slds-form-element__control">
+                                        <apex:inputText value="{!objPart.Weight__c}" styleClass="slds-input partDetailEdit" id="itWeight" disabled="true"/>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                                <div class="slds-form-element">
+                                    <label class="slds-form-element__label">Barcode</label>
+                                    <div class="slds-form-element__control">
+                                        <apex:inputText value="{!objPart.Barcode__c}" styleClass="slds-input partDetailEdit" id="itRecordType" disabled="true"/>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                                <div class="slds-form-element">
+                                    <label class="slds-form-element__label">Shopify Product Id</label>
+                                    <div class="slds-form-element__control">
+                                        <apex:inputText value="{!objPart.Shopify_Product_Id__c}" styleClass="slds-input partDetailEdit" id="itShopifyProductId" disabled="true"/> 
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div> 
+                    <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-1 slds-col--padded">
+                        <div class="slds-grid slds-wrap">
+                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                                <div class="slds-form-element">
+                                    <label class="slds-form-element__label">SKU</label>
+                                    <div class="slds-form-element__control">
+                                        <apex:inputText value="{!objPart.SKU__c}" styleClass="slds-input partDetailEdit" id="itSKU" disabled="true"/>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                                <div class="slds-form-element">
+                                    <label class="slds-form-element__label">Store Location</label>
+                                    <div class="slds-form-element__control">
+                                        <apex:inputText value="{!objPart.Store_Location__c}" styleClass="slds-input partDetailEdit" id="itStoreLocation" disabled="true"/>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                                <div class="slds-form-element">
+                                    <label class="slds-form-element__label">This is a Physical Product</label>
+                                    <div class="slds-form-element__control">
+                                        <apex:inputText value="{!objPart.This_is_a_Physical_Product__c}" styleClass="slds-input partDetailEdit" id="itPhysicalProduct" disabled="true"/>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                                <div class="slds-form-element">
+                                    <label class="slds-form-element__label">Web Description</label>
+                                    <div class="slds-form-element__control">
+                                        <apex:inputText value="{!objPart.Web_Description__c}" styleClass="slds-input partDetailEdit" id="itWebDescription" disabled="true"/> 
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-1 slds-col--padded">
+                        <div class="slds-grid slds-wrap">
+                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                                <div class="slds-form-element">
+                                    <label class="slds-form-element__label">Web Part Number</label>
+                                    <div class="slds-form-element__control">
+                                        <apex:inputText value="{!objPart.Web_Part_Number__c}" styleClass="slds-input partDetailEdit" id="itWebPartNumber" disabled="true"/>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                                <div class="slds-form-element">
+                                    <label class="slds-form-element__label">Web Price</label>
+                                    <div class="slds-form-element__control">
+                                        <apex:inputText value="{!objPart.Web_Price__c}" styleClass="slds-input partDetailEdit" id="itWebPrice" disabled="true"/>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                                <div class="slds-form-element">
+                                    <label class="slds-form-element__label">Web Product Name</label>
+                                    <div class="slds-form-element__control">
+                                        <apex:inputText value="{!objPart.Web_Product_Name__c}" styleClass="slds-input partDetailEdit" id="itWebProductName" disabled="true"/>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                                <div class="slds-form-element">
+                                    <label class="slds-form-element__label">WooCommerce Id</label>
+                                    <div class="slds-form-element__control">
+                                        <apex:inputText value="{!objPart.WooCommerce_Id__c}" styleClass="slds-input partDetailEdit" id="itWooCommerceId" disabled="true"/> 
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                </div>
+            </div>
+        </apex:form>
+        <div style="margin:2%;">
+            <iframe src="/apex/WoocommerceVariationConfig?id={!objPart.Id}" scrolling="true" id="iframe_id" width="100%" height="500px"/>
+        </div>
+    </apex:page>

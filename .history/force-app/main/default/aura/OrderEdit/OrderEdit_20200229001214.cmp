@@ -1,0 +1,280 @@
+<aura:component controller="OrderEditController" implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction" access="global" >
+    <aura:handler name="init" value="{!this}" action="{!c.doinit}"/>
+    <!--<aura:handler name="initLineItem" value="{!this}" action="{!c.getLineItem}"/>-->
+    <aura:attribute name="attrRecordId" type="String" />
+    <aura:attribute name="vendorRecordId" type="String" />
+    <aura:attribute name="lineItemRecordId" type="String" />
+    <aura:attribute name="orderRecordId" type="String" />
+    <aura:attribute name="listlineItem" type="Object[]" />
+    <aura:attribute name="orderDiscount" type="Decimal" />
+    <aura:attribute name="orderShipping" type="Decimal" default="0.00" />
+    <aura:attribute name="orderGrandTotal" type="Decimal" />
+    <aura:attribute name="totalOfQuantity" type="Integer" />
+    <aura:attribute name="totalOfTotal" type="Decimal" />    
+    <aura:attribute name="totalOfAmount" type="Decimal" />
+    <aura:attribute name="totalOfCost" type="Decimal" />
+    <aura:attribute name="totalOfReceived" type="Integer" />
+    <aura:attribute name="totalOfBackOrderQuantity" type="Integer" />
+    <aura:attribute name="totalOfBackOrderAmount" type="Decimal" />
+    
+    <aura:attribute name="showSpinner" type="boolean" default="false" access="global"/>
+    
+    <!--Part Distribute Att-->
+    <aura:attribute name="locationCount" type="Integer" default="0" access="global"/>
+    <aura:attribute name="locations" type="String[]" access="global"/>
+    <aura:if isTrue="{!v.showSpinner}">
+        <lightning:spinner  variant= "brand"/>
+    </aura:if>
+    
+    
+    <lightning:recordViewForm aura:id="recordViewForm" recordId="{!v.attrRecordId}"  objectApiName="BOATBUILDING__Order__c">
+       
+        <div class = "slds-col slds-size--1-of-1 slds-p-top_x-large">
+          
+                <div class = "slds-col slds-size--1-of-1 slds-medium-size--2-of-6 slds-col--padded">
+                    <div class = "slds-form-element">
+                        <div class = "slds-form-element__control">
+                            <lightning:outputField fieldName="Name"/>
+                        </div>
+                    </div>
+             
+                
+            </div>
+        </div>
+    </lightning:recordViewForm>
+    <lightning:recordViewForm aura:id="recordViewForm" recordId="{!v.vendorRecordId}" objectApiName="BOATBUILDING__Manufacturer__c">
+        <div class = "slds-col slds-size--1-of-1">
+            <div class = "slds-grid slds-wrap" >
+                <div class = "slds-col slds-size--1-of-1 slds-medium-size--3-of-6 slds-col--padded">
+                    <div class = "slds-form-element">
+                        <div class = "slds-form-element__control">
+                            <lightning:outputField fieldName="Name" />
+                        </div>
+                    </div>
+                </div>
+                <div class = "slds-col slds-size--1-of-1 slds-medium-size--3-of-6 slds-col--padded">
+                    <div class = "slds-form-element">
+                        <div class = "slds-form-element__control">
+                            <lightning:outputField fieldName="BOATBUILDING__Phone__c" />
+                        </div>
+                    </div>
+                </div>
+                <div class = "slds-col slds-size--1-of-1 slds-medium-size--3-of-6 slds-col--padded">
+                    <div class = "slds-form-element">
+                        <div class = "slds-form-element__control">
+                            <lightning:outputField fieldName="BOATBUILDING__Email__c" />
+                        </div>
+                    </div>
+                </div>
+                <div class = "slds-col slds-size--1-of-1 slds-medium-size--3-of-6 slds-col--padded">
+                    <div class = "slds-form-element">
+                        <div class = "slds-form-element__control">
+                            <lightning:outputField fieldName="BOATBUILDING__Contact_Person__c" />
+                        </div>
+                    </div>
+                </div>
+                <div class = "slds-col slds-size--1-of-1 slds-medium-size--3-of-6 slds-col--padded">
+                    <div class = "slds-form-element">
+                        <div class = "slds-form-element__control">
+                            <lightning:outputField fieldName="BOATBUILDING__Street__c" />
+                        </div>
+                    </div>
+                </div>
+                <div class = "slds-col slds-size--1-of-1 slds-medium-size--3-of-6 slds-col--padded">
+                    <div class = "slds-form-element">
+                        <div class = "slds-form-element__control">
+                            <lightning:outputField fieldName="BOATBUILDING__City__c" />
+                        </div>
+                    </div>
+                </div>
+                <div class = "slds-col slds-size--1-of-1 slds-medium-size--3-of-6 slds-col--padded">
+                    <div class = "slds-form-element">
+                        <div class = "slds-form-element__control">
+                            <lightning:outputField fieldName="BOATBUILDING__State__c" />
+                        </div>
+                    </div>
+                </div>
+                <div class = "slds-col slds-size--1-of-1 slds-medium-size--3-of-6 slds-col--padded">
+                    <div class = "slds-form-element">
+                        <div class = "slds-form-element__control">
+                            <lightning:outputField fieldName="BOATBUILDING__Zip__c" />
+                        </div>
+                    </div>
+                </div>
+                <div class = "slds-col slds-size--1-of-1 slds-medium-size--3-of-6 slds-col--padded">
+                    <div class = "slds-form-element">
+                        <div class = "slds-form-element__control">
+                            <lightning:outputField fieldName="BOATBUILDING__Terms__c" />
+                        </div>
+                    </div>
+                </div>
+                <div class = "slds-col slds-size--1-of-1 slds-medium-size--3-of-6 slds-col--padded">
+                    <div class = "slds-form-element">
+                        <div class = "slds-form-element__control">
+                            <lightning:outputField fieldName="BOATBUILDING__State__c" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </lightning:recordViewForm>
+    <lightning:recordEditForm aura:id="recordEditForm" recordId="{!v.attrRecordId}"  onsuccess="{!c.handleSuccess}" onload="{!c.onLoadCalculation}" objectApiName="BOATBUILDING__Order__c">
+        <div class = "slds-col slds-size--1-of-1">
+            <div class = "slds-grid slds-wrap" >
+                <div class = "slds-col slds-size--1-of-1 slds-medium-size--3-of-6 slds-col--padded">
+                    <div class = "slds-form-element">
+                        <div class = "slds-form-element__control">
+                            <lightning:inputField fieldName="BOATBUILDING__Order_Status__c" />
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+        <div class = "slds-col slds-size--1-of-1">
+            <div class = "slds-grid slds-wrap" >
+                <div class = "slds-col slds-size--1-of-2 slds-medium-size--3-of-6 slds-col--padded">
+                    <div class = "slds-form-element">
+                        <div class = "slds-form-element__control">
+                            <table id="opTable" class="slds-table slds-table--bordered slds-no-row-hover slds-table--cell-buffer slds-m-top--x-large Table1 slds-card">
+                                <thead>
+                                    <th class="mediumWidth fontStyle" >Part Number</th>
+                                    <th class="minWidth fontStyle" >Description</th>
+                                    <th class="minWidth fontStyle" >Quantity</th>
+                                    <th class="minWidth fontStyle" >Cost</th>
+                                    <th class="minWidth fontStyle" >Total</th>
+                                    <th class="minWidth fontStyle" >Received</th>
+                                    <th class="mediumWidth fontStyle" >Amount</th>
+                                    <th class="minWidth fontStyle" >Back Order</th>
+                                    <th class="mediumWidth fontStyle" >Back Order Amount</th>
+                                    <th class="minWidth fontStyle" >&nbsp;</th>
+                                </thead>
+                                <aura:iteration items="{!v.listlineItem}" var="item">
+                                    <tbody>
+                                        <tr>
+                                            <td class="tooltip fontStyle"><span class="tooltiptext">{!item.partNo}</span><lightning:input readonly="" type="text" value="{!item.partNo}" variant="label-hidden" /></td>
+                                            
+                                            <td class="tooltip fontStyle" ><span class="tooltiptext">{!item.description}</span><lightning:input readonly="" type="text" value="{!item.description}" variant="label-hidden" />
+                                                
+                                            </td>
+                                            <td  class="fontStyle" ><lightning:input  readonly="" type="text" value="{!item.quantity}"  variant="label-hidden" /></td> 
+                                            <td  class=" tooltip fontStyle"><span class="tooltiptext">${!item.cost}</span><lightning:input readonly="" formatter="currency" type="number" value="{!item.cost}" variant="label-hidden" /></td>
+                                            <td class="tooltip fontStyle"><span class="tooltiptext" >${!item.quantity * item.cost}</span><lightning:input readonly="" formatter="currency" type="number" value="{!item.quantity * item.cost}" variant="label-hidden" /></td>
+                                            
+                                            <td class="fontStyle"><lightning:input max="{!item.quantity}" onchange="{!c.calculate}" type="number" value="{!item.received}" variant="label-hidden" /></td>
+                                            
+                                            <td class="tooltip fontStyle"><span class="tooltiptext">${!item.received * item.cost}</span><lightning:input readonly="" formatter="currency" type="number" value="{!item.received * item.cost}" variant="label-hidden" /></td>
+                                            <td class="fontStyle"><lightning:input readonly="" type="text" value="{!item.quantity- item.received}" variant="label-hidden" /></td>
+                                            <td class=" tooltip fontStyle"><span class="tooltiptext">${!(item.quantity- item.received)*item.cost}</span><lightning:input readonly="" formatter="currency" type="number" value="{!(item.quantity- item.received)*item.cost}" variant="label-hidden" /></td>
+                                            <td class="fontStyle">
+                                                <aura:if isTrue="{!v.locationCount > 1}">
+                                                    <c:PartDistribution locations="{!v.locations}" locationCount="{!v.locationCount}" partDistribution="false" lstPA="{!item.lstPA}"/>
+                                                </aura:if>
+                                            </td>
+                                        </tr>
+                                        
+                                    </tbody> 
+                                </aura:iteration>
+                                
+                                <tfoot>
+                                    
+                                    <tr class="slds-hint-parent">
+                                        <th ></th>
+                                        <th class="  fontStyle"><b>Total:</b></th>
+                                        <th class="  fontStyle"><lightning:input readonly="" type="text" value="{!v.totalOfQuantity}" variant="label-hidden" /></th>
+                                        <!--<th>&nbsp;</th>-->
+                                        
+                                        <th class=" tooltip fontStyle" ><span class="tooltiptext">${!v.totalOfCost}</span><lightning:input readonly="" formatter="currency" type="number" value="{!v.totalOfCost}" variant="label-hidden" /></th>
+                                        <th class=" tooltip fontStyle"><span class="tooltiptext">${!v.totalOfTotal}</span><lightning:input readonly="" formatter="currency" type="number" value="{!v.totalOfTotal}" variant="label-hidden" /></th>
+                                        <th class="  fontStyle"><lightning:input readonly="" type="number" value="{!v.totalOfReceived}" variant="label-hidden" /></th>
+                                        <th class=" tooltip fontStyle"><span class="tooltiptext">${!v.totalOfAmount}</span><lightning:input readonly="" formatter="currency" type="number" value="{!v.totalOfAmount}" variant="label-hidden" /></th>
+                                        <th class="  fontStyle"><lightning:input readonly="" type="text" value="{!v.totalOfBackOrderQuantity}" variant="label-hidden" /></th>
+                                        
+                                        <th class=" tooltip fontStyle"><span class="tooltiptext">${!v.totalOfBackOrderAmount}</span><lightning:input readonly="" formatter="currency" type="number" value="{!v.totalOfBackOrderAmount}" variant="label-hidden" /></th>
+                                        <th ></th>
+                                    </tr>   
+                                    <tr class="slds-hint-parent">
+                                        <th ></th>
+                                        <th ></th>
+                                        <th ></th>
+                                        <!--<th>&nbsp;</th>-->
+                                        <th ></th>
+                                        <th ></th>
+                                        <th>Shipping Charge:</th>
+                                        <th ><lightning:inputField aura:id="shippingCharge" onchange="{!c.calculate}" fieldName="BOATBUILDING__Shipping_Charges__c" variant="label-hidden"/></th>
+                                        <th ></th>
+                                        <th ></th>
+                                        <th ></th>
+                                    </tr>  
+                                    <tr class="slds-hint-parent">
+                                        <th></th>
+                                        <th></th>
+                                        <th></th>
+                                        <th></th>
+                                        <th></th>
+                                        <th >Discount:</th>
+                                        <th > <lightning:inputField aura:id="discount" onchange="{!c.calculate}" fieldName="BOATBUILDING__Discount_Price__c" variant="label-hidden" /></th>
+                                        <th></th>
+                                        <th></th>
+                                        <th></th>
+                                    </tr>   
+                                    <tr class="slds-hint-parent">
+                                        <th></th>
+                                        <th></th>
+                                        <th></th>
+                                        <th></th>
+                                        <th></th>
+                                        <th ><b>Grand Total:</b></th>
+                                        <th class=" tooltip fontStyle" ><span class="tooltiptext">${!v.orderGrandTotal}</span><lightning:input  formatter="currency" readonly="" type="number" value="{!v.orderGrandTotal}" variant="label-hidden" /></th>
+                                        <th></th>
+                                        <th></th>
+                                        <th></th>
+                                    </tr>                              
+                                </tfoot> 
+                                
+                            </table>    
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </lightning:recordEditForm>
+    <div class="slds-grid slds-grid--vertical-align-center slds-grid--align-center slds-p-bottom_x-large">
+        <div class = "slds-col--padded">
+            <div class = "slds-form-element">
+                <div class = "slds-form-element__control">
+                    <lightning:button type="submit" variant="brand" label="Update Status " onclick="{!c.save}" class = "slds-m-top_medium"/>
+                </div>
+            </div>
+        </div>
+        <div class = "slds-col--padded">
+            <div class = "slds-form-element">
+                <div class = "slds-form-element__control">
+                    <lightning:button  variant="brand" label="Add Inventory" onclick="{!c.addToInventory}" class = "slds-m-top_medium"/>
+                </div>
+            </div>
+        </div>
+        <div class = "slds-col--padded">
+            <div class = "slds-form-element">
+                <div class = "slds-form-element__control">
+                    <lightning:button  variant="brand" label="Print Order" title="print" name="{!v.attrRecordId}"  onclick="{!c.print}"  class = "slds-m-top_medium"/>
+                </div>
+            </div>
+        </div>
+        <div class = "slds-col--padded">
+            <div class = "slds-form-element">
+                <div class = "slds-form-element__control">
+                    <lightning:button  variant="brand" label="Send Order" name="{!v.attrRecordId}"  onclick="{!c.send}" class = "slds-m-top_medium"/>
+                </div>
+            </div>
+        </div>
+        <div class = "slds-col--padded">
+            <div class = "slds-form-element">
+                <div class = "slds-form-element__control">
+                    <lightning:button  variant="brand" label="Add Inventory with Back Order" onclick="{!c.addToInventoryWithBackOrder}" class = "slds-m-top_medium"/>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+</aura:component>

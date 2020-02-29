@@ -1,0 +1,80 @@
+<aura:component controller="NewDealerOptionController">
+    <aura:attribute name="newPLstDealerOptionWraperND" type="DealerOptionWraper[]"/>
+    <aura:attribute name="DealerOptionIdListCCCC" type="String[]"/>
+    <div style="border: 5px solid #d9dee6; padding: 2%; position: fixed; top: 20%; left: 30%; z-index: 999; background: #fff; border-radius: 14px; height: auto; width: 500px;">
+        <div>
+            <a onclick="{!c.hideDOPopup}"><lightning:icon iconName="action:close" size="x-small" style="position: absolute; bottom: 85%; right: 3%;" class="checkClass"/></a>
+        </div>
+        <table>
+            <tbody>
+                <tr>
+                    <td colspan="2" style="text-align: center;">
+                        <h2 style="font-size: 1.25em; font-weight: 600; color: #6f809c;">Add Dealer Option</h2>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2" style="text-align: center;">
+                        &nbsp;
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        Description
+                    </td>
+                    <td>
+                        <input class="slds-input" id="decIdBB" type="text"/>
+                    </td> 
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        &nbsp;
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        Dealer Price
+                    </td>
+                    <td>
+                        <input class="slds-input" id="delIdBB"  type="text" value="0.00"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        &nbsp;
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        Retail Price
+                    </td>
+                    <td>
+                        <input class="slds-input" id="retIdBB" type="text" value="0.00"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        &nbsp;
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        Non Taxable
+                    </td>
+                    <td>
+                        <input id="ntCheck" type="checkbox"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        &nbsp;
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2" style="text-align: center;">
+                        <a class="slds-button slds-button--neutral slds-button--brand" onclick="{!c.addDealerOptionToList}">Add</a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div> 
+</aura:component>

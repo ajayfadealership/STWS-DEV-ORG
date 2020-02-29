@@ -1,0 +1,111 @@
+<apex:page sidebar="false" showHeader="false">
+  <!-- Begin Default Content REMOVE THIS -->
+  <apex:slds />
+  <style>
+      .slds-form-element__label{
+    font-size: 14px;
+    font-weight: 600;
+}
+  </style>
+   <apex:includeScript value="{!URLFOR($Resource.BoatBuilderSR, 'js/jquery.min.js')}"/>
+   
+  <div class="slds-form slds-form_stacked" style="width: 100%;float: none; margin: auto; margin-top: 10%; ">
+  <div class="slds-page-header">
+  <div class="slds-media">
+    <div class="slds-media__figure">
+      <span class="slds-icon_container slds-icon-standard-relationship
+" title="Description of icon when needed">
+        <svg class="slds-icon slds-icon_large slds-page-header__icon" aria-hidden="true">
+          <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="{!URLFOR($Resource.BoatBuilderSR, '/assets/icons/custom-sprite/svg/symbols.svg#custom24
+')}" />
+        </svg>
+      </span>
+    </div>
+    <div class="slds-media__body">
+      <h1 class="slds-page-header__title slds-truncate slds-align-middle" title="Rohde Corp - 80,000 Widgets" style="text-align:center;    font-size: xx-large;
+">Payment Calculator</h1>
+     
+    </div>
+  </div>
+</div>
+  <div class="slds-form-element" style="    margin-top: 2%;">
+    <label class="slds-form-element__label" for="input-id-01">Purchase Price</label>
+    <div class="slds-form-element__control">
+      <input type="number" id="input-id-01" class="slds-input purchagePriceDP" placeholder="Purchase Price" />
+    </div>
+  </div>
+  <div class="slds-form-element ">
+    <label class="slds-form-element__label" for="input-id-02">Down Payment</label>
+    <div class="slds-form-element__control">
+      <input type="number" id="input-id-02" class="slds-input purchagePriceDP" placeholder="Down Payment"/>
+    </div>
+  </div>
+  <div class="slds-form-element">
+    <label class="slds-form-element__label" for="input-id-06">Amount Financed</label>
+    <div class="slds-form-element__control">
+      <input type="text" id="input-id-06" class="slds-input purchagePriceDP" placeholder="Amount Financed" disabled="true"/>
+    </div>
+  </div>
+  <div class="slds-form-element">
+    <label class="slds-form-element__label" for="input-id-03">Term</label>
+    <div class="slds-form-element__control">
+      <select name="termList" id="termlist" class="slds-select purchagePriceDP">
+          
+          <option value="5">5 Year</option>
+          <option value="10">10 Year</option>
+          <option value="12">12 Year</option>
+          <option value="15">15 Year</option>
+          <option value="20">20 Year</option>
+          <option value="25">25 Year</option>
+       </select>
+    </div>
+  </div>
+  <div class="slds-form-element">
+    <label class="slds-form-element__label" for="input-id-04">Rate</label>
+    <div class="slds-form-element__control">
+      <input type="number" id="input-id-04" class="slds-input purchagePriceDP" placeholder="Rate"/>
+    </div>
+  </div>
+  <div class="slds-form-element">
+    <label class="slds-form-element__label" for="input-id-05">Payment</label>
+    <div class="slds-form-element__control">
+      <input type="text" id="input-id-05" class="slds-input" style="font-size: 24px;" placeholder="Payment" disabled="True"/>
+    </div>
+  </div>
+</div>
+    <script>
+       
+        $( ".purchagePriceDP" ).change(function() {
+          var PPrice = $("#input-id-01").val();
+          var DpVal = $("#input-id-02").val();
+          //alert(PPrice+'--'+DpVal);
+          
+          if(DpVal-PPrice >0)
+          {    
+              
+              $("#input-id-05").val('Down Payment is greater than purchase price');
+              return;
+          }
+          else
+          {
+          $("#input-id-05").val('');
+          }
+          
+          var amountFinanced =  PPrice -DpVal;
+          $("#input-id-06").val(amountFinanced);
+          var term = $("#termlist").val()*12;
+          var rate = $("#input-id-04").val()/1200;
+          //alert(rate);
+          
+          var Payment = amountFinanced*rate / (1-Math.pow(1/(1+rate), term));
+          if(!isNaN(Payment))
+          {
+              $("#input-id-05").val(Payment.toFixed(2));
+          }
+          
+          
+        });
+        
+    </script>
+  <!-- End Default Content REMOVE THIS -->
+</apex:page>

@@ -1,0 +1,3 @@
+<aura:event type="APPLICATION" description="Inv" access="public">
+    <aura:attribute name="costlinePoint"  type="Decimal" access="public"/>
+</aura:event>

@@ -1,0 +1,186 @@
+<apex:page id="pge" sidebar="false"  showHeader="false" controller="RefundProcessFromILIController" standardStylesheets="false" docType="html-5.0" action="{!checkAccess}">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.12/css/jquery.dataTables.min.css"/>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.0/jquery.min.js"/>
+    <script src="https://cdn.datatables.net/1.10.12/js/jquery.dataTables.min.js"/>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <apex:stylesheet value="{!URLFOR($Resource.BoatBuilderSR, 'assets/styles/salesforce-lightning-design-system.min.css')}" />  
+    <style >
+        .popup{
+            position: fixed;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(0,0,0,0.5);
+            display: none;
+            z-index: 999;
+        }
+        .popup.active{display:block}
+        .popup img{margin: 15% auto}
+    </style>
+    <title>Invoice Line Item : {!objILI.Name} ({!objILI.Part_Number__c})</title>
+    <apex:form id="frm">    
+        <div  class="popup">
+            <apex:image id="theImage2" value="{!$Resource.Process}" style="display:block;" width="40" height="40"/>
+        </div>      
+        <div class="slds-grid slds-wrap slds-col--padded">
+            <div class="slds-col--padded slds-col slds-size--1-of-1 Customer-Heading">
+                <h2 class=" heading"><br/>
+                    <span class="slds-text-heading--small">Invoice Line Item</span>
+                </h2>
+            </div>
+        </div>
+        
+        <div class="slds-grid slds-wrap slds-col--padded ">
+            <div class="slds-col--padded slds-col slds-size--1-of-1 Customer-Heading">
+                <h2 class=" heading"><br/>
+                    <span class="slds-text-heading--small">Part Number : {!objILI.Part_Number__c}</span>
+                </h2>
+            </div>
+        </div>
+        
+        <div class="slds-grid slds-wrap slds-col--padded ">
+            <div class="slds-col--padded slds-col slds-size--1-of-1 Customer-Heading">
+                <h2 class=" heading"><br/>
+                    <span class="slds-text-heading--small">Related Invoice : {!objILI.Related_To_Invoice__r.Name}</span>
+                </h2>
+            </div>
+        </div>
+        
+        <div id="infoDiv" style="margin-top:1%;padding-top: 30px;">
+            <div class="slds-grid slds-wrap">
+                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-1 slds-col--padded">
+                    <div class="slds-grid slds-wrap">
+                        <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                            <div class="slds-form-element">
+                                <label class="slds-form-element__label">Vendor Name</label>
+                                <div class="slds-form-element__control">
+                                    <apex:inputText value="{!objILI.Part_Vendor__r.Name}" id="ifName" styleClass="slds-input" disabled="true"/>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                            <div class="slds-form-element">
+                                <label class="slds-form-element__label">Quantity</label>
+                                <div class="slds-form-element__control">
+                                    <apex:inputText value="{!objILI.Quantity__c}" styleClass="slds-input" id="ifPhone" disabled="true"/>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                            <div class="slds-form-element">
+                                <label class="slds-form-element__label">Part Cost</label>
+                                <div class="slds-form-element__control">
+                                    <apex:inputText value="{!objILI.Part_Cost__c}" styleClass="slds-input" id="ifEmail" disabled="true"/>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                            <div class="slds-form-element">
+                                <label class="slds-form-element__label">Total Price</label>
+                                <div class="slds-form-element__control">
+                                    <apex:inputText value="{!objILI.Total_Price__c}" styleClass="slds-input" id="ifCon" disabled="true"/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-1 slds-col--padded">
+                    <div class="slds-grid slds-wrap">
+                        <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                            <div class="slds-form-element">
+                                <label class="slds-form-element__label">Discount Price</label>
+                                <div class="slds-form-element__control">
+                                    <apex:inputText value="{!objILI.Discount_Price__c}" styleClass="slds-input" id="ifStreet" disabled="true"/>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                            <div class="slds-form-element">
+                                <label class="slds-form-element__label">Grand Total</label>
+                                <div class="slds-form-element__control">
+                                    <apex:inputText value="{!objILI.Grand_Total__c}" styleClass="slds-input" id="ifCity" disabled="true"/>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                            <div class="slds-form-element">
+                                <label class="slds-form-element__label"></label>
+                                <div class="slds-form-element__control">
+                                    <label class="slds-form-element__label" style="margin-top: 2%; font-size: 15px;">Refund Amount:</label>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                            <div class="slds-form-element">
+                                <label class="slds-form-element__label"></label>
+                                <div class="slds-form-element__control">
+                                    <input type="text" placeHolder="Refund Amount" id="rfndAmt" onclick="document.getElementById('errorSpan').innerHTML = '';" class="slds-input" /><br/>
+                                    <span id="errorSpan" style="color: red;"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div style="padding: 10px; margin-left: 35%; margin-top: 2%;">            
+            <input class="slds-button slds-button--neutral slds-button--brand inside_row_button " id="refBut" value="Refund" type="button" onclick="refundAcount(this);"></input>
+            <a class="slds-button slds-button--neutral slds-button--brand inside_row_button " type="button" onclick="window.top.location='/{!objILI.Id}'">Cancel</a>
+        </div>                
+    </apex:form>
+    <script>
+        onload = function() {
+            var windowTopURL = String(window.top.location);
+            
+            if("{!$CurrentPage.parameters.refundStatus}" == "1") {
+                alert("This part is already refunded.\nThank you!!")
+                window.top.location = '/{!objILI.Id}';
+            }else {
+                console.log(windowTopURL);
+            }
+        }
+        
+        function refundAcount(obj) {
+            
+            if(document.getElementById("rfndAmt").value != null && document.getElementById("rfndAmt").value != "") {
+                var amt = document.getElementById("rfndAmt").value;
+                if(/^\d*$/.test(amt) || /^\d+\.\d{0,2}$/.test(amt) || /^\.\d{0,2}$/.test(amt)) {
+                    if(amt <= parseFloat("{!objILI.Grand_Total__c}")) {
+                        obj.setAttribute("disabled","disabled");
+                        $('.popup').addClass('active');
+                        RefundProcessFromILIController.refundInvoiceLineItem('{!objILI.Id}', amt, function(result, event) {
+                            if(event.status) {
+                                if(result != null) {
+                                    window.top.location = "/" + "{!objILI.Id}";
+                                }else {
+                                    $('.popup').removeClass('active');
+                                    $('#refBut').prop('disabled', false);
+                                    alert("Something went wrong. Please try again!!");
+                                }
+                            }
+                        });
+                    }
+                    else {
+                        document.getElementById("errorSpan").innerHTML = "Error: Refunded amount should be less than or equal to the grand total amount.";
+                    }
+                }
+                else {
+                    document.getElementById("errorSpan").innerHTML = "Error: Please enter currency only. Rounding to 2 decimal place.";
+                    document.getElementById("rfndAmt").value = "";
+                }
+            }
+            else {
+                document.getElementById("errorSpan").innerHTML = "Error: Please enter refund amount before refund.";
+            }
+        }
+        
+    </script>
+</apex:page>

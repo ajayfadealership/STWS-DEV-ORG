@@ -1,0 +1,6 @@
+<aura:event type="APPLICATION" description="PPId AND Status" access="public">
+    <aura:attribute name="objDOId" type="String" />
+    <aura:attribute name="PPStatus" type="String"/> 
+    <aura:attribute name="DOList" type="String[]"/>
+    <aura:attribute name="DealerOptionWraper" type="DealerOptionWraper[]"/>
+</aura:event>

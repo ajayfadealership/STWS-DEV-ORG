@@ -1,0 +1,66 @@
+<aura:component >
+    <aura:attribute name="objAccountCP" type="Account" default="{'sobjectType': 'Account'}"/>
+    
+    <div class="slds-grid slds-wrap slds-col--padded">
+        <h1><b>Closing Potential</b></h1>
+        <div class="slds-col slds-size--1-of-1">
+            <div class="slds-grid slds-wrap" >
+                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-3 slds-col--padded">
+                    <div class="slds-form-element">
+                        <label class="slds-form-element__label">Probability of Closing:</label>
+                        <div class="slds-form-element__control">
+                            <force:inputField value="{!v.objAccountCP.BOATBUILDING__Probability_of_Closing__c}" class="slds-input"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-3 slds-col--padded">
+                    <div class="slds-form-element">
+                        <label class="slds-form-element__label">Probability Of Closing Time Frame:</label>
+                        <div class="slds-form-element__control">
+                            <force:inputField value="{!v.objAccountCP.BOATBUILDING__Pro__c}" class="slds-input"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-3 slds-col--padded">
+                    <div class="slds-form-element">
+                        <label class="slds-form-element__label">Probability of Revenue Amount:</label>
+                        <div class="slds-form-element__control">
+                            <force:inputField value="{!v.objAccountCP.BOATBUILDING__Probability_of_Revenue_Amount__c}" class="slds-input"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-3 slds-col--padded">
+                    <div class="slds-form-element">
+                        <label class="slds-form-element__label">Customer Obstacle 1:</label>
+                        <div class="slds-form-element__control">
+                            <force:inputField value="{!v.objAccountCP.BOATBUILDING__Customer_Obsticle_1__c}" class="slds-input"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-3 slds-col--padded">
+                    <div class="slds-form-element">
+                        <label class="slds-form-element__label">Customer Obstacle 2:</label>
+                        <div class="slds-form-element__control">
+                            <force:inputField value="{!v.objAccountCP.BOATBUILDING__Customer_Obstacle_2__c}" class="slds-input"/>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <hr/>
+    <table>
+        <tr>
+            <td>
+                <div data-value="5" style="height:0px;max-width:auto;" onclick="{!c.previousClick}">
+                    <lightning:button variant="brand" label="Previous" iconName="utility:chevronleft" iconPosition="left" class="leftElement"/>
+                </div> 
+            </td>
+            <td>
+                <div data-value="2" style="height:0px;max-width:auto;" onclick="{!c.handleClick}">
+                    <lightning:button variant="brand" label="Finish" iconName="utility:chevronright" iconPosition="right" class="rightElement" value="2" />
+                </div>
+            </td>
+        </tr>
+    </table>
+</aura:component>

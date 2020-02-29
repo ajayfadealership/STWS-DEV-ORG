@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Related_to_Canned_Job__c</fullName>
+    <deprecated>false</deprecated>
+    <externalId>false</externalId>
+    <label>Related to Canned Job</label>
+    <referenceTo>Canned_Job__c</referenceTo>
+    <relationshipLabel>Canned Job Line Items</relationshipLabel>
+    <relationshipName>Canned_Job_Line_Items</relationshipName>
+    <relationshipOrder>0</relationshipOrder>
+    <reparentableMasterDetail>false</reparentableMasterDetail>
+    <trackTrending>false</trackTrending>
+    <type>MasterDetail</type>
+    <writeRequiresMasterRead>false</writeRequiresMasterRead>
+</CustomField>

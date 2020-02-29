@@ -1,0 +1,45 @@
+<aura:component controller="TechWorkOrderHomeController" 
+                implements="flexipage:availableForRecordHome,flexipage:availableForAllPageTypes,lightning:actionOverride,force:hasRecordId" 
+                access="global">
+
+    <aura:attribute name="WOList" type="Object"/>
+    <aura:attribute name="columns" type="List"/>
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    <aura:attribute name="objUserP" type="Object" access="global"/>
+    <aura:attribute name="showPill" type="boolean" default="false" access="global"/>
+    <aura:attribute name="selectedRecord" type="Object" access="global"/>
+    <aura:handler name="change" value="{!v.objUserP}" action="{!c.findWO}"/>
+    <div class="c-container"   >
+        <lightning:layout multipleRows="true">
+            <lightning:layoutItem padding="around-small" size="12">
+                <div class="page-section page-header" style="text-align: center;">
+                    <h1>TECH WORK ORDER</h1>
+                </div>
+            </lightning:layoutItem>
+            <lightning:layoutItem padding="around-small" size="6">
+                <c:SearchUser objUser="{!v.objUserP}" showPill="{!v.showPill}"/>
+            </lightning:layoutItem>
+            <lightning:layoutItem padding="around-small" size="6">
+                <lightning:select aura:Id ="dateRange" name="Date Range" label="Date Range" onchange="{!c.getWOList}">
+                    <option value="0" default="true">Today</option>
+                    <option value="3">Last 3 Days</option>
+                    <option value="7">Last 7 Days</option>
+                    <option value="15">Last 15 Days</option>
+                </lightning:select>
+            </lightning:layoutItem>
+            <lightning:layoutItem padding="around-small" size="12">
+                <lightning:layout>
+                    <lightning:layoutItem padding="around-small" size="12">
+                        <div class="page-section page-main">
+                            <lightning:datatable
+                                                keyField="WOId"
+                                                data="{! v.WOList }"
+                                                columns="{! v.columns }"
+                                                hideCheckboxColumn="true"/>
+                        </div>
+                    </lightning:layoutItem>
+                </lightning:layout>
+            </lightning:layoutItem>
+        </lightning:layout>
+    </div>
+</aura:component>

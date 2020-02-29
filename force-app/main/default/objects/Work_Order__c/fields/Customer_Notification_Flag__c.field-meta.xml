@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Customer_Notification_Flag__c</fullName>
+    <deprecated>false</deprecated>
+    <externalId>false</externalId>
+    <formula>IMAGE( 
+	IF( ISPICKVAL( Status__c ,&#39;closed&#39;)  || ISPICKVAL( Status__c ,&#39;Closed Internal&#39;) ,
+
+		&#39;/resource/BOATBUILDING__flag_blue&#39;,
+		IF(NOW() - Customer_Last_updated__c &lt;= $Setup.Trigger_Configuration__c.Customer_Notification_Frequency__c ,&#39;/resource/BOATBUILDING__flag_green&#39;,&#39;/resource/BOATBUILDING__flag_red&#39;)
+	),
+&#39;&#39;, 30, 30)</formula>
+    <label>Customer Notification Flag</label>
+    <required>false</required>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Text</type>
+    <unique>false</unique>
+</CustomField>

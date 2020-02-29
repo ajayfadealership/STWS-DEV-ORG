@@ -1,0 +1,27 @@
+<aura:component controller="InventorySelectionTableController">
+    <aura:registerEvent name="inCompNewProduct" type="c:ProductPriceEvent"/>
+    <aura:registerEvent name="inCompNewPDProduct" type="c:DealerOptionEvent"/>
+    <aura:registerEvent name="inCompNewPPFPCProduct" type="c:ProductPriceForPaymentCalculator"/> 
+    <aura:attribute name="InvIdCC" type="sObject" default=""/>
+
+    <aura:attribute name="lstDealerOptionWraperCC" type="DealerOptionWraper[]"/>
+     
+    <aura:attribute name="objInvW" type="InventoryListWrapper"/>
+    <tr>
+        <th scope="row" style="padding: .75rem; vertical-align: top; border-top: 1px solid #dee2e6;"><a onclick="{!c.getProductPriceFromInv}">{!v.objInvW.objInv.Name}</a></th>
+        <td style="padding: .75rem; vertical-align: top; border-top: 1px solid #dee2e6;">
+            <aura:if isTrue="{!v.objInvW.AttId == ''}">
+                &nbsp;
+            </aura:if>
+            <aura:if isTrue="{!v.objInvW.AttId != ''}">
+                <img style="max-width: 80px; height: auto;" src="{!'/servlet/servlet.FileDownload?file='+v.objInvW.AttId}"/>
+            </aura:if>
+        </td> 
+        <td style="padding: .75rem; vertical-align: top; border-top: 1px solid #dee2e6;">{!v.objInvW.objInv.BOATBUILDING__Stage__c }</td>
+        <td style="padding: .75rem; vertical-align: top; border-top: 1px solid #dee2e6;">{!v.objInvW.objInv.BOATBUILDING__Manufacturer__c}</td>
+        <td style="padding: .75rem; vertical-align: top; border-top: 1px solid #dee2e6;">{!v.objInvW.objInv.BOATBUILDING__Model__c}</td>
+        <td style="padding: .75rem; vertical-align: top; border-top: 1px solid #dee2e6;">{!v.objInvW.objInv.BOATBUILDING__Model_Variant__c}</td>
+        <td style="padding: .75rem; vertical-align: top; border-top: 1px solid #dee2e6;">{!v.objInvW.objInv.BOATBUILDING__Year__c}</td>
+        
+    </tr>
+</aura:component>

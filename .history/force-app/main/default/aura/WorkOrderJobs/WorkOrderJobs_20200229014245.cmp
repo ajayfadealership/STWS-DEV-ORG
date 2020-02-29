@@ -1,0 +1,579 @@
+<aura:component controller="WODetailPageController">
+    <aura:attribute name="WOJ" type="Object" access="global" />
+    <aura:attribute name="jobLI" type="Object" access="global" />
+    <aura:attribute name="mapWTP" type="Map" access="global" />
+    <aura:attribute name="wojWithJLI" type="Object" access="global" />
+    <aura:attribute name="mapWTPNew" type="Map" access="global" />
+    <aura:attribute name="mapCannedJob" type="Map" access="global" />
+    <aura:attribute name="mapCannedJobId" type="Map" access="global" />
+    <aura:attribute name="isCannedJob" type="Boolean" access="global" default="false"/>
+    <aura:attribute name="cannedJob" type="String" access="global"/>
+    <aura:attribute name="cannedJobSelected" type="Boolean" access="global" default="false"/>
+    <aura:attribute name="displayMisc2" type="Boolean" access="global" default="false"/>
+    <aura:attribute name="displayMisc3" type="Boolean" access="global" default="false"/>
+    <aura:attribute name="laborPriceMultiplier" type="Decimal" access="global" default="0.00"/>
+    <aura:attribute name="laborAndSSTotal" type="Decimal" access="global" default="0.00" />
+    <aura:attribute name="storeLocation" type="String" access="global" />
+    <aura:attribute name="recordType" type="String" access="global" />
+
+    <aura:attribute name="totalMiscCharges" type="Decimal" access="global" default="0.00" />
+    <aura:attribute name="partsTotal" type="Decimal" access="global" default="0.00" />
+    <aura:attribute name="shopSuppliePercent" type="Decimal" access="global" default="0.00" />
+    <aura:attribute name="shopSuppliesCapping" type="Decimal" access="global" default="0.00" />
+    <aura:attribute name="jobTotal" type="Decimal" access="global" default="0.00" />
+    <aura:attribute name="jobTotalwTax" type="Decimal" access="global" default="0.00" />
+    <aura:attribute name="taxOnJob" type="Decimal" access="global" default="0.00" />
+    <aura:attribute name="noOfMiscCharges" type="Integer" access="global" default="1" />
+    <aura:handler name="change" value="{!v.WOJ.BOATBUILDING__No_of_Labors__c}" action="{!c.updateJObTotal}" />
+    <aura:handler name="change" value="{!v.WOJ.BOATBUILDING__Work_Type__c}" action="{!c.updateJObTotal}" />
+    <aura:handler name="change" value="{!v.WOJ.BOATBUILDING__Discount__c}" action="{!c.updateJObTotal}" />
+    <aura:handler name="change" value="{!v.WOJ.BOATBUILDING__Shipping_Charge__c}" action="{!c.updateJObTotal}" />
+    <aura:handler name="change" value="{!v.WOJ.BOATBUILDING__Shipping_Charge__c}" action="{!c.updateJObTotal}" />
+    <aura:handler name="change" value="{!v.WOJ.BOATBUILDING__Work_Order_Job_Line_Items__r}" action="{!c.joblineItemTotal}" />
+    <aura:registerEvent name="CalculateAllJobsTotal" type="c:CalculateAllJobsTotal"/>
+    <aura:attribute name="workOrderJob" type="Work_Order_Job__c" default="{'sobjectType':'Work_Order_Job__c'}" access="global"/>
+    
+    <aura:handler event="c:JobLineItemUpdated" action="{!c.joblineItemTotal}"/>
+    <aura:handler event="c:CalculateTaxOnWOJObs" action="{!c.calculateTaxOnJOb}"/>
+    <aura:handler event="c:SaveWorkOrderJobs" action="{!c.saveJob}"/>
+    
+
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    <aura:method name="sampleMethod" action="{!c.joblineItemTotal}" />
+   
+    <!--below are the attribute I am using for user lookup-->
+    <aura:attribute name="searchResults" type="Object[]" access="global"/>
+    <aura:attribute name="showPill" type="Boolean" default="false" access="global"/>
+    <aura:attribute name="selectedRecord" type="String" access="global"/>
+    <aura:attribute name="selectedRecordId" type="String" access="global"/>
+   <!--<lightning:button label="save" variant="base" onclick="{!c.saveJob}"/> -->
+   <aura:attribute name="toggleSpinner" type="boolean" default="false"/> 
+    
+   <aura:if isTrue="{!v.toggleSpinner}">
+       <div class="slds-spinner_container">
+          
+             <lightning:spinner alternativeText="Loading" variant="brand" size="large" />
+           </div>
+        
+       
+   </aura:if> 
+   
+        <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-1 slds-large-size_1-of-4">
+            <lightning:input type="toggle" class="slds-p-top_x-small slds-float--right" checked="{!v.isCannedJob}" label="Canned Job" name="input1" aura:id="cannedJobToggelBox"/>
+
+        </div>
+        <div class="slds-col slds-size_1-of-1  slds-medium-size_3-of-4 slds-large-size_3-of-4">
+            <lightning:accordionSection name="" label="{!if(or(v.WOJ.BOATBUILDING__Taxable__c == false,v.recordType == 'Warranty Work Order'),'Job Total : $'+v.jobTotal , 'Job Total : $'+v.jobTotalwTax)}" class="addMiscCharges">
+        
+            <dl class="slds-list_horizontal slds-wrap slds-p-left_xx-large">
+                <aura:if isTrue="{!and(!empty(v.laborPriceMultiplier * v.WOJ.BOATBUILDING__No_of_Labors__c),v.laborPriceMultiplier * v.WOJ.BOATBUILDING__No_of_Labors__c > 0)}">
+                    <dt class="slds-size_12-of-12 slds-medium-size_3-of-12 slds-large-size_1-of-4" title="Total Labor"> Labor Total:</dt>
+                    <dd class="slds-item_detail" title="Labor total"> <ui:outputCurrency value="{!v.laborPriceMultiplier * v.WOJ.BOATBUILDING__No_of_Labors__c}"/></dd>
+                </aura:if>
+                <aura:if isTrue="{!and(!empty(v.partsTotal),v.partsTotal > 0)}">
+                    <dt class="slds-size_12-of-12 slds-medium-size_3-of-12 slds-large-size_1-of-4" title="Total Parts">Parts Total:</dt>
+                    <dd class="slds-item_detail" title="Total of all the job line items(parts)"><ui:outputCurrency value="{!v.partsTotal}"/></dd>
+                </aura:if>
+                <aura:if isTrue="{!and(!empty(v.WOJ.BOATBUILDING__Shop_Supplies_Total__c),v.WOJ.BOATBUILDING__Shop_Supplies_Total__c > 0)}">
+                    <dt class="slds-size_12-of-12 slds-medium-size_3-of-12 slds-large-size_1-of-4" title="Shop Supplies"> Shop Supplies:</dt>
+                    <dd class="slds-item_detail" title="Shop supplies is some percent of amount on labor amount"> <ui:outputCurrency value="{!v.WOJ.BOATBUILDING__Shop_Supplies_Total__c}"/></dd>
+                </aura:if>
+                <aura:if isTrue="{!and(!empty(v.totalMiscCharges),v.totalMiscCharges > 0)}">
+                    <dt class="slds-size_12-of-12 slds-medium-size_3-of-12 slds-large-size_1-of-4" title="Misc Charges"> Misc Total:</dt>
+                    <dd class="slds-item_detail" title="Total of all the Misc charges(Up to 3)"> <ui:outputCurrency value="{!v.totalMiscCharges}"/></dd>
+                </aura:if>
+                <aura:if isTrue="{!and(!empty(v.WOJ.BOATBUILDING__Shipping_Charge__c),v.WOJ.BOATBUILDING__Shipping_Charge__c > 0)}">
+                    <dt class="slds-size_12-of-12 slds-medium-size_3-of-12 slds-large-size_1-of-4" title="Shipping Charges"> Shipping Charges:</dt>
+                    <dd class="slds-item_detail" title="Shipping Charges"> <ui:outputCurrency value="{!v.WOJ.BOATBUILDING__Shipping_Charge__c}"/></dd>
+                </aura:if>
+                    <aura:if isTrue="{!and(!empty(v.WOJ.BOATBUILDING__Discount__c),v.WOJ.BOATBUILDING__Discount__c > 0)}">
+                    <dt class="slds-size_12-of-12 slds-medium-size_3-of-12 slds-large-size_1-of-4" title="Discount"> Discount:</dt>
+                    <dd class="slds-item_detail" title="Discount on Job"> <ui:outputCurrency value="{!v.WOJ.BOATBUILDING__Discount__c}"/></dd>
+                    
+                </aura:if>
+                <aura:if isTrue="{!v.recordType == 'Warranty Work Order'}" >
+                    <dt class="slds-size_12-of-12 slds-medium-size_3-of-12 slds-large-size_1-of-4" title="Tax on job"> Claim Total:</dt>
+                    <dd class="slds-item_detail" title="This total contains the tax calcualted on all the taxable items on job"> <ui:outputCurrency value="{!v.WOJ.BOATBUILDING__Total_Paid__c}"/></dd>
+                </aura:if>
+                <aura:if isTrue="{!v.WOJ.BOATBUILDING__Taxable__c}"> 
+                    <dt class="slds-size_12-of-12 slds-medium-size_3-of-12 slds-large-size_1-of-4" title="Tax on job"> Tax on Job:</dt>
+                    <dd class="slds-item_detail" title="This total contains the tax calcualted on all the taxable items on job"> <ui:outputCurrency value="{!v.taxOnJob}"/></dd>
+                    <dt class="slds-size_12-of-12 slds-medium-size_3-of-12 slds-large-size_1-of-4" title="Job Total including tax"> Grand Total:</dt>
+                    <dd class="slds-item_detail" title="Description for second label"> <ui:outputCurrency value="{!v.jobTotalwTax}"/></dd>
+                </aura:if> 
+            </dl>
+           <!--<div class="slds-col">
+             {!v.WOJ.BOATBUILDING__Discount__c
+                            parts Total : ${!v.partsTotal}
+                    </div>
+                    <div class="slds-col">
+                            Misc Total : ${!v.totalMiscCharges}
+                    </div>
+                    <div class="slds-col">
+                         Labor Total : ${!v.laborPriceMultiplier * v.WOJ.BOATBUILDING__No_of_Labors__c}
+                </div>
+                --> 
+
+            
+    </lightning:accordionSection>
+        </div>
+        
+    
+    
+
+    
+   
+        <aura:if isTrue="{!(!v.isCannedJob)}">
+           
+        <lightning:input name="input1" label="Enter Job Name" value="{!v.WOJ.BOATBUILDING__Job_Name__c}" />
+        <lightning:select name="workTypePicklist2" aura:id="wtpList" label="WorkType" required="true" value="{!v.WOJ.BOATBUILDING__Work_Type__c}" onchange="{!c.workTypeChanged}">
+                    <option value="">--None--</option>
+                    <aura:iteration items="{!v.mapWTPNew}" var="wtp" indexVar="key">
+                        
+                        <option text="{!wtp.key}" value="{!wtp.key}" selected="{!wtp.key == v.WOJ.BOATBUILDING__Work_Type__c}"/>
+                    </aura:iteration>
+        </lightning:select>
+        </aura:if>
+        <aura:if isTrue="{!v.isCannedJob}">
+            <lightning:select class="cannedJob" value="{!v.cannedJob}" name="cannedJobList" aura:id="cannedJobList" label="Select Canned Job" required="true" onchange="{!c.cannedJobSelected}" >
+                <option value="">--None--</option>
+                <aura:iteration items="{!v.mapCannedJobId}" var="cjob" indexVar="key">
+                    
+                    <option text="{!cjob.key}" value="{!cjob.value}" />
+                </aura:iteration> 
+            </lightning:select>
+        </aura:if>
+        <aura:if isTrue="{!and(v.cannedJobSelected, v.isCannedJob)}">
+            <div class="slds-grid slds-gutters">
+                <div class="slds-col slds-size_2-of-4">
+                    <lightning:input name="input1" label="Enter Job Name" value="{!v.WOJ.BOATBUILDING__Job_Name__c}" disabled="true"/>
+
+                </div>
+                <div class="slds-col slds-size_2-of-4">
+                    
+                    <lightning:select name="workTypePicklist" aura:id="wtpList2" label="WorkType" required="true" disabled="true" value="{!v.WOJ.BOATBUILDING__Work_Type__c}">
+                        <option value="">--None--</option>
+                        <aura:iteration items="{!v.mapWTPNew}" var="wtp" indexVar="key">
+                            
+                            <option text="{!wtp.key}" value="{!wtp.key}" selected="{!wtp.key == v.WOJ.BOATBUILDING__Work_Type__c}"/>
+                        </aura:iteration>
+                    </lightning:select>
+                </div>
+            </div>
+                
+        
+        </aura:if>
+        <!--below code is for user/tech lookup-->
+        
+                <aura:if isTrue="{!!v.showPill}">
+                    <div class="slds-grid slds-gutters slds-wrap">
+                    
+                    <div class="sslds-col slds-size_1-of-1  slds-medium-size_1-of-1 slds-large-size_1-of-1">
+
+                    <lightning:input
+                                aura:id="enter-search-user"
+                                name="enter-search"
+                                label="Job Technician"
+                                type="search"
+                                onchange="{!c.handleKeyUp}"
+                                onfocus="{!c.searchUserOnFocus}"/>
+                                <aura:iteration items="{!v.searchResults}" var="item" indexVar="i">
+                                
+                                    <li role="presentation" class="slds-listbox__item" data-value="{!item.Id}" data-label="{!item.Name}" data-selectedIndex="{#i}" 
+                                        onclick="{!c.itemSelected}">
+                                        <span id="{#'listbox-option-unique-id-'+i+1}"  
+                                            class="slds-media slds-listbox__option slds-listbox__option_entity 
+                                                    slds-listbox__option_has-meta" 
+                                            role="option">
+                                            <span class="slds-media__figure optionIcon">
+                                                <span class="slds-icon_container" >
+                                                    <lightning:icon iconName="standard:user_role" size="x-small"/>
+                                                
+                                                </span>
+                                            </span>
+                                            <span class="slds-media__body singleRow">
+                                                <span 
+                                                    class="optionTitle slds-listbox__option-text 
+                                                            slds-listbox__option-text_entity" style="overflow:visible;">{!item.Name}</span>
+                                            </span>
+                                        </span>
+                                    </li>
+                                    </aura:iteration>
+                            
+                                </div>
+                            </div> 
+                    </aura:if>       
+                
+            
+                    <aura:if isTrue="{!v.showPill}">
+                        <div class="slds-grid slds-gutters slds-wrap slds-p-top_small">
+                            <div class="slds-col slds-size_1-of-1  slds-medium-size_1-of-2 slds-large-size_1-of-4">
+                                
+                                <div class="slds-form-element" style="float:left">
+                                    
+                                    <div class="slds-form-element__control">
+                                        <lightning:badge label="Technician"/>                        
+                                    </div>
+                                  </div>
+                            </div>
+                        <div class="slds-col slds-size_1-of-1  slds-medium-size_1-of-2 slds-large-size_1-of-4">
+            
+                <lightning:pill label="{!v.selectedRecord}" title="Change Technician" onremove="{!c.pillRemoved}">
+                    <aura:set attribute="media">
+                        <lightning:avatar size="small"  src="/docs/component-library/app/images/examples/avatar1.jpg" initials="" fallbackIconName="standard:user" alternativeText="Job Tech" class="slds-m-right_small"/>
+                    </aura:set>
+                </lightning:pill>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<lightning:helptext
+                content="Click X button to change the Technician on this Job."/>
+            </div>
+            </div>
+            
+      </aura:if>
+      <br/>
+      
+       
+        <lightning:accordionSection name="laborSection" label="{!if(v.recordType == 'Warranty Work Order','Labor :$'+if(or(empty(v.WOJ.BOATBUILDING__No_of_Labors__c,v.laborPriceMultiplier)),0.00,v.WOJ.BOATBUILDING__No_of_Labors__c * v.laborPriceMultiplier),('Labor &amp; Shop Supplies : $'+v.laborAndSSTotal))}" class="addMiscCharges">
+        <div class="slds-grid slds-gutters slds-wrap">
+            <div class="slds-col slds-size_1-of-1  slds-medium-size_1-of-1 slds-large-size_1-of-4">
+                
+                <div class="slds-form-element slds-p-top_small" style="float:left">
+                    <label class="slds-form-element__label" for="form-element-01"></label>
+                    <label class="slds-form-element__label" for="form-element-01"></label>
+                    <div class="slds-form-element__control">
+                        <lightning:badge label="Labor"/>                        
+                    </div>
+                  </div>
+
+            </div>
+            <div class="slds-col slds-size_1-of-1  slds-medium-size_1-of-1 slds-large-size_1-of-4">
+                <lightning:input type="number" name="numberOfHours" label="No. Of Hours" value="{!v.WOJ.BOATBUILDING__No_of_Labors__c}" step="0.01"/>
+
+            </div>
+            <div class="slds-col slds-size_1-of-1  slds-medium-size_1-of-1 slds-large-size_1-of-4">
+                
+
+                <lightning:input type="number" fieldLevelHelp="The labor rate/hour comes from a custom setting in the software and it is dependent on the work type you have selected. If you don't see your work type listed or need a new one please raise a support ticket or contact your system admin!" name="priceMultiplier" label="Rate/hour" disabled="true" value="{!v.laborPriceMultiplier}" formatter="currency" step="0.01"/>
+               
+
+            </div>
+            <div class="slds-col slds-size_1-of-1  slds-medium-size_1-of-1 slds-large-size_1-of-4">
+                <lightning:input type="number" name="totalLabor" label="Total" formatter="currency" step="0.01" value="{!if(or(empty(v.WOJ.BOATBUILDING__No_of_Labors__c), empty(v.laborPriceMultiplier)),'0.00',v.WOJ.BOATBUILDING__No_of_Labors__c * v.laborPriceMultiplier)}"/>
+
+            </div>
+            <aura:if isTrue="{!v.recordType != 'Warranty Work Order'}" >
+                <div class="slds-col slds-size_1-of-1  slds-medium-size_1-of-1 slds-large-size_1-of-4">
+
+                    <div class="slds-form-element slds-p-top_small" style="float:left">
+                        <label class="slds-form-element__label" for="form-element-01"></label>
+                        <label class="slds-form-element__label" for="form-element-01"></label>
+                        <div class="slds-form-element__control">
+                            <lightning:badge label="Shop Supplies"/>                        
+                        </div>
+                    </div>
+                </div>
+                <div class="slds-col slds-size_1-of-1  slds-medium-size_1-of-1 slds-large-size_1-of-4">
+                    <lightning:input type="number" name="shopSupplies" variant="label-hidden" formatter="currency" value="{!v.WOJ.BOATBUILDING__Shop_Supplies_Total__c}" step="0.01" disabled="true" fieldLevelHelp="{!('The Shop Supplies is: '+v.shopSuppliePercent+'% of total labor amount.'+if(v.shopSuppliesCapping > 0.00, 'The maximum shop supplies can be $'+v.shopSuppliesCapping, ''))}"/>
+
+                </div>
+        </aura:if>
+        </div>
+       
+      </lightning:accordionSection>
+    <lightning:accordionSection name="partsSection" label="{!('Job Parts : $'+v.partsTotal)}" class="addMiscCharges">
+
+    <div class="slds-grid slds-gutters">
+        <div class="slds-col slds-size_1-of-1 slds-p-bottom_medium" style="float:right">
+            <lightning:button variant="base" label="Add Parts" class="addMiscCharges" title="New Misc" onclick="{! c.addNewJobLineItems }"  iconName="action:add_relationship" iconPosition="right"/>
+        </div>
+    </div> 
+    <aura:iteration items="{!v.WOJ.BOATBUILDING__Work_Order_Job_Line_Items__r}" var="jli" indexVar="i">
+        <div class="slds-grid slds-gutters">
+           
+            <div class="slds-col slds-size_11-of-12">
+                <c:WOJobLineItems JLI="{!jli}" recordType="{!v.recordType}"/>
+            </div>
+            <div class="slds-col slds-size_1-of-12" style="float:right">
+                <div class="slds-form-element slds-p-top_xx-small" style="float:right">
+                    <label class="slds-form-element__label" for="form-element-01"></label>
+                    <label class="slds-form-element__label" for="form-element-01"></label>
+                    <div class="slds-form-element__control">
+                <a data-index="{!i}" data-value = "{!jli.Id}" onclick="{!c.handleRemoveJobLineItems}">
+                    <lightning:icon iconName="action:delete" alternativeText="Delete" size="xx-small" />
+                </a>
+                </div></div>
+            </div>
+        </div>
+    </aura:iteration>    
+    <div class="slds-grid slds-gutters slds-wrap slds-p-top_medium">
+        
+        <div class="slds-col slds-size_4-of-12  slds-medium-size_1-of-1 slds-large-size_1-of-4 ">
+            <div class="slds-form-element slds-p-top_x-small" style="float:left">
+                <label class="slds-form-element__label" for="form-element-01"></label>
+                <label class="slds-form-element__label" for="form-element-01"></label>
+                <div class="slds-form-element__control">
+                    <lightning:badge label="Total Parts"/>                        
+                </div>
+              </div> 
+        </div>
+        <div class="slds-col slds-size_6-of-12  slds-medium-size_1-of-1 slds-large-size_1-of-4 " style="float:right;">
+                
+                <lightning:input type="number" name="totalLabor" label="" formatter="currency" step="0.01" disabled="true" value="{!v.partsTotal}"/>
+
+        </div>
+        
+        
+    </div>
+    </lightning:accordionSection>
+    <lightning:accordionSection name="" label="{!('Misc Charges : $'+v.totalMiscCharges)}" class="addMiscCharges">
+    <div class="slds-grid slds-gutters slds-wrap">
+     <div class="slds-col slds-size_1-of-1 slds-p-bottom_medium" style="float:right">
+     <lightning:button variant="base" label="Add Misc Charges" class="addMiscCharges" title="New Misc" onclick="{! c.addNewMiscCharge }"  iconName="action:add_relationship" iconPosition="right"/>
+</div></div>
+     <aura:if isTrue="{!v.noOfMiscCharges > 0}">
+         <div class="slds-grid slds-gutters slds-wrap">
+             <div class="slds-col slds-size_1-of-1  slds-medium-size_1-of-1 slds-large-size_1-of-4 slds-p-left_none">
+                 
+                   
+                <div class="slds-form-element slds-p-top_large" style="float:left">
+                    <label class="slds-form-element__label" for="form-element-01"></label>
+                    <label class="slds-form-element__label" for="form-element-01"></label>
+                    <div class="slds-form-element__control">
+                         <lightning:badge label="Misc Charges"/>                        
+                     </div>
+                 </div>
+
+             </div>
+             <div class="slds-col slds-size_1-of-1  slds-medium-size_1-of-1 slds-large-size_1-of-4 slds-p-left_none">
+                 <lightning:textarea name="input3" value="{!v.WOJ.BOATBUILDING__Misc_Description_1__c}" label="Misc Charges Description" placeholder="type here..."/>
+             </div>
+             
+             <div class="slds-col slds-size_1-of-1  slds-medium-size_1-of-1 slds-large-size_1-of-4 slds-p-left_none">
+                 <lightning:input type="number" name="miscCharge1Value" label="Misc Charge Amount" formatter="currency" step="0.01" value="{!v.WOJ.BOATBUILDING__Misc_Charge__c}" change="keyup" onchange="{!c.addMiscCharges}"/>
+
+             </div>
+         </div>
+     </aura:if>
+     <aura:if isTrue="{!or(and(v.noOfMiscCharges > 1,v.displayMisc2),v.WOJ.BOATBUILDING__Misc_Charge_2__c > 0.00)}">
+         <div class="slds-grid slds-gutters slds-wrap">
+             <div class="slds-col slds-size_1-of-1  slds-medium-size_1-of-1 slds-large-size_1-of-4 slds-p-left_none">
+                 
+                 <div class="slds-form-element slds-p-top_medium slds-p-right_small" style="float:left">
+                     <label class="slds-form-element__label" for="form-element-01"></label>
+                     <label class="slds-form-element__label" for="form-element-01"></label>
+                     <div class="slds-form-element__control">
+                         <a data-value = "misc2" onclick="{!c.removeMisc2}" style="float: left">
+                            <lightning:icon iconName="action:delete" alternativeText="Delete" size="xx-small" />
+                         </a>                     
+                     </div>
+                   </div>
+                   
+                 <div class="slds-form-element slds-p-top_large" style="float:left">
+                     <label class="slds-form-element__label" for="form-element-01"></label>
+                     <label class="slds-form-element__label" for="form-element-01"></label>
+                     <div class="slds-form-element__control">
+                         <lightning:badge label="Misc Charges"/>                        
+                     </div>
+                   </div>
+
+             </div>
+             <div class="slds-col slds-size_1-of-1  slds-medium-size_1-of-1 slds-large-size_1-of-4 slds-p-left_none">
+                 <lightning:textarea name="inputmisc2" value="{!v.WOJ.BOATBUILDING__Misc_Description_2__c}" label="Misc Charges Description" placeholder="type here..."/>
+             </div>
+             <div class="slds-col slds-size_1-of-1  slds-medium-size_1-of-1 slds-large-size_1-of-4 slds-p-left_none">
+                 <lightning:input type="number" name="miscCharge2Amount" label="Misc Charge Amount" formatter="currency" step="0.01" value="{!v.WOJ.BOATBUILDING__Misc_Charge_2__c}" change="keyup" onchange="{!c.addMiscCharges}"/>
+
+             </div>
+         </div>
+     </aura:if>
+     <aura:if isTrue="{!or(and(v.noOfMiscCharges > 1,v.displayMisc3), v.WOJ.BOATBUILDING__Misc_Charge_3__c > 0.00)}">
+         <div class="slds-grid slds-gutters slds-wrap">
+             <div class="slds-col slds-size_1-of-1  slds-medium-size_1-of-1 slds-large-size_1-of-4 slds-p-left_none">
+                 <div class="slds-form-element slds-p-top_medium slds-p-right_small" style="float:left">
+                     <label class="slds-form-element__label" for="form-element-01"></label>
+                     <label class="slds-form-element__label" for="form-element-01"></label>
+                     <div class="slds-form-element__control">
+                         <a data-value = "misc2" onclick="{!c.removeMisc3}" style="float: left">
+                            <lightning:icon iconName="action:delete" alternativeText="Delete" size="xx-small" />
+                         </a>                     
+                     </div>
+                   </div>
+                 <div class="slds-form-element slds-p-top_large" style="float:left">
+                     <label class="slds-form-element__label" for="form-element-01"></label>
+                     <label class="slds-form-element__label" for="form-element-01"></label>
+                     <div class="slds-form-element__control">
+                         <lightning:badge label="Misc Charges"/>                        
+                     </div>
+                   </div>
+
+             </div>
+             <div class="slds-col slds-size_1-of-1  slds-medium-size_1-of-1 slds-large-size_1-of-4 slds-p-left_none">
+                 <lightning:textarea name="input3misc" value="{!v.WOJ.BOATBUILDING__Misc_Description_3__c}" label="Misc Charges Description" placeholder="type here..."/>
+             </div>
+             <div class="slds-col slds-size_1-of-1  slds-medium-size_1-of-1 slds-large-size_1-of-4 slds-p-left_none">
+                 <lightning:input type="number" name="miscChargeAmount" label="Misc Charge Amount" formatter="currency" step="0.01" value="{!v.WOJ.BOATBUILDING__Misc_Charge_3__c}" change="keyup" onchange="{!c.addMiscCharges}"/>
+
+             </div>
+             
+         </div>
+     </aura:if>
+     <aura:if isTrue="{!v.WOJ.BOATBUILDING__Misc_Charge_3__c + v.WOJ.BOATBUILDING__Misc_Charge_2__c + v.WOJ.BOATBUILDING__Misc_Charge__c > 0}">
+     <div class="slds-grid slds-gutters slds-wrap">
+         <div class="slds-col slds-size_12-of-12  slds-medium-size_1-of-1 slds-large-size_1-of-4 slds-p-left_none">
+             <div class="slds-form-element slds-p-top_x-small" >
+                 <label class="slds-form-element__label" for="form-element-01"></label>
+                 <label class="slds-form-element__label" for="form-element-01"></label>
+                 <div class="slds-form-element__control">
+                     <lightning:badge label=" Total Misc Charges"/>                        
+                 </div>
+               </div>
+         </div>
+         <div class="slds-col slds-size_12-of-12  slds-medium-size_1-of-1 slds-large-size_1-of-4 slds-p-left_none">
+             <lightning:input type="number" name="totalmisc" label="" formatter="currency" step="0.01" disabled="true" value="{!v.totalMiscCharges}"/>
+
+         </div>
+     </div>
+ </aura:if>
+ </lightning:accordionSection>
+ <lightning:accordionSection name="" label="{!('Shipping : $'+v.WOJ.BOATBUILDING__Shipping_Charge__c +'&nbsp;&nbsp;Discount: $'+v.WOJ.BOATBUILDING__Discount__c)}" class="addMiscCharges">
+
+ <div class="slds-grid slds-gutters slds-wrap">
+    <div class="slds-col slds-size_1-of-1  slds-medium-size_1-of-1 slds-large-size_2-of-4 slds-p-left_none">
+        
+        <div class="slds-form-element">
+            <label class="slds-form-element__label" for="form-element-01"></label>
+            <label class="slds-form-element__label" for="form-element-01"></label>
+            <div class="slds-form-element__control">
+                <lightning:badge label="Shipping Charges"/>                        
+            </div>
+          </div>
+
+    </div>
+    <div class="slds-col slds-size_1-of-1  slds-medium-size_1-of-1 slds-large-size_2-of-4 slds-p-left_none">
+        <aura:if isTrue="{!v.recordType == 'Warranty Work Order'}" >
+            <lightning:input type="number" name="shippingCharges" formatter="currency" label="" value="{!v.WOJ.BOATBUILDING__Shipping_Charge__c}" step="0.01" disabled="true"/>
+            <aura:set attribute="else">
+                <lightning:input type="number" name="shippingCharges" formatter="currency" label="" value="{!v.WOJ.BOATBUILDING__Shipping_Charge__c}" step="0.01"/>
+
+            </aura:set>
+        </aura:if>
+    </div>
+    
+    <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-1 slds-large-size_2-of-4 slds-p-left_none">
+        
+        <div class="slds-form-element">
+            <label class="slds-form-element__label" for="form-element-01"></label>
+            <label class="slds-form-element__label" for="form-element-01"></label>
+            <div class="slds-form-element__control">
+                <lightning:badge label="Discount"/>                        
+            </div>
+          </div>
+
+    </div>
+    <div class="slds-col slds-size_1-of-1  slds-medium-size_1-of-1 slds-large-size_2-of-4 slds-p-left_none">
+        <aura:if isTrue="{!v.recordType == 'Warranty Work Order'}" >
+        <lightning:input type="number" name="discount" label="" formatter="currency"  value="{!v.WOJ.BOATBUILDING__Discount__c}" step="0.01" disabled="true"/>
+        <aura:set attribute="else">
+            <lightning:input type="number" name="discount" label="" formatter="currency"  value="{!v.WOJ.BOATBUILDING__Discount__c}" step="0.01"/>
+
+        </aura:set>    
+    </aura:if>
+    </div>
+   
+    
+</div>
+</lightning:accordionSection>
+<aura:if isTrue="{!v.recordType == 'Warranty Work Order'}" >
+    <lightning:accordionSection name="" label="Claim Details">
+        <div class="slds-grid slds-gutters slds-wrap">
+                <div class="slds-col slds-size_1-of-2">
+                    <lightning:select class="claimStatus" value="{!v.WOJ.BOATBUILDING__Claim_Status_New__c}" name="Claim Status" aura:id="claimStatusList" label="Select Claim Status" >
+                        <option value="">--None--</option>
+                        <aura:iteration items="{!v.wojWithJLI.lstClaimStatus}" var="cjob" indexVar="key">
+                            
+                            <option text="{!cjob}" value="{!cjob}" />
+                        </aura:iteration> 
+                    </lightning:select>
+                </div>
+                <div class="slds-col slds-size_1-of-2">
+                    <lightning:input type="number" formatter="currency" step="0.01" disabled="true" label="Total Paid" value="{!v.WOJ.BOATBUILDING__Total_Paid__c}" fieldLevelHelp="Labor Paid + Parts Paid + Misc Charge + Shipping Charges - discount"/>
+                </div>
+
+                <div class="slds-col slds-size_2-of-6">
+                    
+                    <lightning:input type="date" label="Claim Date" value="{!v.WOJ.BOATBUILDING__Claim_Date__c}" />
+                </div>
+                <div class="slds-col slds-size_2-of-6">
+                    <lightning:input type="date"  label="Claim Approval Date" value="{!v.WOJ.BOATBUILDING__Claim_Approval_Date__c}" />
+
+                </div>
+                <div class="slds-col slds-size_2-of-6">
+                    <lightning:input type="date"  label="Claim Paid Date" value="{!v.WOJ.BOATBUILDING__Claim_Paid_Date__c}" />
+
+                </div>
+                <div class="slds-col slds-size_2-of-6">
+                    <lightning:input type="number" formatter="currency"  label="Claim Labor Approved Amount" step="0.01" value="{!v.WOJ.BOATBUILDING__Claim_Labor_Approved_Amount__c}"/>
+                </div>
+                <div class="slds-col slds-size_2-of-6">
+                    <lightning:input type="number" formatter="currency"  label="Return Parts Amount:" step="0.01" value="{!v.WOJ.BOATBUILDING__Return_Parts_Amount__c}"/>
+
+                </div>
+                
+                <div class="slds-col slds-size_2-of-6">
+                    <lightning:input type="number" formatter="currency" step="0.01" label="Misc Charge Paid" value="{!v.WOJ.BOATBUILDING__Misc_Charge_Paid__c}" change="keyup" onchange="{!c.calcualteTotalPaidWarranty}"/>
+
+                </div>
+                <div class="slds-col slds-size_2-of-6">
+                   
+                    
+                    <lightning:input type="number" formatter="currency" step="0.01" label="Claim Labor Paid Amount" value="{!v.WOJ.BOATBUILDING__Claim_Labor_Paid_Amount__c}" change="keyup" onchange="{!c.calcualteTotalPaidWarranty}"/>
+                </div>
+                <div class="slds-col slds-size_2-of-6">
+                    <lightning:input type="number" formatter="currency" step="0.01"  label="Parts Paid Amount" value="{!v.WOJ.BOATBUILDING__Parts_Paid_Amount__c}" change="keyup" updateon="keyup" onchange="{!c.calcualteTotalPaidWarranty}"/>
+
+                </div>
+
+              
+
+                <div class="slds-col slds-size_2-of-6">
+                    <lightning:input type="number" name="shippingCharges" formatter="currency" label="" value="{!v.WOJ.BOATBUILDING__Shipping_Charge__c}" step="0.01" onchange="{!c.calcualteTotalPaidWarranty}"/>
+                </div>
+
+               
+        </div>
+
+    </lightning:accordionSection>
+</aura:if> 
+<lightning:accordionSection name="" label="Customer Comments" class="addMiscCharges">
+
+ <div class="slds-grid slds-gutters slds-wrap">
+    <div class="slds-col slds-size_4-of-4">
+      
+      <aura:if isTrue="{!!empty(v.WOJ.Id)}">
+        <c:RecordEventActivity whatId="{!v.WOJ.Id}" whoId="{!v.WOJ.BOATBUILDING__Work_Order_Warranty_Work_Order__r.BOATBUILDING__Contact__c}" accountId="{!v.WOJ.BOATBUILDING__Work_Order_Warranty_Work_Order__r.BOATBUILDING__Account__c}" commentSectionName="Customer Comment"/>
+        <aura:set attribute="else">
+            <lightning:textarea label="Customer Comments" value="{!v.WOJ.BOATBUILDING__Customer_Comments__c}"/>    
+        </aura:set>
+      </aura:if>
+       
+   </div>
+   
+    
+</div>
+</lightning:accordionSection>
+<lightning:accordionSection name="" label="Service Writer &amp; Technician Comments" class="addMiscCharges">
+
+ <div class="slds-grid slds-gutters slds-wrap">
+    <div class="slds-col slds-size_4-of-4">
+        <aura:if isTrue="{!!empty(v.WOJ.Id)}">
+            <c:RecordEventActivity whatId="{!v.WOJ.Id}" whoId="{!v.WOJ.BOATBUILDING__Work_Order_Warranty_Work_Order__r.BOATBUILDING__Contact__c}" accountId="{!v.WOJ.BOATBUILDING__Work_Order_Warranty_Work_Order__r.BOATBUILDING__Account__c}" commentSectionName="Service Writer Comment"/>
+            <aura:set attribute="else">
+                <lightning:textarea label="Customer Comments" value="{!v.WOJ.BOATBUILDING__Comments__c}"/> 
+            </aura:set>
+        </aura:if>
+   </div>
+   
+    
+</div>
+</lightning:accordionSection> 
+ 
+</aura:component>

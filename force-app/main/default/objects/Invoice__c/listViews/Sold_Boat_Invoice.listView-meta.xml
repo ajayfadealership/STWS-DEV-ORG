@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ListView xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Sold_Boat_Invoice</fullName>
+    <columns>NAME</columns>
+    <columns>Invoice_Number__c</columns>
+    <columns>Account_Name__c</columns>
+    <columns>Description__c</columns>
+    <columns>Status__c</columns>
+    <columns>Total_Amount_on_Invoice__c</columns>
+    <columns>Total_Payment__c</columns>
+    <columns>Store_Location__c</columns>
+    <filterScope>Everything</filterScope>
+    <filters>
+        <field>RECORDTYPE</field>
+        <operation>equals</operation>
+        <value>Invoice__c.Standard_Invoice</value>
+    </filters>
+    <label>Sold Boat Invoice</label>
+</ListView>

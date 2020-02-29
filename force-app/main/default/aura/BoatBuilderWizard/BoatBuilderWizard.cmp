@@ -1,0 +1,149 @@
+<aura:component controller="BBWizardController" implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction,lightning:isUrlAddressable" access="global">
+    <aura:attribute name="selectedLookUpRecordvalueAcc" type="sObject" default="{}"/>
+    <aura:attribute name="fromBBNav" type="Boolean" default="false"/> 
+    <aura:attribute name="customSettingSobjRegFeeP" type="System_Configure__c" access="global"/> 
+    <aura:attribute name="selectedLookUpRecordACVP" type="sObject" default="{}"/>
+    
+    <aura:attribute name="InvId" type="String" default="0"/> 
+    <aura:attribute name="ProId" type="String" default="0"/>
+    <aura:attribute name="ProductPriceIdList" type="String[]"/>
+    <aura:attribute name="DealerOptionIdList" type="String[]"/>
+    
+    <aura:attribute name="ObjQuote" type="Quote__c" default="{'sobjectType ': 'BOATBUILDING__Quote__c'}"/>
+    <aura:attribute name="ObjQuoteRR" type="Quote__c" default="{'sobjectType ': 'BOATBUILDING__Quote__c'}"/>
+    <aura:registerEvent name="QuoteEVT" type="c:QuoteEvent"/> 
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    <aura:attribute name="NoSalesmanWithoutCost" type="boolean" default="false"/>
+    
+    <aura:attribute name="lstDealerOptionWraper" type="DealerOptionWraper[]"/>
+    
+    <div id="qtSpinnerWiz" style="display:none; position: fixed; z-index: 999; left: 0; right: 0; top: 0; bottom: 0; background: #0000004f;">
+        <img src="{!$Resource.Process}" style="position: fixed; left: 48%; top: 48%;" width="50" height="50"/>
+    </div>
+    
+    <article class="slds-card">
+        <div class="slds-path"> 
+            <div class="slds-grid slds-path__track">
+                <div class="slds-grid slds-path__scroller-container">
+                    <div class="slds-path__scroller" role="application">
+                        <div class="slds-path__scroller_inner">
+                            <ul class="slds-path__nav" role="listbox" aria-orientation="horizontal">
+                                <li class="slds-path__item slds-is-current slds-is-active" id="1LI" role="presentation">
+                                    <a aria-selected="false" class="slds-path__link" href="javascript:void(0);" id="path-6" role="option" tabindex="-1">
+                                        <span class="slds-path__stage">
+                                            
+                                            <lightning:icon iconName="standard:avatar" size="small" class="checkClass"/>   
+                                            
+                                            <span class="slds-assistive-text">Customer</span>
+                                        </span>
+                                        <span class="slds-path__title">Customer</span>
+                                    </a>
+                                </li>
+                                <li class="slds-path__item slds-is-incomplete" id="2LI" role="presentation">
+                                    <a aria-selected="false" class="slds-path__link" href="javascript:void(0);" id="path-7" role="option" tabindex="-1">
+                                        <span class="slds-path__stage">
+                                            <!--  <svg class="slds-icon slds-icon_x-small" aria-hidden="true">
+                                                <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/assets/icons/utility-sprite/svg/symbols.svg#check" />
+                                            </svg> -->
+                                            <lightning:icon iconName="custom:custom93" size="small" class="checkClass"/>
+                                            <span class="slds-assistive-text">Inventory</span>
+                                        </span>
+                                        <span class="slds-path__title">Inventory</span>
+                                    </a>
+                                </li>
+                                <li class="slds-path__item slds-is-incomplete" id="3LI" role="presentation">
+                                    <a aria-selected="false" class="slds-path__link" href="javascript:void(0);" id="path-8" role="option" tabindex="-1">
+                                        <span class="slds-path__stage">
+                                            <!-- <svg class="slds-icon slds-icon_x-small" aria-hidden="true">
+                                                <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/assets/icons/utility-sprite/svg/symbols.svg#check" />
+                                            </svg> -->
+                                            <lightning:icon iconName="custom:custom16" size="small" class="checkClass"/> 
+                                            <span class="slds-assistive-text">Trade</span>
+                                        </span>
+                                        <span class="slds-path__title">Trade</span>
+                                    </a>
+                                </li>
+                                <li class="slds-path__item slds-is-incomplete" id="4LI" role="presentation">
+                                    <a aria-selected="true" class="slds-path__link" href="javascript:void(0);" id="path-9" role="option" tabindex="0">
+                                        <span class="slds-path__stage">
+                                            <lightning:icon iconName="custom:custom17" size="small" class="checkClass"/>
+                                            <span class="slds-assistive-text">Registration Fees</span>
+                                        </span> 
+                                        <span class="slds-path__title">Registration Fees</span>
+                                    </a>
+                                </li>
+                            </ul>
+                            <div id="tab-default-1" class="slds-tabs_default__content slds-show" role="tabpanel" aria-labelledby="tab-default-1__item" style="height: 600px;">
+                                <c:AccountComponent selectedLookUpRecord="{!v.selectedLookUpRecordvalueAcc}" fromBBNav1="{!v.fromBBNav}"/>
+                                
+                                <!-- <lightning:button variant="brand" label="Previous" iconName="utility:chevronleft" iconPosition="left" onclick="{! c.handleClick }" /> -->
+                                <div onclick="{!c.handleClick}" data-value="1" style="height:0px;max-width:auto;">
+                                    <lightning:button variant="brand" label="Next" iconName="utility:chevronright" iconPosition="right" class="rightElement" value="1" />
+                                </div>
+                            </div>
+                            <div id="tab-default-2" class="slds-tabs_default__content slds-hide" role="tabpanel" aria-labelledby="tab-default-2__item">
+                                <c:InventorySelection lstDealerOptionWraperC="{!v.lstDealerOptionWraper}" NoSalesmanWithoutCostC="{!v.NoSalesmanWithoutCost}" InvIdC="{!v.InvId}" ProIdC="{!v.ProId}" ProductPriceIdListC="{!v.ProductPriceIdList}" DealerOptionIdListC="{!v.DealerOptionIdList}"/> 
+                                <br/> 
+                                <br/>
+                                <table>
+                                    <tr>
+                                        <td>
+                                            <div data-value="2" style="height:0px;max-width:auto;" onclick="{!c.previousClick}">
+                                                <lightning:button variant="brand" label="Previous" iconName="utility:chevronleft" iconPosition="left" class="leftElement"/>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div data-value="2" style="height:0px;max-width:auto;" onclick="{!c.handleClick}">
+                                                <lightning:button variant="brand" label="Next" iconName="utility:chevronright" iconPosition="right" class="rightElement" value="2" />
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div> 
+                            <div id="tab-default-3" class="slds-tabs_default__content slds-hide" role="tabpanel" aria-labelledby="tab-default-3__item">
+                               <c:TradeAndRegistration selectedLookUpRecord="{!v.selectedLookUpRecordACVP}"/> 
+                                <br/>
+                                <br/>
+                                <table>
+                                    <tr>
+                                        <td>
+                                            <div data-value="3" style="height:0px;max-width:auto;" onclick="{!c.previousClick}">
+                                                <lightning:button variant="brand" label="Previous" iconName="utility:chevronleft" iconPosition="left" class="leftElement"/>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div data-value="3" style="height:0px;max-width:auto;" onclick="{!c.handleClick}">
+                                                <lightning:button variant="brand" label="Next" iconName="utility:chevronright" iconPosition="right" class="rightElement" value="2" />
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                            <div id="tab-default-4" style="padding: 2%;" class="slds-tabs_default__content slds-hide" role="tabpanel" aria-labelledby="tab-default-4__item">
+                                <c:Registration customSettingSobj="{!v.customSettingSobjRegFeeP}" ObjQuoteC="{!v.ObjQuoteRR}"/>
+                                <br/><br/>
+                                <br/>
+                                <br/>
+                                <table>
+                                    <tr>
+                                        <td>
+                                            <div data-value="4" style="height:0px;max-width:auto;" onclick="{!c.previousClick}">
+                                                <lightning:button variant="brand" label="Previous" iconName="utility:chevronleft" iconPosition="left" class="leftElement"/>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div data-value="4" style="height:0px;max-width:auto;" onclick="{!c.handleClick}">
+                                                <lightning:button variant="brand" label="Finish" iconPosition="right" class="rightElement" value="2" />
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+    </article>
+</aura:component>

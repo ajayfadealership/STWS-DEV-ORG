@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Check_Number_to_be_Null</fullName>
+    <active>true</active>
+    <description>Check number must be specified only if the payment is made through check.</description>
+    <errorConditionFormula>Not(ISPICKVAL( Payment_Type__c , &quot;Check&quot;)) &amp;&amp; Not(ISBLANK( Check_Number__c))</errorConditionFormula>
+    <errorDisplayField>Check_Number__c</errorDisplayField>
+    <errorMessage>Check number must be specified only if the payment is made through check.</errorMessage>
+</ValidationRule>

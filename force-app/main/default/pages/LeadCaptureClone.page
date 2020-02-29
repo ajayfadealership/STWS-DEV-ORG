@@ -1,0 +1,168 @@
+<apex:page controller="BoatShowLeadCaptureController"  showHeader="false" lightningStyleSheets="true">
+    
+    <apex:slds />
+    <div class="slds-scope">
+        <apex:form >
+            <div class="slds-page-header">
+                <div class="slds-media">
+                    <div class="slds-media__figure">
+                        <span class="slds-icon_container slds-icon-standard-opportunity" title="Description of icon when needed">
+                            <svg class="slds-icon slds-page-header__icon" aria-hidden="true">
+                                <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="{!URLFOR($Resource.BoatBuilderSR, '/icons/standard-sprite/svg/symbols.svg#campaign')}" />
+                            </svg>
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <br/>
+            <apex:pageMessages id="showmsg"></apex:pageMessages>
+            
+            <div class="slds-form" id= "frm">
+                <div class="slds-grid slds-wrap slds-col--padded">
+                    <h1><b>Boat Show Lead Form</b></h1>
+                    <div class="slds-col slds-size--1-of-1">
+                        <div class="slds-grid slds-wrap" >
+                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-2 slds-col--padded">
+                                <div class="slds-form-element">
+                                    <label class="slds-form-element__label">Salesperson:</label>
+                                    <div class="slds-form-element__control">
+                                        <apex:selectList size="1" value="{!selectedUser}" label="User" id="slType" styleClass="slds-select">
+                                            <apex:selectOptions value="{!lstUser}"/>
+                                        </apex:selectList>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-2 slds-col--padded">
+                                <div class="slds-form-element">
+                                    <label class="slds-form-element__label">&nbsp;</label>
+                                    <div class="slds-form-element__control">
+                                        &nbsp;
+                                    </div>
+                                </div>
+                            </div>
+                            <apex:repeat value="{!$ObjectType.Account.FieldSets.BoatShowLeadCapture}"  var="f">
+                                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-2 slds-col--padded">
+                                    <div class="slds-form-element">
+                                        <label class="slds-form-element__label">{!f.label}</label>
+                                        <div class="slds-form-element__control">
+                                            <apex:inputField value="{!objaccount[f.fieldPath]}" styleclass="slds-input"/>
+                                        </div>
+                                    </div>
+                                </div>
+                            </apex:repeat>
+                            
+                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-2 slds-col--padded">
+                                <div class="slds-form-element">
+                                    <label class="slds-form-element__label">First Name:</label>
+                                    <div class="slds-form-element__control">
+                                        <apex:inputField value="{!objaccount.Prospect_First_Name__c}" styleclass="slds-input"/>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-2 slds-col--padded">
+                                <div class="slds-form-element">
+                                    <label class="slds-form-element__label"><span style="color: red;">*</span>Last Name:</label>
+                                    <div class="slds-form-element__control">
+                                        <apex:inputField value="{!objaccount.Prospect_Last_Name__c}" styleclass="slds-input"/>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-2 slds-col--padded">
+                                <div class="slds-form-element">
+                                    <label class="slds-form-element__label">Mobile Phone Number:</label>
+                                    <div class="slds-form-element__control">
+                                        <apex:inputField value="{!objaccount.Prospect_Mobile_Phone_Number__c}" styleclass="slds-input"/>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-2 slds-col--padded">
+                                <div class="slds-form-element">
+                                    <label class="slds-form-element__label">Contact Email:</label>
+                                    <div class="slds-form-element__control">
+                                        <apex:inputField value="{!objaccount.Contact_Email__c}" styleclass="slds-input"/>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-2 slds-col--padded">
+                                <div class="slds-form-element">
+                                    <label class="slds-form-element__label">Work Phone:</label>
+                                    <div class="slds-form-element__control">
+                                        <apex:inputField value="{!objaccount.Work_Phone__c}" styleclass="slds-input"/>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-2 slds-col--padded">
+                                <div class="slds-form-element">
+                                    <label class="slds-form-element__label">Account Customer Type:</label>
+                                    <div class="slds-form-element__control">
+                                        <apex:inputField value="{!objaccount.Account_Customer_Type__c}" styleclass="slds-input"/>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-2 slds-col--padded">
+                                <div class="slds-form-element">
+                                    <label class="slds-form-element__label">Address Line 1:</label>
+                                    <div class="slds-form-element__control">
+                                        <apex:inputField value="{!objaccount.Prospect_Address_Line_1__c}" styleclass="slds-input"/>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-2 slds-col--padded">
+                                <div class="slds-form-element">
+                                    <label class="slds-form-element__label">Address Line 2:</label>
+                                    <div class="slds-form-element__control">
+                                        <apex:inputField value="{!objaccount.Prospect_Address_Line_2__c}" styleclass="slds-input"/>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-2 slds-col--padded">
+                                <div class="slds-form-element">
+                                    <label class="slds-form-element__label">City:</label>
+                                    <div class="slds-form-element__control">
+                                        <apex:inputField value="{!objaccount.Prospect_City__c}" styleclass="slds-input"/>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-2 slds-col--padded">
+                                <div class="slds-form-element">
+                                    <label class="slds-form-element__label">State:</label>
+                                    <div class="slds-form-element__control">
+                                        <apex:inputField value="{!objaccount.Prospect_State__c}" styleclass="slds-input"/>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-2 slds-col--padded">
+                                <div class="slds-form-element">
+                                    <label class="slds-form-element__label">Zip/Postal Code:</label>
+                                    <div class="slds-form-element__control">
+                                        <apex:inputField value="{!objaccount.Prospect_Zip_Code__c}" styleclass="slds-input"/>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-2 slds-col--padded">
+                                <div class="slds-form-element">
+                                    <label class="slds-form-element__label">Country:</label>
+                                    <div class="slds-form-element__control">
+                                        <apex:inputField value="{!objaccount.Country__c}" styleclass="slds-input"/>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-2 slds-col--padded">
+                                <div class="slds-form-element">
+                                    <label class="slds-form-element__label">Comments/Messages</label>
+                                    <div class="slds-form-element__control">
+                                        <apex:inputField value="{!objaccount.Comments__c}" styleclass="slds-input"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <br/> <br/>
+                <div style="text-align: center">
+                    <apex:commandButton styleClass="slds-button slds-button_brand" action="{!CreateBoatShowaccount}" onComplete="alert('Lead has been created successfully.'); window.location.reload();"  value="Save & New" style="float:center"/> 
+                </div>
+            </div>
+        </apex:form>
+    </div>    
+</apex:page>

@@ -1,0 +1,629 @@
+<apex:component id="invntryComp" controller="InventoryController">
+<style>
+      #tab-default-5 .dataTables_filter,#tab-default-5 .dataTables_length {
+        font-size: 0.85rem;
+        margin: 10px 0px;
+    }
+    #tab-default-5 .dataTables_length select {
+        height: 34px;
+        border-radius: 5px;
+        border: 1px solid rgb(169, 169, 169);
+    }
+    #tab-default-5 .dataTables_filter input {
+        height: 34px;
+        border-radius: 5px;
+        border: 1px solid rgb(169, 169, 169);
+        padding: 10px;
+    }
+  </style>
+  <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-1" id="Inventory_Details">
+
+        <div class="slds-grid slds-wrap">  <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-1 slds-col--padded">
+            <div class="slds-grid slds-wrap" id ="purchaseVendorId" style ="display:none;">
+                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-1">
+                    <div class="slds-grid slds-wrap">
+                        <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                            <div class="slds-form-element">
+                                <label class="slds-form-element__label">Vendor Name</label>
+                                <div class="slds-form-element__control">
+                                    <input id="vendorName" type="text" class="slds-input" disabled="disabled"/>
+                                    
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                            <div class="slds-form-element">
+                                <label class="slds-form-element__label">Vendor Phone Number</label>
+                                <div class="slds-form-element__control">
+                                    <input id="vendorPhone" type="text" class="slds-input" disabled="disabled"/>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                            <div class="slds-form-element">
+                                <label class="slds-form-element__label">Vendor Email</label>
+                                <div class="slds-form-element__control">
+                                    <input id="vendorEmail" type="text" class="slds-input" disabled="disabled"/>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                            <div class="slds-form-element">
+                                <label class="slds-form-element__label">Vendor Contact Person</label>
+                                <div class="slds-form-element__control">
+                                    <input id="vendorConPer" type="text" class="slds-input" disabled="disabled"/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-1">
+                    <div class="slds-grid slds-wrap">
+                        <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                            <div class="slds-form-element">
+                                <label class="slds-form-element__label">Vendor Address</label>
+                                <div class="slds-form-element__control">
+                                    <input id="vendorStreet" type="text" class="slds-input" disabled="disabled"/>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                            <div class="slds-form-element">
+                                <label class="slds-form-element__label">Vendor City</label>
+                                <div class="slds-form-element__control">
+                                    <input id="vendorCity" type="text" class="slds-input" disabled="disabled"/>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                            <div class="slds-form-element">
+                                <label class="slds-form-element__label">Vendor State</label>
+                                <div class="slds-form-element__control">
+                                    <input id="vendorState" type="text" class="slds-input" disabled="disabled"/>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                            <div class="slds-form-element">
+                                <label class="slds-form-element__label">Vendor Zip</label>
+                                <div class="slds-form-element__control">
+                                    <input id="vendorZip" type="text" class="slds-input" disabled="disabled"/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-1">
+                    <div class="">
+                        <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                            <div class="slds-form-element">
+                                <label class="slds-form-element__label">Vendor Terms</label>
+                                <div class="slds-form-element__control">
+                                    <input id="vendorTerms" type="text" class="slds-input" disabled="disabled"/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="slds-col--padded" id ="purchaseVendorId1" style ="display:none;">
+                    
+                </div> 
+            </div>
+        </div>
+
+            <!-- ======= Second Table   -->
+            
+            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-1 slds-col--padded slds-m-top--x-large">
+                <div class="slds-card__body slds-col--padded">
+                    <!-- <div class="slds-col slds-size--1-of-1 slds-align--absolute-center Create_button" id="createInventoryDiv" style="display: none;">
+                        
+                        
+                    </div>   -->
+                     <div id="tableDivInventory">
+                        <div class="slds-col slds-size--1-of-1 slds-align--absolute-center Create_button" >
+                           <a class="slds-button slds-button--neutral slds-button--brand" type="button" onclick="changeToInventoryForm(this);">Create Inventory</a>  
+                        </div> 
+                        <span id="InvListSpan"> 
+                        
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="slds-grid slds-wrap" style="display:none;" id="InventoryForm">
+            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-1 slds-col--padded">
+            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-1 ">
+                    <div class="slds-grid slds-wrap">
+                        <div class="slds-col slds-size--1-of-1 slds-align--absolute-center Create_button">
+                            <div class="slds-form-element__control">
+                                <a class="slds-button slds-button--neutral slds-button--brand" type="button" onclick="createInventory(this);">Create Inventory</a>
+                                <a class="slds-button slds-button--neutral slds-button--brand" type="button" onclick="changeToInventoryList(this);">Back to List</a>
+                            </div>
+                        </div>
+                    </div>  
+                </div>
+                <div class="slds-grid slds-wrap">
+                    <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                        <div class="slds-form-element">
+                            <label class="slds-form-element__label">Vendor</label>
+                            <div class="slds-form-element__control">
+                                <apex:inputField value="{!objInventory.Vendor__c}" styleClass="slds-input" id="vendorNameForInventory"/>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                        <div class="slds-form-element">
+                            <label class="slds-form-element__label">Part Number</label>
+                            <div class="slds-form-element__control">
+                                <input class="slds-input" type="text" id="Part_NumberforInventory" onclick="document.getElementById('Part_NumberSpanId1').innerHTML = '';"/>
+                                <span id="Part_NumberSpanId1" style="color:red;font-weight: bold;"></span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                        <div class="slds-form-element">
+                            <label class="slds-form-element__label">MSRP</label>
+                            <div class="slds-form-element__control">
+                                <input class="slds-input" type="decimal" id="MSRPforInventory" onclick="document.getElementById('InvMSRPSpanId1').innerHTML = '';"/>
+                                <span id="InvMSRPSpanId1" style="color:red;font-weight: bold;"></span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                        <div class="slds-form-element">
+                            <label class="slds-form-element__label">Description</label>
+                            <div class="slds-form-element__control">
+                                <input class="slds-input" type="text" id="DescforInventory" onclick="document.getElementById('Part_DescriptionSpanId1').innerHTML = '';"/>
+                                <span id="Part_DescriptionSpanId1" style="color:red;font-weight: bold;"></span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                   
+                    
+                    
+                </div>
+            </div>
+            
+            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-1 slds-col--padded">
+                <div class="slds-grid slds-wrap">
+                    <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                        <div class="slds-form-element">
+                            <label class="slds-form-element__label">Category</label>
+                            <div class="slds-form-element__control">
+                                <div class = "slds-select_container">
+                                    <apex:inputField value="{!objInventory.Category__c}" id="CategoryforInventory" styleClass="slds-input"/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                     <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                        <div class="slds-form-element">
+                            <label class="slds-form-element__label">Family</label>
+                            <div class="slds-form-element__control">
+                                <!-- <input class="slds-input" type="text" id="InventoryFamily"/> -->
+                                <div class = "slds-select_container">
+                                    <apex:inputField value="{!objInventory.Family__c}" id="InventoryFamily" styleClass="slds-input"/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                        <div class="slds-form-element">
+                            <label class="slds-form-element__label">Discount</label>
+                            <div class="slds-form-element__control">
+                                <input class="slds-input" type="decimal" id="DiscountforInventory" onclick="document.getElementById('InvDiscountSpanId1').innerHTML = '';"/>
+                                <span id="InvDiscountSpanId1" style="color:red;font-weight: bold;"></span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                        <div class="slds-form-element">
+                            <label class="slds-form-element__label">Map Price</label>
+                            <div class="slds-form-element__control">
+                                <input class="slds-input" type="decimal" id="MapPriceforInventory" onclick="document.getElementById('InvMapPriceSpanId1').innerHTML = '';"/>
+                                <span id="InvMapPriceSpanId1" style="color:red;font-weight: bold;"></span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                   
+                </div>
+            </div>
+            
+            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-1 slds-col--padded">
+                <div class="slds-grid slds-wrap">
+                    <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                        <div class="slds-form-element">
+                            <label class="slds-form-element__label">Size</label>
+                            <div class="slds-form-element__control">
+                                <input class="slds-input" type="text" id="SizeforInventory"/>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                        <div class="slds-form-element">
+                            <label class="slds-form-element__label">Color</label>
+                            <div class="slds-form-element__control">
+                                <input class="slds-input" type="text" id="InventoryColor"/> 
+                                
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                        <div class="slds-form-element">
+                            <label class="slds-form-element__label">Cost</label>
+                            <div class="slds-form-element__control">
+                                <input class="slds-input" type="decimal" id="CostforInventory" onclick="document.getElementById('Part_CostSpanId1').innerHTML = '';"/>
+                                <span id="Part_CostSpanId1" style="color:red;font-weight: bold;"></span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                        <div class="slds-form-element">
+                            <label class="slds-form-element__label">Minimum Amount</label>
+                            <div class="slds-form-element__control">
+                                <input class="slds-input" type="decimal" id="Minimum_Amount_Inventory" onclick="document.getElementById('InvMinAmountSpanId1').innerHTML = '';"/>
+                                <span id="InvMinAmountSpanId1" style="color:red;font-weight: bold;"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-1 slds-col--padded">
+                <div class="slds-grid slds-wrap">
+                
+                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                          <div class="slds-form-element">
+                              <label class="slds-form-element__label">Weight</label>
+                              <div class="slds-form-element__control">
+                                  <input class="slds-input" type="text" id="InvWeight" onclick="document.getElementById('Inventory_WeightSpan').innerHTML = '';"/>
+                                  <span id="Inventory_WeightSpan" style="color:red;font-weight: bold;"></span>
+                              </div>
+                              
+                          </div>
+                  </div>
+                    
+                     <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                        <div class="slds-form-element">
+                            <label class="slds-form-element__label">Quantity</label>
+                            <div class="slds-form-element__control">
+                                <input class="slds-input" type="text" id="InvQuantity" onclick="document.getElementById('InventoryQuantitySpanId').innerHTML = '';"/>
+                                <span id="InventoryQuantitySpanId" style="color:red;font-weight: bold;"></span>
+                            </div>
+                        </div>
+                    </div>
+                     <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                        <div class="slds-form-element">
+                            <label class="slds-form-element__label">Location</label>
+                            <div class="slds-form-element__control">
+                                <input class="slds-input" type="text" id="LocationforInventory"/>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                    		<div class="slds-form-element">
+                            <label class="slds-form-element__label">Bin</label>
+                            <div class="slds-form-element__control">
+                                <input class="slds-input" type="text" id="binInv"/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                    </div>
+                </div>
+            </div>
+            
+        </div>   
+    </div>
+    <script>
+    
+    
+        $(document).ready(function() {
+            $('#InvTable').DataTable( {
+              "pageLength": 25,
+              "lengthMenu": [[25, 50, -1], [25, 50, "All"]]
+            } );
+        });
+        function createInventory(obj) { 
+            var invDiscount;
+            var invQty;
+            var invCost;
+            var minAmountInventory;
+            var MSRPInventory;
+            var mapPriceInventory;
+            var objInventoryMap = new Object();
+            var partNumber = document.getElementById("Part_NumberforInventory").value;
+            var InvPartWeight;
+            var flag = 1;
+            if(document.getElementById("DiscountforInventory").value!=null && document.getElementById("DiscountforInventory").value!="") {
+                invDiscount = parseFloat(document.getElementById("DiscountforInventory").value);
+            }
+            else {
+                invDiscount = 0.00;
+            }
+            
+            if(document.getElementById("InvWeight").value!=null && document.getElementById("InvWeight").value!="") {
+                InvPartWeight = document.getElementById("InvWeight").value;
+            }
+            
+            
+            if(document.getElementById("MSRPforInventory").value!=null && document.getElementById("MSRPforInventory").value!="") {
+                MSRPInventory = parseFloat(document.getElementById("MSRPforInventory").value);
+            
+            }
+            else {
+                MSRPInventory=0.00;
+            }
+            if(document.getElementById("MapPriceforInventory").value!=null && document.getElementById("MapPriceforInventory").value!="") {
+                mapPriceInventory = parseFloat(document.getElementById("MapPriceforInventory").value);
+            }
+            else {
+                mapPriceInventory = 0.00;
+            }
+            
+            if(document.getElementById("CostforInventory").value!=null && document.getElementById("CostforInventory").value!="") {
+                invCost = parseFloat(document.getElementById("CostforInventory").value);
+            }
+            else {
+                invCost = 0.00;
+            }
+            
+            if(document.getElementById("Minimum_Amount_Inventory").value!=null && document.getElementById("Minimum_Amount_Inventory").value!="") {
+                minAmountInventory = parseFloat(document.getElementById("Minimum_Amount_Inventory").value)
+            }
+            else {
+                minAmountInventory = 0.00;
+            }
+            
+            
+            if(document.getElementById("InvQuantity").value != null && document.getElementById("InvQuantity").value != "") {
+                
+                invQty = document.getElementById("InvQuantity").value;
+            }
+            else {
+                invQty = 0;
+            }
+            //alert(vendor);
+            var vendor = document.getElementById("pge:frm:invntryConpCall:invntryComp:vendorNameForInventory").value;
+            var vendorId = document.getElementById("pge:frm:invntryConpCall:invntryComp:vendorNameForInventory_lkid").value;
+            if(vendor !=null && vendor!="") {
+                if(vendorId != null && vendorId != "" && vendorId != "000000000000000") {
+                    objInventoryMap["vendor"] = vendorId;
+                }
+                else {
+                    alert("Please select vendor again.");
+                }
+                if(document.getElementById("Part_NumberforInventory").value != null && document.getElementById("Part_NumberforInventory").value != "") {
+                    objInventoryMap["PartNumber"] = document.getElementById("Part_NumberforInventory").value;
+                }
+                else {
+                    document.getElementById("Part_NumberSpanId1").innerHTML = "You must enter Part Number.";
+                    flag = 0;
+                }
+                
+                if(InvPartWeight!=null && InvPartWeight!=""){
+                    objInventoryMap["InvPartWeight"] = InvPartWeight ;
+                }
+                
+                else{
+                    document.getElementById("Inventory_WeightSpan").innerHTML = "You must enter Weight of the Part.";
+                    flag = 0;
+                }
+            
+                
+                if(MSRPInventory!="") {
+                    if(/^\d*$/.test(MSRPInventory) || /^\d+\.\d{0,2}$/.test(MSRPInventory) || /^\.\d{0,2}$/.test(MSRPInventory)) {
+                        objInventoryMap["MSRP"] = MSRPInventory;
+                    }
+                    else {
+                        document.getElementById("InvMSRPSpanId1").innerHTML = "Invalid value for Currency (Enter in 0.00 Format)";
+                        flag = 0;
+                    }
+                }
+                if(mapPriceInventory!="") {
+                    if(/^\d*$/.test(mapPriceInventory) || /^\d+\.\d{0,2}$/.test(mapPriceInventory) || /^\.\d{0,2}$/.test(mapPriceInventory)) {
+                        objInventoryMap["MapPrice"] = mapPriceInventory;
+                    }
+                    else {
+                        document.getElementById("InvMapPriceSpanId1").innerHTML = "Invalid value for Currency (Enter in 0.00 Format)";
+                        flag = 0;
+                    }
+                }
+                
+                if(document.getElementById("DescforInventory").value != null && document.getElementById("DescforInventory").value != "") {
+                    objInventoryMap["Description"] = document.getElementById("DescforInventory").value;
+                }
+                else {
+                    document.getElementById("Part_DescriptionSpanId1").innerHTML = "You must enter a Description.";
+                    flag = 0;
+                }
+                
+                objInventoryMap["Category"] = document.getElementById("pge:frm:invntryConpCall:invntryComp:CategoryforInventory").value;
+                 
+                if(invDiscount!="") {
+                     if(/^\d*$/.test(invDiscount) || /^\d+\.\d{0,2}$/.test(invDiscount) || /^\.\d{0,2}$/.test(invDiscount)) {
+                     
+                        objInventoryMap["Discount"] = invDiscount;
+                    }
+                    else {
+                        document.getElementById("InvDiscountSpanId1").innerHTML = 'Invalid Decimal for Discount (%)';
+                        flag = 0;
+                    }
+                }
+                
+                
+                objInventoryMap["Family"] = document.getElementById("pge:frm:invntryConpCall:invntryComp:InventoryFamily").value;
+                objInventoryMap["Size"] = document.getElementById("SizeforInventory").value;
+                objInventoryMap["Color"] = document.getElementById("InventoryColor").value;
+                 if(invCost!= "") {
+                    if(/^\d*$/.test(invCost) || /^\d+\.\d{0,2}$/.test(invCost) || /^\.\d{0,2}$/.test(invCost)) {
+                        objInventoryMap["Cost"] = invCost;
+                        }
+                    else {
+                        document.getElementById("Part_CostSpanId1").innerHTML = "Invalid value for Currency (Enter in 0.00 Format)";
+                        flag = 0;
+                    }
+                }
+                else {
+                    document.getElementById("Part_CostSpanId1").innerHTML = "You must enter Cost.";
+                    flag = 0;
+                }
+                
+                
+                if(/^\d*$/.test(minAmountInventory) || /^\d+\.\d{0,2}$/.test(minAmountInventory) || /^\.\d{0,2}$/.test(minAmountInventory)) {
+                        objInventoryMap["MinAmount"] = minAmountInventory;
+                        }
+                    else {
+                        document.getElementById("InvMinAmountSpanId1").innerHTML = "Invalid value for Currency (Enter in 0.00 Format)";
+                        flag = 0;
+                    }
+                    
+                if(invQty != 0) {
+                //alert(invQty);
+                    if(/^\d*$/.test(invQty)) {
+                        objInventoryMap["Quantity"] = invQty;
+                    }
+                    else {
+                        document.getElementById("InventoryQuantitySpanId").innerHTML= "Invalid value for Quantity (Enter a valid number)";
+                        document.getElementById("InvQuantity").value = 0;
+                        flag = 0;
+                    }
+                }
+                else {
+                    document.getElementById("InventoryQuantitySpanId").innerHTML = "You must enter Quantity.";
+                    flag = 0;
+                }
+                    
+                
+                objInventoryMap["inventoryLocation"] = document.getElementById("LocationforInventory").value;
+                objInventoryMap["inventoryBin"] = document.getElementById("binInv").value;
+                //binInv
+                if(flag!=0) {
+                    BOATBUILDING.InventoryController.saveInventory(objInventoryMap,function(result, event) {
+                        if(event.status) {
+                            if(result != null){
+                               window.top.location = '/apex/ServicePage?subTabName=tab-default-5';
+                            }else{
+                                alert("We're sorry, the content you've requested is temporarily unavailable. Please try again.")
+                            }
+                        }
+                        
+                    }
+                    );
+                }
+                
+                    
+            }
+            else {
+                alert("Please fill Vendor");
+            }                     
+        }
+
+        function changeToInventoryForm(obj) {
+            document.getElementById("tableDivInventory").style.display = "none";
+            //document.getElementById("createInventoryDiv").style.display = "block";
+            document.getElementById("InventoryForm").style.display = "block";
+        }
+        
+        function changeToInventoryList(obj) {
+            document.getElementById("tableDivInventory").style.display = "block";
+            <!-- document.getElementById("createInventoryDiv").style.display = "none"; -->
+            document.getElementById("InventoryForm").style.display = "none";
+            document.getElementById("InvMinAmountSpanId1").innerHTML = "";
+            document.getElementById("InvQuantity").value = "";
+            document.getElementById("InvMapPriceSpanId1").innerHTML = "";
+            document.getElementById("InvMSRPSpanId1").innerHTML = "";
+            document.getElementById("InvDiscountSpanId1").innerHTML = "";
+            document.getElementById("InventoryQuantitySpanId").innerHTML ="";
+            document.getElementById("pge:frm:invntryConpCall:invntryComp:vendorNameForInventory").value = "";
+            document.getElementById("Part_NumberforInventory").value = "";
+            document.getElementById("Part_CostSpanId1").innerHTML = "";
+            document.getElementById("Part_NumberSpanId1").innerHTML ="";
+            document.getElementById("MSRPforInventory").value = "";
+            document.getElementById("DescforInventory").value = "";
+            document.getElementById("Part_DescriptionSpanId1").innerHTML ="";
+            document.getElementById("pge:frm:invntryConpCall:invntryComp:CategoryforInventory").value = "";
+            document.getElementById("MapPriceforInventory").value = "";
+            document.getElementById("DiscountforInventory").value = "";
+            document.getElementById("pge:frm:invntryConpCall:invntryComp:InventoryFamily").value = "";
+            document.getElementById("SizeforInventory").value = "";
+            document.getElementById("InventoryColor").value = "";
+            document.getElementById("CostforInventory").value = "";
+            document.getElementById("Part_CostSpanId1").innerHTML = "";
+            document.getElementById("Minimum_Amount_Inventory").value = "";
+            document.getElementById("LocationforInventory").value = "";
+            document.getElementById("Inventory_WeightSpan").innerHTML = "";
+              
+            
+        }
+        
+        $(document).ready(function() {
+        		getInvList();
+        	});
+        function getInvList() {
+        	BOATBUILDING.InventoryController.getInvList(function(result, event) {
+        			if(event.status) {
+        				if(result != null && result.length > 0) {
+        				console.log(result);
+        					var htmlTbl = '<table id="InvTable" class="show slds-table slds-table--bordered slds-no-row-hover slds-table--cell-buffer slds-m-top--x-large Table1 slds-card">';
+        				  	htmlTbl += '<thead> <tr class="slds-text-heading--label"> <th scope="col">Inventory</th> <th scope="col">Vendor</th> <th scope="col">Part Number</th> <th scope="col">Description</th> <th scope="col">Parts Available</th> <th scope="col">Parts On Order</th> <th scope="col">Category</th> <th scope="col">Price</th> </tr> </thead> <tbody>';
+        				  	for(var i = 0; i < result.length; i++) {
+        				  		var invId = '', invName = '', vendorName = '', prtNum = '', prtName = '', PrtsAvlbl = '0', prtsOnOrder = '0', ctgry = '', price = '0.00';
+        				  		invId = result[i].objInventory.Id;
+        				  		invName = result[i].objInventory.Name;
+        				  		if(result[i].objInventory.BOATBUILDING__Vendor__c !=undefined) {
+        				  			vendorName = result[i].objInventory.BOATBUILDING__Vendor__r.Name;
+        				  		}
+        				  		if(result[i].objInventory.BOATBUILDING__Part_Name__c !=undefined) {
+        				  			prtName = result[i].objInventory.BOATBUILDING__Part_Name__c;
+        				  		}
+        				  		if(result[i].objInventory.BOATBUILDING__Part_Number__c !=undefined) {
+        				  			prtNum = result[i].objInventory.BOATBUILDING__Part_Number__c;
+        				  		}
+        				  		if(result[i].objInventory.BOATBUILDING__Quantity__c !=undefined) {
+        				  			PrtsAvlbl = result[i].objInventory.BOATBUILDING__Quantity__c;
+        				  		}
+        				  		if(result[i].partsOnOrder !=undefined) { 
+        				  			prtsOnOrder = result[i].partsOnOrder;
+        				  		}
+        				  		if(result[i].objInventory.BOATBUILDING__Category__c !=undefined) {
+        				  			ctgry = result[i].objInventory.BOATBUILDING__Category__c;
+        				  		}
+        				  		if(result[i].objInventory.BOATBUILDING__Part_MSRP_Price__c !=undefined) {
+        				  			price = result[i].objInventory.BOATBUILDING__Part_MSRP_Price__c;
+        				  		}
+        				  		htmlTbl += '<tr class="slds-hint-parent"> <td> <a href="/'+invId+'"> '+invName+' </a> &nbsp; <a href="/'+invId+'" target="blank"><img src="https://image.flaticon.com/icons/png/512/376/376007.png" style="height: 10px; width: 10px;"/></a> </td> <td> '+vendorName+' </td> <td> '+prtNum+' </td> <td> '+prtName+' </td> <td> '+PrtsAvlbl+' </td> <td> '+prtsOnOrder+' </td> <td> '+ctgry+' </td> <td> '+price+' </td> </tr>';
+        				  	}
+        				  	htmlTbl += '</tbody> </table>';
+        				  	$("#InvListSpan").html(htmlTbl); 
+        				  	$('#InvTable').delay(1000).DataTable( {  
+			              "pageLength": 25,
+			              "lengthMenu": [[25, 50, -1], [25, 50, "All"]]
+			            } );
+        				}
+        			} 
+        		});
+        }
+    </script>
+</apex:component>

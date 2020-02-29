@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Category1__c</fullName>
+    <deprecated>false</deprecated>
+    <externalId>false</externalId>
+    <label>Category</label>
+    <required>false</required>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Engine Parts</fullName>
+                <default>false</default>
+                <label>Engine Parts</label>
+            </value>
+            <value>
+                <fullName>Boat Parts</fullName>
+                <default>false</default>
+                <label>Boat Parts</label>
+            </value>
+            <value>
+                <fullName>Boat Accessories</fullName>
+                <default>false</default>
+                <label>Boat Accessories</label>
+            </value>
+            <value>
+                <fullName>API Test</fullName>
+                <default>false</default>
+                <label>API Test</label>
+            </value>
+            <value>
+                <fullName>Wakesurf</fullName>
+                <default>false</default>
+                <label>Wakesurf</label>
+            </value>
+            <value>
+                <fullName>Wakeboards</fullName>
+                <default>false</default>
+                <label>Wakeboards</label>
+            </value>
+            <value>
+                <fullName>Snowboards</fullName>
+                <default>false</default>
+                <label>Snowboards</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

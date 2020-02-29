@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Stage__c</fullName>
+    <deprecated>false</deprecated>
+    <description>Contains the status of the product in Inventory.</description>
+    <externalId>false</externalId>
+    <label>Status</label>
+    <required>false</required>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Ordered</fullName>
+                <default>false</default>
+                <label>Ordered</label>
+            </value>
+            <value>
+                <fullName>Pre-production</fullName>
+                <default>false</default>
+                <label>Pre-production</label>
+            </value>
+            <value>
+                <fullName>Production</fullName>
+                <default>false</default>
+                <label>Production</label>
+            </value>
+            <value>
+                <fullName>Transit</fullName>
+                <default>false</default>
+                <label>Transit</label>
+            </value>
+            <value>
+                <fullName>Arrived</fullName>
+                <default>false</default>
+                <label>Arrived</label>
+            </value>
+            <value>
+                <fullName>Rigging</fullName>
+                <default>false</default>
+                <label>Rigging</label>
+            </value>
+            <value>
+                <fullName>Marketing Photos</fullName>
+                <default>false</default>
+                <label>Marketing Photos</label>
+            </value>
+            <value>
+                <fullName>In Stock</fullName>
+                <default>true</default>
+                <label>In Stock</label>
+            </value>
+            <value>
+                <fullName>Deposit</fullName>
+                <default>false</default>
+                <label>Deposit</label>
+            </value>
+            <value>
+                <fullName>Sold</fullName>
+                <default>false</default>
+                <label>Sold</label>
+            </value>
+            <value>
+                <fullName>Transit Factory</fullName>
+                <default>false</default>
+                <label>Transit Factory</label>
+            </value>
+            <value>
+                <fullName>Transit Raleigh</fullName>
+                <default>false</default>
+                <label>Transit Raleigh</label>
+            </value>
+            <value>
+                <fullName>Pre Sold</fullName>
+                <default>false</default>
+                <label>Pre Sold</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

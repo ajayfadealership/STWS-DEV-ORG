@@ -1,0 +1,25 @@
+<apex:page id="pge" standardController="Quote__c" extensions="PrintButtonPageController3" showHeader="false" sidebar="false" action="{!checkAccess}">
+  <style>
+      .popup{
+            position: fixed;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(0,0,0,0.5);
+            z-index: 999;
+        }
+  </style>
+  <div  class="popup">
+               <apex:image id="theImage2" value="{!$Resource.Process}" style="position: fixed;padding-top: 200px;padding-left: 600px;" width="100" height="100"/>
+               <label style="font-size:30px"><h1>Please Wait...</h1></label>
+   </div>
+   <apex:form id="frm"> 
+       <apex:actionFunction name="callDirectTo" action="{!directTo}"/>
+   </apex:form>
+   <script>
+       onload = function(){
+                       callDirectTo();
+                   }
+   </script>
+</apex:page>

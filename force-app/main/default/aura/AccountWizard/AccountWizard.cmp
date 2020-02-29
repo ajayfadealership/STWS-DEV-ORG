@@ -1,0 +1,89 @@
+<aura:component controller="AccountWizardController" implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction,lightning:isUrlAddressable" access="global" >
+    <aura:attribute name="selectedLookUpRecordAcc" type="sObject" default="{}"/>
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    <aura:attribute name="objAccount" type="Account" default="{'sobjectType': 'Account'}"/>
+    <aura:handler  event="c:AccountParentToChild" action="{!c.HandelAccountEvent}"/> 
+    <article class="slds-card">
+        <div class="slds-path"> 
+            <div class="slds-grid slds-path__track">
+                <div class="slds-grid slds-path__scroller-container">
+                    <div class="slds-path__scroller" role="application">
+                        <div class="slds-path__scroller_inner">
+                            <ul class="slds-path__nav" role="listbox" aria-orientation="horizontal">
+                                <li class="slds-path__item slds-is-current slds-is-active" id="1LI" role="presentation">
+                                    <a aria-selected="false" class="slds-path__link" href="javascript:void(0);" id="path-6" role="option" tabindex="-1">
+                                        <span class="slds-path__stage">
+                                            
+                                            <lightning:icon iconName="standard:avatar" size="small" class="checkClass"/>   
+                                            
+                                            <span class="slds-assistive-text">Account</span>
+                                        </span> 
+                                        <span class="slds-path__title">Account</span>
+                                    </a>
+                                </li>
+                                <li class="slds-path__item slds-is-incomplete" id="2LI" role="presentation">
+                                    <a aria-selected="false" class="slds-path__link" href="javascript:void(0);" id="path-7" role="option" tabindex="-1">
+                                        <span class="slds-path__stage">
+                                            <!--  <svg class="slds-icon slds-icon_x-small" aria-hidden="true">
+                                                <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/assets/icons/utility-sprite/svg/symbols.svg#check" />
+                                            </svg> -->
+                                            <lightning:icon iconName="utility:info" size="small" class="checkClass"/>
+                                            <span class="slds-assistive-text">Information</span>
+                                        </span>
+                                        <span class="slds-path__title">Information</span>
+                                    </a>
+                                </li>
+                                <li class="slds-path__item slds-is-incomplete" id="3LI" role="presentation">
+                                    <a aria-selected="false" class="slds-path__link" href="javascript:void(0);" id="path-8" role="option" tabindex="-1">
+                                        <span class="slds-path__stage">
+                                            <!-- <svg class="slds-icon slds-icon_x-small" aria-hidden="true">
+                                                <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/assets/icons/utility-sprite/svg/symbols.svg#check" />
+                                            </svg> -->
+                                            <lightning:icon iconName="standard:product" size="small" class="checkClass"/> 
+                                            <span class="slds-assistive-text">Desired Boat</span>
+                                        </span>
+                                        <span class="slds-path__title">Desired Boat</span>
+                                    </a>
+                                </li>
+                                <li class="slds-path__item slds-is-incomplete" id="4LI" role="presentation">
+                                    <a aria-selected="true" class="slds-path__link" href="javascript:void(0);" id="path-9" role="option" tabindex="0">
+                                        <span class="slds-path__stage">
+                                            <lightning:icon iconName="custom:custom16" size="small" class="checkClass"/> 
+                                            <span class="slds-assistive-text">Trade</span>
+                                        </span> 
+                                        <span class="slds-path__title">Trade</span>
+                                    </a>
+                                </li>
+                                <li class="slds-path__item slds-is-incomplete" id="5LI" role="presentation">
+                                    <a aria-selected="false" class="slds-path__link" href="javascript:void(0);" id="path-10" role="option" tabindex="-1">
+                                        <span class="slds-path__stage">
+                                            <lightning:icon iconName="standard:account" size="small" class="checkClass"/> 
+                                            <span class="slds-assistive-text">Closing Potential</span>
+                                        </span>
+                                        <span class="slds-path__title">Closing Potential</span>
+                                    </a>
+                                </li>
+                            </ul>
+                            <div id="tab-default-1" class="slds-tabs_default__content slds-show" role="tabpanel" aria-labelledby="tab-default-1__item">
+                                <c:AccountAW selectedLookUpRecord="{!v.selectedLookUpRecordAcc}"/>
+                            </div>
+                            <div id="tab-default-2" class="slds-tabs_default__content slds-hide" role="tabpanel" aria-labelledby="tab-default-2__item">
+                                <c:AccountInformation/>
+                            </div> 
+                            <div id="tab-default-3" class="slds-tabs_default__content slds-hide" role="tabpanel" aria-labelledby="tab-default-3__item">
+                                <c:AccountDesiredBoat/>
+                            </div>
+                            <div id="tab-default-4" class="slds-tabs_default__content slds-hide" role="tabpanel" aria-labelledby="tab-default-4__item">
+                                <c:AccountTrade/>
+                            </div>
+                            <div id="tab-default-5" style="padding: 2%;" class="slds-tabs_default__content slds-hide" role="tabpanel" aria-labelledby="tab-default-5__item">
+                                <c:AccountClosingPotential/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+    </article>
+</aura:component>

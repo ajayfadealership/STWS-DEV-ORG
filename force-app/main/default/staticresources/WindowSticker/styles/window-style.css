@@ -1,0 +1,255 @@
+/* Layout */
+@page {
+    size: 215.9mm 279.4mm;
+    margin: 0mm;
+}
+
+html,
+body {
+  height: 100%;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  left: 0;
+  top: 0;
+  font-size: 100%;
+}
+
+/* ROOT FONT STYLES */
+
+* {
+  font-family: Helvetica, sans-serif;
+}
+
+#page1 {
+    width: 215.9mm;
+    height: 279.4mm;
+    position: relative;
+}
+#header {
+    position: absolute;
+    left: 0px;
+    top: 0px;
+    z-index: -1;
+}
+#footer {
+    position: absolute;
+    left: 0px;
+    bottom: 1px;
+    z-index: -1;
+}
+.stretch {
+    width: 100%;
+}
+.container {
+    height: 526px;
+}
+
+/* Formatting */
+.bg-black {
+    background: black;
+}
+
+.bg-white {
+    background: white;
+}
+
+p {
+    margin: 1px;
+}
+.left {
+    text-align: left;
+}
+.right {
+    text-align: right;
+}
+.center {
+    text-align: center;
+    margin-left: auto;
+    margin-right: auto;
+}
+.justify {
+    text-align: justify;
+}
+
+.italic {
+    font-style: italic;
+}
+
+.row {
+    position: relative;
+    overflow:auto;
+    width: 100%;
+}
+.row [class^="col"] {
+    float: left;
+    min-height: 0.125em;
+}
+
+.col-1 {
+    width: 8.33%;
+}
+.col-2 {
+    width: 16.66%;
+}
+.col-3 {
+    width: 25%;
+}
+.col-4 {
+    width: 33.33%;
+}
+.col-5 {
+    width: 41.66%;
+}
+.col-6 {
+    width: 50%;
+}
+.col-7 {
+    width: 58.33%;
+}
+.col-8 {
+    width: 66.66%;
+}
+.col-9 {
+    width: 75%;
+}
+.col-10 {
+    width: 83.33%;
+}
+.col-11 {
+    width: 91.66%;
+}
+.col-12 {
+    width: 100%;
+}
+
+.title {
+    text-transform: uppercase;
+    font-size: 23px;
+    font-weight: 700;
+    margin: 0px;
+}
+
+/* Block Styling */
+
+.header-image {
+    background-position: left;
+    background-repeat: no-repeat;
+    background-size: cover;
+    height: 265px;
+    width: 100%;
+}
+
+.header-logo {
+    margin: 8% 2%;
+}
+
+#header-block.bg-black .header-logo h1 {
+    color: white;
+}
+
+#header-block.bg-white .header-logo h1 {
+    color: black;
+}
+
+.footer-logo {
+    margin: 8% 2%;
+}
+
+#footer-block.bg-black .footer-logo h3 {
+    color: white;
+}
+
+#footer-block.bg-white .footer-logo h3 {
+    color: black;
+}
+/*---*/
+
+#msrp-block .msrp {
+    height: 71px;
+    background: #29abe2;
+    color: white;
+}
+
+#msrp-block .msrp span{
+    font-size: 25px;
+    margin: 20px 15px;
+    font-weight: 700;
+    display: block; 
+}
+
+#msrp-block .price span{
+    font-size: 40px;
+    margin: 13px 15px;
+    font-weight: 700;
+    color: black;
+    display: block; 
+}
+
+/*---*/
+#why-buy-spec-block {
+    background: gray;
+    height: 324px;
+}
+#why-buy-block ul {
+    line-height: 140%;
+    color: white;
+    font-weight: bold;
+    font-size: 18px;
+}
+
+#spec-block ul {
+    line-height: 140%;
+    color: white;
+    margin: 13px 15px;
+    font-size: 18px;
+}
+
+.desc-header {
+    height: 38px;
+    color: white;
+    margin: 13px 15px;
+    display: block;
+}
+
+.desc-header span {
+    font-size: 20px;
+    background: #29abe2;
+    color: white;
+    padding: 8px 15px;
+    font-weight: bold;
+    display: block;
+}
+
+/*---*/
+
+#price-payment-block {
+    height: 71px;
+    background: #29abe2;
+    color: white;
+}
+
+#price-payment-block>div>span {
+    font-size: 25px;
+    margin: 13px 15px;
+    font-weight: 700;
+    display: block;
+}
+#price-payment-block>div>span>span {
+    font-size: 40px;
+    color: black;
+}
+
+/*---*/
+#dealer-disc-down-int-term-block {
+    height: 60px;
+    background: #29abe2;
+    color: white;
+}
+
+#dealer-disc-down-int-term-block>div>span {
+    font-size: 15px;
+    margin: 13px 5px;
+    display: block;
+    font-weight: bold;
+}

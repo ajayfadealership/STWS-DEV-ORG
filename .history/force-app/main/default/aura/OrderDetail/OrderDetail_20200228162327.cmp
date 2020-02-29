@@ -1,0 +1,50 @@
+<aura:component controller="OrderDetailController" implements="flexipage:availableForRecordHome,flexipage:availableForAllPageTypes,lightning:actionOverride,force:hasRecordId" access="global">
+    <aura:attribute name="showPO" type="Boolean" default="false" access="global"/>
+    <aura:attribute name="showO" type="Boolean" default="false" access="global"/>
+    <aura:attribute name="recordId" type="String" default="" access="global" />
+    <aura:attribute name="recordTypeName" type="String" default="" access="global" />
+    <aura:attribute name="recordTypeId" type="String" default="" access="global" />
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    <div class="slds-grid slds-wrap">
+    <aura:if isTrue="{!v.showPO}"> 
+        <!--<c:PurchaseOrderEdit objRecId="{!v.recordId}"/>-->
+        <c:PurchaseOrderEditForm objRecId="{!v.recordId}"/>
+    </aura:if>   
+    <aura:if isTrue="{!v.showO}"> 
+        <c:OrderEdit attrRecordId="{!v.recordId}"/> 
+    </aura:if>
+    <aura:if isTrue="{!empty(v.recordId)}">
+       
+        <lightning:select name="name" label="Select Record Type" value="{!v.recordTypeName}" required="true" onchange="{!c.recordTypeSelected}">
+            <option value="" >--Select--</option>
+            <option value="Part Request" >Part Request</option>
+            <option value="Purchase Order">Purchase Order</option>
+            <option value="Service Repair Orders">Service Repair Orders</option>
+            <option value="Company Purchase Requests">Company Purchase Requests</option>
+            <option value="Order For Boats">Order For Boats</option>
+        </lightning:select>
+            <aura:if isTrue="{!or(v.recordTypeName == 'Part Request',v.recordTypeName == 'Purchase Order')}">
+               <aura:if isTrue="{!v.recordTypeName == 'Part Request'}">
+                    <c:PartRequestLightningComp />
+                    <aura:set attribute="else">
+                        <c:PurchaseOrderEditForm objRecId="{!v.recordId}"/>   
+                    </aura:set>
+                </aura:if> 
+                <aura:set attribute="else">
+                    {!v.recordTypeId}
+                    <aura:if isTrue="{!!empty(v.recordTypeId)}">
+                        <lightning:recordForm
+                            objectApiName="BOATBUILDING__Order__c"
+                            recordTypeId="{!v.recordTypeId}"
+                            layoutType="Full"
+                            mode="edit"
+                            onsuccess="{!c.handleSuccess}"
+                            columns="3" density="comfy" />
+                    </aura:if>
+                </aura:set>
+            </aura:if>
+        
+        </aura:if>
+    </div>
+    
+</aura:component>

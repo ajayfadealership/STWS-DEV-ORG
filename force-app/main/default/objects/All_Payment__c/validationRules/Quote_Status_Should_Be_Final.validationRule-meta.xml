@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Quote_Status_Should_Be_Final</fullName>
+    <active>true</active>
+    <errorConditionFormula>NOT(ISPICKVAL(Quote__r.Status__c, &#39;Final&#39;) || ISPICKVAL(Quote__r.Status__c, &#39;Deposited&#39;))</errorConditionFormula>
+    <errorMessage>Related quote is not final.</errorMessage>
+</ValidationRule>

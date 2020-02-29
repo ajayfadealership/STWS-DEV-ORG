@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Above_Costline__c</fullName>
+    <deprecated>false</deprecated>
+    <description>Commission percentage if BOATBUILDING__Costline_Sell_Price__c &lt; BOATBUILDING__Booked_Sale_Price__c</description>
+    <externalId>false</externalId>
+    <label>Above Costline %</label>
+    <precision>18</precision>
+    <required>false</required>
+    <scale>2</scale>
+    <trackTrending>false</trackTrending>
+    <type>Number</type>
+    <unique>false</unique>
+</CustomField>

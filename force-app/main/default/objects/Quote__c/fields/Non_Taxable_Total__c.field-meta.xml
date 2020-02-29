@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Non_Taxable_Total__c</fullName>
+    <deprecated>false</deprecated>
+    <externalId>false</externalId>
+    <label>Non Taxable Total</label>
+    <summarizedField>Quote_Line_Item__c.Total_Price__c</summarizedField>
+    <summaryFilterItems>
+        <field>Quote_Line_Item__c.Non_Taxable__c</field>
+        <operation>equals</operation>
+        <value>True</value>
+    </summaryFilterItems>
+    <summaryForeignKey>Quote_Line_Item__c.Quote__c</summaryForeignKey>
+    <summaryOperation>sum</summaryOperation>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Summary</type>
+</CustomField>

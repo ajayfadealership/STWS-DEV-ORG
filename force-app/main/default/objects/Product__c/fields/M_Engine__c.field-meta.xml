@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>M_Engine__c</fullName>
+    <deprecated>false</deprecated>
+    <description>Engine options are provided for the Supra and Moomba price lists here.</description>
+    <externalId>false</externalId>
+    <label>Engine</label>
+    <required>false</required>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <controllingField>MModel2__c</controllingField>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Ford Raptor 440 6.2L Engine by Indmar</fullName>
+                <default>false</default>
+                <label>Ford Raptor 440 6.2L Engine by Indmar</label>
+            </value>
+            <value>
+                <fullName>Ford Raptor 575 6.2L Engine by Indmar (SA, SC and SG only)</fullName>
+                <default>false</default>
+                <label>Ford Raptor 575 6.2L Engine by Indmar (SA, SC and SG only)</label>
+            </value>
+            <value>
+                <fullName>Ford Raptor 575 6.2L Engine by Indmar (SE only)</fullName>
+                <default>false</default>
+                <label>Ford Raptor 575 6.2L Engine by Indmar (SE only)</label>
+            </value>
+            <value>
+                <fullName>Ford Raptor 400 6.2L Engine by Indmar</fullName>
+                <default>false</default>
+                <label>Ford Raptor 400 6.2L Engine by Indmar</label>
+            </value>
+        </valueSetDefinition>
+        <valueSettings>
+            <controllingFieldValue>Mondo(MD)</controllingFieldValue>
+            <controllingFieldValue>Craz(MG)</controllingFieldValue>
+            <controllingFieldValue>Mojo(ME)</controllingFieldValue>
+            <controllingFieldValue>SC</controllingFieldValue>
+            <controllingFieldValue>SA</controllingFieldValue>
+            <controllingFieldValue>SG</controllingFieldValue>
+            <controllingFieldValue>SE</controllingFieldValue>
+            <valueName>Ford Raptor 440 6.2L Engine by Indmar</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Mondo(MD)</controllingFieldValue>
+            <controllingFieldValue>Craz(MG)</controllingFieldValue>
+            <controllingFieldValue>Mojo(ME)</controllingFieldValue>
+            <controllingFieldValue>SC</controllingFieldValue>
+            <controllingFieldValue>SA</controllingFieldValue>
+            <controllingFieldValue>SG</controllingFieldValue>
+            <valueName>Ford Raptor 400 6.2L Engine by Indmar</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>SC</controllingFieldValue>
+            <controllingFieldValue>SA</controllingFieldValue>
+            <controllingFieldValue>SG</controllingFieldValue>
+            <valueName>Ford Raptor 575 6.2L Engine by Indmar (SA, SC and SG only)</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>SE</controllingFieldValue>
+            <valueName>Ford Raptor 575 6.2L Engine by Indmar (SE only)</valueName>
+        </valueSettings>
+    </valueSet>
+</CustomField>

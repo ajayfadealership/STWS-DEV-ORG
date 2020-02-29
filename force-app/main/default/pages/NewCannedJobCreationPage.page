@@ -1,0 +1,660 @@
+<apex:page controller="NewCannedJobCreationController" id="pge" sidebar="false" showHeader="false" standardStylesheets="false" docType="html-5.0" action="{!checkAccess}">
+    <html> 
+        <apex:stylesheet value="{!URLFOR($Resource.BoatBuilderSR, 'assets/styles/salesforce-lightning-design-system.min.css')}" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"/>
+        <apex:includeScript value="{!URLFOR($Resource.Signature, 'jquery.min.js')}"/>
+        <title>
+            New Canned Job
+        </title>
+        <style>
+            .lookupInput { 
+               display: flex
+            } 
+               
+            .lookupInput .slds-input {
+               margin: 0
+            }
+               
+            .lookupInput a.slds-input {
+               width: 28px;
+               margin: 0;
+               display: inline-block;
+               background: url('/resource/BOATBUILDING__BoatBuilderSR/assets/icons/utility/search_60.png');
+               background-size: contain;
+               background-repeat: no-repeat;
+               border: none;
+               margin-left: 5px;
+            }
+            
+            
+            /* Full-width input fields */
+
+
+            /* Set a style for all buttons */
+            button {
+                background-color: #4CAF50;
+                color: white;
+                padding: 14px 20px;
+                margin: 8px 0;
+                border: none;
+                cursor: pointer;
+                width: 100%;
+            }
+            
+            /* Extra styles for the cancel button */
+            .cancelbtn {
+                width: auto;
+                padding: 10px 18px;
+                background-color: #f44336;
+            }
+            
+            /* Center the image and position the close button */
+            .imgcontainer {
+                text-align: center;
+                margin: 24px 0 12px 0;
+                position: relative;
+            }
+            
+            img.avatar {
+                width: 40%;
+                border-radius: 50%;
+            }
+            
+            .container {
+                padding: 16px;
+            }
+            
+            span.psw {
+                float: right;
+                padding-top: 16px;
+            }
+            
+            /* The Modal (background) */
+            .modal {
+                display: none; /* Hidden by default */
+                position: fixed; /* Stay in place */
+                z-index: 1; /* Sit on top */
+                left: 0;
+                top: 0;
+                width: 100%; /* Full width */
+                height: 100%; /* Full height */
+                overflow: auto; /* Enable scroll if needed */
+                background-color: rgb(0,0,0); /* Fallback color */
+                background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+                padding-top: 60px;
+            }
+            
+            /* Modal Content/Box */
+            .modal-content {
+                background-color: #fefefe;
+                margin: 1% auto 15% auto; /* 5% from the top, 15% from the bottom and centered */
+                border: 10px solid #888;
+            }
+            
+            /* The Close Button (x) */
+            .close {
+                position: absolute;
+                right: 25px;
+                top: 0;
+                color: #000;
+                font-size: 35px;
+                font-weight: bold;
+            }
+            
+            .close:hover,
+            .close:focus {
+                color: red;
+                cursor: pointer;
+            }
+            
+            /* Add Zoom Animation */
+            .animate {
+                -webkit-animation: animatezoom 0.6s;
+                animation: animatezoom 0.6s
+            }
+            
+            @-webkit-keyframes animatezoom {
+                from {-webkit-transform: scale(0)} 
+                to {-webkit-transform: scale(1)}
+            }
+                
+            @keyframes animatezoom {
+                from {transform: scale(0)} 
+                to {transform: scale(1)}
+            }
+            
+            /* Change styles for span and cancel button on extra small screens */
+            @media screen and (max-width: 300px) {
+                span.psw {
+                   display: block;
+                   float: none;
+                }
+                .cancelbtn {
+                   width: 100%;
+                }
+            }
+            
+            
+            .spinnerClass {
+                position: fixed;
+                top: 0;
+                bottom: 0;
+                left: 0;
+                right: 0;
+                background: rgba(0,0,0,0.5);
+                z-index: 999;
+            }
+            .isa_error {
+                color: #D8000C;
+                background-color: #FFBABA;
+                margin: 10px 0px;
+                padding: 12px;
+            }
+        </style>
+        <body>
+            
+            <apex:form id="frm">
+                <a class="slds-button slds-button--brand" onclick="window.top.location = '/';" style="position: absolute; left: 1.5%; top: 1.5%;">Home</a>
+                <div class="slds-grid slds-wrap slds-col--padded " style="margin-top: 2%; border-top: solid 1px #ccc!important;">
+                    <div class="slds-col--padded slds-col slds-size--1-of-1 Customer-Heading">
+                        <h2 class=" heading"><br/>
+                            <span class="slds-text-heading--small"><b>New Canned Job</b></span>
+                        </h2>
+                    </div>
+                </div>
+                <div class="isa_error" id="errorDiv" style="display: none;">
+                   <i class="fa fa-times-circle"></i>
+                   <span id="errSnap"></span> 
+                </div>
+                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-1 slds-col--padded" style="padding: 1%; margin-top: 2%; border-bottom: solid 1px #ccc!important;">
+                    <div class="slds-grid slds-wrap">
+                        <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-1 slds-col--padded">
+                            <div class = "slds-grid slds-wrap">
+                                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                                    <div class="slds-form-element">
+                                    <label class="slds-form-element__label">Canned Job Name<span style="color: red;">*</span></label>
+                                        <div class="slds-form-element__control">
+                                            <apex:inputField value="{!objCannedJob.Job_Name__c}" styleClass="slds-input" id="ifJN"/>
+                                        </div>
+                                    </div> 
+                                 </div>
+                                
+                                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                                    <div class="slds-form-element">
+                                    <label class="slds-form-element__label">Work Requested<span style="color: red;">*</span></label>
+                                        <div class="slds-form-element__control">
+                                            <apex:inputField value="{!objCannedJob.Work_Requested__c}" styleClass="slds-input" id="ifWOWr"/>
+                                        </div>
+                                    </div> 
+                                 </div>
+                                
+                                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                                    <div class="slds-form-element">
+                                    <label class="slds-form-element__label">Work Type<span style="color: red;">*</span></label>
+                                        <div class="slds-form-element__control">
+<!--                                            <apex:inputField value="{!objCannedJob.Work_Type__c}" styleClass="slds-input" id="ifWOWT"/> -->
+                                            <apex:selectList size="1" value="{!strSelectedWorkType}" id="ifWOWT" styleClass="slds-select">
+                                                <apex:selectOptions value="{!lstWorkType}" id="SOwowt"/>
+                                            </apex:selectList>
+                                        </div>
+                                    </div> 
+                                 </div>
+                                
+                                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                                    <div class="slds-form-element">
+                                    <label class="slds-form-element__label">Type<span style="color: red;">*</span></label>
+                                        <div class="slds-form-element__control">
+                                            <apex:inputField value="{!objCannedJob.Type__c}" styleClass="slds-input" id="ifJNT"/>
+                                        </div>
+                                    </div>     
+                                 </div>
+                                
+                            </div>
+                             
+                            
+                            <div class="slds-grid slds-wrap">
+                                 <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                                    <div class="slds-form-element">
+                                    <label class="slds-form-element__label">Number Of Labor Hours<span style="color: red;">*</span></label>
+                                        <div class="slds-form-element__control">
+                                            <apex:inputField value="{!objCannedJob.No_of_Labors__c}" onkeyPress="return isNumberKey(event);" styleClass="slds-input" id="ifJTNL"/>
+                                        </div>
+                                    </div> 
+                                 </div> 
+                                
+                                                                
+                                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                                    <div class="slds-form-element">
+                                    <label class="slds-form-element__label">Misc Charge 1</label>
+                                        <div class="slds-form-element__control">
+                                            <apex:inputField value="{!objCannedJob.Misc_Charge__c}" onkeyPress="return isNumberKey(event);" styleClass="slds-input" id="ifJTMC"/>
+                                        </div>
+                                    </div> 
+                                 </div>
+                                
+                                 
+                                 <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                                    <div class="slds-form-element">
+                                    <label class="slds-form-element__label">Misc Charge 2</label>
+                                        <div class="slds-form-element__control">
+                                            <apex:inputField value="{!objCannedJob.Misc_Charge_2__c}" onkeyPress="return isNumberKey(event);" styleClass="slds-input" id="ifJTMC2"/>
+                                        </div>
+                                    </div>
+                                 </div>
+                                 <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                                    <div class="slds-form-element">
+                                    <label class="slds-form-element__label">Misc Charge 3</label>
+                                        <div class="slds-form-element__control">
+                                            <apex:inputField value="{!objCannedJob.Misc_Charge_3__c}" onkeyPress="return isNumberKey(event);" styleClass="slds-input" id="ifJTMC3"/>
+                                        </div>
+                                    </div> 
+                                 </div> 
+                             </div>
+                             
+                             <div class="slds-grid slds-wrap">
+                             	<div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                                    <div class="slds-form-element">
+                                    <label class="slds-form-element__label">Misc Description 1</label>
+                                        <div class="slds-form-element__control">
+                                            <apex:inputField value="{!objCannedJob.Misc_Description_1__c}"  styleClass="slds-input" id="ifJTMCD1"/>
+                                        </div>
+                                    </div> 
+                                 </div>
+                                 <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                                    <div class="slds-form-element">
+                                    <label class="slds-form-element__label">Misc Description 2</label>
+                                        <div class="slds-form-element__control">
+                                            <apex:inputField value="{!objCannedJob.Misc_Description_2__c}"  styleClass="slds-input" id="ifJTMCD2"/>
+                                        </div>
+                                    </div>  
+                                 </div>
+                                 <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                                    <div class="slds-form-element">
+                                    <label class="slds-form-element__label">Misc Description 3</label>
+                                        <div class="slds-form-element__control">
+                                            <apex:inputField value="{!objCannedJob.Misc_Description_3__c}"  styleClass="slds-input" id="ifJTMCD3"/>
+                                        </div>
+                                    </div> 
+                                 </div>
+                                 <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                                    <div class="slds-form-element">
+                                    <label class="slds-form-element__label">Taxable</label>
+                                        <div class="slds-form-element__control">
+                                            
+                                            <label class="slds-checkbox">
+	                                          <apex:inputField value="{!objCannedJob.Taxable__c}"  styleClass="slds-input" id="ifJT"/>
+	                                          <span class="slds-checkbox--faux"></span>
+	                                          <span class="slds-form-element__label">&nbsp;</span>
+	                                        </label>
+                                        </div> 
+                                    </div>
+                                 </div> 
+                             </div>
+                             
+                            <hr/>
+                            <a class="slds-button slds-button--brand" onclick="document.getElementById('id01').style.display='block'">Add Parts</a>
+                            <span style="color: #005fb2; position: absolute; margin-top: 0.9%; margin-left: 2px;">[Optional]</span> 
+                            <div id="finalListDiv">
+                                <hr/>
+                                <div id="lstDiv">
+                                
+                                </div>
+                            </div>
+                         </div>
+                         <a class="slds-button slds-button--brand" id="createJobBtn">Save</a>
+                         <a class="slds-button slds-button--brand" id="createJobBtnNew">Save And New</a>
+                    </div>
+                </div>
+                <div class="spinnerClass" id="spinner" style="display: none;">
+                    <i  class="fa fa-spinner fa-spin fa-3x fa-fw margin-bottom fa-5x" style="margin-left: 45%; margin-top: 23%;" aria-hidden="true"></i>
+                </div>
+            </apex:form>
+                <div id="id01" class="modal" >
+                    <div class="modal-content animate" style="height: 90%; width: 80%;overflow: auto;">
+                        <a style="position: absolute;left: 86.8%;" id="closeSign"><i class="fa fa-times fa-lg __web-inspector-hide-shortcut__" aria-hidden="true"></i></a>
+                       <section style="padding: 2%;">
+                        <b>Add Part</b><hr/>
+                        <label><b>Part Number/Part Name: </b></label>
+                        &nbsp;<input type="text" style="width: 20%;" id="prtDetailInput" class="slds-input"/>
+                        <button style="width: auto;" class="slds-button slds-button--neutral slds-button--brand inside_row_button " id="prtSrchBtn" type="button" >Search</button>
+                        <div class="spinnerClass" id="spinner" style="display: none;">
+                            <i  class="fa fa-spinner fa-spin fa-3x fa-fw margin-bottom fa-5x" style="margin-left: 45%; margin-top: 23%;" aria-hidden="true"></i>
+                        </div>
+                        <div id="selectedPrntDiv" style="display: none;">
+                            <hr/>
+                            <label><b>Selected Parts: </b></label>
+                            <div id="selectedPrtDiv">
+                                
+                            </div>
+                            <div>
+                                <a style="width: auto;position: relative;left: 91.5%;" class="slds-button slds-button--neutral slds-button--brand inside_row_button" id="addToCrt" type="button" >Add To Job</a>
+                            </div>
+                        </div>
+                        <div id="partResultDiv" style="display: none;">
+                            <hr/>
+                            <div id="rsltLstDiv">
+                            
+                            </div>
+                        </div>
+                       </section>
+                            
+                    </div>
+            </div>
+            <script>
+                var modal = document.getElementById('id01');
+                window.onclick = function(event) {
+                   if (event.target == modal) {
+                        hideAll();
+                    }
+                }
+                $("#closeSign").click(function() {
+                    hideAll();
+                });
+                
+                var lstSelectedPartNumber = [];
+                var lstParts = [];
+                var mapForQuantity = new Object();
+                var mapForQuantityTmp = new Object();
+                function hideAll() {
+                    $('#id01').fadeOut();
+                    $("#selectedPrntDiv").hide();
+                    $("#partResultDiv").hide();
+                    document.getElementById("prtDetailInput").value = "";
+                    lstSelectedPartNumber = [];
+                    mapForQuantity = new Object();
+                }
+                $("#prtSrchBtn").click(function() {
+                    $("#spinner").show();
+                    var prtDetail = $("#prtDetailInput").val();
+                    if(prtDetail != "") {
+                        BOATBUILDING.NewCannedJobCreationController.searchParts(prtDetail, function(result, event) {
+                            if(event.status) {
+                                if(result != null) {
+                                    lstParts = result;
+                                    $("#partResultDiv").fadeIn();
+                                    var tableHTML = "<table class='slds-table' style='border-collapse: collapse;'><thead><tr><th>&nbsp;</th><th>Part Number</th><th>Part Name</th><th>Quanity</th><th>Retail Price</th><th>Total Amount</th></tr></thead><tbody>";
+                                    if(lstParts.length > 0) {
+                                        for(var i = 0; i < lstParts.length; i++) {
+                                            var total = parseFloat(lstParts[i].Quantity) * parseFloat(lstParts[i].MSRP);
+                                            if (lstParts[i].PartNumber in mapForQuantity ) {
+                                                tableHTML +="<tr><td><input id='select"+i+"' checked='checked' onchange='addToCart(\""+i+"\");' type='checkbox' /></td><td id='partNumber"+i+"'>"+lstParts[i].PartNumber+"</td><td>"+lstParts[i].PartName+"</td><td><input type='text' id='partQuantity"+i+"' value='"+mapForQuantity[lstParts[i].PartNumber]+"' onkeyPress='return isNumber(event);' onKeyUp='quantityChange(\""+i+"\");' class='slds-input'/></td><td>$<span id='partMSRP"+i+"'>"+lstParts[i].MSRP+"</span></td><td>$<span id='partTotal"+i+"'>"+total+"</span></td></tr>"
+                                            }
+                                            else {
+                                                tableHTML +="<tr><td><input id='select"+i+"' onchange='addToCart(\""+i+"\");' type='checkbox' /></td><td id='partNumber"+i+"'>"+lstParts[i].PartNumber+"</td><td>"+lstParts[i].PartName+"</td><td><input type='text' id='partQuantity"+i+"' value='"+lstParts[i].Quantity+"' onkeyPress='return isNumber(event);' onKeyUp='quantityChange(\""+i+"\");' class='slds-input'/></td><td>$<span id='partMSRP"+i+"'>"+lstParts[i].MSRP+"</span></td><td>$<span id='partTotal"+i+"'>"+total+"</span></td></tr>"
+                                            }
+                                        }
+                                        tableHTML += "</tbody></table>";
+                                    }
+                                    document.getElementById("rsltLstDiv").innerHTML = tableHTML;
+                                    $("#spinner").hide();
+                                }else {
+                                    $("#partResultDiv").fadeIn();
+                                    document.getElementById("rsltLstDiv").innerHTML = "<span style='color: red;'>No Record Found.</span>";
+                                    $("#spinner").hide();
+                                }
+                            }
+                        });
+                    }
+                    else {
+                        $("#partResultDiv").fadeIn();
+                        document.getElementById("rsltLstDiv").innerHTML = "<span style='color: red;'>Please enter Part Number/Part Name.</span>";
+                        $("#spinner").hide();
+                    }
+                });
+                
+                function isNumber(evt) {
+                    evt = (evt) ? evt : window.event;
+                    var charCode = (evt.which) ? evt.which : evt.keyCode;
+                    if (charCode > 31 && (charCode < 48 || charCode > 57)) {
+                        return false;
+                    }
+                    return true;
+                }
+                
+                function isNumberKey(evt) {
+                  var charCode = (evt.which) ? evt.which : evt.keyCode;
+                  if (charCode != 46 && charCode > 31 
+                    && (charCode < 48 || charCode > 57)){
+                     return false;
+                  }
+                  return true;
+                }
+                
+                function addToCart(index) {
+                    var partNumber = document.getElementById("partNumber"+index).innerHTML;
+                    var partQuantity = $("#partQuantity"+index).val();
+                    var partMSRP = document.getElementById("partMSRP"+index).innerHTML;
+                    
+                    if(document.getElementById("select"+index).checked == true) {
+                        if(partQuantity != '') {
+                            if(parseFloat(partQuantity) > 0) {
+                                mapForQuantity[partNumber] = partQuantity;
+                                lstSelectedPartNumber.push(partNumber);
+                                if(lstSelectedPartNumber.length > 0) {
+                                    var strParts = '['
+                                    for(var i = 0; i < lstSelectedPartNumber.length; i++) {
+                                        if(i == 0) {
+                                            strParts += "<a style='font-style: italic;'>"+lstSelectedPartNumber[i]+"</a>";
+                                        }
+                                        else {
+                                            strParts += ", <a style='font-style: italic;'>"+lstSelectedPartNumber[i]+"</a>";
+                                        }
+                                    }
+                                    strParts += "]";
+                                    $("#selectedPrntDiv").fadeIn();
+                                    document.getElementById("selectedPrtDiv").innerHTML = strParts; 
+                                        
+                                }
+                            }
+                            else {
+                                document.getElementById("select"+index).checked = false;
+                                alert("Quantity should be greater than 0.");
+                            }
+                        }else {
+                            document.getElementById("select"+index).checked = false;
+                            alert("Quantity should be greater than 0.");
+                        }
+                    }
+                    else {
+                        if(lstSelectedPartNumber.length > 0) {
+                            var index = lstSelectedPartNumber.indexOf(partNumber);
+                            if(index > -1) {
+                                lstSelectedPartNumber.splice(index, 1);
+                            }
+                            if(lstSelectedPartNumber.length > 0) {
+                                var strParts = '['
+                                for(var i = 0; i < lstSelectedPartNumber.length; i++) {
+                                    if(i == 0) {
+                                        strParts += "<a style='font-style: italic;'>"+lstSelectedPartNumber[i]+"</a>";
+                                    }
+                                    else {
+                                        strParts += ", <a style='font-style: italic;'>"+lstSelectedPartNumber[i]+"</a>";
+                                    }
+                                }
+                                strParts += "]";
+                                $("#selectedPrntDiv").fadeIn();
+                                document.getElementById("selectedPrtDiv").innerHTML = strParts;     
+                            }
+                            else {
+                                $("#selectedPrntDiv").fadeOut();
+                            }
+                        }
+                        
+                        delete mapForQuantity[partNumber];
+                    }
+                }
+                
+                function quantityChange(index) {
+                    updateDiscountQuantityMaps(index);
+                }
+                
+                function updateDiscountQuantityMaps(index) {
+                    var partNumber = document.getElementById("partNumber"+index).innerHTML;
+                    var partQuantity = $("#partQuantity"+index).val();
+                    var partMSRP = document.getElementById("partMSRP"+index).innerHTML;
+                    if(partQuantity != '') {
+                        partQuantityTmp = parseFloat(partQuantity);
+                    }
+                    var total = partQuantityTmp * partMSRP;
+                    
+                    document.getElementById("partTotal"+index).innerHTML = total;
+                    if (partNumber in mapForQuantity ) {
+                        mapForQuantity[partNumber] = partQuantity;
+                    }
+                }
+                var lstFinalList = [];
+                var objMapForResutData = new Object();
+                $("#addToCrt").click(function() {
+                    $("#spinner").show();
+                    for(key in mapForQuantity) {
+                        mapForQuantityTmp[key] = mapForQuantity[key];
+                    }
+                    var lstResult = [];
+                    if(lstSelectedPartNumber.length > 0) {
+                        BOATBUILDING.NewCannedJobCreationController.getFinalList(lstSelectedPartNumber, function(result, event) {
+                            if(event.status) {
+                                if(result != null) {
+                                    lstResult = result;
+                                    if(lstResult.length > 0) {
+                                        for(var i = 0; i < lstResult.length; i++) {
+                                            if(lstResult[i].PartNumber in mapForQuantityTmp ) {
+                                                if(!(lstResult[i].PartNumber in objMapForResutData)) {
+                                                    lstFinalList.push(lstResult[i]);
+                                                    objMapForResutData[lstResult[i].PartNumber] = lstResult[i];
+                                                }
+                                            }
+                                        }
+                                    }
+                                    if(lstFinalList.length > 0) {
+                                        var tableHTML = "<table class='slds-table' style='border-collapse: collapse;'><thead><tr><th>Part Number</th><th>Part Name</th><th>Quanity</th><th>Retail Price</th><th>Total Amount</th></tr></thead><tbody>";
+                                        for(var i = 0; i < lstFinalList.length; i++) {
+                                            if(lstFinalList[i].PartNumber in mapForQuantityTmp) {
+                                                var total = parseFloat(mapForQuantityTmp[lstFinalList[i].PartNumber]) * parseFloat(lstFinalList[i].MSRP);
+                                                tableHTML +="<tr><td>"+lstFinalList[i].PartNumber+"</td><td>"+lstFinalList[i].PartName+"</td><td>"+mapForQuantityTmp[lstFinalList[i].PartNumber]+"</td><td>$"+parseFloat(lstFinalList[i].MSRP).toFixed(2)+"</td><td>$"+parseFloat(total).toFixed(2)+"</td></tr>"
+                                            }
+                                        } 
+                                        tableHTML += "</tbody></table>";
+                                        document.getElementById("lstDiv").innerHTML = tableHTML;
+                                    }
+                                    $("#spinner").hide();
+                                    hideAll();
+                                }
+                            }
+                        });
+                    }
+                    
+                    
+                    
+                });
+                
+                var objJobData = new Object();
+                
+                $("#createJobBtn").click(function() {
+                    createJob(1);
+                });
+                
+                $("#createJobBtnNew").click(function() {
+                    createJob(2);
+                });
+                function createJob(redirectTo) {    
+                    var isError = true; 
+                    var jobName = document.getElementById("pge:frm:ifJN").value;
+                    var wrkRqstd = document.getElementById("pge:frm:ifWOWr").value;
+                    var wrkType = document.getElementById("pge:frm:ifWOWT").value;
+                    var type = document.getElementById("pge:frm:ifJNT").value;
+                    var noOfLabr = document.getElementById("pge:frm:ifJTNL").value;
+                    
+                    var miscCharge = document.getElementById("pge:frm:ifJTMC").value;
+                    var miscCharge2 = document.getElementById("pge:frm:ifJTMC2").value;
+                    var miscCharge3 = document.getElementById("pge:frm:ifJTMC3").value; 
+                    
+                    var miscChargeDesc1 = document.getElementById("pge:frm:ifJTMCD1").value;
+                    var miscChargeDesc2 = document.getElementById("pge:frm:ifJTMCD2").value;
+                    var miscChargeDesc3 = document.getElementById("pge:frm:ifJTMCD3").value;
+                    var taxableVar = '0';
+                    if(document.getElementById("pge:frm:ifJT").checked) {
+                    		taxableVar = '1';
+                    }
+                    if(jobName.trim() != "") {
+                        if(wrkRqstd.trim() != "") {
+                            if(wrkType != "0") {
+                                if(type != null && type != "") {
+                                    if(noOfLabr.trim() != "") {
+                                        isError = false;
+                                    }
+                                    else {
+                                        document.getElementById("errSnap").innerHTML = "Please Enter Number of Labor.";
+                                        $("#errorDiv").slideDown();
+                                        $("#errorDiv").delay(8000).slideUp();
+                                    }
+                                }
+                                else {
+                                    document.getElementById("errSnap").innerHTML = "Please Select Type.";
+                                    $("#errorDiv").slideDown();
+                                    $("#errorDiv").delay(8000).slideUp();
+                                }   
+                            }
+                            else {
+                                document.getElementById("errSnap").innerHTML = "Please Select Work Type.";
+                                $("#errorDiv").slideDown();
+                                $("#errorDiv").delay(8000).slideUp();
+                            }   
+                        }
+                        else {
+                            document.getElementById("errSnap").innerHTML = "Please Enter Work Requested.";
+                            $("#errorDiv").slideDown();
+                            $("#errorDiv").delay(8000).slideUp();
+                        }
+                    }
+                    else {
+                        document.getElementById("errSnap").innerHTML = "Please Enter Job Name.";
+                        $("#errorDiv").slideDown();
+                        $("#errorDiv").delay(8000).slideUp();
+                    }
+                        
+                    if(!isError) {
+                        $("#spinner").show();
+                        objJobData["jobName"] = jobName;
+                        objJobData["wrkRequested"] = wrkRqstd;
+                        objJobData["wrkType"] = wrkType;
+                        objJobData["type"] = type;
+                        objJobData["laborNo"] = noOfLabr;
+                        objJobData["MISC"] = miscCharge;
+                        objJobData["MISC2"] = miscCharge2;
+                        objJobData["MISC3"] = miscCharge3;
+                        
+                        objJobData["MISCDesc1"] = miscChargeDesc1;
+                        objJobData["MISCDesc2"] = miscChargeDesc2;
+                        objJobData["MISCDesc3"] = miscChargeDesc3;
+                        objJobData["Taxable"] = taxableVar
+                        //objJobData["discount"] = document.getElementById("pge:frm:ifWOdis").value;
+                        
+
+                          
+                        BOATBUILDING.NewCannedJobCreationController.createJob(objJobData, mapForQuantityTmp, function(result, event) {
+                            if(event.status) {
+                                if(result != null){
+                                    if(redirectTo == 1) {
+                                        window.top.location = "/"+result;     
+                                    } else if(redirectTo == 2) {
+                                        window.top.location = "/apex/NewCannedJobCreationPage";
+                                    }
+                                    
+                                    $("#spinner").hide(); 
+                                }else {
+                                    $("#spinner").hide();
+                                    document.getElementById("errSnap").innerHTML = "Something went wrong. Please try again.";
+                                    $("#errorDiv").slideDown();
+                                    $("#errorDiv").delay(8000).slideUp();   
+                                }
+                            }
+                        });
+                    }                               
+                }
+            </script>
+
+        </body>
+        
+    </html>
+    
+</apex:page>

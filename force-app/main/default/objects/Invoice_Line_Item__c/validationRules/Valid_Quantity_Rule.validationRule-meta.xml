@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Valid_Quantity_Rule</fullName>
+    <active>true</active>
+    <description>Quantity should be a valid positive number.</description>
+    <errorConditionFormula>Quantity__c &lt;0</errorConditionFormula>
+    <errorDisplayField>Quantity__c</errorDisplayField>
+    <errorMessage>Quantity should be a valid positive number.</errorMessage>
+</ValidationRule>

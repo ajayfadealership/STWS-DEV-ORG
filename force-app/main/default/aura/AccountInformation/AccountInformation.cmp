@@ -1,0 +1,237 @@
+<aura:component access="global">
+    <aura:attribute name="objAccountAI" type="Account" default="{'sobjectType': 'Account'}"/>
+    <aura:registerEvent name="ParentToChild" type="c:AccountParentToChild"/>
+    
+    <aura:handler  event="c:AccountParentToChild" action="{!c.HandelAccountEvent11}"/> 
+    <div id="srchAddBarAW" style="display: none; position: fixed; background: rgba(0, 0, 0, 0.24); left: 0; right: 0; top: 0; bottom: 0; z-index: 9;">
+        <div style="position: fixed; top: 29%; left: 20%; padding: 3%; width: 700px; height: auto;">
+            <a onclick="{!c.nonePopAddSearch}"><lightning:icon iconName="utility:close" size="small" class="checkClass" style="position: relative; left: 592px;"/></a>
+            <c:MapInput/>  
+        </div>
+    </div>
+    <div class="slds-grid slds-wrap slds-col--padded">
+        <h1><b>Account Information</b></h1>
+        <div class="slds-col slds-size--1-of-1">
+            <div class="slds-grid slds-wrap" >
+                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-3 slds-col--padded">
+                    <div class="slds-form-element">
+                        <label class="slds-form-element__label"><span style="color: red;">*</span>Account Name:</label>
+                        <div class="slds-form-element__control">
+                            <force:inputField value="{!v.objAccountAI.Name}" class="slds-input"/>
+                        </div>
+                    </div> 
+                </div>
+                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-3 slds-col--padded">
+                    <div class="slds-form-element">
+                        <label class="slds-form-element__label">Last Name:</label>
+                        <div class="slds-form-element__control">
+                            <force:inputField value="{!v.objAccountAI.BOATBUILDING__Prospect_Last_Name__c}" class="slds-input"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-3 slds-col--padded">
+                    <div class="slds-form-element">
+                        <label class="slds-form-element__label">First Name:</label>
+                        <div class="slds-form-element__control">
+                            <force:inputField value="{!v.objAccountAI.BOATBUILDING__Prospect_First_Name__c}" class="slds-input"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-3 slds-col--padded">
+                    <div class="slds-form-element">
+                        <label class="slds-form-element__label">Contact First Name:</label>
+                        <div class="slds-form-element__control">
+                            <ui:inputText placeholder="Co-Buyer First Name" value="{!v.objAccountAI.BOATBUILDING__Contact_First_Name__c}" class="slds-input"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-3 slds-col--padded">
+                    <div class="slds-form-element">
+                        <label class="slds-form-element__label">Contact Last Name:</label>
+                        <div class="slds-form-element__control">
+                            <ui:inputText placeholder="Co-Buyer Last Name" value="{!v.objAccountAI.BOATBUILDING__Contact_Last_Name__c}" class="slds-input"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-3 slds-col--padded">
+                    <div class="slds-form-element">
+                        <label class="slds-form-element__label">Account Customer Type:</label>
+                        <div class="slds-form-element__control">
+                            <force:inputField value="{!v.objAccountAI.BOATBUILDING__Account_Customer_Type__c }" class="slds-input"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-3 slds-col--padded">
+                    <div class="slds-form-element">
+                        <label class="slds-form-element__label">Sub Account Type:</label>
+                        <div class="slds-form-element__control">
+                            <force:inputField value="{!v.objAccountAI.BOATBUILDING__Sub_Account_Type__c}" class="slds-input"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-3 slds-col--padded">
+                    <div class="slds-form-element">
+                        <label class="slds-form-element__label">Phone:</label>
+                        <div class="slds-form-element__control">
+                            <force:inputField value="{!v.objAccountAI.Phone}" class="slds-input"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-3 slds-col--padded">
+                    <div class="slds-form-element">
+                        <label class="slds-form-element__label">Mobile Phone Number:</label>
+                        <div class="slds-form-element__control">
+                            <force:inputField value="{!v.objAccountAI.BOATBUILDING__Prospect_Mobile_Phone_Number__c}" class="slds-input"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-3 slds-col--padded">
+                    <div class="slds-form-element">
+                        <label class="slds-form-element__label">Email:</label>
+                        <div class="slds-form-element__control">
+                            <force:inputField value="{!v.objAccountAI.BOATBUILDING__Email__c}" class="slds-input"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-3 slds-col--padded">
+                    <div class="slds-form-element">
+                        <label class="slds-form-element__label">Communication Type With Customer:</label>
+                        <div class="slds-form-element__control">
+                            <force:inputField value="{!v.objAccountAI.BOATBUILDING__Communication_Type_With_Customer__c}" class="slds-input"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-3 slds-col--padded">
+                    <div class="slds-form-element">
+                        <label class="slds-form-element__label">Prospect Lead Source:</label>
+                        <div class="slds-form-element__control">
+                            <force:inputField value="{!v.objAccountAI.BOATBUILDING__Lead_Source__c}" class="slds-input"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-3 slds-col--padded">
+                    <div class="slds-form-element">
+                        <label class="slds-form-element__label">Lead Status:</label>
+                        <div class="slds-form-element__control">
+                            <force:inputField value="{!v.objAccountAI.BOATBUILDING__Lead_Status__c}" class="slds-input"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-3 slds-col--padded">
+                    <div class="slds-form-element">
+                        <label class="slds-form-element__label">Store Location:</label>
+                        <div class="slds-form-element__control">
+                            <force:inputField value="{!v.objAccountAI.BOATBUILDING__Store_Location__c}" class="slds-input"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-3 slds-col--padded">
+                    <div class="slds-form-element">
+                        <label class="slds-form-element__label">Account Balance:</label>
+                        <div class="slds-form-element__control">
+                            <force:inputField value="{!v.objAccountAI.BOATBUILDING__Account_Balance__c }" class="slds-input"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-3 slds-col--padded">
+                    <div class="slds-form-element">
+                        <label class="slds-form-element__label">Comments/Messages:</label>
+                        <div class="slds-form-element__control">
+                            <force:inputField value="{!v.objAccountAI.BOATBUILDING__Comments__c}" class="slds-input"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-3 slds-col--padded">
+                    <div class="slds-form-element">
+                        <label class="slds-form-element__label">&nbsp;</label>
+                        <div class="slds-form-element__control">
+                            &nbsp;
+                        </div>
+                    </div>
+                </div>
+                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-3 slds-col--padded">
+                    <div class="slds-form-element">
+                        <label class="slds-form-element__label">&nbsp;</label>
+                        <div class="slds-form-element__control">
+                            &nbsp;
+                        </div>
+                    </div>
+                </div>
+                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-3 slds-col--padded">
+                    <div class="slds-form-element">
+                        <label class="slds-form-element__label">Search Address</label>
+                        <div class="slds-form-element__control">
+                            <a onclick="{!c.showPopAddSearch}" class="slds-button slds-button_brand" style="width: 100%; background: #fff; color: rgba(27, 82, 151, 1.0); border-color: rgb(221, 219, 218);">
+                                <lightning:icon iconName="utility:search" size="xx-small" class="colorIcon"/>
+                                &nbsp;Search Address
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-3 slds-col--padded">
+                    <div class="slds-form-element">
+                        <label class="slds-form-element__label">&nbsp;</label>
+                        <div class="slds-form-element__control">
+                            &nbsp;
+                        </div>
+                    </div>
+                </div>
+                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-3 slds-col--padded">
+                    <div class="slds-form-element">
+                        <label class="slds-form-element__label">&nbsp;</label>
+                        <div class="slds-form-element__control">
+                            &nbsp;
+                        </div>
+                    </div>
+                </div>
+                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-3 slds-col--padded">
+                    <div class="slds-form-element">
+                        <label class="slds-form-element__label">Billing Address:</label>
+                        <div class="slds-form-element__control">
+                            <ui:inputText value="{!v.objAccountAI.BillingStreet}" class="slds-input"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-3 slds-col--padded">
+                    <div class="slds-form-element">
+                        <label class="slds-form-element__label">Billing City:</label>
+                        <div class="slds-form-element__control">
+                            <force:inputField value="{!v.objAccountAI.BillingCity}" class="slds-input"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-3 slds-col--padded">
+                    <div class="slds-form-element">
+                        <label class="slds-form-element__label">Billing State:</label>
+                        <div class="slds-form-element__control">
+                            <force:inputField value="{!v.objAccountAI.BillingState}" class="slds-input"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-3 slds-col--padded">
+                    <div class="slds-form-element">
+                        <label class="slds-form-element__label">Billing Zip Code:</label>
+                        <div class="slds-form-element__control">
+                            <force:inputField value="{!v.objAccountAI.BillingPostalCode}" class="slds-input"/>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <hr/>
+    <table>
+        <tr>
+            <td>
+                <div data-value="2" style="height:0px;max-width:auto;" onclick="{!c.previousClick}">
+                    <lightning:button variant="brand" label="Previous" iconName="utility:chevronleft" iconPosition="left" class="leftElement"/>
+                </div>
+            </td>
+            <td>
+                <div data-value="2" style="height:0px;max-width:auto;" onclick="{!c.handleClick}">
+                    <lightning:button variant="brand" label="Next" iconName="utility:chevronright" iconPosition="right" class="rightElement" value="2" />
+                </div>
+            </td>
+        </tr>
+    </table>
+</aura:component>

@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<RecordType xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Locked</fullName>
+    <active>true</active>
+    <label>Locked</label>
+    <picklistValues>
+        <picklist>Boat_Sold_By__c</picklist>
+        <values>
+            <fullName>FAD Admin</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Dealer_Disclaimer__c</picklist>
+        <values>
+            <fullName>New Boat Disclaimer</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Used Boat Disclaimer</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Lock_Record__c</picklist>
+        <values>
+            <fullName>No</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Yes</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Quote_Term__c</picklist>
+        <values>
+            <fullName>10 Years</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>12 Years</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>15 Years</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>20 Years</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>5 Years</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Sold_Boat_Account__c</picklist>
+        <values>
+            <fullName>4011 NB Supra</fullName>
+            <default>true</default>
+        </values>
+        <values>
+            <fullName>4012 NB Moomba</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>4700 Used Boat Sale</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>4750 Consignment Boat Sale</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>4770 Wholesale Boat Sale</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>State__c</picklist>
+        <values>
+            <fullName>Indiana</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>North Carolina</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Other</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>South Carolina</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Status__c</picklist>
+        <values>
+            <fullName>Accepted</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Denied</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Draft</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Final</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>In Review</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Presented</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Store_Location__c</picklist>
+        <values>
+            <fullName>Other</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+</RecordType>

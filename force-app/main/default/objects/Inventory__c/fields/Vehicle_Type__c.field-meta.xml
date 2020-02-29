@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Vehicle_Type__c</fullName>
+    <deprecated>false</deprecated>
+    <externalId>false</externalId>
+    <label>Vehicle Type</label>
+    <required>false</required>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Runabout</fullName>
+                <default>false</default>
+                <label>Runabout</label>
+            </value>
+            <value>
+                <fullName>Ski Boat</fullName>
+                <default>false</default>
+                <label>Ski Boat</label>
+            </value>
+            <value>
+                <fullName>Pontoon</fullName>
+                <default>false</default>
+                <label>Pontoon</label>
+            </value>
+            <value>
+                <fullName>Jet Ski</fullName>
+                <default>false</default>
+                <label>Jet Ski</label>
+            </value>
+            <value>
+                <fullName>Sailboat</fullName>
+                <default>false</default>
+                <label>Sailboat</label>
+            </value>
+            <value>
+                <fullName>RV</fullName>
+                <default>false</default>
+                <label>RV</label>
+            </value>
+            <value>
+                <fullName>4 Wheeler</fullName>
+                <default>false</default>
+                <label>4 Wheeler</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

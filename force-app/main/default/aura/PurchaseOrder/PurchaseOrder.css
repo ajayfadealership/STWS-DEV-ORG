@@ -1,0 +1,6 @@
+.THIS.adjustNewButton {
+    position: absolute;
+    right: 3%;
+    margin-top: 0.5%;
+    z-index: 999;
+}

@@ -1,0 +1,145 @@
+<apex:page standardController="Account" extensions="AccountDetailExtensionController" renderAs="pdf" showHeader="false">
+    
+    <h1 style="text-align: center; font-family: arial; font-size: 14px;">CREDIT APPLICATION</h1>
+    <!-- h1 -->
+    <table style="border-spacing:0;  border-collapse:collapse; font-family: arial; border: 1p solid #000; width: 100%;">
+        <tr>
+            <td valign="top" style="padding:0px; border-color: #000;border-style: solid; border-width: 1px 0px 1px 1px;">
+                <table  style="border-spacing:0; border-collapse:collapse; border:0px; font-size:8px; width: 100%;">
+                    <tr>
+                        <th colspan="3" valign="top" style="padding:8px 0px; border-color: #000;border-style: solid; border-width: 0px 0px 1px 0px; text-align: center; font-size: 16px;">(A) APPLICANT INFORMATION</th>
+                    </tr>
+                    <tr>
+                        <td colspan="3" style="border-color: #000;border-style: solid; border-width: 0px 0px 1px 0px; padding:8px 3px;font-size: 13px;">FULL NAME: &nbsp; {!acct.Lead_Account_History__r.Name} </td>
+                    </tr>
+                    <tr>
+                        <td style="border-color: #000;border-style: solid; border-width: 0px 1px 1px 0px; padding:8px 3px;font-size: 13px;">DOB: &nbsp; {!Account.BOATBUILDING__SFA_Date_of_Birth__c}</td>
+                        <td style="border-color: #000;border-style: solid; border-width: 0px 1px 1px 0px; padding:8px 3px;font-size: 13px;">SSN: &nbsp; {!Account.BOATBUILDING__SFA_Social_Security_Number__c}</td>
+                        <td style="border-color: #000;border-style: solid; border-width: 0px 1px 1px 0px; padding:8px 3px;font-size: 13px;">DLN: &nbsp; {!Account.BOATBUILDING__SFA_Drivers_License__c}</td>
+                    </tr>
+                    <tr>
+                        <td colspan="3" style="border-color: #000;border-style: solid; border-width: 0px 0px 1px 0px; padding:8px 3px;font-size: 13px;font-size: 13px;">STREET ADDRESS: &nbsp; {!Account.BillingStreet}</td>
+                    </tr>
+                    <tr>
+                        <td style="border-color: #000;border-style: solid; border-width: 0px 0px 1px 0px; padding:8px 3px;font-size: 13px;">CITY :&nbsp; {!Account.BillingCity} </td>
+                        <td style="border-color: #000;border-style: solid; border-width: 0px 1px 1px 0px; padding:8px 3px;font-size: 13px;">STATE : &nbsp; {!Account.BillingState}</td>
+                        <td style="border-color: #000;border-style: solid; border-width: 0px 0px 1px 0px; padding:8px 3px;font-size: 13px;">ZIP: &nbsp; {!Account.BillingPostalCode}</td>
+                    </tr>
+                    <tr>
+                        <td style="border-color: #000;border-style: solid; border-width: 0px 1px 1px 0px; padding:8px 3px;font-size: 13px;">PHONE: &nbsp; {!acct.Lead_Account_History__r.Contact_Phone__c} </td>
+                        <td colspan="2" style="border-color: #000;border-style: solid; border-width: 0px 1px 1px 0px; padding:8px 3px;font-size: 13px;">Email:&nbsp; {!acct.Email__c}</td>
+                    </tr>
+                    <tr>
+                        <td style="border-color: #000;border-style: solid; border-width: 0px 1px 1px 0px; padding:8px 3px;font-size: 13px;">LANDLORD/MORTGAGE HOLDER: &nbsp; {!Account.SFA_Landlord_Mortgage_Holder__c}</td>
+                        <td colspan="2" style="border-color: #000;border-style: solid; border-width: 0px 1px 1px 0px; padding:8px 3px;font-size: 13px;">MONTHELY RENT/MORTGAGE PMT: &nbsp; {!Account.BOATBUILDING__SFA_Monthly_Rent_Mortgage__c}</td>
+                    </tr>
+                    <tr>
+                        <td  style="border-color: #000;border-style: solid; border-width: 0px 1px 1px 0px; padding:8px 3px;font-size: 13px;">OWN/RENT: &nbsp; {!Account.BOATBUILDING__SFA_Property_Owner__c}</td>
+                        <td  style="border-color: #000;border-style: solid; border-width: 0px 1px 1px 0px; padding:8px 3px;font-size: 13px;">YEARS AT ADDRESS: &nbsp; {!Account.BOATBUILDING__SFA_Years_at_current_address__c}</td>
+                        <td  style="border-color: #000;border-style: solid; border-width: 0px 1px 1px 0px; padding:8px 3px;font-size: 13px;">MONTHS AT ADDRESS: &nbsp; {!Account.BOATBUILDING__SFA_Months_at_current_address__c}</td>
+                        
+                    </tr>
+                    
+                    <tr>
+                        <td colspan="3" style="border-color: #000;border-style: solid; border-width: 0px 0px 1px 0px; padding:8px 3px;font-size: 13px;">CURRENT EMPLOYER's NAME: &nbsp; {!Account.BOATBUILDING__SFA_Employer_Name__c}</td>
+                    </tr>
+                    
+                    <tr>
+                        <td style="border-color: #000;border-style: solid; border-width: 0px 1px 1px 0px; padding:8px 3px;font-size: 13px;">GROSS ANNUALLY SALARY: &nbsp; {!Account.BOATBUILDING__SFA_Salary_Annually_Gross__c} </td>
+                        <td colspan="2" style="border-color: #000;border-style: solid; border-width: 0px 0px 1px 0px; padding:8px 3px;font-size: 13px;">EMPLOYER PHONE: &nbsp; {!Account.BOATBUILDING__SFA_Employer_Phone__c} </td> 
+                    </tr>
+                    <tr>
+                        <td colspan="3" style="border-color: #000;border-style: solid; border-width: 0px 0px 1px 0px; padding:8px 3px;font-size: 13px;">OCCUPATION/JOB TITLE: &nbsp; {!Account.BOATBUILDING__SFA_Occupation__c}</td>
+                    </tr>
+                    <tr>
+                        <td style="border-color: #000;border-style: solid; border-width: 0px 0px 0px 0px; padding:8px 3px;font-size: 13px;">YEARS WITH CURRENT EMPLOYER &nbsp; {!Account.BOATBUILDING__SFA_Years_at_employer__c}</td>
+                        <td colspan="2" style="border-color: #000;border-style: solid; border-width: 0px 0px 0px 0px; padding:7px 3px;font-size: 13px;">MONTHS WITH CURRENT EMPLOYER &nbsp; {!Account.BOATBUILDING__SFA_Months_at_employer__c}</td>
+                    </tr>
+                </table>
+            </td>
+            <td valign="top" style="padding:0px; border-color: #000;border-style: solid; border-width: 1px 0px 1px 1px;">
+                <table style="border-spacing:0;  border-collapse:collapse; border:0px; font-size: 8px; width: 100%;">
+                    <tr>
+                        <th colspan="3"  border="1px solid #ddd" valign="top" style="padding:8px 0px; border-color: #000;border-style: solid; border-width: 0px 1px 1px 0px; text-align: center; font-size: 16px;">(B)JOINT  APPLICANT INFORMATION</th>
+                    </tr>
+                    <tr>
+                        <td style="border-color: #000;border-style: solid; border-width: 0px 1px 1px 0px; padding:8px 3px;font-size: 13px;"> FULL NAME: &nbsp;  {!Account.BOATBUILDING__Joint_Applicant_First_Name__c}&nbsp; {!Account.BOATBUILDING__Joint_Applicant_Last_Name__c}</td>
+                        <td colspan="2" style="border-color: #000;border-style: solid; border-width: 0px 1px 1px 0px; padding:8px 3px;font-size: 13px;">RELATIONSHIP TO APPLICANT: &nbsp;  {!Account.BOATBUILDING__Relationship_to_Applicant__c}</td>
+                        
+                    </tr>
+                    <tr>
+                        <td style="border-color: #000;border-style: solid; border-width: 0px 1px 1px 0px; padding:8px 3px;font-size: 13px;">DOB: &nbsp; {!Account.BOATBUILDING__Joint_Applicant_Date_of_Birth__c}</td>
+                        <td style="border-color: #000;border-style: solid; border-width: 0px 1px 1px 0px; padding:8px 3px;font-size: 13px;">SSN: &nbsp; {!Account.BOATBUILDING__Joint_Applicant_Social_Security_Number__c}</td>
+                        <td style="border-color: #000;border-style: solid; border-width: 0px 1px 1px 0px; padding:8px 3px;font-size: 13px;">DLN: &nbsp; {!Account.BOATBUILDING__Joint_Applicant_Drivers_License__c}</td>
+                        
+                    </tr>
+                    <tr>
+                        <td colspan="3" style="border-color: #000;border-style: solid; border-width: 0px 1px 1px 0px; padding:8px 3px;font-size: 13px;font-size: 13px;">STREET ADDRESS: &nbsp; {!Account.BOATBUILDING__Joint_Applicant_Street_Address__c}</td>
+                       <!-- <td colspan="2" style="border-color: #000;border-style: solid; border-width: 0px 1px 1px 0px; padding:8px 3px;font-size: 13px;">COUNTRY: &nbsp; {!Account.BOATBUILDING__Joint_Applicant_County__c}</td>-->
+                    </tr>
+                    <tr>
+                        <td style="border-color: #000;border-style: solid; border-width: 0px 1px 1px 0px; padding:8px 3px;font-size: 13px;">CITY: &nbsp; {!Account.BOATBUILDING__Joint_Applicant_City__c}</td>
+                        <td style="border-color: #000;border-style: solid; border-width: 0px 1px 1px 0px; padding:8px 3px;font-size: 13px;">STATE: &nbsp; {!Account.BOATBUILDING__Joint_Applicant_State__c }</td>
+                        <td style="border-color: #000;border-style: solid; border-width: 0px 1px 1px 0px; padding:8px 3px;font-size: 13px;">ZIP: &nbsp; {!Account.BOATBUILDING__Joint_Applicant_Zip_Postal_Code__c}</td>
+                    </tr>
+                    <tr>
+                        <td style="border-color: #000;border-style: solid; border-width: 0px 1px 1px 0px; padding:8px 3px;font-size: 13px;"> PHONE: &nbsp; {!Account.BOATBUILDING__Joint_Applicant_Phone__c}</td>
+                        <td colspan="2" style="border-color: #000;border-style: solid; border-width: 0px 1px 1px 0px; padding:8px 3px;font-size: 13px;">EMAIL:  &nbsp; {!Account.BOATBUILDING__Joint_Applicant_Email__c}</td>
+                    </tr>
+                    <tr>
+                        <td style="border-color: #000;border-style: solid; border-width: 0px 1px 1px 0px; padding:8px 3px;font-size: 13px;">LANDLORD/MORTGAGE HOLDER: &nbsp; {!Account.BOATBUILDING__Joint_Applicant_Landlord_Mortgage_Holder__c}</td>
+                        <td colspan="2" style="border-color: #000;border-style: solid; border-width: 0px 1px 1px 0px; padding:8px 3px;font-size: 13px;">MONTHELY RENT/MORTGAGE PMT: &nbsp; {!Account.BOATBUILDING__Joint_Applicant_Monthly_Rent_Mortgage__c}</td>
+                        
+                    </tr> 
+                    <tr>
+                        <td  style="border-color: #000;border-style: solid; border-width: 0px 1px 1px 0px; padding:8px 3px;font-size: 13px;">OWN/RENT: &nbsp; {!Account.BOATBUILDING__Joint_Applicant_Property_Owner__c}</td>
+                        <td  style="border-color: #000;border-style: solid; border-width: 0px 1px 1px 0px; padding:8px 3px;font-size: 13px;">YEARS AT ADDRESS: &nbsp; {!Account.BOATBUILDING__Joint_Applicant_Years_at_current_address__c}</td>
+                        <td  style="border-color: #000;border-style: solid; border-width: 0px 1px 1px 0px; padding:8px 3px;font-size: 13px;">MONTHS AT ADDRESS: &nbsp; {!Account.BOATBUILDING__Joint_Applicant_Months_Current_Address__c}</td>
+                    </tr>
+                    <tr>
+                        <td colspan="3" style="border-color: #000;border-style: solid; border-width: 0px 1px 1px 0px; padding:8px 3px;font-size: 13px;">CURRENT EMPLOYER's NAME: &nbsp; {!Account.BOATBUILDING__Joint_Applicant_Employer_Name__c}</td>
+                    </tr>
+                    <tr>
+                        <td style="border-color: #000;border-style: solid; border-width: 0px 1px 1px 0px; padding:8px 3px;font-size: 13px;">GROSS ANNUALLY SALARY: &nbsp; {!Account.BOATBUILDING__Joint_Applicant_Salary_Annually_Gross__c} </td>
+                        <td colspan="2" style="border-color: #000;border-style: solid; border-width: 0px 1px 1px 0px; padding:8px 3px;font-size: 13px;">CURRENT EMPLOYER PHONE: &nbsp; {!Account.BOATBUILDING__Joint_Applicant_Employer_Phone__c} </td>
+                    </tr>
+                    <tr>
+                        <td colspan="3" style="border-color: #000;border-style: solid; border-width: 0px 1px 1px 0px; padding:8px 3px;font-size: 13px;">OCCUPATION/JOB TITLE: &nbsp; {!Account.BOATBUILDING__Joint_Applicant_Occupation__c}</td>
+                    </tr>
+                    <tr>
+                        <td style="border-color: #000;border-style: solid; border-width: 0px 1px 0px 0px; padding:8px 3px;font-size: 13px;">YEARS WITH CURRENT EMPLOYER:&nbsp;{!Account.BOATBUILDING__Joint_Applicant_Years_at_Employer__c}</td>
+                        <td colspan="2" style="border-color: #000;border-style: solid; border-width: 0px 1px 0px 0px; padding:7px 3px;font-size: 13px;">MONTHS WITH CURRENT EMPLOYER:&nbsp;{!Account.BOATBUILDING__Joint_Applicant_Months_at_Employer__c}</td>
+                    </tr>
+                    <table style="border-spacing:0;  border-collapse:collapse; font-family: arial; border: 1p solid #000; width: 100%;"/>
+                </table >
+            </td>
+        </tr>
+    </table>
+    <h1 style="text-align: center; font-family: arial; font-size: 18px; margin-top: 25px">FAIR CREDIT REPORTING ACT TO CONSUMER</h1>
+    <p style="font-size: 12px; margin: 0px 0px 5px;">THIS WILL ADIVSE YOU THAT YOUR RETAIL INSTALLMENT SALES CONTRACT AND BUYER’S APPLICATION FOR SECURED DEBT WILL BE SUBMITTED TO FINANCIAL
+        INSTITUTIONS AND THEIR AFFILIATES FOR PURCHASE AND CONSIDERATION AS TO WHETHER YOU MEET THEIR CREDIT REQUIREMENTS.</p>
+    <p style="font-size: 12px; margin: 0px 0px 5px;">THE UNDERSIGNED FURTHER AUTORIZES THESE FINANCIAL INSTITUTIONS AND THEIR AFFILIATES TO OBTAIN SUCH INFORMATION THAT THEY MAY REQUIRE IN
+        ORDER TO VERIFY INFORMATION RELATIVE TO THIS REQUEST INCLUDING CONTACTING SPOUSES TO VERIFY SPOUSE RELATED INFORMATION.</p>
+    <p style="font-size: 12px; margin: 0px 0px 5px;">I CERTIFY THAT ALL INFORMATION GIVEN BY ME ON THIS APPLICATION IS COMPLETE AND ACCURATE. I GIVE MY PERMISSION FOR ANY FINANCIAL INSTITUTION
+        WHICH WILL REVIEW THIS CREIDT APPLICATION, TO INVESTIGATE MY CREDIT AND EMPLOYMENT HISTORY, AND TO ANSWER QUESTIONS ABOUT THEIR CREDIT
+        EXPERIENCE WITH ME INCLUDING BUT NOT LIMITED TO LATE PAYMENTS, MISSED PAYMENTS OR OTHER DEFAULTS, AND THIS INFORMATION MAY BY REPORTED
+        IN YOUR CREIDIT REPORT.
+    </p>
+    <div style="height: 150px;">
+        <div style="float: left; width: 45%; padding-right: 15px;">
+            <!--<h4 style="font-size: 12px; font-weight: bold;">APPLICANT </h4>
+<h4 style="font-size: 12px; font-weight: bold;">SIGNATURE <span style="display: inline-block; float: right; margin-top: 13px; border-bottom: 1px solid #000; width: 40%;"></span></h4>
+<h4 style="font-size: 12px; font-weight: bold;">REQUIRED <span style="display: inline-block; float: right; width: 40%; text-align: right;">DATE</span></h4>-->
+            <h4 style="font-size: 16px; font-weight: bold;">(A) APPLICANT Driver’s License No. <span style="display: inline-block; float: right; margin-top: 13px; border-bottom: 1px solid #000; width: 30%;"></span></h4>
+        </div>
+        <div style="float: left; width: 45%; padding-left; 15px;">
+            <!--<h4 style="font-size: 12px; font-weight: bold;">APPLICANT </h4>
+<h4 style="font-size: 12px; font-weight: bold;">SIGNATURE <span style="display: inline-block; float: right; margin-top: 13px; border-bottom: 1px solid #000; width: 40%;"></span></h4>
+<h4 style="font-size: 12px; font-weight: bold;">REQUIRED <span style="display: inline-block; float: right; width: 70%; text-align: right;"><span style="margin-right: 10px; font-size: 8px; display: inline-block;">(means you intend to apply for joint credit)</span>  DATE</span></h4>-->
+            <h4 style="font-size: 16px; font-weight: bold;">(B) APPLICANT Driver’s License No. <span style="display: inline-block; float: right; margin-top: 13px; border-bottom: 1px solid #000; width: 30%;"></span></h4>
+        </div>
+    </div>
+    <div>
+        Source : {!acct.BOATBUILDING__Source_URL__c}
+    </div>
+</apex:page>

@@ -1,0 +1,6 @@
+<apex:page controller="RunWorkOrderBatchController" action="{!runBatch}">
+
+    <apex:pageblock >
+      <h1>{!batchResult}</h1>  
+    </apex:pageblock>
+</apex:page>

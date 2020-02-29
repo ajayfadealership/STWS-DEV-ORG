@@ -1,0 +1,9 @@
+.THIS .left-align {
+    text-align: left;
+}
+.THIS .right-align {
+    text-align: right;
+}
+.THIS .slds-truncate{
+    white-space: normal;
+}

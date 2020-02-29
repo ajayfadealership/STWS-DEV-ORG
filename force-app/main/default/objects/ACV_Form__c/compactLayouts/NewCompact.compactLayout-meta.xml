@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CompactLayout xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>NewCompact</fullName>
+    <fields>Name</fields>
+    <fields>Ballast_Pumps_Estimated_Repair_Cost__c</fields>
+    <fields>Bilge_Pump__c</fields>
+    <fields>Bilge_Pump_Estimated_Repair_Cost__c</fields>
+    <fields>Cover_Estimated_Repair_Cost__c</fields>
+    <fields>CreatedById</fields>
+    <fields>Dash_Condition__c</fields>
+    <fields>Dash_Estimated_Repair_Cost__c</fields>
+    <label>NewCompact</label>
+</CompactLayout>

@@ -1,0 +1,357 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<RecordType xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Sold_Boat_Invoice</fullName>
+    <active>true</active>
+    <label>Sold Boat Invoice</label>
+    <picklistValues>
+        <picklist>Billing_State_Province__c</picklist>
+        <values>
+            <fullName>Other</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Boat_Sold_By__c</picklist>
+        <values>
+            <fullName>Alex Dunson</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Cameron Richardson</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Close</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Danny Tolentino</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>JJ Penninger</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Josh Smith</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Robert Lowery</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Tanner Lawson</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Tyler Holloman</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Commission_Paid__c</picklist>
+        <values>
+            <fullName>No</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Yes</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Invoice_Status__c</picklist>
+        <values>
+            <fullName>Active</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Cancelled</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Final</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Lending_Bank__c</picklist>
+        <values>
+            <fullName>Aqua Finance</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>BB%26T</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Bank of the West</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Huntington Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Marathon Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Medalion Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Merrick Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>South State Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>State Farm</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>US Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>USAA</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Payoff_Account_Payable__c</picklist>
+        <values>
+            <fullName>Consignment Customer Pay-off</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Consignment Pay-off Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>North Pointe</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Wells Fargo</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Shopify_Status__c</picklist>
+        <values>
+            <fullName>Canceled</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Completed</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>On Hold</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Pending Payment</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Processing</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Refunded</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Sold_Boat_Account__c</picklist>
+        <values>
+            <fullName>4011 NB Supra</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>4012 NB Moomba</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>4700 Used Boat Sale</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>4750 Consignment Boat Sale</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>4770 Wholesale Boat Sale</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Sold_Boat_Location__c</picklist>
+        <values>
+            <fullName>STWS</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>STWS Augusta</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>STWS-RDU</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Sold_Location__c</picklist>
+        <values>
+            <fullName>STWS Augusta</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>STWS Charlotte</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>STWS RDU</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>State_Province__c</picklist>
+        <values>
+            <fullName>North Carolina</fullName>
+            <default>true</default>
+        </values>
+        <values>
+            <fullName>South Carolina</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Status__c</picklist>
+        <values>
+            <fullName>Accepted</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Approved</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Denied</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Draft</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>In Review</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Needs Review</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Presented</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Rejected</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Store_Location__c</picklist>
+        <values>
+            <fullName>Other</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Term__c</picklist>
+        <values>
+            <fullName>10 Years</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>12 Years</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>15 Years</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>20 Years</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>5 Years</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Trade_in_Bank_Pay_off__c</picklist>
+        <values>
+            <fullName>Aqua</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>BB%26T</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Bank of the West</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Founders Credit Union</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Huntington Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Marathon Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Merrick Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>US Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>USSA</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Web_Source__c</picklist>
+        <values>
+            <fullName>Shopify</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Woocommerce</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Woocommerce_Status__c</picklist>
+        <values>
+            <fullName>cancelled</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+</RecordType>

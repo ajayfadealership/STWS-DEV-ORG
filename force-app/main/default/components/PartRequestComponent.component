@@ -1,0 +1,484 @@
+<apex:component controller="WorkRequestControllerClone" id="wrpcmp">
+    <div class="slds-grid slds-wrap" id="WRTableSec1"> 
+        <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-1">
+            <input type="hidden" id="hiddnPartId" value="0"/>   
+            <div class="slds-grid slds-wrap"><div class="slds-col slds-size--1-of-1 slds-align--absolute-center Create_button">
+                <p id="buttonPnl">
+                    
+                    <a class="slds-button slds-button--brand" onclick="createPRFormCall();">Create Part Request</a>
+                </p>
+                </div>
+                
+                <apex:outputPanel id="tableOPPanle">
+                    <table id="Table3" class="slds-table slds-table--bordered slds-no-row-hover slds-table--cell-buffer slds-m-top--x-large Table1 slds-card">
+                        <thead>
+                            <tr class="slds-text-heading--label">
+                                <th scope="col">Part Request Number</th>
+                                <th scope="col">Vendor</th>
+                                <th scope="col">Request Type</th> 
+                                <th scope="col">Customer Name</th> 
+                                <th scope="col">Created Date</th>
+                                <th scope="col">Part Request Status</th>
+                                <th scope="col">Assigned To</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <apex:repeat value="{!lstPR}" var="obj">
+                                <tr>
+                                    <td>
+                                        <a href="#"  onclick=" fetchRequestpart(this,'{!obj.Id}');">
+                                            <apex:outputField value="{!obj.Name}" />&nbsp;
+                                        </a>
+                                        &nbsp; <a href="/apex/BOATBUILDING__ServicePage?type=PartRequest&prId={!obj.Id}" target="blank"><img src="https://image.flaticon.com/icons/png/512/376/376007.png" style="height: 10px; width: 10px;"/></a>
+                                    </td>
+                                    <td>
+                                        
+                                        <apex:outputField value="{!obj.Vendor__c}" />
+                                    </td>
+                                    <td>
+                                        
+                                        <apex:outputField value="{!obj.Request_Type__c}" />
+                                    </td>
+                                    <td>
+                                        
+                                        <apex:outputField value="{!obj.Contact__c}" />
+                                    </td>
+                                    <td>
+                                        
+                                        <apex:outputField value="{!obj.CreatedDate}" />
+                                        
+                                    </td>
+                                    <td>
+                                        
+                                        <apex:outputField value="{!obj.Part_Request_Status__c}" />
+                                    </td>
+                                    <td>
+                                        
+                                        <apex:outputField value="{!obj.Assigned_to__c}" />
+                                    </td>
+                                    
+                                </tr>
+                            </apex:repeat>
+                        </tbody>
+                    </table>
+                </apex:outputPanel>
+                
+            </div>
+        </div>
+    </div>
+    <div class="slds-grid slds-wrap slds-col--padded " id='prtdiv' style="display:none;">
+        <div class="slds-col--padded slds-col slds-size--1-of-1 Customer-Heading">
+            <h2 class=" heading"><br/>
+                <span class="slds-text-heading--small" id="spId"> Part Request Number : <span Id="prname"></span> </span>
+            </h2>
+        </div>
+    </div>
+    <div class="slds-grid slds-wrap" id="WRFrmSec1" style="display: none;"> 
+        <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-1">   
+            <div class="slds-grid slds-wrap">
+                <span id="spanIds"></span>
+                
+                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                    <div class="slds-form-element">
+                        <label class="slds-form-element__label">Part Number</label>
+                        <div class="slds-form-element__control">              
+                            <apex:inputField value="{!objWO.Part_Number__c}" styleClass="slds-input" id="prtNoId"/> 
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                    <div class="slds-form-element">
+                        <span style="color:red">*</span>
+                        <label class="slds-form-element__label">Part Description</label>
+                        <div class="slds-form-element__control">
+                            <apex:inputField value="{!objWO.Part_description__c}" styleClass="slds-input" id="prt"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                    <div class="slds-form-element">
+                        <label class="slds-form-element__label">Vendor</label>
+                        <div class="slds-form-element__control">
+                            <apex:inputField value="{!objWO.Vendor__c}" styleClass="slds-input" id="vendor"/>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                    <div class="slds-form-element">
+                        <label class="slds-form-element__label">Customer Name</label>
+                        <div class="slds-form-element__control">
+                            <apex:inputField value="{!objWO.Contact__c}" id="custno" onchange="lookupchange(this);"/>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                    <div class="slds-form-element">
+                        <label class="slds-form-element__label">WO For</label>
+                        <div class="slds-form-element__control">
+                            <apex:inputField value="{!objWO.WO_for__c}"  id="Wofor" onchange="lookupchange(this);"/>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                    <div class="slds-form-element">
+                        <label class="slds-form-element__label">Invoice For</label>
+                        <div class="slds-form-element__control">
+                            <apex:inputField value="{!objWO.Invoice_for__c}" id="Ivofor" onchange="lookupchange(this);"/>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                    <div class="slds-form-element">
+                        <label class="slds-form-element__label">Boat Make</label>
+                        <div class="slds-form-element__control">
+                            <apex:inputField value="{!objWO.Boat_Make__c}" styleClass="slds-input" id="Boatmake"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                    <div class="slds-form-element">
+                        <label class="slds-form-element__label">Boat Model</label>
+                        <div class="slds-form-element__control">
+                            <apex:inputField value="{!objWO.Boat_Model__c}" styleClass="slds-input" id="boatmodle"/>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                    <div class="slds-form-element">
+                        <label class="slds-form-element__label">Boat Year</label>
+                        <div class="slds-form-element__control">
+                            <apex:inputField value="{!objWO.Boat_Year__c}" styleClass="slds-input" id="boatyear"/>
+                        </div>
+                    </div> 
+                </div>
+                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                    <div class="slds-form-element">
+                        <label class="slds-form-element__label">Engine Make</label>
+                        <div class="slds-form-element__control">
+                            <apex:inputField value="{!objWO.Engine_Make__c}" styleClass="slds-input" id="engmake"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                    <div class="slds-form-element">
+                        <label class="slds-form-element__label">Engine Model</label>
+                        <div class="slds-form-element__control">
+                            <apex:inputField value="{!objWO.Engine_Model__c}" styleClass="slds-input" id="engmodle"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                    <div class="slds-form-element">
+                        <label class="slds-form-element__label">Engine Year</label>
+                        <div class="slds-form-element__control">
+                            <apex:inputField value="{!objWO.Engine_Year__c}" styleClass="slds-input" id="engyear"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                    <div class="slds-form-element">
+                        <label class="slds-form-element__label">Assigned To<span style="color:red">*</span></label>
+                        <div class="slds-form-element__control">
+                            <apex:inputField value="{!objWO.Assigned_to__c}" styleClass="hideDropDown" style="width:88%"  id="Assignedto"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                    <div class="slds-form-element">
+                        <label class="slds-form-element__label"> Part Request Status</label>
+                        <div class="slds-form-element__control">
+                            <apex:inputField value="{!objWO.Part_Request_Status__c}" styleClass="slds-input" id="prtst"/>
+                        </div>
+                    </div>                     
+                </div> 
+                
+                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                    <div class="slds-form-element">
+                        <label class="slds-form-element__label">Upload</label>
+                        <div class="slds-form-element__control">
+                            <input type="file" id="attchPRC"/>
+                        </div>
+                    </div>                    
+                </div>
+                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                    <div class="slds-form-element">
+                        <label class="slds-form-element__label"> &nbsp;</label>
+                        <div class="slds-form-element__control">
+                            &nbsp;
+                        </div>
+                    </div>                    
+                </div>
+                
+            </div><br/>
+            
+            <div>
+            	<label class="slds-form-element__label"> Attached Files:</label>
+            	<div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-1 slds-small-size--1-of-2 slds-col--padded" id="attSection">                    
+                </div>
+            </div>
+            <hr/>
+            <a class="slds-button slds-button--brand" id="crtWrkReq" style="margin-left: 39%;"  onclick="createWorkRequestPart(this)">Create Part Request</a>
+            <a class="slds-button slds-button--brand" id="cncl"  onclick="window.top.location='/apex/ServicePage';">Back to List</a>
+        </div>   
+        
+        <style> 
+            .hideDropDown select{ 
+            visibility: hidden !important; 
+            display: none !important; 
+            } 
+        </style>
+    </div><br/>
+    
+        
+    
+    <script> 
+    function createPRFormCall(){ 
+        
+        document.getElementById("WRTableSec1").style.display = "none";
+        document.getElementById("WRFrmSec1").style.display = "block";
+        
+    }
+    //document.getElementById('pge:frm:PartRequestCompCall:wrpcmp:reqest').value = 'Part Request';
+    function createWorkRequestPart(obj) {
+        var strBase64 = '';
+        var files = document.getElementById('attchPRC').files;
+        if(files.length > 0) {
+            var reader = new FileReader();
+            reader.readAsDataURL(files[0]);
+            reader.onload = function () {
+                strBase64 = reader.result;
+                var mapWorkRequest = new Object();
+                //   var prtrqfrm = document.getElementById("pge:frm:PartRequestCompCall:wrpcmp:prtreqId").value;
+                var prtno = document.getElementById("pge:frm:PartRequestCompCall:wrpcmp:prtNoId").value;
+                var prtdescrip = document.getElementById("pge:frm:PartRequestCompCall:wrpcmp:prt").value;
+                var vendor = document.getElementById("pge:frm:PartRequestCompCall:wrpcmp:vendor").value;
+                var custname = document.getElementById("pge:frm:PartRequestCompCall:wrpcmp:custno_lkid").value;
+                var Wofor = document.getElementById("pge:frm:PartRequestCompCall:wrpcmp:Wofor_lkid").value;
+                var invoicefor = document.getElementById("pge:frm:PartRequestCompCall:wrpcmp:Ivofor_lkid").value; 
+                var BoatMake = document.getElementById("pge:frm:PartRequestCompCall:wrpcmp:Boatmake").value;
+                var BoatModle = document.getElementById("pge:frm:PartRequestCompCall:wrpcmp:boatmodle").value;                      
+                var BoatYear =   document.getElementById("pge:frm:PartRequestCompCall:wrpcmp:boatyear").value;        
+                var EngineMake =  document.getElementById("pge:frm:PartRequestCompCall:wrpcmp:engmake").value; 
+                var EngineModel =   document.getElementById("pge:frm:PartRequestCompCall:wrpcmp:engmodle").value; 
+                var EngineYear =   document.getElementById("pge:frm:PartRequestCompCall:wrpcmp:engyear").value; 
+                var partRequestStatus =   document.getElementById("pge:frm:PartRequestCompCall:wrpcmp:prtst").value;
+                var assingedTo = '';
+                if(document.getElementById("pge:frm:PartRequestCompCall:wrpcmp:Assignedto_lkid").value != '000000000000000') { 
+                    assingedTo = document.getElementById("pge:frm:PartRequestCompCall:wrpcmp:Assignedto_lkid").value;
+                } else {
+                    alert('Please select Assign To.');
+                    return false;
+                }
+                //var prtreqest = document.getElementById("pge:frm:PartRequestCompCall:wrpcmp:reqest").value;
+                //Adding true below in if to remove the unwanted validations. A user can submit the request without any required field
+                if(prtdescrip){
+                    
+                    // mapWorkRequest["partReq"] = prtrqfrm;
+                    partId = document.getElementById("hiddnPartId").value;
+                    mapWorkRequest["Id"] = partId;
+                    mapWorkRequest["partnum"] = prtno;
+                    mapWorkRequest["prtdes"] = prtdescrip;
+                    mapWorkRequest["vendors"] = vendor;
+                    mapWorkRequest["custname"] = custname != "000000000000000" ? custname : null;
+                    mapWorkRequest["Wofors"] = Wofor != "000000000000000" ? Wofor : null;    
+                    mapWorkRequest["invoicefors"] = invoicefor != "000000000000000" ? invoicefor : null;
+                    mapWorkRequest["BoatMakes"] = BoatMake;
+                    mapWorkRequest["BoatModle"] = BoatModle;
+                    mapWorkRequest["BoatYear"] =  BoatYear;
+                    mapWorkRequest["EngineMake"] = EngineMake;
+                    mapWorkRequest["EngineModel"] = EngineModel;
+                    mapWorkRequest["EngineYear"] = EngineYear;
+                    mapWorkRequest["assingedTo"] = assingedTo != "000000000000000" ? assingedTo : null;
+                    mapWorkRequest["partRequestStatus"] = partRequestStatus;
+                    mapWorkRequest["prtReq"] = 'Part Request';
+                    $('.popup').addClass('active');
+                    BOATBUILDING.WorkRequestControllerClone.createWorkRequest(mapWorkRequest,strBase64, files[0].name,function(result, event) {
+                        $('.popup').removeClass('active');
+                        if(result.indexOf('Fail') == -1) {
+	                        document.getElementById("spanId").style.color = 'Green';
+	                        document.getElementById("spanId").innerHTML = "Work Request has been submitted successfully";
+	                        window.top.location = "/apex/BOATBUILDING__ServicePage?type=PartRequest&prId="+result; 
+	                    }
+	                    else{
+	                        document.getElementById("spanId").style.color = 'Red';
+	                        document.getElementById("spanId").innerHTML = "Error: "+result;
+	                    }
+                        
+                        
+                    },{buffer: true, escape: true, timeout: 120000});
+                    
+                }
+                else{
+                    alert('Please fill all the fields marked with red *');
+                }
+            };
+        }
+        else{
+            var mapWorkRequest = new Object();
+            //   var prtrqfrm = document.getElementById("pge:frm:PartRequestCompCall:wrpcmp:prtreqId").value;
+            var prtno = document.getElementById("pge:frm:PartRequestCompCall:wrpcmp:prtNoId").value;
+            var prtdescrip = document.getElementById("pge:frm:PartRequestCompCall:wrpcmp:prt").value;
+            var vendor = document.getElementById("pge:frm:PartRequestCompCall:wrpcmp:vendor").value;
+            var custname = document.getElementById("pge:frm:PartRequestCompCall:wrpcmp:custno_lkid").value;
+            var Wofor = document.getElementById("pge:frm:PartRequestCompCall:wrpcmp:Wofor_lkid").value;
+            var invoicefor = document.getElementById("pge:frm:PartRequestCompCall:wrpcmp:Ivofor_lkid").value; 
+            var BoatMake = document.getElementById("pge:frm:PartRequestCompCall:wrpcmp:Boatmake").value;
+            var BoatModle = document.getElementById("pge:frm:PartRequestCompCall:wrpcmp:boatmodle").value;                      
+            var BoatYear =   document.getElementById("pge:frm:PartRequestCompCall:wrpcmp:boatyear").value;        
+            var EngineMake =  document.getElementById("pge:frm:PartRequestCompCall:wrpcmp:engmake").value; 
+            var EngineModel =   document.getElementById("pge:frm:PartRequestCompCall:wrpcmp:engmodle").value; 
+            var EngineYear =   document.getElementById("pge:frm:PartRequestCompCall:wrpcmp:engyear").value; 
+            var partRequestStatus =   document.getElementById("pge:frm:PartRequestCompCall:wrpcmp:prtst").value;
+            var assingedTo = '';
+            if(document.getElementById("pge:frm:PartRequestCompCall:wrpcmp:Assignedto_lkid").value != '000000000000000') { 
+                assingedTo = document.getElementById("pge:frm:PartRequestCompCall:wrpcmp:Assignedto_lkid").value;
+            } else {
+                alert('Please select Assign To.');
+                return false;
+            }
+            //var prtreqest = document.getElementById("pge:frm:PartRequestCompCall:wrpcmp:reqest").value;
+            //Adding true below in if to remove the unwanted validations. A user can submit the request without any required field
+            if(prtdescrip){
+                
+                // mapWorkRequest["partReq"] = prtrqfrm;
+                partId = document.getElementById("hiddnPartId").value;
+                mapWorkRequest["Id"] = partId;
+                mapWorkRequest["partnum"] = prtno;
+                mapWorkRequest["prtdes"] = prtdescrip;
+                mapWorkRequest["vendors"] = vendor;
+                mapWorkRequest["custname"] = custname != "000000000000000" ? custname : null;
+                mapWorkRequest["Wofors"] = Wofor != "000000000000000" ? Wofor : null;    
+                mapWorkRequest["invoicefors"] = invoicefor != "000000000000000" ? invoicefor : null;
+                mapWorkRequest["BoatMakes"] = BoatMake;
+                mapWorkRequest["BoatModle"] = BoatModle;
+                mapWorkRequest["BoatYear"] =  BoatYear;
+                mapWorkRequest["EngineMake"] = EngineMake;
+                mapWorkRequest["EngineModel"] = EngineModel;
+                mapWorkRequest["EngineYear"] = EngineYear;
+                mapWorkRequest["assingedTo"] = assingedTo != "000000000000000" ? assingedTo : null;
+                mapWorkRequest["partRequestStatus"] = partRequestStatus;
+                mapWorkRequest["prtReq"] = 'Part Request';
+                $('.popup').addClass('active');
+                BOATBUILDING.WorkRequestControllerClone.createWorkRequest(mapWorkRequest,'','',function(result, event) {
+                    $('.popup').removeClass('active');
+                    if(result.indexOf('Fail') == -1) {
+                        document.getElementById("spanId").style.color = 'Green';
+                        document.getElementById("spanId").innerHTML = "Work Request has been submitted successfully";
+                        window.top.location = "/apex/BOATBUILDING__ServicePage?type=PartRequest&prId="+result; 
+                    }
+                    else{
+                        document.getElementById("spanId").style.color = 'Red';
+                        document.getElementById("spanId").innerHTML = "Error: "+result;
+                    }
+                    
+                    
+                },{buffer: true, escape: true, timeout: 120000});
+                
+            }
+            else{
+                alert('Please fill all the fields marked with red *');
+            }
+        }
+    }
+    
+    
+    
+    function fetchRequestpart(obj,objId) {
+        $('.popup').addClass('active');
+        BOATBUILDING.WorkRequestControllerClone.fetchWorkOrders(objId, function(result, event){
+            $('.popup').removeClass('active');
+             $('#prtdiv').show();
+            console.log(result);
+            if(event.status){
+                if(result != null) {
+                    document.getElementById("hiddnPartId").value = objId;
+                    document.getElementById("prname").innerHTML  = result[0].Name;
+                    if(result[0].BOATBUILDING__Part_Number__c != undefined) {
+                        document.getElementById("pge:frm:PartRequestCompCall:wrpcmp:prtNoId").value = result[0].BOATBUILDING__Part_Number__c;
+                    }
+                    if(result[0].BOATBUILDING__Part_description__c != undefined) {
+                        document.getElementById("pge:frm:PartRequestCompCall:wrpcmp:prt").value = result[0].BOATBUILDING__Part_description__c;
+                    }
+                    if(result[0].BOATBUILDING__Vendor__c != undefined) {
+                        document.getElementById("pge:frm:PartRequestCompCall:wrpcmp:vendor").value = result[0].BOATBUILDING__Vendor__c;
+                    }
+                    if(result[0].BOATBUILDING__Contact__c != undefined) {
+                        document.getElementById("pge:frm:PartRequestCompCall:wrpcmp:custno_lkid").value = result[0].BOATBUILDING__Contact__c;
+                        if(result[0].BOATBUILDING__Contact__r.FirstName != undefined) {
+                            document.getElementById("pge:frm:PartRequestCompCall:wrpcmp:custno_lkold").value = result[0].BOATBUILDING__Contact__r.FirstName +" "+ result[0].BOATBUILDING__Contact__r.LastName;
+                            document.getElementById("pge:frm:PartRequestCompCall:wrpcmp:custno").value = result[0].BOATBUILDING__Contact__r.FirstName +" "+ result[0].BOATBUILDING__Contact__r.LastName;
+                        } else {
+                            document.getElementById("pge:frm:PartRequestCompCall:wrpcmp:custno_lkold").value = result[0].BOATBUILDING__Contact__r.LastName;
+                            document.getElementById("pge:frm:PartRequestCompCall:wrpcmp:custno").value = result[0].BOATBUILDING__Contact__r.LastName;
+                        }
+                    }
+                    if(result[0].BOATBUILDING__WO_for__c != undefined) {
+                        document.getElementById("pge:frm:PartRequestCompCall:wrpcmp:Wofor_lkid").value = result[0].BOATBUILDING__WO_for__c;
+                        document.getElementById("pge:frm:PartRequestCompCall:wrpcmp:Wofor_lkold").value = result[0].BOATBUILDING__WO_for__r.Name;
+                        document.getElementById("pge:frm:PartRequestCompCall:wrpcmp:Wofor").value = result[0].BOATBUILDING__WO_for__r.Name;
+                    }
+                    if(result[0].BOATBUILDING__Invoice_for__c != undefined) {
+                        document.getElementById("pge:frm:PartRequestCompCall:wrpcmp:Ivofor_lkid").value = result[0].BOATBUILDING__Invoice_for__c;
+                        document.getElementById("pge:frm:PartRequestCompCall:wrpcmp:Ivofor_lkold").value = result[0].BOATBUILDING__Invoice_for__r.Name;
+                        document.getElementById("pge:frm:PartRequestCompCall:wrpcmp:Ivofor").value = result[0].BOATBUILDING__Invoice_for__r.Name;
+                    }
+                    if(result[0].BOATBUILDING__Boat_Make__c != undefined) {
+                        document.getElementById("pge:frm:PartRequestCompCall:wrpcmp:Boatmake").value = result[0].BOATBUILDING__Boat_Make__c;
+                    }
+                    if(result[0].BOATBUILDING__Boat_Model__c != undefined) {
+                        document.getElementById("pge:frm:PartRequestCompCall:wrpcmp:boatmodle").value = result[0].BOATBUILDING__Boat_Model__c;
+                    }
+                    if(result[0].BOATBUILDING__Boat_Year__c != undefined) {
+                        document.getElementById("pge:frm:PartRequestCompCall:wrpcmp:boatyear").value = result[0].BOATBUILDING__Boat_Year__c;
+                    }
+                    if(result[0].BOATBUILDING__Engine_Make__c != undefined) {
+                        document.getElementById("pge:frm:PartRequestCompCall:wrpcmp:engmake").value = result[0].BOATBUILDING__Engine_Make__c;
+                    }
+                    if(result[0].BOATBUILDING__Engine_Model__c != undefined) {
+                        document.getElementById("pge:frm:PartRequestCompCall:wrpcmp:engmodle").value  = result[0].BOATBUILDING__Engine_Model__c;
+                    }
+                    if(result[0].BOATBUILDING__Engine_Year__c != undefined) {
+                        document.getElementById("pge:frm:PartRequestCompCall:wrpcmp:engyear").value = result[0].BOATBUILDING__Engine_Year__c;
+                    }
+                    if(result[0].BOATBUILDING__Assigned_to__c != undefined) {
+                        document.getElementById("pge:frm:PartRequestCompCall:wrpcmp:Assignedto_lkid").value = result[0].BOATBUILDING__Assigned_to__c;
+                        document.getElementById("pge:frm:PartRequestCompCall:wrpcmp:Assignedto_lkold").value = result[0].BOATBUILDING__Assigned_to__r.Name;
+                        document.getElementById("pge:frm:PartRequestCompCall:wrpcmp:Assignedto").value = result[0].BOATBUILDING__Assigned_to__r.Name;
+                    }
+                    if(result[0].BOATBUILDING__Part_Request_Status__c != undefined) {
+                        document.getElementById("pge:frm:PartRequestCompCall:wrpcmp:prtst").value = result[0].BOATBUILDING__Part_Request_Status__c;
+                    }
+                    if(result[0].BOATBUILDING__Request_Type__c != undefined) {
+                        //document.getElementById("pge:frm:PartRequestCompCall:wrpcmp:reqest").value = result[0].BOATBUILDING__Request_Type__c;
+                    }
+                    createPRFormCall();
+                    document.getElementById("crtWrkReq").innerHTML = "Update  Part Request";
+                    
+                    BOATBUILDING.WorkRequestControllerClone.getAttRecords(objId, function(result2, event2){
+                    	if(event2.status && result2.length > 0) {
+                    		var attSectionHTML = '<table style="border: 1px solid #ccc;"><tr>';
+                    		for(var i=0; i < result2.length; i++) {
+                    			attSectionHTML += '<td style="text-align: center;"><a href="/servlet/servlet.FileDownload?file='+result2[i].Id+'" target="_blank"><img style="max-width: 100px;" src="/servlet/servlet.FileDownload?file='+result2[i].Id+'" ></img></a></td>';
+                    			//attSectionHTML += '<a href="/servlet/servlet.FileDownload?file='+result2[i].Id+'" target="_blank">'+result2[i].Name+'</a><br/>';
+                    		}
+                    		attSectionHTML += '</tr></table>';
+                    		$("#attSection").html(attSectionHTML);
+                    	}
+                    });
+                    
+                }
+            }
+            
+            
+        },{buffer: true, escape: true, timeout: 120000});
+    }
+    
+    
+    </script>
+</apex:component>

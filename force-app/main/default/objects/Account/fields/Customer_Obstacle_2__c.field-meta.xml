@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Customer_Obstacle_2__c</fullName>
+    <deprecated>false</deprecated>
+    <externalId>false</externalId>
+    <label>Customer Obstacle 2</label>
+    <required>false</required>
+    <trackFeedHistory>false</trackFeedHistory>
+    <type>Picklist</type>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Customer has bad credit</fullName>
+                <default>false</default>
+                <label>Customer has bad credit</label>
+            </value>
+            <value>
+                <fullName>Customer is waiting</fullName>
+                <default>false</default>
+                <label>Customer is waiting</label>
+            </value>
+            <value>
+                <fullName>Customer doesn&#39;t have down payment</fullName>
+                <default>false</default>
+                <label>Customer doesn&#39;t have down payment</label>
+            </value>
+            <value>
+                <fullName>Customer likes another brand better</fullName>
+                <default>false</default>
+                <label>Customer likes another brand better</label>
+            </value>
+            <value>
+                <fullName>Customer is all over the place</fullName>
+                <default>false</default>
+                <label>Customer is all over the place</label>
+            </value>
+            <value>
+                <fullName>Customer wants to look at other brands</fullName>
+                <default>false</default>
+                <label>Customer wants to look at other brands</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

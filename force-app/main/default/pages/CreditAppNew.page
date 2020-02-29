@@ -1,0 +1,905 @@
+<apex:page standardController="Account" showHeader="false" extensions="CreditAppPageController" id="pg">
+    <apex:stylesheet value="{!URLFOR($Resource.BoatBuilderSR, 'assets/styles/salesforce-lightning-design-system.min.css')}" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"/>
+    <apex:includeScript value="{!URLFOR($Resource.Signature, 'jquery.min.js')}"/>
+    <style> 
+        .isa_error {
+        color: #D8000C;
+        background-color: #FFBABA;
+        margin: 10px 0px;
+        padding: 12px;
+        }
+        .lookupInput a.slds-input {
+        width: 28px !important;
+        margin: 0;
+        display: inline-block;
+        background: url('/resource/BOATBUILDING__BoatBuilderSR/assets/icons/utility/search_60.png');
+        background-size: contain;
+        background-repeat: no-repeat;
+        border: none;
+        margin-left: 5px;
+        }
+        
+        .zen-deemphasize, .actionColumn {
+        font-weight: bold !important;   
+        } 
+    </style>
+    <apex:form id="frm" >
+        <apex:messages ></apex:messages>
+        <title>Application Form</title>
+        <div class="slds-grid slds-wrap slds-col--padded">
+            <div class="slds-col--padded slds-col slds-size--1-of-1 Customer-Heading">
+                <h2 class=" heading"><br/>
+                    <span class="slds-text-heading--small"><b>Application Form</b></span>
+                </h2>
+            </div>
+        </div>
+        <!--Primary Applicant Header Info -->
+        <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-1 slds-col--padded" style="padding: 1%; margin-top: 2%; border-bottom: solid 1px #ccc!important; border-top: solid 1px #ccc!important;">
+            <apex:outputPanel rendered="true">
+                <div class="slds-grid slds-wrap">
+                    <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-1 slds-col--padded">
+                        <div class="slds-grid slds-wrap" style="margin-top: 1%;">
+                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                                <div class="slds-form-element">
+                                    <label class="slds-form-element__label">First Name<span style="color: red;">*</span></label>
+                                    <div class="slds-form-element__control">
+                                        <apex:inputText value="{!Account.Prospect_First_Name__c}" id="fname" styleClass="slds-input"/>
+                                    </div>
+                                </div> 
+                            </div>
+                            
+                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                                <div class="slds-form-element">
+                                    <label class="slds-form-element__label">Last Name<span style="color: red;">*</span></label>
+                                    <div class="slds-form-element__control">
+                                        <apex:inputText value="{!Account.Prospect_Last_Name__c}" id="lname" styleClass="slds-input"/>
+                                    </div>
+                                </div> 
+                            </div>
+                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                                <div class="slds-form-element"> 
+                                    <label class="slds-form-element__label">Phone Number<span style="color: red;">*</span></label>
+                                    <div class="slds-form-element__control">
+                                        <apex:inputText value="{!Account.Phone}"  id="pno" styleClass="slds-input"/>
+                                    </div>
+                                </div> 
+                            </div>
+                            
+                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                                <div class="slds-form-element">
+                                    <label class="slds-form-element__label">Email<span style="color: red;">*</span></label>
+                                    <div class="slds-form-element__control">
+                                        <apex:inputText value="{!Account.Email__c}" id="eml" styleClass="slds-input"/>
+                                    </div>
+                                </div> 
+                            </div>
+                        </div> 
+                    </div>
+                </div>
+            </apex:outputPanel>
+            
+            <apex:outputPanel rendered="true" id="op">
+                <div class="slds-grid slds-wrap">
+                    <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-1 slds-col--padded">
+                        <div class="slds-grid slds-wrap" style="margin-top: 1%;">
+                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                                <div class="slds-form-element">
+                                    <label class="slds-form-element__label">Social Security Number<span style="color: red;">*</span> </label>
+                                    <div class="slds-form-element__control">
+                                        <apex:inputText value="{!Account.SFA_Social_Security_Number__c}" id="SSN" styleClass="slds-input"/>
+                                    </div>
+                                </div> 
+                            </div>
+                            
+                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                                <div class="slds-form-element">
+                                    <label class="slds-form-element__label">Date of Birth(mm/dd/yyy)<span style="color: red;">*</span></label>
+                                    <div class="slds-form-element__control">
+                                        <apex:inputText value="{!Account.SFA_Date_of_Birth__c}" id="dob" styleClass="slds-input"/>
+                                    </div>
+                                </div> 
+                            </div>
+                            
+                            
+                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                                <div class="slds-form-element">
+                                    <label class="slds-form-element__label">Driver's License Number<span style="color: red;">*</span></label>
+                                    <div class="slds-form-element__control">
+                                        <apex:inputText value="{!Account.SFA_Drivers_License__c}" id="dln" styleClass="slds-input"/>
+                                    </div>
+                                </div> 
+                            </div>
+                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                                <div class="slds-form-element">
+                                    <label class="slds-form-element__label">&nbsp;</label>
+                                    <div class="slds-form-element__control">
+                                        &nbsp;
+                                    </div>
+                                </div> 
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </apex:outputPanel>
+        </div>
+        
+        <!--Primary Applicant Address Info -->
+        <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-1 slds-col--padded" style="padding: 1%; border-bottom: solid 1px #ccc!important;">
+            <apex:outputPanel rendered="true">
+                <div class="slds-grid slds-wrap">
+                    <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-1 slds-col--padded">
+                        <div class="slds-grid slds-wrap" style="margin-top: 1%;">                                               
+                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                                <div class="slds-form-element">
+                                    <label class="slds-form-element__label">Address<span style="color: red;">*</span></label>
+                                    <div class="slds-form-element__control">
+                                        <apex:inputText value="{!Account.BillingStreet}" id="add" styleClass="slds-input"/>
+                                    </div>
+                                </div> 
+                            </div>
+                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                                <div class="slds-form-element">
+                                    <label class="slds-form-element__label">City</label>
+                                    <div class="slds-form-element__control">
+                                        <apex:inputText value="{!Account.BillingCity}" styleClass="slds-input"/>
+                                    </div>
+                                </div> 
+                            </div>
+                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                                <div class="slds-form-element">
+                                    <label class="slds-form-element__label">State / Province / Region</label>
+                                    <div class="slds-form-element__control">
+                                        <apex:inputText value="{!Account.BillingState}" styleClass="slds-input"/>
+                                    </div>
+                                </div> 
+                            </div>
+                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                                <div class="slds-form-element">
+                                    <label class="slds-form-element__label">Postal / Zip Code</label>
+                                    <div class="slds-form-element__control">
+                                        <apex:inputText value="{!Account.BillingPostalCode}" styleClass="slds-input"/>
+                                    </div>
+                                </div> 
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </apex:outputPanel>
+            
+            <apex:outputPanel rendered="true">
+                <div class="slds-grid slds-wrap">
+                    <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-1 slds-col--padded">
+                        <div class="slds-grid slds-wrap" style="margin-top: 1%;">                                               
+                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                                <div class="slds-form-element">
+                                    <label class="slds-form-element__label">Country</label>
+                                    <div class="slds-form-element__control">
+                                        <apex:inputText value="{!Account.BillingCountry}" styleClass="slds-input"/>
+                                    </div>
+                                </div> 
+                            </div>
+                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                                
+                            </div>
+                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                                
+                            </div>
+                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                                
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </apex:outputPanel>
+        </div> 
+        
+         <!--Primary Applicant Mortgage Info -->
+        <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-1 slds-col--padded" style="padding: 1%; border-bottom: solid 1px #ccc!important;"> 
+            <apex:outputPanel rendered="true">
+                <div class="slds-grid slds-wrap">
+                    <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-1 slds-col--padded">
+                        <div class="slds-grid slds-wrap" style="margin-top: 1%;">                                               
+                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                                <div class="slds-form-element">
+                                    <label class="slds-form-element__label">Mortgage Lender/Landlord Name</label>
+                                    <div class="slds-form-element__control">
+                                        <apex:inputText value="{!Account.SFA_Landlord_Mortgage_Holder__c}" styleClass="slds-input"/>
+                                    </div>
+                                </div> 
+                            </div>
+                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                                <div class="slds-form-element">
+                                    <label class="slds-form-element__label"> Monthly Payment<span style="color: red;">*</span></label>
+                                    <div class="slds-form-element__control">
+                                        <apex:inputText value="{!Account.SFA_Monthly_Rent_Mortgage__c}" id="monthp" styleClass="slds-input"/>
+                                    </div>
+                                </div> 
+                            </div>
+                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                                <div class="slds-form-element">
+                                    <label class="slds-form-element__label">Own/Rent<span style="color: red;">*</span></label>
+                                    <div class="slds-form-element__control">
+                                        <apex:inputField value="{!Account.SFA_Property_Owner__c}" id="owrent" styleClass="slds-input"/>
+                                    </div>
+                                </div> 
+                            </div>
+                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                                <div class="slds-form-element">
+                                    <label class="slds-form-element__label"> Years at Address<span style="color: red;">*</span></label>
+                                    <div class="slds-form-element__control">
+                                        <apex:inputField value="{!Account.SFA_Years_at_current_address__c}" id="yadd" styleClass="slds-input"/>
+                                    </div>
+                                </div> 
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </apex:outputPanel>
+
+            <apex:outputPanel >
+                <div class="slds-grid slds-wrap">
+                    <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-1 slds-col--padded">
+                        <div class="slds-grid slds-wrap" style="margin-top: 1%;">                                               
+                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                                <div class="slds-form-element">
+                                    <label class="slds-form-element__label">Months at Address<span style="color: red;">*</span> </label>
+                                    <div class="slds-form-element__control">
+                                        <apex:inputField value="{!Account.SFA_Months_at_current_address__c}" id="madd" styleClass="slds-input"/>
+                                    </div>
+                                </div> 
+                            </div>
+                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                                
+                            </div>
+                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                                
+                            </div>
+                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                                
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </apex:outputPanel>
+
+        </div>
+        
+        <!--Primary Applicant Occupation Info -->
+        <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-1 slds-col--padded" style="padding: 1%; ">
+            
+            <div class="slds-grid slds-wrap">
+                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-1 slds-col--padded">
+                    <div class="slds-grid slds-wrap" style="margin-top: 1%;">
+                        <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                            <div class="slds-form-element">
+                                <label class="slds-form-element__label">Current Occupation<span style="color: red;">*</span></label>
+                                <div class="slds-form-element__control">
+                                    <apex:inputText value="{!Account.SFA_Occupation__c}" id="occup" styleClass="slds-input"/>
+                                </div>
+                            </div>
+                        </div>  
+                        
+                        <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                            <div class="slds-form-element">
+                                <label class="slds-form-element__label">Current Employer Name<span style="color: red;">*</span></label>
+                                <div class="slds-form-element__control">
+                                    <apex:inputText value="{!Account.SFA_Employer_Name__c}" id="cempname" styleClass="slds-input"/>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                            
+                            <div class="slds-form-element">
+                                <label class="slds-form-element__label">Current Employer Phone Number<span style="color: red;">*</span></label>
+                                <div class="slds-form-element__control">
+                                    <apex:inputText value="{!Account.SFA_Employer_Phone__c}" id="cemphone" styleClass="slds-input"/>
+                                </div>
+                            </div>
+                        </div>  
+                        <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                            <div class="slds-form-element">
+                                <label class="slds-form-element__label">Current Monthly Salary<span style="color: red;">*</span></label>
+                                <div class="slds-form-element__control">
+                                    <apex:inputText value="{!Account.SFA_Salary_Annually_Gross__c}" id="cempsal" styleClass="slds-input"/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="slds-grid slds-wrap" style="border-bottom: solid 1px; padding-bottom:1%; border-color: #c2c2a3">
+                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-1 slds-col--padded">
+                    <div class="slds-grid slds-wrap" style="margin-top: 1%;">                                
+                        
+                        <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                            <div class="slds-form-element">
+                                <label class="slds-form-element__label">Years with Current Employer<span style="color: red;">*</span></label>
+                                <div class="slds-form-element__control">
+                                    <apex:inputText value="{!Account.SFA_Years_at_employer__c}" id="ycemp" styleClass="slds-input"/>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                            <div class="slds-form-element">
+                                <label class="slds-form-element__label">Months with Current Employer<span style="color: red;">*</span> </label>
+                                <div class="slds-form-element__control">
+                                    <apex:inputText value="{!Account.SFA_Months_at_Employer__c}" id="mcemp" styleClass="slds-input"/>
+                                </div>
+                            </div>
+                        </div>   
+                        <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                            <div class="slds-form-element">
+                                <label class="slds-form-element__label">&nbsp;</label>
+                                <div class="slds-form-element__control">
+                                    &nbsp;
+                                </div>
+                            </div> 
+                        </div>
+                        <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                            <div class="slds-form-element">
+                                <label class="slds-form-element__label">&nbsp;</label>
+                                <div class="slds-form-element__control">
+                                    &nbsp;
+                                </div>
+                            </div> 
+                        </div>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Co-Applicant -->
+        <apex:outputPanel rendered="true">
+            <div class="slds-grid slds-wrap" style="margin-top: 1%;">
+                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                    <div class="slds-form-element">
+                        <label class="slds-form-element__label">Do you have a Co-Applicant?</label>
+                        <div class="slds-form-element__control">
+                            <label class="slds-checkbox--toggle slds-grid slds-grid--vertical-align-center">
+                                <input name="checkbox" type="checkbox" value="on" id="stockInvtryId" />
+                                <span class="slds-checkbox--faux" data-check-on="Yes" data-check-off="No"></span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <apex:messages ></apex:messages>
+            <div id="formhide" style="display:none">
+                
+                <title>Co-Applicant</title>
+                <div class="slds-grid slds-wrap slds-col--padded">
+                    <div class="slds-col--padded slds-col slds-size--1-of-1 Customer-Heading">
+                        <h2 class=" heading"><br/>
+                            <span class="slds-text-heading--small"><b>Co-Applicant</b></span>
+                        </h2>
+                    </div>
+                </div>
+                
+                <!--Co-Applicant Header Info -->
+                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-1 slds-col--padded" style="padding: 1%; margin-top: 2%; border-bottom: solid 1px #ccc!important; border-top: solid 1px #ccc!important;">
+                    <apex:outputPanel rendered="true">
+                        <div class="slds-grid slds-wrap">
+                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-1 slds-col--padded">
+                                <div class="slds-grid slds-wrap" style="margin-top: 1%;">
+                                    <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                                        <div class="slds-form-element">
+                                            <label class="slds-form-element__label">First Name<span style="color: red;">*</span></label>
+                                            <div class="slds-form-element__control">
+                                                <apex:inputText value="{!Account.Joint_Applicant_First_Name__c}" id="cfname" styleClass="slds-input"/>
+                                            </div>
+                                        </div> 
+                                    </div>
+                                    
+                                    <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                                        <div class="slds-form-element">
+                                            <label class="slds-form-element__label">Last Name<span style="color: red;">*</span></label>
+                                            <div class="slds-form-element__control">
+                                                <apex:inputText value="{!Account.Joint_Applicant_Last_Name__c}" id="clname" styleClass="slds-input"/>
+                                            </div>
+                                        </div> 
+                                    </div>
+                                    <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                                        <div class="slds-form-element">
+                                            <label class="slds-form-element__label">Date of Birth(mm/dd/yyy)<span style="color: red;">*</span></label>
+                                            <div class="slds-form-element__control">
+                                                <apex:inputText value="{!Account.Joint_Applicant_Date_of_Birth__c}" id="cdob" styleClass="slds-input"/>
+                                            </div>
+                                        </div> 
+                                    </div>
+                                    
+                                    <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                                        <div class="slds-form-element">
+                                            <label class="slds-form-element__label">Relationship to Applicant<span style="color: red;">*</span></label>
+                                            <div class="slds-form-element__control">
+                                                <apex:inputText value="{!Account.Relationship_to_Applicant__c}" id="rtoapp" styleClass="slds-input"/>
+                                            </div>
+                                        </div> 
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </apex:outputPanel>
+                    
+                    <apex:outputPanel rendered="true" id="opp">
+                        <div class="slds-grid slds-wrap">
+                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-1 slds-col--padded">
+                                <div class="slds-grid slds-wrap" style="margin-top: 1%;">
+                                    <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                                        <div class="slds-form-element">
+                                            <label class="slds-form-element__label">Social Security Number<span style="color: red;">*</span> </label>
+                                            <div class="slds-form-element__control">
+                                                <apex:inputText value="{!Account.Joint_Applicant_Social_Security_Number__c}" id="cssn" styleClass="slds-input"/>
+                                            </div>
+                                        </div> 
+                                    </div>
+                                    
+                                    <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                                        <div class="slds-form-element">
+                                            <label class="slds-form-element__label">Driver's License Number<span style="color: red;">*</span></label>
+                                            <div class="slds-form-element__control">
+                                                <apex:inputText value="{!Account.Joint_Applicant_Drivers_License__c}" id="cdlm" styleClass="slds-input"/>
+                                            </div>
+                                        </div> 
+                                    </div>
+                                    <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                                        <div class="slds-form-element"> 
+                                            <label class="slds-form-element__label">Phone Number<span style="color: red;">*</span></label>
+                                            <div class="slds-form-element__control">
+                                                <apex:inputText value="{!Account.Joint_Applicant_Phone__c}" id="cpno" styleClass="slds-input"/>
+                                            </div>
+                                        </div> 
+                                    </div>
+                                    <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                                        <div class="slds-form-element">
+                                            <label class="slds-form-element__label">Email<span style="color: red;">*</span></label>
+                                            <div class="slds-form-element__control">
+                                                <apex:inputText value="{!Account.Joint_Applicant_Email__c}" id="emll" styleClass="slds-input"/>
+                                            </div>
+                                        </div> 
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </apex:outputPanel>
+                </div>
+                
+                <!--Co-Applicant Address Info -->
+                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-1 slds-col--padded" style="padding: 1%; border-bottom: solid 1px  #ccc!important; ">
+                    <apex:outputPanel rendered="true">
+                        <div class="slds-grid slds-wrap">
+                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-1 slds-col--padded">
+                                <div class="slds-grid slds-wrap" style="margin-top: 1%;">                                                     
+                                    <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                                        <div class="slds-form-element">
+                                            <label class="slds-form-element__label">Address<span style="color: red;">*</span></label>
+                                            <div class="slds-form-element__control">
+                                                <apex:inputText value="{!Account.Joint_Applicant_Street_Address__c}" id="cadd" styleClass="slds-input"/>
+                                            </div>
+                                        </div> 
+                                    </div>
+                                    <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                                        <div class="slds-form-element">
+                                            <label class="slds-form-element__label">City</label>
+                                            <div class="slds-form-element__control">
+                                                <apex:inputText value="{!Account.Joint_Applicant_City__c}" styleClass="slds-input"/>
+                                            </div>
+                                        </div> 
+                                    </div>
+                                    <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                                        <div class="slds-form-element">
+                                            <label class="slds-form-element__label">State / Province / Region</label>
+                                            <div class="slds-form-element__control">
+                                                <apex:inputText value="{!Account.Joint_Applicant_State__c}" styleClass="slds-input"/>
+                                            </div>
+                                        </div> 
+                                    </div>
+                                    <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                                        <div class="slds-form-element">
+                                            <label class="slds-form-element__label">Postal / Zip Code</label>
+                                            <div class="slds-form-element__control">
+                                                <apex:inputText value="{!Account.Joint_Applicant_Zip_Postal_Code__c}" styleClass="slds-input"/>
+                                            </div>
+                                        </div> 
+                                    </div>
+                                    
+                                </div>
+                            </div>
+                        </div>
+                    </apex:outputPanel>
+                    
+                    <apex:outputPanel rendered="true">
+                        <div class="slds-grid slds-wrap">
+                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-1 slds-col--padded">
+                                <div class="slds-grid slds-wrap" style="margin-top: 1%;">                                               
+                                    <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                                        <div class="slds-form-element">
+                                            <label class="slds-form-element__label">Country</label>
+                                            <div class="slds-form-element__control">
+                                                <apex:inputText value="{!Account.Joint_Applicant_County__c}" styleClass="slds-input"/>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                                        
+                                    </div>
+                                    <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                                        
+                                    </div>
+                                    <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                                        
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </apex:outputPanel>
+                </div> 
+                
+                <!--Co-Applicant Mortgage Info -->
+                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-1 slds-col--padded" style="padding: 1%; border-bottom: solid 1px #ccc!important;"> 
+                    <apex:outputPanel rendered="true">
+                        <div class="slds-grid slds-wrap">
+                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                                <div class="slds-form-element">
+                                    <label class="slds-form-element__label">Mortgage Lender/Landlord Name</label>
+                                    <div class="slds-form-element__control">
+                                        <apex:inputText value="{!Account.Joint_Applicant_Landlord_Mortgage_Holder__c}" styleClass="slds-input"/>
+                                    </div>
+                                </div> 
+                            </div>
+                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                                <div class="slds-form-element">
+                                    <label class="slds-form-element__label"> Monthly Payment<span style="color: red;">*</span></label>
+                                    <div class="slds-form-element__control">
+                                        <apex:inputText value="{!Account.Joint_Applicant_Monthly_Rent_Mortgage__c}" id="cmp" styleClass="slds-input"/>
+                                    </div>
+                                </div> 
+                            </div>
+                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                                <div class="slds-form-element">
+                                    <label class="slds-form-element__label">Own/Rent<span style="color: red;">*</span></label>
+                                    <div class="slds-form-element__control">
+                                        <apex:inputField value="{!Account.Joint_Applicant_Property_Owner__c}" id="cownrent" styleClass="slds-input"/>
+                                    </div>
+                                </div> 
+                            </div> 
+                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                                <div class="slds-form-element">
+                                    <label class="slds-form-element__label"> Years at Address<span style="color: red;">*</span></label>
+                                    <div class="slds-form-element__control">
+                                        <apex:inputField value="{!Account.Joint_Applicant_Years_at_current_address__c}" id="cyadd" styleClass="slds-input"/>
+                                    </div>
+                                </div> 
+                            </div>
+                        </div>
+                    </apex:outputPanel>
+        
+                    <apex:outputPanel >
+                        <div class="slds-grid slds-wrap">
+                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-1 slds-col--padded">
+                                <div class="slds-grid slds-wrap" style="margin-top: 1%;">                                               
+                                    <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                                        <div class="slds-form-element">
+                                            <label class="slds-form-element__label">Months at Address<span style="color: red;">*</span> </label>
+                                            <div class="slds-form-element__control">
+                                                <apex:inputField value="{!Account.Joint_Applicant_Months_Current_Address__c}" id="cmadd" styleClass="slds-input"/>
+                                            </div>
+                                        </div> 
+                                    </div>
+                                    <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                                        
+                                    </div>
+                                    <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                                        
+                                    </div>
+                                    <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                                        
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </apex:outputPanel>
+                </div>
+ 
+                <!--Co-Applicant Occupation Info -->
+                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-1 slds-col--padded" style="padding: 1%; border-bottom: solid 1px #ccc!important;">
+                    <div class="slds-grid slds-wrap">
+                        <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-1 slds-col--padded">
+                            <div class="slds-grid slds-wrap" style="margin-top: 1%;">
+                                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                                    <div class="slds-form-element">
+                                        <label class="slds-form-element__label">Current Occupation</label>
+                                        <div class="slds-form-element__control">
+                                            <apex:inputText value="{!Account.Joint_Applicant_Occupation__c}" id="joccup" styleClass="slds-input"/>
+                                        </div>
+                                    </div>
+                                </div>  
+                                
+                                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                                    <div class="slds-form-element">
+                                        <label class="slds-form-element__label">Current Employer Name<span style="color: red;">*</span></label>
+                                        <div class="slds-form-element__control">
+                                            <apex:inputText value="{!Account.Joint_Applicant_Employer_Name__c}" id="jcempname" styleClass="slds-input"/>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                                    <div class="slds-form-element">
+                                        <label class="slds-form-element__label">Current Employer Phone Number<span style="color: red;">*</span></label>
+                                        <div class="slds-form-element__control">
+                                            <apex:inputText value="{!Account.Joint_Applicant_Employer_Phone__c}" id="jcempno" styleClass="slds-input"/>
+                                        </div>
+                                    </div>
+                                </div> 
+                                
+                                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                                    <div class="slds-form-element">
+                                        <label class="slds-form-element__label">Current Monthly Salary<span style="color: red;">*</span></label>
+                                        <div class="slds-form-element__control">
+                                            <apex:inputText value="{!Account.Joint_Applicant_Salary_Annually_Gross__c}" id="coempsal" styleClass="slds-input"/>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+        
+                    <div class="slds-grid slds-wrap">
+                        <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-1 slds-col--padded">
+                            <div class="slds-grid slds-wrap" style="margin-top: 1%;">                                
+                                
+                                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                                    <div class="slds-form-element">
+                                        <label class="slds-form-element__label">Years with Current Employer<span style="color: red;">*</span></label>
+                                        <div class="slds-form-element__control">
+                                            <apex:inputText value="{!Account.Joint_Applicant_Years_at_Employer__c}" id="cycemp" styleClass="slds-input"/>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                                    <div class="slds-form-element">
+                                        <label class="slds-form-element__label">Months with Current Employer<span style="color: red;">*</span> </label>
+                                        <div class="slds-form-element__control">
+                                            <apex:inputText value="{!Account.Joint_Applicant_Months_at_Employer__c}" id="jcmcemp" styleClass="slds-input"/>
+                                        </div>
+                                    </div>
+                                </div>   
+                                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+        
+                                </div>
+                                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+        
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+           </div>  
+            
+            <!--Signature Area -->
+            <div class="slds-grid slds-wrap">
+                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-1 slds-col--padded">
+                    <div class="slds-grid slds-wrap" style="margin-top: 1%;"> 
+                        <div class="slds-grid slds-wrap" style="margin-top: 1%;">
+                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                                <div class="slds-form-element">
+                                    <label class="slds-form-element__label">Signature</label>
+                                    <div class="slds-form-element__control">
+                                        <apex:inputText styleClass="slds-input"/>
+                                    </div>
+                                </div>
+                            </div>                                  
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </apex:outputPanel>                                                                                                                                                                            
+
+        <a href="javascript:void(0);" onclick="saveDetails();" class="slds-button slds-button--neutral slds-button--brand" style="border: 1px solid white; box-shadow: 3px 5px 15px #888888;position: fixed; z-index: 99; left: 88%; top: 2%;">
+            Submit 
+        </a>
+        <a href="javascript:void(0);" onclick="window.top.location = '{!cancelURL}';" class="slds-button slds-button--neutral slds-button--brand" style="border: 1px solid white; box-shadow: 3px 5px 15px #888888;position: fixed; z-index: 99; left: 93%; top: 2%;">
+            Cancel  
+        </a> 
+        <apex:actionFunction name="saveDetailsSF" action="{!saveCreditDetails}" />
+    </apex:form>   
+    <script> 
+    
+    var btn1='off';
+    function saveDetails() {
+        var email = document.getElementById("pg:frm:eml").value;
+        if(document.getElementById("pg:frm:SSN").value == null || document.getElementById("pg:frm:SSN").value == "" ) {
+            alert("Please Enter Social Security Number.");
+            return false;
+        }
+        if(document.getElementById("pg:frm:fname").value == null || document.getElementById("pg:frm:fname").value == "" ) {
+            alert("Please Enter First name.");
+            return false;
+        }
+        if(document.getElementById("pg:frm:lname").value == null || document.getElementById("pg:frm:lname").value == "" ) {
+            alert("Please Enter last name.");
+            return false;
+        }
+        if(document.getElementById("pg:frm:pno").value == null || document.getElementById("pg:frm:pno").value == "" ) {
+            alert("Please Enter Phone Number.");
+            return false;
+        }
+        if(document.getElementById("pg:frm:dob").value == null || document.getElementById("pg:frm:dob").value == "" ) {
+            alert("Please Enter Date of birth.");
+            return false;
+        }
+        
+        if(document.getElementById("pg:frm:dln").value == null || document.getElementById("pg:frm:dln").value == "" ) {
+            alert("Please Enter Driver License Number.");
+            return false;
+        }
+        if(document.getElementById("pg:frm:add").value == null || document.getElementById("pg:frm:add").value == "" ) {
+            alert("Please Enter Address.");
+            return false;
+        }
+        
+        if(document.getElementById("pg:frm:monthp").value == null || document.getElementById("pg:frm:monthp").value == "" ) {
+            alert("Please Enter Monthly Payment.");
+            return false;
+        }
+        
+        if(document.getElementById("pg:frm:yadd").value == null || document.getElementById("pg:frm:yadd").value == "" ) {
+            alert("Please Enter Years at address.");
+            return false;
+        }
+        if(document.getElementById("pg:frm:madd").value == null || document.getElementById("pg:frm:madd").value == "" ) {
+            alert("Please Enter Months at address.");
+            return false;
+        }
+        
+        if(document.getElementById("pg:frm:owrent").value == null || document.getElementById("pg:frm:owrent").value == "" ) {
+            alert("Please Enter Own/rent.");
+            return false;
+        }
+        
+        if(document.getElementById("pg:frm:occup").value == null || document.getElementById("pg:frm:occup").value == "" ) {
+            alert("Please Enter Occupation.");
+            return false;
+        }
+        if(document.getElementById("pg:frm:cempname").value == null || document.getElementById("pg:frm:cempname").value == "" ) {
+            alert("Please Enter Current Employer Name.");
+            return false;
+        }
+        if(document.getElementById("pg:frm:cemphone").value == null || document.getElementById("pg:frm:cemphone").value == "" ) {
+            alert("Please Enter Current Employer Phone Number.");
+            return false;
+        }
+        if(document.getElementById("pg:frm:cempsal").value == null || document.getElementById("pg:frm:cempsal").value == "" ) {
+            alert("Please Enter Current Monthly Salary.");
+            return false;
+        }
+        if(document.getElementById("pg:frm:ycemp").value == null || document.getElementById("pg:frm:ycemp").value == "" ) {
+            alert("Please Enter Years with Current Employer.");
+            return false;
+        }
+        if(document.getElementById("pg:frm:mcemp").value == null || document.getElementById("pg:frm:mcemp").value == "" ) {
+            alert("Please Enter Months with Current Employer.");
+            return false;
+        }
+        
+        
+        if(btn1=='on'){
+            var emaill = document.getElementById("pg:frm:emll").value;
+            if(document.getElementById("pg:frm:cfname").value == null || document.getElementById("pg:frm:cfname").value == "" ) {
+                alert("Please Enter Coapplicant First Name.");
+                return false;
+            }
+            if(document.getElementById("pg:frm:clname").value == null || document.getElementById("pg:frm:clname").value == "" ) {
+                alert("Please Enter Coapplicant Last Name.");
+                return false;
+            }
+            if(document.getElementById("pg:frm:cdob").value == null || document.getElementById("pg:frm:cdob").value == "" ) {
+                alert("Please Enter Coapplicant Date of Birth.");
+                return false;
+            }
+            if(document.getElementById("pg:frm:rtoapp").value == null || document.getElementById("pg:frm:rtoapp").value == "" ) {
+                alert("Please Enter Realtionship to Applicant.");
+                return false;
+            }
+            if(document.getElementById("pg:frm:cssn").value == null || document.getElementById("pg:frm:cssn").value == "" ) {
+                alert("Please Enter Social Security Number.");
+                return false;
+            }
+            if(document.getElementById("pg:frm:cdlm").value == null || document.getElementById("pg:frm:cdlm").value == "" ) {
+                alert("Please Enter Driver's License Number.");
+                return false;
+            }
+            if(document.getElementById("pg:frm:cpno").value == null || document.getElementById("pg:frm:cpno").value == "" ) {
+                alert("Please Enter Coapplicant Phone Number.");
+                return false;
+            }
+            if(document.getElementById("pg:frm:cadd").value == null || document.getElementById("pg:frm:cadd").value == "" ) {
+                alert("Please Enter Coapplicant Addre.");
+                return false;
+            }
+            if(document.getElementById("pg:frm:cownrent").value == null || document.getElementById("pg:frm:cownrent").value == "" ) {
+                alert("Please Enter Coapplicant own/rent.");
+                return false;
+            }
+            if(document.getElementById("pg:frm:cmp").value == null || document.getElementById("pg:frm:cmp").value == "" ) {
+                alert("Please Enter Coapplicant Monthly payment.");
+                return false;
+            }
+            if(document.getElementById("pg:frm:cyadd").value == null || document.getElementById("pg:frm:cyadd").value == "" ) {
+                alert("Please Enter Coapplicant Years at Address.");
+                return false;
+            }
+            if(document.getElementById("pg:frm:cmadd").value == null || document.getElementById("pg:frm:cmadd").value == "" ) {
+                alert("Please Enter Coapplicant Months at Address.");
+                return false;
+            }
+
+            if(document.getElementById("pg:frm:coempsal").value == null || document.getElementById("pg:frm:coempsal").value == "" ) {
+                alert("Please Enter Current Monthly Salary.");
+                return false;
+            }
+            if(document.getElementById("pg:frm:cycemp").value == null || document.getElementById("pg:frm:cycemp").value == "" ) {
+                alert("Please Enter Years with Current Employer.");
+                return false;
+            }
+            if(document.getElementById("pg:frm:jcmcemp").value == null || document.getElementById("pg:frm:jcmcemp").value == "" ) {
+                alert("Please Enter Months with Current Employer.");
+                return false;
+            }
+            
+            if(document.getElementById("pg:frm:jcempno").value == null || document.getElementById("pg:frm:jcempno").value == "" ) {
+                alert("Please Enter Current Employer's Phone Number.");
+                return false;
+            }
+            
+            if(document.getElementById("pg:frm:jcempname").value == null || document.getElementById("pg:frm:jcempname").value == "" ) {
+                alert("Please Enter Current Employer's Name.");
+                return false;
+            }
+            
+            if(emaill != "") {
+                saveDetailsSF();
+            } 	
+            else {
+                alert("Please enter email.");
+            } 
+        }
+        
+        if(email != "") {
+            saveDetailsSF();
+        } 	
+        else {
+            alert("Please enter email.");
+        }
+    }
+    
+    $(document).ready(function(){
+        
+        $('#stockInvtryId').on('click',function(){
+            
+            
+            var btn=$('#stockInvtryId').val();
+            
+            if( btn=='on')
+            {
+                $('#formhide').css({'display':'block'});
+                $('#stockInvtryId').attr({'value':'off'});
+                btn1='on';
+                
+                
+            }else if(btn=='off'){
+                $('#formhide').css({'display':'none'});
+                $('#stockInvtryId').attr({'value':'on'});
+                btn1='off';
+            }
+        });
+    });
+    
+    </script>
+</apex:page>

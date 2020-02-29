@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Valid_Refunded_Amount_Rule</fullName>
+    <active>true</active>
+    <description>Refunded Amount must not exceed Total Amount</description>
+    <errorConditionFormula>if(Refunded_Amount__c &gt; Total_Amount_on_Invoice__c,true,false)</errorConditionFormula>
+    <errorDisplayField>Refunded_Amount__c</errorDisplayField>
+    <errorMessage>Refunded Amount must not exceed Total Amount</errorMessage>
+</ValidationRule>

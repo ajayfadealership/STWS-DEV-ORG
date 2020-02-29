@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>M_Boat_Actual_Cost_Value_ACV__c</fullName>
+    <deprecated>false</deprecated>
+    <description>Specifies the Actual Value Cost of the Boat.</description>
+    <externalId>false</externalId>
+    <label>Boat Actual Cost Value (ACV)</label>
+    <precision>18</precision>
+    <required>false</required>
+    <scale>2</scale>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Currency</type>
+</CustomField>

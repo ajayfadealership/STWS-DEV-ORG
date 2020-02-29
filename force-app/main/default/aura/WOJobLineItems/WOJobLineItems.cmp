@@ -1,0 +1,88 @@
+<aura:component controller="JobLineItemController">
+    <aura:attribute name="JLI" type="Object" access="global"/>
+    <aura:attribute name="searchResults" type="Object[]" access="global"/>
+    <aura:attribute name="showPill" type="Boolean" default="false" access="global"/>
+    <aura:attribute name="selectedRecord" type="String" access="global"/>
+    <aura:attribute name="selectedRecordId" type="String" access="global"/>
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    <aura:registerEvent name="JobLineItemUpdated" type="c:JobLineItemUpdated"/>
+    <aura:handler name="change" value="{!v.JLI}" action="{!c.lineItemUpdated}"/>
+    <aura:attribute name="recordType" type="String" access="global" />
+    <aura:attribute name="isSearchLoading" type="Boolean" default="false" access="global" />
+    
+    <div class="slds-grid slds-wrap slds-gutters">
+        
+        <aura:if isTrue="{!!v.showPill}">
+            <div class="slds-col slds-size_1-of-1  slds-medium-size_1-of-1 slds-large-size_1-of-4 ">
+                <lightning:input
+                                 aura:id="enter-search"
+                                 name="enter-search"
+                                 placeholder="Min 3 letters to search"
+                                 label="Search parts"
+                                 type="search"
+                                 isLoading="{!v.isSearchLoading}"
+                                 onfocus="{!c.handlonfocus}"
+                                 onchange="{!c.handleKeyUp}"/>
+                <aura:iteration items="{!v.searchResults}" var="item" indexVar="i">
+                    
+                    <li role="presentation" class="slds-listbox__item" data-value="{!item.partId}" data-label="{!item.partName+'---'+item.partNumber}" data-selectedIndex="{#i}" 
+                        onclick="{!c.itemSelected}">
+                        <span id="{#'listbox-option-unique-id-'+i+1}"  
+                              class="slds-media slds-listbox__option slds-listbox__option_entity 
+                                     slds-listbox__option_has-meta" 
+                              role="option">
+                            <span class="slds-media__figure optionIcon">
+                                <span class="slds-icon_container" >
+                                    <lightning:icon iconName="standard:work_order_item" size="xx-small"/>
+                                    
+                                </span>
+                            </span>
+                            <span class="slds-media__body singleRow">
+                                <span 
+                                      class="optionTitle slds-listbox__option-text 
+                                             slds-listbox__option-text_entity" style="overflow:visible;">{!item.partName+'--'+item.partNumber}</span>
+                            </span>
+                        </span>
+                    </li>
+                </aura:iteration>
+                
+            </div> 
+        </aura:if>       
+        
+        
+        <aura:if isTrue="{!v.showPill}">
+            <div class="slds-col slds-size_1-of-1  slds-medium-size_1-of-1 slds-large-size_1-of-4 slds-p-top_large">
+                
+                <lightning:pill title="{!v.selectedRecord}" label="{!v.selectedRecord}" href="{!'/lightning/r/'+v.selectedRecordId+'/view'}" onremove="{!c.pillRemoved}">
+                    <aura:set attribute="media">
+                        <lightning:icon iconName="standard:work_order_item"  alternativeText="Parts"/>
+                    </aura:set>
+                </lightning:pill>
+            </div>
+        </aura:if>
+        <div class="slds-col slds-size_1-of-1  slds-medium-size_1-of-1 slds-large-size_1-of-4 ">
+
+            
+            
+            <lightning:input type="Number" messageWhenRangeUnderflow="Quantity should be more than 0" name="input2" fieldLevelHelp="The default quantity dispalyed here is what's curruntly available. Please fill in required quantity." min="1" label="Quantity" value="{!v.JLI.BOATBUILDING__Quantity__c}"/>
+        </div>
+        <div class="slds-col slds-size_1-of-1  slds-medium-size_1-of-1 slds-large-size_1-of-4 "> 
+            <aura:if isTrue="{!v.recordType != 'Warranty Work Order'}">
+                <lightning:input type="number" name="priceofPart" label="Price" formatter="currency" step="0.01"  value="{!v.JLI.BOATBUILDING__Price__c}" disabled="true"/>
+                <aura:set attribute="else">
+                    <lightning:input type="number" name="costofPart" label="Part Cost" formatter="currency" step="0.01"  value="{!v.JLI.BOATBUILDING__Dealer_Price__c}" disabled="true"/>
+
+                </aura:set>
+            </aura:if>
+        </div>
+        <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-1 slds-large-size_1-of-4 ">
+            <aura:if isTrue="{!v.recordType != 'Warranty Work Order'}">
+                <lightning:input type="number" name="Total" label="Total" formatter="currency" step="0.01" value="{!v.JLI.BOATBUILDING__Price__c * v.JLI.BOATBUILDING__Quantity__c}" disabled="true"/>
+                <aura:set attribute="else">
+                    <lightning:input type="number" name="Total" label="Total" formatter="currency" step="0.01" value="{!v.JLI.BOATBUILDING__Dealer_Price__c * v.JLI.BOATBUILDING__Quantity__c}" disabled="true"/>
+
+                </aura:set>
+            </aura:if> 
+        </div>
+    </div>  
+</aura:component>

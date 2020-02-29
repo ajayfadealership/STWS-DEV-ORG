@@ -1,0 +1,132 @@
+<aura:component controller="WorkRequestLightningCompController" implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction" access="global" >
+    <aura:handler name="init" value="{!this}" action="{!c.getRecordTypeId}"/>
+    <aura:attribute name="recordId" type="String" access="global" />
+    <aura:attribute name="attrWO" type="Work_Order__c"/>
+    <aura:attribute name="attrRecordType" type="String" />
+    <aura:attribute name="showform" type="boolean" default="false" access="global"/>
+    <aura:attribute name="showlist" type="boolean" default="true" access="global"/>
+    <aura:attribute name="objItem" type="Item__c"/>
+    <div style="background-color:#fff;padding: 3% 2% 8% 2%;border-radius: 3px;">
+        <lightning:recordEditForm aura:id="recordEditForm"  onsubmit="{!c.handleOnSubmit}" recordId="{!v.recordId}" onerror="{!c.handleError}" recordTypeId="{!v.attrRecordType}" objectApiName="BOATBUILDING__Work_Order__c" onsuccess="{!c.handleSuccess}">      
+            <div class = "slds-col slds-size--1-of-1">
+                <div class = "slds-grid slds-wrap" >
+                    <div class = "slds-col slds-size--1-of-1 slds-medium-size--2-of-6 slds-col--padded">
+                        <div class = "slds-form-element">
+                            <div class = "slds-form-element__control">
+                                <lightning:inputField aura:id="WrkReqDesId" fieldName="BOATBUILDING__Part_description__c" variant="label-stacked"/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class = "slds-col slds-size--1-of-1 slds-medium-size--2-of-6 slds-col--padded">
+                        <div class = "slds-form-element">
+                            <div class = "slds-form-element__control">
+                                <lightning:inputField  fieldName="BOATBUILDING__Account__c" variant="label-stacked"/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class = "slds-col slds-size--1-of-1 slds-medium-size--2-of-6 slds-col--padded">
+                        <div class = "slds-form-element">
+                            <div class = "slds-form-element__control">
+                                <lightning:inputField fieldName="BOATBUILDING__Contact__c" variant="label-stacked"/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class = "slds-col slds-size--1-of-1 slds-medium-size--2-of-6 slds-col--padded">
+                        <div class = "slds-form-element">
+                            <div class = "slds-form-element__control">
+                                <lightning:inputField fieldName="BOATBUILDING__Boat__c" aura:id="item" onchange="{!c.getItemDetails}" variant="label-stacked"/>
+                            </div>
+                        </div> 
+                    </div>
+                    <div class = "slds-col slds-size--1-of-1 slds-medium-size--2-of-6 slds-col--padded">
+                        <div class = "slds-form-element">
+                            <div class = "slds-form-element__control">
+                                <lightning:inputField fieldName="BOATBUILDING__Boat_Make__c" value="{!v.objItem.BOATBUILDING__Boat_Manufacturer__r.Name}" variant="label-stacked"/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class = "slds-col slds-size--1-of-1 slds-medium-size--2-of-6 slds-col--padded">
+                        <div class = "slds-form-element">
+                            <div class = "slds-form-element__control">
+                                <lightning:inputField fieldName="BOATBUILDING__Boat_Model__c" value="{!v.objItem.BOATBUILDING__Boat_Model__c}" variant="label-stacked"/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class = "slds-col slds-size--1-of-1 slds-medium-size--2-of-6 slds-col--padded">
+                        <div class = "slds-form-element">
+                            <div class = "slds-form-element__control">
+                                <lightning:inputField fieldName="BOATBUILDING__Boat_Year__c" value="{!v.objItem.BOATBUILDING__M_Boat_Year__c}" variant="label-stacked"/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class = "slds-col slds-size--1-of-1 slds-medium-size--2-of-6 slds-col--padded">
+                        <div class = "slds-form-element">
+                            <div class = "slds-form-element__control">
+                                <lightning:inputField fieldName="BOATBUILDING__Engine_Make__c" variant="label-stacked"/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class = "slds-col slds-size--1-of-1 slds-medium-size--2-of-6 slds-col--padded">
+                        <div class = "slds-form-element">
+                            <div class = "slds-form-element__control">
+                                <lightning:inputField fieldName="BOATBUILDING__Engine_Model__c" variant="label-stacked"/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class = "slds-col slds-size--1-of-1 slds-medium-size--2-of-6 slds-col--padded">
+                        <div class = "slds-form-element">
+                            <div class = "slds-form-element__control">
+                                <lightning:inputField fieldName="BOATBUILDING__Engine_Year__c" variant="label-stacked"/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class = "slds-col slds-size--1-of-1 slds-medium-size--2-of-6 slds-col--padded">
+                        <div class = "slds-form-element">
+                            <div class = "slds-form-element__control">
+                                <lightning:inputField fieldName="BOATBUILDING__Assigned_to__c" variant="label-stacked"/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class = "slds-col slds-size--1-of-1 slds-medium-size--2-of-6 slds-col--padded">
+                        <div class = "slds-form-element">
+                            <div class = "slds-form-element__control">
+                                <lightning:inputField aura:id="storeLocId" fieldName="BOATBUILDING__Store_Location__c" variant="label-stacked"/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class = "slds-col slds-size--1-of-1 slds-medium-size--2-of-6 slds-col--padded">
+                        <div class = "slds-form-element">
+                            <div class = "slds-form-element__control">
+                                <lightning:inputField fieldName="BOATBUILDING__Status__c" variant="label-stacked"/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class = "slds-col slds-size--1-of-1 slds-medium-size--2-of-6 slds-col--padded">
+                        <div class = "slds-form-element">
+                            <div class = "slds-form-element__control">
+                                <lightning:inputField fieldName="BOATBUILDING__HIN_Number__c" value="{!v.objItem.BOATBUILDING__Boat_HIN_No__c}" variant="label-stacked"/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+             <div class="slds-grid slds-grid--vertical-align-center slds-grid--align-center">
+            <div class = "slds-col--padded">
+                <div class = "slds-form-element">
+                    <div class = "slds-form-element__control">
+                        <lightning:button onclick="{!c.saveWorkRequest}" iconName="utility:save" label="Save" class = "slds-m-top_medium"/>
+                    </div>
+                </div>
+            </div>
+            <div class = "slds-col--padded">
+                <div class = "slds-form-element">
+                    <div class = "slds-form-element__control">
+                        <lightning:button onclick="{!c.backToList}" label="Back To List" iconName="utility:back" class = "slds-m-top_medium"/>
+                    </div>
+                </div>
+            </div>
+        </div>
+              
+        </lightning:recordEditForm>        
+    </div>
+</aura:component>

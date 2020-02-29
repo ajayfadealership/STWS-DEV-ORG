@@ -1,0 +1,335 @@
+.page-malibu {
+    background-image: url("../img/malibu-bg.jpg");
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+    background-position: center center;
+    .our-price .flex-row {
+        .flex-col {
+            flex: 1;
+            &.left-side {
+                flex: 0 0 60%;
+                max-width: 60%;
+            }
+            &.right-side {
+                flex: 0 0 40%;
+                max-width: 40%;
+            }
+        }
+        .price {
+            color: white;
+        }
+    }
+    .specification-price {
+        .left-side {
+            padding-right: 15px;
+            padding-left: 15px;
+            .image-cover {
+                img {
+                    @media print {
+                        max-height: 100px;
+                    }
+                }
+            }
+            .product-img {
+                display: none;
+            }
+            .boat-name {
+                border-bottom: 4px solid white;
+                color: white;
+                display: inline-block;
+                font-size: 24px;
+                margin-top: 15px;
+                font-family: "Open Sans", sans-serif;
+                font-weight: 700;
+                text-transform: uppercase;
+                word-spacing: 8px;
+            }
+            .specification-block {
+                .hd {
+                    color: white;
+                    font-size: 28px;
+                    margin-bottom: 0;
+                    font-family: "Open Sans", sans-serif;
+                    font-weight: 700;
+                    text-transform: uppercase;
+                }
+                .list-block li {
+                    padding-left: 0;
+                    font-family: "Open Sans", sans-serif;
+                    font-weight: 100;
+                }
+            }
+        }
+        .right-side {
+            .product-img {
+                display: none;
+            }
+            .boat-price {
+                color: white !important;
+                font-size: 35px;
+                font-family: "Open Sans", sans-serif;
+                font-weight: 700;
+                padding-right: 30px;
+                padding-left: 10px;
+                text-transform: uppercase;
+                .price {
+                    color: white !important;
+                    display: block;
+                    font-size: 55px;
+                }
+            }
+        }
+    }
+    .malibu-products-banner .carousel {
+        border: 8px solid white;
+        max-width: 1080px;
+        margin: 20px auto 5px;
+
+    }
+}
+
+@media screen and (min-width: 768px) and (max-width: 991px) {
+    .page-malibu .our-price .flex-row {
+        align-items: center;
+    }
+}
+
+@media screen and (max-width: 767px) {
+    .page-malibu .our-price .flex-row .flex-col.left-side {
+        text-align: center;
+    }
+}
+
+@media screen and (min-width: 768px) {
+    .page-malibu .our-price .flex-row .dealer-discount {
+        text-align: left;
+    }
+}
+
+@media screen and (min-width: 768px) {
+    .page-malibu .our-price .flex-row .price {
+        margin-bottom: -20px;
+        text-align: right;
+    }
+}
+
+.page-malibu .our-price .flex-row .price {
+    @media screen and (min-width: 768px) {
+        line-height: 50px;
+    }
+    @media print {
+        font-size: 30px;
+    }
+}
+
+@media print {
+    .page-malibu .specification-price .container {
+        padding-right: 0px;
+    }
+}
+
+@media screen and (max-width: 767px) {
+    .page-malibu .specification-price .flex-row {
+        flex-direction: column;
+    }
+}
+
+@media screen and (min-width: 992px) {
+    .page-malibu .specification-price .left-side {
+        padding-left: 30px;
+    }
+}
+
+@media screen and (max-width: 767px) {
+    .page-malibu .specification-price .left-side .product-img {
+        display: block;
+        margin-top: 20px;
+    }
+}
+
+@media screen and (min-width: 768px) {
+    .page-malibu .specification-price .right-side {
+        padding: 0;
+    }
+}
+
+@media print {
+    .page-malibu .specification-price .right-side .product-img {
+        display: block;
+        margin-right: 0;
+        margin-left: auto;
+    }
+}
+
+@media screen and (min-width: 768px) {
+    .page-malibu .specification-price .right-side .product-img {
+        display: block;
+    }
+}
+
+@media print {
+    .page-malibu .specification-price .right-side .boat-price {
+        color: white !important;
+        font-size: 45px;
+        text-align: right;
+    }
+}
+
+@media screen and (min-width: 768px) {
+    .page-malibu .specification-price .right-side .boat-price {
+        font-size: 45px;
+        text-align: right;
+    }
+}
+
+@media screen and (min-width: 768px) {
+    .page-malibu .specification-price .right-side .boat-price .price {
+        font-size: 85px;
+    }
+}
+
+@media screen and (max-width: 992px) {
+    .page-malibu .malibu-products-banner .container {
+        padding-right: 15px;
+        padding-left: 15px;
+    }
+}
+
+@media print {
+    * {
+        -webkit-print-color-adjust: exact !important;
+        color-adjust: exact !important;
+    }
+    .page-malibu {
+        background: url("../img/malibu-bg.jpg") !important;
+        background-size: 1140px 100% !important;
+        background-repeat: no-repeat !important;
+        background-position: center center !important;
+        #malibu-products {
+          width: calc(100% - 30px);
+          margin: 0px auto 10px;
+        }
+        .carousel-inner .item img {
+          max-height: 300px;
+          width: 100%;
+        }
+        .heading {
+          background: #29abe2 !important;
+          color: #ffffff !important;
+        }
+        .modal-name {
+          color: #ffffff !important;
+          b {
+            color: #ffffff !important;
+          }
+        }
+        .why-buy-from-us .col-flex {
+          width: 570px !important;
+          min-height: 280px !important;
+        }
+        .specification-block li, footer li {
+          color: #ffffff !important;
+        }
+        .why-buy-from-us {
+          .left-side li {
+            text-align: left !important;
+          }
+          .right-side li {
+            text-align: right !important;
+            padding-right: 10px !important;
+          }
+          .left-side .heading {
+            width: 320px !important;
+          }
+          .right-side .heading {
+            width: 320px !important;
+            margin-left: 250px !important;
+            margin-top: 0 !important;
+            margin-top: -15px !important;
+          }
+        }
+        .why-us .list-block li:before {
+          background: white !important;
+          content: '' !important;
+          display: inline-block !important;
+          height: 3px !important;
+          margin-right: 7px !important;
+          vertical-align: middle !important;
+          width: 5px !important;
+        }
+        .our-price {
+          .content-cover {
+            background: #29abe2 !important;
+            .hd, .dealer-discount {
+              color: #ffffff !important;
+            }
+            .price {
+              margin-left: 80px !important;
+              text-align: right !important;
+              color: #ffffff !important;
+              em {
+                text-align: right !important;
+                color: #ffffff !important;
+              }
+            }
+          }
+          margin-bottom: 5px;
+          &.our-price-second {
+            margin-bottom: 10px;
+            .flex-row {
+              -webkit-box-pack: justify;
+              -ms-flex-pack: justify;
+              justify-content: space-between;
+            }
+            .col-flex {
+              color: #fff !important;
+            }
+          }
+        }
+        .footer .flex-row {
+          .flex-col:not(:last-child):before {
+            color: #ffffff !important;
+            font-size: 14px;
+          }
+          .address {
+            p, a {
+              color: #ffffff !important;
+              font-size: 14px;
+            }
+          }
+          .boat-identities a, .mobile-no .icon:before {
+            color: #ffffff !important;
+            font-size: 14px;
+          }
+        }
+        .specification-price .left-side {
+          .boat-name, .specification-block .hd {
+            color: #ffffff !important;
+            font-size: 14px;
+          }
+        }
+        .footer {
+          .flex-row {
+            .mobile-no .icon:before, .address-block .icon:before {
+              font-size: 40px;
+              color: #fff !important;
+            }
+            .flex-col { 
+                padding-top: 5px;
+                padding-bottom: 5px;
+            }
+          }
+          padding: 0px 0px;
+        }
+        .specification-price .right-side .product-img {
+          position: relative !important;
+          img {
+            max-height: 200px;
+            width: 100%;
+            margin-top: -10px;
+            margin-right: -20px;
+          }
+        }
+      }
+    
+}

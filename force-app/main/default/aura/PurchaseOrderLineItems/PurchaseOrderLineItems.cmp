@@ -1,0 +1,84 @@
+<aura:component controller="PurchaseOrderLightningController">
+    <aura:attribute name="objPOLI" type="Object" access="global"/>
+    
+    <aura:attribute name="selectedRecord" type="Object" access="global"/>
+    <aura:attribute name="searchResults" type="Object[]" access="global"/>
+    <aura:attribute name="showPill" type="boolean" default="false" access="global"/>
+    <aura:attribute name="lineItemTotal" type="double" access="global"/> 
+     
+    <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-6 slds-col--padded">
+        <div class="slds-form-element"> 
+            <aura:if isTrue="{!!v.showPill}">
+                <div class="slds-form-element__control">
+                    
+                    <lightning:input aura:id="searchPrtInp" name="searchPrtInp" label="Search Part"  type="search" onfocus="{!c.handlonfocus}" onchange="{!c.searchPartKeyUp}" placeholder="Min 4 characters..."/>
+                    <aura:if isTrue="{!v.searchResults.length > 0}">
+                        <div id="listbox-id-1" class="slds-dropdown slds-dropdown_length-with-icon-7 slds-dropdown_fluid" role="listbox">
+                            <ul class="slds-listbox slds-listbox_vertical" role="presentation">
+                                <aura:iteration items="{!v.searchResults}" var="objPrt" >
+                                    <a id="{!objPrt.partId}" onclick="{!c.selectValue}">
+                                        <li role="presentation" class="slds-listbox__item">
+                                            <div id="{!objPrt.partId}" class="slds-media slds-listbox__option slds-listbox__option_entity slds-listbox__option_has-meta" role="option">
+                                                <span class="slds-media__figure slds-listbox__option-icon">
+                                                    <span class="slds-icon_container slds-icon-standard-account">
+                                                        <lightning:icon iconName="standard:order_item"  alternativeText="Purchase Order Line Item"/>
+                                                    </span>
+                                                </span>
+                                                <span class="slds-media__body">
+                                                    <span class="slds-listbox__option-text slds-listbox__option-text_entity">{!objPrt.partName}</span>
+                                                    <span class="slds-listbox__option-meta slds-listbox__option-meta_entity">{!objPrt.partNumber} • ${!objPrt.partCost}</span>
+                                                </span>
+                                            </div>
+                                        </li>
+                                    </a>
+                                </aura:iteration>
+                            </ul>
+                        </div>
+                    </aura:if>
+                </div> 
+            </aura:if>
+            <aura:if isTrue="{!v.showPill}">
+                <label class="slds-form-element__label">Part Number</label>
+                <div class="slds-form-element__control">
+                    <lightning:pill label="{!v.objPOLI.PartNumber}" title="{!v.objPOLI.PartNumber}" onremove="{!c.removePart}">
+                        <aura:set attribute="media">
+                            <lightning:icon iconName="standard:account"  alternativeText="Account"/>
+                        </aura:set>
+                    </lightning:pill>
+                </div> 
+            </aura:if>
+        </div>  
+    </div>
+    <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-6 slds-col--padded">
+        <div class="slds-form-element">
+            <label class="slds-form-element__label">Description</label>
+            <div class="slds-form-element__control">
+                {!v.objPOLI.PartName}
+                <span style="display: none;"> 
+                    {!v.objPOLI.PartId}
+                </span>
+            </div> 
+        </div>
+    </div> 
+    <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-6 slds-col--padded">
+        <div class="slds-form-element">
+            <div class="slds-form-element__control">
+                <lightning:input label="Quantity" type="number" messageWhenRangeUnderflow="Quantity should be greater than 0!" min="1" value="{!v.objPOLI.Quantity}" onkeyup="{!c.updateTotal}"/> 
+            </div> 
+        </div>
+    </div>
+    <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-6 slds-col--padded">
+        <div class="slds-form-element">
+            <div class="slds-form-element__control">
+                <lightning:input label="Cost" type="number" formatter="currency" value="{!v.objPOLI.Cost}" disabled="true"/> 
+            </div> 
+        </div>
+    </div>
+    <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-6 slds-col--padded">
+        <div class="slds-form-element">
+            <div class="slds-form-element__control">
+                <lightning:input label="Total" type="number" formatter="currency" value="{!v.objPOLI.Cost * v.objPOLI.Quantity}" disabled="true"/> 
+            </div> 
+        </div>
+    </div>
+</aura:component>

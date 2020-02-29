@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ListView xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Harris_Grand_Mariner</fullName>
+    <columns>NAME</columns>
+    <columns>M_Year__c</columns>
+    <columns>Product_Manufacturer__c</columns>
+    <columns>MModel2__c</columns>
+    <columns>M_Model_Variant__c</columns>
+    <columns>Cost_Price__c</columns>
+    <columns>M_Boat_MSRP_PRICE__c</columns>
+    <filterScope>Everything</filterScope>
+    <filters>
+        <field>M_Year__c</field>
+        <operation>equals</operation>
+        <value>2018</value>
+    </filters>
+    <filters>
+        <field>Product_Manufacturer__c</field>
+        <operation>equals</operation>
+        <value>Harris</value>
+    </filters>
+    <filters>
+        <field>MModel2__c</field>
+        <operation>equals</operation>
+        <value>Grand Mariner</value>
+    </filters>
+    <label>2019_Harris Grand Mariner</label>
+</ListView>

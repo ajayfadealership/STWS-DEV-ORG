@@ -1,0 +1,4 @@
+<aura:event type="APPLICATION" description="InventoryCtoP" access="public">
+    <aura:attribute name="tab"  type="String" access="public"/>
+    <aura:attribute name="objInventory"  type="Inventory__c" access="public"/>
+</aura:event>

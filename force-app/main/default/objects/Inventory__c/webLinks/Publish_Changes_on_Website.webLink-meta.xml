@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<WebLink xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Publish_Changes_on_Website</fullName>
+    <availability>online</availability>
+    <displayType>button</displayType>
+    <linkType>javascript</linkType>
+    <masterLabel>Publish Changes on Website</masterLabel>
+    <openType>onClickJavaScript</openType>
+    <protected>false</protected>
+    <url>{!REQUIRESCRIPT(&quot;/soap/ajax/43.0/connection.js&quot;)}
+{!REQUIRESCRIPT(&quot;/soap/ajax/43.0/apex.js&quot;)}
+
+
+var invId = &quot;{!Inventory__c.Id}&quot;;
+
+var warning = confirm(&quot;Are you sure you want to push these changes to website?&quot;);
+var callback = { 
+onSuccess: function(e){
+    //window.location.href = &quot;/&quot; + e;
+    console.log(e);
+    var result = e;
+    
+    
+       alert(&#39;Changes were published successfuly&#39;);
+   
+}, onFailure: function(error){
+console.log(error);
+} };
+
+
+if (warning == true) {
+sforce.connection.sessionId=&#39;{!GETSESSIONID()}&#39;; 
+sforce.apex.execute(&quot;BOATBUILDING.UpdateInventoryOnWebsite&quot;,&quot;updateOnWeb&quot;,{invId:invId}, callback);
+//alert(&quot;Course has been created.&quot;);
+
+
+}</url>
+</WebLink>

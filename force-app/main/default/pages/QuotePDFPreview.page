@@ -1,0 +1,562 @@
+<apex:page showHeader="false" sidebar="false" standardStylesheets="false" applyBodyTag="false" applyHtmlTag="false"
+    controller="BoatBuilderController">
+    <html>
+
+    <head>
+        <link media="all" type="text/css" rel="stylesheet" href="{!URLFOR($Resource.invoicestyle)}" />
+    </head>
+
+    <body>
+        <div id="page1">
+            <div id="header">
+                <img src="{!URLFOR($Resource.invoiceheader)}" class="stretch" alt="" />
+            </div>
+
+            <div class="container"> 
+
+                <!-- Header Block -->
+                <div class="row" id="header-block">
+                    <!-- Logo Block -->
+                    <div class="col-5">
+                    		<apex:outputPanel rendered="{!if(CompanyBanner != '', true, false)}">
+                        		<img src="/servlet/servlet.FileDownload?file={!CompanyBanner}" style="height: 93px; width: {!width}%;"/>
+                        </apex:outputPanel>
+                    </div>
+
+                    <!-- Address Block-->
+                    <div class="col-7">
+                        <div class="row italic">
+                            <div class="col-6">
+                                <p class="title2">{!objSLC2.MasterLabel}</p> 
+                                <p class="address-line">{!objSLC2.Street__c} </p>
+                                <p class="address-line">{!objSLC2.City__c} {!objSLC2.State__c} {!objSLC2.BOATBUILDING__Zip_Postal_Code__c}</p>
+                                <p class="address-line">{!objSLC2.Phone__c}</p>
+                            </div> 
+                            <div class="col-6">
+                                <p class="title2">{!objSLC1.MasterLabel}</p> 
+                                <p class="address-line">{!objSLC1.Street__c} </p>
+                                <p class="address-line">{!objSLC1.City__c} {!objSLC1.State__c} {!objSLC1.BOATBUILDING__Zip_Postal_Code__c}</p>
+                                <p class="address-line">{!objSLC1.Phone__c}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Website Block -->
+                <div class="row" id="website-block">
+                    <div class="col-12 center title italic">
+                        {!website}
+                    </div>
+                </div>
+
+                <!-- Customer Info, Boat Mode, Total, Boat Images -->
+                <div class="row" id="customer-total-block">
+
+                    <div class="col-4">
+                        <div id="customer-block" class="right">
+                            <div class="boat-model" style="font-size: 25px; text-align: left;">Customer Info</div>
+                            <div class="">
+                                <p class="title2 cust-name" style="text-align: left;">{!objQuote2.Account_Name__r.Name}</p>
+                                <apex:outputPanel rendered="{!checkBoxExist}">
+                                		<p class="title2 cust-name" style="text-align: left;">{!objQuote2.CO_Buyer_Name__r.Name}</p>
+                                </apex:outputPanel>
+                                <p class="address-line" style="text-align: left;">{!objAccount.BillingStreet}</p>
+                                <p class="address-line" style="text-align: left;">{!objAccount.BillingCity}, {!objAccount.BillingState}, {!objAccount.BillingPostalCode}</p>
+                                <p class="address-line cust-mobile" style="text-align: left;">{!objQuote2.Phone__c}</p>
+                                <p class="address-line" style="text-align: left;">{!objQuote2.Email__c}</p>
+                            </div>
+
+                            <h2 class="boat-model" style="font-size: 25px; text-align: left;" >{!yearForQuotePDF} {!modelForQuotePDF}<br/>{!modelVarForQuotePDF}</h2>
+                        </div>
+                    </div>
+                    <div class="col-8" style="margin-right: 0px; margin-left: 4%;">
+
+                        <div id="total-image-block">
+                            <div id="total-block" class="row">
+                                <div class="col-3">
+                                        <br/>
+                                    <p class="total title2">TOTAL</p>
+                                </div>
+                                <div class="col-8">
+                                        
+                                    <p style="margin-top: 10px;" class="totalprice right"><apex:outputField value="{!objQuote2.Quote_Your_Price_Formula__c}"/></p>
+                                </div>
+                            </div>
+                            <div id="image-block" class="row">
+                                <div class="col-6" style="margin: 0px 0px 0px 2%; float: right;">
+                                    <apex:outputPanel rendered="{!if(quoteImg2 != '', true, false)}">
+                                            <img src="/servlet/servlet.FileDownload?file={!quoteImg2}" style="width: 100%; " />
+                                    </apex:outputPanel>
+                                </div>
+                                <div class="col-6" style="margin: 0px; float: right;">
+                                    <apex:outputPanel rendered="{!if(quoteImg1 != '', true, false)}">
+                                            <img src="/servlet/servlet.FileDownload?file={!quoteImg1}" style="width: 100%; " />
+                                    </apex:outputPanel>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Customer Info, Boat Mode, Total, Boat Images - End -->
+
+
+                <!-- Boat Info Section -->
+                <div class="row" style="margin-top: -2%;">
+                    <div class="col-12">
+                        <div class="col-12">
+                            <h2 class="title" style="margin: 0px -2% !important;">Boat Information</h2>
+                        </div>
+
+                        <div class="col-5 value-group">
+                            <div class="col-4 label">Inventory ID:  </div>
+                            <div class="col-6 val" style="text-align: left;">{!objQuote2.Test_2__r.Name}</div>
+                        </div>
+                        <div class="col-3 value-group">
+                            <div class="col-4 label">Year: </div>
+                            <div class="col-6 val" style="text-align: left;">{!yearForQuotePDF}</div>
+                        </div>
+                        <div class="col-4 value-group">
+                            <div class="col-5 label">Make: </div>
+                            <div class="col-7 val" style="text-align: left;">{!getManufacturerName}</div>
+                        </div>
+
+                        <div class="col-6 value-group">
+                            <div class="col-2 label">Model: </div>
+                            <div class="col-10 val" style="text-align: left;">{!modelForQuotePDF}</div>
+                        </div>
+                        <div class="col-6 value-group">
+                            <div class="col-2 label">HIN #: </div>
+                            <div class="col-10 val" style="text-align: left;">{!objQuote2.Mapped_HIN__c}</div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Boat Info Section - End-->
+
+                <!-- Engine Info Section -->
+                <div class="row">
+
+                    <div class="col-12">
+                        <div class="col-12">
+                            <h2 class="title" style="margin: 0px -2% !important;">Engine Information</h2>
+                        </div>
+
+                        <div class="col-3 value-group">
+                            <div class="col-5 label">Make: </div>
+                            <div class="col-7 val">
+                            		<apex:outputPanel rendered="{!EngineInfoQuote}">
+                            			{!objQuote2.Engine__r.Manufacturer__c}
+                            		</apex:outputPanel>
+                            		<apex:outputPanel rendered="{!if(EngineInfoQuote == false, true, false)}">
+                            			{!objQuote2.Test_2__r.Engine_Make__c}
+                            		</apex:outputPanel>
+                            </div>
+                        </div>
+                        <div class="col-3 value-group">
+                            <div class="col-5 label">Year: </div>
+                            <div class="col-7 val">
+                            		<apex:outputPanel rendered="{!EngineInfoQuote}">
+                            			{!objQuote2.Engine__r.Year__c}
+                            		</apex:outputPanel>
+                            		<apex:outputPanel rendered="{!if(EngineInfoQuote == false, true, false)}">
+                            			{!objQuote2.Test_2__r.Engine_Year__c}
+                            		</apex:outputPanel>
+                            </div>
+                        </div>
+                        <div class="col-6 value-group">
+                            <div class="col-5 label">Model: </div>
+                            <div class="col-7 val">
+                            		<apex:outputPanel rendered="{!EngineInfoQuote}">
+                            			{!objQuote2.Engine__r.Model__c}
+                            		</apex:outputPanel>
+                            		<apex:outputPanel rendered="{!if(EngineInfoQuote == false, true, false)}">
+                            			{!objQuote2.Test_2__r.Engine_Model__c}
+                            		</apex:outputPanel>
+                            </div>
+                        </div>
+
+                        <div class="col-4 value-group">
+                            <div class="col-5 label">Serial #1: </div>
+                            <div class="col-7 val">
+								<apex:outputPanel rendered="{!EngineInfoQuote}">
+                            			{!objQuote2.Engine__r.Engine_SN__c}
+                            		</apex:outputPanel>
+                            		<apex:outputPanel rendered="{!if(EngineInfoQuote == false, true, false)}">
+                            			{!objQuote2.Test_2__r.Engine_SN__c}
+                            		</apex:outputPanel>
+							</div>
+                        </div>
+                        <div class="col-4 value-group">
+                            <div class="col-5 label">Serial #2: </div>
+                            <div class="col-7 val">
+                            		<apex:outputPanel rendered="{!EngineInfoQuote}">
+                            			{!objQuote2.Engine__r.Serial_Number_2__c}
+                            		</apex:outputPanel>
+                            		<apex:outputPanel rendered="{!if(EngineInfoQuote == false, true, false)}">
+                            			{!objQuote2.Test_2__r.Serial_Number_2__c}
+                            		</apex:outputPanel>
+                            </div>
+                        </div>
+                        <div class="col-4 value-group">
+                            <div class="col-5 label">Trans #: </div>
+                            <div class="col-7 val">
+                            		<apex:outputPanel rendered="{!EngineInfoQuote}">
+                            			{!objQuote2.Engine__r.Transmission_Gearbox_SN__c}
+                            		</apex:outputPanel>
+                            		<apex:outputPanel rendered="{!if(EngineInfoQuote == false, true, false)}">
+                            			{!objQuote2.Test_2__r.Transmission_Gearbox_SN__c} 
+                            		</apex:outputPanel>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <!-- Engine Info Section - End-->
+
+
+                <div class="row">
+                    <div class="col-6">
+
+                        <!-- Trailer -->
+                        <div class="row">
+                            <div class="col-12">
+                                <h2 class="title" style="margin: 0px -2% !important;">Trailer</h2>
+                            </div>
+
+                            <div class="col-4 value-group">
+                                <div class="col-5 label">Make: </div>
+                                <div class="col-7 val">
+                                		<apex:outputPanel rendered="{!TrailerInfoQuote}">
+                            				{!objQuote2.Trailer__r.Manufacturer__c}
+	                            		</apex:outputPanel>
+	                            		<apex:outputPanel rendered="{!if(TrailerInfoQuote == false, true, false)}">
+	                            			{!objQuote2.Test_2__r.Trailer_Make__c} 
+	                            		</apex:outputPanel>
+                                </div>
+                            </div>
+                            <div class="col-4 value-group">
+                                <div class="col-5 label">Year: </div>
+                                <div class="col-7 val">
+                                		<apex:outputPanel rendered="{!TrailerInfoQuote}">
+	                            			{!objQuote2.Trailer__r.Year__c}  
+	                            		</apex:outputPanel>
+	                            		<apex:outputPanel rendered="{!if(TrailerInfoQuote == false, true, false)}">
+	                            			{!objQuote2.Test_2__r.Trailer_Year__c} 
+	                            		</apex:outputPanel>
+                                </div>
+                            </div>
+                            <div class="col-4 value-group">
+                                <div class="col-5 label">Axles: </div>
+                                <div class="col-7 val">
+                                		<apex:outputPanel rendered="{!TrailerInfoQuote}">
+	                            			{!objQuote2.Trailer__r.Trailer_Axles__c}
+	                            		</apex:outputPanel>
+	                            		<apex:outputPanel rendered="{!if(TrailerInfoQuote == false, true, false)}">
+	                            			{!objQuote2.Test_2__r.Trailer_Axles__c} 
+	                            		</apex:outputPanel>
+                                </div>
+                            </div>
+
+                            <div class="col-5 value-group">
+                                <div class="col-5 label">Model: </div>
+                                <div class="col-7 val">
+                                		<apex:outputPanel rendered="{!TrailerInfoQuote}">
+	                            			{!objQuote2.Trailer__r.Model__c}
+	                            		</apex:outputPanel>
+	                            		<apex:outputPanel rendered="{!if(TrailerInfoQuote == false, true, false)}">
+	                            			{!objQuote2.Test_2__r.Trailer_Model__c} 
+	                            		</apex:outputPanel>
+                                </div>
+                            </div>
+                            <div class="col-7 value-group">
+                                <div class="col-5 label">VIN #: </div>
+                                <div class="col-7 val">
+                                		<apex:outputPanel rendered="{!TrailerInfoQuote}">
+	                            			{!objQuote2.Trailer__r.Trailer_VIN__c}
+	                            		</apex:outputPanel>
+	                            		<apex:outputPanel rendered="{!if(TrailerInfoQuote == false, true, false)}">
+	                            			{!objQuote2.Test_2__r.Trailer_VIN__c} 
+	                            		</apex:outputPanel>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Trailer - End -->
+
+                        <!-- Trade In Info -->
+                        <div class="row">
+                            <div class="col-12">
+                                <h2 class="title" style="margin: 0px -2% !important;">Trade-In Info</h2>
+                            </div>
+
+                            <div class="col-4 value-group">
+                                <div class="col-5 label">Make: </div>
+                                <div class="col-7 val">{!objQuote2.ACV_FORM__r.Boat_Make__c}</div>
+                            </div>
+                            <div class="col-4 value-group">
+                                <div class="col-5 label">Year: </div>
+                                <div class="col-7 val">{!objQuote2.ACV_FORM__r.BOATBUILDING__Boat_Year__c}</div>
+                            </div>
+                            <div class="col-4 value-group">
+                                <div class="col-5 label">Model: </div>
+                                <div class="col-7 val">{!objQuote2.ACV_FORM__r.Boat_Model__c}</div>
+                            </div>
+
+                            <div class="col-6 value-group">
+                                <div class="col-5 label">HIN: </div>
+                                <div class="col-7 val">{!objQuote2.ACV_FORM__r.Boat_HIN__c}</div>
+                            </div>
+                            <div class="col-6 value-group">
+                                <div class="col-6 label">Engine SN: </div>
+                                <div class="col-6 val">{!objQuote2.ACV_FORM__r.Engine_SN__c}</div>
+                            </div>
+
+                            <div class="col-6 value-group">
+                                <div class="col-5 label">Engine Model: </div>
+                                <div class="col-7 val">{!objQuote2.ACV_FORM__r.BOATBUILDING__Engine_Model__c}</div>
+
+                            </div>
+                            <div class="col-6 value-group">
+                                <div class="col-5 label">Trailer Make: </div>
+                                <div class="col-7 val">{!objQuote2.ACV_FORM__r.BOATBUILDING__Trailer_Make__c}</div>
+                            </div>
+
+                            <div class="col-8 value-group">
+                                <div class="col-5 label">Trailer Model: </div>
+                                <div class="col-7 val">{!objQuote2.ACV_FORM__r.BOATBUILDING__Trailer_Model__c}</div>
+                            </div>
+                            <div class="col-4 value-group">
+                                <div class="col-5 label">Axles: </div>
+                                <div class="col-7 val">{!objQuote2.ACV_FORM__r.BOATBUILDING__Trailer_Axles__c}</div>
+                            </div>
+
+                            <div class="col-6 value-group">
+                                <div class="col-5 label">VIN: </div>
+                                <div class="col-7 val">{!objQuote2.ACV_FORM__r.BOATBUILDING__Trailer_Vin__c}</div>
+                            </div>
+                            <div class="col-6 value-group">
+                                <div class="col-5 label">Lien Holder: </div>
+                                <div class="col-7 val">{!objQuote2.Account_Name__r.BOATBUILDING__Trade_Lien_Bank__c}</div>
+                            </div>
+
+                            <div class="col-12 value-group">
+                                <div class="col-2 label">Lien Amount: </div>
+                                <div class="col-10 val"><apex:outputField value="{!objQuote2.Account_Name__r.Trade_Pay_Off__c}"/></div>
+                            </div>
+
+                        </div>
+                        <!-- Trade In Info - End -->
+                    </div>
+                    <div class="col-6">
+
+                        <div class="row">
+                            <div class="col-12">
+                                <h2 class="title">Payment Info</h2>
+                            </div>
+                            <div class="col-6">
+                                <div class="row">
+                                    <div class="col-12 value-group">
+                                        <div class="col-6 label">Quote: </div>
+                                        <div class="col-6 val"><apex:outputField value="{!objQuote2.Quote_Number__c}"/></div>
+                                    </div>
+                                    <div class="col-12 value-group">
+                                        <div class="col-6 label">Payment: </div>
+                                        <div class="col-6 val"><apex:outputField value="{!objQuote2.Quote_Payment__c}"/></div>
+                                    </div>
+                                    <div class="col-12 value-group">
+                                        <div class="col-6 label">MSRP: </div>
+                                        <div class="col-6 val"><apex:outputField value="{!objQuote2.Total_Price_Quote__c}"/></div>
+                                    </div>
+                                    <div class="col-12 value-group">
+                                        <div class="col-6 label">Discount: </div>
+                                        <div class="col-6 val"><apex:outputField value="{!objQuote2.Discount_On_Quote__c}"/></div>
+                                    </div>
+                                    <div class="col-12 value-group">
+                                        <div class="col-6 label">Trade: </div>
+                                        <div class="col-6 val"><apex:outputField value="{!objQuote2.Quote_Trade_Allowance__c}"/></div>
+                                    </div>
+                                    <div class="col-12 value-group">
+                                        <div class="col-6 label">Net Price: </div>
+                                        <div class="col-6 val"><apex:outputField value="{!objQuote2.Quote_Net_Selling_Price_Calculated__c}"/></div>
+                                    </div>
+                                    
+		                            <div class="col-12 value-group">
+                                        <div class="col-4 label">Total Due: </div>
+                                        <div class="col-8 val"><apex:outputField value="{!objQuote2.Quote_Total_Price_Calculated__c}"/></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="row">
+                                    <div class="col-12 value-group">
+                                        <div class="col-5 label">Boat Tax: </div>
+                                        <div class="col-7 val"><apex:outputField value="{!objQuote2.Boat_Sales_Tax2__c}"/></div>
+                                    </div>
+                                    <div class="col-12 value-group">
+                                        <div class="col-5 label">Trailer Tax: </div>
+                                        <div class="col-7 val"><apex:outputField value="{!objQuote2.Quote_Trailer_Sales_Tax__c}"/></div>
+                                    </div>
+                                    <apex:outputPanel rendered="{!NOT(ISBLANK(objQuote2.Tyre_Tax__c))}">    
+	                                    <div class="col-12 value-group">
+	                                        <div class="col-5 label">Tire Tax: </div>
+	                                        <div class="col-7 val"><apex:outputField value="{!objQuote2.Tyre_Tax__c}"/></div>
+	                                    </div>
+                                    </apex:outputPanel>
+                                    <div class="col-12 value-group">
+                                        <div class="col-5 label">Boat Reg: </div>
+                                        <div class="col-7 val"><apex:outputField value="{!objQuote2.Quote_Boat_Reg_Fee__c}"/></div>
+                                    </div>
+                                    <div class="col-12 value-group">
+                                        <div class="col-5 label">Trailer Reg: </div>
+                                        <div class="col-7 val"><apex:outputField value="{!objQuote2.Quote_Trailer_Reg_Fee__c}"/></div>
+                                    </div>
+                                    <div class="col-12 value-group">
+                                        <div class="col-5 label">Doc Fees: </div>
+                                        <div class="col-7 val"><apex:outputField value="{!objQuote2.Quote_Doc_Fee__c}"/></div>
+                                    </div>
+                                    <div class="col-12 value-group">
+                                        <div class="col-5 label">Trade Payoff: </div>
+                                        <div class="col-7 val"><apex:outputField value="{!objQuote2.Quote_Trade_Payoff__c}"/></div>
+                                    </div>
+                                    <div class="col-12 value-group">
+		                                <div class="col-5 label" style="font-size: 11px;">Down Payment: </div>
+		                                <div class="col-7 val"><apex:outputField value="{!objQuote2.Quote_Down_Payment__c}"/></div>
+		                            </div>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="row">
+                                    <div class="col-12 value-group">
+                                        <div class="col-5 label">Due: </div>
+                                        <div class="col-7 val"><apex:outputField value="{!objQuote2.Quote_Total_Amount_Financed_Calculated__c}"/></div>
+                                    </div>
+                                    <div class="col-12 value-group">
+                                        <div class="col-5 label">Term: </div>
+                                        <div class="col-7 val"><apex:outputField value="{!objQuote2.Quote_Term__c}"/></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="row">
+                                    <div class="col-12 value-group">
+                                        <div class="col-5 label">Rate: </div>
+                                        <div class="col-7 val"><apex:outputField value="{!objQuote2.Quote_Rate__c}"/></div>
+                                    </div>
+                                    <div class="col-12 value-group">
+                                        <div class="col-5 label">Payment: </div>
+                                        <div class="col-7 val"><apex:outputField value="{!objQuote2.Quote_Payment__c}"/></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+
+            <div id="footer">
+<!--                 <img src="{!URLFOR($Resource.invoicefooter)}" class="stretch" alt="" /> -->
+            </div>
+        </div>
+        
+        <div id="page2">
+            <div class="container">
+
+                <!-- Dealer Disclaimer -->
+                <apex:outputPanel rendered="{!if(BoatDis != '', true, false)}">
+                <div class="row">
+                    <div id="dealer-disclaimer" class="col-12" style="padding-top: 15px;padding-left: 12px;">
+                        <div id="dealer-header" class="title">
+                            Dealer Disclaimer
+                        </div>
+                        <span style="margin-top: 1%;">
+                                {!BoatDis}
+                        </span>
+                    </div>
+                </div>
+                </apex:outputPanel>
+                <!-- Dealer Disclaimer - End -->
+
+                <!-- Boat Options -->
+                <div class="row">
+                    <div id="boat-optns" class="col-6" style="height: auto;">
+                        <!-- Header -->
+                        <div id="boat-optns-header" class="title">
+                            Boat Options
+                        </div>
+
+                        <!-- Values -->
+                        <div class="row b-opt">
+                            <apex:repeat var="objQOCW" value="{!lstQLIDis1}">
+                                <div class="col-12 b-opt-h">{!objQOCW.strOptionCategory}</div>
+                                <div class="row">
+                                    <apex:repeat var="objSOC" value="{!objQOCW.lstSelectedOptionCategory}">
+                                        <div class="col-1 b-opt-v"></div>
+                                        <div class="col-8 b-opt-v">{!objSOC.Name__c}</div>
+                                        <apex:outputPanel rendered="{!objQuote2.Show_MSRP_Option_Pricing__c}">
+                                            <div class="col-3 b-opt-v right">{!objSOC.Total_Price__c}</div>
+                                        </apex:outputPanel>
+                                    </apex:repeat>
+                                </div>
+                            </apex:repeat>
+                        </div>
+                    </div>
+                    <div id="boat-optns2" class="col-6 row b-opt" style="height: auto;">
+                        <apex:repeat var="objQOCW" value="{!lstQLIDis2}">
+                            <div class="col-12 b-opt-h">{!objQOCW.strOptionCategory}</div>
+                            <div class="row">
+                                <apex:repeat var="objSOC" value="{!objQOCW.lstSelectedOptionCategory}">
+                                    <div class="col-1 b-opt-v"></div>
+                                    <div class="col-8 b-opt-v">{!objSOC.Name__c}</div>
+                                    <apex:outputPanel rendered="{!objQuote2.Show_MSRP_Option_Pricing__c}">
+                                        <div class="col-3 b-opt-v right">{!objSOC.Total_Price__c}</div>
+                                    </apex:outputPanel>
+                                </apex:repeat>
+                            </div>
+                        </apex:repeat>
+                    </div>
+                </div>
+                <!-- Boat Options - End -->
+
+                <!-- Customer Signature -->
+                <div id="customer-sig" class="row">
+                    <div class="col-3 option-key">Customer Signature: </div>
+                    <div class="col-5 val-input">&nbsp;</div>
+                    <div class="col-1 option-key">Date: </div>
+                    <div class="col-3 val-input">&nbsp;</div>
+                </div>
+                <apex:outputPanel rendered="{!checkBoxExist}">
+                    <div id="customer-sig" class="row">
+                        <div class="col-3 option-key">Co-Buyer Signature: </div>
+                        <div class="col-5 val-input">&nbsp;</div>
+                        <div class="col-1 option-key">Date: </div>
+                        <div class="col-3 val-input">&nbsp;</div>
+                    </div>
+                </apex:outputPanel>
+                <div id="sales-sig" class="row">
+                    <div class="col-3 option-key">Sales Signature: </div>
+                    <div class="col-5 val-input">&nbsp;</div>
+                    <div class="col-1 option-key">Date: </div>
+                    <div class="col-3 val-input">&nbsp;</div>
+                </div>
+            </div>
+
+            <div id="ftr" >
+            <!--             footer ^ -->
+                <img src="{!URLFOR($Resource.invoicefooter)}" class="stretch"  alt="" style="position: unset;"/>
+            </div>
+        </div>
+    </body>
+
+    </html>
+    <apex:form >
+            <div style="padding: 2%; position: fixed; top: 0%; left: 52%;">
+                <apex:pageBlock >
+                <apex:pageBlockButtons location="bottom">
+                    <apex:commandButton value="Print" style="width: 90px;" action="{!saveQuoteasPDF}" rendered="{!if(($CurrentPage.parameters.btnStatus)=='Print',true,false)}" />
+                    <apex:commandButton value="Send Quote" style="width: 90px;" action="{!saveAndSendQuote}" rendered="{!if(($CurrentPage.parameters.btnStatus)=='SendQuote',true,false)}"/>
+                </apex:pageBlockButtons>
+            </apex:pageBlock>
+            
+        </div>
+    </apex:form>
+</apex:page>

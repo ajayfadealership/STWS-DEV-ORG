@@ -1,0 +1,20 @@
+<aura:component implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction" access="global" >
+    
+    <aura:attribute name="showSpinner" type="boolean" default="false" access="global"/>
+    <aura:attribute name="showform" type="boolean" default="false" access="global"/>
+    <aura:if isTrue="{!v.showSpinner}">
+        <lightning:spinner alternativeText="Loading" size="large" />
+    </aura:if>
+    
+
+       <!-- <lightning:button label="New" class="newBtn" iconName="utility:add" title="New" onclick="{!c.newForm}"/>-->
+        <lightning:listView objectApiName="BOATBUILDING__Order__c"
+                    listName="BOATBUILDING__Order_List"
+                    rows="5"
+                    showSearchBar="true"
+                    showActionBar="false"
+                    enableInlineEdit="false"
+                    showRowLevelActions="false"
+                    />
+   
+</aura:component>

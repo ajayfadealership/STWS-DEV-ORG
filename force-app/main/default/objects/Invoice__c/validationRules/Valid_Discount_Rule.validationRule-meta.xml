@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Valid_Discount_Rule</fullName>
+    <active>true</active>
+    <description>Discount availed on the Product must not be more than 100%</description>
+    <errorConditionFormula>Total_Invoice_Discount__c &gt;100.00</errorConditionFormula>
+    <errorDisplayField>Total_Invoice_Discount__c</errorDisplayField>
+    <errorMessage>Discount availed on the Product must not be more than 100%</errorMessage>
+</ValidationRule>

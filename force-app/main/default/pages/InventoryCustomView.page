@@ -1,0 +1,425 @@
+<apex:page standardController="Inventory__c" showHeader="false" extensions="InventoryCustomViewController" sideBar="false" id="pge" title="Inventory" standardStylesheets="false" action="{!checkAccess}">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <apex:stylesheet value="{!URLFOR($Resource.BoatBuilderSR, '/css/styles.css')}"/>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.12/css/jquery.dataTables.min.css"/>
+    <apex:stylesheet value="{!URLFOR($Resource.BoatBuilderSR, '/css/styles.css')}"/>
+    <apex:stylesheet value="{!URLFOR($Resource.BoatBuilderSR, '/assets/styles/salesforce-lightning-design-system.min.css')}"/> 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.0/jquery.min.js"/>
+    <script src="https://cdn.datatables.net/1.10.12/js/jquery.dataTables.min.js"/>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <style>
+        .dataTables_wrapper .dataTables_paginate {
+            float: left; 
+        }
+        .dataTables_wrapper .dataTables_info {
+            float:right
+        }
+        
+        .dataTables_wrapper .dataTables_filter, table.dataTable.no-footer, 
+        .dataTables_wrapper.no-footer,  .divider, svg:not(:root) {
+               display: none;
+           }
+        .slds-card, .slds-card__body_inner {
+                display: block;
+                background: #fff !important;
+                position: relative;
+             }
+        
+                
+             .inventory {
+               font-size: 1.5em;
+                font-weight: normal;
+                line-height: 1.1em;
+                display: block;
+                margin-left: 91px;
+                margin-top: 10px;
+              } 
+              
+              .main-heading {
+                font-size: 20px;
+                display: block;
+              } 
+              .main-heading:hover {
+                  color: #337ab7;
+                  cursor: pointer;
+              }
+               .custom-filter {
+                    margin-left: 23px;
+                    margin-bottom: 0px;
+                    margin-top: 30px;
+                }
+            .slds-card, .slds-card__body_inner {
+                display: block !important;
+             }
+                
+             
+              .main-heading .glyphicon  {
+                  vertical-align: text-top;
+              }
+            .slds-card {
+                background: none;
+                border: 0px;
+            }
+          .slds-card__body_inner {
+                    border: 1px solid rgba(0,0,0,0.2);
+                    display:none;
+                    padding: 25px 25px;
+                    margin: 0px auto;
+                    width: calc(100% - 50px);
+                    margin-bottom: 20px;
+                    background: #fffcfc;
+                    box-shadow: 4px 6px 4px rgba(0,0,0,0.05);
+                }
+                .slds-card__body_inner .flex-row {
+                    display: flex;
+                }
+                .slds-card__body_inner .flex-row .flex-col:first-child{
+                    flex: 0 0 200px; 
+                    max-width: 200px;
+                }
+                @media screen and (max-width: 1024px) {
+                 .slds-card__body_inner .flex-row .flex-col:first-child{
+                    flex: 0 0 150px; 
+                    max-width: 150px;
+                 }
+                }
+                .slds-card__body_inner .flex-row .flex-col .key-val{
+
+                }
+                .slds-card__body_inner .flex-row .flex-col .key-name {
+                    font-weight: bold;
+                }   
+                .slds-card__body_inner .media-left {
+                   display: inline-block;
+                   width: 200px;
+                } 
+                .slds-card__body_inner .media-body {
+                   display: inline-block;
+                   width: calc(100% - 206px);
+                }  
+                
+                .slds-card__body_inner .media-left .sfdc_richtext {
+                     max-width: 100%;
+                     width: auto !important;
+                 }
+                .slds-card__body_inner .media-left .sfdc_richtext img {
+                     max-width: 100%;
+                     width: auto !important;
+                     height: auto !important;
+                 }
+                 
+                
+                
+                @media screen and (max-width: 1024px) {
+                    .inventory {
+                        font-size: 36px;
+                        margin-top: 20px;
+        
+                      } 
+                      
+                      .main-heading {
+                         font-size: 20px;
+                        margin-left: 21px;
+                        margin-top: 0px;
+        
+                      } 
+                }
+                @media screen and (max-width: 1023px) {
+                    .inventory {
+                        margin-top: 16px;
+        
+                      } 
+                     }
+                 @media screen and (max-width: 767px) {
+                    .inventory {
+                        margin-top: 9px;
+        
+                  } 
+                 }    
+                 
+                  
+                @media screen and (max-width: 767px) {
+                    .slds-card__body_inner .media-left {
+                       display: inline-block;
+                       width: 100px;
+                    } 
+                    .slds-card__body_inner .media-body {
+                       display: inline-block;
+                       width: calc(100% - 106px);
+                    } 
+                } 
+                
+    </style>
+    <script>
+        $(function(){
+            $('.sfdc_richtext').css({'width':'150px'});
+            $('.sfdc_richtext img').css({'width':'150px','height':'85px'}); 
+        })
+        function addDataTable() {
+            $('#tabId').delay(1000).DataTable({ 
+                "sDom": '<"pull-left"f><"pull-right"l>tip',
+                "pageLength": 25,
+                "lengthMenu": [[10, 20, 25, 50, -1], [10, 20, 25, 50, "All"]]
+            });
+            $('.sfdc_richtext').delay(1000).css({'width':'150px'});
+            $('.sfdc_richtext img').delay(1000).css({'width':'150px','height':'85px'}); 
+        }
+        function searchTheFinalList() {
+                searchDataInController(); 
+        }
+    </script>
+    <apex:form id="frm" title="Inventory">
+            <apex:actionFunction name="searchDataInController" action="{!searchData}" reRender="invntryLst" oncomplete="addDataTable();"/>
+            
+        <p style="font-size:22px;font-family: 'Arial';">
+            <img src="/s.gif" alt="Inventory" class="pageTitleIcon" title="Product">
+                <font class="inventory"> Inventory</font>
+                <a onclick="window.top.location='/';" class="slds-button slds-button--neutral slds-button--brand" href="/home/home.jsp" style="border: 1px solid white; box-shadow: 3px 5px 15px #888888; position: fixed; z-index: 99; left: 1%; top: 2%; padding:5px 12px; font-size: 14px;">Home</a>
+                
+            </img>
+        </p>
+        <hr class="divider"/>
+        <p class="custom-filter">
+            <b>Type:&nbsp;</b> 
+            <apex:selectList size="1" value="{!strPickListValue}" label="Record Type: " id="slRecType"  style="max-width: 12%;" styleClass="slds-select">
+                <apex:selectOptions value="{!lstInventoryRecordtype}" id="so1"/>
+                <apex:actionSupport event="onchange"  action="{!recordTypeChange}" reRender="invntryLst" oncomplete="addDataTable();"/>
+            </apex:selectList>
+            &nbsp;|&nbsp;
+            <b>Status:&nbsp;</b> 
+            <apex:inputField value="{!objInventoryPick.Stage__c}" style="max-width: 12%;" styleClass="slds-select">
+                <apex:actionSupport event="onchange"  action="{!recordTypeChange}" reRender="invntryLst" oncomplete="addDataTable();"/>
+            </apex:inputField> 
+            &nbsp;|&nbsp; 
+              <b>Boat Type:&nbsp;</b>  <apex:inputField value="{!objInventoryPick.Boat_Type__c}" style="width: 14%;" styleClass="slds-input" /> &nbsp;|&nbsp;
+            <b>Store Location:&nbsp;</b>
+            <apex:selectList size="1" value="{!selectedStoreLocation}" label="Store Location " id="storeLocation"  style="max-width: 14%;" styleClass="slds-select">
+                <apex:selectOptions value="{!listStoreLocation}"/>
+            </apex:selectList>
+            
+            <!--<apex:inputField value="{!objInventoryPick.Store_Location__c}" style="width: 14%;" styleClass="slds-input" /> -->&nbsp;|&nbsp;
+         
+            <apex:inputText value="{!strSearchString}" style="width: 14%;" styleClass="slds-input" title="Search" html-placeholder="keywords"/>&nbsp;
+            
+            <a class="slds-button slds-button--neutral slds-button--brand" onclick="searchTheFinalList();" style="font-size: 10px;" >Search</a> 
+                  
+        </p> 
+         <hr/>
+         <apex:outputPanel id="invntryLst">
+             
+            <apex:repeat value="{!lstAllInventory }" var="inv" id="pbt11"> 
+            <article class="slds-card inventory-details-card">
+              <div class="slds-card__body slds-card__body_inner">
+                  <div class="media-left">
+                      <a href="/{!inv.objInventory.Id}">
+                                  <!--  <apex:outputField value="{!inv.objInventory.Side__c}"/> -->
+                                   <apex:image url="/servlet/servlet.FileDownload?file={!inv.fileId}" />
+  
+                            </a>
+                  </div>
+                  <div class="media-body">
+                  
+                  <div class="row">
+                      <div class="col-sm-6">
+                          
+                      <div class="flex-row">
+                          <div class="flex-col">
+                              <span class="key-name">Inventory</span>
+                          </div>
+                          <div class="flex-col">
+                              <span class="key-val"><apex:outputLink value="/{!inv.objInventory.Id}" disabled="{!checkStatus}">{!inv.objInventory.Name}</apex:outputLink></span>
+                          </div>
+                      </div>
+                      <div class="flex-row">
+                          <div class="flex-col">
+                              <span class="key-name">Boat Type</span>
+                          </div>
+                          <div class="flex-col">
+                              <span class="key-val"><apex:outputField value="{!inv.objInventory.RecordTypeId}"/></span>
+                          </div>
+                      </div>
+                      <div class="flex-row">
+                          <div class="flex-col">
+                              <span class="key-name">Status</span>
+                          </div>
+                          <div class="flex-col">
+                              <span class="key-val"><apex:outputField value="{!inv.objInventory.Stage__c}"/></span>
+                          </div>
+                      </div>
+                      <div class="flex-row">
+                          <div class="flex-col">
+                              <span class="key-name">Manufacturer</span>
+                          </div>
+                          <div class="flex-col">
+                              <span class="key-val"><apex:outputField value="{!inv.objInventory.Manufacturer__c}"/></span>
+                          </div>
+                      </div>
+                      
+                      <div class="flex-row">
+                          <div class="flex-col">
+                              <span class="key-name">Model</span>
+                          </div>
+                          <div class="flex-col">
+                              <span class="key-val"><apex:outputField value="{!inv.objInventory.Model__c}"/></span>
+                          </div>
+                      </div>
+                      
+                      <div class="flex-row">
+                          <div class="flex-col">
+                              <span class="key-name">Model Variant</span>
+                          </div>
+                          <div class="flex-col">
+                              <span class="key-val"><apex:outputField value="{!inv.objInventory.Model_Variant__c}"/></span>
+                          </div>
+                      </div>
+                      
+                      <div class="flex-row">
+                          <div class="flex-col">
+                              <span class="key-name">HIN Number</span>
+                          </div>
+                          <div class="flex-col">
+                              <span class="key-val"><apex:outputField value="{!inv.objInventory.HIN_Number__c}"/></span>
+                          </div>
+                      </div>
+                      
+                       <div class="flex-row">
+                          <div class="flex-col">
+                              <span class="key-name">Store Location</span>
+                          </div>
+                          <div class="flex-col">
+                              <span class="key-val"><apex:outputField value="{!inv.objInventory.Store_Location__c}"/></span>
+                          </div>
+                      </div>
+                      
+                      
+                      
+                      <div class="flex-row">
+                          <div class="flex-col">
+                              <span class="key-name">Price</span>
+                          </div>
+                          <div class="flex-col">
+                              <span class="key-val">
+                                <apex:outputPanel rendered="{!inv.isNewBoat}">  
+                                  <apex:outputField value="{!inv.objInventory.Total_MSRP_Price__c}"/>
+                                </apex:outputPanel> 
+                                <apex:outputPanel rendered="{!if(inv.isNewBoat, false, true)}"> 
+                                  <apex:outputField value="{!inv.objInventory.Suggested_List_Price__c}"/>
+                                </apex:outputPanel>
+                              </span>
+                          </div>
+                      </div>
+                      
+                      
+                      
+                      
+                      
+                      
+                      </div>
+                      <div class="col-sm-6" style="position: relative;">
+                          <a class="slds-button slds-button--neutral slds-button--brand" href="/apex/BOATBUILDING__ProductOrder?invId={!inv.objInventory.Id}&frm=InvList" style="border: 1px solid white; box-shadow: 3px 5px 15px #888888; position: absolute; right: 13%;top: calc(50% - 20px);padding:5px 12px; font-size: 14px; z-index: 1000;">Quote</a>                         
+                      
+                      <div class="flex-row">
+                          <div class="flex-col">
+                              <span class="key-name">Engine SN</span>
+                          </div>
+                          <div class="flex-col">
+                              <span class="key-val"><apex:outputField value="{!inv.objInventory.Engine_SN__c}"/></span>
+                          </div>
+                      </div>
+                      
+                      <div class="flex-row">
+                          <div class="flex-col">
+                              <span class="key-name">Trailer VIN</span>
+                          </div>
+                          <div class="flex-col">
+                              <span class="key-val"><apex:outputField value="{!inv.objInventory.Trailer_VIN__c}"/></span>
+                          </div>
+                      </div>
+                      
+                      <div class="flex-row">
+                          <div class="flex-col">
+                              <span class="key-name">Boat Length(Feet)</span>
+                          </div>
+                          <div class="flex-col">
+                              <span class="key-val"><apex:outputField value="{!inv.objInventory.Boat_Length_in_feets__c}"/></span>
+                          </div>
+                      </div>
+                      
+                      <div class="flex-row">
+                          <div class="flex-col">
+                              <span class="key-name">Location</span>
+                          </div>
+                          <div class="flex-col">
+                              <span class="key-val"><apex:outputField value="{!inv.objInventory.Location__c}"/></span>
+                          </div>
+                      </div>
+                      
+                      <div class="flex-row">
+                          <div class="flex-col">
+                              <span class="key-name">Days in the lot</span>
+                          </div>
+                          <div class="flex-col">
+                              <span class="key-val"><apex:outputField value="{!inv.objInventory.Status_for_Days_on_the_Lot__c}"/></span>
+                          </div>
+                      </div>
+                      <div class="flex-row">
+                          <div class="flex-col">
+                              <span class="key-name">Interest Start Date</span>
+                          </div>
+                          <div class="flex-col">
+                              <span class="key-val"><apex:outputField value="{!inv.objInventory.Status_for_Interest_Start_Date__c}"/></span>
+                          </div>
+                      </div>
+                      
+                      <div class="flex-row">
+                          <div class="flex-col">
+                              <span class="key-name">Curtailments Start Date</span>
+                          </div>
+                          <div class="flex-col">
+                              <span class="key-val"><apex:outputField value="{!inv.objInventory.Status_for_Curtailment_Start_Date__c}"/></span>
+                          </div>
+                      </div>
+                      
+                      
+                          
+                      <div class="flex-row">
+                          <div class="flex-col">
+                              <span class="key-name">Main color</span>
+                          </div>
+                          <div class="flex-col">
+                              <span class="key-val"><apex:outputField value="{!inv.objInventory.Main_color__c}"/></span>
+                          </div>
+                      </div>
+                      
+                             <div class="flex-row">
+                          <div class="flex-col">
+                              <span class="key-name">Accent color</span>
+                          </div>
+                          <div class="flex-col">
+                              <span class="key-val"><apex:outputField value="{!inv.objInventory.Accent_color__c}"/></span>
+                          </div>
+                      </div>
+                      
+                      
+                      </div>
+                  </div>
+                      
+                 </div>
+              </div>
+            </article>
+            </apex:repeat>
+        </apex:outputPanel>
+        
+        <script>
+            $(document).ready(function(){
+                document.getElementById('pge:frm:slRecType').value= '{!defaultVal}'; 
+                $('#tabId').DataTable({
+                    "sDom": '<"pull-left"f><"pull-right"l>tip',
+                    "pageLength": 25,
+                    "lengthMenu": [[10, 20, 25, 50, -1], [10, 20, 25, 50, "All"]]
+                });
+            }); 
+        </script>
+    </apex:form>
+</apex:page>

@@ -1,0 +1,10 @@
+<aura:component >
+    <aura:attribute name="strId" type="String"/> 
+    <aura:attribute name="ProductPriceIdListCCCC" type="String[]"/>
+    <aura:attribute name="ProductPriceIdListCCCCBlank" type="String[]" default="{}"/>
+    <aura:attribute name="objDOCheck" type="BOOLEAN" />
+    
+	<aura:registerEvent name="PPIdEvent" type="c:PPIdEvent"/>
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/> 
+    <ui:inputCheckbox aura:id="ppcheck"  change="{!c.changePPOption}" value="{!v.objDOCheck}"/>
+</aura:component>

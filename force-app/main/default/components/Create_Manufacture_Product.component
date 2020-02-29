@@ -1,0 +1,133 @@
+<apex:component controller="BoatBuilderController" id="popupComp" allowDML="true">
+	<apex:attribute name="SelectedTypee" description="Selected Type." assignTo="{!ST}" type="String" required="true"/>
+	
+    <div>
+        <a onclick="hidePopup();"><i id="closeIcn" class="fa fa-close" style="font-size:24px; position: absolute; bottom: 85%; right: 3%; top: 3%;"></i></a>
+    </div>
+    
+    <script>
+    		function hidePopup() {
+    			document.getElementById("doId").style.display = "none"; 
+    		}
+    		function showProPanel(obj) {
+	    		if(obj.checked) {
+	    			document.getElementById("prodPanel").style.display = "block"
+	    		} else {
+	    			document.getElementById("prodPanel").style.display = "none";
+	    		}
+    		}
+    		function checkAllDetails() {
+    			
+    			var manuVal = document.getElementById("p:frm:popComp:popupComp:manuList").value;
+    			console.log('asdasdasdas: '+manuVal);
+    			if(manuVal === 'NEW') {
+    				document.getElementById("prodPanel").style.display = "block"
+    				document.getElementById("newproCheck").style.display = "none";
+    			} else if(manuVal === '') {
+    				document.getElementById("prodPanel").style.display = "none";
+    				document.getElementById("newproCheck").style.display = "none";
+    			} else {
+    				document.getElementById("prodPanel").style.display = "none";	
+    				document.getElementById("newproCheck").style.display = "block";
+    			}
+    		}
+    </script>
+    <apex:outputPanel id="opFNew">
+    		<table>
+    			<tr>
+                <td colspan="2" style="text-align: center;">
+                    <div class="slds-form-element">
+                        <label class="slds-form-element__label">Manufacture:</label>
+                        <div class="slds-form-element__control">
+                            <apex:selectList size="1" style="width: 90%;" value="{!selectedManufacturepop}" id="manuList"  styleClass="slds-select">
+                                <apex:selectOptions value="{!lstManufacturepop}" id="so1"/>
+                                <apex:actionSupport event="onchange" action="{!getExistManuDetail}" reRender="opFNew" oncomplete="checkAllDetails();"/>
+                            </apex:selectList>
+                        </div> 
+                    </div>
+                </td> 
+            </tr>
+            <tr>
+                <td colspan="2" style="text-align: center;">
+                    <hr/>
+                </td>
+            </tr>
+    		</table>
+    		<div id="newproCheck" style="display: none;">
+	        <label class="slds-checkbox">
+	          <input type="checkbox" name="options" id="ManuProdCheck"  onchange="showProPanel(this);"/>
+	          <span class="slds-checkbox--faux"></span>
+	          <span class="slds-form-element__label">New Product</span>
+	      </label>
+	    </div>
+    		<div id="prodPanel" style="display: none;">
+	        <table >
+	            
+	            <tr>
+	                <td>
+	                    <div class="slds-form-element">
+	                        <label class="slds-form-element__label">Manufacture:</label>
+	                        <div class="slds-form-element__control">
+	                            <apex:inputText style="width: 98%;" value="{!ManuName}" disabled="{!if(selectedManufacturepop == '' || selectedManufacturepop == 'NEW', false, true)}"  styleClass="slds-input"/>
+	                        </div>
+	                    </div> 
+	                </td>
+	                <td>
+	                    <div class="slds-form-element">
+	                        <label class="slds-form-element__label">Product Model:</label>
+	                        <div class="slds-form-element__control">
+	                            <apex:inputText style="width: 98%;" value="{!objProductpop.MModel2__c}"  styleClass="slds-input"/>
+	                        </div>
+	                    </div> 
+	                </td>
+	            </tr>
+	            <tr>
+	                
+	                <td>
+	                    <div class="slds-form-element">
+	                        <label class="slds-form-element__label">Product Model Variant:</label>
+	                        <div class="slds-form-element__control">
+	                            <apex:inputText style="width: 98%;" value="{!objProductpop.M_Model_Variant__c}"  styleClass="slds-input"/>
+	                        </div>
+	                    </div> 
+	                </td>
+	                <td>
+	                    <div class="slds-form-element">
+	                        <label class="slds-form-element__label">Product Year:</label>
+	                        <div class="slds-form-element__control">
+	                            <apex:inputText style="width: 98%;" value="{!objProductpop.M_Year__c}"  styleClass="slds-input"/>
+	                        </div>
+	                    </div> 
+	                </td>
+	            </tr>
+	            <tr>
+	                
+	                <td>
+	                    <div class="slds-form-element">
+	                        <label class="slds-form-element__label">Product Dealer Price:</label>
+	                        <div class="slds-form-element__control">
+	                            <apex:inputField style="width: 98%;" value="{!objProductpop.Cost_Price__c}"  styleClass="slds-input"/>
+	                        </div>
+	                    </div> 
+	                </td>
+	                <td>
+	                    <div class="slds-form-element"> 
+	                        <label class="slds-form-element__label">Product Retail Price:</label>
+	                        <div class="slds-form-element__control">
+	                            <apex:inputField style="width: 98%;" value="{!objProductpop.M_Boat_MSRP_PRICE__c}"  styleClass="slds-input"/>
+	                        </div>
+	                    </div> 
+	                </td>
+	            </tr>
+	            
+	        </table>
+        </div>
+        <table>
+        		<tr>
+                <td colspan="2" style="text-align: center;">
+                    <apex:commandLink styleClass="slds-button slds-button--neutral slds-button--brand" action="{!saveProduct}" >Save &amp; Continue</apex:commandLink>
+                </td>
+            </tr>
+        </table>
+    </apex:outputPanel>
+</apex:component>

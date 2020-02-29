@@ -1,0 +1,12 @@
+<apex:page standardController="Inventory__c" extensions="GoogleAnalyticsChartsController" action="{!storeAnalyticsData}" >
+    <apex:pageMessages />
+    <apex:chart height="400" width="700" data="{!data}">
+        <apex:axis type="Numeric" position="left" fields="data1" 
+                   title="Number of Views" grid="true"/>
+        <apex:axis type="Category" position="bottom" fields="pageViewDate" 
+                   title="Last 30 Days">
+        </apex:axis>
+        <apex:lineSeries axis="left" fill="true" xField="pageViewDate" yField="data1"
+                         markerType="cross" markerSize="4" markerFill="#FF0000"/>
+    </apex:chart>
+</apex:page>

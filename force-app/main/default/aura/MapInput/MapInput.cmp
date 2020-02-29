@@ -1,0 +1,23 @@
+<aura:component controller="GooglePlaceController" access="global">
+    <aura:attribute name="location" type="string" default=""/>
+    <aura:attribute name="predictions" type="List" default="[]"/>
+    <aura:attribute name="objAccountMP" type="Account" default="{'sobjectType': 'Account'}"/>
+    <aura:registerEvent name="ParentToChild" type="c:AccountParentToChild"/>
+    <div style="background: #fff; border-radius: .25em; padding: 2%;">
+        <lightning:input label="Location"
+                         name="location"
+                         aura:id="location" 
+                         value="{!v.location}"
+                         onchange="{!c.getCities}" style="width:100%;"/>
+        
+        <aura:if isTrue="{!v.predictions.length > 0}">		 
+            <ul class="city_predictions">
+                <aura:iteration items="{!v.predictions}" var="prediction">
+                    <li class="slds-listbox__item" style="padding: 1%; border: 1px solid #e1e1e1; border-radius: .25em; margin-top: 1%; background: #ececec;">
+                        <a onclick="{!c.getCityDetails}" data-placeid="{!prediction.place_id}">{!prediction.description}</a>
+                    </li>
+                </aura:iteration>
+            </ul> 	 
+        </aura:if>
+    </div>
+</aura:component>

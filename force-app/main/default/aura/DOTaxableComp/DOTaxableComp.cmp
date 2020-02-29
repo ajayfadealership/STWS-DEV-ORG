@@ -1,0 +1,5 @@
+<aura:component >
+	<aura:attribute name="newPLstDealerOptionWraperC" type="DealerOptionWraper[]"/>
+    <aura:attribute name="objDO" type="DealerOptionWraper" />
+    <ui:inputCheckbox aura:id="pptbcheck" class="myCheckbox"  change="{!c.changePPDOOption}" value="{!v.objDO.objDealerOption.BOATBUILDING__Non_Taxable__c}"/> 
+</aura:component>

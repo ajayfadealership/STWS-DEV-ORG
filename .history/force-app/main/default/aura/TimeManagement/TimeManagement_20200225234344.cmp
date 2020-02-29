@@ -1,0 +1,132 @@
+<aura:component controller="TimeManagementController" implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction" access="global" >
+    <aura:attribute name="today" type="Date" />
+     <aura:attribute name="objTimeM" type="Time_Management__c" default="{'sobjectType' : 'BOATBUILDING__Time_Management__c'}"/>
+    <aura:handler name="init" action="{!c.init}" value="{!this}" />
+    <aura:attribute name="enableDayIn" type="Boolean" default="true"/>
+    <aura:attribute name="enableDayOut" type="Boolean" default="true"/>
+    <aura:attribute name="enableLunchIn" type="Boolean" default="true"/>
+    <aura:attribute name="enableLunchOut" type="Boolean" default="true"/>
+    <div class="background_img img-responsive">
+        <div class="slds-card login_box">
+            <div class="slds-card__header slds-grid">
+                <header class="slds-media slds-media--center slds-has-flexi-truncate">
+                    <div class="slds-media__body slds-truncate">
+                        <h2>
+                            <a href="javascript:void(0);" class="slds-text-link--reset">
+                                <span class="slds-text-heading--small">Time Management</span>
+                            </a>
+                        </h2>
+                        
+                    </div>
+                </header>
+                 <lightning:formattedDateTime aura:id="dt"
+                                     value="{!v.today}"
+                                     month="short"
+                                     day="numeric"
+                                     year="numeric"
+                                     hour="2-digit"
+                                     minute="2-digit"
+                                     second="2-digit"
+                                     hour12="true"
+                                     timeZone="{!$Locale.timezone}"/>
+            </div>
+            
+            <div class="slds-card__body">
+                <div class="slds-form-element slds-m-bottom--x-large">
+                    <div class="slds-form-element tab_mid">
+                        <center>
+                        <!--<a class="slds-button slds-button-brand" id="day_in_btn">Day In</a>
+                        <a class="slds-button slds-button-brand" id="lunch_out_btn">Lunch Out</a>
+                        <a class="slds-button slds-button-brand" id="lunch_in_btn">Lunch In</a>
+                        <a class="slds-button slds-button-brand" id="day_out_btn">Day Out</a> -->
+                        <div class="slds-grid slds-gutter gutters slds-wrap slds-p-top_large">
+                            <aura:if isTrue="{!and(v.enableDayIn,v.enableLunchOut,v.enableLunchIn,v.enableDayOut)}">
+                                <div class="slds-col slds-size_1-of-1 slds-p-left_none slds-p-bottom_large">
+                                    <strong style="color:green;"> You are done for the Day. See you tomorrow!</strong>
+                                </div>
+                            </aura:if>
+                            <div class="slds-col slds-size_1-of-1  slds-medium-size_1-of-2 slds-large-size_1-of-2 slds-p-left_none slds-p-bottom_large">
+                                <lightning:button variant="brand" label="Day IN" onclick="{! c.dayIn }" disabled="{!v.enableDayIn}" />
+
+                            </div>
+                            <div class="slds-col slds-size_1-of-1  slds-medium-size_1-of-2 slds-large-size_1-of-2 slds-p-left_none slds-p-bottom_large">
+                                <lightning:button variant="brand" label="Lunch Out" onclick="{! c.lunchOut }" disabled="{!v.enableLunchOut}" />
+
+                            </div>
+                            <div class="slds-col slds-size_1-of-1  slds-medium-size_1-of-2 slds-large-size_1-of-2 slds-p-left_none slds-p-bottom_large">
+                                <lightning:button variant="brand" label="Lunch IN" onclick="{! c.lunchIn }" disabled="{!v.enableLunchIn}" />
+
+                            </div>
+                            <div class="slds-col slds-size_1-of-1  slds-medium-size_1-of-2 slds-large-size_1-of-2 slds-p-left_none slds-p-bottom_large">
+                                <lightning:button variant="brand" label="Day Out" onclick="{! c.dayOut }" disabled="{!v.enableDayOut}" />
+
+                            </div>
+                        </div>
+                        
+                            </center>
+                    </div>
+                </div>
+            </div>
+            
+                            <div class="slds-grid slds-gutter gutters slds-wrap slds-p-left_medium">
+                               
+                                <div class="slds-col slds-size_1-of-1  slds-medium-size_1-of-2 slds-large-size_1-of-2 slds-p-left_none slds-p-bottom_large">
+                                   <Strong> Day In:</Strong><lightning:formattedDateTime aura:id="dt"
+                                    value="{!v.objTimeM.BOATBUILDING__Day_In__c}"
+                                    month="short"
+                                    day="numeric"
+                                    year="numeric"
+                                    hour="2-digit"
+                                    minute="2-digit"
+                                    second="2-digit"
+                                    hour12="true"
+                                    timeZone="{!$Locale.timezone}"/>
+                                </div>
+                                <div class="slds-col slds-size_1-of-1  slds-medium-size_1-of-2 slds-large-size_1-of-2 slds-p-left_none slds-p-bottom_large">
+                                    <Strong> Lunch Out:</Strong> <lightning:formattedDateTime aura:id="dt"
+                                    value="{!v.objTimeM.BOATBUILDING__Lunch_Out__c}"
+                                    month="short"
+                                    day="numeric"
+                                    year="numeric"
+                                    hour="2-digit"
+                                    minute="2-digit"
+                                    second="2-digit"
+                                    hour12="true"
+                                    timeZone="{!$Locale.timezone}"/>
+                                </div>
+                                <div class="slds-col slds-size_1-of-1  slds-medium-size_1-of-2 slds-large-size_1-of-2 slds-p-left_none slds-p-bottom_large">
+                                    <Strong> Lunch IN:</Strong> <lightning:formattedDateTime aura:id="dt"
+                                    value="{!v.objTimeM.BOATBUILDING__Lunch_In__c}"
+                                    month="short"
+                                    day="numeric"
+                                    year="numeric"
+                                    hour="2-digit"
+                                    minute="2-digit"
+                                    second="2-digit"
+                                    hour12="true"
+                                    timeZone="{!$Locale.timezone}"/>
+                                </div>
+                                <div class="slds-col slds-size_1-of-1  slds-medium-size_1-of-2 slds-large-size_1-of-2 slds-p-left_none slds-p-bottom_large">
+                                    <Strong> Day Out:</Strong> <lightning:formattedDateTime aura:id="dt"
+                                    value="{!v.objTimeM.BOATBUILDING__Day_Out__c}"
+                                    month="short"
+                                    day="numeric"
+                                    year="numeric"
+                                    hour="2-digit"
+                                    minute="2-digit"
+                                    second="2-digit"
+                                    hour12="true"
+                                    timeZone="{!$Locale.timezone}"/>
+                                </div>
+                                <div class="slds-col slds-size_1-of-1  slds-medium-size_1-of-2 slds-large-size_1-of-2 slds-p-left_none slds-p-bottom_large">
+                                    <Strong> Working Hours: </Strong> {!v.objTimeM.BOATBUILDING__Working_Hours__c}
+                                   
+                                </div>
+                            </div>
+                      
+                                
+                          
+                 
+        </div>
+    </div>
+</aura:component>

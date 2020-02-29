@@ -1,0 +1,939 @@
+<apex:page showHeader="false" controller="TimeMgmtCustReportController" sidebar="false">
+    <apex:includeScript value="{!URLFOR($Resource.FC, 'fullcalendar-3.4.0/FC/lib/jquery.min.js')}" />
+    <apex:includeScript value="{!URLFOR($Resource.bootstrap, '/bsjs.js')}" />
+    <apex:stylesheet value="{!URLFOR($Resource.bootstrap, '/bscss.css')}" />
+    <apex:includeScript value="{!URLFOR($Resource.bootstrap, '/bsmultiselect.js')}" />
+    <apex:stylesheet value="{!URLFOR($Resource.bootstrap, '/bsmultiselect.css')}" />
+    <apex:slds />
+    <html>
+
+    <head>
+        <title>Technician Efficiency Report</title>
+        <style>
+            span.multiselect-selected-text {
+                        color: black !important;
+                    }
+                    b.caret {
+                        color: black;
+                    }
+                    span.multiselect-native-select {
+                        position: absolute !important;
+                        top: 60% !important;
+                        left: 18% !important;
+                        font-size: 13px !important;
+                    }
+                    body {
+                        background: #f9fafb;
+                    }
+                #customers {
+                    font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+                    border-collapse: collapse;
+                    width: 50%;
+                    position: absolute;
+                    top: 15%;
+                    left: 0%;
+                }
+
+                #TMDinDoutPrint {
+                    font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+                    border-collapse: collapse;
+                    width: 48%;
+                    position: absolute;
+                    top: 15%;
+                    left: 51.6%;
+                }
+                
+
+                #customers td, #customers th, #TMDinDout td, #TMDinDout th {
+                    border: 1px solid #ddd;
+                    padding: 8px;
+                }
+
+                #customers tr:nth-child, #TMDinDout tr:nth-child(even){background-color: #f2f2f2;}
+
+                #customers tr td table tr:hover, #TMDinDout tr:hover {background-color: #84c6e2;}
+                
+                                
+
+                #customers th, #TMDinDout th {
+                    padding-top: 12px;
+                    padding-bottom: 12px;
+                    text-align: left;
+                    background-color: #29abe2;
+                    color: white;
+                }
+                #headerSection {
+                    position: fixed;
+                    border: 1px solid #fff;
+                    width: 100%;
+                    height: 12%;
+                    background: #29abe2;
+                    color: #fff;
+                    z-index: 999;
+                }
+            </style>
+    </head>
+
+    <body>
+
+        <div id="headerSection">
+            <p>
+                <h1 style="position: relative;font-size: 28px;left: 35%;">Technician Efficiency Report</h1>
+            </p>
+            <a class="slds-button slds-button--neutral" onclick="window.location.href = '/home/home.jsp';" style="position: absolute;z-index: 999;left: 1%;top: 56%;">
+                <apex:image id="theImage2" value="{!$Resource.HomeLogo}" width="25" height="25" />
+            </a>
+            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded"
+                style="position: absolute; z-index: 999; left: 5%; top: 18%;">
+                <div class="slds-form-element">
+                    <label class="slds-form-element__label">&nbsp;</label>
+                    <div class="slds-form-element__control" style="position: absolute; left: -17%; top: -62%;">
+                        Auto Refresh
+                        <label class="slds-checkbox--toggle slds-grid slds-grid--vertical-align-center">
+                            <input name="checkbox" type="checkbox" id="autoReferesh" checked="true" />
+                            <span class="slds-checkbox--faux" data-check-on="Yes" data-check-off="No"></span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+            <p>
+                <b style="position: absolute;top: 54%;left: 10%;font-size: 20px;">Technician:</b>
+                <select id="userPick" onchange="fetchReport();" class="4colactive slds-select" style="position: absolute; top: 26%; left: 35.5%; font-size: 20px; color: black;"
+                    multiple="multiple">
+
+                    <option value="ALL">All</option>
+                </select>
+            </p>
+            <p>
+                <b style="position: absolute;top: 55%;left: 32%;font-size: 20px;">Range:</b>
+                <select id="range" onchange="fetchReport();" style="position: absolute;top: 58%;left: 37%;font-size: 16px;color: black;">
+                    <option value="#">--None--</option>
+                    <option value="ALL">All</option>
+                    <option value="0">Today</option>
+                    <option value="1">Yesterday</option>
+                    <option value="7">Last 7 Days</option>
+                    <option value="30">Last 30 Days</option>
+                    <option value="60">Last 60 Days</option>
+                    <option value="120">Last 120 Days</option>
+                    <option value="CurrentWeek">Current Week</option>
+                    <option value="CurrentMonth">Current Month</option>
+                    <option value="CurrentYear">Current Year</option>
+                </select>
+            </p>
+            <p style="position: absolute;top: 55%;left: 49%;font-size: 20px;">
+            OR
+            </p>
+            <p>
+                <b style="position: absolute;top: 62%;left: 54%;font-size: 18px;">Start Date:</b>
+                <input type="date" style="position: absolute;top: 57%;left: 61%;font-size: 15px;max-width: 155px;color: black;"
+                    id="strDate" />
+            </p>
+            <p>
+                <b style="position: absolute;top: 64%;left: 77%;font-size: 17px;">End Date:</b>
+                <input type="date" style="position: absolute;top: 59%;left: 83%;font-size: 14px;max-width: 155px;color: black;"
+                    id="endDate" />
+            </p>
+            <p>
+                <button type="button" onclick="print()" style="position: absolute;top: 56%;left: 97%;color: black;font-size: 14px;border-radius: 7px;">Print</button>
+                <input id="searchByDateRange" type="button" value="Go" style="position: absolute;top: 56%;left: 94%;color: black;font-size: 17px;border-radius: 7px;" />
+            </p>
+        </div>
+        <table id="customers">
+
+        </table>
+        <div id="TMDinDoutPrint">
+        		<div id="printHeaderDiv" style="display: none;">
+        			<span style="font-size: 22px; position: relative; left: 39%; color: #42abe2;">Technician Efficiency Report</span>
+        			<hr/>
+        			<span style="font-size: 22px; position: relative; left: 1%; color: #42abe2;" >Date: </span>
+        			<span style="font-size: 20px; position: relative; left: 1%;" id="currentDateShow">{!LongDate} </span>
+        			<span style="font-size: 22px; position: relative; left: 24%; color: #42abe2;">Range: </span>
+        			<span style="font-size: 20px; position: relative; left: 24%;" id="rangeShow"></span>
+        			<hr/>	
+        		</div>
+            <table class="table" id="TMDinDout">
+
+            </table>
+        </div>
+        <style>
+            .btn-print {
+                background: #29abe2;
+                color: #fff !important;
+                border-radius: 2px;
+                padding: 8px 15px;
+            }
+        </style>
+        <script>
+            function print() {
+                var WindowObject = window.open('', 'PrintWindow', 'width=750,height=650,top=50,left=50,toolbars=no,scrollbars=yes,status=no,resizable=yes');
+                var content = `<!DOCTYPE html>
+            <html lang="en">
+
+            <head>
+                <meta charset="UTF-8">
+                <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                <meta http-equiv="X-UA-Compatible" content="ie=edge">
+                <title>Print</title>
+            </head>
+
+            <body>
+                <style>
+                    body {
+                        padding: 0px;
+                        margin: 0px;
+                    }
+
+                    .table {
+                        width: 100%;
+                        border-collapse: collapse;
+                    }
+
+                    .table tr th,
+                    .table tr td {
+                        text-align: left;
+                        font-family: calibri;
+                        padding: 8px 10px;
+                        border: 1px solid #ccc;
+                    }
+
+                    .table tr th {
+                        background: #03A9F4;
+                        color: #fff;
+                    }
+                    @media print {
+                        .table tr th {
+                            background: #03A9F4;
+                            color: #fff;
+                        }
+                    }
+                </style>
+                    ${document.getElementById('TMDinDoutPrint').innerHTML}
+                    </body>
+                </html>`;
+                WindowObject.document.writeln(content);
+                WindowObject.focus();
+                WindowObject.print();
+                WindowObject.close();
+
+            }
+            $(document).ready(function () {
+                //document.getElementById("autoReferesh").click();
+
+                var x = setInterval(function () {
+
+                    if (document.getElementById("autoReferesh").checked == true) {
+                        console.log("autoReferesh");
+                        var userId = $("#userPick").val();
+                        var rangeValue = $("#range").val();
+
+                        var strtDate = $("#strDate").val();
+                        var endDate = $("#endDate").val();
+                        if (userId != "0" && rangeValue != "#") {
+                            fetchReport();
+                        } else if (strtDate != null && strtDate != "" && endDate != null && endDate != "" && userId != "0") {
+                            reportWithDate();
+                        }
+                    }
+                }, 300000);
+
+                BOATBUILDING.TimeMgmtCustReportController.getUserDetails(function (result, event) {
+                    if (event.status) {
+                        if (result != null && result.length > 0) {
+                            var jsonStr = [];
+
+                            for (var i = 0; i < result.length; i++) {
+                                $("#userPick").append("<option value='" + result[i].Id + "'>" + result[i].Name + "</option>")
+                            }
+                            $('#userPick').multiselect();
+                        }
+                    }
+                });
+            });
+        
+            function fetchReport() {
+
+                var userId = $("#userPick").val();
+                var rangeValue = $("#range").val();
+                $("#strDate").val("");
+                $("#endDate").val("");
+                if (userId != "0" && rangeValue != "#") {
+                    console.log("dfghjk");
+                    BOATBUILDING.TimeMgmtCustReportController.getReport(userId, rangeValue, function (result, event) {
+                        if (event.status) {
+                            if (result != null) {
+                                if (result.length > 0) {
+                                    console.log(result);
+                                    var userIdName = new Object();
+                                    for (var i = 0; i < result.length; i++) {
+                                    	userIdName[result[i].OwnerId] = result[i].Owner.Name;
+                                    }
+                                    console.log('userIdName');
+                                    console.log(userIdName); 
+                                    var keylst = Object.keys(userIdName);
+                                    var tbleHTML = "<tr> <th>WO-Name</th> <th>Job Name</th> <th>Job Technician</th> <th>Customer</th> <th>Allocated Hours</th> <th>Worked Hours</th> <th>Job Efficiency</th> </tr>";
+                                    for(var j = 0; j < keylst.length; j++) {
+	                                    for (var i = 0; i < result.length; i++) {
+	                                    	if(keylst[j] == result[i].OwnerId) {
+	                                    		tbleHTML += "<tr style='background: #8db7ce;'> <td colspan='7'> <b style='font-size: 10px;'> " + result[i].Owner.Name + " </b> </td> </tr>";
+		                                        var WOName = "", Cust = "", JN = "", JT = "", Efcncy = "", TWH = "", AH = "";
+		
+		
+		                                        if (result[i].BOATBUILDING__Work_Order_Warranty_Work_Order__c != undefined && result[i].BOATBUILDING__Work_Order_Warranty_Work_Order__r.Name != undefined) {
+		                                            WOName = result[i].BOATBUILDING__Work_Order_Warranty_Work_Order__r.Name;
+		                                        }
+		                                        if (result[i].BOATBUILDING__Work_Order_Warranty_Work_Order__c != undefined && result[i].BOATBUILDING__Work_Order_Warranty_Work_Order__r.BOATBUILDING__Contact__c != undefined && result[i].BOATBUILDING__Work_Order_Warranty_Work_Order__r.BOATBUILDING__Contact__r.Name != undefined) {
+		                                            Cust = result[i].BOATBUILDING__Work_Order_Warranty_Work_Order__r.BOATBUILDING__Contact__r.Name;
+		                                        }
+		                                        if (result[i].BOATBUILDING__Job_Name__c != undefined) {
+		                                            JN = result[i].BOATBUILDING__Job_Name__c;
+		                                        }
+		                                        if (result[i].BOATBUILDING__Technician__r != undefined) {
+		                                            JT = result[i].BOATBUILDING__Technician__r.Name;
+		                                        }
+		                                        if (result[i].BOATBUILDING__Efficiency__c != undefined) {
+		                                            Efcncy = result[i].BOATBUILDING__Efficiency__c;
+		                                        }
+		
+		                                        if (result[i].BOATBUILDING__TWO_Worked_Hour__c != undefined) {
+		                                            TWH = result[i].BOATBUILDING__TWO_Worked_Hour__c;
+		                                        }
+		
+		                                        if (result[i].BOATBUILDING__No_of_Labors__c != undefined) {
+		                                            AH = result[i].BOATBUILDING__No_of_Labors__c; 
+		                                        }
+		
+		                                        
+		                                        tbleHTML += "<tr style='background: #8db7ce;'> <td> <a target='_blank' href='/apex/ServicePage?type=TO&TOId="+WOName+"'><b style='color: #fff;'>" + WOName + "</b></a> </td> <td> <b> " + JN + " </b> </td> <td> <b> " + JT + " </b> </td> <td>" + Cust + "</td> <td> " + AH + " </td> <td> " + TWH + " </td> <td> " + Efcncy + "% </td> </tr> <tr> <td colspan='7'>";
+		
+		                                        if (result[i].BOATBUILDING__Time_Management__r != undefined) {
+		                                            tbleHTML += "<table width='100%'><tr> <th>TM-Number</th><th>Tech name</th><th>Clock In</th> <th>Clock Out</th> <th>Total Work(Hours)</th> </tr>";
+		                                            if (result[i].BOATBUILDING__Time_Management__r.length > 0) {
+		                                                console.log(result[i].BOATBUILDING__Time_Management__r);
+		
+		                                                for (var j = 0; j < result[i].BOATBUILDING__Time_Management__r.length; j++) {
+		                                                    var TMID = "", AHOJ = "", TWH = "", CO = "", CI = "", ownerId = "";
+		                                                    if (result[i].BOATBUILDING__Time_Management__r[j].Name != undefined) {
+		                                                        TMID = result[i].BOATBUILDING__Time_Management__r[j].Name;
+		                                                    }
+		
+		                                                    if (result[i].BOATBUILDING__Time_Management__r[j].BOATBUILDING__Technician__r != undefined && result[i].BOATBUILDING__Time_Management__r[j].BOATBUILDING__Technician__r.Name != undefined) {
+		                                                        ownerId = result[i].BOATBUILDING__Time_Management__r[j].BOATBUILDING__Technician__r.Name;
+		                                                    }
+		
+		                                                    if (result[i].BOATBUILDING__Time_Management__r[j].BOATBUILDING__Total_Work__c != undefined) {
+		                                                        TWH = result[i].BOATBUILDING__Time_Management__r[j].BOATBUILDING__Total_Work__c;
+		                                                    }
+		
+		                                                    if (result[i].BOATBUILDING__Time_Management__r[j].BOATBUILDING__Clock_In__c != undefined) {
+		                                                        var dateObj = new Date(result[i].BOATBUILDING__Time_Management__r[j].BOATBUILDING__Clock_In__c);
+		                                                        var month = dateObj.getMonth() + 1; //months from 1-12
+		                                                        var day = dateObj.getDate();
+		                                                        var year = dateObj.getFullYear();
+		                                                        var hr = dateObj.getHours();
+		                                                        var min = dateObj.getMinutes();
+		                                                        var sec = dateObj.getSeconds();
+		
+		
+		                                                        CI =  month + "/" + day + "/" + year + " " + pad(hr) + ":" + pad(min) + ":" + pad(sec);
+		                                                    }
+		
+		                                                    if (result[i].BOATBUILDING__Time_Management__r[j].BOATBUILDING__Clock_Out__c != undefined) {
+		                                                        var dateObj = new Date(result[i].BOATBUILDING__Time_Management__r[j].BOATBUILDING__Clock_Out__c);
+		                                                        var month = dateObj.getMonth() + 1; //months from 1-12
+		                                                        var day = dateObj.getDate();
+		                                                        var year = dateObj.getFullYear();
+		                                                        var hr = dateObj.getHours();
+		                                                        var min = dateObj.getMinutes();
+		                                                        var sec = dateObj.getSeconds();
+		
+		                                                        CO = month + "/" + day + "/" + year + " " + pad(hr) + ":" + pad(min) + ":" + pad(sec);
+		                                                    }
+		
+		                                                    tbleHTML += "<tr> <td> " + TMID + " </td><td>" + ownerId + "</td> <td> " + CI + " </td> <td> " + CO + " </td> <td> " + TWH + " </td>  </tr>";
+		                                                }
+		                                                tbleHTML += "</table> </td> </tr>";
+		                                            }
+		                                        }
+	                                        }
+                                        }
+                                    }
+                                    $("#customers").html(tbleHTML);
+                                } else {
+                                    var tbleHTML = "<tr> <th>Job Name</th> <th>Allocated Hours</th> <th>Efficiency</th> </tr>";
+                                    $("#customers").html(tbleHTML);
+                                }
+                            }
+                        }
+                    });
+                }
+                fetchTimeMgmt();
+            }
+
+            function pad(vall) {
+                //console.log(vall);
+                //console.log(String(vall).length);
+                if (String(vall).length < 2) {
+                    return '0' + String(vall);
+                }
+                return String(vall);
+            }
+
+            function fetchTimeMgmt() {
+                var userId = $("#userPick").val();
+                var rangeValue = $("#range").val();
+
+                if (userId != "0" && rangeValue != "#") {
+                    BOATBUILDING.TimeMgmtCustReportController.getTM(userId, rangeValue, function (result, event) {
+                        console.log("result");
+                        //console.log(result);
+                        if (event.status) {
+                            if (result != null) {
+                                if (result.length > 0) {
+                                    var tbleHTML = "<tr> <th>TM-Number</th><th>Tech Name</th> <th>Day In</th> <th>Lunch Out</th> <th>Lunch In</th> <th>Day Out</th> <th>Clocked Hours</th> <th>Billed Hours</th> <th>Tech. Efficiency</th>  </tr>";
+                                    var clockHR = 0.00;
+                                    var BilledHR = 0.00;
+                                    var TechEFF = 0.00;
+                                    var objTechNameWH = new Object();
+                                    var objTechNameBH = new Object();
+                                    var objTechNameTE	 = new Object();
+                                    var objTechNameId	 = new Object();
+                                    for (var i = 0; i < result.length; i++) {
+                                        if(result[i].BOATBUILDING__Technician__c != undefined) {
+                                            if(!(result[i].BOATBUILDING__Technician__c in objTechNameId)) {
+                                                objTechNameId[result[i].BOATBUILDING__Technician__c] = result[i].BOATBUILDING__Technician__r.Name;
+                                            }
+                                        } else {
+                                            if(!('---' in objTechNameId)) {
+                                                objTechNameId['---'] = '---';
+                                            }
+                                        }
+                                    }
+                                    
+                                    for (var i = 0; i < result.length; i++) {
+                                        var TmId = "", DI = "", LI = "", LO = "", DO = "", WH = "", BH = "0.00", TE = "0.00", OwnerId = "";
+                                        TmId = result[i].Name;
+
+                                        var ownerid = "";
+                                        if (result[i].BOATBUILDING__Technician__r != undefined) {
+                                            ownerid = result[i].BOATBUILDING__Technician__r.Name;
+                                        }
+                                        if (result[i].BOATBUILDING__Day_In__c != undefined) {
+                                            //DI = result[i].BOATBUILDING__Day_In__c;
+
+                                            var dateObj = new Date(result[i].BOATBUILDING__Day_In__c);
+                                            var month = dateObj.getMonth() + 1; //months from 1-12
+                                            var day = dateObj.getDate();
+                                            var year = dateObj.getFullYear();
+                                            var hr = dateObj.getHours();
+                                            var min = dateObj.getMinutes();
+                                            var sec = dateObj.getSeconds();
+                                            DI = month + "/" + day + "/" + year + " " + pad(hr) + ":" + pad(min) + ":" + pad(sec);
+                                        }
+                                        if (result[i].BOATBUILDING__Lunch_In__c != undefined) {
+                                            //LI = result[i].BOATBUILDING__Lunch_In__c;
+                                            var dateObj = new Date(result[i].BOATBUILDING__Lunch_In__c);
+                                            var month = dateObj.getMonth() + 1; //months from 1-12
+                                            var day = dateObj.getDate();
+                                            var year = dateObj.getFullYear();
+                                            var hr = dateObj.getHours();
+                                            var min = dateObj.getMinutes();
+                                            var sec = dateObj.getSeconds();
+                                            LI = month + "/" + day + "/" + year + " " + pad(hr) + ":" + pad(min) + ":" + pad(sec);
+                                        }
+                                        if (result[i].BOATBUILDING__Lunch_Out__c != undefined) {
+                                            //LO = result[i].BOATBUILDING__Lunch_Out__c;
+
+                                            var dateObj = new Date(result[i].BOATBUILDING__Lunch_Out__c);
+                                            var month = dateObj.getMonth() + 1; //months from 1-12
+                                            var day = dateObj.getDate();
+                                            var year = dateObj.getFullYear();
+                                            var hr = dateObj.getHours();
+                                            var min = dateObj.getMinutes();
+                                            var sec = dateObj.getSeconds();
+                                            LO = month + "/" + day + "/" + year + " " + pad(hr) + ":" + pad(min) + ":" + pad(sec);
+                                        }
+                                        if (result[i].BOATBUILDING__Day_Out__c != undefined) {
+                                            //DO = result[i].BOATBUILDING__Day_Out__c;
+
+                                            var dateObj = new Date(result[i].BOATBUILDING__Day_Out__c);
+                                            var month = dateObj.getMonth() + 1; //months from 1-12
+                                            var day = dateObj.getDate();
+                                            var year = dateObj.getFullYear();
+                                            var hr = dateObj.getHours();
+                                            var min = dateObj.getMinutes();
+                                            var sec = dateObj.getSeconds();
+                                            DO = month + "/" + day + "/" + year + " " + pad(hr) + ":" + pad(min) + ":" + pad(sec);
+                                        }
+										console.log('result[i].Working_Hours__c---', result[i].BOATBUILDING__Working_Hours__c);
+                                        if (result[i].BOATBUILDING__Working_Hours__c != undefined) {
+                                            WH = result[i].BOATBUILDING__Working_Hours__c.toFixed(2);
+                                        }
+                                        if (result[i].BOATBUILDING__Billed_Hour__c != undefined) {
+                                            BH = result[i].BOATBUILDING__Billed_Hour__c.toFixed(2);
+                                        }
+
+                                        if (result[i].BOATBUILDING__Technician_Efficiency__c != undefined) {
+                                            TE = result[i].BOATBUILDING__Technician_Efficiency__c;
+                                        }
+                                        
+                                        if(WH != '')
+                                            clockHR += parseFloat(WH);
+                                        if(BH != '')
+                                            BilledHR += parseFloat(BH);
+                                        if(TE != '')
+                                            TechEFF += parseFloat(TE);
+                                        
+                                        if (result[i].BOATBUILDING__Technician__c != undefined) {
+                                        		if(!(result[i].BOATBUILDING__Technician__c in objTechNameWH)) {
+                                        			if(WH != '') {
+                                            			objTechNameWH[result[i].BOATBUILDING__Technician__c] = parseFloat(WH);
+                                        			} else {
+                                        				objTechNameWH[result[i].BOATBUILDING__Technician__c] = 0.00;
+                                        			}
+                                        		} else {
+                                        			if(WH != '') 
+                                            			objTechNameWH[result[i].BOATBUILDING__Technician__c] += parseFloat(WH);
+                                        		}
+                                        } else {
+                                        		if(!('---' in objTechNameWH)) {
+                                        			if(WH != '') {
+                                            			objTechNameWH['---'] = parseFloat(WH);
+                                        			} else {
+                                        				objTechNameWH['---'] = 0.00;
+                                        			}
+                                        		} else {
+                                        			if(WH != '') 
+                                            			objTechNameWH['---'] += parseFloat(WH);
+                                        		}
+                                        }
+                                        
+                                        if (result[i].BOATBUILDING__Technician__c != undefined) {
+                                        		if(!(result[i].BOATBUILDING__Technician__c in objTechNameBH)) {
+                                        			if(BH != '') {
+                                            			objTechNameBH[result[i].BOATBUILDING__Technician__c] = parseFloat(BH);
+                                       			} else {
+                                        				objTechNameBH[result[i].BOATBUILDING__Technician__c] = 0.00;
+                                        			}
+                                        		} else {
+                                        			if(BH != '')
+                                            			objTechNameBH[result[i].BOATBUILDING__Technician__c] += parseFloat(BH);
+                                        		}
+                                        } else {
+                                        		if(!('---' in objTechNameBH)) {
+                                        			if(WH != '') {
+                                            			objTechNameBH['---'] = parseFloat(WH);
+                                        			} else {
+                                        				objTechNameBH['---'] = 0.00;
+                                        			}
+                                        		} else {
+                                        			if(WH != '') 
+                                            			objTechNameBH['---'] += parseFloat(WH);
+                                        		}
+                                    		}
+                                        
+                                        if (result[i].BOATBUILDING__Technician__c != undefined) {
+                                        		if(!(result[i].BOATBUILDING__Technician__c in objTechNameTE)) {
+                                        			if(TE != '') {
+                                            			objTechNameTE[result[i].BOATBUILDING__Technician__c] = parseFloat(TE);
+                                            		} else {
+                                        				objTechNameTE[result[i].BOATBUILDING__Technician__c] = 0.00;
+                                        			}
+                                        		} else {
+                                        			if(TE != '') 
+                                            			objTechNameTE[result[i].BOATBUILDING__Technician__c] += parseFloat(TE);  
+                                        		}
+                                        } else {
+                                        		if(!('---' in objTechNameTE)) {
+                                        			if(WH != '') {
+                                            			objTechNameTE['---'] = parseFloat(WH);
+                                        			} else {
+                                        				objTechNameTE['---'] = 0.00;
+                                        			}
+                                        		} else {
+                                        			if(WH != '') 
+                                            			objTechNameTE['---'] += parseFloat(WH);
+                                        		}
+                                        }
+                                        
+                                        tbleHTML += "<tr> <td> " + TmId + " </td><td>" + ownerid + "</td> <td>" + DI + "</td> <td>" + LO + "</td> <td>" + LI + "</td> <td>" + DO + "</td> <td>" + WH + "</td> <td> " + BH + "</td>  <td> " + TE + "% </td></tr>";
+                                    }
+
+                                    TechEFF = ((BilledHR/clockHR) * 100).toFixed(2);
+                                    var objKey = Object.keys(objTechNameId);
+                                    for(var i = 0; i < objKey.length; i++) {
+                                        var techEff = ((objTechNameBH[objKey[i]]/objTechNameWH[objKey[i]]) * 100).toFixed(2);
+                                        if(techEff == 'NaN'){
+                                            techEff = 0;
+                                        }
+                       					tbleHTML += "<tr> <td colspan='5' style = 'font-size:12px; text-align: center;'> &nbsp; </td> <td> "+objTechNameId[objKey[i]]+" </td> <td>" + objTechNameWH[objKey[i]].toFixed(2) + "</td> <td> " + objTechNameBH[objKey[i]].toFixed(2) + "</td>  <td> " + techEff + "% </td></tr>";
+                                    }
+                                    
+                                    tbleHTML += "<tr> <td colspan='5' style = 'font-size:12px; text-align: center;'> <b>Summary</b> </td> <td> &nbsp; </td> <td>" + clockHR.toFixed(2) + "</td> <td> " + BilledHR.toFixed(2) + "</td>  <td> " + parseFloat(TechEFF).toFixed(2) + "% </td></tr>";
+                                    $("#printHeaderDiv").show();
+                                    var textval = $("#range option:selected").text();
+                                    if(textval.indexOf('Current') == -1) {
+                                    		$("#rangeShow").html(rangeValue+" Days");
+                                    } else {
+                                    		$("#rangeShow").html(rangeValue);
+                                    }
+                                    $("#TMDinDout").html(tbleHTML);
+                                } else {
+                                    var tbleHTML = "<tr> <th>TM-Number</th> <th>Day In</th> <th>Lunch Out</th> <th>Lunch In</th> <th>Day Out</th> <th>Worked Hour</th> <th>User Efficiency</th> <th>User Efficiency on Job</th> </tr>";
+                                    $("#printHeaderDiv").show();
+                                    var textval = $("#range option:selected").text();
+                                    if(textval.indexOf('Current') == -1) {
+                                    		$("#rangeShow").html(rangeValue+" Days");
+                                    } else {
+                                    		$("#rangeShow").html(rangeValue);
+                                    }
+                                    $("#TMDinDout").html(tbleHTML);
+                                }
+                            }
+                        } 
+                    });
+                }
+            }
+
+            $("#searchByDateRange").click(function () {
+                reportWithDate();
+            });
+
+            function reportWithDate() {
+                var strtDate = $("#strDate").val();
+                var endDate = $("#endDate").val();
+
+                console.log('Start Date: ' + strtDate);
+                console.log('End Date: ' + endDate);
+
+
+                $("#range").val("#");
+                var userId = $("#userPick").val();
+                if (strtDate != null && strtDate != "" && endDate != null && endDate != "" && userId != "0") {
+                    console.log("Entered");
+                    BOATBUILDING.TimeMgmtCustReportController.getReportDateRange(userId, strtDate, endDate, function (result, event) {
+                        //console.log(result);
+                        if (event.status) {
+                            if (result != null) {
+                                if (result.length > 0) {
+                                    //console.log(result);
+                                    var userIdName = new Object();
+                                    for (var i = 0; i < result.length; i++) {
+                                    	userIdName[result[i].OwnerId] = result[i].Owner.Name;
+                                    }
+                                    console.log('userIdName');
+                                    console.log(userIdName); 
+                                    var keylst = Object.keys(userIdName);
+                                    var tbleHTML = "<tr> <th>WO-Name</th> <th>Job Name</th> <th>Customer</th> <th>Allocated Hours</th> <th>Worked Hours</th> <th>Job Efficiency</th> </tr>";
+                                    for (var i = 0; i < result.length; i++) {
+                                    	for (var j = 0; j < keylst.length; j++) {
+                                    		if(keylst[j] == result[i].OwnerId) {
+                                    			tbleHTML += "<tr style='background: #8db7ce;'> <td colspan='7'> <b style='font-size: 10px;'> " + result[i].Owner.Name + " </b> </td> </tr>"; 
+                                    			var WOName = "", Cust = "", JN = "", Efcncy = "", TWH = "", AH = "";
+		                                        if (result[i].BOATBUILDING__Work_Order_Warranty_Work_Order__c != undefined && result[i].BOATBUILDING__Work_Order_Warranty_Work_Order__r.Name != undefined) {
+		                                            WOName = result[i].BOATBUILDING__Work_Order_Warranty_Work_Order__r.Name;
+		                                        }
+		                                        if (result[i].BOATBUILDING__Work_Order_Warranty_Work_Order__c != undefined && result[i].BOATBUILDING__Work_Order_Warranty_Work_Order__r.BOATBUILDING__Contact__c != undefined && result[i].BOATBUILDING__Work_Order_Warranty_Work_Order__r.BOATBUILDING__Contact__r.Name != undefined) {
+		                                            Cust = result[i].BOATBUILDING__Work_Order_Warranty_Work_Order__r.BOATBUILDING__Contact__r.Name;
+		                                        }
+		                                        if (result[i].BOATBUILDING__Job_Name__c != undefined) {
+		                                            JN = result[i].BOATBUILDING__Job_Name__c;
+		                                        }
+		                                        if (result[i].BOATBUILDING__Efficiency__c != undefined) {
+		                                            Efcncy = result[i].BOATBUILDING__Efficiency__c;
+		                                        }
+		
+		                                        if (result[i].BOATBUILDING__TWO_Worked_Hour__c != undefined) {
+		                                            TWH = result[i].BOATBUILDING__TWO_Worked_Hour__c;
+		                                        }
+		
+		                                        if (result[i].BOATBUILDING__No_of_Labors__c != undefined) {
+		                                            AH = result[i].BOATBUILDING__No_of_Labors__c;
+		                                        }
+		
+		                                        //tbleHTML += "<tr style='background: #7ea3b7;'> <td  colspan='6'> <b>" + WOName + " </b></td> </tr>"
+		                                        //tbleHTML += "<tr style='background: #86aec3;'> <td style=' border-right: 1px solid #86aec3; '> &nbsp; </td><td  colspan='5'> <b> " + JN + " </b></td> </tr>"
+		                                        tbleHTML += "<tr style='background: #8db7ce;'> <td> <a target='_blank' href='/apex/ServicePage?type=TO&TOId="+WOName+"'><b style='color: #fff;'>" + WOName + " </b></a> </td> <td> <b> " + JN + " </b> </td> <td>" + Cust + "</td> <td> " + AH + " </td> <td> " + TWH + " </td> <td> " + Efcncy + "% </td> </tr> <tr> <td colspan='6'>";
+		
+		                                        if (result[i].BOATBUILDING__Time_Management__r != undefined) {
+		                                            tbleHTML += "<table width='100%'><tr> <th>TM-Number</th><th>Tech Name</th><th>Clock In</th> <th>Clock Out</th> <th>Total Work(Hours)</th>  </tr>";
+		                                            if (result[i].BOATBUILDING__Time_Management__r.length > 0) {
+		                                                console.log(result[i].BOATBUILDING__Time_Management__r);
+		
+		                                                for (var j = 0; j < result[i].BOATBUILDING__Time_Management__r.length; j++) {
+		                                                    var TMID = "", AHOJ = "", TWH = "", CO = "", CI = "", ownerId = "";
+		                                                    if (result[i].BOATBUILDING__Time_Management__r[j].Name != undefined) {
+		                                                        TMID = result[i].BOATBUILDING__Time_Management__r[j].Name;
+		                                                    }
+		                                                    if (result[i].BOATBUILDING__Time_Management__r[j].BOATBUILDING__Technician__r != undefined) {
+		                                                        ownerId = result[i].BOATBUILDING__Time_Management__r[j].BOATBUILDING__Technician__r.Name;
+		                                                    }
+		
+		                                                    if (result[i].BOATBUILDING__Time_Management__r[j].BOATBUILDING__Total_Work__c != undefined) {
+		                                                        TWH = result[i].BOATBUILDING__Time_Management__r[j].BOATBUILDING__Total_Work__c;
+		                                                    }
+		
+		                                                    if (result[i].BOATBUILDING__Time_Management__r[j].BOATBUILDING__Clock_In__c != undefined) {
+		                                                        var dateObj = new Date(result[i].BOATBUILDING__Time_Management__r[j].BOATBUILDING__Clock_In__c);
+		                                                        var month = dateObj.getMonth() + 1; //months from 1-12
+		                                                        var day = dateObj.getDate();
+		                                                        var year = dateObj.getFullYear();
+		                                                        var hr = dateObj.getHours();
+		                                                        var min = dateObj.getMinutes();
+		                                                        var sec = dateObj.getSeconds();
+		
+		
+		                                                        CI = month + "/" + day + "/" + year + " " + pad(hr) + ":" + pad(min) + ":" + pad(sec);
+		                                                    }
+		
+		                                                    if (result[i].BOATBUILDING__Time_Management__r[j].BOATBUILDING__Clock_Out__c != undefined) {
+		                                                        var dateObj = new Date(result[i].BOATBUILDING__Time_Management__r[j].BOATBUILDING__Clock_Out__c);
+		                                                        var month = dateObj.getMonth() + 1; //months from 1-12
+		                                                        var day = dateObj.getDate();
+		                                                        var year = dateObj.getFullYear();
+		                                                        var hr = dateObj.getHours();
+		                                                        var min = dateObj.getMinutes();
+		                                                        var sec = dateObj.getSeconds();
+		
+		                                                        CO = month + "/" + day + "/" + year + " " + pad(hr) + ":" + pad(min) + ":" + pad(sec);
+		                                                    }
+		
+		                                                    tbleHTML += "<tr> <td> " + TMID + " </td><td>" + ownerId + "</td> <td> " + CI + " </td> <td> " + CO + " </td> <td> " + TWH + " </td>  </tr>";
+		                                                }
+		                                                tbleHTML += "</table> </td> </tr>";
+		                                            }
+		                                        }
+                                    		
+                                    		}
+                                        }
+                                    }
+                                    $("#customers").html(tbleHTML);
+                                } else {
+                                    var tbleHTML = "<tr> <th>Job Name</th> <th>Allocated Hours</th> <th>Efficiency</th> </tr>";
+                                    $("#customers").html(tbleHTML);
+                                }
+                            }
+                        }
+                    });
+                } else {
+                    alert("Please select User or a proper date range.");
+                }
+                fetchTimeMgmtWithDateRange();
+            }
+
+            function fetchTimeMgmtWithDateRange() {
+                var strtDate = $("#strDate").val();
+                var endDate = $("#endDate").val();
+                var dateRange = $("#range").val();
+
+                //console.log('Start Date: ' + strtDate);
+                //console.log('End Date: ' + endDate);
+
+                $("#range").val("#");
+                var userId = $("#userPick").val();
+                if (strtDate != null && strtDate != "" && endDate != null && endDate != "" && userId != "0" && dateRange == "#") {
+                    BOATBUILDING.TimeMgmtCustReportController.getTMWithDateRange(userId, strtDate, endDate, function (result, event) {
+                        console.log("result");
+                        console.log(result);
+                        if (event.status) {
+                            if (result != null) {
+                                if (result.length > 0) {
+                                    var tbleHTML = "<tr> <th>TM-Number</th><th>Tech Name</th> <th>Day In</th> <th>Lunch Out</th> <th>Lunch In</th> <th>Day Out</th> <th>Clocked Hours</th> <th>Billed Hours</th> <th>Tech. Efficiency</th>  </tr>";
+                                    var clockHR = 0.00;
+                                    var BilledHR = 0.00;
+                                    var TechEFF = 0.00;
+                                    var objTechNameWH = new Object();
+                                    var objTechNameBH = new Object();
+                                    var objTechNameTE = new Object();
+                                    var objTechNameId	 = new Object();
+                                    for (var i = 0; i < result.length; i++) {
+                                    		if(result[i].BOATBUILDING__Technician__c != undefined) {
+	                                    		if(!(result[i].BOATBUILDING__Technician__c in objTechNameId)) {
+	                                    			objTechNameId[result[i].BOATBUILDING__Technician__c] = result[i].BOATBUILDING__Technician__r.Name;
+	                                    		}
+                                    		} else {
+                                    			if(!('---' in objTechNameId)) {
+	                                    			objTechNameId['---'] = '---';
+	                                    		}
+                                    		}
+                                    }
+                                    for (var i = 0; i < result.length; i++) {
+                                        var TmId = "", DI = "", LI = "", LO = "", DO = "", WH = "", BH = "0.00", TE = "0.00", ownerId = "";
+                                        TmId = result[i].Name;
+                                        console.log('TmId---',TmId);
+                                        if (result[i].BOATBUILDING__Technician__r != undefined) {
+                                            ownerId = result[i].BOATBUILDING__Technician__r.Name;
+                                        }
+                                        if (result[i].BOATBUILDING__Day_In__c != undefined) {
+                                            //DI = result[i].BOATBUILDING__Day_In__c;
+
+                                            var dateObj = new Date(result[i].BOATBUILDING__Day_In__c);
+                                            var month = dateObj.getMonth() + 1; //months from 1-12
+                                            var day = dateObj.getDate();
+                                            var year = dateObj.getFullYear();
+                                            var hr = dateObj.getHours();
+                                            var min = dateObj.getMinutes();
+                                            var sec = dateObj.getSeconds();
+                                            DI = month + "/" + day + "/" + year + " " + pad(hr) + ":" + pad(min) + ":" + pad(sec);
+                                        }
+                                        if (result[i].BOATBUILDING__Lunch_In__c != undefined) {
+                                            //LI = result[i].BOATBUILDING__Lunch_In__c;
+                                            var dateObj = new Date(result[i].BOATBUILDING__Lunch_In__c);
+                                            var month = dateObj.getMonth() + 1; //months from 1-12
+                                            var day = dateObj.getDate();
+                                            var year = dateObj.getFullYear();
+                                            var hr = dateObj.getHours();
+                                            var min = dateObj.getMinutes();
+                                            var sec = dateObj.getSeconds();
+                                            LI = month + "/" + day + "/" + year + " " + pad(hr) + ":" + pad(min) + ":" + pad(sec);
+                                        }
+                                        if (result[i].BOATBUILDING__Lunch_Out__c != undefined) {
+                                            //LO = result[i].BOATBUILDING__Lunch_Out__c;
+
+                                            var dateObj = new Date(result[i].BOATBUILDING__Lunch_Out__c);
+                                            var month = dateObj.getMonth() + 1; //months from 1-12
+                                            var day = dateObj.getDate();
+                                            var year = dateObj.getFullYear();
+                                            var hr = dateObj.getHours();
+                                            var min = dateObj.getMinutes();
+                                            var sec = dateObj.getSeconds();
+                                            LO = month + "/" + day + "/" + year + " " + pad(hr) + ":" + pad(min) + ":" + pad(sec);
+                                        }
+                                        if (result[i].BOATBUILDING__Day_Out__c != undefined) {
+                                            //DO = result[i].BOATBUILDING__Day_Out__c;
+
+                                            var dateObj = new Date(result[i].BOATBUILDING__Day_Out__c);
+                                            var month = dateObj.getMonth() + 1; //months from 1-12
+                                            var day = dateObj.getDate();
+                                            var year = dateObj.getFullYear();
+                                            var hr = dateObj.getHours();
+                                            var min = dateObj.getMinutes(); 
+                                            var sec = dateObj.getSeconds();
+                                            DO = month + "/" + day + "/" + year + " " + pad(hr) + ":" + pad(min) + ":" + pad(sec);
+                                        }
+										console.log('result[i].Working_Hours__c--763-', result[i].BOATBUILDING__Working_Hours__c);
+                                        if (result[i].BOATBUILDING__Working_Hours__c != undefined) {
+                                            WH = result[i].BOATBUILDING__Working_Hours__c;
+                                        }
+                                        if (result[i].BOATBUILDING__Billed_Hour__c != undefined) {
+                                            BH = result[i].BOATBUILDING__Billed_Hour__c.toFixed(2);
+                                        }
+
+                                        if (result[i].BOATBUILDING__Technician_Efficiency__c != undefined) {
+                                            TE = result[i].BOATBUILDING__Technician_Efficiency__c;
+                                        }
+                                        if(WH != '')
+                                            clockHR += parseFloat(WH);
+                                        if(BH != '')
+                                            BilledHR += parseFloat(BH);
+                                        if(TE != '')
+                                            TechEFF += parseFloat(TE);
+                                            
+                                            
+                                        if (result[i].BOATBUILDING__Technician__c != undefined) {
+                                        		if(!(result[i].BOATBUILDING__Technician__c in objTechNameWH)) {
+                                        			if(WH != '') {
+                                            			objTechNameWH[result[i].BOATBUILDING__Technician__c] = parseFloat(WH);
+                                        			} else {
+                                        				objTechNameWH[result[i].BOATBUILDING__Technician__c] = 0.00;
+                                        			}
+                                        		} else {
+                                        			if(WH != '') 
+                                            			objTechNameWH[result[i].BOATBUILDING__Technician__c] += parseFloat(WH);
+                                        		}
+                                        } else {
+                                        		if(!('---' in objTechNameWH)) {
+                                        			if(WH != '') {
+                                            			objTechNameWH['---'] = parseFloat(WH);
+                                        			} else {
+                                        				objTechNameWH['---'] = 0.00;
+                                        			}
+                                        		} else {
+                                        			if(WH != '') 
+                                            			objTechNameWH['---'] += parseFloat(WH);
+                                        		}
+                                        }
+                                        
+                                        if (result[i].BOATBUILDING__Technician__c != undefined) {
+                                        		if(!(result[i].BOATBUILDING__Technician__c in objTechNameBH)) {
+                                        			if(BH != '') {
+                                            			objTechNameBH[result[i].BOATBUILDING__Technician__c] = parseFloat(BH);
+                                       			} else {
+                                        				objTechNameBH[result[i].BOATBUILDING__Technician__c] = 0.00;
+                                        			}
+                                        		} else {
+                                        			if(BH != '')
+                                            			objTechNameBH[result[i].BOATBUILDING__Technician__c] += parseFloat(BH);
+                                        		}
+                                        } else {
+                                        		if(!('---' in objTechNameBH)) {
+                                        			if(WH != '') {
+                                            			objTechNameBH['---'] = parseFloat(WH);
+                                        			} else {
+                                        				objTechNameBH['---'] = 0.00;
+                                        			}
+                                        		} else {
+                                        			if(WH != '') 
+                                            			objTechNameBH['---'] += parseFloat(WH);
+                                        		}
+                                    		}
+                                        
+                                        if (result[i].BOATBUILDING__Technician__c != undefined) {
+                                        		if(!(result[i].BOATBUILDING__Technician__c in objTechNameTE)) {
+                                        			if(TE != '') {
+                                            			objTechNameTE[result[i].BOATBUILDING__Technician__c] = parseFloat(TE);
+                                            		} else {
+                                        				objTechNameTE[result[i].BOATBUILDING__Technician__c] = 0.00;
+                                        			}
+                                        		} else {
+                                        			if(TE != '') 
+                                            			objTechNameTE[result[i].BOATBUILDING__Technician__c] += parseFloat(TE);  
+                                        		}
+                                        } else {
+                                        		if(!('---' in objTechNameTE)) {
+                                        			if(WH != '') {
+                                            			objTechNameTE['---'] = parseFloat(WH);
+                                        			} else {
+                                        				objTechNameTE['---'] = 0.00;
+                                        			}
+                                        		} else {
+                                        			if(WH != '') 
+                                            			objTechNameTE['---'] += parseFloat(WH);
+                                        		}
+                                        }
+                                            
+                                        
+                                        tbleHTML += "<tr> <td> " + TmId + " </td><td>" + ownerId + "</td> <td>" + DI + "</td> <td>" + LO + "</td> <td>" + LI + "</td> <td>" + DO + "</td> <td>" + WH + "</td> <td> " + BH + "</td>  <td> " + TE + "% </td></tr>";
+                                    }
+                                    
+                                    TechEFF = ((BilledHR/clockHR) * 100).toFixed(2);
+                                     
+                                    var objKey = Object.keys(objTechNameId);
+                                    for(var i = 0; i < objKey.length; i++) {
+                                        var techEff = ((objTechNameBH[objKey[i]]/objTechNameWH[objKey[i]]) * 100).toFixed(2);
+                                        if(techEff == 'NaN'){
+                                            techEff = 0;
+                                        }
+                       					tbleHTML += "<tr> <td colspan='5' style = 'font-size:12px; text-align: center;'> &nbsp; </td> <td> "+objTechNameId[objKey[i]]+" </td> <td>" + objTechNameWH[objKey[i]].toFixed(2) + "</td> <td> " + objTechNameBH[objKey[i]].toFixed(2) + "</td>  <td> " + techEff + "% </td></tr>";
+                                    }
+                                    
+                                    tbleHTML += "<tr> <td colspan='6' style = 'font-size:12px; text-align: center;'> <b>Summary</b> </td> <td>" + clockHR.toFixed(2) + "</td> <td> " + BilledHR.toFixed(2) + "</td>  <td> " + parseFloat(TechEFF).toFixed(2)	 + "% </td></tr>";
+                                    $("#printHeaderDiv").show();
+                                    
+                                    $("#rangeShow").html(strtDate+" - "+endDate);
+                                    $("#TMDinDout").html(tbleHTML);
+                                } else {
+                                    var tbleHTML = "<tr> <th>TM-Number</th> <th>Day In</th> <th>Lunch Out</th> <th>Lunch In</th> <th>Day Out</th> <th>Worked Hour</th> <th>User Efficiency</th> <th>User Efficiency on Job</th> </tr>";
+                                    $("#printHeaderDiv").show();
+                                    $("#rangeShow").html(strtDate+" - "+endDate);
+                                    $("#TMDinDout").html(tbleHTML);
+                                }
+                            }
+                        }
+                    });
+                }
+            }
+        </script>
+    </body>
+
+    </html>
+</apex:page>

@@ -1,0 +1,371 @@
+<apex:page controller="GenerateCasePDFClone" showHeader="false" applyHtmlTag="false" renderAs="pdf">
+     <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>-->
+    <apex:includeScript value="{!URLFOR($Resource.Signature, 'jquery.min.js')}"/> 
+      <head>
+      
+        <style type="text/css">
+            .content{
+                font-family: "Times New Roman", Georgia, Serif;
+                max-width:1000px;
+                margin: 0 auto;
+            } 
+ 
+            div.header {
+                padding: 10px;
+                position: running(header);
+            }
+            
+            div.footer {
+                display: block;
+                padding: 5px;
+                position: running(footer);
+            }
+ 
+            .pagenumber:before {
+                content: counter(page);
+            }
+            
+            .pagecount:before {
+                content: counter(pages);
+            }
+            table, td, th {
+                border-collapse: collapse;
+            }
+            .listTable td, .listTable th {
+                border: none;
+            }
+ 
+            .listTable thead th {
+                background: #eee;
+                text-align: center;
+                font-weight: bold;
+            }
+ 
+            .listTable tbody td {
+                border: none;
+          
+            }
+ 
+            .listTable tbody tr.odd td {
+                background: #eee;
+            }
+ 
+            .listTable td.no-border {
+                border: none;
+            }
+ 
+            .listTable tbody {
+                border: none;
+            }
+        </style>
+        <style type="text/css" media="print">
+            @page {
+                
+                @top-center {
+                    content: element(header);
+                }
+                
+                @bottom-left {
+                    content: element(footer);
+                }
+            }
+            .content{
+                font-family: "Times New Roman", Georgia, Serif;
+            }
+            
+            div.header {
+                padding: 10px;
+                position: running(header);
+            }
+            
+            div.footer {
+                display: block;
+                padding: 5px;
+                position: running(footer);
+            }
+ 
+            .pagenumber:before {
+                content: counter(page);
+            }
+            
+            .pagecount:before {
+                content: counter(pages);
+            }
+            table, td, th {
+                width:100%
+                border-collapse: collapse;
+                border: none;
+            }
+            .listTable td, .listTable th {
+                border: none;
+            }
+ 
+            .listTable thead th {
+                background: #eee;
+                text-align: center;
+                font-weight: bold;
+            }
+ 
+            .listTable tbody td {
+                border: none;
+               
+            }
+
+ 
+            .listTable tbody tr.odd td {
+                background: #eee;
+            }
+ 
+            .listTable td.no-border {
+                border: none;
+            }
+ 
+            .listTable tbody {
+                border: none;
+            }
+        </style>
+    </head>
+    <body>
+     <apex:form >
+     <apex:commandButton value="Back" action="{!backToService}" />
+     <apex:pageBlock >
+      <img src="/servlet/servlet.FileDownload?file={!strDocId}" width="100%" height="40%" style="border-bottom:10px solid #00B0F0" />
+    <div class="content" width="100%">
+        <!--style = "page-break-inside:avoid;"-->
+    <table width="100%" >
+            <tr>
+                <td>
+                    <p style="font-size: 13px;">
+                        <strong>Bill To:</strong><br/>
+                        <apex:outputText value="{!objWO.Contact__r.Name}"></apex:outputText> <br/>
+                        <apex:outputText value="{!objWO.Contact__r.MailingStreet}"> </apex:outputText> <br/>
+                        <apex:outputText value="{!objWO.Contact__r.MailingCity}"></apex:outputText> , <apex:outputText value="{!objWO.Contact__r.MailingPostalCode}"></apex:outputText> <br/>
+                        
+                        <apex:outputText value="{!objWO.Contact__r.Email}"></apex:outputText> <br/>
+                        <apex:outputText value="{!objWO.Contact__r.Phone}"></apex:outputText> <br/>
+                    </p>
+                </td>
+                <td width="30%">&nbsp;</td>
+                <td>
+                    <p style="font-size: 13px;">
+                        <b>Work Order:</b> &nbsp;<apex:outputText value="{!objWO.Name}"></apex:outputText><br/>
+                        <b>Date:</b> &nbsp;<apex:outputText value="{0, date, MMMM d','  yyyy}">
+                                <apex:param value="{!objWO.CreatedDate}" /> 
+                            </apex:outputText><br/>
+                         <br/>
+                         <b>Boat:</b> &nbsp;<apex:outputText value="{!objWO.Boat__r.Name}"></apex:outputText><br/>
+                         <apex:outputPanel rendered="{!if(objWO.Boat__r.Boat_Registration_Number__c != null && objWO.Boat__r.Boat_Registration_Number__c != '', true, false)}">
+                         	<b>Boat Registration Number:</b> &nbsp;<apex:outputText value="{!objWO.Boat__r.Boat_Registration_Number__c}"></apex:outputText><br/>
+                         </apex:outputPanel>
+                         <b>Boat HIN:</b> &nbsp;<apex:outputText value="{!objWO.Boat__r.Boat_HIN_No__c}"></apex:outputText><br/>
+                         <b>Engine SN:</b> &nbsp;<apex:outputText value="{!objWO.Boat__r.Engine_SN__c}"></apex:outputText><br/>
+                         <b>Hours:</b> &nbsp;<apex:outputText value="{!objWO.Hours__c}"></apex:outputText><br/>
+                    </p>
+                </td>
+            </tr>
+    </table>
+        <br/>
+
+    <table class="" style="border-collapse: collapse; border: none;" width="100%">           
+        <tbody>
+            <apex:repeat var="a" value="{!joblist}">
+                <tr style=" font-size: 13px;">
+                    <!--<td style="padding: 6px; border: none;"><b><apex:outputText value="{!a.Name}"/></b></td>-->
+                    <td style="border-collapse: collapse; padding: 6px; border: none;"><b><apex:outputText value="{!a.Job_Name__c}"/></b></td>
+                </tr>
+                <tr>
+                    <td colspan = '2' style="border-bottom: 1px solid #000;">
+                        <table class="" style="border-collapse: collapse; border: none;" width="100%" >
+                            <tbody>
+                                <apex:repeat var="jobLI" value="{!a.BOATBUILDING__Work_Order_Job_Line_Items__r}">
+                                    <tr style="font-size: 13px;">
+                                        <td style="padding: 6px; border: none;"></td>
+                                        <td  width ="60%" style="border-collapse: collapse; padding: 6px; border: none;"><i class="fa fa-usd" aria-hidden="true"></i><apex:outputField value="{!jobLI.Part_Number__c}"/></td>
+                                        <td width ="10%" style="border-collapse: collapse; padding: 6px; border: none;"><i class="fa fa-usd" aria-hidden="true"></i><apex:outputField value="{!jobLI.Part_Name__c}"/></td>
+                                        <td width ="10%" style="border-collapse: collapse; padding: 6px; border: none;"><i class="fa fa-usd" aria-hidden="true"></i><apex:outputField value="{!jobLI.Quantity__c}"/></td>
+                                        <td width ="10%" style="border-collapse: collapse; padding: 6px; border: none;"><i class="fa fa-usd" aria-hidden="true"></i><apex:outputField value="{!jobLI.Price__c}"/></td>
+                                        <td width ="10%" style="border-collapse: collapse; padding: 6px; border: none;"><i class="fa fa-usd" aria-hidden="true"></i><apex:outputField value="{!jobLI.Total__c}"/></td>
+                                    </tr>
+                                </apex:repeat>
+                                    <tr style="font-size: 13px;">
+                                        <td style="padding: 6px; border: none;"></td>
+                                        <td  width ="60%" style="border-collapse: collapse; padding: 6px; border: none;"><b>Technician :</b>&nbsp;<apex:outputField value="{!a.Technician__r.Name}"/></td>
+                                        <td width ="10%" style="border-collapse: collapse; padding: 6px; border: none;"></td>
+                                        <td width ="10%" style="border-collapse: collapse; padding: 6px; border: none;"></td>
+                                        <td width ="10%" style="border-collapse: collapse; padding: 6px; border: none;"></td>
+                                        <td width ="10%" style="border-collapse: collapse; padding: 6px; border: none;"></td>
+                                    </tr> 
+                                    <tr style="font-size: 13px;">
+                                        <td style="padding: 6px; border: none;"></td>
+                                        <td  width ="60%" style="border-collapse: collapse; padding: 6px; border: none;"><b>Discount :</b></td>
+                                        <td width ="10%" style="border-collapse: collapse; padding: 6px; border: none;"></td>
+                                        <td width ="10%" style="border-collapse: collapse; padding: 6px; border: none;"></td>
+                                        <td width ="10%" style="border-collapse: collapse; padding: 6px; border: none;"></td>
+                                        <td width ="10%" style="border-collapse: collapse; padding: 6px; border: none;"><i class="fa fa-usd" aria-hidden="true"></i><apex:outputField value="{!a.Discount__c}"/></td>
+                                    </tr>
+                                    <tr style="font-size: 13px;">
+                                        <td style="padding: 6px; border: none;"></td>
+                                        <td  width ="30%" style="border-collapse: collapse; padding: 6px; border: none;">
+                                            <apex:outputPanel rendered="{!if(a.Misc_Charge__c != null && a.Misc_Charge__c > 0, true, false)}">
+                                                    <b>Misc Description 1 : </b> 
+                                            </apex:outputPanel>
+                                        </td>
+                                        <td width ="30%" style="border-collapse: collapse; padding: 6px; border: none;">
+                                                <apex:outputPanel rendered="{!if(a.Misc_Charge__c != null && a.Misc_Charge__c > 0, true, false)}">
+                                                    <apex:outputField value="{!a.Misc_Description_1__c}"/> 
+                                                </apex:outputPanel>
+                                        </td>
+                                        <td width ="10%" style="border-collapse: collapse; padding: 6px; border: none;" colspan="2">
+                                                <apex:outputPanel rendered="{!if(a.Misc_Charge__c != null && a.Misc_Charge__c > 0, true, false)}">
+                                                    <b>Misc Charge 1 :</b> 
+                                                </apex:outputPanel>
+                                        </td>
+                                        <td width ="10%" style="border-collapse: collapse; padding: 6px; border: none;">
+                                                <apex:outputPanel rendered="{!if(a.Misc_Charge__c != null && a.Misc_Charge__c > 0, true, false)}">
+                                                    <i class="fa fa-usd" aria-hidden="true"></i><apex:outputField value="{!a.Misc_Charge__c}"/> 
+                                                </apex:outputPanel> 
+                                        
+                                        </td>
+                                    </tr>
+                                    
+                                    <tr style="font-size: 13px;">
+                                        <td style="padding: 6px; border: none;"></td>
+                                        <td  width ="30%" style="border-collapse: collapse; padding: 6px; border: none;">
+                                                <apex:outputPanel rendered="{!if(a.Misc_Charge_2__c != null && a.Misc_Charge_2__c > 0, true, false)}">
+                                                    <b>Misc Description 2 : </b> 
+                                            </apex:outputPanel>
+                                        </td>
+                                        <td width ="30%" style="border-collapse: collapse; padding: 6px; border: none;">
+                                                <apex:outputPanel rendered="{!if(a.Misc_Charge_2__c != null && a.Misc_Charge_2__c > 0, true, false)}">
+                                                    <apex:outputField value="{!a.Misc_Description_2__c}"/> 
+                                                </apex:outputPanel>
+                                        </td>
+                                        <td width ="10%" style="border-collapse: collapse; padding: 6px; border: none;" colspan="2">
+                                                <apex:outputPanel rendered="{!if(a.Misc_Charge_2__c != null && a.Misc_Charge_2__c > 0, true, false)}">
+                                                    <b>Misc Charge 2 :</b> 
+                                                </apex:outputPanel>
+                                        </td>
+                                        <td width ="10%" style="border-collapse: collapse; padding: 6px; border: none;">
+                                                <apex:outputPanel rendered="{!if(a.Misc_Charge_2__c != null && a.Misc_Charge_2__c > 0, true, false)}">
+                                                    <i class="fa fa-usd" aria-hidden="true"></i><apex:outputField value="{!a.Misc_Charge_2__c}"/> 
+                                                </apex:outputPanel>
+                                            </td>
+                                    </tr>
+                                    
+                                    <tr style="font-size: 13px;">
+                                        <td style="padding: 6px; border: none;"></td>
+                                        <td  width ="30%" style="border-collapse: collapse; padding: 6px; border: none;">
+                                                <apex:outputPanel rendered="{!if(a.Misc_Charge_3__c != null && a.Misc_Charge_3__c > 0, true, false)}">
+                                                    <b>Misc Description 3 : </b>  
+                                                </apex:outputPanel>
+                                        </td>
+                                        <td width ="30%" style="border-collapse: collapse; padding: 6px; border: none;">
+                                                <apex:outputPanel rendered="{!if(a.Misc_Charge_3__c != null && a.Misc_Charge_3__c > 0, true, false)}">
+                                                    <apex:outputField value="{!a.Misc_Description_3__c}"/> 
+                                                </apex:outputPanel>
+                                        </td>
+                                        <td width ="10%" style="border-collapse: collapse; padding: 6px; border: none;" colspan="2">
+                                                <apex:outputPanel rendered="{!if(a.Misc_Charge_3__c != null && a.Misc_Charge_3__c > 0, true, false)}">
+                                                    <b>Misc Charge 3 :</b> 
+                                                </apex:outputPanel>
+                                        </td>
+                                        <td width ="10%" style="border-collapse: collapse; padding: 6px; border: none;">
+                                                <apex:outputPanel rendered="{!if(a.Misc_Charge_3__c != null && a.Misc_Charge_3__c > 0, true, false)}">
+                                                    <i class="fa fa-usd" aria-hidden="true"></i><apex:outputField value="{!a.Misc_Charge_3__c}"/> 
+                                                </apex:outputPanel>
+                                        </td> 
+                                    </tr>
+                                    <tr style="font-size: 13px;"> 
+                                        <td style="padding: 6px; border: none;"></td>
+                                        <td  width ="60%" style="border-collapse: collapse; padding: 6px; border: none;"></td>
+                                        <td width ="10%" style="border-collapse: collapse; padding: 6px; border: none;"></td>
+                                        <td width ="10%" style="border-collapse: collapse; padding: 6px; border: none;"></td>
+                                        <td width ="10%" style="border-collapse: collapse; padding: 6px; border: none;"><b>Job Total</b></td>
+                                        <td width ="10%" style="border-collapse: collapse; padding: 6px; border: none;"><b><i class="fa fa-usd" aria-hidden="true"></i><apex:outputField value="{!a.Total_Amount_Job__c}"/></b></td>
+                                    </tr>
+                            </tbody>
+                        </table>
+                    </td>
+                </tr>
+            </apex:repeat>
+              <tr style="font-size: 13px;display:{!IF(ISBLANK(objWO.BOATBUILDING__Promo_Code__c), 'none', 'table-row')};">
+                                            <td width ="10%" style="border-collapse: collapse; padding: 6px; border: none;"><b>Applied promo code</b></td>
+                                            <td width ="10%" style="border-collapse: collapse; padding: 6px; border: none;"><b><i class="fa fa-usd" aria-hidden="true"></i><apex:outputField value="{!objWO.BOATBUILDING__Promo_Code__r.Promo_Code_Name__c}"/></b></td>
+                </tr>
+           
+            
+             <tr style="font-size: 13px;">
+                                            <td width ="10%" style="border-collapse: collapse; padding: 6px; border: none;"><b>Discount On Work Order</b></td>
+                                            <td width ="10%" style="border-collapse: collapse; padding: 6px; border: none;"><b><i class="fa fa-usd" aria-hidden="true"></i><apex:outputField value="{!objWO.Discount__c}"/></b></td>
+                </tr>
+           
+            <tr style="font-size: 13px;">
+                                            <td width ="10%" style="border-collapse: collapse; padding: 6px; border: none;"><b>Grand Total</b></td>
+                                            <td width ="10%" style="border-collapse: collapse; padding: 6px; border: none;"><b><i class="fa fa-usd" aria-hidden="true"></i><apex:outputField value="{!objWO.Total_Amount_Due__c}"/></b></td>
+                </tr>
+                
+               <!--  <tr style="font-size: 13px;">
+                                            <td width ="10%" style="border-collapse: collapse; padding: 6px; border: none;"><b>Sales Tax</b></td>
+                                            <td width ="10%" style="border-collapse: collapse; padding: 6px; border: none;"><b><i class="fa fa-usd" aria-hidden="true"></i><apex:outputField value="{!objWO.Sales_Tax__c}"/></b></td>
+                </tr>
+            <tr style="font-size: 13px;">
+                                            <td width ="10%" style="border-collapse: collapse; padding: 6px; border: none;"><b>Total Misc Charges</b></td>
+                                            <td width ="10%" style="border-collapse: collapse; padding: 6px; border: none;"><b><i class="fa fa-usd" aria-hidden="true"></i><apex:outputField value="{!objWO.Total_Misc__c}"/></b></td>
+                </tr>-->
+            <tr style="font-size: 13px;">
+                                            <td width ="10%" style="border-collapse: collapse; padding: 6px; border: none;"><b>Total Amount</b></td>
+                                            <td width ="10%" style="border-collapse: collapse; padding: 6px; border: none;"><b><i class="fa fa-usd" aria-hidden="true"></i><apex:outputField value="{!objWO.Deducted_Total_Due_Amount__c}"/></b></td>
+                </tr>
+            <tr style="font-size: 13px;">
+                                            <td width ="10%" style="border-collapse: collapse; padding: 6px; border: none;"><b>Total Payment</b></td>
+                                            <td width ="10%" style="border-collapse: collapse; padding: 6px; border: none;"><b><i class="fa fa-usd" aria-hidden="true"></i><apex:outputField value="{!objWO.Total_Payment_payment__c}"/></b></td>
+                </tr>
+            <tr style="font-size: 13px;">
+                                            <td width ="10%" style="border-collapse: collapse; padding: 6px; border: none;"><b>Revised Total</b></td>
+                                            <td width ="10%" style="border-collapse: collapse; padding: 6px; border: none;"><b><i class="fa fa-usd" aria-hidden="true"></i><apex:outputField value="{!objWO.Balance__c}"/></b></td>
+                </tr>
+            
+        </tbody>            
+    </table>
+    
+    <table style="margin-top:20px;">
+        <tr>
+           <td style="font-size: 13px;" width="30%">Customer Signature</td>
+           <td style="width:25%; border-bottom:1px solid #666; font-size: 13px;">&nbsp;</td>
+           <td style="width:02%; font-size: 13px;">&nbsp;</td>
+           <td style="font-size: 13px;" width="10%">Date</td>
+           <td style="width:32%; border-bottom:1px solid #666; font-size: 13px;"></td>
+        </tr>
+        <tr>
+            <td style="">&nbsp;</td>
+        </tr>
+        <!--<tr>
+          <td style="font-size: 13px;" width="30%">Co-Buyer Signature</td>
+            <td style="width:25%; border-bottom:1px solid #666; font-size: 13px;"></td>
+            <td style="width:02%; font-size: 13px;">&nbsp;</td>
+            <td style="width:10%; font-size: 13px;">Date</td>
+            <td style="width:32%; font-size: 13px; border-bottom:1px solid #666;">&nbsp;</td>
+        </tr>
+        
+          
+           <tr>
+              <td style="">&nbsp;</td>
+           </tr>
+           <tr>
+              <td style="font-size: 13px;" width="30%">Salesperson Signature</td>
+              <td style="width:25%; border-bottom:1px solid #666; font-size: 13px;"></td>
+              <td style="width:02%; font-size: 13px;">&nbsp;</td>
+              <td style="font-size: 13px;" width="10%">Date</td>
+              <td style="width:32%; border-bottom:1px solid #666; font-size: 13px;"></td>
+           </tr>-->
+    </table>    
+    </div>
+
+        <apex:pageBlockButtons location="bottom">
+           <apex:commandButton value="Print" action="{!saveCaseasPDF}" rendered="{!if(($CurrentPage.parameters.btnStatus)=='Print',true,false)}"/>
+            <apex:commandButton value="Send Work Order" action="{!saveAndSendCase}" rendered="{!if(($CurrentPage.parameters.btnStatus)=='SendWO',true,false)}"/>
+        </apex:pageBlockButtons>
+          </apex:pageBlock>              
+          </apex:form>
+      </body>
+</apex:page>

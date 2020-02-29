@@ -1,0 +1,198 @@
+<aura:component controller="RecordEventActivityController">
+    <aura:attribute name="whatId" type="String" access="global"/>
+    <aura:attribute name="whoId" type="String" access="global"/>
+    <aura:attribute name="accountId" type="String" access="global"/>
+    <aura:attribute name="EventTypes" type="String" access="global" />
+    <aura:attribute name="Type" type="String" access="global" default="noValue" />
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    <aura:attribute name="customerComment" type="String" access="global"/>
+    <aura:attribute name="commentSectionName" type="String" access="global" />
+    <aura:attribute name="commentSubject" type="String" access="global"/>
+    <aura:attribute name="allEvents" type="Object[]" access="global" />
+     <aura:attribute name="toggleSpinner" type="boolean" default="false"/> 
+    
+        <aura:if isTrue="{!v.toggleSpinner}">
+            <div class="slds-spinner_container">
+               
+                  <lightning:spinner alternativeText="Loading" variant="brand" size="large" />
+                </div>
+             
+            
+        </aura:if>  
+    <div class="slds-grid slds-wrap slds-gutters">
+        <div class="slds-col slds-size_1-of-1">
+            <lightning:input type="text" name="subject" label="Subject" value="{!v.commentSubject}" />
+        </div>
+        <div class="slds-col slds-size_1-of-1">
+             
+            <lightning:textarea name="customerComment"
+            label="Enter Comment"
+            required="false"
+            value="{!v.customerComment}"
+            placeholder="Enter Comment" /> 
+            
+              
+
+            
+         </div>
+         <div class="slds-col slds-size_1-of-1 slds-p-top_small">
+          <lightning:button variant="brand" label="Add Comment" title="Comment for Customer" onclick="{!c.saveCustomerComment }"/>
+          <lightning:button variant="base" label="View Latest" class="floatRightCls" title="" iconName="action:refresh" iconPosition="right" onclick="{!c.doInit }"/>
+         </div>
+         
+         
+         <div class="slds-col slds-size_1-of-1 slds-p-top_medium">
+          
+          <lightning:accordionSection name="A" label="View All Comments">
+            <ul class="slds-timeline">
+                <aura:iteration items="{!v.allEvents}" var="item">
+                    <li>
+                        <div class="slds-timeline__item_expandable slds-timeline__item_task slds-is-open">
+                          <span class="slds-assistive-text">Customer Comments</span>
+                          <div class="slds-media">
+                            <div class="slds-media__figure slds-p-left_medium">
+                                
+                              
+                              <div class="slds-icon_container slds-icon-standard-task slds-timeline__icon" title="Comment">
+                                 <aura:if isTrue="{!item.Type == 'Customer Comment'}">
+                                    <lightning:icon class="customerComment" iconName="standard:messaging_user" alternativeText="alternativeText" />
+                                      
+                                 </aura:if> 
+                                 <aura:if isTrue="{!item.Type == 'Comment for Customer'}">
+                                  <lightning:icon class="serviceWriterComment" iconName="standard:messaging_user" alternativeText="alternativeText" />
+
+                                 </aura:if>
+                                 <aura:if isTrue="{!item.Type == 'Comment from Technician'}">
+                                    <lightning:icon class="techComment" iconName="standard:messaging_user" alternativeText="alternativeText" />
+                                     
+                                     
+                                 </aura:if> 
+                                 <aura:if isTrue="{!item.Type == 'Comment for Technician'}">
+                                  <lightning:icon class="serviceWriterComment" iconName="standard:messaging_user" alternativeText="alternativeText" />
+
+                                 </aura:if>
+                                 <aura:if isTrue="{!item.Type == 'Call'}">
+                                  <lightning:icon class="serviceWriterComment" iconName="action:log_a_call" alternativeText="alternativeText" />
+
+                                 </aura:if>
+                                 <aura:if isTrue="{!item.Type == 'Email'}">
+                                  <lightning:icon class="serviceWriterComment" iconName="standard:email" alternativeText="alternativeText" />
+
+                                 </aura:if>
+                                 <aura:if isTrue="{!item.Type == 'Other'}">
+                                  <lightning:icon class="serviceWriterComment" iconName="custom:custom103" alternativeText="alternativeText" />
+
+                                 </aura:if>
+                                 <aura:if isTrue="{!item.Type == 'Meeting'}">
+                                  <lightning:icon class="serviceWriterComment" iconName="action:share_post" alternativeText="alternativeText" />
+
+                                 </aura:if>
+                                 <aura:if isTrue="{!empty(item.Type)}">
+                                  <lightning:icon class="serviceWriterComment" iconName="standard:event" alternativeText="alternativeText" />
+
+                                 </aura:if>
+                                
+                              </div>
+                            </div>
+                            <div class="slds-media__body">
+                              <div class="slds-grid slds-grid_align-spread slds-timeline__trigger">
+                                <div class="slds-grid slds-grid_vertical-align-center slds-truncate_container_75 slds-no-space">
+                                  <div class="slds-no-flex">
+                                    
+                                  </div>
+                                  <h3 class="slds-truncate" title="!item.Subject}">
+                                    <a href="{!'/lightning/r/' + item.Id+'/view'}" target="_blank">
+                                      <strong>{!item.Subject}</strong>
+                                    </a>
+                                  </h3>
+                                  <div class="slds-no-flex">
+                                    
+                                  </div>
+                                </div>
+                                <div class="slds-timeline__actions slds-timeline__actions_inline">
+                                  <p class="slds-timeline__date">
+                                    <lightning:formattedDateTime value="{!item.CreatedDate}" year="numeric" month="numeric" day="numeric" hour="2-digit"
+                                    minute="2-digit" timeZoneName="short" timeZone="America/New_York"/>
+
+                                  </p>
+                                  
+                                </div>
+                              </div>
+                              <p class="slds-m-horizontal_xx-small">
+                                <aura:if isTrue="{!item.Type == 'Comment for Customer'}">
+                                  <a href="{!'/lightning/r/' + item.CreatedById+'/view'}" target="_blank">{!item.CreatedBy.Name}</a> created a comment for
+                                    <aura:if isTrue="{!!empty(item.Who.Name)}">
+                                      <a href="{!'/lightning/r/' + item.WhoId+'/view'}" target="_blank"> for {!item.Who.Name}</a>
+                                      <aura:set attribute="else">
+                                        customer.
+                                      </aura:set>
+                                    </aura:if>
+                                </aura:if>
+                                <aura:if isTrue="{!item.Type == 'Customer Comment'}">
+                                    <aura:if isTrue="{!!empty(item.Who.Name)}">
+                                      <a href="{!'/lightning/r/' + item.CreatedById+'/view'}" target="_blank">{!item.Who.Name} posted a Comment</a>
+                                        <aura:set attribute="else">
+                                             <a href="{!'/lightning/r/' + item.CreatedById+'/view'}" target="_blank">Customer posted a Comment</a>
+                                        </aura:set>
+                                    </aura:if>
+                                </aura:if>
+                                <aura:if isTrue="{!item.Type == 'Comment from Technician'}">
+                                  <a href="{!'/lightning/r/' + item.CreatedById+'/view'}" target="_blank">{!item.CreatedBy.Name}</a> created a comment
+                                  
+                              </aura:if>
+                              <aura:if isTrue="{!item.Type == 'Comment for Technician'}">
+                                <a href="{!'/lightning/r/' + item.CreatedById+'/view'}" target="_blank">{!item.CreatedBy.Name}</a> created a comment
+                                  
+                              </aura:if>
+                              <aura:if isTrue="{!item.Type == 'Call' || item.Type == 'Other' || item.Type == 'Meeting' || item.Type == 'Email'}">
+                                <a href="{!'/lightning/r/' + item.CreatedById+'/view'}" target="_blank">{!item.CreatedBy.Name}</a> created a comment
+                              </aura:if>
+                               
+                              </p>
+                              <article class="slds-box slds-timeline__item_details slds-theme_shade slds-m-top_x-small slds-m-horizontal_xx-small slds-p-around_medium" id="task-item-expanded" aria-hidden="false">
+                                <ul class="slds-list_horizontal slds-wrap">
+                                    <aura:if isTrue="{!!empty(item.Who.Name)}">
+                                  <li class="slds-grid slds-grid_vertical slds-size_1-of-1 slds-medium-size_1-of-2 slds-large-size_1-of-2 slds-p-bottom_small">
+                                    <span class="slds-text-title slds-p-bottom_x-small">Name</span>
+                                    <span class="slds-text-body_medium slds-truncate" title="Charlie Gomez">
+                                      <a href="{!'/lightning/r/' + item.WhoId+'/view'}" target="_blank">{!item.Who.Name}</a>
+                                    </span>
+                                  </li>
+                                </aura:if>
+                                  <li class="slds-grid slds-grid_vertical slds-size_1-of-1 slds-medium-size_1-of-2 slds-large-size_1-of-2 slds-p-bottom_small">
+                                    <span class="slds-text-title slds-p-bottom_x-small">Related To</span>
+                                    <span class="slds-text-body_medium slds-truncate" title="Tesla Cloudhub + Anypoint Connectors">
+                                      <a href="{!'/lightning/r/' + item.WhatId+'/view'}" target="_blank">{!item.What.Name}</a>
+                                    </span>
+                                  </li>
+                                </ul>
+                                <div>
+                                  <ul class="slds-list_horizontal slds-wrap">
+                                    <li class="slds-grid slds-grid_vertical slds-size_1-of-1 slds-medium-size_1-of-2 slds-large-size_1-of-2 slds-p-bottom_small">
+                                      <span class="slds-text-title">Description</span>
+                                      <p class="slds-p-top_x-small">{!item.Description}</p>
+                                    </li>
+                                    <li class="slds-grid slds-grid_vertical slds-size_1-of-1 slds-medium-size_1-of-2 slds-large-size_1-of-2 slds-p-bottom_small">
+                                      <aura:if isTrue="{!item.Type}">
+                                        <span class="slds-text-title">Event Type</span>
+                                        <p class="slds-p-top_x-small">{!item.Type}</p>
+                                      </aura:if>
+                                    </li>
+                                   </ul>
+                                </div>
+                              </article>
+                            </div>
+                          </div>
+                        </div>
+                      </li>
+                </aura:iteration>
+                      
+            </ul>
+          </lightning:accordionSection>
+          
+         </div>
+         
+
+    </div>
+   
+</aura:component>

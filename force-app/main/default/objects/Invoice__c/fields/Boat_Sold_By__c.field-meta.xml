@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Boat_Sold_By__c</fullName>
+    <deprecated>false</deprecated>
+    <externalId>false</externalId>
+    <label>Boat Sold By</label>
+    <required>false</required>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Close</fullName>
+                <default>false</default>
+                <label>Close</label>
+            </value>
+            <value>
+                <fullName>Josh Smith</fullName>
+                <default>false</default>
+                <label>Josh Smith</label>
+            </value>
+            <value>
+                <fullName>Cameron Richardson</fullName>
+                <default>false</default>
+                <label>Cameron Richardson</label>
+            </value>
+            <value>
+                <fullName>JJ Penninger</fullName>
+                <default>false</default>
+                <label>JJ Penninger</label>
+            </value>
+            <value>
+                <fullName>Danny Tolentino</fullName>
+                <default>false</default>
+                <label>Danny Tolentino</label>
+            </value>
+            <value>
+                <fullName>Alex Dunson</fullName>
+                <default>false</default>
+                <label>Alex Dunson</label>
+            </value>
+            <value>
+                <fullName>Tyler Holloman</fullName>
+                <default>false</default>
+                <label>Tyler Holloman</label>
+            </value>
+            <value>
+                <fullName>Tanner Lawson</fullName>
+                <default>false</default>
+                <label>Tanner Lawson</label>
+            </value>
+            <value>
+                <fullName>Robert Lowery</fullName>
+                <default>false</default>
+                <label>Robert Lowery</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

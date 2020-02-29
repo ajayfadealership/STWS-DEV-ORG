@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Trade_in_Bank_Pay_off__c</fullName>
+    <deprecated>false</deprecated>
+    <externalId>false</externalId>
+    <label>Trade in Bank Pay-off</label>
+    <required>false</required>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Bank of the West</fullName>
+                <default>false</default>
+                <label>Bank of the West</label>
+            </value>
+            <value>
+                <fullName>US Bank</fullName>
+                <default>false</default>
+                <label>US Bank</label>
+            </value>
+            <value>
+                <fullName>USSA</fullName>
+                <default>false</default>
+                <label>USSA</label>
+            </value>
+            <value>
+                <fullName>BB&amp;T</fullName>
+                <default>false</default>
+                <label>BB&amp;T</label>
+            </value>
+            <value>
+                <fullName>Huntington Bank</fullName>
+                <default>false</default>
+                <label>Huntington Bank</label>
+            </value>
+            <value>
+                <fullName>Aqua</fullName>
+                <default>false</default>
+                <label>Aqua</label>
+            </value>
+            <value>
+                <fullName>Founders Credit Union</fullName>
+                <default>false</default>
+                <label>Founders Credit Union</label>
+            </value>
+            <value>
+                <fullName>Merrick Bank</fullName>
+                <default>false</default>
+                <label>Merrick Bank</label>
+            </value>
+            <value>
+                <fullName>Marathon Bank</fullName>
+                <default>false</default>
+                <label>Marathon Bank</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

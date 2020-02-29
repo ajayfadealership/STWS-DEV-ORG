@@ -1,0 +1,9 @@
+<!--Updated Code--->
+<apex:page controller="NewQuickbooksConnector">
+    <apex:form >
+           <apex:commandButton value="callQB" action="{!OAuth_Step1_getTempTokenAndRedirectToIntuit}"/>
+           <apex:commandButton value="OAuth_Step2_getFinalToken" action="{!OAuth_Step2_getFinalToken}"/>
+           {!mapResponse}
+    </apex:form>
+
+</apex:page>

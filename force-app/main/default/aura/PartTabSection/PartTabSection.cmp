@@ -1,0 +1,26 @@
+<aura:component implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction" access="global" >
+	<lightning:tabset selectedTabId="partRequest" variant="scoped">
+        <lightning:tab label="Part Request" id="partRequest">
+            <c:PartRequestList/>
+        </lightning:tab>
+        <lightning:tab label="Vendor" id="vendor">
+            <c:vendorsList/>
+        </lightning:tab>
+        <lightning:tab label=" Create Parts" id="parts">
+            <c:PartsList/>
+        </lightning:tab>
+        <lightning:tab label="Purchase Order" id="purchaseOrder">
+            <c:PurchaseOrder/>
+        </lightning:tab>
+        <lightning:tab label="Orders" id="orders">
+            <c:OrderList/>
+        </lightning:tab>
+        
+        <lightning:tab label="Inventory" id="inventory">
+             <c:InventoryList/>
+        </lightning:tab>
+        <lightning:tab label="Invoice" id="invoice">
+            <c:InvoiceList/>
+        </lightning:tab>
+    </lightning:tabset>
+</aura:component>

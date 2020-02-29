@@ -1,0 +1,412 @@
+<apex:page controller="BoatMatchController" showHeader="false" sidebar="false">
+    <html lang="en">
+        <head>
+        
+        <title>Boat Match</title>
+        <style>
+            .banner {
+                background-image: url('{!boatMatchLogoId}') !important;
+            }
+            .header-top {
+                background: #29abe2;
+                padding: 1.8em 0; 
+            }
+            .header {
+                padding: 1em 0 3em;
+                background: #fff;
+                position: relative;
+                border-bottom: solid 10px #29abe2;;
+            }
+            .top-nav ul li.home-icon a, .top-nav ul li.home-icon a:focus {
+                background: #29abe2;
+                outline: none;
+            }
+            .banner-button a {
+                background: #29abe2;
+                color: #FFF;
+                font-size: 1em;
+                padding: .5em 3em;
+                text-decoration: none;
+                border: solid 2px #29abe2;
+                letter-spacing: 1px;
+                display: inline-block;
+            }
+            .banner-w3text h5 {
+                color: #29abe2;
+                font-size: 1em;
+                margin: 1em 0 2em 0;
+                font-weight: 600;
+                text-transform: uppercase;
+            }
+            .header-top-right div input[type="text"] {
+                font-size: .9em;
+                color: #2b2b2b;
+                float: left;
+                outline: none;
+                border: 1px solid #2b2b2b;
+                padding: 0.5em 3em .5em 0.5em;
+                -webkit-appearance: none;
+                width: 100%;
+            }
+            .header-top-right div input[type="button"] {
+                font-size: .9em;
+                color: #2b2b2b;
+                float: left;
+                outline: none;
+                border: 1px solid #2b2b2b;
+                padding: 0.5em 3em .5em 0.5em;
+                -webkit-appearance: none;
+                width: 100%;
+                background: black;
+                color: white;
+            }
+            .header-top-right div select{
+                font-size: .9em;
+                color: #2b2b2b;
+                float: left;
+                outline: none;
+                border: 1px solid #2b2b2b;
+                padding: 0.7em 3em .5em 0.5em;
+                width: 100%;
+            }
+            .banner-w3text {
+                margin: 6em 0;
+                width: 54%;
+            }
+        </style>
+        <meta name="viewport" content="width=device-width, initial-scale=1"/>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <script type="application/x-javascript"> addEventListener("load", function() { setTimeout(hideURLbar, 0); }, false); function hideURLbar(){ window.scrollTo(0,1); } </script>
+        <link rel="stylesheet" href="https://cdn.datatables.net/1.10.12/css/jquery.dataTables.min.css"/>
+        <apex:includeScript value="{!URLFOR($Resource.Signature, 'jquery.min.js')}"/>
+        <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.0/jquery.min.js"/>-->
+        <script src="https://cdn.datatables.net/1.10.12/js/jquery.dataTables.min.js"/>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+        <!-- Custom Theme files -->
+        <link href="css/bootstrap.css" rel="stylesheet" type="text/css" />  
+        <link href="css/style.css" rel="stylesheet" type="text/css" />
+        <link href="css/font-awesome.css" rel="stylesheet"/>    
+        <apex:stylesheet value="{!URLFOR($Resource.BoatMatch, 'css/bootstrap.css')}" />
+        <apex:stylesheet value="{!URLFOR($Resource.BoatMatch, 'css/style.css')}" />
+        <apex:stylesheet value="{!URLFOR($Resource.BoatMatch, 'css/font-awesome.css')}" />
+        <!-- //Custom Theme files -->
+        <!-- fonts -->
+        <link href="//fonts.googleapis.com/css?family=Open+Sans:400,300,300italic,400italic,600,600italic,700,700italic,800,800italic" rel="stylesheet" type="text/css"/>
+        <link href="//fonts.googleapis.com/css?family=Open+Sans+Condensed:300,300italic,700" rel="stylesheet" type="text/css"/>
+        <!-- //fonts -->
+        <!-- js -->
+        
+        <apex:includeScript value="{!URLFOR($Resource.BoatMatch, 'js/jquery-1.11.1.min.js')}"/> 
+        <apex:includeScript value="{!URLFOR($Resource.BoatMatch, 'js/bootstrap.js')}"/> 
+        <script type="text/javascript">
+            jQuery(document).ready(function($) {
+                $(".scroll").click(function(event){     
+                    event.preventDefault();
+                    $('html,body').animate({scrollTop:$(this.hash).offset().top},1000);
+                });
+            });
+        </script>    
+        <script src="js/menu_jquery.js"></script> <!-- pop-up -->   
+        <!-- //js -->
+        </head>
+        <body>
+            <!-- header-top -->
+            <div class="header-top">
+                <!-- container -->
+                <div class="container">
+                    <div class="social w3-agileitsicons"> 
+                        <ul>
+                            <li><a onclick="redirectToHome();"><img style="vertical-align: middle; height: 72px;width: 82px; top: -1%; position: absolute;" src="https://maxcdn.icons8.com/Share/icon/ios7/Logos//salesforce1600.png"/></a></li>
+                        </ul>  
+                    </div>
+                    <div class="clearfix"> </div>
+                </div>
+                <script>
+                    function redirectToHome() {
+                        window.top.location = "/home/home.jsp";
+                    }
+                </script>
+                <!-- //container -->
+            </div>
+            <!-- //header-top -->
+            <!-- header -->
+            <div class="header">
+                <!-- container -->
+                <div class="container">
+                    <div class="header-bottom">
+                        <div class="w3ls-logo">
+                            <h1>{!boatMatchCompanyName}</h1>
+                        </div>
+                        <div class="header-top-right">
+                            <div action="#" method="post">
+                                <table width="100%" style=" width: 500px; position: absolute; left: 56%; top: 22%;">
+                                    <tr>
+                                        <td>
+                                            <select id="searchType">
+                                                <option value="0">Search By</option> 
+                                                <option value="All">All</option> 
+                                                <option value="Boat">Boat</option>
+                                                <option value="DesiredBoat">Desired Boat</option>
+                                                <option value="Trade">Trade</option>
+                                                
+                                            </select>     
+                                        </td>
+                                        <td> <input type="text" id="inputVal" name="Search" placeholder="Search" required=""/> </td>
+                                        <td> <input type="button" onclick="searchAccounts();" value="Search"/> </td>
+                                    </tr>
+                                </table>
+                                <div class="clearfix"> </div>
+                            </div>
+                        </div>
+                        <div class="clearfix"> </div>
+                    </div>
+                    <div class="top-nav">
+                        <nav class="navbar navbar-default">  
+                            <div class="container">
+                                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">Menu                       
+                                </button>
+                            </div>
+                            <!-- Collect the nav links, forms, and other content for toggling -->
+                            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                                <ul class="nav navbar-nav">
+                                    <li class="home-icon"><a href=""><span class="glyphicon" aria-hidden="true"><b>Boat-Match</b></span></a></li>
+                                    
+                                </ul>   
+                                <div class="clearfix"> </div>
+                            </div>  
+                        </nav>  
+                    </div>
+                </div>
+                <!-- //container -->
+            </div>
+            <!-- //header -->
+            <!-- banner -->
+            <div class="banner">
+                <!-- container -->
+                <div class="container">
+                    <div class="banner-agileinfo">
+                        <script src="js/responsiveslides.min.js"></script>
+                        <div  id="top" class="callbacks_container-wrap">
+                            <ul class="rslides" id="slider3">
+                                <li>
+                                    <div class="banner-w3text">
+                                        <div id="detailSection">
+                                            <h5>{!boatMatchCompanyName}</h5>
+                                           <!-- <p style="color: {!fontColot}"> 
+                                                {!boatMatchCompanyName} has been chosen to be the exclusive Supra and Moomba dealer located in the Piedmont of North Carolina and upstate South Carolina. The Supra brand is synonymous with innovative styling, luxurious interior, and unsurpassed wake performance. Moomba is a value-oriented brand that delivers the same quality and performance of other inboard boats at a significantly lower price. Come down to our dealership and see just what we can do for your wakeboard or ski boat. We carry a large range of wakeboard boats for sale in the Charlotte and Mooresville area. Check out our service and parts team who will help keep your wakeboard or ski boat in perfect running order.
+                                            </p> -->
+                                        </div>
+                                        <div class="banner-buttons">
+                                            <div class="banner-button">
+                                                <a onclick="redirectToBoatBuilder();">Boat Builder</a>
+                                                <a onclick="redirectToService();">Service</a>
+                                            </div> 
+                                        </div>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>  
+                    </div>
+                </div>
+                <!-- //container -->
+            </div>
+            <script>
+                function redirectToBoatBuilder() {
+                    window.open("/apex/Purchase_Item2");
+                }
+                function redirectToService() {
+                    window.open("/apex/ServicePage");
+                }
+            </script>
+            
+            <apex:includeScript value="{!URLFOR($Resource.BoatMatch, 'js/move-top.js')}"/> 
+            <apex:includeScript value="{!URLFOR($Resource.BoatMatch, 'js/easing.js')}"/> 
+            <script type="text/javascript">
+                $(document).ready(function() {
+                    $().UItoTop({ easingType: 'easeOutQuart' });
+                });
+            </script> 
+            <script>
+                function searchAccounts() {
+                    //detailSection
+                    //inputVal
+                    //searchType
+                    var searchType = document.getElementById("searchType").value;
+                    var inputVal = document.getElementById("inputVal").value;
+                    if(searchType != "0") {
+                        if(searchType == "All") {  
+                            BOATBUILDING.BoatMatchController.searchAccount(searchType, inputVal, function(result, event) {
+                                if(event.status) {
+                                    if(result != null) { 
+                                        
+                                        if(result.length > 0) { 
+                                            var htmlTable = "<table  id='resltTable' width='100%'><thead> <tr> <th> Name </th> <th> Phone </th> <th> Email </th> </tr> </thead></tr><tbody>";
+                                            for(var i = 0; i < result.length; i++) {
+                                                var Phone = "";
+                                                if(result[i].Phone != undefined) {
+                                                    Phone = result[i].Phone; 
+                                                }
+                                                var Email = "";
+                                                if(result[i].BOATBUILDING__Email__c != undefined) {
+                                                    Email =  result[i].BOATBUILDING__Email__c;
+                                                }
+                                                htmlTable += "<tr> <td><a href='void:javascript(0);' onclick='window.open(\"/"+result[i].Id+"\");'>" + result[i].Name + "</a></td> <td>" + Phone + "</td> <td>" + Email + "</td></tr>";
+                                            } 
+                                            $("#detailSection").css("width", "181%");
+                                            $("#detailSection").css("background", "white");
+                                            $("#detailSection").css("padding", "5px");
+                                            $("#detailSection").css("border-radius", "2px");
+                                            //$("#detailSection").css("opacity", "0.8");
+                                            $("#detailSection").html(htmlTable);
+                                            $('#resltTable').delay(1000).DataTable( { 
+                                              "pageLength": 5,
+                                              "lengthMenu": [[5, 10, 25, 50, -1], [5, 10, 25, 50, "All"]]
+                                            } );
+                                        } else {
+                                            $("#detailSection").html("<h1 style='color: {!fontColot};'>No Record Found.</h1>");
+                                            $("#detailSection").css("background", "");
+                                        }
+                                    }
+                                }
+                                 
+                            });
+                        } else if(searchType != null && searchType != "") {
+                            if(inputVal != null && inputVal != "") {
+                                BOATBUILDING.BoatMatchController.searchAccount(searchType, inputVal, function(result, event) {
+                                    if(event.status) {
+                                        if(result != null) {
+                                            
+                                            if(result.length > 0) {
+                                                if(searchType == "Boat") {
+                                                    if(result.length > 0) { 
+                                                    var htmlTable = "<table  id='resltTable' width='100%'><thead> <tr> <th> Name </th> <th> Phone </th> <th> Email </th> </tr> </thead></tr><tbody>";
+                                                    for(var i = 0; i < result.length; i++) {
+                                                        var Phone = "";
+                                                        if(result[i].Phone != undefined) {
+                                                            Phone = result[i].Phone; 
+                                                        }
+                                                        var Email = "";
+                                                        if(result[i].BOATBUILDING__Email__c != undefined) {
+                                                            Email =  result[i].BOATBUILDING__Email__c;
+                                                        } 
+                                                        htmlTable += "<tr> <td><a href='void:javascript(0);' onclick='window.open(\"/"+result[i].Id+"\");'>" + result[i].Name + "</a></td> <td>" + Phone + "</td> <td>" + Email + "</td></tr>";
+                                                    } 
+                                                    $("#detailSection").css("width", "181%");
+                                                    $("#detailSection").css("background", "white");
+                                                    $("#detailSection").css("padding", "5px");
+                                                    $("#detailSection").css("border-radius", "2px");
+                                                    //$("#detailSection").css("opacity", "0.8");
+                                                    $("#detailSection").html(htmlTable);
+                                                    $('#resltTable').delay(1000).DataTable( { 
+                                                      "pageLength": 5,
+                                                      "lengthMenu": [[5, 10, 25, 50, -1], [5, 10, 25, 50, "All"]]
+                                                    } );
+                                                } else {
+                                                    $("#detailSection").html("<h1 style='color: {!fontColot};'>No Record Found.</h1>");
+                                                    $("#detailSection").css("background", "");
+                                                }
+                                                } 
+                                                else if(searchType == "DesiredBoat") {
+                                                    var htmlTable = "<table  id='resltTable' width='100%'><thead> <tr> <th> Name </th> <th> Phone </th> <th> Email </th> <th> Manufacturer </th> <th> Model </th> <th> Length </th> <th> Price High </th> <th> Price Low </th> </tr> </thead><tbody>";
+                                                    for(var i = 0; i < result.length; i++) {
+                                                        var Phone = "";
+                                                        if(result[i].Phone != undefined) {
+                                                            Phone = result[i].Phone; 
+                                                        }
+                                                        var Email = "";
+                                                        if(result[i].BOATBUILDING__Email__c != undefined) {
+                                                            Email =  result[i].BOATBUILDING__Email__c;
+                                                        }
+                                                        var Manufacturer = "";
+                                                        if(result[i].BOATBUILDING__Desired_Boat_Manufacturer__c != undefined) {
+                                                            Manufacturer =  result[i].BOATBUILDING__Desired_Boat_Manufacturer__c;
+                                                        }
+                                                        var Model = "";
+                                                        if(result[i].BOATBUILDING__Desire_boat_model__c != undefined) {
+                                                            Model =  result[i].BOATBUILDING__Desire_boat_model__c;
+                                                        }
+                                                        var Length = "";
+                                                        if(result[i].BOATBUILDING__Prospect_Desired_Boat_Length__c != undefined) {
+                                                            Length =  result[i].BOATBUILDING__Prospect_Desired_Boat_Length__c;
+                                                        }
+                                                        var Phigh = "0.00";
+                                                        if(result[i].BOATBUILDING__Desire_price_high__c != undefined) {
+                                                            Phigh =  result[i].BOATBUILDING__Desire_price_high__c;
+                                                        }
+                                                        var Plow = "0.00";
+                                                        if(result[i].BOATBUILDING__Desire_Price_low__c != undefined) {
+                                                            Plow =  result[i].BOATBUILDING__Desire_Price_low__c;
+                                                        }
+                                                        htmlTable += "<tr> <td><a href='void:javascript(0);' onclick='window.open(\"/"+result[i].Id+"\");'>"+ result[i].Name + "</a> </td> <td>" + Phone + "</td> <td>" + Email + "</td> <td>" + Manufacturer + "</td> <td>" + Model + "</td> <td>" + Length + "</td> <td>" + Phigh + "</td> <td>" + Plow + "</td> </tr>";
+                                                    }
+                                                    $("#detailSection").css("width", "181%");
+                                                    $("#detailSection").css("background", "white");
+                                                    $("#detailSection").css("padding", "5px");
+                                                    $("#detailSection").css("border-radius", "2px");
+                                                    //$("#detailSection").css("opacity", "0.8");
+                                                    $("#detailSection").html(htmlTable);
+                                                    $('#resltTable').delay(1000).DataTable( { 
+                                                      "pageLength": 5,
+                                                      "lengthMenu": [[5, 10, 25, 50, -1], [5, 10, 25, 50, "All"]]
+                                                    } );
+                                                } else if(searchType == "Trade") {
+                                                    var htmlTable = "<table  id='resltTable' width='100%'><thead> <tr> <th> Name </th> <th> Phone </th> <th> Email </th> <th> Make </th> <th> Model </th> <th> Model Year </th> </tr> </thead><tbody>";
+                                                    for(var i = 0; i < result.length; i++) {
+                                                        var Phone = "";
+                                                        if(result[i].Phone != undefined) {
+                                                            Phone = result[i].Phone; 
+                                                        }
+                                                        var Email = "";
+                                                        if(result[i].BOATBUILDING__Email__c != undefined) {
+                                                            Email =  result[i].BOATBUILDING__Email__c;
+                                                        }
+                                                        var Manufacturer = "";
+                                                        if(result[i].BOATBUILDING__Trade_Make__c != undefined) {
+                                                            Manufacturer =  result[i].BOATBUILDING__Trade_Make__c;
+                                                        }
+                                                        var Model = "";
+                                                        if(result[i].BOATBUILDING__Trade_Model__c != undefined) {
+                                                            Model =  result[i].BOATBUILDING__Trade_Model__c;
+                                                        }
+                                                        var Year = "";
+                                                        if(result[i].BOATBUILDING__Trade_Model_Year__c != undefined) {
+                                                            Year =  result[i].BOATBUILDING__Trade_Model_Year__c;
+                                                        }
+                                                        
+                                                        htmlTable += "<tr> <td><a href='void:javascript(0);' onclick='window.open(\"/"+result[i].Id+"\");'>" + result[i].Name + "</a></td> <td>" + Phone + "</td> <td>" + Email + "</td> <td>" + Manufacturer + "</td> <td>" + Model + "</td> <td>" + Year + "</td> </tr>";
+                                                    }
+                                                    $("#detailSection").css("width", "181%");
+                                                    $("#detailSection").css("background", "white");
+                                                    $("#detailSection").css("padding", "5px");
+                                                    $("#detailSection").css("border-radius", "2px");
+                                                    //$("#detailSection").css("opacity", "0.8");
+                                                    $("#detailSection").html(htmlTable);
+                                                    $('#resltTable').delay(1000).DataTable( { 
+                                                      "pageLength": 5,
+                                                      "lengthMenu": [[5, 10, 25, 50, -1], [5, 10, 25, 50, "All"]]
+                                                    } );
+                                                }
+                                            } else {
+                                                $("#detailSection").html("<h1 style='color: {!fontColot};'>No Record Found.</h1>");
+                                                $("#detailSection").css("background", "");
+                                            }
+                                        }
+                                    } 
+                                     
+                                });
+                            } else {
+                                $("#detailSection").html("<h1 style='color: {!fontColot};'>Please enter a value in \"Search Bar\".</h1>");    
+                                $("#detailSection").css("background", "");
+                                //$("#detailSection").css("opacity", "1");
+                            }
+                        } 
+                    } else {
+                        $("#detailSection").html("<h1 style='color: {!fontColot};'>Please select \"Search Type\".</h1>");
+                        $("#detailSection").css("background", ""); 
+                        //$("#detailSection").css("opacity", "1");
+                    }
+                }
+            </script>
+        </body>
+    </html> 
+</apex:page>

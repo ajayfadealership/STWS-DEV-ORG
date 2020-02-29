@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Family__c</fullName>
+    <deprecated>false</deprecated>
+    <externalId>false</externalId>
+    <inlineHelpText>Comes from Part: Comes when a Product is selected for creating Purchase Order</inlineHelpText>
+    <label>Family</label>
+    <required>false</required>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Back Packs</fullName>
+                <default>false</default>
+                <label>Back Packs</label>
+            </value>
+            <value>
+                <fullName>Bindings</fullName>
+                <default>false</default>
+                <label>Bindings</label>
+            </value>
+            <value>
+                <fullName>Board Racks</fullName>
+                <default>false</default>
+                <label>Board Racks</label>
+            </value>
+            <value>
+                <fullName>Boards</fullName>
+                <default>false</default>
+                <label>Boards</label>
+            </value>
+            <value>
+                <fullName>Board Shorts</fullName>
+                <default>false</default>
+                <label>Board Shorts</label>
+            </value>
+            <value>
+                <fullName>Boots</fullName>
+                <default>false</default>
+                <label>Boots</label>
+            </value>
+            <value>
+                <fullName>Canvas</fullName>
+                <default>false</default>
+                <label>Canvas</label>
+            </value>
+            <value>
+                <fullName>Dash</fullName>
+                <default>false</default>
+                <label>Dash</label>
+            </value>
+            <value>
+                <fullName>Electrical</fullName>
+                <default>false</default>
+                <label>Electrical</label>
+            </value>
+            <value>
+                <fullName>Engine</fullName>
+                <default>false</default>
+                <label>Engine</label>
+            </value>
+            <value>
+                <fullName>Fat Sacs</fullName>
+                <default>false</default>
+                <label>Fat Sacs</label>
+            </value>
+            <value>
+                <fullName>Gel</fullName>
+                <default>false</default>
+                <label>Gel</label>
+            </value>
+            <value>
+                <fullName>Handles</fullName>
+                <default>false</default>
+                <label>Handles</label>
+            </value>
+            <value>
+                <fullName>Hats</fullName>
+                <default>false</default>
+                <label>Hats</label>
+            </value>
+            <value>
+                <fullName>Hoodies</fullName>
+                <default>false</default>
+                <label>Hoodies</label>
+            </value>
+            <value>
+                <fullName>Life Jackets</fullName>
+                <default>false</default>
+                <label>Life Jackets</label>
+            </value>
+            <value>
+                <fullName>Lighting</fullName>
+                <default>false</default>
+                <label>Lighting</label>
+            </value>
+            <value>
+                <fullName>Lower Unit</fullName>
+                <default>false</default>
+                <label>Lower Unit</label>
+            </value>
+            <value>
+                <fullName>Ropes</fullName>
+                <default>false</default>
+                <label>Ropes</label>
+            </value>
+            <value>
+                <fullName>Rub Rail</fullName>
+                <default>false</default>
+                <label>Rub Rail</label>
+            </value>
+            <value>
+                <fullName>Running Gear</fullName>
+                <default>false</default>
+                <label>Running Gear</label>
+            </value>
+            <value>
+                <fullName>Steering</fullName>
+                <default>false</default>
+                <label>Steering</label>
+            </value>
+            <value>
+                <fullName>Stereo</fullName>
+                <default>false</default>
+                <label>Stereo</label>
+            </value>
+            <value>
+                <fullName>Surf Boards</fullName>
+                <default>false</default>
+                <label>Surf Boards</label>
+            </value>
+            <value>
+                <fullName>Surf Pads</fullName>
+                <default>false</default>
+                <label>Surf Pads</label>
+            </value>
+            <value>
+                <fullName>Surf Ropes</fullName>
+                <default>false</default>
+                <label>Surf Ropes</label>
+            </value>
+            <value>
+                <fullName>Swimsuits</fullName>
+                <default>false</default>
+                <label>Swimsuits</label>
+            </value>
+            <value>
+                <fullName>Tee Shirts</fullName>
+                <default>false</default>
+                <label>Tee Shirts</label>
+            </value>
+            <value>
+                <fullName>Tower</fullName>
+                <default>false</default>
+                <label>Tower</label>
+            </value>
+            <value>
+                <fullName>Trans</fullName>
+                <default>false</default>
+                <label>Trans</label>
+            </value>
+            <value>
+                <fullName>Travel Bags</fullName>
+                <default>false</default>
+                <label>Travel Bags</label>
+            </value>
+            <value>
+                <fullName>Tubes</fullName>
+                <default>false</default>
+                <label>Tubes</label>
+            </value>
+            <value>
+                <fullName>Upholstery</fullName>
+                <default>false</default>
+                <label>Upholstery</label>
+            </value>
+            <value>
+                <fullName>V-Drive</fullName>
+                <default>false</default>
+                <label>V-Drive</label>
+            </value>
+            <value>
+                <fullName>Wake Boards</fullName>
+                <default>false</default>
+                <label>Wake Boards</label>
+            </value>
+            <value>
+                <fullName>Wake Skates</fullName>
+                <default>false</default>
+                <label>Wake Skates</label>
+            </value>
+            <value>
+                <fullName>Walk Shorts</fullName>
+                <default>false</default>
+                <label>Walk Shorts</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

@@ -1,0 +1,241 @@
+<apex:page controller="CreateOutboardEngineController" showHeader="false">
+    <apex:slds />
+    <style>
+        * {font-family: "Salesforce Sans",Arial,sans-serif}
+        .popup{
+        position: fixed;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background: rgba(0,0,0,0.5);
+        display: none;
+        z-index: 999;
+        }
+        .popup.active{display:block}
+        .popup img{margin: 15% auto}
+        .card-wrapper_Orderpage {
+        max-width: 1000px;
+        margin: 2rem auto;
+        }
+        .card-wrapper_Orderpage .slds-input, .slds-select {
+        max-width: 25rem;
+        }
+        
+        .card-wrapper_Orderpage .slds-select {
+        padding: 0 0.5rem;
+        }       
+        
+        .card-wrapper_Orderpage .slds-card__body {
+        overflow: auto;
+        }
+        .card-wrapper_Orderpage .slds-text-heading--small {
+        font-weight: 600;
+        
+        }
+        
+        .card-wrapper_Orderpage .slds-card__body{
+        background: #fff;
+        border-top:1px solid #d8dde6;
+        }
+        .card-wrapper_Orderpage textarea{
+        width: 100%;
+        resize: none;
+        padding: 4px;
+        }
+        .card-wrapper_Orderpage .slds-form-element__label{
+        font-size: 1rem;
+        text-align: right;
+        display: block;
+        padding-right: 30px;
+        }
+        .dateOnlyInput input {
+        width: 8em;
+        }
+        .slds-form-element {
+        position: relative;
+        margin-bottom: 15px;
+        }
+        .card-wrapper_Orderpage  td .slds-form-element__label{
+        text-align: left;
+        display: inline;
+        
+        }            
+        .slds-table .slds-form-element {
+        margin-bottom: 0px;
+        }
+        .card-wrapper_Orderpage .slds-text-heading--small {
+        font-weight: 600;
+        font-size: 1.25em;
+        color: #6f809c;
+        }
+    </style>
+    <title>Create Onboard Engine</title>
+    <apex:form >
+        <apex:actionFunction name="createEngine" action="{!createEngine}" />
+        
+        <article class="slds-card card-wrapper_Orderpage">
+            <header class="slds-card__header slds-grid"> 
+                <div class="slds-media slds-media--center slds-has-flexi-truncate">
+                    <div class="slds-media__body slds-truncate">
+                        <h2>
+                            <span class="slds-text-heading--small">Create Trailer</span>
+                        </h2>
+                    </div>
+                </div>
+            </header>
+            
+            <div class="slds-card__body">
+                <div class="slds-card__body slds-col--padded">  
+                    <div class="slds-grid slds-wrap slds-p-top--large">
+                        
+                        <div class="slds-col slds-size--1-of-1">
+                            <div class="slds-grid slds-wrap">
+                                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-2 slds-p-left--x-large ">
+                                    <div class="slds-grid slds-wrap">
+                                        <div class="slds-col slds-size--1-of-1 slds-size--1-of-2">
+                                            <label class="slds-form-element__label" for="text-input-01">Engine SN</label>
+                                        </div>
+                                        <div class="slds-col slds-size--1-of-2">
+                                            <div class="slds-form-element">
+                                                <div class="slds-form-element__control">
+                                                    <apex:inputField value="{!objInv.Engine_SN__c}" styleClass="slds-input"/>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                </div>
+                                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-2 slds-p-left--x-large slds-p-right--x-large">
+                                    <div class="slds-grid slds-wrap">
+                                        <div class="slds-col slds-size--1-of-1 slds-size--1-of-2">
+                                            <label class="slds-form-element__label" for="text-input-01">Engine Make</label>
+                                        </div>
+                                        <div class="slds-col slds-size--1-of-2">
+                                            <div class="slds-form-element">
+                                                <div class="slds-form-element__control">
+                                                    <apex:inputField value="{!objInv.Engine_Make__c}" styleClass="slds-input"/>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="slds-col slds-size--1-of-1">
+                            <div class="slds-grid slds-wrap">
+                                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-2 slds-p-left--x-large">
+                                    <div class="slds-grid slds-wrap">
+                                        <div class="slds-col slds-size--1-of-1 slds-size--1-of-2">
+                                            <label class="slds-form-element__label" for="text-input-01">Engine Model</label>
+                                        </div>
+                                        <div class="slds-col slds-size--1-of-2">
+                                            <div class="slds-form-element">
+                                                <div class="slds-form-element__control">
+                                                    <apex:inputField value="{!objInv.Engine_Model__c}" styleClass="slds-input"/>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                </div>
+                                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-2 slds-p-left--x-large slds-p-right--x-large">
+                                    <div class="slds-grid slds-wrap">
+                                        <div class="slds-col slds-size--1-of-1 slds-size--1-of-2">
+                                            <label class="slds-form-element__label" for="text-input-01">Engine Year</label>
+                                        </div>
+                                        <div class="slds-col slds-size--1-of-2">
+                                            <div class="slds-form-element">
+                                                <div class="slds-form-element__control">
+                                                    
+                                                    <apex:inputField value="{!objInv.Engine_Year__c}" styleClass="slds-input"/>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                       
+                        <div class="slds-col slds-size--1-of-1">
+                            <div class="slds-grid slds-wrap">
+                                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-2 slds-p-left--x-large">
+                                    <div class="slds-grid slds-wrap">
+                                        <div class="slds-col slds-size--1-of-1 slds-size--1-of-2">
+                                            <label class="slds-form-element__label" for="text-input-01">MSRP Price</label>
+                                        </div>
+                                        <div class="slds-col slds-size--1-of-2">
+                                            <div class="slds-form-element">
+                                                <div class="slds-form-element__control">
+                                                    <apex:inputField value="{!objInv.Total_MSRP_Price__c}" styleClass="slds-input"/>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                </div>
+                                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-2 slds-p-left--x-large slds-p-right--x-large">
+                                    <div class="slds-grid slds-wrap">
+                                        <div class="slds-col slds-size--1-of-1 slds-size--1-of-2">
+                                            <label class="slds-form-element__label" for="text-input-01">Trailer Dealer Price</label>
+                                        </div>
+                                        <div class="slds-col slds-size--1-of-2">
+                                            <div class="slds-form-element">
+                                                <div class="slds-form-element__control">
+                                                    <apex:inputField value="{!objInv.Total_Dealer_Price__c}" styleClass="slds-input"/>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="slds-col slds-size--1-of-1">
+                            <div class="slds-grid slds-wrap">
+                                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-2 slds-p-left--x-large">
+                                    <div class="slds-grid slds-wrap">
+                                        <div class="slds-col slds-size--1-of-1 slds-size--1-of-2">
+                                            <label class="slds-form-element__label" for="text-input-01">Dealer discount</label>
+                                        </div>
+                                        <div class="slds-col slds-size--1-of-2">
+                                            <div class="slds-form-element">
+                                                <div class="slds-form-element__control">
+                                                    <apex:inputField value="{!objInv.Dealer_Discount__c}" styleClass="slds-input"/>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                </div>
+                                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-2 slds-p-left--x-large slds-p-right--x-large">
+                                    <div class="slds-grid slds-wrap">
+                                        <div class="slds-col slds-size--1-of-1 slds-size--1-of-2">
+                                            <label class="slds-form-element__label" for="text-input-01"></label>
+                                        </div>
+                                        <div class="slds-col slds-size--1-of-2">
+                                            <div class="slds-form-element">
+                                                <div class="slds-form-element__control">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        
+                        <div class="slds-col slds-size--1-of-1 slds-m-top--large slds-m-bottom--x-large slds-align--absolute-center">
+                            <div class="slds-grid slds-wrap">
+                                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-2 slds-col--padded">
+                                    <button class="slds-button slds-button--neutral slds-button--brand " type="button" id="createId" onclick="createEngine();">Create Engine</button>
+                                    <button class="slds-button slds-button--neutral slds-button--brand " type="button" onclick="window.location.href = '/home/home.jsp'" >Close</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </article>
+        
+    </apex:form>
+</apex:page>

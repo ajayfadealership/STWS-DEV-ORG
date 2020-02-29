@@ -1,0 +1,163 @@
+<apex:component id="Cooler__c" controller="DDCloneController">
+    <apex:attribute name="parentId" type="String" description="Parent record where attachment would be attached"/>
+    
+    <apex:attribute name="DragDropHeight" type="String" description="Height in Pixel for Drag and Drop Section"/>
+    <apex:attribute name="imagename" type="String" description="Height in Pixel for Drag and Drop Section"/>
+    <apex:attribute name="HostName" type="String" description="HostName"/>
+    <style>
+        #holder2 {
+        border: 2px dashed #ccc;
+        width: 50%;
+        height:95%;
+        background-color:#ccc;
+        -webkit-border-radius: 8px 8px 8px 8px;
+        border-radius: 8px 8px 8px 8px;
+        text-align: center;
+        }
+        #holder2 span, #uploadCompleted span {
+        position: relative;
+        top: 30%;
+        transform: translateY(-50%);
+        text-shadow: 2px 2px 2px #525252;
+        font-size:3em;
+        color:#A3A3A3;
+        }
+        #holder2.hover { border: 2px dashed #636363; }
+        
+        #uploadstatus2 span{
+        text-shadow: 2px 2px 2px #525252;
+        font-size:1em;
+        }
+        
+        #holder2 p { margin: 10px; font-size: 14px; }
+        progress { width: 100%;  height:2em;  }
+        progress:after { content: '%'; }
+        #uploadprogress {text-shadow: 2px 2px 2px #525252;}
+        .fail { background: #c00; padding: 2px; color: #fff; }
+        .hidden { display: none;}
+        .dragDropComponentSize{ height:{!DragDropHeight} ; overflow-y:auto; }
+        body{width:98%;font-family: Helvetica,"Helvetica Neue",Arial,sans-serif;}
+    </style>
+    
+    <article class="dragDropComponentSize" id="dndContainer">
+        <div id="holder2" >
+            <span id="holder2_txt1"> Drag and Drop file here </span>
+            <span  id="holder2_txt2" class="hidden"> Upload </span>
+        </div>
+        <p id="upload" class="hidden"><label>Drag &amp; drop not supported by your browser, but you can still upload via this input field:<br /><input type="file" /></label></p>
+        <!--<p id="filereader">File API &amp; FileReader API not supported</p>
+<p id="formdata">XHR2's FormData is not supported</p>
+<p id="progress">XHR2's upload progress isn't supported</p>-->
+        <p id="uploadstatus2" class="hidden"><span>Upload Completed</span></p>
+    </article>
+    <script>
+    var holder2 = document.getElementById('holder2');
+    var holder2_txt1 = document.getElementById('holder2_txt1');
+    var holder2_txt2 = document.getElementById('holder2_txt2');
+    var uploadstatus2 = document.getElementById('uploadstatus2'); 
+    
+    var sfdcHostName =window.location.host.split('.')[1]; 
+    
+    tests = {
+        filereader: typeof FileReader != 'undefined',
+        dnd: 'draggable' in document.createElement('span'),
+        formdata: !!window.FormData,
+        progress: "upload" in new XMLHttpRequest
+    },
+        support = {
+        filereader: document.getElementById('filereader'),
+        formdata: document.getElementById('formdata'),
+        progress: document.getElementById('progress')
+    },
+        progress = document.getElementById('uploadprogress'),
+        fileupload = document.getElementById('upload');
+    
+    "filereader formdata progress".split(' ').forEach(function (api) {
+        if (tests[api] === false) {
+            support[api].className = 'fail';
+        } else {
+            support[api].className = 'hidden';
+        }
+    });
+    
+    function textBeforeDrag(flag){
+        if(flag)
+        {
+            holder2_txt1.className = '';
+            holder2_txt2.className = 'hidden';
+        }else{
+            holder2_txt1.className = 'hidden';
+            holder2_txt2.className = '';
+        }
+    }
+    
+    function resetAll()
+    {
+        holder2.className = holder2_txt1.className = '';
+        holder2_txt2.className = uploadstatus2.className = 'hidden';
+    }
+    
+    function readfilescooler(files) { 
+        
+        var formData = tests.formdata ? new FormData() : null;
+        
+        //Not sure why multiple files dropping, so for time being disable multi file functionality
+        if(files.length > 1)
+        { 
+            alert('Multi Upload is not supported, please try to upload single file');
+            return;
+        }
+        if(files[0].size > 2000000)
+        {
+            alert('File size is too large it should be less than 2 MB');
+            return;
+        }
+        for (var i = 0; i < files.length; i++) {
+            uploadstatus2.className = '';
+            holder2.className = 'hidden';
+            // now post a new XHR request
+            if (tests.formdata) {
+                var reader = new FileReader(); 
+                reader.readAsDataURL(files[i]);
+                reader.onload = function () {
+                    console.log(">>>My console loging>>>");
+                    //console.log(reader.result);    
+                    $('.popup').addClass('active'); 
+                    BOATBUILDING.DDCloneController.uploadImage(reader.result, 'Cooler__c.jpg', '{!parentId}',  function(result, event) {
+                        $('.popup').removeClass('active');
+                        console.log(result); 
+                    });  
+                };
+            }
+        } 
+        
+        
+    }
+    
+    if (tests.dnd) {
+        holder2.ondragover = function () {
+            this.className = 'hover';
+            textBeforeDrag(false);
+            return false;
+        };
+        holder2.ondragend = function () {
+            this.className = '';
+            textBeforeDrag(true);
+            return false;
+        };
+        holder2.ondrop = function (e) {
+            textBeforeDrag(true);
+            this.className = '';
+            
+            e.preventDefault();
+            readfilescooler(e.dataTransfer.files);
+        }
+    } else {
+        fileupload.className = 'hidden';
+        fileupload.querySelector('input').onchange = function () {
+            readfilescooler(this.files);
+        };
+    }
+    
+    </script>
+</apex:component>

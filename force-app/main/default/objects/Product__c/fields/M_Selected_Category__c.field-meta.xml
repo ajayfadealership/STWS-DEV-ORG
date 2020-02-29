@@ -1,0 +1,2595 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>M_Selected_Category__c</fullName>
+    <deprecated>false</deprecated>
+    <externalId>false</externalId>
+    <label>Selected Category</label>
+    <required>false</required>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <controllingField>M_Option_Category__c</controllingField>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Flush Kit</fullName>
+                <default>false</default>
+                <label>Flush Kit</label>
+            </value>
+            <value>
+                <fullName>Water Strainer</fullName>
+                <default>false</default>
+                <label>Water Strainer</label>
+            </value>
+            <value>
+                <fullName>Spray Pattern &quot;Classic&quot;</fullName>
+                <default>false</default>
+                <label>Spray Pattern &quot;Classic&quot;</label>
+            </value>
+            <value>
+                <fullName>Spray Pattern &quot;Striker&quot;</fullName>
+                <default>false</default>
+                <label>Spray Pattern &quot;Striker&quot;</label>
+            </value>
+            <value>
+                <fullName>Spray Pattern &quot;Torqued&quot;</fullName>
+                <default>false</default>
+                <label>Spray Pattern &quot;Torqued&quot;</label>
+            </value>
+            <value>
+                <fullName>White</fullName>
+                <default>false</default>
+                <label>White</label>
+            </value>
+            <value>
+                <fullName>Platinum</fullName>
+                <default>false</default>
+                <label>Platinum</label>
+            </value>
+            <value>
+                <fullName>Black</fullName>
+                <default>false</default>
+                <label>Black</label>
+            </value>
+            <value>
+                <fullName>Atomic Orange</fullName>
+                <default>false</default>
+                <label>Atomic Orange</label>
+            </value>
+            <value>
+                <fullName>Brittany Blue</fullName>
+                <default>false</default>
+                <label>Brittany Blue</label>
+            </value>
+            <value>
+                <fullName>Celestial Blue</fullName>
+                <default>false</default>
+                <label>Celestial Blue</label>
+            </value>
+            <value>
+                <fullName>Charcoal</fullName>
+                <default>false</default>
+                <label>Charcoal</label>
+            </value>
+            <value>
+                <fullName>Fire Red</fullName>
+                <default>false</default>
+                <label>Fire Red</label>
+            </value>
+            <value>
+                <fullName>Intense Green</fullName>
+                <default>false</default>
+                <label>Intense Green</label>
+            </value>
+            <value>
+                <fullName>Pacific Blue</fullName>
+                <default>false</default>
+                <label>Pacific Blue</label>
+            </value>
+            <value>
+                <fullName>Reuben Red</fullName>
+                <default>false</default>
+                <label>Reuben Red</label>
+            </value>
+            <value>
+                <fullName>Sundance Yellow</fullName>
+                <default>false</default>
+                <label>Sundance Yellow</label>
+            </value>
+            <value>
+                <fullName>Atomic Orange Metal Flake</fullName>
+                <default>false</default>
+                <label>Atomic Orange Metal Flake</label>
+            </value>
+            <value>
+                <fullName>Brittany Blue Metal Flake</fullName>
+                <default>false</default>
+                <label>Brittany Blue Metal Flake</label>
+            </value>
+            <value>
+                <fullName>Eclipse Black Metal Flake</fullName>
+                <default>false</default>
+                <label>Eclipse Black Metal Flake</label>
+            </value>
+            <value>
+                <fullName>Fire Red Metal Flake</fullName>
+                <default>false</default>
+                <label>Fire Red Metal Flake</label>
+            </value>
+            <value>
+                <fullName>Gunmetal Metal Flake</fullName>
+                <default>false</default>
+                <label>Gunmetal Metal Flake</label>
+            </value>
+            <value>
+                <fullName>Intense Green Metal Flake</fullName>
+                <default>false</default>
+                <label>Intense Green Metal Flake</label>
+            </value>
+            <value>
+                <fullName>Plum Crazy Purple Flake</fullName>
+                <default>false</default>
+                <label>Plum Crazy Purple Flake</label>
+            </value>
+            <value>
+                <fullName>Silver Metal Flake</fullName>
+                <default>false</default>
+                <label>Silver Metal Flake</label>
+            </value>
+            <value>
+                <fullName>A AM/FM/BT Aux input 4 speakers no amp</fullName>
+                <default>false</default>
+                <label>A AM/FM/BT Aux input 4 speakers no amp</label>
+            </value>
+            <value>
+                <fullName>B Add 2 Bow Speakers with Amplifier</fullName>
+                <default>false</default>
+                <label>B Add 2 Bow Speakers with Amplifier</label>
+            </value>
+            <value>
+                <fullName>C Add 2 Bow Speakers and Sub with Amplifier</fullName>
+                <default>false</default>
+                <label>C Add 2 Bow Speakers and Sub with Amplifier</label>
+            </value>
+            <value>
+                <fullName>D Add 2 Tower Speakers with Amplifier (Aviator)</fullName>
+                <default>false</default>
+                <label>D Add 2 Tower Speakers with Amplifier (Aviator)</label>
+            </value>
+            <value>
+                <fullName>E Add Wiring and Amp for 2 Tower Speakers (no speakers)</fullName>
+                <default>false</default>
+                <label>E Add Wiring and Amp for 2 Tower Speakers (no speakers)</label>
+            </value>
+            <value>
+                <fullName>F1 Add 4 Tower Speakers (Spin) with Amplifier (Aviator)</fullName>
+                <default>false</default>
+                <label>F1 Add 4 Tower Speakers (Spin) with Amplifier (Aviator)</label>
+            </value>
+            <value>
+                <fullName>F2 Add 4 Tower Speakers (Spin) with Amplifier (S-Bend)</fullName>
+                <default>false</default>
+                <label>F2 Add 4 Tower Speakers (Spin) with Amplifier (S-Bend)</label>
+            </value>
+            <value>
+                <fullName>Audio Remote - Transom Location</fullName>
+                <default>false</default>
+                <label>Audio Remote - Transom Location</label>
+            </value>
+            <value>
+                <fullName>Docking Lights</fullName>
+                <default>false</default>
+                <label>Docking Lights</label>
+            </value>
+            <value>
+                <fullName>Bow Mood Lights</fullName>
+                <default>false</default>
+                <label>Bow Mood Lights</label>
+            </value>
+            <value>
+                <fullName>Speaker Box Logo Lights</fullName>
+                <default>false</default>
+                <label>Speaker Box Logo Lights</label>
+            </value>
+            <value>
+                <fullName>Tower Light Bar with Courtesy Light (Aviator tower only)</fullName>
+                <default>false</default>
+                <label>Tower Light Bar with Courtesy Light (Aviator tower only)</label>
+            </value>
+            <value>
+                <fullName>Underwater Lights</fullName>
+                <default>false</default>
+                <label>Underwater Lights</label>
+            </value>
+            <value>
+                <fullName>Cooler, Softside w/ Logo</fullName>
+                <default>false</default>
+                <label>Cooler, Softside w/ Logo</label>
+            </value>
+            <value>
+                <fullName>Single Battery Set-up w/ Charger</fullName>
+                <default>false</default>
+                <label>Single Battery Set-up w/ Charger</label>
+            </value>
+            <value>
+                <fullName>Dual Battery Set-up w/ Charger</fullName>
+                <default>false</default>
+                <label>Dual Battery Set-up w/ Charger</label>
+            </value>
+            <value>
+                <fullName>Depth Finder</fullName>
+                <default>false</default>
+                <label>Depth Finder</label>
+            </value>
+            <value>
+                <fullName>Heater (6.2L engines)</fullName>
+                <default>false</default>
+                <label>Heater (6.2L engines)</label>
+            </value>
+            <value>
+                <fullName>Extended Mirror Bracket</fullName>
+                <default>false</default>
+                <label>Extended Mirror Bracket</label>
+            </value>
+            <value>
+                <fullName>Automatic Fire Suppression System</fullName>
+                <default>false</default>
+                <label>Automatic Fire Suppression System</label>
+            </value>
+            <value>
+                <fullName>Shipping Cover and Package Materials</fullName>
+                <default>false</default>
+                <label>Shipping Cover and Package Materials</label>
+            </value>
+            <value>
+                <fullName>Registration Fee</fullName>
+                <default>false</default>
+                <label>Registration Fee</label>
+            </value>
+            <value>
+                <fullName>Grow Boating Ad Campaign</fullName>
+                <default>false</default>
+                <label>Grow Boating Ad Campaign</label>
+            </value>
+            <value>
+                <fullName>Single Spring Axle w/ Disc Brakes</fullName>
+                <default>false</default>
+                <label>Single Spring Axle w/ Disc Brakes</label>
+            </value>
+            <value>
+                <fullName>Tandem Spring Axle w/ tandem Disc Brakes</fullName>
+                <default>false</default>
+                <label>Tandem Spring Axle w/ tandem Disc Brakes</label>
+            </value>
+            <value>
+                <fullName>No Trailer Credit</fullName>
+                <default>false</default>
+                <label>No Trailer Credit</label>
+            </value>
+            <value>
+                <fullName>Upgrade - Single Axle Torsion</fullName>
+                <default>false</default>
+                <label>Upgrade - Single Axle Torsion</label>
+            </value>
+            <value>
+                <fullName>Upgrade - Tandem Axle Torsion</fullName>
+                <default>false</default>
+                <label>Upgrade - Tandem Axle Torsion</label>
+            </value>
+            <value>
+                <fullName>Galvanized - No Color (Single or Tandem)</fullName>
+                <default>false</default>
+                <label>Galvanized - No Color (Single or Tandem)</label>
+            </value>
+            <value>
+                <fullName>No Pinstripe</fullName>
+                <default>false</default>
+                <label>No Pinstripe</label>
+            </value>
+            <value>
+                <fullName>White Pinstripe</fullName>
+                <default>false</default>
+                <label>White Pinstripe</label>
+            </value>
+            <value>
+                <fullName>Platinum Pinstripe</fullName>
+                <default>false</default>
+                <label>Platinum Pinstripe</label>
+            </value>
+            <value>
+                <fullName>Black Pinstripe</fullName>
+                <default>false</default>
+                <label>Black Pinstripe</label>
+            </value>
+            <value>
+                <fullName>Stainless Steel Fenders-Single Axle</fullName>
+                <default>false</default>
+                <label>Stainless Steel Fenders-Single Axle</label>
+            </value>
+            <value>
+                <fullName>Stainless Steel Fenders-Tandem Axle</fullName>
+                <default>false</default>
+                <label>Stainless Steel Fenders-Tandem Axle</label>
+            </value>
+            <value>
+                <fullName>Two Tone Painted Fender - Single Axle (select color below)</fullName>
+                <default>false</default>
+                <label>Two Tone Painted Fender - Single Axle (select color below)</label>
+            </value>
+            <value>
+                <fullName>Two Tone Painted Fender - Tandem Axle (select color below)</fullName>
+                <default>false</default>
+                <label>Two Tone Painted Fender - Tandem Axle (select color below)</label>
+            </value>
+            <value>
+                <fullName>15&quot; Spare Tire with Bracket (T6 Aluminum) (Single)</fullName>
+                <default>false</default>
+                <label>15&quot; Spare Tire with Bracket (T6 Aluminum) (Single)</label>
+            </value>
+            <value>
+                <fullName>14&quot; Spare Tire with Bracket (T6 Aluminum) (Tandem)</fullName>
+                <default>false</default>
+                <label>14&quot; Spare Tire with Bracket (T6 Aluminum) (Tandem)</label>
+            </value>
+            <value>
+                <fullName>Wheel Upgrade w/ Painted Fenders - 18&quot; Wheels (Tandem)</fullName>
+                <default>false</default>
+                <label>Wheel Upgrade w/ Painted Fenders - 18&quot; Wheels (Tandem)</label>
+            </value>
+            <value>
+                <fullName>Wheel Upgrade w/ Stainless Stl Fenders - 18&quot; Wheels (Tandem)</fullName>
+                <default>false</default>
+                <label>Wheel Upgrade w/ Stainless Stl Fenders - 18&quot; Wheels (Tandem)</label>
+            </value>
+            <value>
+                <fullName>18&quot; Spare Tire with Bracket (18&quot; Wheel Upgrade)</fullName>
+                <default>false</default>
+                <label>18&quot; Spare Tire with Bracket (18&quot; Wheel Upgrade)</label>
+            </value>
+            <value>
+                <fullName>Illuminated Laser-Cut Steps</fullName>
+                <default>false</default>
+                <label>Illuminated Laser-Cut Steps</label>
+            </value>
+            <value>
+                <fullName>LED Back-up Lights</fullName>
+                <default>false</default>
+                <label>LED Back-up Lights</label>
+            </value>
+            <value>
+                <fullName>Surface Mount Clear LED</fullName>
+                <default>false</default>
+                <label>Surface Mount Clear LED</label>
+            </value>
+            <value>
+                <fullName>Runway Lighting</fullName>
+                <default>false</default>
+                <label>Runway Lighting</label>
+            </value>
+            <value>
+                <fullName>7-way Round Trailer Plug w/ Holder</fullName>
+                <default>false</default>
+                <label>7-way Round Trailer Plug w/ Holder</label>
+            </value>
+            <value>
+                <fullName>Swing-away Tounge - Color Matched</fullName>
+                <default>false</default>
+                <label>Swing-away Tounge - Color Matched</label>
+            </value>
+            <value>
+                <fullName>Fulton F2 Jack Upgrade</fullName>
+                <default>false</default>
+                <label>Fulton F2 Jack Upgrade</label>
+            </value>
+            <value>
+                <fullName>Transom Steps</fullName>
+                <default>false</default>
+                <label>Transom Steps</label>
+            </value>
+            <value>
+                <fullName>Aluminum Step Plates</fullName>
+                <default>false</default>
+                <label>Aluminum Step Plates</label>
+            </value>
+            <value>
+                <fullName>Transom Trailer Straps</fullName>
+                <default>false</default>
+                <label>Transom Trailer Straps</label>
+            </value>
+            <value>
+                <fullName>Guide Pole Covers</fullName>
+                <default>false</default>
+                <label>Guide Pole Covers</label>
+            </value>
+            <value>
+                <fullName>Trim Level 400</fullName>
+                <default>false</default>
+                <label>Trim Level 400</label>
+            </value>
+            <value>
+                <fullName>Trim Level 450 (requires Raptor 440 engine)</fullName>
+                <default>false</default>
+                <label>Trim Level 450 (requires Raptor 440 engine)</label>
+            </value>
+            <value>
+                <fullName>Trim Level 550 (requires Raptor 575 engine)</fullName>
+                <default>false</default>
+                <label>Trim Level 550 (requires Raptor 575 engine)</label>
+            </value>
+            <value>
+                <fullName>World&#39;s Edition Package (see separate sheet for contents)</fullName>
+                <default>false</default>
+                <label>World&#39;s Edition Package (see separate sheet for contents)</label>
+            </value>
+            <value>
+                <fullName>Spray Pattern Worlds (required Worlds Package)</fullName>
+                <default>false</default>
+                <label>Spray Pattern Worlds (required Worlds Package)</label>
+            </value>
+            <value>
+                <fullName>SE550 Roush Limited Edition</fullName>
+                <default>false</default>
+                <label>SE550 Roush Limited Edition</label>
+            </value>
+            <value>
+                <fullName>Spray Pattern Roush Limited Edition</fullName>
+                <default>false</default>
+                <label>Spray Pattern Roush Limited Edition</label>
+            </value>
+            <value>
+                <fullName>Ford Raptor 400 6.2L Engine by Indmar</fullName>
+                <default>false</default>
+                <label>Ford Raptor 400 6.2L Engine by Indmar</label>
+            </value>
+            <value>
+                <fullName>Ford Raptor 440 6.2L Engine by Indmar</fullName>
+                <default>false</default>
+                <label>Ford Raptor 440 6.2L Engine by Indmar</label>
+            </value>
+            <value>
+                <fullName>Ford Raptor 575 6.2L Engine by Indmar (SA, SC and SG only)</fullName>
+                <default>false</default>
+                <label>Ford Raptor 575 6.2L Engine by Indmar (SA, SC and SG only)</label>
+            </value>
+            <value>
+                <fullName>Ford Raptor 575 6.2L Engine by Indmar (SE only)</fullName>
+                <default>false</default>
+                <label>Ford Raptor 575 6.2L Engine by Indmar (SE only)</label>
+            </value>
+            <value>
+                <fullName>Light Graphite</fullName>
+                <default>false</default>
+                <label>Light Graphite</label>
+            </value>
+            <value>
+                <fullName>Plum Crazy Purple Metal Flake</fullName>
+                <default>false</default>
+                <label>Plum Crazy Purple Metal Flake</label>
+            </value>
+            <value>
+                <fullName>Hull Forward Accent Color Matches Main Panel Color</fullName>
+                <default>false</default>
+                <label>Hull Forward Accent Color Matches Main Panel Color</label>
+            </value>
+            <value>
+                <fullName>Hull Forward Accent Color Matches Upper Accent Color</fullName>
+                <default>false</default>
+                <label>Hull Forward Accent Color Matches Upper Accent Color</label>
+            </value>
+            <value>
+                <fullName>Hull Forward Accent Color Matches Deck Forward Accent</fullName>
+                <default>false</default>
+                <label>Hull Forward Accent Color Matches Deck Forward Accent</label>
+            </value>
+            <value>
+                <fullName>Hull Middle Accent Color Matches Main Panel Color</fullName>
+                <default>false</default>
+                <label>Hull Middle Accent Color Matches Main Panel Color</label>
+            </value>
+            <value>
+                <fullName>Hull Middle Accent Color Matches Lower Accent Color</fullName>
+                <default>false</default>
+                <label>Hull Middle Accent Color Matches Lower Accent Color</label>
+            </value>
+            <value>
+                <fullName>&quot;Supra&quot; Verge 2-Tone</fullName>
+                <default>false</default>
+                <label>&quot;Supra&quot; Verge 2-Tone</label>
+            </value>
+            <value>
+                <fullName>&quot;Supra&quot; Verge Chrome</fullName>
+                <default>false</default>
+                <label>&quot;Supra&quot; Verge Chrome</label>
+            </value>
+            <value>
+                <fullName>&quot;Supra&quot; Verge Blacked Out</fullName>
+                <default>false</default>
+                <label>&quot;Supra&quot; Verge Blacked Out</label>
+            </value>
+            <value>
+                <fullName>Supra Force Background</fullName>
+                <default>false</default>
+                <label>Supra Force Background</label>
+            </value>
+            <value>
+                <fullName>Auster</fullName>
+                <default>false</default>
+                <label>Auster</label>
+            </value>
+            <value>
+                <fullName>Dark Graphite</fullName>
+                <default>false</default>
+                <label>Dark Graphite</label>
+            </value>
+            <value>
+                <fullName>Silver</fullName>
+                <default>false</default>
+                <label>Silver</label>
+            </value>
+            <value>
+                <fullName>Tangerine Orange</fullName>
+                <default>false</default>
+                <label>Tangerine Orange</label>
+            </value>
+            <value>
+                <fullName>Purple Passion</fullName>
+                <default>false</default>
+                <label>Purple Passion</label>
+            </value>
+            <value>
+                <fullName>Standard Black</fullName>
+                <default>false</default>
+                <label>Standard Black</label>
+            </value>
+            <value>
+                <fullName>Sterling Grey</fullName>
+                <default>false</default>
+                <label>Sterling Grey</label>
+            </value>
+            <value>
+                <fullName>Midnight Star</fullName>
+                <default>false</default>
+                <label>Midnight Star</label>
+            </value>
+            <value>
+                <fullName>Snap-In Carpet, Midnight Star Tufted Design</fullName>
+                <default>false</default>
+                <label>Snap-In Carpet, Midnight Star Tufted Design</label>
+            </value>
+            <value>
+                <fullName>Snap-In Carpet, Sterling Grey Tufted Design</fullName>
+                <default>false</default>
+                <label>Snap-In Carpet, Sterling Grey Tufted Design</label>
+            </value>
+            <value>
+                <fullName>Snap-In Liner, Compass Gunmetal</fullName>
+                <default>false</default>
+                <label>Snap-In Liner, Compass Gunmetal</label>
+            </value>
+            <value>
+                <fullName>SeaDek Nonskid Floor</fullName>
+                <default>false</default>
+                <label>SeaDek Nonskid Floor</label>
+            </value>
+            <value>
+                <fullName>Stainless Steel Rubrail (Black)</fullName>
+                <default>false</default>
+                <label>Stainless Steel Rubrail (Black)</label>
+            </value>
+            <value>
+                <fullName>Stainless Steel Rubrail (White)</fullName>
+                <default>false</default>
+                <label>Stainless Steel Rubrail (White)</label>
+            </value>
+            <value>
+                <fullName>LED Docking Lights</fullName>
+                <default>false</default>
+                <label>LED Docking Lights</label>
+            </value>
+            <value>
+                <fullName>LED Bar Docking Lights</fullName>
+                <default>false</default>
+                <label>LED Bar Docking Lights</label>
+            </value>
+            <value>
+                <fullName>Underwater Transom Lights, Roswell L6 Stainless</fullName>
+                <default>false</default>
+                <label>Underwater Transom Lights, Roswell L6 Stainless</label>
+            </value>
+            <value>
+                <fullName>Underwater Transom Lights, Roswell Pro 3&quot; Machined</fullName>
+                <default>false</default>
+                <label>Underwater Transom Lights, Roswell Pro 3&quot; Machined</label>
+            </value>
+            <value>
+                <fullName>Underwater Transom Lights, Worlds Upgrade to Pro 3&quot;</fullName>
+                <default>false</default>
+                <label>Underwater Transom Lights, Worlds Upgrade to Pro 3&quot;</label>
+            </value>
+            <value>
+                <fullName>Black (Standard)</fullName>
+                <default>false</default>
+                <label>Black (Standard)</label>
+            </value>
+            <value>
+                <fullName>Swivel Board Rack Upgrade, Clamping Forks, PTMEdge</fullName>
+                <default>false</default>
+                <label>Swivel Board Rack Upgrade, Clamping Forks, PTMEdge</label>
+            </value>
+            <value>
+                <fullName>Upper Board Racks, Fixed Clamping Forks, PTMEdge</fullName>
+                <default>false</default>
+                <label>Upper Board Racks, Fixed Clamping Forks, PTMEdge</label>
+            </value>
+            <value>
+                <fullName>Upper Board Racks, Fixed ProEdge</fullName>
+                <default>false</default>
+                <label>Upper Board Racks, Fixed ProEdge</label>
+            </value>
+            <value>
+                <fullName>No-Tower Credit (also deletes swivel, bimini)</fullName>
+                <default>false</default>
+                <label>No-Tower Credit (also deletes swivel, bimini)</label>
+            </value>
+            <value>
+                <fullName>Black Bases w/ Brushed Arms (Standard)</fullName>
+                <default>false</default>
+                <label>Black Bases w/ Brushed Arms (Standard)</label>
+            </value>
+            <value>
+                <fullName>White Bases and Arms</fullName>
+                <default>false</default>
+                <label>White Bases and Arms</label>
+            </value>
+            <value>
+                <fullName>Atomic Orange Bases and Arms</fullName>
+                <default>false</default>
+                <label>Atomic Orange Bases and Arms</label>
+            </value>
+            <value>
+                <fullName>Brittany Blue Bases and Arms</fullName>
+                <default>false</default>
+                <label>Brittany Blue Bases and Arms</label>
+            </value>
+            <value>
+                <fullName>Celestial Blue Bases and Arms</fullName>
+                <default>false</default>
+                <label>Celestial Blue Bases and Arms</label>
+            </value>
+            <value>
+                <fullName>Charcoal Bases and Arms</fullName>
+                <default>false</default>
+                <label>Charcoal Bases and Arms</label>
+            </value>
+            <value>
+                <fullName>Fire Red Bases and Arms</fullName>
+                <default>false</default>
+                <label>Fire Red Bases and Arms</label>
+            </value>
+            <value>
+                <fullName>Intense Green Bases and Arms</fullName>
+                <default>false</default>
+                <label>Intense Green Bases and Arms</label>
+            </value>
+            <value>
+                <fullName>Light Graphite Bases and Arms</fullName>
+                <default>false</default>
+                <label>Light Graphite Bases and Arms</label>
+            </value>
+            <value>
+                <fullName>Platinum Bases and Arms</fullName>
+                <default>false</default>
+                <label>Platinum Bases and Arms</label>
+            </value>
+            <value>
+                <fullName>Pacific Blue Bases and Arms</fullName>
+                <default>false</default>
+                <label>Pacific Blue Bases and Arms</label>
+            </value>
+            <value>
+                <fullName>Reuben Red Bases and Arms</fullName>
+                <default>false</default>
+                <label>Reuben Red Bases and Arms</label>
+            </value>
+            <value>
+                <fullName>Sundance Yellow Bases and Arms</fullName>
+                <default>false</default>
+                <label>Sundance Yellow Bases and Arms</label>
+            </value>
+            <value>
+                <fullName>Black (Bimini / Z-5 Arm Upgrade Only)</fullName>
+                <default>false</default>
+                <label>Black (Bimini / Z-5 Arm Upgrade Only)</label>
+            </value>
+            <value>
+                <fullName>Boat Cover w/ ProEdge Tower, Charcoal</fullName>
+                <default>false</default>
+                <label>Boat Cover w/ ProEdge Tower, Charcoal</label>
+            </value>
+            <value>
+                <fullName>Tonneau Cover - Black</fullName>
+                <default>false</default>
+                <label>Tonneau Cover - Black</label>
+            </value>
+            <value>
+                <fullName>Cockpit &amp; Tonneau Cover w/ ProEdge Tower - Black</fullName>
+                <default>false</default>
+                <label>Cockpit &amp; Tonneau Cover w/ ProEdge Tower - Black</label>
+            </value>
+            <value>
+                <fullName>Tower Bimini - Rear Extending</fullName>
+                <default>false</default>
+                <label>Tower Bimini - Rear Extending</label>
+            </value>
+            <value>
+                <fullName>Tower Bimini - Z-5 Cargo Rack, ProEdge Tower w/ Conv. Top</fullName>
+                <default>false</default>
+                <label>Tower Bimini - Z-5 Cargo Rack, ProEdge Tower w/ Conv. Top</label>
+            </value>
+            <value>
+                <fullName>Substitute Std Bimini for Z-5, Worlds Edition only</fullName>
+                <default>false</default>
+                <label>Substitute Std Bimini for Z-5, Worlds Edition only</label>
+            </value>
+            <value>
+                <fullName>Prop, CNC 14.50x14.25, 4 Bld (Acme 1235) - Std 400, 450</fullName>
+                <default>false</default>
+                <label>Prop, CNC 14.50x14.25, 4 Bld (Acme 1235) - Std 400, 450</label>
+            </value>
+            <value>
+                <fullName>Prop, CNC 15.00x12.50, 4 Bld (Acme 2775) - Wake 400, 450</fullName>
+                <default>false</default>
+                <label>Prop, CNC 15.00x12.50, 4 Bld (Acme 2775) - Wake 400, 450</label>
+            </value>
+            <value>
+                <fullName>Prop, CNC, 15.00x15.75, 4 Bld (ACME 2277) - Std 550</fullName>
+                <default>false</default>
+                <label>Prop, CNC, 15.00x15.75, 4 Bld (ACME 2277) - Std 550</label>
+            </value>
+            <value>
+                <fullName>Prop, CNC, 15.00x14.25, 4 Bld (ACME 2247) - Wake 550</fullName>
+                <default>false</default>
+                <label>Prop, CNC, 15.00x14.25, 4 Bld (ACME 2247) - Wake 550</label>
+            </value>
+            <value>
+                <fullName>No Prop Credit</fullName>
+                <default>false</default>
+                <label>No Prop Credit</label>
+            </value>
+            <value>
+                <fullName>Liquid Lead Flex Ballast, 3 Bags-2000 lbs - (1 front, 2 rear)</fullName>
+                <default>false</default>
+                <label>Liquid Lead Flex Ballast, 3 Bags-2000 lbs - (1 front, 2 rear)</label>
+            </value>
+            <value>
+                <fullName>Swell Surf System</fullName>
+                <default>false</default>
+                <label>Swell Surf System</label>
+            </value>
+            <value>
+                <fullName>Subwoofer with Amplifier &amp; Enclosure, JL Audio</fullName>
+                <default>false</default>
+                <label>Subwoofer with Amplifier &amp; Enclosure, JL Audio</label>
+            </value>
+            <value>
+                <fullName>Tower Speakers, 2-7.7&quot; Top, 2-7.7&quot; Side, JL Audio</fullName>
+                <default>false</default>
+                <label>Tower Speakers, 2-7.7&quot; Top, 2-7.7&quot; Side, JL Audio</label>
+            </value>
+            <value>
+                <fullName>Tower Speakers, 2-8.8&quot; Top, 2-7.7&quot; Side, JL Audio</fullName>
+                <default>false</default>
+                <label>Tower Speakers, 2-8.8&quot; Top, 2-7.7&quot; Side, JL Audio</label>
+            </value>
+            <value>
+                <fullName>Tower Speakers, 2-8.8&quot; Top, 2-8.8&quot; Side, JL Audio</fullName>
+                <default>false</default>
+                <label>Tower Speakers, 2-8.8&quot; Top, 2-8.8&quot; Side, JL Audio</label>
+            </value>
+            <value>
+                <fullName>No Tower Speaker Credit, Worlds Edition only</fullName>
+                <default>false</default>
+                <label>No Tower Speaker Credit, Worlds Edition only</label>
+            </value>
+            <value>
+                <fullName>Steering Wheel with Controls, Gussi Ettore</fullName>
+                <default>false</default>
+                <label>Steering Wheel with Controls, Gussi Ettore</label>
+            </value>
+            <value>
+                <fullName>Rear Mounted Camera w/ VSION Integration</fullName>
+                <default>false</default>
+                <label>Rear Mounted Camera w/ VSION Integration</label>
+            </value>
+            <value>
+                <fullName>Single Battery Setup with Onboard Battery Charger</fullName>
+                <default>false</default>
+                <label>Single Battery Setup with Onboard Battery Charger</label>
+            </value>
+            <value>
+                <fullName>Dual Battery Setup with Onboard Battery Charger</fullName>
+                <default>false</default>
+                <label>Dual Battery Setup with Onboard Battery Charger</label>
+            </value>
+            <value>
+                <fullName>Heater with 6.2L Engine</fullName>
+                <default>false</default>
+                <label>Heater with 6.2L Engine</label>
+            </value>
+            <value>
+                <fullName>PTMEdge VR-140 Mirror Upgrade w/ Mirror Arm, Black</fullName>
+                <default>false</default>
+                <label>PTMEdge VR-140 Mirror Upgrade w/ Mirror Arm, Black</label>
+            </value>
+            <value>
+                <fullName>Navionics Map Card - Canada</fullName>
+                <default>false</default>
+                <label>Navionics Map Card - Canada</label>
+            </value>
+            <value>
+                <fullName>Navionics Map Card - Austrailia</fullName>
+                <default>false</default>
+                <label>Navionics Map Card - Austrailia</label>
+            </value>
+            <value>
+                <fullName>Shipping Cover and Packaging Materials</fullName>
+                <default>false</default>
+                <label>Shipping Cover and Packaging Materials</label>
+            </value>
+            <value>
+                <fullName>Grow Boating Fund</fullName>
+                <default>false</default>
+                <label>Grow Boating Fund</label>
+            </value>
+            <value>
+                <fullName>Tandem Torsion Axle w/ Disc Brakes</fullName>
+                <default>false</default>
+                <label>Tandem Torsion Axle w/ Disc Brakes</label>
+            </value>
+            <value>
+                <fullName>Triple Trosion Axle w/ Disc Brakes</fullName>
+                <default>false</default>
+                <label>Triple Trosion Axle w/ Disc Brakes</label>
+            </value>
+            <value>
+                <fullName>World&#39;s Trailer, Tandom (requires World&#39;s pkg)</fullName>
+                <default>false</default>
+                <label>World&#39;s Trailer, Tandom (requires World&#39;s pkg)</label>
+            </value>
+            <value>
+                <fullName>World&#39;s Trailer, Triple Upgrade (requires World&#39;s pkg)</fullName>
+                <default>false</default>
+                <label>World&#39;s Trailer, Triple Upgrade (requires World&#39;s pkg)</label>
+            </value>
+            <value>
+                <fullName>World&#39;s Trailer, Tandom + Elite Shield (requires World&#39;s pkg)</fullName>
+                <default>false</default>
+                <label>World&#39;s Trailer, Tandom + Elite Shield (requires World&#39;s pkg)</label>
+            </value>
+            <value>
+                <fullName>World&#39;s Trailer, Triple Upgrade + Elite Shield (requires World&#39;s pkg)</fullName>
+                <default>false</default>
+                <label>World&#39;s Trailer, Triple Upgrade + Elite Shield (requires World&#39;s pkg)</label>
+            </value>
+            <value>
+                <fullName>Roush Edition Trailer - Tandem Axle</fullName>
+                <default>false</default>
+                <label>Roush Edition Trailer - Tandem Axle</label>
+            </value>
+            <value>
+                <fullName>Roush Edition Trailer - Triple Axle Upgrade</fullName>
+                <default>false</default>
+                <label>Roush Edition Trailer - Triple Axle Upgrade</label>
+            </value>
+            <value>
+                <fullName>Substitute Base Trailer for Std World&#39;s Trailer</fullName>
+                <default>false</default>
+                <label>Substitute Base Trailer for Std World&#39;s Trailer</label>
+            </value>
+            <value>
+                <fullName>No Trailer (World&#39;s Only)</fullName>
+                <default>false</default>
+                <label>No Trailer (World&#39;s Only)</label>
+            </value>
+            <value>
+                <fullName>Elite Shield Coating, Select Color (No Two Tone or Pin Stripes)</fullName>
+                <default>false</default>
+                <label>Elite Shield Coating, Select Color (No Two Tone or Pin Stripes)</label>
+            </value>
+            <value>
+                <fullName>Stainless Steel Fenders - Tandem Axle</fullName>
+                <default>false</default>
+                <label>Stainless Steel Fenders - Tandem Axle</label>
+            </value>
+            <value>
+                <fullName>Stainless Steel Fenders - Triple Axle</fullName>
+                <default>false</default>
+                <label>Stainless Steel Fenders - Triple Axle</label>
+            </value>
+            <value>
+                <fullName>Two Tone Painted Fender - White</fullName>
+                <default>false</default>
+                <label>Two Tone Painted Fender - White</label>
+            </value>
+            <value>
+                <fullName>Two Tone Painted Fender - Light Graphite</fullName>
+                <default>false</default>
+                <label>Two Tone Painted Fender - Light Graphite</label>
+            </value>
+            <value>
+                <fullName>Two Tone Painted Fender - Platinum</fullName>
+                <default>false</default>
+                <label>Two Tone Painted Fender - Platinum</label>
+            </value>
+            <value>
+                <fullName>Two Tone Painted Fender - Black</fullName>
+                <default>false</default>
+                <label>Two Tone Painted Fender - Black</label>
+            </value>
+            <value>
+                <fullName>Two Tone Painted Fender - Atomic Orange</fullName>
+                <default>false</default>
+                <label>Two Tone Painted Fender - Atomic Orange</label>
+            </value>
+            <value>
+                <fullName>Two Tone Painted Fender - Brittany Blue</fullName>
+                <default>false</default>
+                <label>Two Tone Painted Fender - Brittany Blue</label>
+            </value>
+            <value>
+                <fullName>Two Tone Painted Fender - Celestial Blue</fullName>
+                <default>false</default>
+                <label>Two Tone Painted Fender - Celestial Blue</label>
+            </value>
+            <value>
+                <fullName>Two Tone Painted Fender - Charcoal</fullName>
+                <default>false</default>
+                <label>Two Tone Painted Fender - Charcoal</label>
+            </value>
+            <value>
+                <fullName>Two Tone Painted Fender - Fire Red</fullName>
+                <default>false</default>
+                <label>Two Tone Painted Fender - Fire Red</label>
+            </value>
+            <value>
+                <fullName>Two Tone Painted Fender - Intense Green</fullName>
+                <default>false</default>
+                <label>Two Tone Painted Fender - Intense Green</label>
+            </value>
+            <value>
+                <fullName>Two Tone Painted Fender - Pacific Blue</fullName>
+                <default>false</default>
+                <label>Two Tone Painted Fender - Pacific Blue</label>
+            </value>
+            <value>
+                <fullName>Two Tone Painted Fender - Reuben Red</fullName>
+                <default>false</default>
+                <label>Two Tone Painted Fender - Reuben Red</label>
+            </value>
+            <value>
+                <fullName>Two Tone Painted Fender - Sundance Yellow</fullName>
+                <default>false</default>
+                <label>Two Tone Painted Fender - Sundance Yellow</label>
+            </value>
+            <value>
+                <fullName>Two Tone Painted Fender - Atomic Orange Metal Flake</fullName>
+                <default>false</default>
+                <label>Two Tone Painted Fender - Atomic Orange Metal Flake</label>
+            </value>
+            <value>
+                <fullName>Two Tone Painted Fender - Brittany Blue Metal Flake</fullName>
+                <default>false</default>
+                <label>Two Tone Painted Fender - Brittany Blue Metal Flake</label>
+            </value>
+            <value>
+                <fullName>Two Tone Painted Fender - Eclipse Black Metal Flake</fullName>
+                <default>false</default>
+                <label>Two Tone Painted Fender - Eclipse Black Metal Flake</label>
+            </value>
+            <value>
+                <fullName>Two Tone Painted Fender - Fire Red Metal Flake</fullName>
+                <default>false</default>
+                <label>Two Tone Painted Fender - Fire Red Metal Flake</label>
+            </value>
+            <value>
+                <fullName>Two Tone Painted Fender - Gunmetal Metal Flake</fullName>
+                <default>false</default>
+                <label>Two Tone Painted Fender - Gunmetal Metal Flake</label>
+            </value>
+            <value>
+                <fullName>Two Tone Painted Fender - Intense Green Metal Flake</fullName>
+                <default>false</default>
+                <label>Two Tone Painted Fender - Intense Green Metal Flake</label>
+            </value>
+            <value>
+                <fullName>Two Tone Painted Fender - Plum Crazy Purple Metal Flake</fullName>
+                <default>false</default>
+                <label>Two Tone Painted Fender - Plum Crazy Purple Metal Flake</label>
+            </value>
+            <value>
+                <fullName>Two Tone Painted Fender - Silver Metal Flake</fullName>
+                <default>false</default>
+                <label>Two Tone Painted Fender - Silver Metal Flake</label>
+            </value>
+            <value>
+                <fullName>Aluminum Wheels (per axle)</fullName>
+                <default>false</default>
+                <label>Aluminum Wheels (per axle)</label>
+            </value>
+            <value>
+                <fullName>Spare Tire Bracket (Mounting Bracket Only, No Tire)</fullName>
+                <default>false</default>
+                <label>Spare Tire Bracket (Mounting Bracket Only, No Tire)</label>
+            </value>
+            <value>
+                <fullName>14&quot; Spare Tire, Frame Side Mount (SC Tandem; SG, SE Triple)</fullName>
+                <default>false</default>
+                <label>14&quot; Spare Tire, Frame Side Mount (SC Tandem; SG, SE Triple)</label>
+            </value>
+            <value>
+                <fullName>14&quot; Spare Tire, Underbelly Mount (SC Tandem; SG, SE Triple)</fullName>
+                <default>false</default>
+                <label>14&quot; Spare Tire, Underbelly Mount (SC Tandem; SG, SE Triple)</label>
+            </value>
+            <value>
+                <fullName>15&quot; Spare Tire, Frame Side Mount (SA, SG, SE Tandem)</fullName>
+                <default>false</default>
+                <label>15&quot; Spare Tire, Frame Side Mount (SA, SG, SE Tandem)</label>
+            </value>
+            <value>
+                <fullName>15&quot; Spare Tire, Underbelly Mount (SA, SG, SE Tandem)</fullName>
+                <default>false</default>
+                <label>15&quot; Spare Tire, Underbelly Mount (SA, SG, SE Tandem)</label>
+            </value>
+            <value>
+                <fullName>18&quot; Wheels Upgrade (Tandem only)</fullName>
+                <default>false</default>
+                <label>18&quot; Wheels Upgrade (Tandem only)</label>
+            </value>
+            <value>
+                <fullName>18&quot; Wheels Upgrade (Triple only)</fullName>
+                <default>false</default>
+                <label>18&quot; Wheels Upgrade (Triple only)</label>
+            </value>
+            <value>
+                <fullName>18&quot; Spare Tire, Framed Side Mount</fullName>
+                <default>false</default>
+                <label>18&quot; Spare Tire, Framed Side Mount</label>
+            </value>
+            <value>
+                <fullName>18&quot; Spare Tire, Underbelly Mount</fullName>
+                <default>false</default>
+                <label>18&quot; Spare Tire, Underbelly Mount</label>
+            </value>
+            <value>
+                <fullName>18&quot; Spare Tire, Underbelly Mount, World&#39;s Edition only</fullName>
+                <default>false</default>
+                <label>18&quot; Spare Tire, Underbelly Mount, World&#39;s Edition only</label>
+            </value>
+            <value>
+                <fullName>Surface Mount Lighting with Clear LED&#39;s</fullName>
+                <default>false</default>
+                <label>Surface Mount Lighting with Clear LED&#39;s</label>
+            </value>
+            <value>
+                <fullName>Runway Lighting - White</fullName>
+                <default>false</default>
+                <label>Runway Lighting - White</label>
+            </value>
+            <value>
+                <fullName>Runway Lighting - Blue</fullName>
+                <default>false</default>
+                <label>Runway Lighting - Blue</label>
+            </value>
+            <value>
+                <fullName>Runway Lighting - Red</fullName>
+                <default>false</default>
+                <label>Runway Lighting - Red</label>
+            </value>
+            <value>
+                <fullName>Runway Lighting - Green</fullName>
+                <default>false</default>
+                <label>Runway Lighting - Green</label>
+            </value>
+            <value>
+                <fullName>Aluminum Tread Plates - Steps Only</fullName>
+                <default>false</default>
+                <label>Aluminum Tread Plates - Steps Only</label>
+            </value>
+            <value>
+                <fullName>Aluminum Tread Plates - Steps and Fenders</fullName>
+                <default>false</default>
+                <label>Aluminum Tread Plates - Steps and Fenders</label>
+            </value>
+            <value>
+                <fullName>Bow Step Ladder w/ Tongue Step Pad, 3 Step</fullName>
+                <default>false</default>
+                <label>Bow Step Ladder w/ Tongue Step Pad, 3 Step</label>
+            </value>
+            <value>
+                <fullName>Graphic - &quot;Moomba&quot; Chrome</fullName>
+                <default>false</default>
+                <label>Graphic - &quot;Moomba&quot; Chrome</label>
+            </value>
+            <value>
+                <fullName>Graphic - &quot;Moomba&quot; Black Chrome</fullName>
+                <default>false</default>
+                <label>Graphic - &quot;Moomba&quot; Black Chrome</label>
+            </value>
+            <value>
+                <fullName>Graphic - Moomba Distortion</fullName>
+                <default>false</default>
+                <label>Graphic - Moomba Distortion</label>
+            </value>
+            <value>
+                <fullName>Graphic - Moomba Rally</fullName>
+                <default>false</default>
+                <label>Graphic - Moomba Rally</label>
+            </value>
+            <value>
+                <fullName>Graphic - Moomba Striker</fullName>
+                <default>false</default>
+                <label>Graphic - Moomba Striker</label>
+            </value>
+            <value>
+                <fullName>No Background Graphic</fullName>
+                <default>false</default>
+                <label>No Background Graphic</label>
+            </value>
+            <value>
+                <fullName>Mystic White/White Moquetta</fullName>
+                <default>false</default>
+                <label>Mystic White/White Moquetta</label>
+            </value>
+            <value>
+                <fullName>Mystic White/Silver Moquetta</fullName>
+                <default>false</default>
+                <label>Mystic White/Silver Moquetta</label>
+            </value>
+            <value>
+                <fullName>Sky Grey/White Moquetta</fullName>
+                <default>false</default>
+                <label>Sky Grey/White Moquetta</label>
+            </value>
+            <value>
+                <fullName>Sky Grey/Silver Moquetta</fullName>
+                <default>false</default>
+                <label>Sky Grey/Silver Moquetta</label>
+            </value>
+            <value>
+                <fullName>Dove Grey/White Moquetta</fullName>
+                <default>false</default>
+                <label>Dove Grey/White Moquetta</label>
+            </value>
+            <value>
+                <fullName>Dove Grey/Silver Moquetta</fullName>
+                <default>false</default>
+                <label>Dove Grey/Silver Moquetta</label>
+            </value>
+            <value>
+                <fullName>Mystic White</fullName>
+                <default>false</default>
+                <label>Mystic White</label>
+            </value>
+            <value>
+                <fullName>Sky Grey</fullName>
+                <default>false</default>
+                <label>Sky Grey</label>
+            </value>
+            <value>
+                <fullName>Plum Crazy Purple</fullName>
+                <default>false</default>
+                <label>Plum Crazy Purple</label>
+            </value>
+            <value>
+                <fullName>Bow Filler Cushion</fullName>
+                <default>false</default>
+                <label>Bow Filler Cushion</label>
+            </value>
+            <value>
+                <fullName>Walk-thru Screen</fullName>
+                <default>false</default>
+                <label>Walk-thru Screen</label>
+            </value>
+            <value>
+                <fullName>Sundeck Walk Across w/ Nonskid</fullName>
+                <default>false</default>
+                <label>Sundeck Walk Across w/ Nonskid</label>
+            </value>
+            <value>
+                <fullName>Removable Seat Back Kit, Rear Seat and Stbd Cockpit Seat</fullName>
+                <default>false</default>
+                <label>Removable Seat Back Kit, Rear Seat and Stbd Cockpit Seat</label>
+            </value>
+            <value>
+                <fullName>Pop-up Cleats (set of 4)</fullName>
+                <default>false</default>
+                <label>Pop-up Cleats (set of 4)</label>
+            </value>
+            <value>
+                <fullName>Carpet, Snap In (Midnight Star)</fullName>
+                <default>false</default>
+                <label>Carpet, Snap In (Midnight Star)</label>
+            </value>
+            <value>
+                <fullName>Nonskid, Snap in with Logo (Light Grey)</fullName>
+                <default>false</default>
+                <label>Nonskid, Snap in with Logo (Light Grey)</label>
+            </value>
+            <value>
+                <fullName>Nonskid Package for Gunnels and Bow</fullName>
+                <default>false</default>
+                <label>Nonskid Package for Gunnels and Bow</label>
+            </value>
+            <value>
+                <fullName>Aviator Tower (Black)</fullName>
+                <default>false</default>
+                <label>Aviator Tower (Black)</label>
+            </value>
+            <value>
+                <fullName>Aviator Tower (White)</fullName>
+                <default>false</default>
+                <label>Aviator Tower (White)</label>
+            </value>
+            <value>
+                <fullName>S-Bend Tower (Black)</fullName>
+                <default>false</default>
+                <label>S-Bend Tower (Black)</label>
+            </value>
+            <value>
+                <fullName>No-Tower Credit</fullName>
+                <default>false</default>
+                <label>No-Tower Credit</label>
+            </value>
+            <value>
+                <fullName>Rack, Fixed Wake/Surf  (set of 2)</fullName>
+                <default>false</default>
+                <label>Rack, Fixed Wake/Surf  (set of 2)</label>
+            </value>
+            <value>
+                <fullName>Rack, Quick Release Swivel Mechanism</fullName>
+                <default>false</default>
+                <label>Rack, Quick Release Swivel Mechanism</label>
+            </value>
+            <value>
+                <fullName>Full Boat Cover w/ Hangtyte (Charcoal)</fullName>
+                <default>false</default>
+                <label>Full Boat Cover w/ Hangtyte (Charcoal)</label>
+            </value>
+            <value>
+                <fullName>Tonneau Cover (Black)</fullName>
+                <default>false</default>
+                <label>Tonneau Cover (Black)</label>
+            </value>
+            <value>
+                <fullName>Tower Cockpit and Tonneau Cover w/ HT (Black)</fullName>
+                <default>false</default>
+                <label>Tower Cockpit and Tonneau Cover w/ HT (Black)</label>
+            </value>
+            <value>
+                <fullName>Tower Bimini, Aviator (Black)</fullName>
+                <default>false</default>
+                <label>Tower Bimini, Aviator (Black)</label>
+            </value>
+            <value>
+                <fullName>Tower Bimini, S-Bend (Black)</fullName>
+                <default>false</default>
+                <label>Tower Bimini, S-Bend (Black)</label>
+            </value>
+            <value>
+                <fullName>Bimini, Z5 Cargo Rack, S-Bend (Black)</fullName>
+                <default>false</default>
+                <label>Bimini, Z5 Cargo Rack, S-Bend (Black)</label>
+            </value>
+            <value>
+                <fullName>Prop, Nibral, 14.25x14.5 4 Blade  (Standard)</fullName>
+                <default>false</default>
+                <label>Prop, Nibral, 14.25x14.5 4 Blade  (Standard)</label>
+            </value>
+            <value>
+                <fullName>Prop, Nibral, 15x13 4 Blade (OJ 945, Wakeboard V Drive)</fullName>
+                <default>false</default>
+                <label>Prop, Nibral, 15x13 4 Blade (OJ 945, Wakeboard V Drive)</label>
+            </value>
+            <value>
+                <fullName>Digital Cruise Pro II (Display)</fullName>
+                <default>false</default>
+                <label>Digital Cruise Pro II (Display)</label>
+            </value>
+            <value>
+                <fullName>Multisport Wakeplate w/ Gravity III Ballast</fullName>
+                <default>false</default>
+                <label>Multisport Wakeplate w/ Gravity III Ballast</label>
+            </value>
+            <value>
+                <fullName>Cruise, Zero Off, GPS Upgrade (Requires new cruise)</fullName>
+                <default>false</default>
+                <label>Cruise, Zero Off, GPS Upgrade (Requires new cruise)</label>
+            </value>
+            <value>
+                <fullName>Integrated Bow Sac</fullName>
+                <default>false</default>
+                <label>Integrated Bow Sac</label>
+            </value>
+            <value>
+                <fullName>AutoFlow 2 Surf System</fullName>
+                <default>false</default>
+                <label>AutoFlow 2 Surf System</label>
+            </value>
+            <value>
+                <fullName>AutoFlow 2 Surf Package (AutoFlow Sys, Bow Bag, Decal)</fullName>
+                <default>false</default>
+                <label>AutoFlow 2 Surf Package (AutoFlow Sys, Bow Bag, Decal)</label>
+            </value>
+        </valueSetDefinition>
+        <valueSettings>
+            <controllingFieldValue>Other Appearance Options (3C)</controllingFieldValue>
+            <valueName>Stainless Steel Rubrail (Black)</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Other Appearance Options (3C)</controllingFieldValue>
+            <valueName>Stainless Steel Rubrail (White)</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Other Appearance Options (3C)</controllingFieldValue>
+            <valueName>LED Docking Lights</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Other Appearance Options (3C)</controllingFieldValue>
+            <valueName>LED Bar Docking Lights</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Other Appearance Options (3C)</controllingFieldValue>
+            <valueName>Underwater Transom Lights, Roswell L6 Stainless</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Other Appearance Options (3C)</controllingFieldValue>
+            <valueName>Underwater Transom Lights, Roswell Pro 3&quot; Machined</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Other Appearance Options (3C)</controllingFieldValue>
+            <valueName>Underwater Transom Lights, Worlds Upgrade to Pro 3&quot;</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Other Appearance Options (3C)</controllingFieldValue>
+            <valueName>Pop-up Cleats (set of 4)</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Other Appearance Options (3C)</controllingFieldValue>
+            <valueName>Carpet, Snap In (Midnight Star)</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Other Appearance Options (3C)</controllingFieldValue>
+            <valueName>Nonskid, Snap in with Logo (Light Grey)</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Other Appearance Options (3C)</controllingFieldValue>
+            <valueName>Nonskid Package for Gunnels and Bow</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Tower Options (3D)</controllingFieldValue>
+            <controllingFieldValue>Tower Main Color Options (3E)</controllingFieldValue>
+            <valueName>Black (Standard)</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Tower Options (3D)</controllingFieldValue>
+            <valueName>Swivel Board Rack Upgrade, Clamping Forks, PTMEdge</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Tower Options (3D)</controllingFieldValue>
+            <valueName>Upper Board Racks, Fixed Clamping Forks, PTMEdge</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Tower Options (3D)</controllingFieldValue>
+            <valueName>Upper Board Racks, Fixed ProEdge</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Tower Options (3D)</controllingFieldValue>
+            <valueName>No-Tower Credit (also deletes swivel, bimini)</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Tower Options (3D)</controllingFieldValue>
+            <valueName>Aviator Tower (Black)</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Tower Options (3D)</controllingFieldValue>
+            <valueName>Aviator Tower (White)</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Tower Options (3D)</controllingFieldValue>
+            <valueName>S-Bend Tower (Black)</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Tower Options (3D)</controllingFieldValue>
+            <valueName>No-Tower Credit</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Tower Contrast Color Options (3F)</controllingFieldValue>
+            <valueName>Black Bases w/ Brushed Arms (Standard)</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Tower Contrast Color Options (3F)</controllingFieldValue>
+            <valueName>White Bases and Arms</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Tower Contrast Color Options (3F)</controllingFieldValue>
+            <valueName>Atomic Orange Bases and Arms</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Tower Contrast Color Options (3F)</controllingFieldValue>
+            <valueName>Brittany Blue Bases and Arms</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Tower Contrast Color Options (3F)</controllingFieldValue>
+            <valueName>Celestial Blue Bases and Arms</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Tower Contrast Color Options (3F)</controllingFieldValue>
+            <valueName>Charcoal Bases and Arms</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Tower Contrast Color Options (3F)</controllingFieldValue>
+            <valueName>Fire Red Bases and Arms</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Tower Contrast Color Options (3F)</controllingFieldValue>
+            <valueName>Intense Green Bases and Arms</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Tower Contrast Color Options (3F)</controllingFieldValue>
+            <valueName>Light Graphite Bases and Arms</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Tower Contrast Color Options (3F)</controllingFieldValue>
+            <valueName>Platinum Bases and Arms</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Tower Contrast Color Options (3F)</controllingFieldValue>
+            <valueName>Pacific Blue Bases and Arms</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Tower Contrast Color Options (3F)</controllingFieldValue>
+            <valueName>Reuben Red Bases and Arms</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Tower Contrast Color Options (3F)</controllingFieldValue>
+            <valueName>Sundance Yellow Bases and Arms</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Tower Contrast Color Options (3F)</controllingFieldValue>
+            <valueName>Black (Bimini / Z-5 Arm Upgrade Only)</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Canvas Options (4A)</controllingFieldValue>
+            <valueName>Boat Cover w/ ProEdge Tower, Charcoal</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Canvas Options (4A)</controllingFieldValue>
+            <valueName>Tonneau Cover - Black</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Canvas Options (4A)</controllingFieldValue>
+            <valueName>Cockpit &amp; Tonneau Cover w/ ProEdge Tower - Black</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Canvas Options (4A)</controllingFieldValue>
+            <valueName>Tower Bimini - Rear Extending</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Canvas Options (4A)</controllingFieldValue>
+            <valueName>Tower Bimini - Z-5 Cargo Rack, ProEdge Tower w/ Conv. Top</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Canvas Options (4A)</controllingFieldValue>
+            <valueName>Substitute Std Bimini for Z-5, Worlds Edition only</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Prop Options (5C)</controllingFieldValue>
+            <valueName>Prop, CNC 14.50x14.25, 4 Bld (Acme 1235) - Std 400, 450</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Prop Options (5C)</controllingFieldValue>
+            <valueName>Prop, CNC 15.00x12.50, 4 Bld (Acme 2775) - Wake 400, 450</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Prop Options (5C)</controllingFieldValue>
+            <valueName>Prop, CNC, 15.00x15.75, 4 Bld (ACME 2277) - Std 550</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Prop Options (5C)</controllingFieldValue>
+            <valueName>Prop, CNC, 15.00x14.25, 4 Bld (ACME 2247) - Wake 550</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Prop Options (5C)</controllingFieldValue>
+            <controllingFieldValue>Prop Options  (5C)</controllingFieldValue>
+            <valueName>No Prop Credit</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Prop Options (5C)</controllingFieldValue>
+            <controllingFieldValue>Prop Options  (5C)</controllingFieldValue>
+            <valueName>Prop, Nibral, 14.25x14.5 4 Blade  (Standard)</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Prop Options (5C)</controllingFieldValue>
+            <controllingFieldValue>Prop Options  (5C)</controllingFieldValue>
+            <valueName>Prop, Nibral, 15x13 4 Blade (OJ 945, Wakeboard V Drive)</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Wake Enhancement Options (6C)</controllingFieldValue>
+            <valueName>Liquid Lead Flex Ballast, 3 Bags-2000 lbs - (1 front, 2 rear)</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Wake Enhancement Options (6C)</controllingFieldValue>
+            <valueName>Swell Surf System</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Base Trailer (9A).</controllingFieldValue>
+            <valueName>Single Spring Axle w/ Disc Brakes</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Base Trailer (9A).</controllingFieldValue>
+            <valueName>Tandem Spring Axle w/ tandem Disc Brakes</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Base Trailer (9A).</controllingFieldValue>
+            <valueName>No Trailer Credit</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Base Trailer (9A).</controllingFieldValue>
+            <valueName>Tandem Torsion Axle w/ Disc Brakes</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Base Trailer (9A).</controllingFieldValue>
+            <valueName>Triple Trosion Axle w/ Disc Brakes</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Base Trailer (9A).</controllingFieldValue>
+            <valueName>World&#39;s Trailer, Tandom (requires World&#39;s pkg)</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Base Trailer (9A).</controllingFieldValue>
+            <valueName>World&#39;s Trailer, Triple Upgrade (requires World&#39;s pkg)</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Base Trailer (9A).</controllingFieldValue>
+            <valueName>World&#39;s Trailer, Tandom + Elite Shield (requires World&#39;s pkg)</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Base Trailer (9A).</controllingFieldValue>
+            <valueName>World&#39;s Trailer, Triple Upgrade + Elite Shield (requires World&#39;s pkg)</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Base Trailer (9A).</controllingFieldValue>
+            <valueName>Roush Edition Trailer - Tandem Axle</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Base Trailer (9A).</controllingFieldValue>
+            <valueName>Roush Edition Trailer - Triple Axle Upgrade</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Base Trailer (9A).</controllingFieldValue>
+            <valueName>Substitute Base Trailer for Std World&#39;s Trailer</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Base Trailer (9A).</controllingFieldValue>
+            <valueName>No Trailer (World&#39;s Only)</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Trailer Axle Options.</controllingFieldValue>
+            <valueName>Upgrade - Single Axle Torsion</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Trailer Axle Options.</controllingFieldValue>
+            <valueName>Upgrade - Tandem Axle Torsion</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Audio and Video Options (7A)</controllingFieldValue>
+            <valueName>Subwoofer with Amplifier &amp; Enclosure, JL Audio</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Audio and Video Options (7A)</controllingFieldValue>
+            <valueName>Tower Speakers, 2-7.7&quot; Top, 2-7.7&quot; Side, JL Audio</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Audio and Video Options (7A)</controllingFieldValue>
+            <valueName>Tower Speakers, 2-8.8&quot; Top, 2-7.7&quot; Side, JL Audio</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Audio and Video Options (7A)</controllingFieldValue>
+            <valueName>Tower Speakers, 2-8.8&quot; Top, 2-8.8&quot; Side, JL Audio</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Audio and Video Options (7A)</controllingFieldValue>
+            <valueName>No Tower Speaker Credit, Worlds Edition only</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Audio and Video Options (7A)</controllingFieldValue>
+            <valueName>Steering Wheel with Controls, Gussi Ettore</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Audio and Video Options (7A)</controllingFieldValue>
+            <valueName>Rear Mounted Camera w/ VSION Integration</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Trailer Base Color (9B)</controllingFieldValue>
+            <controllingFieldValue>Gelcoat Hull Color  (1F)</controllingFieldValue>
+            <controllingFieldValue>Two Tone Fender Color (9E)</controllingFieldValue>
+            <controllingFieldValue>Gelcoat Main Color (1D)</controllingFieldValue>
+            <controllingFieldValue>Gelcoat Accent Color (1C)</controllingFieldValue>
+            <controllingFieldValue>Gelcoat Deck Color  (1B)</controllingFieldValue>
+            <controllingFieldValue>Gelcoat Deck Color (1B)</controllingFieldValue>
+            <controllingFieldValue>Gelcoat Deck Forward Accent (1BB)</controllingFieldValue>
+            <controllingFieldValue>Gelcoat Upper Accent Color  (1C)</controllingFieldValue>
+            <controllingFieldValue>Gelcoat Main Panel Color (1D)</controllingFieldValue>
+            <controllingFieldValue>Gelcoat Lower Accent Color (1E)</controllingFieldValue>
+            <controllingFieldValue>Gelcoat Hull Color (1F)</controllingFieldValue>
+            <controllingFieldValue>Upholstery Color Selections</controllingFieldValue>
+            <controllingFieldValue>Vinyl Base Color (2A)</controllingFieldValue>
+            <controllingFieldValue>Vinyl Main Color (2B)</controllingFieldValue>
+            <controllingFieldValue>Vinyl Accent Color (2D)</controllingFieldValue>
+            <controllingFieldValue>Welt Color (2E)</controllingFieldValue>
+            <controllingFieldValue>Insert Panel Accent Color (2F) (2 Tone)</controllingFieldValue>
+            <valueName>White</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Trailer Base Color (9B)</controllingFieldValue>
+            <controllingFieldValue>Gelcoat Hull Color  (1F)</controllingFieldValue>
+            <controllingFieldValue>Two Tone Fender Color (9E)</controllingFieldValue>
+            <controllingFieldValue>Gelcoat Main Color (1D)</controllingFieldValue>
+            <controllingFieldValue>Gelcoat Accent Color (1C)</controllingFieldValue>
+            <controllingFieldValue>Gelcoat Deck Color  (1B)</controllingFieldValue>
+            <controllingFieldValue>Gelcoat Deck Color (1B)</controllingFieldValue>
+            <controllingFieldValue>Gelcoat Deck Forward Accent (1BB)</controllingFieldValue>
+            <controllingFieldValue>Gelcoat Upper Accent Color  (1C)</controllingFieldValue>
+            <controllingFieldValue>Gelcoat Main Panel Color (1D)</controllingFieldValue>
+            <controllingFieldValue>Gelcoat Lower Accent Color (1E)</controllingFieldValue>
+            <controllingFieldValue>Gelcoat Hull Color (1F)</controllingFieldValue>
+            <controllingFieldValue>Welt Color (2E)</controllingFieldValue>
+            <valueName>Platinum</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Trailer Base Color (9B)</controllingFieldValue>
+            <controllingFieldValue>Gelcoat Hull Color  (1F)</controllingFieldValue>
+            <controllingFieldValue>Two Tone Fender Color (9E)</controllingFieldValue>
+            <controllingFieldValue>Gelcoat Main Color (1D)</controllingFieldValue>
+            <controllingFieldValue>Gelcoat Accent Color (1C)</controllingFieldValue>
+            <controllingFieldValue>Gelcoat Deck Color  (1B)</controllingFieldValue>
+            <controllingFieldValue>Panel Color   (2B)</controllingFieldValue>
+            <controllingFieldValue>Welt Color   (2C)</controllingFieldValue>
+            <controllingFieldValue>Gelcoat Deck Color (1B)</controllingFieldValue>
+            <controllingFieldValue>Gelcoat Deck Forward Accent (1BB)</controllingFieldValue>
+            <controllingFieldValue>Gelcoat Upper Accent Color  (1C)</controllingFieldValue>
+            <controllingFieldValue>Gelcoat Main Panel Color (1D)</controllingFieldValue>
+            <controllingFieldValue>Gelcoat Lower Accent Color (1E)</controllingFieldValue>
+            <controllingFieldValue>Gelcoat Hull Color (1F)</controllingFieldValue>
+            <controllingFieldValue>Vinyl Accent Color (2D)</controllingFieldValue>
+            <controllingFieldValue>Welt Color (2E)</controllingFieldValue>
+            <controllingFieldValue>Insert Panel Accent Color (2F) (2 Tone)</controllingFieldValue>
+            <valueName>Black</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Trailer Base Color (9B)</controllingFieldValue>
+            <controllingFieldValue>Gelcoat Hull Color  (1F)</controllingFieldValue>
+            <controllingFieldValue>Two Tone Fender Color (9E)</controllingFieldValue>
+            <controllingFieldValue>Gelcoat Main Color (1D)</controllingFieldValue>
+            <controllingFieldValue>Gelcoat Accent Color (1C)</controllingFieldValue>
+            <controllingFieldValue>Gelcoat Deck Color  (1B)</controllingFieldValue>
+            <controllingFieldValue>Panel Color   (2B)</controllingFieldValue>
+            <controllingFieldValue>Welt Color   (2C)</controllingFieldValue>
+            <controllingFieldValue>Gelcoat Deck Color (1B)</controllingFieldValue>
+            <controllingFieldValue>Gelcoat Deck Forward Accent (1BB)</controllingFieldValue>
+            <controllingFieldValue>Gelcoat Upper Accent Color  (1C)</controllingFieldValue>
+            <controllingFieldValue>Gelcoat Main Panel Color (1D)</controllingFieldValue>
+            <controllingFieldValue>Gelcoat Lower Accent Color (1E)</controllingFieldValue>
+            <controllingFieldValue>Gelcoat Hull Color (1F)</controllingFieldValue>
+            <controllingFieldValue>Welt Color (2E)</controllingFieldValue>
+            <valueName>Atomic Orange</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Trailer Base Color (9B)</controllingFieldValue>
+            <controllingFieldValue>Gelcoat Hull Color  (1F)</controllingFieldValue>
+            <controllingFieldValue>Two Tone Fender Color (9E)</controllingFieldValue>
+            <controllingFieldValue>Gelcoat Main Color (1D)</controllingFieldValue>
+            <controllingFieldValue>Gelcoat Accent Color (1C)</controllingFieldValue>
+            <controllingFieldValue>Gelcoat Deck Color  (1B)</controllingFieldValue>
+            <controllingFieldValue>Panel Color   (2B)</controllingFieldValue>
+            <controllingFieldValue>Welt Color   (2C)</controllingFieldValue>
+            <controllingFieldValue>Gelcoat Deck Color (1B)</controllingFieldValue>
+            <controllingFieldValue>Gelcoat Deck Forward Accent (1BB)</controllingFieldValue>
+            <controllingFieldValue>Gelcoat Upper Accent Color  (1C)</controllingFieldValue>
+            <controllingFieldValue>Gelcoat Main Panel Color (1D)</controllingFieldValue>
+            <controllingFieldValue>Gelcoat Lower Accent Color (1E)</controllingFieldValue>
+            <controllingFieldValue>Gelcoat Hull Color (1F)</controllingFieldValue>
+            <controllingFieldValue>Vinyl Accent Color (2D)</controllingFieldValue>
+            <controllingFieldValue>Welt Color (2E)</controllingFieldValue>
+            <controllingFieldValue>Insert Panel Accent Color (2F) (2 Tone)</controllingFieldValue>
+            <valueName>Brittany Blue</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Trailer Base Color (9B)</controllingFieldValue>
+            <controllingFieldValue>Gelcoat Hull Color  (1F)</controllingFieldValue>
+            <controllingFieldValue>Two Tone Fender Color (9E)</controllingFieldValue>
+            <controllingFieldValue>Gelcoat Main Color (1D)</controllingFieldValue>
+            <controllingFieldValue>Gelcoat Accent Color (1C)</controllingFieldValue>
+            <controllingFieldValue>Gelcoat Deck Color  (1B)</controllingFieldValue>
+            <controllingFieldValue>Panel Color   (2B)</controllingFieldValue>
+            <controllingFieldValue>Welt Color   (2C)</controllingFieldValue>
+            <controllingFieldValue>Gelcoat Deck Color (1B)</controllingFieldValue>
+            <controllingFieldValue>Gelcoat Deck Forward Accent (1BB)</controllingFieldValue>
+            <controllingFieldValue>Gelcoat Upper Accent Color  (1C)</controllingFieldValue>
+            <controllingFieldValue>Gelcoat Main Panel Color (1D)</controllingFieldValue>
+            <controllingFieldValue>Gelcoat Lower Accent Color (1E)</controllingFieldValue>
+            <controllingFieldValue>Gelcoat Hull Color (1F)</controllingFieldValue>
+            <controllingFieldValue>Welt Color (2E)</controllingFieldValue>
+            <valueName>Celestial Blue</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Trailer Base Color (9B)</controllingFieldValue>
+            <controllingFieldValue>Gelcoat Hull Color  (1F)</controllingFieldValue>
+            <controllingFieldValue>Two Tone Fender Color (9E)</controllingFieldValue>
+            <controllingFieldValue>Gelcoat Main Color (1D)</controllingFieldValue>
+            <controllingFieldValue>Gelcoat Accent Color (1C)</controllingFieldValue>
+            <controllingFieldValue>Gelcoat Deck Color  (1B)</controllingFieldValue>
+            <controllingFieldValue>Panel Color   (2B)</controllingFieldValue>
+            <controllingFieldValue>Welt Color   (2C)</controllingFieldValue>
+            <controllingFieldValue>Gelcoat Deck Color (1B)</controllingFieldValue>
+            <controllingFieldValue>Gelcoat Deck Forward Accent (1BB)</controllingFieldValue>
+            <controllingFieldValue>Gelcoat Upper Accent Color  (1C)</controllingFieldValue>
+            <controllingFieldValue>Gelcoat Main Panel Color (1D)</controllingFieldValue>
+            <controllingFieldValue>Gelcoat Lower Accent Color (1E)</controllingFieldValue>
+            <controllingFieldValue>Gelcoat Hull Color (1F)</controllingFieldValue>
+            <controllingFieldValue>Vinyl Accent Color (2D)</controllingFieldValue>
+            <controllingFieldValue>Welt Color (2E)</controllingFieldValue>
+            <controllingFieldValue>Insert Panel Accent Color (2F) (2 Tone)</controllingFieldValue>
+            <valueName>Charcoal</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Trailer Base Color (9B)</controllingFieldValue>
+            <controllingFieldValue>Gelcoat Hull Color  (1F)</controllingFieldValue>
+            <controllingFieldValue>Two Tone Fender Color (9E)</controllingFieldValue>
+            <controllingFieldValue>Gelcoat Main Color (1D)</controllingFieldValue>
+            <controllingFieldValue>Gelcoat Accent Color (1C)</controllingFieldValue>
+            <controllingFieldValue>Gelcoat Deck Color  (1B)</controllingFieldValue>
+            <controllingFieldValue>Panel Color   (2B)</controllingFieldValue>
+            <controllingFieldValue>Welt Color   (2C)</controllingFieldValue>
+            <controllingFieldValue>Gelcoat Deck Color (1B)</controllingFieldValue>
+            <controllingFieldValue>Gelcoat Deck Forward Accent (1BB)</controllingFieldValue>
+            <controllingFieldValue>Gelcoat Upper Accent Color  (1C)</controllingFieldValue>
+            <controllingFieldValue>Gelcoat Main Panel Color (1D)</controllingFieldValue>
+            <controllingFieldValue>Gelcoat Lower Accent Color (1E)</controllingFieldValue>
+            <controllingFieldValue>Gelcoat Hull Color (1F)</controllingFieldValue>
+            <controllingFieldValue>Vinyl Accent Color (2D)</controllingFieldValue>
+            <controllingFieldValue>Welt Color (2E)</controllingFieldValue>
+            <controllingFieldValue>Insert Panel Accent Color (2F) (2 Tone)</controllingFieldValue>
+            <valueName>Fire Red</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Trailer Base Color (9B)</controllingFieldValue>
+            <controllingFieldValue>Gelcoat Hull Color  (1F)</controllingFieldValue>
+            <controllingFieldValue>Two Tone Fender Color (9E)</controllingFieldValue>
+            <controllingFieldValue>Gelcoat Main Color (1D)</controllingFieldValue>
+            <controllingFieldValue>Gelcoat Accent Color (1C)</controllingFieldValue>
+            <controllingFieldValue>Gelcoat Deck Color  (1B)</controllingFieldValue>
+            <controllingFieldValue>Panel Color   (2B)</controllingFieldValue>
+            <controllingFieldValue>Welt Color   (2C)</controllingFieldValue>
+            <controllingFieldValue>Gelcoat Deck Color (1B)</controllingFieldValue>
+            <controllingFieldValue>Gelcoat Deck Forward Accent (1BB)</controllingFieldValue>
+            <controllingFieldValue>Gelcoat Upper Accent Color  (1C)</controllingFieldValue>
+            <controllingFieldValue>Gelcoat Main Panel Color (1D)</controllingFieldValue>
+            <controllingFieldValue>Gelcoat Lower Accent Color (1E)</controllingFieldValue>
+            <controllingFieldValue>Gelcoat Hull Color (1F)</controllingFieldValue>
+            <controllingFieldValue>Vinyl Accent Color (2D)</controllingFieldValue>
+            <controllingFieldValue>Welt Color (2E)</controllingFieldValue>
+            <controllingFieldValue>Insert Panel Accent Color (2F) (2 Tone)</controllingFieldValue>
+            <valueName>Intense Green</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Trailer Base Color (9B)</controllingFieldValue>
+            <controllingFieldValue>Gelcoat Hull Color  (1F)</controllingFieldValue>
+            <controllingFieldValue>Two Tone Fender Color (9E)</controllingFieldValue>
+            <controllingFieldValue>Gelcoat Main Color (1D)</controllingFieldValue>
+            <controllingFieldValue>Gelcoat Accent Color (1C)</controllingFieldValue>
+            <controllingFieldValue>Gelcoat Deck Color  (1B)</controllingFieldValue>
+            <controllingFieldValue>Panel Color   (2B)</controllingFieldValue>
+            <controllingFieldValue>Welt Color   (2C)</controllingFieldValue>
+            <controllingFieldValue>Gelcoat Deck Color (1B)</controllingFieldValue>
+            <controllingFieldValue>Gelcoat Deck Forward Accent (1BB)</controllingFieldValue>
+            <controllingFieldValue>Gelcoat Upper Accent Color  (1C)</controllingFieldValue>
+            <controllingFieldValue>Gelcoat Main Panel Color (1D)</controllingFieldValue>
+            <controllingFieldValue>Gelcoat Lower Accent Color (1E)</controllingFieldValue>
+            <controllingFieldValue>Gelcoat Hull Color (1F)</controllingFieldValue>
+            <controllingFieldValue>Vinyl Accent Color (2D)</controllingFieldValue>
+            <controllingFieldValue>Welt Color (2E)</controllingFieldValue>
+            <controllingFieldValue>Insert Panel Accent Color (2F) (2 Tone)</controllingFieldValue>
+            <valueName>Pacific Blue</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Trailer Base Color (9B)</controllingFieldValue>
+            <controllingFieldValue>Gelcoat Hull Color  (1F)</controllingFieldValue>
+            <controllingFieldValue>Two Tone Fender Color (9E)</controllingFieldValue>
+            <controllingFieldValue>Gelcoat Main Color (1D)</controllingFieldValue>
+            <controllingFieldValue>Gelcoat Accent Color (1C)</controllingFieldValue>
+            <controllingFieldValue>Gelcoat Deck Color  (1B)</controllingFieldValue>
+            <controllingFieldValue>Panel Color   (2B)</controllingFieldValue>
+            <controllingFieldValue>Welt Color   (2C)</controllingFieldValue>
+            <controllingFieldValue>Gelcoat Deck Color (1B)</controllingFieldValue>
+            <controllingFieldValue>Gelcoat Deck Forward Accent (1BB)</controllingFieldValue>
+            <controllingFieldValue>Gelcoat Upper Accent Color  (1C)</controllingFieldValue>
+            <controllingFieldValue>Gelcoat Main Panel Color (1D)</controllingFieldValue>
+            <controllingFieldValue>Gelcoat Lower Accent Color (1E)</controllingFieldValue>
+            <controllingFieldValue>Gelcoat Hull Color (1F)</controllingFieldValue>
+            <controllingFieldValue>Welt Color (2E)</controllingFieldValue>
+            <valueName>Reuben Red</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Trailer Base Color (9B)</controllingFieldValue>
+            <controllingFieldValue>Gelcoat Hull Color  (1F)</controllingFieldValue>
+            <controllingFieldValue>Two Tone Fender Color (9E)</controllingFieldValue>
+            <controllingFieldValue>Gelcoat Main Color (1D)</controllingFieldValue>
+            <controllingFieldValue>Gelcoat Accent Color (1C)</controllingFieldValue>
+            <controllingFieldValue>Gelcoat Deck Color  (1B)</controllingFieldValue>
+            <controllingFieldValue>Panel Color   (2B)</controllingFieldValue>
+            <controllingFieldValue>Welt Color   (2C)</controllingFieldValue>
+            <controllingFieldValue>Gelcoat Deck Color (1B)</controllingFieldValue>
+            <controllingFieldValue>Gelcoat Deck Forward Accent (1BB)</controllingFieldValue>
+            <controllingFieldValue>Gelcoat Upper Accent Color  (1C)</controllingFieldValue>
+            <controllingFieldValue>Gelcoat Main Panel Color (1D)</controllingFieldValue>
+            <controllingFieldValue>Gelcoat Lower Accent Color (1E)</controllingFieldValue>
+            <controllingFieldValue>Gelcoat Hull Color (1F)</controllingFieldValue>
+            <controllingFieldValue>Vinyl Accent Color (2D)</controllingFieldValue>
+            <controllingFieldValue>Welt Color (2E)</controllingFieldValue>
+            <controllingFieldValue>Insert Panel Accent Color (2F) (2 Tone)</controllingFieldValue>
+            <valueName>Sundance Yellow</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Trailer Base Color (9B)</controllingFieldValue>
+            <valueName>Galvanized - No Color (Single or Tandem)</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Trailer Base Color (9B)</controllingFieldValue>
+            <controllingFieldValue>Gelcoat Deck Color (1B)</controllingFieldValue>
+            <controllingFieldValue>Gelcoat Upper Accent Color  (1C)</controllingFieldValue>
+            <controllingFieldValue>Gelcoat Main Panel Color (1D)</controllingFieldValue>
+            <controllingFieldValue>Gelcoat Lower Accent Color (1E)</controllingFieldValue>
+            <controllingFieldValue>Gelcoat Hull Color (1F)</controllingFieldValue>
+            <controllingFieldValue>Upholstery Color Selections</controllingFieldValue>
+            <controllingFieldValue>Vinyl Base Color (2A)</controllingFieldValue>
+            <controllingFieldValue>Vinyl Main Color (2B)</controllingFieldValue>
+            <valueName>Light Graphite</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Trailer Base Color (9B)</controllingFieldValue>
+            <valueName>Elite Shield Coating, Select Color (No Two Tone or Pin Stripes)</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Trailer Pinstripe Color (9C)</controllingFieldValue>
+            <valueName>No Pinstripe</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Trailer Pinstripe Color (9C)</controllingFieldValue>
+            <valueName>White Pinstripe</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Trailer Pinstripe Color (9C)</controllingFieldValue>
+            <valueName>Platinum Pinstripe</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Trailer Pinstripe Color (9C)</controllingFieldValue>
+            <valueName>Black Pinstripe</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Trailer Fender Options (9D)</controllingFieldValue>
+            <valueName>Stainless Steel Fenders-Single Axle</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Trailer Fender Options (9D)</controllingFieldValue>
+            <valueName>Stainless Steel Fenders-Tandem Axle</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Trailer Fender Options (9D)</controllingFieldValue>
+            <valueName>Two Tone Painted Fender - Single Axle (select color below)</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Trailer Fender Options (9D)</controllingFieldValue>
+            <valueName>Two Tone Painted Fender - Tandem Axle (select color below)</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Trailer Fender Options (9D)</controllingFieldValue>
+            <valueName>Stainless Steel Fenders - Tandem Axle</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Trailer Fender Options (9D)</controllingFieldValue>
+            <valueName>Stainless Steel Fenders - Triple Axle</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Trailer Fender Options (9D)</controllingFieldValue>
+            <valueName>Two Tone Painted Fender - White</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Trailer Fender Options (9D)</controllingFieldValue>
+            <valueName>Two Tone Painted Fender - Light Graphite</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Trailer Fender Options (9D)</controllingFieldValue>
+            <valueName>Two Tone Painted Fender - Platinum</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Trailer Fender Options (9D)</controllingFieldValue>
+            <valueName>Two Tone Painted Fender - Black</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Trailer Fender Options (9D)</controllingFieldValue>
+            <valueName>Two Tone Painted Fender - Atomic Orange</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Trailer Fender Options (9D)</controllingFieldValue>
+            <valueName>Two Tone Painted Fender - Brittany Blue</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Trailer Fender Options (9D)</controllingFieldValue>
+            <valueName>Two Tone Painted Fender - Celestial Blue</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Trailer Fender Options (9D)</controllingFieldValue>
+            <valueName>Two Tone Painted Fender - Charcoal</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Trailer Fender Options (9D)</controllingFieldValue>
+            <valueName>Two Tone Painted Fender - Fire Red</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Trailer Fender Options (9D)</controllingFieldValue>
+            <valueName>Two Tone Painted Fender - Intense Green</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Trailer Fender Options (9D)</controllingFieldValue>
+            <valueName>Two Tone Painted Fender - Pacific Blue</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Trailer Fender Options (9D)</controllingFieldValue>
+            <valueName>Two Tone Painted Fender - Reuben Red</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Trailer Fender Options (9D)</controllingFieldValue>
+            <valueName>Two Tone Painted Fender - Sundance Yellow</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Trailer Fender Options (9D)</controllingFieldValue>
+            <valueName>Two Tone Painted Fender - Atomic Orange Metal Flake</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Trailer Fender Options (9D)</controllingFieldValue>
+            <valueName>Two Tone Painted Fender - Brittany Blue Metal Flake</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Trailer Fender Options (9D)</controllingFieldValue>
+            <valueName>Two Tone Painted Fender - Eclipse Black Metal Flake</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Trailer Fender Options (9D)</controllingFieldValue>
+            <valueName>Two Tone Painted Fender - Fire Red Metal Flake</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Trailer Fender Options (9D)</controllingFieldValue>
+            <valueName>Two Tone Painted Fender - Gunmetal Metal Flake</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Trailer Fender Options (9D)</controllingFieldValue>
+            <valueName>Two Tone Painted Fender - Intense Green Metal Flake</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Trailer Fender Options (9D)</controllingFieldValue>
+            <valueName>Two Tone Painted Fender - Plum Crazy Purple Metal Flake</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Trailer Fender Options (9D)</controllingFieldValue>
+            <valueName>Two Tone Painted Fender - Silver Metal Flake</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Trailer Wheel Options (9F)</controllingFieldValue>
+            <valueName>15&quot; Spare Tire with Bracket (T6 Aluminum) (Single)</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Trailer Wheel Options (9F)</controllingFieldValue>
+            <valueName>14&quot; Spare Tire with Bracket (T6 Aluminum) (Tandem)</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Trailer Wheel Options (9F)</controllingFieldValue>
+            <valueName>Wheel Upgrade w/ Painted Fenders - 18&quot; Wheels (Tandem)</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Trailer Wheel Options (9F)</controllingFieldValue>
+            <valueName>Wheel Upgrade w/ Stainless Stl Fenders - 18&quot; Wheels (Tandem)</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Trailer Wheel Options (9F)</controllingFieldValue>
+            <valueName>18&quot; Spare Tire with Bracket (18&quot; Wheel Upgrade)</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Trailer Wheel Options (9F)</controllingFieldValue>
+            <valueName>Aluminum Wheels (per axle)</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Trailer Wheel Options (9F)</controllingFieldValue>
+            <valueName>Spare Tire Bracket (Mounting Bracket Only, No Tire)</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Trailer Wheel Options (9F)</controllingFieldValue>
+            <valueName>14&quot; Spare Tire, Frame Side Mount (SC Tandem; SG, SE Triple)</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Trailer Wheel Options (9F)</controllingFieldValue>
+            <valueName>14&quot; Spare Tire, Underbelly Mount (SC Tandem; SG, SE Triple)</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Trailer Wheel Options (9F)</controllingFieldValue>
+            <valueName>15&quot; Spare Tire, Frame Side Mount (SA, SG, SE Tandem)</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Trailer Wheel Options (9F)</controllingFieldValue>
+            <valueName>15&quot; Spare Tire, Underbelly Mount (SA, SG, SE Tandem)</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Trailer Wheel Options (9F)</controllingFieldValue>
+            <valueName>18&quot; Wheels Upgrade (Tandem only)</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Trailer Wheel Options (9F)</controllingFieldValue>
+            <valueName>18&quot; Wheels Upgrade (Triple only)</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Trailer Wheel Options (9F)</controllingFieldValue>
+            <valueName>18&quot; Spare Tire, Framed Side Mount</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Trailer Wheel Options (9F)</controllingFieldValue>
+            <valueName>18&quot; Spare Tire, Underbelly Mount</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Trailer Wheel Options (9F)</controllingFieldValue>
+            <valueName>18&quot; Spare Tire, Underbelly Mount, World&#39;s Edition only</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Trailer Light Options (9G)</controllingFieldValue>
+            <valueName>Illuminated Laser-Cut Steps</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Trailer Light Options (9G)</controllingFieldValue>
+            <valueName>LED Back-up Lights</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Trailer Light Options (9G)</controllingFieldValue>
+            <valueName>Surface Mount Clear LED</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Trailer Light Options (9G)</controllingFieldValue>
+            <valueName>Runway Lighting</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Trailer Light Options (9G)</controllingFieldValue>
+            <valueName>Surface Mount Lighting with Clear LED&#39;s</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Trailer Light Options (9G)</controllingFieldValue>
+            <valueName>Runway Lighting - White</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Trailer Light Options (9G)</controllingFieldValue>
+            <valueName>Runway Lighting - Blue</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Trailer Light Options (9G)</controllingFieldValue>
+            <valueName>Runway Lighting - Red</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Trailer Light Options (9G)</controllingFieldValue>
+            <valueName>Runway Lighting - Green</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Trailer Other Options (9H)</controllingFieldValue>
+            <valueName>7-way Round Trailer Plug w/ Holder</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Trailer Other Options (9H)</controllingFieldValue>
+            <valueName>Swing-away Tounge - Color Matched</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Trailer Other Options (9H)</controllingFieldValue>
+            <valueName>Fulton F2 Jack Upgrade</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Trailer Other Options (9H)</controllingFieldValue>
+            <valueName>Transom Steps</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Trailer Other Options (9H)</controllingFieldValue>
+            <valueName>Aluminum Step Plates</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Trailer Other Options (9H)</controllingFieldValue>
+            <valueName>Transom Trailer Straps</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Trailer Other Options (9H)</controllingFieldValue>
+            <valueName>Guide Pole Covers</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Trailer Other Options (9H)</controllingFieldValue>
+            <valueName>Aluminum Tread Plates - Steps Only</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Trailer Other Options (9H)</controllingFieldValue>
+            <valueName>Aluminum Tread Plates - Steps and Fenders</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Trailer Other Options (9H)</controllingFieldValue>
+            <valueName>Bow Step Ladder w/ Tongue Step Pad, 3 Step</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Engine Options</controllingFieldValue>
+            <controllingFieldValue>Engine Options (5B)</controllingFieldValue>
+            <valueName>Flush Kit</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Engine Options</controllingFieldValue>
+            <valueName>Water Strainer</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Gelcoat Spray Pattern (1A)</controllingFieldValue>
+            <valueName>Spray Pattern &quot;Classic&quot;</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Gelcoat Spray Pattern (1A)</controllingFieldValue>
+            <valueName>Spray Pattern &quot;Striker&quot;</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Gelcoat Spray Pattern (1A)</controllingFieldValue>
+            <valueName>Spray Pattern &quot;Torqued&quot;</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Gelcoat Main Color (1D)</controllingFieldValue>
+            <controllingFieldValue>Gelcoat Upper Accent Color  (1C)</controllingFieldValue>
+            <controllingFieldValue>Gelcoat Main Panel Color (1D)</controllingFieldValue>
+            <valueName>Atomic Orange Metal Flake</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Gelcoat Main Color (1D)</controllingFieldValue>
+            <controllingFieldValue>Gelcoat Upper Accent Color  (1C)</controllingFieldValue>
+            <controllingFieldValue>Gelcoat Main Panel Color (1D)</controllingFieldValue>
+            <valueName>Brittany Blue Metal Flake</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Gelcoat Main Color (1D)</controllingFieldValue>
+            <controllingFieldValue>Gelcoat Upper Accent Color  (1C)</controllingFieldValue>
+            <controllingFieldValue>Gelcoat Main Panel Color (1D)</controllingFieldValue>
+            <valueName>Eclipse Black Metal Flake</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Gelcoat Main Color (1D)</controllingFieldValue>
+            <controllingFieldValue>Gelcoat Upper Accent Color  (1C)</controllingFieldValue>
+            <controllingFieldValue>Gelcoat Main Panel Color (1D)</controllingFieldValue>
+            <valueName>Fire Red Metal Flake</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Gelcoat Main Color (1D)</controllingFieldValue>
+            <controllingFieldValue>Gelcoat Upper Accent Color  (1C)</controllingFieldValue>
+            <controllingFieldValue>Gelcoat Main Panel Color (1D)</controllingFieldValue>
+            <valueName>Gunmetal Metal Flake</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Gelcoat Main Color (1D)</controllingFieldValue>
+            <controllingFieldValue>Gelcoat Upper Accent Color  (1C)</controllingFieldValue>
+            <controllingFieldValue>Gelcoat Main Panel Color (1D)</controllingFieldValue>
+            <valueName>Intense Green Metal Flake</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Gelcoat Main Color (1D)</controllingFieldValue>
+            <valueName>Plum Crazy Purple Flake</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Gelcoat Main Color (1D)</controllingFieldValue>
+            <controllingFieldValue>Gelcoat Upper Accent Color  (1C)</controllingFieldValue>
+            <controllingFieldValue>Gelcoat Main Panel Color (1D)</controllingFieldValue>
+            <valueName>Silver Metal Flake</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Audio Options (7A)</controllingFieldValue>
+            <valueName>A AM/FM/BT Aux input 4 speakers no amp</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Audio Options (7A)</controllingFieldValue>
+            <valueName>B Add 2 Bow Speakers with Amplifier</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Audio Options (7A)</controllingFieldValue>
+            <valueName>C Add 2 Bow Speakers and Sub with Amplifier</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Audio Options (7A)</controllingFieldValue>
+            <valueName>D Add 2 Tower Speakers with Amplifier (Aviator)</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Audio Options (7A)</controllingFieldValue>
+            <valueName>E Add Wiring and Amp for 2 Tower Speakers (no speakers)</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Audio Options (7A)</controllingFieldValue>
+            <valueName>F1 Add 4 Tower Speakers (Spin) with Amplifier (Aviator)</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Audio Options (7A)</controllingFieldValue>
+            <valueName>F2 Add 4 Tower Speakers (Spin) with Amplifier (S-Bend)</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Audio Options (7A)</controllingFieldValue>
+            <valueName>Audio Remote - Transom Location</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Lighting Options (7B) -</controllingFieldValue>
+            <valueName>Docking Lights</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Lighting Options (7B) -</controllingFieldValue>
+            <valueName>Bow Mood Lights</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Lighting Options (7B) -</controllingFieldValue>
+            <valueName>Speaker Box Logo Lights</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Lighting Options (7B) -</controllingFieldValue>
+            <valueName>Tower Light Bar with Courtesy Light (Aviator tower only)</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Lighting Options (7B) -</controllingFieldValue>
+            <valueName>Underwater Lights</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Lighting Options (7B) -</controllingFieldValue>
+            <controllingFieldValue>Miscellaneous Options (8A)</controllingFieldValue>
+            <valueName>Automatic Fire Suppression System</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Lighting Options (7B) -</controllingFieldValue>
+            <controllingFieldValue>Miscellaneous Options (8A)</controllingFieldValue>
+            <valueName>Registration Fee</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Lighting Options (7B) -</controllingFieldValue>
+            <valueName>Single Battery Setup with Onboard Battery Charger</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Lighting Options (7B) -</controllingFieldValue>
+            <valueName>Dual Battery Setup with Onboard Battery Charger</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Lighting Options (7B) -</controllingFieldValue>
+            <valueName>Heater with 6.2L Engine</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Lighting Options (7B) -</controllingFieldValue>
+            <valueName>PTMEdge VR-140 Mirror Upgrade w/ Mirror Arm, Black</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Lighting Options (7B) -</controllingFieldValue>
+            <valueName>Navionics Map Card - Canada</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Lighting Options (7B) -</controllingFieldValue>
+            <valueName>Navionics Map Card - Austrailia</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Lighting Options (7B) -</controllingFieldValue>
+            <valueName>Shipping Cover and Packaging Materials</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Lighting Options (7B) -</controllingFieldValue>
+            <valueName>Grow Boating Fund</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Miscellaneous Options (8A)</controllingFieldValue>
+            <valueName>Cooler, Softside w/ Logo</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Miscellaneous Options (8A)</controllingFieldValue>
+            <valueName>Single Battery Set-up w/ Charger</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Miscellaneous Options (8A)</controllingFieldValue>
+            <valueName>Dual Battery Set-up w/ Charger</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Miscellaneous Options (8A)</controllingFieldValue>
+            <valueName>Depth Finder</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Miscellaneous Options (8A)</controllingFieldValue>
+            <valueName>Heater (6.2L engines)</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Miscellaneous Options (8A)</controllingFieldValue>
+            <valueName>Extended Mirror Bracket</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Miscellaneous Options (8A)</controllingFieldValue>
+            <valueName>Shipping Cover and Package Materials</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Miscellaneous Options (8A)</controllingFieldValue>
+            <valueName>Grow Boating Ad Campaign</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Graphic Name Selections (1G)</controllingFieldValue>
+            <valueName>Graphic - &quot;Moomba&quot; Chrome</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Graphic Name Selections (1G)</controllingFieldValue>
+            <valueName>Graphic - &quot;Moomba&quot; Black Chrome</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Graphic Background Options (1H)</controllingFieldValue>
+            <valueName>Graphic - Moomba Distortion</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Graphic Background Options (1H)</controllingFieldValue>
+            <valueName>Graphic - Moomba Rally</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Graphic Background Options (1H)</controllingFieldValue>
+            <valueName>Graphic - Moomba Striker</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Graphic Background Options (1H)</controllingFieldValue>
+            <valueName>No Background Graphic</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Base Color  (2A)</controllingFieldValue>
+            <valueName>Mystic White/White Moquetta</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Base Color  (2A)</controllingFieldValue>
+            <valueName>Mystic White/Silver Moquetta</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Base Color  (2A)</controllingFieldValue>
+            <valueName>Sky Grey/White Moquetta</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Base Color  (2A)</controllingFieldValue>
+            <valueName>Sky Grey/Silver Moquetta</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Base Color  (2A)</controllingFieldValue>
+            <valueName>Dove Grey/White Moquetta</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Base Color  (2A)</controllingFieldValue>
+            <valueName>Dove Grey/Silver Moquetta</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Panel Color   (2B)</controllingFieldValue>
+            <controllingFieldValue>Welt Color   (2C)</controllingFieldValue>
+            <valueName>Mystic White</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Panel Color   (2B)</controllingFieldValue>
+            <controllingFieldValue>Welt Color   (2C)</controllingFieldValue>
+            <valueName>Sky Grey</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Welt Color   (2C)</controllingFieldValue>
+            <valueName>Plum Crazy Purple</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Package and Trim Level Options (1A)</controllingFieldValue>
+            <valueName>Trim Level 400</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Package and Trim Level Options (1A)</controllingFieldValue>
+            <valueName>Trim Level 450 (requires Raptor 440 engine)</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Package and Trim Level Options (1A)</controllingFieldValue>
+            <valueName>Trim Level 550 (requires Raptor 575 engine)</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Package and Trim Level Options (1A)</controllingFieldValue>
+            <valueName>World&#39;s Edition Package (see separate sheet for contents)</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Package and Trim Level Options (1A)</controllingFieldValue>
+            <valueName>Spray Pattern Worlds (required Worlds Package)</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Package and Trim Level Options (1A)</controllingFieldValue>
+            <valueName>SE550 Roush Limited Edition</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Package and Trim Level Options (1A)</controllingFieldValue>
+            <valueName>Spray Pattern Roush Limited Edition</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Upholstery Options  (2D)</controllingFieldValue>
+            <valueName>Bow Filler Cushion</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Upholstery Options  (2D)</controllingFieldValue>
+            <valueName>Walk-thru Screen</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Upholstery Options  (2D)</controllingFieldValue>
+            <valueName>Sundeck Walk Across w/ Nonskid</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Upholstery Options  (2D)</controllingFieldValue>
+            <valueName>Removable Seat Back Kit, Rear Seat and Stbd Cockpit Seat</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Engines (5A)</controllingFieldValue>
+            <valueName>Ford Raptor 400 6.2L Engine by Indmar</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Engines (5A)</controllingFieldValue>
+            <valueName>Ford Raptor 440 6.2L Engine by Indmar</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Engines (5A)</controllingFieldValue>
+            <valueName>Ford Raptor 575 6.2L Engine by Indmar (SA, SC and SG only)</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Engines (5A)</controllingFieldValue>
+            <valueName>Ford Raptor 575 6.2L Engine by Indmar (SE only)</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Tower Accessories (3F)</controllingFieldValue>
+            <valueName>Rack, Fixed Wake/Surf  (set of 2)</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Tower Accessories (3F)</controllingFieldValue>
+            <valueName>Rack, Quick Release Swivel Mechanism</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Tower Canvas (Oz) (4A)</controllingFieldValue>
+            <valueName>Full Boat Cover w/ Hangtyte (Charcoal)</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Tower Canvas (Oz) (4A)</controllingFieldValue>
+            <valueName>Tonneau Cover (Black)</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Tower Canvas (Oz) (4A)</controllingFieldValue>
+            <valueName>Tower Cockpit and Tonneau Cover w/ HT (Black)</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Tower Canvas (Oz) (4A)</controllingFieldValue>
+            <valueName>Tower Bimini, Aviator (Black)</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Tower Canvas (Oz) (4A)</controllingFieldValue>
+            <valueName>Tower Bimini, S-Bend (Black)</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Tower Canvas (Oz) (4A)</controllingFieldValue>
+            <valueName>Bimini, Z5 Cargo Rack, S-Bend (Black)</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Performance Package Options - MD,MG,ME (6D)</controllingFieldValue>
+            <valueName>Digital Cruise Pro II (Display)</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Performance Package Options - MD,MG,ME (6D)</controllingFieldValue>
+            <valueName>Multisport Wakeplate w/ Gravity III Ballast</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Performance Package Options - MD,MG,ME (6D)</controllingFieldValue>
+            <valueName>Cruise, Zero Off, GPS Upgrade (Requires new cruise)</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Performance Package Options - MD,MG,ME (6D)</controllingFieldValue>
+            <valueName>Integrated Bow Sac</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Performance Package Options - MD,MG,ME (6D)</controllingFieldValue>
+            <valueName>AutoFlow 2 Surf System</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Performance Package Options - MD,MG,ME (6D)</controllingFieldValue>
+            <valueName>AutoFlow 2 Surf Package (AutoFlow Sys, Bow Bag, Decal)</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Gelcoat Upper Accent Color  (1C)</controllingFieldValue>
+            <controllingFieldValue>Gelcoat Main Panel Color (1D)</controllingFieldValue>
+            <valueName>Plum Crazy Purple Metal Flake</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Gelcoat Hull Forward Accent (1DD)</controllingFieldValue>
+            <valueName>Hull Forward Accent Color Matches Main Panel Color</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Gelcoat Hull Forward Accent (1DD)</controllingFieldValue>
+            <valueName>Hull Forward Accent Color Matches Upper Accent Color</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Gelcoat Hull Forward Accent (1DD)</controllingFieldValue>
+            <valueName>Hull Forward Accent Color Matches Deck Forward Accent</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Gelcoat Hull Middle Accent</controllingFieldValue>
+            <valueName>Hull Middle Accent Color Matches Main Panel Color</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Gelcoat Hull Middle Accent</controllingFieldValue>
+            <valueName>Hull Middle Accent Color Matches Lower Accent Color</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Graphic Name Options (for Worlds, do not choose)</controllingFieldValue>
+            <valueName>&quot;Supra&quot; Verge 2-Tone</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Graphic Name Options (for Worlds, do not choose)</controllingFieldValue>
+            <valueName>&quot;Supra&quot; Verge Chrome</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Graphic Name Options (for Worlds, do not choose)</controllingFieldValue>
+            <valueName>&quot;Supra&quot; Verge Blacked Out</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Graphic Background Options &amp; Other Graphic Options</controllingFieldValue>
+            <valueName>Supra Force Background</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Upholstery Color Selections</controllingFieldValue>
+            <controllingFieldValue>Vinyl Base Color (2A)</controllingFieldValue>
+            <controllingFieldValue>Vinyl Main Color (2B)</controllingFieldValue>
+            <valueName>Auster</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Vinyl Base Color (2A)</controllingFieldValue>
+            <controllingFieldValue>Vinyl Main Color (2B)</controllingFieldValue>
+            <valueName>Dark Graphite</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Vinyl Accent Color (2D)</controllingFieldValue>
+            <controllingFieldValue>Insert Panel Accent Color (2F) (2 Tone)</controllingFieldValue>
+            <valueName>Silver</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Vinyl Accent Color (2D)</controllingFieldValue>
+            <controllingFieldValue>Insert Panel Accent Color (2F) (2 Tone)</controllingFieldValue>
+            <valueName>Tangerine Orange</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Welt Color (2E)</controllingFieldValue>
+            <valueName>Purple Passion</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Insert Panel Accent Color (2F) (2 Tone)</controllingFieldValue>
+            <valueName>Standard Black</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Carpet Base Color Options (2G) - Must Select 1</controllingFieldValue>
+            <valueName>Sterling Grey</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Carpet Base Color Options (2G) - Must Select 1</controllingFieldValue>
+            <valueName>Midnight Star</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Carpet Snap-In Options (2G) - Must Select 1</controllingFieldValue>
+            <valueName>Snap-In Carpet, Midnight Star Tufted Design</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Carpet Snap-In Options (2G) - Must Select 1</controllingFieldValue>
+            <valueName>Snap-In Carpet, Sterling Grey Tufted Design</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Carpet Snap-In Options (2G) - Must Select 1</controllingFieldValue>
+            <valueName>Snap-In Liner, Compass Gunmetal</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Carpet Snap-In Options (2G) - Must Select 1</controllingFieldValue>
+            <valueName>SeaDek Nonskid Floor</valueName>
+        </valueSettings>
+    </valueSet>
+</CustomField>

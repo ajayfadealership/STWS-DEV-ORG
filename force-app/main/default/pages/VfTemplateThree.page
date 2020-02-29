@@ -1,0 +1,188 @@
+<apex:page controller="VfTemplateContrl" showHeader="false" standardStylesheets="false">
+    
+<html>
+    <head>
+        <meta charset="utf-8"/>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+        <title>::STWS - MOOMBA::</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1"/>
+        <!-- Description / Keywords -->
+        <meta name="description" content=""/>
+        <meta name="keywords" content=""/>
+        <!-- Mobile web app capable -->
+        <meta name="apple-mobile-web-app-capable" content="yes"/>
+        <meta name="apple-touch-fullscreen" content="yes"/>
+        <meta name="format-detection" content="telephone=no"/>
+        <meta name="mobile-web-app-capable" content="yes"/>
+        <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+        <meta name="HandheldFriendly" content="true"/>
+
+        <!-- Facebook Open Graph -->
+        <meta property="og:title" content=""/>
+        <meta property="og:url" content=""/>
+        <meta property="og:image" content=""/>
+        <meta property="og:site_name" content=""/>
+        <meta property="og:description" content=""/>
+        <!-- Bootstrap and core app CSS -->
+        <link rel="stylesheet" href="{!URLFOR($Resource.STWSPRINT,
+                  'assets/css/bootstrap.css')}"/>
+        <link rel="stylesheet" href="{!URLFOR($Resource.STWSPRINT,
+                  'assets/css/style.css')}"/>
+        <link rel="stylesheet" href="{!URLFOR($Resource.STWSPRINT,
+                  'assets/css/malibu_print.css')}"/>
+    </head>
+    <body>
+        <div class="wrapper page-moomba">
+        <header class="header">
+          <div class="container">
+                    <div class="flex-row">
+            <div class="flex-col boat-identities">
+              <div class="image-cover">
+                <img src="{!LogoURLBlack}" alt=""/> 
+              </div>
+              <a href="{!CSTemp.BOATBUILDING__Company_Website__c}" class="website-link">{!CSTemp.BOATBUILDING__Company_Website__c}</a>
+            </div>
+                        <div class="flex-col address-block">
+                            <i class="icon ion-ios-location"></i>
+                            <address class="address">
+                                <p>{!CSTemp.BOATBUILDING__Company_Address__c}</p>
+                            </address>
+                        </div>
+                        <div class="flex-col mobile-no">
+                            <i class="icon ion-iphone"></i>
+                            <address class="address">
+                                <a href="tel:{!CSTemp.BOATBUILDING__Company_Phone__c}">{!CSTemp.BOATBUILDING__Company_Phone__c}</a>
+                            </address>
+                        </div>
+                    </div>
+          </div>
+        </header>
+            <!-- header -->
+       <section class="banner-section">
+        <div class="container">
+          <div id="stsw-carousel" class="carousel slide carousel-home" data-ride="carousel" data-interval="3000">
+            <div class="carousel-inner">
+              <div class="item active">
+                 <apex:outputPanel rendered="{!imageavailableSide}" >
+                 <apex:image url="{!URLFOR($Action.Attachment.Download,sideimageid)}" />   
+                 </apex:outputPanel>           
+                  <div class="carousel-caption">
+                  <h4 class="hd">{!listInventory[0].BOATBUILDING__Model__c} </h4>
+                </div>
+              </div>
+
+             
+            </div>
+          </div>
+          <!-- / carousel-home -->
+        </div>
+      </section>
+      <!-- banner-section -->
+            <section class="our-price-section">
+                <div class="container">
+                    <div class="flex-row">
+                        <div class="flex-col dealer-discount-block">
+                            <h4 class="hd" style = "margin-top: 15px;">OUR PRICE</h4>
+                            <span class="price">$<b class="usd-price">{!listInventory[0].BOATBUILDING__Window_Sticker_Your_Price__c}</b></span>
+                            <span class="dealer-discount-price">Dealer Discount: $<b class="usd-price">{!listInventory[0].BOATBUILDING__Window_Sticker_Our_Discount__c}</b></span>
+                            <span class="dealer-discount-price">Interest Rate: {!listInventory[0].BOATBUILDING__Window_Sticker_Interest_Rate__c}</span>
+
+                        </div>
+                        <div class="flex-col price-block">
+                            <h4 class="hd">$<b class="usd-price">{!listInventory[0].BOATBUILDING__Window_Sticker_Payment__c}</b><span>PER MONTH</span></h4>
+                        </div>
+                        <div class="flex-col msrp-price-block">
+                            <h4 class="hd">MSRP PRICE</h4>
+                            <span class="price">$<b class="usd-price">{!listInventory[0].BOATBUILDING__Window_Sticker_MSRP__c}</b></span>
+
+                        </div>
+                    </div>
+                    
+                </div>
+            </section>
+      <section class="why-buy-from-us">
+                <div class="container">
+                    <div class="content-cover">
+                        <div class="flex-row flex-row-wrap flex-row-no-padding">
+                            <div class="col-flex left-side why-us">
+                                <h4 class="heading">Why buy from us?</h4>
+                                <ul class="list-block">
+                                    <li>{!tempInfoList[0]}</li>
+                                    <li>{!tempInfoList[1]}</li>
+                                    <li>{!tempInfoList[2]}</li>
+                                    <li>{!tempInfoList[3]}</li>
+                                    <li>{!tempInfoList[4]}</li>
+                                </ul>
+                            </div>
+                            <div class="col-flex right-side">
+                                <h4 class="heading">SPECS:</h4>
+                                <ul class="list-block">
+                                   <li>Length: {!listInventory[0].BOATBUILDING__Boat_Length_in_feets__c} Ft</li>
+                                    <li>Ballast: {!listInventory[0].BOATBUILDING__Boat_Ballast_Weight__c} LBS</li>
+                                    <li>Capacity: {!listInventory[0].BOATBUILDING__Boat_Seating_Capacity__c} People</li>
+                                    <li>Weight: {!listInventory[0].BOATBUILDING__Boat_Ballast_Weight__c} LBS</li>
+                                    <li>Fuel Capacity: {!listInventory[0].BOATBUILDING__Boat_Fuel_Capacity__c } Gals</li>
+                                    <li>Overall Length: {!listInventory[0].BOATBUILDING__Boat_Overall_Length__c}</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- /content-cover -->
+                </div>
+                <!-- /container -->
+            </section>
+            <!-- /why-buy-from-us -->
+
+      <div class="img-gallery">
+        <div class="container">
+          <div class="flex-row">
+            <div class="item">
+              <div class="image-cover">
+                 <apex:outputPanel rendered="{!imageavailableInterior}" >
+                 <apex:image url="{!URLFOR($Action.Attachment.Download,Interiorimageid)}" />
+                 </apex:outputPanel>
+              </div>
+            </div>
+            <div class="item">
+              <div class="image-cover">
+               <!-- <apex:outputPanel rendered="{!imageavailablecabin}" >
+                <apex:image url="{!URLFOR($Action.Attachment.Download,Cabinimageid)}" />
+                </apex:outputPanel>-->
+              </div>
+            </div>
+            <div class="item">
+              <div class="image-cover">
+             <!-- <apex:outputPanel rendered="{!imageavailableCooler}" >
+                 <apex:image url="{!URLFOR($Action.Attachment.Download,Coolerimageid)}" />
+                </apex:outputPanel>-->
+              </div>
+            </div>
+           
+          </div>
+        </div>
+      </div>
+        </div>
+
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+        <script>window.jQuery || document.write('<script src="assets/js/jquery-3.2.1.min.js"><\/script>')</script>
+        <!-- Latest compiled and minified JavaScript -->
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+        <script type="text/javascript">
+            $(document).ready(function() {
+                $(".usd-price").each(function() {
+                    var price = $(this).text();
+                    price = parseInt(price);
+                    function commafy(n) {
+                        var str = n.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, "$1,");
+                        str = str.split(".");
+                        return str[0];
+                    }
+                    price = commafy(price);
+                    $(this).text(price);
+                });
+            });
+        </script>
+    </body>
+</html>
+
+</apex:page>

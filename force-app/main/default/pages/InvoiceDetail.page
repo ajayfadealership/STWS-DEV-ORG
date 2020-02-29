@@ -1,0 +1,1317 @@
+<apex:page id="pge" sidebar="false"  Standardcontroller="Invoice__c" extensions="InvoiceDetailController" showHeader="false" standardStylesheets="false" docType="html-5.0" action="{!checkAccess}">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.0/jquery.min.js"/>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <apex:stylesheet value="{!URLFOR($Resource.BoatBuilderSR, 'assets/styles/salesforce-lightning-design-system.min.css')}" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"/>
+    <apex:includeScript value="{!URLFOR($Resource.Signature, 'jquery.min.js')}"/>
+    <style >
+        .popup{
+        position: fixed;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background: rgba(0,0,0,0.5);
+        display: none;
+        z-index: 999;
+        }
+        .popup.active{display:block}
+        .popup img{margin: 15% auto}
+        
+        .slds-addPart {
+        border: 1px solid white;
+        box-shadow: 3px 5px 15px #888888;
+        position: relative;
+        left: 90%;
+        width: 10%;
+        }
+        .lookupInput a.slds-input {
+        width: 28px !important;
+        margin: 0;
+        display: inline-block;
+        background: url('/resource/BOATBUILDING__BoatBuilderSR/assets/icons/utility/search_60.png');
+        background-size: contain;
+        background-repeat: no-repeat;
+        border: none;
+        margin-left: 5px;
+        }
+        /* The Modal (background) */
+        .modal {
+        display: none; /* Hidden by default */
+        position: fixed; /* Stay in place */
+        z-index: 1; /* Sit on top */
+        left: 0;
+        top: 0;
+        width: 100%; /* Full width */
+        height: 100%; /* Full height */
+        overflow: auto; /* Enable scroll if needed */
+        background-color: rgb(0,0,0); /* Fallback color */
+        background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+        padding-top: 60px;
+        }
+        
+        /* Modal Content/Box */
+        .modal-content {
+        background-color: #fefefe;
+        margin: 1% auto 15% auto; /* 5% from the top, 15% from the bottom and centered */
+        border: 10px solid #888;
+        }
+        
+        /* The Close Button (x) */
+        .close {
+        position: absolute;
+        right: 25px;
+        top: 0;
+        color: #000;
+        font-size: 35px;
+        font-weight: bold;
+        }
+        
+        .close:hover,
+        .close:focus {
+        color: red;
+        cursor: pointer;
+        }
+        
+        /* Add Zoom Animation */
+        .animate {
+        -webkit-animation: animatezoom 0.6s;
+        animation: animatezoom 0.6s
+        }
+        
+        @-webkit-keyframes animatezoom {
+        from {-webkit-transform: scale(0)} 
+        to {-webkit-transform: scale(1)}
+        }
+        
+        @keyframes animatezoom {
+        from {transform: scale(0)} 
+        to {transform: scale(1)}
+        }
+        
+        /* Change styles for span and cancel button on extra small screens */
+        @media screen and (max-width: 300px) {
+        span.psw {
+        display: block;
+        float: none;
+        }
+        .cancelbtn {
+        width: 100%;
+        }
+        }
+        
+        
+        .spinnerClass {
+        position: fixed;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background: rgba(0,0,0,0.5);
+        z-index: 999;
+        }
+    </style>
+    <html>
+        <head>
+            <title>INVOICE DETAILS </title>
+        </head>
+        <body>
+            <apex:form id="frm">
+                
+                <!-- Add Payment Popup by Sajal Start-->
+                <div id="addPaymentPopup" class="modal" >
+                    <div class="modal-content animate" style="height: 90%; width: 80%;overflow: auto;">
+                        <div class="slds-grid slds-wrap slds-col--padded slds-m-top--medium slds-align--absolute-center">
+                            <div class="slds-col slds-size--1-of-1">
+                                <a id="createPaymentBtn" style="margin-left: 45%;" class="slds-button slds-button--brand">Create Payment</a>
+                            </div>
+                        </div>
+                        <a style="position: absolute;left: 86.8%;" id="closeSign1"><i class="fa fa-times fa-lg __web-inspector-hide-shortcut__" aria-hidden="true"></i></a>
+                        <section style="padding: 2%;">
+                            <div class="slds-col slds-size--1-of-1">
+                                <div class="slds-grid slds-wrap">
+                                    <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-2 slds-col--padded">
+                                        <div class="slds-form-element">
+                                            <label class="slds-form-element__label">Payment Type</label>
+                                            <div class="slds-form-element__control">
+                                                <apex:inputField value="{!objPayment.Payment_Type__c}" styleClass="slds-select" id="PaymentType" onchange="onChangePayment(this.value);"/>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-2 slds-col--padded">
+                                        <div class="slds-form-element">
+                                            <label class="slds-form-element__label">Total Amount Due</label>
+                                            <div class="slds-form-element__control">
+                                                <apex:inputText value="{!objInvoice.Balance__c}" styleClass="slds-select" id="TotalAmountDue" disabled="true"/>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-2 slds-col--padded">
+                                        <div class="slds-form-element">
+                                            <label class="slds-form-element__label">Check Number</label>
+                                            <div class="slds-form-element__control">
+                                                <apex:inputField value="{!objPayment.Check_Number__c}" styleClass="slds-input" id="CheckNumber" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-2 slds-col--padded">
+                                        <div class="slds-form-element">
+                                            <label class="slds-form-element__label">Amount</label>
+                                            <div class="slds-form-element__control">
+                                                <apex:inputField value="{!objPayment.Amount__c}" styleClass="slds-input" id="PaymentAmount"  onkeyup="UpdateBalance(this.value);" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="slds-col slds-size--1-of-2 slds-medium-size--1-of-2 slds-col--padded">
+                                        <div class="slds-form-element">
+                                            <label class="slds-form-element__label">Credit Card Type</label>
+                                            <div class="slds-form-element__control">
+                                                <select Class="slds-select" id="CreditCardType" disabled="true">
+                                                    <option value="">--None--</option>
+                                                    <option value="American Express">American Express</option>
+                                                    <option value="Citibank">Citibank</option>
+                                                    <option value="MasterCard">MasterCard</option>
+                                                    <option value="USAA">USAA</option>
+                                                    <option value="Visa">Visa</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-2 slds-col--padded">
+                                        <div class="slds-form-element">
+                                            <label class="slds-form-element__label">Balance</label>
+                                            <div class="slds-form-element__control">
+                                                <input type="text" class="slds-input" id="paymentBalance" disabled="disabled"/>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-2 slds-col--padded">
+                                        <div class="slds-form-element">
+                                            <label class="slds-form-element__label">&nbsp;</label>
+                                            <div class="slds-form-element__control">
+                                                &nbsp;
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-2 slds-col--padded" id="paymentRChangesec" style="display: none;"> 
+                                        <div class="slds-form-element">
+                                            <label class="slds-form-element__label">Return Change</label>
+                                            <div class="slds-form-element__control">
+                                                <input type="text" class="slds-input" value="0.00" id="paymentRChange" disabled="disabled"/>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+                    </div>
+                </div>
+                <!-- Add Payment Popup by Sajal End-->
+                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-col--padded">
+                    <div class="slds-form-element">
+                        <label class="slds-form-element__label">&nbsp;</label>
+                        <div class="slds-form-element__control">
+                        	<apex:outputPanel rendered="{!if(!editMode || objInvoice.Invoice_Status__c != 'Final', true, false)}">
+	                            <a id="addpayment" onClick = "addPayment()" class="slds-button slds-button--neutral slds-button--brand" style="border: 1px solid white; box-shadow: 3px 5px 15px #888888;position: fixed; z-index: 99; left: 88.8%; top: 1%; width: 10%;">
+	                                Add Payment
+	                            </a>
+                            </apex:outputPanel>
+                        </div>
+                    </div>
+                </div>
+                
+                <div  class="popup">
+                    <apex:image id="theImage2" value="{!$Resource.Process}" style="display:block;" width="40" height="40"/>
+                </div>
+                <div class="slds-grid slds-wrap slds-col--padded">
+                    <div class="slds-col--padded slds-col slds-size--1-of-1 Customer-Heading">
+                        <h2 class=" heading"><br/>
+                            <span class="slds-text-heading--small">INVOICE DETAILS</span>
+                        </h2>
+                    </div>
+                </div>
+                <div class="slds-grid slds-wrap slds-col--padded ">
+                    <div class="slds-col--padded slds-col slds-size--1-of-1 Customer-Heading">
+                        <h2 class=" heading"><br/>
+                            <span class="slds-text-heading--small"><b>Invoice Number : {!objInvoice.Invoice_Number__c}</b></span>
+                        </h2>
+                    </div>
+                </div>
+                <div id="infoDiv" style="margin-top:1%;padding-top: 30px;">
+                    <div class="slds-grid slds-wrap">
+                        <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-1 slds-col--padded">
+                            <div class="slds-grid slds-wrap">
+                                
+                                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                                    <div class="slds-form-element">
+                                        <label class="slds-form-element__label">Invoice Name</label>
+                                        <div class="slds-form-element__control">
+                                            <apex:inputText value="{!objInvoice.Name}" id="ifName" styleClass="slds-input" disabled="{!editMode}"/>
+                                            
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                                    <div class="slds-form-element">
+                                        <label class="slds-form-element__label">Invoice Status</label>
+                                        <div class="slds-form-element__control">
+                                            <apex:outputField value="{!objInvoice.Invoice_Status__c}" styleClass="slds-input" id="itInvoiceStatus" rendered="{!editMode}"/>
+                                            <apex:inputField value="{!objInvoice.Invoice_Status__c}" styleClass="slds-input" id="Invst" rendered="{!if(editMode, false, true)}"/>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                                    <div class="slds-form-element">
+                                        <label class="slds-form-element__label">Related To Inventory</label>
+                                        <div class="slds-form-element__control">
+                                            <apex:inputText value="{!objInvoice.BOATBUILDING__Inventory__r.Name}" styleClass="slds-input" id="ifRTI" disabled="true"/>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                                    <div class="slds-form-element">
+                                        <label class="slds-form-element__label">Total Amount Due</label>
+                                        <div class="slds-form-element__control">
+                                            <apex:inputText value="{!objInvoice.Payment__c}" styleClass="slds-input" id="ifPayment" disabled="true"/>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-1 slds-col--padded">
+                            <div class="slds-grid slds-wrap">
+                                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                                    <div class="slds-form-element">
+                                        <label class="slds-form-element__label">Customer Name</label>
+                                        <div class="slds-form-element__control">
+                                            <apex:outputField value="{!objInvoice.Related_to_Contact__c}" styleClass="slds-input" id="ifCon" rendered="{!editMode}"/> 
+                                            <apex:inputField value="{!objInvoice.Related_to_Contact__c}" style="width: 88%;" styleClass="slds-input" id="ifConLook" rendered="{!if(editMode, false, true)}"/>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                                    <div class="slds-form-element">
+                                        <label class="slds-form-element__label">Total Parts</label>
+                                        <div class="slds-form-element__control">
+                                            <apex:inputText value="{!objInvoice.Total_Parts__c}" styleClass="slds-input" id="iftotalpart" disabled="true"/>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                                    <div class="slds-form-element">
+                                        <label class="slds-form-element__label">Sales Tax(%)</label>
+                                        <div class="slds-form-element__control">
+                                            <apex:inputText value="{!objInvoice.Sales_TaxPer__c}" id="ifsalestaxper" styleClass="slds-input" disabled="true"/>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                                    <div class="slds-form-element">
+                                        <label class="slds-form-element__label">Sales Tax($)</label>
+                                        <div class="slds-form-element__control">
+                                            <apex:inputText value="{!objInvoice.Sales_Tax_Formula__c}" styleClass="slds-input" id="ifsalestax" disabled="true"/>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-1 slds-col--padded">
+                            <div class="slds-grid slds-wrap">
+                                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                                    <div class="slds-form-element">
+                                        <label class="slds-form-element__label">City</label>
+                                        <div class="slds-form-element__control">
+                                            <apex:inputText value="{!objInvoice.City__c}" id="ifcity" styleClass="slds-input" disabled="{!editMode}"/>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                                    <div class="slds-form-element">
+                                        <label class="slds-form-element__label">State</label>
+                                        <div class="slds-form-element__control">
+                                            <apex:inputText value="{!objInvoice.State__c}"  styleClass="slds-input" disabled="{!editMode}" id="ifstate"/>
+                                        </div>
+                                    </div> 
+                                </div>
+                                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                                    <div class="slds-form-element">
+                                        <label class="slds-form-element__label">Zip Code</label>
+                                        <div class="slds-form-element__control">
+                                            <apex:inputText value="{!objInvoice.Zip_Code__c}" styleClass="slds-input" id="ifzcode" disabled="{!editMode}"/>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                                    <div class="slds-form-element">
+                                        <label class="slds-form-element__label">Total Payment</label>
+                                        <div class="slds-form-element__control">
+                                            <apex:inputText value="{!objInvoice.Total_Payment_Formula__c}" styleClass="slds-input" id="iftotpay" disabled="true"/>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-1 slds-col--padded">
+                            <div class="slds-grid slds-wrap">
+                                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                                    <div class="slds-form-element">
+                                        <label class="slds-form-element__label">Owner</label>
+                                        <div class="slds-form-element__control">
+                                            <apex:inputText value="{!objInvoice.Owner.name}" styleClass="slds-input" id="ifowner" disabled="true"/>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                                    <div class="slds-form-element">
+                                        <label class="slds-form-element__label">Email</label>
+                                        <div class="slds-form-element__control">
+                                            <apex:inputText value="{!objInvoice.Email__c}" styleClass="slds-input" id="ifnEmail" disabled="{!editMode}"/>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                                    <div class="slds-form-element">
+                                        <label class="slds-form-element__label">Billing State/Province</label>
+                                        <div class="slds-form-element__control">
+                                            <apex:inputText value="{!objInvoice.Billing_State_Province__c}" styleClass="slds-select" id="ifbillstateout" rendered="{!editMode}" disabled="True" required="true"/>
+                                            <apex:inputField value="{!objInvoice.Billing_State_Province__c}" styleClass="slds-select" id="ifbillstate" rendered="{!!editMode}" required="true"/>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                                    <div class="slds-form-element">
+                                        <label class="slds-form-element__label">Balance</label>
+                                        <div class="slds-form-element__control">
+                                            <apex:inputText value="{!objInvoice.Balance__c}" styleClass="slds-input" id="ifBalance" disabled="true"/>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-1 slds-col--padded">
+                            <div class="slds-grid slds-wrap">
+                                <!----Added for defect Payment date---->
+                                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                                    <div class="slds-form-element">
+                                        <label class="slds-form-element__label">Payment Date</label>
+                                        <div class="slds-form-element__control">
+                                            <apex:inputText value="{!paymentDate}" styleClass="slds-input" id="ifPayDt" disabled="true" required="true"/>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                                    <div class="slds-form-element">
+                                        <label class="slds-form-element__label">Related to Order</label>
+                                        <div class="slds-form-element__control">
+                                            <apex:inputText value="{!objInvoice.Related_to_Order__c}" styleClass="slds-input" id="ifrto" rendered="{!editMode}" disabled="{!editMode}"/>
+                                            <apex:inputField value="{!objInvoice.Related_to_Order__c}" styleClass="slds-input" style="width: 88%;" id="ifrto2" rendered="{!if(editMode, false, true)}"/>
+                                        </div>  
+                                    </div>
+                                </div>
+                                
+                                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                                    <div class="slds-form-element">
+                                        <label class="slds-form-element__label">Phone Number</label>
+                                        <div class="slds-form-element__control">
+                                            <apex:inputText value="{!objInvoice.Phone_Number__c}" styleClass="slds-input" id="ifphn" disabled="{!editMode}"/>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                                    <div class="slds-form-element">
+                                        <label class="slds-form-element__label"> Non Taxable</label>
+                                        <div>
+                                            
+                                            <apex:inputCheckbox value="{!objInvoice.Non_Taxable__c}"  id="ifNonTaxable" disabled="{!editMode}"/>
+                                            
+                                        </div>
+                                    </div>
+                                </div> 
+                                
+                                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                                    <div class="slds-form-element">
+                                        <label class="slds-form-element__label">Customer Address</label>
+                                        <div class="slds-form-element__control">
+    	                                    <apex:inputText value="{!objInvoice.Customer_Address__c}" styleClass="slds-input" id="ifZip" disabled="{!editMode}"/> 
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                                    <div class="slds-form-element">
+                                        <label class="slds-form-element__label">Comments/Notes</label>
+                                        <div class="slds-form-element__control">
+                                            <apex:inputTextarea value="{!objInvoice.Comments_Notes__c}" styleClass="slds-input" id="ifPayComNot" disabled="{!editMode}" required="true"/>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                                    <div class="slds-form-element">
+                                        <label class="slds-form-element__label">Sold By</label>
+                                        <div class="slds-form-element__control">
+                                            <apex:inputText value="{!objInvoice.Sold_By_Ref__r.Name}" styleClass="slds-input" id="sldB" rendered="{!editMode}" disabled="{!editMode}"/>
+                                            <apex:inputField value="{!objInvoice.Sold_By_Ref__c}" styleClass="slds-input" style="width: 88%;" id="sldBL" rendered="{!if(editMode, false, true)}"/>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                                    <div class="slds-form-element">
+                                        <label class="slds-form-element__label">Promo Code</label>
+                                        <div class="slds-form-element__control">
+                                            <apex:inputText value="{!objInvoice.BOATBUILDING__Promo_Code__r.Promo_Code_Name__c}" styleClass="slds-input" id="invPC" disabled="true"/>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                                    <div class="slds-form-element">
+                                        <label class="slds-form-element__label">Promo Code Discount</label>
+                                        <div class="slds-form-element__control">
+                                            <apex:inputText value="{!objInvoice.Discount_With_Promocode__c}" styleClass="slds-input" id="invPCD" disabled="true"/>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                                    <div class="slds-form-element">
+                                        <label class="slds-form-element__label"></label>
+                                        <div class="slds-form-element__control"> 
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                                    <div class="slds-form-element">
+                                        <label class="slds-form-element__label"></label>
+                                        <div class="slds-form-element__control"> 
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                                    <div class="slds-form-element">
+                                        <label class="slds-form-element__label"></label>
+                                        <div class="slds-form-element__control"> 
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                                    <div class="slds-form-element">
+                                        <label class="slds-form-element__label"></label>
+                                        <div class="slds-form-element__control"> 
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>   
+                    </div>
+                </div>
+                <hr/>
+                <div id="pTable" class="slds-col slds-size--1-of-1 slds-medium-size--1-of-1 slds-col--padded">
+                    <div>
+                    	<apex:outputPanel rendered="{!if(!editMode, true, false)}">
+                        	<a href="javascript:void(0);" onclick="document.getElementById('id01').style.display='block'" class="slds-button slds-button--neutral slds-button--brand inside_row_button slds-addPart" id="addParts">Add Parts</a>
+                        </apex:outputPanel>
+                    </div>
+                    
+                    <apex:outputPanel id="prtTblId">
+                        <table id="opTable" class="slds-table slds-table--bordered slds-no-row-hover slds-table--cell-buffer slds-m-top--x-large Table1 slds-card">
+                            <tr>
+                                <th>Part Number</th>
+                                <th>Decription</th>
+                                <th>Quantity</th>
+                                <th>MSRP</th>
+                                <th>Total</th>
+                                <th>Discount(%)</th>
+                                <th>Discount($)</th>
+                                <th>Grand Total</th>
+                                <th>&nbsp;</th>
+                            </tr>
+                            <tbody>
+                                <apex:repeat value="{!AllLineItem}" var="objInvoiceLineItem">
+                                    <tr>
+                                        <td>{!objInvoiceLineItem.objInvoiceLineItem.Part_Number__c}</td>
+                                        <td>{!objInvoiceLineItem.objInvoiceLineItem.Name}</td>
+                                        <td><apex:inputText styleClass="slds-input" onchange="quantityChangeLII(this, '{!objInvoiceLineItem.objInvoiceLineItem.Id}')" style="width: 30%;" value="{!objInvoiceLineItem.objInvoiceLineItem.Quantity__c}" disabled="{!editMode}"/></td>
+                                        <td>${!objInvoiceLineItem.objInvoiceLineItem.Part_Cost__c}</td> 
+                                        <td>${!objInvoiceLineItem.objInvoiceLineItem.Total_Price__c}</td>
+                                        <td><apex:inputText styleClass="slds-input" onchange="discountChange(this, '{!objInvoiceLineItem.objInvoiceLineItem.Id}', 'PER')" style="width: 30%;" value="{!objInvoiceLineItem.objInvoiceLineItem.Discount_in_Percent__c}" disabled="{!editMode}"/></td>
+                                        <td><apex:inputText styleClass="slds-input" onchange="discountChange(this, '{!objInvoiceLineItem.objInvoiceLineItem.Id}', 'CUR')" style="width: 30%;" value="{!objInvoiceLineItem.objInvoiceLineItem.Discount_Price__c}" disabled="{!editMode}"/></td>
+                                        <td>${!objInvoiceLineItem.objInvoiceLineItem.Grand_Total__c}</td>
+                                        <td><apex:outputPanel rendered="{!if(!editMode || objInvoice.Invoice_Status__c != 'Final', true, false)}"><a class="slds-button slds-button--neutral slds-button--brand inside_row_button" type="button" onclick="deleteLI('{!objInvoiceLineItem.objInvoiceLineItem.Id}');" id="dltLI">Delete</a></apex:outputPanel></td>  
+                                    </tr>
+                                </apex:repeat>
+                            </tbody>
+                            <tfoot>
+                                <tr class="slds-hint-parent">
+                                    <th></th>
+                                    <th></th>
+                                    <th></th>
+                                    <th></th>
+                                    <th>${!objInvoice.Sum_Price_Line_Items__c}</th>
+                                    <th></th>
+                                    <th>${!objInvoice.Sum_Discount_Availed_on_Line_Items__c}</th>
+                                    <th>${!objInvoice.Payment__c}</th>
+                                    <th>&nbsp;</th>
+                                </tr>
+                                <tr class="slds-hint-parent">
+                                    <th></th>
+                                    <th></th>
+                                    <th></th>
+                                    <th></th>
+                                    <th></th>
+                                    <th>Shipping Charge: </th>
+                                    <th><apex:inputText styleClass="slds-input" onchange="ShippingChange(this);" style="width: 30%;" value="{!objInvoice.Shipping_Charge__c}" disabled="{!editMode}"/></th>
+                                    <th>&nbsp;</th>
+                                </tr>   
+                                <tr class="slds-hint-parent">
+                                    <th></th>
+                                    <th></th>
+                                    <th></th>
+                                    <th></th>
+                                    <th></th>
+                                    <th>Parts Total: </th>
+                                    <th>${!FinalAmount}</th>
+                                    <th>&nbsp;</th>
+                                </tr> 
+                            </tfoot>
+                        </table>
+                    </apex:outputPanel>             
+                </div>
+                <div id="id01" class="modal" >
+                    <div class="modal-content animate" style="height: 90%; width: 80%;overflow: auto;">
+                        <a style="position: absolute;left: 86.8%;" id="closeSign"><i class="fa fa-times fa-lg __web-inspector-hide-shortcut__" aria-hidden="true"></i></a>
+                        <section style="padding: 2%;">
+                            <b>Add Part</b><hr/>
+                            <label><b>Part Number/Part Name: </b></label>
+                            &nbsp;<input type="text" style="width: 20%;" id="prtDetailInput" class="slds-input"/>
+                            <button style="width: auto;" class="slds-button slds-button--neutral slds-button--brand inside_row_button " id="prtSrchBtn" type="button" >Search</button>
+                            <div class="spinnerClass" id="spinner" style="display: none;">
+                                <i  class="fa fa-spinner fa-spin fa-3x fa-fw margin-bottom fa-5x" style="margin-left: 45%; margin-top: 23%;" aria-hidden="true"></i>
+                            </div>
+                            <div id="selectedPrntDiv" style="display: none;">
+                                <hr/>
+                                <label><b>Selected Parts: </b></label>
+                                <div id="selectedPrtDiv">
+                                    
+                                </div>
+                                <div>
+                                    <a style="width: auto;position: relative;left: 91.5%;" class="slds-button slds-button--neutral slds-button--brand inside_row_button" id="addToCrt" type="button" >Add To Invoice</a>
+                                </div>
+                            </div>
+                            <div id="partResultDiv" style="display: none;">
+                                <hr/>
+                                <div id="rsltLstDiv">
+                                    
+                                </div>
+                            </div>
+                        </section>
+                        
+                    </div>
+                    
+                </div>
+                
+                
+                <div style="padding: 10px; margin-left: 25%; margin-top: 2%;">            
+                    <a class="slds-button slds-button--neutral slds-button--brand inside_row_button " type="button" onclick="onClickEditInvoice();" id="editBtn">Edit</a>
+                    <a class="slds-button slds-button--neutral slds-button--brand inside_row_button " type="button" onclick="printInvoice();" id="PrntInvBtn">Print Invoice</a>
+                    <a class="slds-button slds-button--neutral slds-button--brand inside_row_button " type="button" onclick="sendInvoice(this);" id="sendInvBtn">Send Invoice</a>
+                    <a class="slds-button slds-button--neutral slds-button--brand inside_row_button " type="button" onclick="cancelToDetail();" id="cancelBtn">Cancel</a>
+                    <a class="slds-button slds-button--neutral slds-button--brand inside_row_button" type="button" onclick="cancelInvoice();" id="canInvBtn">Cancel Invoice</a>
+                    <a class="slds-button slds-button--neutral slds-button--brand inside_row_button" type="button" onclick="saveInvoice();" id="SaveInvBtn">Save Invoice</a>
+                    <a class="slds-button slds-button--neutral slds-button--brand inside_row_button" type="button" onclick="BackToDetailInvoice();" id="BackInvDetail">Back</a>
+                    <a class="slds-button slds-button--neutral slds-button--brand inside_row_button" type="button" onclick="finalInvoice();" id="finalInvBtn">Final Invoice</a>
+                    
+                     
+                </div> 
+                <apex:actionFunction name="calculateTotal" action="{!calculateAllValues}" id="af1" rerender="prtTblId" oncomplete="completedTask();">
+                    <apex:param name="pN" assignTo="{!prtNum}" value=""/>
+                </apex:actionFunction>
+                <apex:actionFunction name="generateBackInvoiceAndInvoiceLineItem" action="{!createBackInvoice}" id="af3" oncomplete="completedTask();"/>
+                <apex:actionFunction name="addItemsToInventory" action="{!addToInventory}" id="af4" oncomplete="completedTask();"/>
+                <apex:actionFunction name="cancelInvoiceAction" action="{!CancelInvoice}" id="af7" oncomplete="completedTask();" immediate="true"/>
+                
+                
+<!--                 <apex:actionRegion > -->
+<!--                     <apex:actionFunction name="finalInvoiceVF" action="{!finalInvoiceApex}"/> -->
+<!--                 </apex:actionRegion> -->
+                
+                <apex:actionRegion >
+                    <apex:actionFunction name="acfEditInvoice" action="{!editInovice}" id="af8" reRender="frm"/>
+                </apex:actionRegion> 
+                <apex:actionRegion >
+                    <apex:actionFunction name="updateTheLineItem" action="{!updateDiscount}" id="afDisUpdate" reRender="frm">
+                        <apex:param name="LIID" assignTo="{!lineItemIdToBeUpdated}" value=""/>
+                        <apex:param name="DIS" assignTo="{!discountForLineItem}" value=""/>
+                        <apex:param name="DISType" assignTo="{!dicType}" value=""/>
+                    </apex:actionFunction> 
+                </apex:actionRegion>
+                
+                <apex:actionRegion >
+                    <apex:actionFunction name="updateQuanityLI" action="{!updateQuantity}" id="afQuaUpdate" reRender="frm">
+                        <apex:param name="LIIID" assignTo="{!lineItemIdToBeUpdated}" value=""/>
+                        <apex:param name="Qua" assignTo="{!QuantityForLineItem}" value=""/>
+                    </apex:actionFunction> 
+                </apex:actionRegion>
+                
+                <apex:actionRegion >
+                    <apex:actionFunction name="ShippingToUpdate" action="{!ShippingUpdate}" id="afShipUpdate" reRender="frm"/> 
+                </apex:actionRegion>
+                <apex:actionRegion >
+                    <apex:actionFunction name="deletingILI" action="{!deleteLIL}" id="afDel" reRender="frm"> 
+                        <apex:param name="delLIID" assignTo="{!ILIdelete}" value=""/>
+                    </apex:actionFunction>
+                </apex:actionRegion>
+                <apex:actionRegion >
+                    <apex:actionFunction name="updateAllCall" action="{!updateAll}" id="afupdate" reRender="frm"/> 
+                </apex:actionRegion>
+                
+                <script>
+                if('{!editMode}'=='false'){
+                    //document.getElementById("PrntInvBtn").style.display = 'none';
+                    document.getElementById("sendInvBtn").style.display = 'none';
+                    document.getElementById("canInvBtn").style.display = 'none';
+                    document.getElementById("editBtn").style.display = 'none';
+                    document.getElementById("finalInvBtn").style.display = 'inline-block';
+                }
+                if('{!editMode}'=='true'){
+                    document.getElementById("SaveInvBtn").style.display = 'none';
+                    document.getElementById("finalInvBtn").style.display = 'none';
+                }
+                if('{!objInvoice.BOATBUILDING__Invoice_Status__c}'=='Final'){
+	                document.getElementById("editBtn").style.display = 'none';
+	                document.getElementById("canInvBtn").style.display = 'none';
+	                document.getElementById("finalInvBtn").style.display = 'none';
+                }
+                
+                </script>
+                
+                <apex:outputPanel id="opID1"></apex:outputPanel>            
+                <script>
+                
+                
+                var Invoice = '{!InvoiceId}';             
+                function calclateTotal(obj, partNumber, quantity) {
+                    
+                }
+                
+                function finalInvoice() {
+                	//finalInvoiceVF();
+                	var invId = "{!$CurrentPage.parameters.id}";
+                	BOATBUILDING.InvoiceDetailController.finalInvoiceApex(invId, function(result, event) {
+                		window.top.location = '/apex/BOATBUILDING__InvoiceDetail?id='+result;
+                	});
+                }
+                
+                
+                function cancelToDetail(){
+                    //alert('Cancel btn called');
+                    var invId = "";
+                    invId = "{!$CurrentPage.parameters.id}";
+                    //alert(invId);
+                    window.top.location = '/apex/BOATBUILDING__InvoiceDetail?id='+invId;
+                }
+                
+                //Part Disount Change*******************************
+                function discountChange(obj, objILIId, disTypeJS) {
+                    
+                    if(/^\d*$/.test(obj.value) || /^\d+\.\d{0,2}$/.test(obj.value) || /^\.\d{0,2}$/.test(obj.value)) {
+                        console.log("Discount: " + obj.value + ", Id: "+ objILIId);
+                        updateTheLineItem(objILIId, obj.value, disTypeJS);
+                    } else {
+                        obj.value = "0.00";
+                    }
+                }
+                
+                //Part Disount Change*******************************
+                function quantityChangeLII(obj, objILIId) {
+                    
+                    if(/^\d*$/.test(obj.value)) {
+                        console.log("Discount: " + obj.value + ", Id: "+ objILIId);
+                        updateQuanityLI(objILIId, obj.value);
+                    } else {
+                        obj.value = "0.00";
+                    }
+                }
+                
+                //Shipping Change*******************************8
+                function ShippingChange(obj) {
+                    var invId = "";
+                    invId = "{!$CurrentPage.parameters.id}"
+                    if(/^\d*$/.test(obj.value) || /^\d+\.\d{0,2}$/.test(obj.value) || /^\.\d{0,2}$/.test(obj.value)) {
+                        BOATBUILDING.InvoiceDetailController.updateShipping(obj.value, invId, function(result, event) {
+                            if(event.status) {
+                                if(result != null) {
+                                    updateAllCall();
+                                }
+                            }
+                        });
+                    } else {
+                        obj.value = "0.00";
+                    }
+                }
+                
+                function BackToDetailInvoice(){
+                    window.top.location = '/apex/ServicePage?subTabName=tab-default-6';
+                }
+                
+                function saveInvoice(){
+                    var invId = "";
+                    var NonTax = document.getElementById("pge:frm:ifNonTaxable").checked ;
+                    invId = "{!$CurrentPage.parameters.id}";
+                    if(invId != null && invId != "") { 
+                        
+                        var invoiceDetails = new Object();
+                        var isError = false;
+                        invoiceDetails["Id"] = invId;
+                        
+                        //Name*******************************
+                        if(document.getElementById("pge:frm:ifName").value != "") {
+                            invoiceDetails["InvoiceName"] = document.getElementById("pge:frm:ifName").value;
+                        } else {
+                            isError = true;
+                            alert("Please enter the name.");
+                        }
+                        
+                        //Status*******************************
+                        if(document.getElementById("pge:frm:Invst").value != null && document.getElementById("pge:frm:Invst").value != "") {
+                            invoiceDetails["InvoiceStatus"] = document.getElementById("pge:frm:Invst").value;
+                        }
+                        
+                        //Customer Name**********************
+                        var conId = document.getElementById("pge:frm:ifConLook_lkid").value;
+                        var conName = document.getElementById("pge:frm:ifConLook").value;
+                        if(conId != null && conId != "" && conId != "000000000000000") {
+                            if(conName != null && conName != "") {
+                                invoiceDetails["RelatedToContact"] = conId;
+                            } else {
+                                alert("Please select customer.");
+                            } 
+                        } else {
+                            alert("Please select customer.");
+                        }
+                        
+                        
+                        //Total ShopShpplies*******************
+                        invoiceDetails["ShopShupplies"] = "0";
+                        /*
+                       if(document.getElementById("pge:frm:iftotss").value != "") {
+                            
+                       } else {
+                            invoiceDetails["ShopShupplies"] = "0"; 
+                       }*/
+                       
+                       //City ********************************
+                       if(document.getElementById("pge:frm:ifcity").value != "") {
+                           invoiceDetails["City"] = document.getElementById("pge:frm:ifcity").value;
+                       } else {
+                           invoiceDetails["City"] = "0"; 
+                       }
+                       
+                       //Email ********************************
+                       var mailTest = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+                       var email = document.getElementById("pge:frm:ifnEmail");
+                       if (mailTest.test(email.value) || email.value == "") {
+                           invoiceDetails["Email"] = email.value;      
+                       } else {
+                           alert("Please enter email in aa@aa.aa format.");
+                           isError = true;
+                       }
+                       
+                       //State ********************************
+                       if(document.getElementById("pge:frm:ifstate").value != "") {
+                           invoiceDetails["State"] = document.getElementById("pge:frm:ifstate").value;
+                       } else {
+                           invoiceDetails["State"] = "--"; 
+                       }
+                       
+                       //Postal Code ********************************
+                       if(document.getElementById("pge:frm:ifzcode").value != "") {
+                           invoiceDetails["Zip"] = document.getElementById("pge:frm:ifzcode").value;
+                       } else {
+                           invoiceDetails["Zip"] = "--"; 
+                       }
+                       
+                       //Billing State ********************************
+                       if(document.getElementById("pge:frm:ifbillstate").value != "") {
+                           invoiceDetails["BillingState"] = document.getElementById("pge:frm:ifbillstate").value;
+                       } else {
+                           invoiceDetails["BillingState"] = "--"; 
+                       }
+                       
+                       //Total Labor ********************************
+                       invoiceDetails["Labor"] = "0";
+                       /*
+                       if(document.getElementById("pge:frm:iftotlab").value != "") {
+                            invoiceDetails["Labor"] = document.getElementById("pge:frm:iftotlab").value;
+                       }*/
+                       
+                       //Related To Order ********************************
+                       if(document.getElementById("pge:frm:ifrto2_lkid").value != "000000000000000") {
+                           invoiceDetails["RTO"] = document.getElementById("pge:frm:ifrto2_lkid").value;
+                       }
+                       
+                       //NotesComments ********************************
+                       if(document.getElementById("pge:frm:ifPayComNot").value != "") {
+                           invoiceDetails["NotesComments"] = document.getElementById("pge:frm:ifPayComNot").value;
+                       }
+                       
+                       //Phone Number ********************************
+                       if(document.getElementById("pge:frm:ifphn").value != "") {
+                           invoiceDetails["PhoneNumber"] = document.getElementById("pge:frm:ifphn").value;
+                       }
+                       
+                       //Zip Code ********************************
+                       if(document.getElementById("pge:frm:ifZip").value != "") {
+                           invoiceDetails["CustomerAddress"] = document.getElementById("pge:frm:ifZip").value;
+                       } 
+                       
+                       var sldById = document.getElementById("pge:frm:sldBL_lkid").value;
+                       var sldByName = document.getElementById("pge:frm:sldBL").value;
+                       if(sldById == null || sldById == "" || sldById == "000000000000000"){
+                           alert("Please Select Sold By.");
+                           $('.popup').removeClass('active');
+                           return false;
+                       }
+                       else {
+                           invoiceDetails["SoldBy"] = sldById;
+                       }
+                       
+                       //Updating Invoice*****************************
+                       BOATBUILDING.InvoiceDetailController.updateInvoice(invoiceDetails,NonTax,function(result, event) {
+                           
+                           if(event.status) {
+                               if(result != null) {
+                                   //window.top.location = '/apex/ServicePage?subTabName=tab-default-6';
+                                   window.top.location = '/apex/BOATBUILDING__InvoiceDetail?id='+invId;
+                               }
+                           }
+                       });
+                   }
+                }
+                
+                
+                function cancelInvoice(){
+                    alert('cancel invoice');
+                    cancelInvoiceAction();
+                }
+                
+                function onClickEditInvoice(){
+                    acfEditInvoice();
+                }
+                
+                function completedTask() {
+                    // alert('Enter Completed task');
+                    $('.popup').removeClass('active');
+                    console.log("Task Completed");
+                }
+                function generateInvoice(obj) {
+                    console.log("Generating Order Please Wait...");
+                    $('.popup').addClass('active');
+                    addItemsToInventory();
+                }
+                function generateBackInvoice(obj) {
+                    console.log("Generating Back Order Please Wait...");
+                    $('.popup').addClass('active');
+                    generateBackInvoiceAndInvoiceLineItem();    
+                }
+                function printInvoice() {
+                    
+                    console.log("Printing Invoice Please Wait... "+"{!printStatus}");
+                    debugger;
+                    $('.popup').addClass('active');
+                    window.open('/apex/PrintButtonPageInvoice?scontrolCaching=1&id='+Invoice+'&PrintSkip='+'{!printStatus}');
+                    
+                    completedTask();
+                }
+                function sendInvoice(obj) {
+                    console.log("Sending Invoice Please Wait...");
+                    $('.popup').addClass('active');
+                    window.open('/apex/SendInvoiceDetailPage?scontrolCaching=1&id='+Invoice);
+                    
+                    completedTask(); 
+                }
+                
+                function deleteLI(objLIID) {
+                    console.log(objLIID); 
+                    deletingILI(objLIID);
+                }
+                
+                
+                
+                
+                //*****************************************************************Add Parts**********************
+                
+                var modal = document.getElementById('id01');
+                window.onclick = function(event) {
+                    if (event.target == modal) {
+                        hideAll();
+                    }
+                }
+                $("#closeSign").click(function() {
+                    hideAll();
+                });
+                
+                var lstSelectedPartNumber = [];
+                var lstParts = [];
+                var mapForQuantity = new Object();
+                var mapForQuantityTmp = new Object();
+                function hideAll() {
+                    $('#id01').fadeOut();
+                    $('#id02').fadeOut();
+                    $("#selectedPrntDiv").hide();
+                    $("#partResultDiv").hide();
+                    document.getElementById("prtDetailInput").value = "";
+                    lstSelectedPartNumber = [];
+                    mapForQuantity = new Object();
+                }
+                $("#prtSrchBtn").click(function() {
+                    $("#spinner").show();
+                    var prtDetail = $("#prtDetailInput").val();
+                    if(prtDetail != "") {
+                        BOATBUILDING.InvoiceDetailController.searchParts(prtDetail, function(result, event) {
+                            if(event.status) {
+                                if(result != null) {
+                                    lstParts = result;
+                                    $("#partResultDiv").fadeIn();
+                                    var tableHTML = "<table class='slds-table' style='border-collapse: collapse;'><thead><tr><th>&nbsp;</th><th>Part Number</th><th>Part Name</th><th>Quanity</th><th>Retail Price</th><th>Total Amount</th></tr></thead><tbody>";
+                                    if(lstParts.length > 0) { 
+                                        for(var i = 0; i < lstParts.length; i++) {
+                                            var total = parseFloat(lstParts[i].Quantity) * parseFloat(lstParts[i].MSRP);
+                                            if (lstParts[i].PartNumber in mapForQuantity ) {
+                                                tableHTML +="<tr><td><input id='select"+i+"' checked='checked' onchange='addToCart(\""+i+"\");' type='checkbox' /></td><td id='partNumber"+i+"'>"+lstParts[i].PartNumber+"</td><td>"+lstParts[i].PartName+"</td><td><input type='text' id='partQuantity"+i+"' value='"+mapForQuantity[lstParts[i].PartNumber]+"' onkeyPress='return isNumber(event);' onKeyUp='quantityChange(\""+i+"\");' class='slds-input'/></td><td>$<span id='partMSRP"+i+"'>"+lstParts[i].MSRP+"</span></td><td>$<span id='partTotal"+i+"'>"+total+"</span></td></tr>"
+                                            }
+                                            else {
+                                                tableHTML +="<tr><td><input id='select"+i+"' onchange='addToCart(\""+i+"\");' type='checkbox' /></td><td id='partNumber"+i+"'>"+lstParts[i].PartNumber+"</td><td>"+lstParts[i].PartName+"</td><td><input type='text' id='partQuantity"+i+"' value='"+lstParts[i].Quantity+"' onkeyPress='return isNumber(event);' onKeyUp='quantityChange(\""+i+"\");' class='slds-input'/></td><td>$<span id='partMSRP"+i+"'>"+lstParts[i].MSRP+"</span></td><td>$<span id='partTotal"+i+"'>"+total+"</span></td></tr>"
+                                            }
+                                        }
+                                        tableHTML += "</tbody></table>";
+                                    }
+                                    document.getElementById("rsltLstDiv").innerHTML = tableHTML;
+                                    $("#spinner").hide();
+                                }else {
+                                    $("#partResultDiv").fadeIn();
+                                    document.getElementById("rsltLstDiv").innerHTML = "<span style='color: red;'>No Record Found.</span>";
+                                    $("#spinner").hide();
+                                }
+                            }
+                        });
+                    }
+                    else {
+                        $("#partResultDiv").fadeIn();
+                        document.getElementById("rsltLstDiv").innerHTML = "<span style='color: red;'>Please enter Part Number/Part Name.</span>";
+                        $("#spinner").hide();
+                    }
+                });
+                
+                function isNumber(evt) {
+                    evt = (evt) ? evt : window.event;
+                    var charCode = (evt.which) ? evt.which : evt.keyCode;
+                    if (charCode > 31 && (charCode < 48 || charCode > 57)) {
+                        return false;
+                    }
+                    return true;
+                }
+                
+                function isNumberKey(evt) {
+                    var charCode = (evt.which) ? evt.which : evt.keyCode;
+                    if (charCode != 46 && charCode > 31 
+                        && (charCode < 48 || charCode > 57)){
+                        return false;
+                    }
+                    return true;
+                }
+                
+                function addToCart(index) {
+                    var partNumber = document.getElementById("partNumber"+index).innerHTML;
+                    var partQuantity = $("#partQuantity"+index).val();
+                    var partMSRP = document.getElementById("partMSRP"+index).innerHTML;
+                    
+                    if(document.getElementById("select"+index).checked == true) {
+                        if(partQuantity != '') {
+                            if(parseFloat(partQuantity) > 0) {
+                                mapForQuantity[partNumber] = partQuantity;
+                                lstSelectedPartNumber.push(partNumber);
+                                if(lstSelectedPartNumber.length > 0) {
+                                    var strParts = '['
+                                    for(var i = 0; i < lstSelectedPartNumber.length; i++) {
+                                        if(i == 0) {
+                                            strParts += "<a style='font-style: italic;'>"+lstSelectedPartNumber[i]+"</a>";
+                                        }
+                                        else {
+                                            strParts += ", <a style='font-style: italic;'>"+lstSelectedPartNumber[i]+"</a>";
+                                        }
+                                    }
+                                    strParts += "]";
+                                    $("#selectedPrntDiv").fadeIn();
+                                    document.getElementById("selectedPrtDiv").innerHTML = strParts; 
+                                    
+                                }
+                            }
+                            else {
+                                document.getElementById("select"+index).checked = false;
+                                alert("Quantity should be greater than 0.");
+                            }
+                        }else {
+                            document.getElementById("select"+index).checked = false;
+                            alert("Quantity should be greater than 0.");
+                        }
+                    }
+                    else {
+                        if(lstSelectedPartNumber.length > 0) {
+                            var index = lstSelectedPartNumber.indexOf(partNumber);
+                            if(index > -1) {
+                                lstSelectedPartNumber.splice(index, 1);
+                            }
+                            if(lstSelectedPartNumber.length > 0) {
+                                var strParts = '['
+                                for(var i = 0; i < lstSelectedPartNumber.length; i++) {
+                                    if(i == 0) {
+                                        strParts += "<a style='font-style: italic;'>"+lstSelectedPartNumber[i]+"</a>";
+                                    }
+                                    else {
+                                        strParts += ", <a style='font-style: italic;'>"+lstSelectedPartNumber[i]+"</a>";
+                                    }
+                                }
+                                strParts += "]";
+                                $("#selectedPrntDiv").fadeIn();
+                                document.getElementById("selectedPrtDiv").innerHTML = strParts;     
+                            }
+                            else {
+                                $("#selectedPrntDiv").fadeOut();
+                            }
+                        }
+                        
+                        delete mapForQuantity[partNumber];
+                    }
+                }
+                
+                function quantityChange(index) {
+                    updateDiscountQuantityMaps(index);
+                }
+                
+                function updateDiscountQuantityMaps(index) {
+                    var partNumber = document.getElementById("partNumber"+index).innerHTML;
+                    var partQuantity = $("#partQuantity"+index).val();
+                    var partMSRP = document.getElementById("partMSRP"+index).innerHTML;
+                    if(partQuantity != '') {
+                        partQuantityTmp = parseFloat(partQuantity);
+                    }
+                    var total = partQuantityTmp * partMSRP;
+                    
+                    document.getElementById("partTotal"+index).innerHTML = total;
+                    if (partNumber in mapForQuantity ) {
+                        mapForQuantity[partNumber] = partQuantity;
+                    }
+                }
+                
+                
+                $("#addToCrt").click(function() {
+                    var invId = "";
+                    invId = "{!$CurrentPage.parameters.id}";
+                    $("#spinner").show();
+                    for(key in mapForQuantity) {
+                        mapForQuantityTmp[key] = mapForQuantity[key];
+                    }
+                    var lstResult = [];
+                    if(lstSelectedPartNumber.length > 0) {
+                        BOATBUILDING.InvoiceDetailController.generateInvoice(lstSelectedPartNumber, mapForQuantityTmp, invId, function(result, event) {
+                            if(event.status) {
+                                if(result != null) {
+                                    updateAllCall();
+                                    $("#spinner").hide();
+                                    hideAll();
+                                }
+                            }
+                        });
+                    }
+                });
+                
+                var modal = document.getElementById('addPaymentPopup');
+                window.onclick = function(event) {
+                    if (event.target == modal) {
+                        $('#addPaymentPopup').fadeOut();
+                    }
+                }
+                
+                $("#closeSign1").click(function() {
+                    $('#addPaymentPopup').fadeOut();
+                });
+                
+                function addPayment(){
+                    document.getElementById('addPaymentPopup').style.display='block';
+                }
+                
+                function onChangePayment(strPaymentType) {
+                    //if(strPaymentType == "Credit_Card" && '{!baseUrlINV}' != ""){
+                    //  document.getElementById('CreditCardType').disabled = false;
+                    //} else {
+                    //  document.getElementById('CreditCardType').disabled = true;
+                    //}
+                    if(strPaymentType == 'Cash') {
+                    	$("#paymentRChangesec").show();
+                    } else {
+                    	$("#paymentRChangesec").hide();
+                    }
+                    
+                    
+                    if(strPaymentType == "Credit_Card") {
+                        document.getElementById('CreditCardType').disabled = false; 
+                    }                    
+                    
+                    if(strPaymentType == "Credit_Card" && '{!baseUrlINV}' != ""){
+                        document.getElementById('CreditCardType').disabled = false;
+                        //document.getElementById('pge:frm:PaymentAmount').disabled = true;
+                        $("#createPaymentBtn").html("Proceed to Gateway");
+                    } else { 
+                        if(strPaymentType != "Credit_Card" ) {
+                            document.getElementById('CreditCardType').disabled = true;
+                        }
+                        //document.getElementById('pge:frm:PaymentAmount').disabled = false;
+                        $("#createPaymentBtn").html("Create Payment");
+                    }
+                    
+                }
+                
+                function UpdateBalance(amount){
+                    document.getElementById('paymentBalance').value = parseFloat(document.getElementById('pge:frm:TotalAmountDue').value - amount).toFixed(2);
+                    var ptype = document.getElementById("pge:frm:PaymentType").value;
+                    if(ptype == 'Cash') {
+                    	var changeReturn = amount - document.getElementById('pge:frm:TotalAmountDue').value;
+                    	if(changeReturn > 0) {
+                    		$("#paymentRChange").val(parseFloat(changeReturn).toFixed(2));
+                    	} else {
+                    		$("#paymentRChange").val(0.00);
+                    	}
+                    } else {
+                    	$("#paymentRChange").val(0.00); 
+                    }
+                }
+                
+                
+                $("#createPaymentBtn").click(function() {
+                	console.log("Method Check");
+                    var objPaymentDataDetail = new Object();
+                    var invId = "";
+                    invId = "{!$CurrentPage.parameters.id}";
+                    var checkNum;
+                    objPaymentDataDetail["PaymentType"] = document.getElementById("pge:frm:PaymentType").value;
+                    console.log("PaymentType"+document.getElementById("pge:frm:PaymentType").value);
+                    objPaymentDataDetail["Amount"] = document.getElementById("pge:frm:PaymentAmount").value;
+                    
+                    objPaymentDataDetail["CheckNumber"] = document.getElementById("pge:frm:CheckNumber").value;
+                    objPaymentDataDetail["CreditCardType"] = document.getElementById("CreditCardType").value; 
+                    objPaymentDataDetail["ChangeRTN"] = document.getElementById("paymentRChange").value;
+                    if(objPaymentDataDetail["PaymentType"] == 'Credit_Card' && '{!baseUrlINV}' != "") {
+                        if(objPaymentDataDetail["CreditCardType"] != null && objPaymentDataDetail["CreditCardType"] != "" && objPaymentDataDetail["CreditCardType"] != "None") {
+                            window.top.location = '{!baseUrlINV}'+'?invId='+'{!InvoiceId}'+'&CardType='+objPaymentDataDetail["CreditCardType"]+'&amount='+objPaymentDataDetail["Amount"];;
+                            return;
+                        } else {  
+                            alert("Please select card type");   
+                            return; 
+                        }    
+                    } 
+                    console.log("After Redirection");
+                    var error = false;
+                    var totalAmt = document.getElementById("pge:frm:TotalAmountDue").value;
+                    if(parseFloat(objPaymentDataDetail["Amount"]) > parseFloat(totalAmt) && objPaymentDataDetail["PaymentType"] != 'Cash') {
+                        error = true;
+                    }
+                    
+                    console.log("after Amount Validation: " +error);
+                    
+                    
+                    if(!error) {
+                        
+                        if(document.getElementById("pge:frm:PaymentType").value!=null && document.getElementById("pge:frm:PaymentType").value !=""){
+                            if(document.getElementById("pge:frm:PaymentType").value == "Check"){
+                                // alert('Enter in check');
+                                if(document.getElementById("pge:frm:CheckNumber").value!=null && document.getElementById("pge:frm:CheckNumber").value!=""){
+                                    console.log('Enter if checknumber is there');
+                                    if(document.getElementById("pge:frm:PaymentAmount").value !=null && document.getElementById("pge:frm:PaymentAmount").value!="" && document.getElementById("pge:frm:PaymentAmount").value !="0.00"){
+                                        console.log('Before  Method call');
+                                        BOATBUILDING.InvoiceDetailController.addPayment(objPaymentDataDetail, invId, function(result, event) {
+                                            console.log(result);
+                                            console.log('Enter in After payment');
+                                            if(event.status) {
+                                                if(result != null){
+                                                    updateAllCall();
+                                                    $('#addPaymentPopup').fadeOut();
+                                                }else {
+                                                    $('#addPaymentPopup').fadeOut();
+                                                }
+                                            } 
+                                        }); 
+                                    }else{
+                                        alert('Please enter Amount');
+                                    }
+                                }else{
+                                    alert('Please Enter Check Number');
+                                }
+                            }else if(document.getElementById("pge:frm:PaymentType").value =="Cash"){
+                                //alert('not in check');
+                                if(document.getElementById("pge:frm:PaymentAmount").value !=null && document.getElementById("pge:frm:PaymentAmount").value!="" && document.getElementById("pge:frm:PaymentAmount").value !="0.00"){
+                                    BOATBUILDING.InvoiceDetailController.addPayment(objPaymentDataDetail, invId, function(result, event) {
+                                        //alert('Enter in After payment');
+                                        if(event.status) {
+                                            if(result != null){
+                                                updateAllCall();
+                                                $('#addPaymentPopup').fadeOut();
+                                            }else {
+                                                $('#addPaymentPopup').fadeOut();
+                                            }
+                                        } 
+                                    }); 
+                                }else{
+                                    alert('Please enter Amount');
+                                }
+                            }else if(document.getElementById("pge:frm:PaymentType").value =="Credit_Card"){
+                                //alert('cc value :'+document.getElementById("CreditCardType").value);
+                                if(document.getElementById("CreditCardType").value!=null && document.getElementById("CreditCardType").value!="" && document.getElementById("CreditCardType").value!="--None--"){
+                                    //alert('Enter if CC type is selected');
+                                    if(document.getElementById("pge:frm:PaymentAmount").value !=null && document.getElementById("pge:frm:PaymentAmount").value!="" && document.getElementById("pge:frm:PaymentAmount").value !="0.00"){
+                                        BOATBUILDING.InvoiceDetailController.addPayment(objPaymentDataDetail, invId, function(result, event) {
+                                            //alert('Enter in After payment');
+                                            if(event.status) {
+                                                if(result != null){
+                                                    updateAllCall();
+                                                    $('#addPaymentPopup').fadeOut();
+                                                }else {
+                                                    $('#addPaymentPopup').fadeOut();
+                                                }
+                                            } 
+                                        }); 
+                                    }else{
+                                        alert('Please enter Amount');
+                                    }
+                                }else{
+                                    alert('Please Select Card Type');
+                                }
+                            } else {
+                            	if(document.getElementById("pge:frm:PaymentAmount").value !=null && document.getElementById("pge:frm:PaymentAmount").value!="" && document.getElementById("pge:frm:PaymentAmount").value !="0.00"){
+                                   BOATBUILDING.InvoiceDetailController.addPayment(objPaymentDataDetail, invId, function(result, event) {
+                                       //alert('Enter in After payment');
+                                       if(event.status) {
+                                           if(result != null){
+                                               updateAllCall();
+                                               $('#addPaymentPopup').fadeOut();
+                                           }else {
+                                               $('#addPaymentPopup').fadeOut();
+                                           }
+                                       } 
+                                   }); 
+                               }else{
+                                   alert('Please enter Amount');
+                               }
+                            }
+                            
+                        }else{
+                            alert("Please select payment type");
+                        } 
+                    } else {
+                        alert("Amount of the Payment must not exceed total Balance on Invoice.");
+                    }
+                });
+                
+                </script>
+            </apex:form>
+        </body>
+    </html>
+</apex:page>

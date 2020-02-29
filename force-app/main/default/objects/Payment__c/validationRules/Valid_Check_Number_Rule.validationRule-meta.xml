@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Valid_Check_Number_Rule</fullName>
+    <active>true</active>
+    <errorConditionFormula>AND( ISPICKVAL(Payment_Type__c , &quot;Check&quot;) ,
+OR
+(
+ !ISNUMBER( Check_Number__c ) ,
+LEN( Check_Number__c ) &lt;9
+)
+)</errorConditionFormula>
+    <errorDisplayField>Check_Number__c</errorDisplayField>
+    <errorMessage>Please Provide a valid Routing Transit Number for the check (A valid 9 digit number).</errorMessage>
+</ValidationRule>

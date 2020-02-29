@@ -1,0 +1,15 @@
+.THIS .customerComment svg {
+    background: orangered !important;
+}
+
+.THIS .serviceWriterComment svg {
+    background: #4bb3e4 !important;
+}
+
+.THIS .techComment svg {
+    background: blue  !important;
+}
+
+.THIS .floatRightCls {
+    float: right;
+}

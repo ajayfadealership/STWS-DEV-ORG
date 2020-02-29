@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>M_Hidden_Box__c</fullName>
+    <deprecated>false</deprecated>
+    <externalId>false</externalId>
+    <formula>M_Your_Price_Calculated__c  -  M_Total_Over_Allowance_Calculated__c</formula>
+    <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+    <inlineHelpText>Used to perform calculations of Prices(internal purposes),not shown during Negotiation.</inlineHelpText>
+    <label>Hidden Box</label>
+    <precision>18</precision>
+    <required>false</required>
+    <scale>2</scale>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Currency</type>
+</CustomField>

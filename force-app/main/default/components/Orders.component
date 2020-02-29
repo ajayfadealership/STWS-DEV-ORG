@@ -1,0 +1,54 @@
+<apex:component id="ordrComp" controller="OrdersController">
+    <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-1" id="Customer_Datails">
+        
+        <div class="slds-grid slds-wrap">
+            <!-- ======= Second Table   -->
+            
+            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-1 slds-col--padded">
+                <div class="slds-card__body slds-col--padded">
+	                <apex:outputPanel id="orderTbleOP">
+	                    <table id="ordrTableFinal" class="show slds-table slds-table--bordered slds-no-row-hover slds-table--cell-buffer slds-m-top--x-large slds-card">
+	                        <thead>
+	                            <tr class="slds-text-heading--label">
+	                                <th scope="col">Order Number</th>
+	                                <th scope="col">Vendor</th>
+	                              <!--  <th scope="col">Order Date</th> -->
+	                               <th scope="col">Total Amount</th>
+	                                 <th scope="col">Created By</th>              		
+	                                 <th scope="col">Created Date</th>
+	                                 <th scope="col">Record Type</th>
+	                            </tr>
+	                        </thead>
+	                        <tbody>
+	                            <apex:repeat value="{!lstOfOrder}" var="objO">
+	                                <tr class="slds-hint-parent">
+	                                    <td>
+	                                        <a href="/apex/BOATBUILDING__ApproveOrder?id={!objO.Id}">
+	                                            <apex:outputField value="{!objO.Name}"/>
+	                                        </a>
+	                                        &nbsp; <a href="/apex/BOATBUILDING__ApproveOrder?id={!objO.Id}" target="blank"><img src="https://image.flaticon.com/icons/png/512/376/376007.png" style="height: 10px; width: 10px;"/></a>
+	                                    </td>
+	                                    <td><apex:outputField value="{!objO.Vendor_Name__r.Name}"/></td>
+	                                  <!-- <td><apex:outputField value="{!objO.PO_Date__c}"/></td> -->
+	                                    <td><apex:outputField value="{!objO.Amount_On_Order__c}"/></td>
+	                                    <td><apex:outputField value="{!objO.CreatedBy.Name}"/></td>
+	                                     <td><apex:outputField value="{!objO.CreatedDate}"/></td>
+	                                     <td><apex:outputField value="{!objO.RecordType.Name}"/></td>
+	                        
+	                                    
+	                                </tr>
+	                            </apex:repeat>
+	                        </tbody>
+	                    </table>
+	                </apex:outputPanel>
+                </div>
+            </div>
+        </div>
+        <script>
+                $('#ordrTableFinal').DataTable( {
+              "pageLength": 25,
+              "lengthMenu": [[25, 50, -1], [25, 50, "All"]]
+            } );
+        </script>
+    </div>
+</apex:component>

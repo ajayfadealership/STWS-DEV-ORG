@@ -1,0 +1,89 @@
+<apex:page id="pge" standardController="Quote__c" extensions="SoldBoatInvoiceController" showHeader="false" sidebar="false" action="{!directTo}">
+    <style>
+        .popup{
+        position: fixed;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background: rgba(0,0,0,0.5);
+        z-index: 999;
+        }
+        .myButton {
+        background:-webkit-gradient(linear, left top, left bottom, color-stop(0.05, #458fc7), color-stop(1, #3186bf));
+        background:-moz-linear-gradient(top, #458fc7 5%, #3186bf 100%);
+        background:-webkit-linear-gradient(top, #458fc7 5%, #3186bf 100%);
+        background:-o-linear-gradient(top, #458fc7 5%, #3186bf 100%);
+        background:-ms-linear-gradient(top, #458fc7 5%, #3186bf 100%);
+        background:linear-gradient(to bottom, #458fc7 5%, #3186bf 100%);
+        filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#458fc7', endColorstr='#3186bf',GradientType=0);
+        background-color:#458fc7;
+        -moz-border-radius:13px;
+        -webkit-border-radius:13px;
+        border-radius:13px;
+        border:1px solid #238bd1;
+        display:inline-block;
+        cursor:pointer;
+        color:#ffffff;
+        font-family:Arial;
+        font-size:21px;
+        padding:12px 51px;
+        text-decoration:none;
+        text-shadow:1px 2px 9px #010300;
+        margin-left: 450px;
+        margin-top: 20px;
+        }
+        .myButton:hover {
+        background:-webkit-gradient(linear, left top, left bottom, color-stop(0.05, #3186bf), color-stop(1, #458fc7));
+        background:-moz-linear-gradient(top, #3186bf 5%, #458fc7 100%);
+        background:-webkit-linear-gradient(top, #3186bf 5%, #458fc7 100%);
+        background:-o-linear-gradient(top, #3186bf 5%, #458fc7 100%);
+        background:-ms-linear-gradient(top, #3186bf 5%, #458fc7 100%);
+        background:linear-gradient(to bottom, #3186bf 5%, #458fc7 100%);
+        filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#3186bf', endColorstr='#458fc7',GradientType=0);
+        background-color:#3186bf;
+        }
+        .myButton:active {
+        position:relative;
+        top:1px;
+        }
+        
+    </style>
+    <div id="spinnerDiv"  class="popup" style="display:none;">
+        <apex:image id="theImage2" value="{!$Resource.Process}" style="position: fixed;padding-top: 200px;padding-left: 600px;" width="100" height="100"/>
+        <label style="font-size:30px"><h1>Please Wait...</h1></label>
+    </div>
+    <div id="popupDiv" style="top: 0;bottom: 0;left: 0;right: 0;background: rgba(0,0,0,0.5);padding-top: 200px;padding-left: 350px;background-color:white;display:none;">
+        <label style="font-size:30px"><h1>Inventory Quantity Is Not Updated. Please Update.</h1></label><br/>
+        <a  class="myButton" onclick="callQuote();">OK</a>
+    </div>
+    <div id="popupDiv2" style="top: 0;bottom: 0;left: 0;right: 0;background: rgba(0,0,0,0.5);padding-top: 200px;padding-left: 350px;background-color:white;display:none;">
+        <label style="font-size:30px;    position: relative; left: 22%;"><h1>Quote is not Final.</h1></label><br/>
+        <a  class="myButton" onclick="callQuote();">OK</a>
+    </div>
+    <apex:form id="frm">  
+        <apex:pageMessages />
+        <apex:actionFunction name="callDirectTo" action="{!directTo}" oncomplete="hideEverything();" reRender="pge:div"/>
+    </apex:form>
+    <script>
+    onload = function() {
+        
+        //callDirectTo(); 
+    }
+    function hideEverything() {
+        document.getElementById("spinnerDiv").style.display = "none";
+        var quantity = '{!lstQuote[0].Test_2__r.Quantity__c}';
+        
+        console.log(quantity);
+        if(quantity == null || quantity == "" || quantity == 0) {
+            document.getElementById("popupDiv").style.display = "block";
+        } else if("{!status}" != "Final") {
+            document.getElementById("popupDiv2").style.display = "block"; 
+        }
+    }
+    function callQuote() {
+        var quoteId = '{!lstQuote[0].Id}';
+        window.top.location = "/"+quoteId;
+    }
+    </script>
+</apex:page>

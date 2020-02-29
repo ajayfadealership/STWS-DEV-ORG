@@ -1,0 +1,6 @@
+<apex:page standardController="Work_Order__c" extensions="WorkOrderpageController" action="{!sendworkordertoqb}">
+
+    <apex:pageblock >
+      <h1>{!batchResult}</h1>  
+    </apex:pageblock>
+</apex:page>

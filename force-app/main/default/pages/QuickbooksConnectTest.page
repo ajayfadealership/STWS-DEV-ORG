@@ -1,0 +1,5 @@
+<apex:page controller="NewQBConnectTest">
+  <apex:form >
+      Authentication Succesfully......
+  </apex:form>
+</apex:page>

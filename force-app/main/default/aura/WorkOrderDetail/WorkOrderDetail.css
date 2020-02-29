@@ -1,0 +1,16 @@
+.THIS .addNewJob {
+    float: right;
+    margin-top: -35px;
+}
+.THIS .taxableToggle{
+    float:right;
+}
+.THIS .saveJobs{
+    float: right;
+    margin-right: 41%;
+    margin-top: -4%;
+}
+
+.THIS .slds-truncate{
+    white-space: normal;
+}

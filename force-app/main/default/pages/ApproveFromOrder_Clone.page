@@ -1,0 +1,529 @@
+<apex:page id="pge" sidebar="false"  showHeader="false" standardController="Order__c" extensions="ApproveFromOrderController_Clone" standardStylesheets="false" docType="html-5.0" action="{!checkAccess}">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.12/css/jquery.dataTables.min.css"/>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.0/jquery.min.js"/>
+    <script src="https://cdn.datatables.net/1.10.12/js/jquery.dataTables.min.js"/>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <apex:stylesheet value="{!URLFOR($Resource.BoatBuilderSR, 'assets/styles/salesforce-lightning-design-system.min.css')}" />
+    <style >
+        .popup{ 
+            position: fixed; 
+            top: 0;
+            bottom: 0; 
+            left: 0;
+            right: 0;
+            background: rgba(0,0,0,0.5);
+            display: none; 
+            z-index: 999; 
+        } 
+        
+        .popup.active{display:block}
+        .popup img{margin: 15% auto}
+        
+        
+        .lookupInput {
+            display: flex
+           }
+           
+           .lookupInput .slds-input {
+           margin: 0
+           }
+           
+           .lookupInput a.slds-input {
+           width: 28px;
+           margin: 0;
+           display: inline-block;
+           background: url('/resource/BOATBUILDING__BoatBuilderSR/assets/icons/utility/search_60.png');
+           background-size: contain;
+           background-repeat: no-repeat;
+           border: none;
+           margin-left: 5px;
+           }
+         .modal {
+        display: none; /* Hidden by default */
+        position: fixed; /* Stay in place */
+        z-index: 1; /* Sit on top */
+        left: 0;
+        top: 0;
+        width: 100%; /* Full width */
+        height: 100%; /* Full height */
+        overflow: auto; /* Enable scroll if needed */
+        background-color: rgb(0,0,0); /* Fallback color */
+        background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+        padding-top: 60px;
+        }
+        
+        /* Modal Content/Box */
+        .modal-content {
+        background-color: #fefefe;
+        margin: 1% auto 15% auto; /* 5% from the top, 15% from the bottom and centered */
+        border: 10px solid #888;
+        }
+        
+        /* The Close Button (x) */
+        .close {
+        position: absolute;
+        right: 25px;
+        top: 0;
+        color: #000;
+        font-size: 35px;
+        font-weight: bold;
+        }
+        
+        .close:hover,
+        .close:focus {
+        color: red;
+        cursor: pointer;
+        }
+        
+        /* Add Zoom Animation */
+        .animate {
+        -webkit-animation: animatezoom 0.6s;
+        animation: animatezoom 0.6s
+        }
+        
+        @-webkit-keyframes animatezoom {
+        from {-webkit-transform: scale(0)} 
+        to {-webkit-transform: scale(1)}
+        }
+        
+        @keyframes animatezoom {
+        from {transform: scale(0)} 
+        to {transform: scale(1)}
+        }
+        
+        /* Change styles for span and cancel button on extra small screens */
+        @media screen and (max-width: 300px) {
+        span.psw {
+        display: block;
+        float: none;
+        }
+    </style>
+    <title>Purchase Order Number : {!objPurchaseOrder.Name}</title>
+    <apex:form id="frm">  
+    	<apex:pageMessages id="showmsg"></apex:pageMessages>  
+        <div  class="popup">
+            <apex:image id="theImage2" value="{!$Resource.Process}" style="display:block;" width="40" height="40"/>
+        </div>      
+        <div class="slds-grid slds-wrap slds-col--padded">
+            <div class="slds-col--padded slds-col slds-size--1-of-1 Customer-Heading">
+                <h2 class=" heading"><br/>
+                    <span class="slds-text-heading--small">PURCHASE ORDER</span>
+                </h2>
+            </div>
+        </div>
+        
+        <div class="slds-grid slds-wrap slds-col--padded ">
+            <div class="slds-col--padded slds-col slds-size--1-of-1 Customer-Heading">
+                <h2 class=" heading"><br/>
+                    <span class="slds-text-heading--small">Purchase Order Number : {!objPurchaseOrder.Name}</span>
+                </h2>
+            </div>
+        </div>
+        
+        <div id="infoDiv" style="margin-top:1%;padding-top: 30px;">
+            <div class="slds-grid slds-wrap">
+                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-1 slds-col--padded">
+                    <div class="slds-grid slds-wrap">
+                        <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                            <div class="slds-form-element">
+                                <label class="slds-form-element__label">Vendor Name</label>
+                                <div class="slds-form-element__control">
+                                	<apex:outputPanel rendered="{!NOT(isEdit)}">
+                                    	<apex:inputText value="{!objManufacturer.Name}" id="ifName" styleClass="slds-input" disabled="true"/>
+                                    </apex:outputPanel>
+                                    <apex:outputPanel rendered="{!isEdit}"> 
+                                    	<apex:inputField value="{!objPurchaseOrder.Vendor_Name__c}" onchange="getVendorInfo();" styleClass="slds-input"/>
+                                    </apex:outputPanel>
+                                </div>
+                            </div>
+                        </div> 
+                        
+                        <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                            <div class="slds-form-element">
+                                <label class="slds-form-element__label">Vendor Phone Number</label>
+                                <div class="slds-form-element__control">
+                                    <apex:inputText value="{!objManufacturer.Phone__c}" styleClass="slds-input" id="ifPhone" disabled="true"/>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                            <div class="slds-form-element">
+                                <label class="slds-form-element__label">Vendor Email</label>
+                                <div class="slds-form-element__control">
+                                    <apex:inputText value="{!objManufacturer.Email__c}" styleClass="slds-input" id="ifEmail" disabled="true"/>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                            <div class="slds-form-element">
+                                <label class="slds-form-element__label">Vendor Contact Person</label>
+                                <div class="slds-form-element__control">
+                                    <apex:inputText value="{!objManufacturer.Contact_Person__r.Name}" styleClass="slds-input" id="ifCon" disabled="true"/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-1 slds-col--padded">
+                    <div class="slds-grid slds-wrap">
+                        <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                            <div class="slds-form-element">
+                                <label class="slds-form-element__label">Vendor Address</label>
+                                <div class="slds-form-element__control">
+                                    <apex:inputText value="{!objManufacturer.Street__c}" styleClass="slds-input" id="ifStreet" disabled="true"/>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                            <div class="slds-form-element">
+                                <label class="slds-form-element__label">Vendor City</label>
+                                <div class="slds-form-element__control">
+                                    <apex:inputText value="{!objManufacturer.City__c}" styleClass="slds-input" id="ifCity" disabled="true"/>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                            <div class="slds-form-element">
+                                <label class="slds-form-element__label">Vendor State</label>
+                                <div class="slds-form-element__control">
+                                    <apex:inputText value="{!objManufacturer.State__c}" styleClass="slds-input" id="ifState" disabled="true"/>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                            <div class="slds-form-element">
+                                <label class="slds-form-element__label">Vendor Zip</label>
+                                <div class="slds-form-element__control">
+                                    <apex:inputText value="{!objManufacturer.Zip__c}" styleClass="slds-input" id="ifZip" disabled="true"/> 
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-1 slds-col--padded">
+                    <div class="">
+                        <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                            <div class="slds-form-element">
+                                <label class="slds-form-element__label">Vendor Terms</label>
+                                <div class="slds-form-element__control">
+                                    <apex:inputText value="{!objManufacturer.Terms__c}" styleClass="slds-input" id="ifTerm" disabled="true"/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div style="padding: 1%;">
+        	<span style="position: relative; left: 91%;">
+	        	<apex:outputPanel rendered="{!isEdit}">
+	            	<a class="slds-button slds-button--neutral slds-button--brand inside_row_button " type="button" onclick="document.getElementById('id01').style.display='block'"  id="addli">Add Line Items</a>
+	            </apex:outputPanel>
+            </span>
+        </div>
+        <div id="pTable" class="slds-col slds-size--1-of-1 slds-medium-size--1-of-1 slds-col--padded">
+            <apex:outputPanel id="prtTblId">
+                <table id="opTable" class="slds-table slds-table--bordered slds-no-row-hover slds-table--cell-buffer slds-m-top--x-large Table1 slds-card">
+                    <tr>
+                        <th>Part Number</th>
+                        <th>Decription</th>
+                        <th>Quantity</th>
+                        <th>Cost</th>
+                        <!--<th>Shipping Charge</th>-->
+                        <th>Total</th>
+                    </tr>
+                    <tbody>
+                        <apex:repeat value="{!lstPurchaseOrderLineItemsWrapper}" var="objPrt">
+                            <tr>
+                                <td>{!objPrt.objPurchaseOrderLineItem.Part_Number__c}</td>
+                                <td>{!objPrt.objPurchaseOrderLineItem.Name}</td>
+                                <td>
+                                <apex:outputPanel rendered="{!NOT(isEdit)}">
+                                	{!objPrt.objPurchaseOrderLineItem.Quantity__c}
+                                </apex:outputPanel>
+                                <apex:outputPanel rendered="{!isEdit}">
+                                	<apex:inputField value="{!objPrt.objPurchaseOrderLineItem.Quantity__c}" styleClass="slds-input" onchange="updateQuantity('{!objPrt.objPurchaseOrderLineItem.Id}');"/>
+                                </apex:outputPanel>
+                                </td>
+                                <td>${!objPrt.objPurchaseOrderLineItem.Cost__c}</td>
+                                <!--<td>${!objPrt.objPurchaseOrderLineItem.Shipping_Charge__c}</td>-->
+                                <td>${!objPrt.total}</td>
+                            </tr>
+                        </apex:repeat>
+                    </tbody> 
+                    <tfoot>
+                        <tr class="slds-hint-parent">
+                            <th></th>
+                            <th></th>
+                            <th>{!totalQuantity}</th>
+                            <!--<th>&nbsp;</th>-->
+                            <th>Total: </th>
+                            <th>${!totalOfTotal}</th>
+                        </tr>                             
+                    </tfoot>       
+                </table>
+            </apex:outputPanel>             
+        </div>
+        
+        
+        
+<!--         popup -->
+        <div id="id01" class="modal" >
+            <div class="modal-content animate" style="height: 90%; width: 80%;overflow: auto;">
+                
+                <section style="padding: 2%;">
+                	<a style="position: absolute;left: 86.8%;" id="closeSign" onclick="hideAll();">[X]</a>
+                    <b>Add Part</b><hr/>
+                    <label><b>Part Number/Part Name: </b></label>
+                    &nbsp;<input type="text" style="width: 20%;" id="prtDetailInput" class="slds-input"/>
+                    <button style="width: auto;" class="slds-button slds-button--neutral slds-button--brand inside_row_button " id="prtSrchBtn" onclick="srcprt();" type="button" >Search</button>
+                    <div class="spinnerClass" id="spinner" style="display: none;">
+                        <i  class="fa fa-spinner fa-spin fa-3x fa-fw margin-bottom fa-5x" style="margin-left: 45%; margin-top: 23%;" aria-hidden="true"></i>
+                    </div>
+                    <div id="selectedPrntDiv" style="display: none;">
+                        <hr/>
+                        <label><b>Selected Parts: </b></label>
+                        <div id="selectedPrtDiv">
+                            
+                        </div>
+                        <div>
+                            <a style="width: auto;position: relative;left: 91.5%;" class="slds-button slds-button--neutral slds-button--brand inside_row_button" onclick="addToCrt();" type="button" >Add To Invoice</a>
+                        </div>
+                    </div>
+                    <div id="partResultDiv" style="display: none;">
+                        <hr/>
+                        <div id="rsltLstDiv">
+                            
+                        </div>
+                    </div>
+                </section>
+                
+            </div>
+            
+        </div>
+        
+        
+        <div style="padding: 10px; margin-left: 35%; margin-top: 2%;">
+        	<apex:outputPanel rendered="{!NOT(isEdit)}">
+            	<a class="slds-button slds-button--neutral slds-button--brand inside_row_button " type="button" onclick="onClickEditInvoice();" id="editBtn">Edit</a>
+            </apex:outputPanel>
+            <apex:outputPanel rendered="{!isEdit}">
+            	<a class="slds-button slds-button--neutral slds-button--brand inside_row_button " type="button" onclick="savePO();" id="saveBtn">Save</a>
+            </apex:outputPanel>           
+            <a class="slds-button slds-button--neutral slds-button--brand inside_row_button " type="button" onclick="generateOrder(this);">Generate Order</a>
+            <a class="slds-button slds-button--neutral slds-button--brand inside_row_button " type="button" onclick="window.top.location='/apex/ServicePage?subTabName=tab-default-2'">Cancel</a>
+        </div>                
+        <apex:actionFunction name="generateOrderAndOrderLineItem" action="{!createOrder}" id="af2"/>
+        <apex:actionFunction name="editPOVF" action="{!editPOApex}" id="af3" reRender="frm"/>
+        <apex:actionFunction name="getVendorInfoVF" action="{!getVendorInfoApex}" id="af4" reRender="frm"/>
+        <apex:actionFunction name="updatePOVF" action="{!updatePOApex}" id="af5" reRender="frm"/>
+        <apex:actionFunction name="updateQuantityVF" action="{!updateQuantityApex}" id="af6" reRender="frm">
+        	<apex:param name="fp" assignTo="{!param}" value=""/> 
+        </apex:actionFunction>
+        <apex:actionFunction name="updateAllCall" action="{!refreshLineItem}" id="af7" reRender="frm"/>
+        
+    </apex:form>
+    <script>
+        function generateOrder(obj) {
+            console.log("Genrating Order Please Wait...");
+            $('.popup').addClass('active');
+            generateOrderAndOrderLineItem();
+        }
+        function onClickEditInvoice() {
+        	editPOVF();
+        }
+        function getVendorInfo() {
+        	getVendorInfoVF(); 
+        }
+        function savePO() {
+        	updatePOVF();
+        }
+        function updateQuantity(POLIId) {
+        	updateQuantityVF(POLIId);
+        }
+        var lstSelectedPartNumber = [];
+	     var lstParts = [];
+	     var mapForQuantity = new Object();
+	     var mapForQuantityTmp = new Object();
+	     function hideAll() {
+	         $('#id01').fadeOut();
+	         $('#id02').fadeOut();
+	         $("#selectedPrntDiv").hide();
+	         $("#partResultDiv").hide();
+	         document.getElementById("prtDetailInput").value = "";
+	         lstSelectedPartNumber = [];
+	         mapForQuantity = new Object();
+	     }
+	     function srcprt() {
+	         console.log('...');
+	         var prtDetail = $("#prtDetailInput").val();
+	         if(prtDetail != "") {
+	             BOATBUILDING.ApproveFromOrderController_Clone.searchParts(prtDetail, function(result, event) {
+	             	console.log(result);
+	                 if(event.status) {
+	                     if(result != null) {
+	                         lstParts = result;
+	                         
+	                         $("#partResultDiv").fadeIn();
+	                         var tableHTML = "<table class='slds-table' style='border-collapse: collapse;'><thead><tr><th>&nbsp;</th><th>Part Number</th><th>Part Name</th><th>Quanity</th><th>Retail Price</th><th>Total Amount</th></tr></thead><tbody>";
+	                         if(lstParts.length > 0) { 
+	                             for(var i = 0; i < lstParts.length; i++) {
+	                                 var total = parseFloat(lstParts[i].Quantity) * parseFloat(lstParts[i].MSRP);
+	                                 if (lstParts[i].PartNumber in mapForQuantity ) {
+	                                     tableHTML +="<tr><td><input id='select"+i+"' checked='checked' onchange='addToCart(\""+i+"\");' type='checkbox' /></td><td id='partNumber"+i+"'>"+lstParts[i].PartNumber+"</td><td>"+lstParts[i].PartName+"</td><td><input type='text' id='partQuantity"+i+"' value='"+mapForQuantity[lstParts[i].PartNumber]+"' onkeyPress='return isNumber(event);' onKeyUp='quantityChange(\""+i+"\");' class='slds-input'/></td><td>$<span id='partMSRP"+i+"'>"+lstParts[i].MSRP+"</span></td><td>$<span id='partTotal"+i+"'>"+total+"</span></td></tr>"
+	                                 }
+	                                 else {
+	                                     tableHTML +="<tr><td><input id='select"+i+"' onchange='addToCart(\""+i+"\");' type='checkbox' /></td><td id='partNumber"+i+"'>"+lstParts[i].PartNumber+"</td><td>"+lstParts[i].PartName+"</td><td><input type='text' id='partQuantity"+i+"' value='"+lstParts[i].Quantity+"' onkeyPress='return isNumber(event);' onKeyUp='quantityChange(\""+i+"\");' class='slds-input'/></td><td>$<span id='partMSRP"+i+"'>"+lstParts[i].MSRP+"</span></td><td>$<span id='partTotal"+i+"'>"+total+"</span></td></tr>"
+	                                 }
+	                             }
+	                             tableHTML += "</tbody></table>";
+	                         }
+	                         document.getElementById("rsltLstDiv").innerHTML = tableHTML;
+	                         
+	                     }else {
+	                         $("#partResultDiv").fadeIn();
+	                         document.getElementById("rsltLstDiv").innerHTML = "<span style='color: red;'>No Record Found.</span>";
+	                     }
+	                 }
+	             });
+	         }
+	         else {
+	             $("#partResultDiv").fadeIn();
+	             document.getElementById("rsltLstDiv").innerHTML = "<span style='color: red;'>Please enter Part Number/Part Name.</span>";
+	             $("#spinner").hide();
+	         }
+	     }
+	     
+	     function isNumber(evt) {
+	         evt = (evt) ? evt : window.event;
+	         var charCode = (evt.which) ? evt.which : evt.keyCode;
+	         if (charCode > 31 && (charCode < 48 || charCode > 57)) {
+	             return false;
+	         }
+	         return true;
+	     }
+	     
+	     function isNumberKey(evt) {
+	         var charCode = (evt.which) ? evt.which : evt.keyCode;
+	         if (charCode != 46 && charCode > 31 
+	             && (charCode < 48 || charCode > 57)){
+	             return false;
+	         }
+	         return true;
+	     }
+	     
+	     function addToCart(index) {
+	         var partNumber = document.getElementById("partNumber"+index).innerHTML;
+	         var partQuantity = $("#partQuantity"+index).val();
+	         var partMSRP = document.getElementById("partMSRP"+index).innerHTML;
+	         
+	         if(document.getElementById("select"+index).checked == true) {
+	             if(partQuantity != '') {
+	                 if(parseFloat(partQuantity) > 0) {
+	                     mapForQuantity[partNumber] = partQuantity;
+	                     lstSelectedPartNumber.push(partNumber);
+	                     if(lstSelectedPartNumber.length > 0) {
+	                         var strParts = '['
+	                         for(var i = 0; i < lstSelectedPartNumber.length; i++) {
+	                             if(i == 0) {
+	                                 strParts += "<a style='font-style: italic;'>"+lstSelectedPartNumber[i]+"</a>";
+	                             }
+	                             else {
+	                                 strParts += ", <a style='font-style: italic;'>"+lstSelectedPartNumber[i]+"</a>";
+	                             }
+	                         }
+	                         strParts += "]";
+	                         $("#selectedPrntDiv").fadeIn();
+	                         document.getElementById("selectedPrtDiv").innerHTML = strParts; 
+	                         
+	                     }
+	                 }
+	                 else {
+	                     document.getElementById("select"+index).checked = false;
+	                     alert("Quantity should be greater than 0.");
+	                 }
+	             }else {
+	                 document.getElementById("select"+index).checked = false;
+	                 alert("Quantity should be greater than 0.");
+	             }
+	         }
+	         else {
+	             if(lstSelectedPartNumber.length > 0) {
+	                 var index = lstSelectedPartNumber.indexOf(partNumber);
+	                 if(index > -1) {
+	                     lstSelectedPartNumber.splice(index, 1);
+	                 }
+	                 if(lstSelectedPartNumber.length > 0) {
+	                     var strParts = '['
+	                     for(var i = 0; i < lstSelectedPartNumber.length; i++) {
+	                         if(i == 0) {
+	                             strParts += "<a style='font-style: italic;'>"+lstSelectedPartNumber[i]+"</a>";
+	                         }
+	                         else {
+	                             strParts += ", <a style='font-style: italic;'>"+lstSelectedPartNumber[i]+"</a>";
+	                         }
+	                     }
+	                     strParts += "]";
+	                     $("#selectedPrntDiv").fadeIn();
+	                     document.getElementById("selectedPrtDiv").innerHTML = strParts;     
+	                 }
+	                 else {
+	                     $("#selectedPrntDiv").fadeOut();
+	                 }
+	             }
+	             
+	             delete mapForQuantity[partNumber];
+	         }
+	     }
+	     
+	     function quantityChange(index) {
+	         updateDiscountQuantityMaps(index);
+	     }
+	     
+	     function updateDiscountQuantityMaps(index) {
+	         var partNumber = document.getElementById("partNumber"+index).innerHTML;
+	         var partQuantity = $("#partQuantity"+index).val();
+	         var partMSRP = document.getElementById("partMSRP"+index).innerHTML;
+	         var partQuantityTmp = 0;
+	         if(partQuantity != '') {
+	             partQuantityTmp = parseFloat(partQuantity);
+	         }
+	         var total = partQuantityTmp * partMSRP;
+	         
+	         document.getElementById("partTotal"+index).innerHTML = total;
+	         if (partNumber in mapForQuantity ) {
+	             mapForQuantity[partNumber] = partQuantity;
+	         }
+	     }
+	     
+	     
+	     function addToCrt() {
+	         for(key in mapForQuantity) {
+	             mapForQuantityTmp[key] = mapForQuantity[key];
+	         }
+	         var lstResult = [];
+	         if(lstSelectedPartNumber.length > 0) {
+	             BOATBUILDING.ApproveFromOrderController_Clone.updateLIonOrder(lstSelectedPartNumber, mapForQuantityTmp, '{!$CurrentPage.parameters.Id}', function(result, event) {
+	             console.log(result);
+	                 if(event.status) {
+	                     if(result == 'SUCCESS') {
+	                         hideAll();
+	                         updateAllCall();
+	                         
+	                         
+	                     } else {
+	                     	alert(result);
+	                     }
+	                 }
+	             });
+	         }
+	     }
+    </script>
+</apex:page>

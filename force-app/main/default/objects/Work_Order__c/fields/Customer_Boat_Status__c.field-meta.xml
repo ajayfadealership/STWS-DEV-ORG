@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Customer_Boat_Status__c</fullName>
+    <deprecated>false</deprecated>
+    <externalId>false</externalId>
+    <label>Customer Boat Status</label>
+    <required>false</required>
+    <trackFeedHistory>false</trackFeedHistory>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Waiting for Work</fullName>
+                <default>false</default>
+                <label>Waiting for Work</label>
+            </value>
+            <value>
+                <fullName>In Service</fullName>
+                <default>false</default>
+                <label>In Service</label>
+            </value>
+            <value>
+                <fullName>In Detail</fullName>
+                <default>false</default>
+                <label>In Detail</label>
+            </value>
+            <value>
+                <fullName>In Storage</fullName>
+                <default>false</default>
+                <label>In Storage</label>
+            </value>
+            <value>
+                <fullName>Ready for Pickup</fullName>
+                <default>false</default>
+                <label>Ready for Pickup</label>
+            </value>
+            <value>
+                <fullName>Ready for Delivery</fullName>
+                <default>false</default>
+                <label>Ready for Delivery</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

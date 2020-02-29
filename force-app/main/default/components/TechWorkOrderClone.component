@@ -1,0 +1,974 @@
+<apex:component id="tchWrkOrdr" controller="TechWorkOrderControllerClone">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"/>
+    <style>
+        .slds-button--brand[disabled=disabled] {
+        background-color: #e0e5ee;
+        border-color: #a8b7c7;
+        cursor: not-allowed;
+        user-select: none;
+        color: #16325c;
+        }
+        .slds-button--brand[disabled=disabled]:hover {
+        background-color: #e0e5ee;
+        border-color: #a8b7c7;
+        cursor: not-allowed;
+        user-select: none;
+        color: #16325c;
+        }
+        .slds-button--brand:hover {
+        background-color: rgba(21, 137, 238, 0.75);
+        }
+        
+        .slds-button--brand[disabled=false] {
+        background-color : #29abe2;
+        border : 1px solid #29abe2;
+        }
+        .twotextAreaPopup {
+                    margin: 0px 15.3281px 0px 0px;
+                width: 42%;
+                height: 54%;
+                position: fixed;
+                left: 30%;
+                top: 22%;
+                padding: 10px;
+                border-radius: .25rem;
+            } 
+       .twopopupText {
+                position: fixed;
+                top: 0;
+                bottom: 0;
+                left: 0;
+                right: 0;
+                background: rgba(0,0,0,0.5);
+                z-index: 999;
+                display: none;
+            }
+        .popupDiv{
+            position: fixed;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(0,0,0,0.5);
+            display: none;
+            z-index: 999;
+            
+        }
+    </style>
+     <div class="popupDiv" id="doId">
+     	
+		<div style="border: 5px solid #d9dee6; padding: 2%; position: fixed; top: 20%; left: 30%; z-index: 999; background: #fff; border-radius: 14px; height: auto; width: 500px;">
+			<div>
+				<i id="closeIcn" class="fa fa-close" style="font-size:24px; position: absolute; bottom: 76%; right: 3%;"></i>
+			</div> 
+			<div id="CommentList" style="padding:1%;">
+				
+			</div>
+			
+		</div>        
+	</div>
+    <div id="twopopupTextArea" class="twopopupText"> 
+        <input type="hidden" value="" id="twohiddenInpPopup"/> 
+        <input type="hidden" value="" id="typeInputPopp"/>
+        <input type="hidden" value="" id="jobIdPopup"/>
+        <a style="position: fixed; left: 70.8%; top: 19%;" onclick="document.getElementById('twopopupTextArea').style.display='none';document.getElementById('twotaCommnt').value='';document.getElementById('twoaddCmntBttn').style.display='block';">[X]</a>
+        <textarea id="twotaCommnt" class="twotextAreaPopup"></textarea>
+        <a id="twoaddCmntBttn" style="position: fixed; left: 65.4%; top: 77%;" class="slds-button slds-button--neutral slds-button--brand">Add Comment</a>
+    </div> 
+    <a class="slds-button slds-button_icon" id="refreshbtsid" style="display: none; position: fixed; right: 1%; z-index: 999; background: #5aacdc;" onclick="fetchWorkOrderParameters(this);">
+    		<apex:image id="ref" value="{!URLFOR($Resource.RefreshIcon)}" width="40" height="40" />
+    </a>
+    
+      
+    <div class="slds-grid slds-wrap slds-col--padded">
+        <!-- work order section user details -->
+        <div class="slds-col slds-size--1-of-1">
+            <div class="slds-grid slds-wrap">
+                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-col--padded">
+                                <div class="slds-form-element">
+                                    <label class="slds-form-element__label">Select Work Order</label>
+                                    <div class="slds-form-element__control">
+                                        <apex:inputField value="{!objJob2.Work_Order_Warranty_Work_Order__c }" id="existingWorkOrdersId" onchange="fetchWorkOrderParameters(this);" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-col--padded">
+                                <div class="slds-form-element">
+                                    <label class="slds-form-element__label">WO Number</label>
+                                    <div class="slds-form-element__control">
+                                        <input class="slds-input" type="text" id="WoNumberId" disabled="disabled"  />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-col--padded">
+                                <div class="slds-form-element">
+                                    <label class="slds-form-element__label">Type</label>
+                                    <div class="slds-form-element__control">
+                                        <input class="slds-input" type="text" id="WOTypeId" disabled="disabled"/>
+                                    </div>
+                                </div>
+                            </div>
+                            <!--<div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-col--padded">
+
+</div>-->
+                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-col--padded">
+                                <div class="slds-form-element">
+                                    <label class="slds-form-element__label">Status</label>
+                                    <div class="slds-form-element__control">
+                                        <input class="slds-input" type="text" id="WOStatusId" disabled="disabled"/>
+                                    </div>
+                                </div>
+                            </div>
+                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-col--padded">
+                                <div class="slds-form-element">
+                                    <label class="slds-form-element__label">Hrs</label>
+                                    <div class="slds-form-element__control">
+                                        <input class="slds-input" type="text" id="WoHrsId" onkeypress="return isNumberKey(event);" onchange="hoursUpdate(this);"/>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-col--padded">
+                                <div class="slds-form-element">
+                                    <label class="slds-form-element__label">Customer Name</label>
+                                    <div class="slds-form-element__control">
+                                        <input class="slds-input" type="text" id="TechWOContactId" disabled="disabled"/>
+                                        
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-col--padded">
+                                <div class="slds-form-element">
+                                    <label class="slds-form-element__label">Address</label>
+                                    <div class="slds-form-element__control">
+                                        <input class="slds-input" type="text" id="TechWOAddressId" disabled="disabled"/>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-col--padded">
+                                <div class="slds-form-element">
+                                    <label class="slds-form-element__label">City</label>
+                                    <div class="slds-form-element__control">
+                                        <input class="slds-input" type="text" id="TechWOCityId" disabled="disabled"/>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-col--padded">
+                                    <div class="slds-form-element">
+                                        <label class="slds-form-element__label">Zip</label>
+                                        <div class="slds-form-element__control">
+                                            <input class="slds-input" type="text" id="TechWOZipId" disabled="disabled"/>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-col--padded">
+                                    <div class="slds-form-element">
+                                        <label class="slds-form-element__label">Phone Number</label>
+                                        <div class="slds-form-element__control">
+                                            <input class="slds-input" type="text" id="TechWOPhoneId" disabled="disabled"/>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-col--padded">
+                                    <div class="slds-form-element">
+                                        <label class="slds-form-element__label">Email</label>
+                                        <div class="slds-form-element__control">
+                                            <input class="slds-input" type="text" id="TechWOEmailId" disabled="disabled"/>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-col--padded">
+                                    <div class="slds-form-element">
+                                        <label class="slds-form-element__label">Boat HIN</label>
+                                        <div class="slds-form-element__control">
+                                            <input class="slds-input" type="text" id="TechWOboatId" disabled="disabled"/>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-col--padded">
+                                    <div class="slds-form-element">
+                                        <label class="slds-form-element__label">Boat Model</label>
+                                        <div class="slds-form-element__control">
+                                            <input class="slds-input" type="text" id="TechWOModelId" disabled="disabled"/>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-col--padded">
+                                    <div class="slds-form-element">
+                                        <label class="slds-form-element__label">Date Created</label>
+                                        <div class="slds-form-element__control">
+                                            <input class="slds-input" type="text" id="TechWODateCrtedId" disabled="disabled"/>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-col--padded">
+                                    <div class="slds-form-element">
+                                        <label class="slds-form-element__label">Boat Year</label>
+                                        <div class="slds-form-element__control">
+                                            <input class="slds-input" type="text" id="TechWOYearId" disabled="disabled"/>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-col--padded">
+                                    <div class="slds-form-element">
+                                        <label class="slds-form-element__label">Engine SN</label>
+                                        <div class="slds-form-element__control">
+                                            <input class="slds-input" type="text" style=" width: 65%; " id="TechWODriveId"/>
+                                            <a id="updateEnSN" class="slds-button slds-button--brand" style="width: 31%;">Save EN Sn</a>
+                                        </div> 
+                                    </div>
+                                </div>
+                                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-col--padded">
+                                    <div class="slds-form-element">
+                                        <label class="slds-form-element__label">Store Location</label>
+                                        <div class="slds-form-element__control">
+                                            <input class="slds-input" type="text" id="StoreLocationId" disabled="disabled"/>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-col--padded">
+                                    <div class="slds-form-element">
+                                        <label class="slds-form-element__label">Engine Model</label>
+                                        <div class="slds-form-element__control">
+                                            <input class="slds-input" type="text" id="engMod" disabled="disabled"/>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-col--padded">
+                                    <div class="slds-form-element">
+                                        <label class="slds-form-element__label">&nbsp;</label>
+                                        <div class="slds-form-element__control">
+                                            &nbsp;
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-col--padded">
+                                    <div class="slds-form-element">
+                                        <label class="slds-form-element__label">&nbsp;</label>
+                                        <div class="slds-form-element__control">
+                                            <a id="frmBtntwo"  class="slds-button slds-button_icon" style="display: none; background-color: #29abe2; background-color: #29abe2; width: 100%;" title= "Inspection Form">
+					                             <apex:image id="frmBtnIcntwo" value="{!URLFOR($Resource.Form)}"  width="20" height="20" />&nbsp;Inspection Form
+					                         </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <script>
+				      		$("#frmBtntwo").click(function() {
+				      			var WrkOrderID = document.getElementById("pge:frm:tchWrkOrderCompCall:tchWrkOrdr:existingWorkOrdersId_lkid").value;
+				       			window.open('/apex/BOATBUILDING__ServiceInspectionForm?woId='+WrkOrderID);
+				      		});
+				      </script>
+                    <script>
+                        $("#updateEnSN").click(function() {
+                            var caseId = document.getElementById("pge:frm:tchWrkOrderCompCall:tchWrkOrdr:existingWorkOrdersId_lkid").value;
+                            var caseName = document.getElementById("pge:frm:tchWrkOrderCompCall:tchWrkOrdr:existingWorkOrdersId").value;
+                            var enSnval = $("#TechWODriveId").val();
+                            
+                            if(caseName != null && caseName != "") {
+                                if(caseId != null && caseId != "" && caseId != "000000000000000") {
+                                    if(enSnval != null) {
+                                        BOATBUILDING.TechWorkOrderControllerClone.updateEngineSN(caseId, enSnval, function(result, event) {
+                                            console.log(result);  
+                                        });
+                                    }
+                                }
+                            }
+                        });
+                    </script>
+    
+    <div id="TechWOShowjobList" style="display:none;">
+        <div class="slds-grid slds-wrap slds-col--padded slds-m-top--medium" id="techcreatejobpanel">
+            <input type="hidden" name="TechWODivValue" id="TechWODivValue" value="0" />
+            <div class="slds-col slds-size--1-of-1 slds-medium-size--3-of-4 slds-col--padded" id="AddDivForJobTechWO">
+            </div>
+            
+            
+            
+        </div>
+    </div>
+    
+    
+    <!-- ________________________Tech Work Order___________________________-->
+    
+    <script>
+    
+    function isNumberKey(evt) {
+        var charCode = (evt.which) ? evt.which : evt.keyCode;
+        if (charCode != 46 && charCode > 31 
+          && (charCode < 48 || charCode > 57)){
+           return false;
+        }
+        return true;
+    }
+    
+    function hoursUpdate(obj) {
+        console.log(obj.value);
+        var woId = document.getElementById("pge:frm:tchWrkOrderCompCall:tchWrkOrdr:existingWorkOrdersId_lkid").value;
+        var woName = document.getElementById("pge:frm:tchWrkOrderCompCall:tchWrkOrdr:existingWorkOrdersId").value;
+        var woHours = obj.value;
+        if(woId != "000000000000000" && woName != "" && woHours != "") {
+            BOATBUILDING.TechWorkOrderControllerClone.updateHoursWO(woId, woHours, function(result, event) {});
+        }
+    }
+    
+    var Techalllstjob = [];
+    var mapJobtoTimeMgmt = new Object(); 
+    var techlstJob = [];
+    function fetchWorkOrderParameters(obj1) {
+       $("#TechWODriveId").val("");
+       $("#WoHrsId").val("");
+       $("#TechWOContactId").val("");
+       $("#TechWOAddressId").val("");
+       $("#TechWOCityId").val("");
+       $("#TechWODateCrtedId").val("");
+        //alert('Enter in fetchWorkOrderParameters method=');
+        $("#AddDivForJobTechWO").html('');
+        var WrkOrderID = document.getElementById("pge:frm:tchWrkOrderCompCall:tchWrkOrdr:existingWorkOrdersId_lkid").value;
+        var techstCase = [],  techlstLstItem = [], techTimeManagment = [];
+        var WrkOrderName = document.getElementById("pge:frm:tchWrkOrderCompCall:tchWrkOrdr:existingWorkOrdersId_lkold").value;
+        if(WrkOrderID != null && WrkOrderID != "") {
+        		$("#refreshbtsid").fadeIn();
+        		$("#frmBtntwo").fadeIn();
+            BOATBUILDING.TechWorkOrderControllerClone.getDetailsOfWrkOrder(WrkOrderID, function(result, event) {
+            	$('.popup').removeClass('active');
+                if(event.status) {
+                    if(result != null) {
+                        var lstObject = [];
+                        lstObject = result;
+                        console.log('===lstObject===');
+                        console.log(lstObject);
+                        //alert('=======lstObject==='+lstObject);
+                        if(lstObject.length > 0) {
+                            //alert('testvivekfirst'+document.getElementById("TechWODivValue").value);
+                            document.getElementById("TechWODivValue").value = 0;
+                            if(lstObject[0].length > 0){
+                                //alert('vivektechstCase'+lstObject[0]);
+                                techstCase = lstObject[0]; 
+                                if(techstCase[0].Name!= null) {
+                                    document.getElementById("WoNumberId").value = techstCase[0].Name;
+                                }
+                                if(techstCase[0].RecordTypeId != undefined) {
+                                    document.getElementById("WOTypeId").value = techstCase[0].RecordType.Name;
+                                }
+                                if(techstCase[0].BOATBUILDING__Status__c!= undefined) {
+                                    document.getElementById("WOStatusId").value = techstCase[0].BOATBUILDING__Status__c;
+                                }
+                                if(techstCase[0].BOATBUILDING__Store_Location__c!= undefined) {
+                                    document.getElementById("StoreLocationId").value = techstCase[0].BOATBUILDING__Store_Location__c;
+                                }
+                                if(techstCase[0].BOATBUILDING__Boat__r.BOATBUILDING__Engine_SN__c != undefined) {
+                                    document.getElementById("TechWODriveId").value = techstCase[0].BOATBUILDING__Boat__r.BOATBUILDING__Engine_SN__c;
+                                }
+                                if(techstCase[0].BOATBUILDING__Hours__c != undefined) {
+                                    document.getElementById("WoHrsId").value = techstCase[0].BOATBUILDING__Hours__c;
+                                }
+                                if(techstCase[0].BOATBUILDING__Contact__r.FirstName != undefined){
+                                    document.getElementById("TechWOContactId").value = techstCase[0].BOATBUILDING__Contact__r.Name;
+                                }
+                                else if(techstCase[0].BOATBUILDING__Contact__r.LastName != undefined){
+                                    document.getElementById("TechWOContactId").value = techstCase[0].BOATBUILDING__Contact__r.LastName;
+                                }
+                                if(techstCase[0].BOATBUILDING__ContactEmail__c!= undefined){
+                                    document.getElementById("TechWOEmailId").value = techstCase[0].BOATBUILDING__ContactEmail__c;
+                                }
+                                if(techstCase[0].BOATBUILDING__ContactPhone__c!= undefined){
+                                    document.getElementById("TechWOPhoneId").value = techstCase[0].BOATBUILDING__ContactPhone__c;
+                                }
+                                if(techstCase[0].BOATBUILDING__Boat__r.BOATBUILDING__Boat_HIN_No__c != undefined) {
+                                    document.getElementById("TechWOboatId").value = techstCase[0].BOATBUILDING__Boat__r.BOATBUILDING__Boat_HIN_No__c;
+                                }
+                                if(techstCase[0].BOATBUILDING__Boat__r.BOATBUILDING__Boat_Model__c != undefined){
+                                    document.getElementById("TechWOModelId").value = techstCase[0].BOATBUILDING__Boat__r.BOATBUILDING__Boat_Model__c;
+                                }
+                                if(techstCase[0].BOATBUILDING__Boat__r.BOATBUILDING__M_Boat_Year__c != undefined){
+                                    document.getElementById("TechWOYearId").value = techstCase[0].BOATBUILDING__Boat__r.BOATBUILDING__M_Boat_Year__c;
+                                }
+                                if(techstCase[0].BOATBUILDING__Boat__r.BOATBUILDING__Engine_Model__c != undefined){ 
+                                    document.getElementById("engMod").value = techstCase[0].BOATBUILDING__Boat__r.BOATBUILDING__Engine_Model__c;
+                                } 
+                                if(techstCase[0].BOATBUILDING__Boat__r.BOATBUILDING__CreatedDateCustom__c != undefined){
+                                    var d = parseInt(techstCase[0].BOATBUILDING__Boat__r.BOATBUILDING__CreatedDateCustom__c);
+                                    var dd = new Date(d);
+                                    document.getElementById("TechWODateCrtedId").value = (dd.getMonth()+1)+"/"+dd.getDate()+"/"+dd.getFullYear();
+                                }
+                                
+                                if(techstCase[0].BOATBUILDING__Contact__r.MailingStreet != undefined){
+                                    document.getElementById("TechWOAddressId").value = techstCase[0].BOATBUILDING__Contact__r.MailingStreet;
+                                }
+                                if(techstCase[0].BOATBUILDING__Contact__r.MailingCity != undefined){
+                                    document.getElementById("TechWOCityId").value = techstCase[0].BOATBUILDING__Contact__r.MailingCity;
+                                }
+                                if(techstCase[0].BOATBUILDING__Contact__r.MailingPostalCode != undefined){
+                                    document.getElementById("TechWOZipId").value = techstCase[0].BOATBUILDING__Contact__r.MailingPostalCode;
+                                }
+                                
+                            }
+                            else {
+                                document.getElementById("WoNumberId").value = "";
+                                document.getElementById("TechWODriveId").value = "";
+                                document.getElementById("WoHrsId").value = "";
+                                document.getElementById("WOStatusId").value = "";
+                                document.getElementById("WOTypeId").value = "";
+                                document.getElementById("TechWOContactId").value = "";
+                                document.getElementById("TechWOEmailId").value = "";
+                                document.getElementById("TechWOPhoneId").value = "";
+                                document.getElementById("TechWOboatId").value = "";
+                                document.getElementById("TechWOModelId").value = "";
+                                document.getElementById("TechWOYearId").value = "";
+                                document.getElementById("TechWODateCrtedId").value = "";
+                                document.getElementById("TechWOAddressId").value = "";
+                                document.getElementById("TechWOCityId").value = "";
+                                document.getElementById("TechWOZipId").value = "";
+                                document.getElementById("Tech_grandtotal_parts").value = "";
+                                document.getElementById("Tech_grandtotal_supplies").value = "";
+                                document.getElementById("Tech_grandtotal_total").value = "";
+                                document.getElementById("Tech_grandtotal_tax").value = "";
+                                document.getElementById("Tech_grandtotal_amount_due").value = "";
+                                document.getElementById("Tech_grandtotal_payment").value = "";
+                                document.getElementById("Tech_grandtotal_balance").value = "";
+                                
+                                
+                                
+                            }
+                            //alert('==before job===='+lstObject[1]);
+                            
+                            var objType = new Object();
+                            
+                            if(lstObject[2] != undefined){
+                                if(lstObject[2].length > 0){
+                                    for(var i = 0; i < lstObject[2].length; i++) {
+                                        objType[lstObject[2][i].Id] = lstObject[2][i].Name;
+                                    }
+                                }
+                            }
+                            //console.log("objType");
+                            //console.log(objType);
+                            if(lstObject[1] != undefined) {
+                                if(lstObject[1].length > 0) {
+                                    $("#TechWOShowjobList").css("display", "");
+                                    techlstJob = lstObject[1];
+                                    //console.log('TechlstJob 0 : '+techlstJob[0]);
+                                    //console.log('Techlstjob 1:'+techlstJob[1]);
+                                    for(var i = 0 ; i < techlstJob.length;i++) {
+                                        console.log(i);
+                                        var DiviTechWO = document.getElementById('TechWODivValue');
+                                        var DivnumTechWO = (document.getElementById("TechWODivValue").value -1)+ 2;
+                                        DiviTechWO.value = DivnumTechWO;
+                                        var TechtheValue = "techtheValueDiv"+DivnumTechWO;
+                                        var TechWoExistingjobId = "techWojobId"+DivnumTechWO;
+                                        var TechWoClockInBtnId = "TechWoClockInBtnId"+DivnumTechWO;
+                                        var CommentBoxId = "CommentBoxId"+DivnumTechWO;
+                                        var TechnicianCommentBoxId = "TechnicianCommentBoxId"+DivnumTechWO;
+                                        var TechWoClockOutBtnId = "TechWoClockOutBtnId"+DivnumTechWO;
+                                        var Techpartdiv='';
+                                        var TechAddPart = "TechAddPartDiv"+DivnumTechWO;
+                                        var c = "TechhiddentdDiv"+DivnumTechWO;
+                                        var TechLabourQuantity = "TechLabourQuantityDiv"+DivnumTechWO;
+                                        var TechLabourPrice = "TechLabourPriceDiv"+DivnumTechWO;
+                                        var TechLabourTotalPrice = "TechLabourTotalPriceDiv"+DivnumTechWO;
+                                        var TechShopSuppliesPrice = "TechShopSuppliesPriceDiv"+DivnumTechWO;
+                                        var TechShopSupliesTotalPrice = "TechShopSupliesTotalPriceDiv"+DivnumTechWO;
+                                        var TechTotalOfJobDiv = "TechTotalOfJobDiv"+DivnumTechWO;
+                                        var AddCommentBtn = "AddComment"+DivnumTechWO;
+                                        var SpanforWorkedHours = "SpanWorkdHrs"+DivnumTechWO;
+                                        var OOWH = '',TechWojobCmnt = '',TechWojobname = '',TechWoworkrequested = '', TechWoworktype = '',TechWoLabourQuantity = '',TechWoLabourPrice = 0.0, TechWoLabourTotalPrice = 0.0, TechWoshopsuppliesPrice = 0.0, TechwojobCustomerPay = 0.0 , TechwojobTotal = 0.0 ,TechWojobId = '',TechwohoursAllowed = '', TechwohoursWorked = 0.0;
+                                        var tech = '---';
+                                        console.log(techlstJob[i]);
+                                        console.log(techlstJob[i].Id);
+                                        if(techlstJob[i].Id != undefined ) {
+                                            TechWojobId = techlstJob[i].Id;
+                                        }
+                                        if(techlstJob[i].BOATBUILDING__Job_Name__c != undefined) {
+                                            TechWojobname = techlstJob[i].BOATBUILDING__Job_Name__c;
+                                        }
+                                        if(techlstJob[i].BOATBUILDING__Work_Requested__c != undefined) {
+                                            TechWoworkrequested = techlstJob[i].BOATBUILDING__Work_Requested__c;//TechWoworkrequested
+                                        }
+                                        if(techlstJob[i].BOATBUILDING__Work_Type__c != undefined) { 
+                                            if(techlstJob[i].BOATBUILDING__Work_Type__c in objType) {
+                                                TechWoworktype = objType[techlstJob[i].BOATBUILDING__Work_Type__c];
+                                            } else {
+                                                TechWoworktype = techlstJob[i].BOATBUILDING__Work_Type__c; 
+                                            }
+                                        }
+                                        if(techlstJob[i].BOATBUILDING__No_of_Labors__c != undefined) {
+                                            TechWoLabourQuantity = techlstJob[i].BOATBUILDING__No_of_Labors__c;
+                                        }
+                                        if(techlstJob[i].BOATBUILDING__Price_per_Labor__c != undefined) {
+                                            TechWoLabourPrice = techlstJob[i].BOATBUILDING__Price_per_Labor__c;
+                                        }
+                                        if(techlstJob[i].BOATBUILDING__Total_Cost_Labor__c != undefined) {
+                                            TechWoLabourTotalPrice = techlstJob[i].BOATBUILDING__Total_Cost_Labor__c;
+                                        }
+                                        if(techlstJob[i].BOATBUILDING__Shop_Supplies_Total__c != undefined) {
+                                            TechWoshopsuppliesPrice = techlstJob[i].BOATBUILDING__Shop_Supplies_Total__c;
+                                        }
+                                        if(techlstJob[i].BOATBUILDING__Total_Amount_Job__c != undefined) {
+                                            TechwojobTotal = techlstJob[i].BOATBUILDING__Total_Amount_Job__c;
+                                        }
+                                        if(techlstJob[i].BOATBUILDING__Customer_Pay__c != undefined) {
+                                            TechwojobCustomerPay = techlstJob[i].BOATBUILDING__Customer_Pay__c;
+                                        }
+                                        if(techlstJob[i].BOATBUILDING__No_of_Labors__c != undefined) {
+                                            TechwohoursAllowed = techlstJob[i].BOATBUILDING__No_of_Labors__c;
+                                        }
+                                        if(techlstJob[i].BOATBUILDING__TWO_Worked_Hour__c != undefined) {
+                                            TechwohoursWorked = techlstJob[i].BOATBUILDING__TWO_Worked_Hour__c;
+                                        }
+                                        
+                                        if(techlstJob[i].BOATBUILDING__Comments__c != undefined) {
+                                            TechWojobCmnt = techlstJob[i].BOATBUILDING__Comments__c;
+                                        }
+                                        
+                                        if(techlstJob[i].BOATBUILDING__TWO_Worked_Hour__c != undefined) {
+                                            OOWH = techlstJob[i].BOATBUILDING__TWO_Worked_Hour__c;
+                                        } 
+                                        
+                                        if(techlstJob[i].BOATBUILDING__Time_Management__r != undefined && techlstJob[i].BOATBUILDING__Time_Management__r.length > 0 &&  techlstJob[i].BOATBUILDING__Time_Management__r[0].BOATBUILDING__Technician__c != undefined) {
+                                            tech = techlstJob[i].BOATBUILDING__Time_Management__r[0].BOATBUILDING__Technician__r.Name;
+                                            console.log(techlstJob[i].BOATBUILDING__Time_Management__r[0].BOATBUILDING__Technician__r.Name);
+                                        } 
+                                        
+                                        console.log(tech);
+                                        
+                                        //var newdivTechWO ="<div class='slds-card'id='TechWOSubdiv"+DivnumTechWO+"'><div style='float:right;line-height:0;'></div><div class='slds-grid slds-wrap slds-m-top--medium'><table class='slds-table slds-table--bordered'><thead><tr><th>Job</th><th>Work Requested</th><th >Type</th><th >Quantity</th><th class='slds-text-align--right'></th></tr></thead><tbody><tr><td><input id="+TechWoExistingjobId+" type='hidden' value="+TechWojobId+"></input>"+TechWojobname+"</td><td>"+TechWoworkrequested+"</td><td>"+TechWoworktype+"</td><td>&nbsp;</td><td colspan='3' class='slds-text-align--right'></td></tr><tr><td colspan='7'><div id=Techexistingjobdiv"+DivnumTechWO+"><input type='hidden' name='theValue' id='"+TechtheValue+"' value='0' /></div></td></tr><tr><td>&nbsp;</td><td data-label='Labor'>Labor</td><td>&nbsp;</td><td data-label='Quantity'>"+TechWoLabourQuantity+"</td><td data-label='Price' class='slds-text-align--right'></td><td data-label='Total' class='slds-text-align--right'>&nbsp;</td><td>&nbsp;</td></tr><tr><td>Last Clock In : </td><td><input class='slds-input' id='Tech_Last_ClockIn_Time"+DivnumTechWO+"' type='text' disabled='disabled'/></td><td>Last Clock Out : </td><td><input class='slds-input' id='Tech_Last_ClockOut_Time"+DivnumTechWO+"' type='text' disabled='disabled'/></td><td class='slds-text-align--right'>Time Allowed(in Hrs)</td><td class='slds-text-align--right'>"+TechwohoursAllowed+"</td><td>&nbsp;</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td class='slds-text-align--right'>Overall Worked Hours</td><td class='slds-text-align--right'><span id = "+SpanforWorkedHours+">"+TechwohoursWorked+"</span></td><td>&nbsp;</td></tr><tr><td>&nbsp;</td><td colspan='2'><a id="+TechWoClockInBtnId+" class='slds-button slds-button--brand'onclick='insertClockIn("+DivnumTechWO+")'>Clock In</a></td><td>&nbsp;</td><td colspan='2'><a id="+TechWoClockOutBtnId+" disabled='disabled' class='slds-button slds-button--brand' onclick='updateClockOut("+DivnumTechWO+")'>Clock Out</a></td><td>&nbsp;</td></tr></tr><tr><td>Comments :</td><td colspan = '2'><textarea rows='2' cols='20' id='"+CommentBoxId+"' disabled = 'disabled'></textarea></td><td colspan = '4'><a id="+AddCommentBtn+" class='slds-button slds-button--brand'onclick='addComment("+DivnumTechWO+")' disabled = 'disabled'>Add Comment</a></td></tr></tbody></table></div></div>";  
+     
+                                        if(techlstJob[i].BOATBUILDING__Work_Order_Job_Line_Items__r != undefined){
+                                            if(techlstJob[i].BOATBUILDING__Work_Order_Job_Line_Items__r.length > 0){
+                                                techlstLstItem = techlstJob[i].BOATBUILDING__Work_Order_Job_Line_Items__r;
+                                                for(var j=0; j<techlstLstItem.length; j++){
+                                                    var TechWoPartnumber = '', TechWoPartQuantity = '',TechWoPartname = '', TechWoPartPrice = 0.0, TechWoPartTotalPrice = 0.0;
+                                                    if(techlstLstItem[j].BOATBUILDING__Part_Number__c != undefined){
+                                                        TechWoPartnumber = techlstLstItem[j].BOATBUILDING__Part_Number__c;
+                                                    }
+                                                    if(techlstLstItem[j].BOATBUILDING__Part_Name__c != undefined){
+                                                        TechWoPartname = techlstLstItem[j].BOATBUILDING__Part_Name__c;
+                                                    }
+                                                    if(techlstLstItem[j].BOATBUILDING__Quantity__c != undefined ){
+                                                        TechWoPartQuantity = techlstLstItem[j].BOATBUILDING__Quantity__c;
+                                                    }
+                                                    if(techlstLstItem[j].BOATBUILDING__Price__c != undefined ){
+                                                        TechWoPartPrice = techlstLstItem[j].BOATBUILDING__Price__c;
+                                                    }
+                                                    if(techlstLstItem[j].BOATBUILDING__Total__c != undefined ){
+                                                        TechWoPartTotalPrice = techlstLstItem[j].BOATBUILDING__Total__c;
+                                                    }
+                                                    
+                                                    Techpartdiv += '<table width="100%" border="0" cellspacing="2" cellpadding="2"><tr><td data-label="Part" width="10%" >Parts</td><td width="10%">'+TechWoPartnumber+'</td><td width="10%">'+TechWoPartname+'</td><td data-label="Quantity" width="10%">'+TechWoPartQuantity+'</td></tr></table>';              
+                                                    
+                                                }
+                                                
+                                            }
+                                            
+                                        } 
+                                        //alert('==techlstJob[i].BOATBUILDING__Time_Management__r=== '+techlstJob[i].BOATBUILDING__Time_Management__r);
+                                       var checkinTime;
+                                       var statusForComment = '';
+                                       if(techlstJob[i].BOATBUILDING__Time_Management__r != undefined){
+                                            if(techlstJob[i].BOATBUILDING__Time_Management__r.length > 0){
+                                                techTimeManagment = techlstJob[i].BOATBUILDING__Time_Management__r;
+                                                for(var j=0; j<techTimeManagment.length; j++){
+                                                    if(techTimeManagment[j].BOATBUILDING__Clock_In__c != null){
+                                                       //alert('vivektime'+techTimeManagment[j].BOATBUILDING__Clock_In__c);
+                                                        var d = parseInt(techTimeManagment[j].BOATBUILDING__Clock_In__c);
+                                                        var dd = new Date(d); 
+                                                        //alert('vivekdd'+dd);                                                       
+                                                        //document.getElementById("Tech_Last_ClockIn_Time"+objClockIn).value = (dd.getMonth()+1)+"/"+dd.getDate()+"/"+dd.getFullYear()+" "+dd.getHours()+":"+dd.getMinutes()+":"+dd.getSeconds();
+                                                        checkinTime =(dd.getMonth()+1)+"/"+dd.getDate()+"/"+dd.getFullYear()+" "+dd.getHours()+":"+dd.getMinutes()+":"+dd.getSeconds();
+                                                    } 
+                                                    if(techTimeManagment[j].BOATBUILDING__Service_writer_comment__c != undefined) {
+                                                    		statusForComment = techTimeManagment[j].BOATBUILDING__Service_writer_comment__c;
+                                                    }
+                                                    
+                                              }
+                                              mapJobtoTimeMgmt[techlstJob[i].Id] = techTimeManagment[0].Id;
+                                          }
+                                       }
+                                       else{
+                                           checkinTime = '';
+                                       } 
+                                       
+                                       var jobId = '';
+                                       if(techlstJob[i].Id != true) {
+                                            jobId = techlstJob[i].Id;
+                                       } 
+                                       console.log(techlstJob[i]);
+                                       var newdivTechWO ="<div class='slds-card'id='TechWOSubdiv"+DivnumTechWO+"'> <span style='position: relative; left: 90%;'> <b>Is Completed:</b>&nbsp;<input onchange='completeTheJob(\""+DivnumTechWO+"\", \""+jobId+"\");' type='checkbox' id='completedStatus"+ DivnumTechWO +"' /> </span> <div style='float:right;line-height:0;'></div><div class='slds-grid slds-wrap slds-m-top--medium'><table class='slds-table slds-table--bordered'><thead><tr><th>Job</th><th>Work Requested</th><th >Type</th><th ></th><th >Quantity</th><th class='slds-text-align--right'></th> <th  class='slds-text-align--right'></th></tr><tr><th>Technician:&nbsp;</th><th><span id='techName"+DivnumTechWO+"'>"+tech+"</span></th><th ></th><th ></th><th ></th><th class='slds-text-align--right'></th> <th  class='slds-text-align--right'></th></tr></thead><tbody><tr><td><input id="+TechWoExistingjobId+" type='hidden' value="+TechWojobId+"></input>"+TechWojobname+"</td><td>"+TechWoworkrequested+"</td><td>"+TechWoworktype+"</td><td>&nbsp;</td><td colspan='3' class='slds-text-align--right'></td></tr><tr><td colspan='7'><div id=Techexistingjobdiv"+DivnumTechWO+"><input type='hidden' name='theValue' id='"+TechtheValue+"' value='0' /></div></td></tr><tr><td>&nbsp;</td><td data-label='Labor'>Labor</td><td>&nbsp;</td><td data-label='Quantity'>"+TechWoLabourQuantity+"</td><td data-label='Price' class='slds-text-align--right'></td><td data-label='Total' class='slds-text-align--right'>&nbsp;</td><td>&nbsp;</td></tr><tr><td>Last Clock In : </td><td><input class='slds-input' id='Tech_Last_ClockIn_Time"+DivnumTechWO+"' type='text' disabled='disabled' value="+checkinTime+"/></td><td>Last Clock Out : </td><td><input class='slds-input' id='Tech_Last_ClockOut_Time"+DivnumTechWO+"' type='text' disabled='disabled'/></td><td class='slds-text-align--right'>Time Allowed(in Hrs)</td><td class='slds-text-align--right'>"+TechwohoursAllowed+"</td><td>&nbsp;</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td class='slds-text-align--right'>Overall Worked Hours</td><td class='slds-text-align--right'><span id = "+SpanforWorkedHours+">"+OOWH+"</span></td><td>&nbsp;</td></tr><tr><td>&nbsp;</td><td colspan='2'><a id="+TechWoClockInBtnId+" class='slds-button slds-button--brand'onclick='insertClockIn("+DivnumTechWO+")'>Clock In</a></td><td>&nbsp;</td><td colspan='2'><a id="+TechWoClockOutBtnId+" disabled='disabled' class='slds-button slds-button--brand' onclick='updateClockOut("+DivnumTechWO+")'>Clock Out</a></td><td>&nbsp;</td></tr></tr><tr><td>Service writer comments:</td><td colspan = '2'><input   id='"+CommentBoxId+"' type='hidden' value='"+TechWojobCmnt+"' /><span ><a onclick='twoviewCommentFromJob(\""+DivnumTechWO+"\", \"SWC\", \""+jobId+"\");'>View</a></span>  </td><td>Technician comments:</td><td colspan = '2'><input type='hidden' id='"+TechnicianCommentBoxId+"' value='"+statusForComment+"'/><span ><a onclick='twoaddCommentToJob(\""+DivnumTechWO+"\", \"TC\", \""+jobId+"\");'>Add</a>&nbsp;|&nbsp;<a onclick='twoviewCommentFromJob(\""+DivnumTechWO+"\", \"TC\", \""+jobId+"\");'>View</a></span></td><td colspan = '4'><a onclick='showCallComments(\""+jobId+"\")'>View All Tech. Comments</a></td></tr></tbody></table></div></div>";  
+                                        
+                                        //<a onclick='twoaddCommentToJob(\""+DivnumTechWO+"\", \"SWC\", \""+jobId+"\");'>Add</a>&nbsp;|&nbsp;
+                                        console.log('log for i'+i);
+                                        $("#AddDivForJobTechWO").append(newdivTechWO);
+                                        var Techfd = document.getElementById("Techexistingjobdiv"+DivnumTechWO);
+                                        $(Techfd).append(Techpartdiv);
+                                        Techalllstjob = Techalllstjob.concat(techlstJob); 
+                                        var count = i+1;
+                                        <!---------Added------->
+                                        
+                                        //alert('vivekchecktime'+checkinTime);
+                                        //alert('vivekcount'+count);                                   
+                                        document.getElementById("Tech_Last_ClockIn_Time"+count).value = checkinTime; 
+                                        //alert('vivekbeforebuttondisable');  
+                                        if(checkinTime !='') 
+                                        {                                    
+                                            $("#TechWoClockInBtnId"+count).attr("disabled","disabled"); 
+                                            $("#TechWoClockOutBtnId"+count).attr("disabled",false); 
+                                        }
+                                    }
+                                    updateCompleteStatusToAllJob(); 
+                                }
+                            }
+                            
+                        }
+                    }
+                }
+            });
+        }
+    }
+    
+    function completeTheJob(toDivNum, jobId) {
+        console.log(toDivNum + " : " + jobId);
+        var completeStatus = '0';
+        if(document.getElementById("completedStatus"+toDivNum).checked == true) {  
+            completeStatus = '1';
+        }    
+        if(document.getElementById("Tech_Last_ClockIn_Time"+toDivNum).value != "" && document.getElementById("Tech_Last_ClockOut_Time"+toDivNum).value == "") {
+            updateClockOut(toDivNum);
+        }
+        BOATBUILDING.TechWorkOrderControllerClone.completeTheJob(jobId, completeStatus, function(result, event) {
+            if(event.status) {
+                if(result != null) { 
+                    if(completeStatus == '1') {
+                        $("#TechWoClockInBtnId"+toDivNum).attr("disabled","disabled"); 
+                        $("#TechWoClockOutBtnId"+toDivNum).attr("disabled","disabled");
+                        document.getElementById("Tech_Last_ClockIn_Time"+toDivNum).value = "";
+                        document.getElementById("Tech_Last_ClockOut_Time"+toDivNum).value = "";
+                        $("#CommentBoxId"+toDivNum).attr("disabled","disabled");
+                        $("#AddComment"+toDivNum).attr("disabled","disabled");
+                        $("#TechnicianCommentBoxId"+toDivNum).attr("disabled","disabled");
+                        //document.getElementById("completedStatus"+toDivNum).disabled = true; 
+                    } else {
+                        document.getElementById("TechWoClockInBtnId"+toDivNum).removeAttribute("disabled"); 
+                        $("#TechWoClockOutBtnId"+toDivNum).attr("disabled","disabled");
+                        $("#CommentBoxId"+toDivNum).attr("disabled","disabled");
+                        $("#AddComment"+toDivNum).attr("disabled","disabled");
+                    }
+                }
+            } 
+        });     
+        
+    }   
+    
+    function updateCompleteStatusToAllJob() {  
+        console.log(techlstJob);
+        if(techlstJob != null && techlstJob.length > 0) {
+            for(var i = 0; i < techlstJob.length; i++) {
+                console.log(techlstJob[i].BOATBUILDING__Completed__c);
+                if(techlstJob[i].BOATBUILDING__Completed__c == true) {
+                    var wwoNum = i+1;
+                    $("#TechWoClockInBtnId"+wwoNum).attr("disabled","disabled"); 
+                    $("#TechWoClockOutBtnId"+wwoNum).attr("disabled","disabled");
+                    document.getElementById("Tech_Last_ClockIn_Time"+wwoNum).value = "";
+                    document.getElementById("Tech_Last_ClockOut_Time"+wwoNum).value = "";
+                    $("#CommentBoxId"+wwoNum).attr("disabled","disabled");
+                    $("#AddComment"+wwoNum).attr("disabled","disabled");
+                    $("#TechnicianCommentBoxId"+wwoNum).attr("disabled","disabled");
+                    document.getElementById("completedStatus"+wwoNum).checked = true;
+                    //document.getElementById("completedStatus"+wwoNum).disabled = true;     
+                }
+            } 
+        }
+    }
+    
+    function insertClockIn(objClockIn) {  
+        
+        if($("#TechWoClockInBtnId"+objClockIn).attr('disabled')) { // HERE
+        return false;
+        }
+        else { 
+            $("#TechWoClockInBtnId"+objClockIn).attr("disabled","disabled"); 
+            var RelatedjobId = document.getElementById("techWojobId"+objClockIn).value;
+            //alert('==RelatedjobId==' +RelatedjobId);
+            console.log('Job Id for insertClockIn'+RelatedjobId);
+            if(RelatedjobId != null && RelatedjobId != ""){
+                BOATBUILDING.TechWorkOrderControllerClone.insertclockin(RelatedjobId,function(result,event){
+                    console.log(result);
+                    console.log('event'+ event);
+                    var res = [];
+                    res = result;
+                    if(event.status) {
+                        if(res != null) {
+                            if(res.BOATBUILDING__Clock_In__c != null){
+                                var d = parseInt(res.BOATBUILDING__Clock_In__c);
+                                var dd = new Date(d);
+                                console.log(res.RecordTypeId);
+                                console.log(res.BOATBUILDING__Clock_In__c);
+                                document.getElementById("Tech_Last_ClockIn_Time"+objClockIn).value = (dd.getMonth()+1)+"/"+dd.getDate()+"/"+dd.getFullYear()+" "+dd.getHours()+":"+dd.getMinutes()+":"+dd.getSeconds();
+                                $("#techName"+objClockIn).html(res.BOATBUILDING__Technician__r.Name);
+                            }
+                            document.getElementById("Tech_Last_ClockOut_Time"+objClockIn).value = "";
+                            mapJobtoTimeMgmt[RelatedjobId] = res.Id;
+                            $("#TechWoClockOutBtnId"+objClockIn).attr("disabled",false); 
+                            $("#TechWoClockInBtnId"+objClockIn).attr("disabled","disabled"); 
+                            $("#CommentBoxId"+objClockIn).attr("disabled",false);
+                            $("#AddComment"+objClockIn).attr("disabled",false);
+                            $("#TechnicianCommentBoxId"+objClockIn).attr("disabled",false);
+                        }               
+                    }
+                    else {
+                        alert("Something went wrong. Please Try again");
+                    } 
+                }); 
+            }
+        }
+        
+    }
+    
+    function updateClockOut(objClockOut) {
+    	var timeMgmtId;
+        if($("#TechWoClockOutBtnId"+objClockOut).attr('disabled')) { // HERE
+            return false;
+        }
+        else{
+            console.log('Param for updateClockOut'+objClockOut);
+            
+            $("#TechWoClockOutBtnId"+objClockOut).attr("disabled","disabled"); 
+            var RelatedjobId = document.getElementById("techWojobId"+objClockOut).value;
+            //alert('==RelatedjobId===' +RelatedjobId);
+            console.log('Job Id '+RelatedjobId);
+            console.log(mapJobtoTimeMgmt);
+            console.log('timeMgmtId'+mapJobtoTimeMgmt[RelatedjobId]);
+            if(RelatedjobId in mapJobtoTimeMgmt){
+                timeMgmtId = mapJobtoTimeMgmt[RelatedjobId];
+            }
+            //alert('===timeMgmtId==='+timeMgmtId);
+            console.log('Time Management record Id for corresponding job uncensored'+timeMgmtId);
+            if(RelatedjobId != null && RelatedjobId != "" && timeMgmtId != null && timeMgmtId != "") {
+            
+                BOATBUILDING.TechWorkOrderControllerClone.updateclockout(RelatedjobId,timeMgmtId,function(result,event){
+                    if(event.status) {
+                        console.log(result);
+                        if(result != null) {
+                            if(result.BOATBUILDING__Clock_Out__c != null){
+                                
+                                BOATBUILDING.TechWorkOrderControllerClone.fetchOOWH(RelatedjobId, function(OOWH, event) {
+                                    if(event.status) {
+                                        if(OOWH != null) {
+                                            $("#SpanWorkdHrs"+objClockOut).html(OOWH); 
+                                        }
+                                    }
+                                });
+                                
+                                
+                                var d = parseInt(result.BOATBUILDING__Clock_Out__c);
+                                var dd = new Date(d);
+                                document.getElementById("Tech_Last_ClockOut_Time"+objClockOut).value = (dd.getMonth()+1)+"/"+dd.getDate()+"/"+dd.getFullYear()+" "+dd.getHours()+":"+dd.getMinutes()+":"+dd.getSeconds();
+                            }
+                            if(result.BOATBUILDING__Related_Work_Order_Job__r.BOATBUILDING__TWO_Worked_Hour__c != undefined){
+                                document.getElementById("SpanWorkdHrs"+objClockOut).innerHTML = result.BOATBUILDING__Related_Work_Order_Job__r.BOATBUILDING__TWO_Worked_Hour__c;
+                            }
+                            //$("#TechWoClockInBtnId"+objClockOut).attr("disabled","disabled");    
+                            document.getElementById("TechWoClockInBtnId"+objClockOut).removeAttribute("disabled"); 
+                            $("#TechWoClockOutBtnId"+objClockOut).attr("disabled","disabled");
+                            $("#CommentBoxId"+objClockOut).attr("disabled","disabled");
+                            $("#AddComment"+objClockOut).attr("disabled","disabled");
+                        }
+                    }
+                    else {
+                        alert("Something went wrong. Please Try again");
+                    } 
+                });
+            }
+        }
+        
+        
+    }
+        /*
+        function addComment(addComment){
+            var timeMgmtId;
+            if($("#AddComment"+addComment).attr('disabled')) { // HERE
+                return false;
+            }
+            else{
+                console.log('Param for addComment'+addComment);
+                //$("#TechWoClockOutBtnId"+objClockOut).attr("disabled","disabled"); 
+                var RelatedjobId = document.getElementById("techWojobId"+addComment).value;
+                if(RelatedjobId in mapJobtoTimeMgmt){
+                    timeMgmtId = mapJobtoTimeMgmt[RelatedjobId];
+                }
+                var Comment = (document.getElementById("CommentBoxId"+addComment).value != null ? document.getElementById("CommentBoxId"+addComment).value : "");
+                var servicetechcom = (document.getElementById("TechnicianCommentBoxId"+addComment).value != null ? document.getElementById("TechnicianCommentBoxId"+addComment).value : "");
+                console.log(Comment);
+                console.log('Job Id '+RelatedjobId);
+                console.log('Time Mgmt ID' +timeMgmtId);
+                if(timeMgmtId != undefined && timeMgmtId != "") {
+                    BOATBUILDING.TechWorkOrderControllerClone.addCommentonJob(timeMgmtId,Comment,servicetechcom,function(result,event){
+                        if(event.status) {
+                            console.log(result);
+                            if(result != null) { 
+                                console.log(result);
+                                console.log(result.BOATBUILDING__Related_Work_Order_Job__r.BOATBUILDING__TWO_Worked_Hour__c);
+                                $("#TechWoClockInBtnId"+addComment).attr("disabled","disabled"); 
+                                $("#TechWoClockOutBtnId"+addComment).attr("disabled",false);
+                                $("#CommentBoxId"+addComment).attr("disabled","disabled");
+                                $("#AddComment"+addComment).attr("disabled","disabled");
+                                $("#TechnicianCommentBoxId"+addComment).attr("disabled","disabled");
+                            }
+                        }
+                        else {
+                            alert("Something went wrong. Please Try again");
+                        }  
+                    });
+                }
+            }
+        }*/
+        
+        
+        function twoaddCommentToJob(wwoDivNum, typeInputPopp, jobIdPopup) {
+                console.log(wwoDivNum);
+                console.log(typeInputPopp);
+                console.log(jobIdPopup);
+                
+                
+                var isDisabled = false;
+                
+                $("#TechWoClockInBtnId"+wwoDivNum).each(function() {
+              $.each(this.attributes, function() {
+                // this.attributes is not a plain object, but an array
+                // of attribute nodes, which contain both the name and value
+                if(this.specified) {
+                  if(this.name == "disabled") {
+                    isDisabled = true;
+                  }
+                }
+              });
+            });
+                
+                if(isDisabled) {
+                    //twotaCommnt, twohiddenInpPopup, typeInputPopp, jobIdPopup
+                    document.getElementById("twohiddenInpPopup").value = wwoDivNum;
+                    document.getElementById("typeInputPopp").value = typeInputPopp;
+                    document.getElementById("jobIdPopup").value = jobIdPopup;
+                    
+                    var comments = "";
+                    if(typeInputPopp == "SWC") {
+                        comments = document.getElementById("CommentBoxId"+wwoDivNum).value;
+                    } 
+                    else if(typeInputPopp == "TC") {
+                        comments = document.getElementById("TechnicianCommentBoxId"+wwoDivNum).value;
+                    }
+                    if(comments != null && comments != '') {
+                        document.getElementById("twotaCommnt").value = comments;
+                    }
+                    document.getElementById("twopopupTextArea").style.display = "block";
+                } else {
+                    alert("Please clock-in first.\nThank you!!");
+                } 
+        }
+        function twoviewCommentFromJob(wwoDivNum, typeInputPopp, jobIdPopup) {
+                console.log(wwoDivNum);
+                console.log(typeInputPopp);
+                console.log(jobIdPopup);  
+                
+                document.getElementById("twohiddenInpPopup").value = wwoDivNum;
+                document.getElementById("typeInputPopp").value = typeInputPopp;
+                document.getElementById("jobIdPopup").value = jobIdPopup;
+                
+                var comments = "";
+                if(typeInputPopp == "SWC") {
+                    comments = document.getElementById("CommentBoxId"+wwoDivNum).value;
+                } 
+                else if(typeInputPopp == "TC") {
+                    comments = document.getElementById("TechnicianCommentBoxId"+wwoDivNum).value;
+                }
+                if(comments != null && comments != '') {
+                    document.getElementById("twotaCommnt").value = comments;
+                }
+                
+                document.getElementById("twopopupTextArea").style.display = "block";
+                document.getElementById("twoaddCmntBttn").style.display = "none";
+        
+        }
+        $("#twoaddCmntBttn").click(function() {
+        	var timeMgmtId = '';
+                var cmntToAdd = document.getElementById("twotaCommnt").value;
+                var typeInputPopp = document.getElementById("typeInputPopp").value;
+                var wwoDivNum = document.getElementById("twohiddenInpPopup").value;
+                if(typeInputPopp == "SWC") {
+                    document.getElementById("CommentBoxId"+wwoDivNum).value = cmntToAdd;
+                } 
+                else if(typeInputPopp == "TC") {
+                    document.getElementById("TechnicianCommentBoxId"+wwoDivNum).value = cmntToAdd;
+                }
+                
+                
+                var RelatedjobId = document.getElementById("jobIdPopup").value;
+            if(RelatedjobId in mapJobtoTimeMgmt){
+                timeMgmtId = mapJobtoTimeMgmt[RelatedjobId];
+            }
+            var Comment = (document.getElementById("CommentBoxId"+wwoDivNum).value != null ? document.getElementById("CommentBoxId"+wwoDivNum).value : "");
+            var servicetechcom = (document.getElementById("TechnicianCommentBoxId"+wwoDivNum).value != null ? document.getElementById("TechnicianCommentBoxId"+wwoDivNum).value : "");
+            console.log(Comment);
+            console.log('Job Id '+RelatedjobId);
+             
+            if(timeMgmtId != undefined && timeMgmtId != "") { 
+            	console.log('Time Mgmt ID' +timeMgmtId);
+                BOATBUILDING.TechWorkOrderControllerClone.addCommentonJob(timeMgmtId, Comment, servicetechcom, function(result,event){
+                    if(event.status) {
+                        console.log(result);
+                        if(result != null) {
+                        	document.getElementById('twotaCommnt').value=''; 
+                            document.getElementById('twopopupTextArea').style.display='none';
+                            
+                        }
+                    } 
+                    else {
+                        alert("Something went wrong. Please Try again");
+                    } 
+                });
+            } else {
+            	document.getElementById('twotaCommnt').value='';
+            	document.getElementById('twopopupTextArea').style.display='none';
+                
+            }
+                
+                
+                //var jobDivNum = document.getElementById("hiddenInpPopup").value;
+                //document.getElementById("cmnt"+jobDivNum).value = cmntToAdd;
+        }); 
+        
+        
+        function showCallComments(jobId) {
+        		console.log(jobId);
+        		$('.popup').addClass('active');
+        		BOATBUILDING.TechWorkOrderControllerClone.getCommentList(jobId, function(result, event) {
+        			if(event.status) {
+        				$('.popup').removeClass('active');
+        				if(result != null && result.length > 0) {
+        					console.log(result);
+        					var htmlList = '';
+        					for(var i = 0; i < result.length; i++) {
+        						htmlList += '<span>'+result[i]+'</span><br/><br/>';
+        					} 
+        					$("#doId").fadeIn();
+        					$("#CommentList").html(htmlList);
+        				} else {
+        					$("#doId").fadeIn();
+        					$("#CommentList").html("<span style='color:red;'>No comments yet.</span>");
+        				}
+        			}
+        		});
+        }
+        $("#closeIcn").click(function() {
+			$("#doId").fadeOut();
+			$("#CommentList").html("");
+		});
+    </script>
+    
+    
+    
+    <!-- ________________________Tech Work Order___________________________-->
+    
+</apex:component>

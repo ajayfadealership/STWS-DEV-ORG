@@ -1,0 +1,26 @@
+<aura:component controller="TechWorkOrderDetailController" implements="flexipage:availableForRecordHome,flexipage:availableForAllPageTypes,lightning:actionOverride,force:hasRecordId" access="global">
+    <aura:attribute name="objTWO" type="Object" access="global"/>
+    <aura:attribute name="objTWOJobs" type="Object[]" access="global"/>
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    <aura:attribute name="showSpinnerP" type="Boolean" default="false"/>
+    <aura:if isTrue="{!v.showSpinnerP}">
+        <lightning:spinner alternativeText="Loading" size="large"/>
+    </aura:if>
+    <lightning:accordion aura:id="WOId" activeSectionName="WOJDetails" allowMultipleSectionsOpen="true">
+        <lightning:accordionSection name="WODetails" label="{!'Work Order Details ( '+ v.objTWO.Name + ' )'}">
+            <c:WorkOrderDetailOnTechWO objTWO="{!v.objTWO}"/>
+        </lightning:accordionSection>
+        <lightning:accordionSection name="WOJDetails" label="{!'Work Order Jobs ( '+ v.objTWOJobs.length + ' )'}">
+            <aura:if isTrue="{!v.objTWOJobs.length > 0}">
+                    <lightning:accordion aura:id="WOJId" activeSectionName="" allowMultipleSectionsOpen="true">
+                        <aura:iteration items="{!v.objTWOJobs}" var="objJob">
+                            <c:TechWorkOrderJobs objJob="{!objJob}"/>
+                        </aura:iteration>
+                    </lightning:accordion>
+                <aura:set attribute="else">
+                    There is no related job.
+                </aura:set>
+            </aura:if>
+        </lightning:accordionSection>
+    </lightning:accordion>
+</aura:component>

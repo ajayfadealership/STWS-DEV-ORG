@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Module_Provided__c</fullName>
+    <deprecated>false</deprecated>
+    <externalId>false</externalId>
+    <label>Module Provided</label>
+    <required>false</required>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Sales &amp; Service with All</fullName>
+                <default>false</default>
+                <label>Sales &amp; Service with All</label>
+            </value>
+            <value>
+                <fullName>Service with Part</fullName>
+                <default>false</default>
+                <label>Service with Part</label>
+            </value>
+            <value>
+                <fullName>Service with Work</fullName>
+                <default>false</default>
+                <label>Service with Work</label>
+            </value>
+            <value>
+                <fullName>Service with Schedule</fullName>
+                <default>false</default>
+                <label>Service with Schedule</label>
+            </value>
+            <value>
+                <fullName>Service with Time Management</fullName>
+                <default>false</default>
+                <label>Service with Time Management</label>
+            </value>
+            <value>
+                <fullName>Sales and Service with Part</fullName>
+                <default>false</default>
+                <label>Sales and Service with Part</label>
+            </value>
+            <value>
+                <fullName>Sales and Service with Work</fullName>
+                <default>false</default>
+                <label>Sales and Service with Work</label>
+            </value>
+            <value>
+                <fullName>Sales and Service with Schedule</fullName>
+                <default>false</default>
+                <label>Sales and Service with Schedule</label>
+            </value>
+            <value>
+                <fullName>Sales and Service with Time Management</fullName>
+                <default>false</default>
+                <label>Sales and Service with Time Management</label>
+            </value>
+            <value>
+                <fullName>Sales Only</fullName>
+                <default>false</default>
+                <label>Sales Only</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

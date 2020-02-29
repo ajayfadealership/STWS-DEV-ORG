@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Lead_Source__c</fullName>
+    <deprecated>false</deprecated>
+    <externalId>false</externalId>
+    <label>Prospect Lead Source</label>
+    <required>false</required>
+    <trackFeedHistory>false</trackFeedHistory>
+    <type>Picklist</type>
+    <valueSet>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Boat Trader</fullName>
+                <default>false</default>
+                <label>Boat Trader</label>
+            </value>
+            <value>
+                <fullName>Boat.com</fullName>
+                <default>false</default>
+                <label>Boat.com</label>
+            </value>
+            <value>
+                <fullName>Dealer Spike</fullName>
+                <default>false</default>
+                <label>Dealer Spike</label>
+            </value>
+            <value>
+                <fullName>Only Inboards</fullName>
+                <default>false</default>
+                <label>Only Inboards</label>
+            </value>
+            <value>
+                <fullName>Malibu Boats</fullName>
+                <default>false</default>
+                <label>Malibu Boats</label>
+            </value>
+            <value>
+                <fullName>Skiers Choice</fullName>
+                <default>false</default>
+                <label>Skiers Choice</label>
+            </value>
+            <value>
+                <fullName>Event</fullName>
+                <default>false</default>
+                <label>Event</label>
+            </value>
+            <value>
+                <fullName>Boat Show</fullName>
+                <default>false</default>
+                <label>Boat Show</label>
+            </value>
+            <value>
+                <fullName>Surf Night</fullName>
+                <default>false</default>
+                <label>Surf Night</label>
+            </value>
+            <value>
+                <fullName>Wakeboard Camp</fullName>
+                <default>false</default>
+                <label>Wakeboard Camp</label>
+            </value>
+            <value>
+                <fullName>Phone</fullName>
+                <default>false</default>
+                <label>Phone</label>
+            </value>
+            <value>
+                <fullName>Walk-in</fullName>
+                <default>false</default>
+                <label>Walk-in</label>
+            </value>
+            <value>
+                <fullName>Word of Mouth</fullName>
+                <default>false</default>
+                <label>Word of Mouth</label>
+            </value>
+            <value>
+                <fullName>SouthTown Watersports</fullName>
+                <default>false</default>
+                <label>SouthTown Watersports</label>
+            </value>
+            <value>
+                <fullName>Get a Quote</fullName>
+                <default>false</default>
+                <label>Get a Quote</label>
+            </value>
+            <value>
+                <fullName>Value your trade</fullName>
+                <default>false</default>
+                <label>Value your trade</label>
+            </value>
+            <value>
+                <fullName>Service Request</fullName>
+                <default>false</default>
+                <label>Service Request</label>
+            </value>
+            <value>
+                <fullName>Walk In</fullName>
+                <default>false</default>
+                <label>Walk In</label>
+            </value>
+            <value>
+                <fullName>Schedule a Ride</fullName>
+                <default>false</default>
+                <label>Schedule a Ride</label>
+            </value>
+            <value>
+                <fullName>LS</fullName>
+                <default>false</default>
+                <label>LS</label>
+            </value>
+            <value>
+                <fullName>Contact Form</fullName>
+                <default>false</default>
+                <label>Contact Form</label>
+            </value>
+            <value>
+                <fullName>Parts Request</fullName>
+                <default>false</default>
+                <label>Parts Request</label>
+            </value>
+            <value>
+                <fullName>Newsletter Signup</fullName>
+                <default>false</default>
+                <label>Newsletter Signup</label>
+            </value>
+            <value>
+                <fullName>Finance Application</fullName>
+                <default>false</default>
+                <label>Finance Application</label>
+            </value>
+            <value>
+                <fullName>Joint Finance Application</fullName>
+                <default>false</default>
+                <label>Joint Finance Application</label>
+            </value>
+            <value>
+                <fullName>Facebook Leads</fullName>
+                <default>false</default>
+                <label>Facebook Leads</label>
+            </value>
+            <value>
+                <fullName>Referral Program</fullName>
+                <default>false</default>
+                <label>Referral Program</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

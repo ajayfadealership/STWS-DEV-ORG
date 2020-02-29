@@ -1,0 +1,354 @@
+<apex:component controller="ServiceGlobalSearchController">
+    
+    <style>
+        .popupView {
+	        height: 75%;
+	        position: fixed;
+	        left: 18%;
+	        top: 13%;
+	        width: auto;
+	        min-width: 62%;
+	        border: 1px solid black;
+	        padding: 1%;
+	        border-radius: .30em;
+	        background: #fff;
+	        box-shadow: 2px 2px 4px #0000008c;
+	        overflow: scroll;
+        }
+        
+        .popupBackSide{
+	        display: none;
+	        position: fixed;
+	        top: 0;
+	        bottom: 0;
+	        left: 0;
+	        right: 0;
+	        background: #0000004a;
+	        z-index: 9999;
+        }
+        .slds-m-top--x-large {
+		    margin-top: 1rem;
+		}
+    </style>
+    <table style="width: 77%;">
+        <tr> 
+            <td style="text-align: right; padding-right: 1%;">
+                <input type="text" style="width: 35%;" id="searchKeyWord" class="slds-input"/>
+            </td>
+            <td style="width: 34%;">
+                <a id="inpBtnGS" class="slds-button slds-button--neutral slds-button--brand">Search</a>
+            </td>
+        </tr> 
+    </table>
+    <div class="popupBackSide" id="popOut">  
+        <div class="popupView" >
+            <a id="Btn" style="color: red; position: fixed; font-size: 22px; z-index: 99999; left: 78%; top: 13%;" ><b>x</b></a><!-- class="slds-button slds-button--neutral slds-button--brand"-->  
+            <div id="popupIn">
+                
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        $("#inpBtnGS").click(function() {
+            var searchKeyWrd = $("#searchKeyWord").val();
+            BOATBUILDING.ServiceGlobalSearchController.searchRecords(searchKeyWrd, function(result, event) {
+                console.log("Status: "+event.status);
+                if(event.status) {
+                    if(result != null) {
+                        console.log(result);
+                        if(result != null && result.length > 0) {
+                            var lstPrt = result[0];
+                            var lstInventory = result[1];
+                            var lstInvoice = result[2];
+                            var lstWorkOrder = [];
+                            var lstWarrentyWorkOrder = [];
+                            console.log(lstPrt);
+                            console.log(lstInventory);
+                            console.log(lstInvoice);
+                            
+                            if(result[3].length > 0) {
+                            	for(var i = 0; i < result[3].length; i++) {
+                            		if(result[3][i].RecordType != undefined) {
+	                            		if(result[3][i].RecordType.DeveloperName == 'Work_Order') {
+	                            			lstWorkOrder.push(result[3][i]);
+	                            		} else if(result[3][i].RecordType.DeveloperName == 'Warranty_Work_Order') {
+	                            			lstWarrentyWorkOrder.push(result[3][i]);
+	                            		}
+                            		}
+                            	}
+                            }
+                            console.log(lstWorkOrder);
+                            console.log(lstWarrentyWorkOrder);
+							var htmlFor_popupIn_Div = '<div>Result for: "<b>'+searchKeyWrd+'</b>"</div>';
+							
+							if(lstPrt.length > 0) {
+								var partHTML = '<hr/>';
+								partHTML += '<div style="border: 1px solid #ddd; padding: 1%; border-radius: .25em;">';
+								partHTML += '<span style="border-bottom: 1px solid #ddd;">';
+								partHTML += '<b>Part</b>';
+								partHTML += '</span>';
+								partHTML += '<table id="prtTblSearch" class="show slds-table slds-table--bordered slds-no-row-hover slds-table--cell-buffer slds-m-top--x-large slds-card" style="border-radius: .25em;">';
+								partHTML += '<thead><tr style="background: #ddd;">';
+								partHTML += '<th>Vendor</th>';
+								partHTML += '<th>Name</th>';
+								partHTML += '<th>Cost</th>';
+								partHTML += '<th>Map Price</th>';
+								partHTML += '<th>Retail Price</th>';
+								partHTML += '<th>Part Number</th>';	
+								partHTML += '</tr></thead><tbody>';
+								for(var j = 0; j < lstPrt.length; j++) {
+									var vendor = '', name = '', cost = '0.00', mapPrice = '0.00', retailPrice = '0.00', partNumber = ''; 
+									var objPart = lstPrt[j];
+									if(objPart.BOATBUILDING__Vendor_Name__c != undefined && objPart.BOATBUILDING__Vendor_Name__r.Name != undefined) {
+										vendor = objPart.BOATBUILDING__Vendor_Name__r.Name;
+									}
+									if(objPart.Name != undefined) {
+										name = objPart.Name;
+									}
+									if(objPart.BOATBUILDING__Part_Cost__c != undefined) {
+										cost = objPart.BOATBUILDING__Part_Cost__c;
+									}
+									if(objPart.BOATBUILDING__Map_Price__c != undefined) {
+										mapPrice = objPart.BOATBUILDING__Map_Price__c;
+									}
+									if(objPart.BOATBUILDING__Retail_Price__c != undefined) {
+										retailPrice = objPart.BOATBUILDING__Retail_Price__c;
+									}
+									if(objPart.BOATBUILDING__Part_Number__c != undefined) {
+										partNumber = objPart.BOATBUILDING__Part_Number__c;
+									}
+									partHTML += '<tr> <td>'+vendor+'</td> <td><a href="/'+objPart.Id+'">'+name+'</a></td> <td>'+cost+'</td> <td>'+mapPrice+'</td> <td>'+retailPrice+'</td> <td>'+partNumber+'</td> </tr>';
+								}
+								partHTML += '<tbody></table>';
+								partHTML += '</div>';
+								htmlFor_popupIn_Div += partHTML;
+							}
+						
+							if(lstInventory.length > 0) {
+								var inventoryHTML = '<hr/>';
+								inventoryHTML += '<div style="border: 1px solid #ddd; padding: 1%; border-radius: .25em;">';
+								inventoryHTML += '<span style="border-bottom: 1px solid #ddd;">';
+								inventoryHTML += '<b>Inventory</b>';
+								inventoryHTML += '</span>';
+								inventoryHTML += '<table id="invSearchResult" class="show slds-table slds-table--bordered slds-no-row-hover slds-table--cell-buffer slds-m-top--x-large slds-card" style="border-radius: .25em;">';
+								inventoryHTML += '<thead><tr style="background: #ddd;">';
+								inventoryHTML += '<th>Invntory</th>';
+								inventoryHTML += '<th>Vendor</th>';
+								inventoryHTML += '<th>Part Number</th>';
+								inventoryHTML += '<th>Category</th>';
+								inventoryHTML += '<th>Price</th>';
+								//inventoryHTML += '<th>Part Number</th>';	
+								inventoryHTML += '</tr></thead><tbody>';
+								
+								for(var j = 0; j < lstInventory.length; j++) {
+									var objinventory = lstInventory[j];
+									if(objinventory.RecordType.DeveloperName != undefined 
+										&& objinventory.RecordType.DeveloperName == 'Inventory_for_Parts') {
+										var inventory = '', vendor = '', partNumber = '0.00', category = '0.00', price = '0.00'; 
+										
+										if(objinventory.BOATBUILDING__Vendor__c != undefined && objinventory.BOATBUILDING__Vendor__r.Name != undefined) {
+											vendor = objinventory.BOATBUILDING__Vendor__r.Name;
+										}
+										if(objinventory.Name != undefined) {
+											name = objinventory.Name;
+										}
+										if(objinventory.BOATBUILDING__Part_MSRP_Price__c != undefined) {
+											price = objinventory.BOATBUILDING__Part_MSRP_Price__c;
+										}
+										if(objinventory.BOATBUILDING__Category__c != undefined) {
+											category = objinventory.BOATBUILDING__Category__c;
+										}
+										if(objinventory.BOATBUILDING__Part_Number__c != undefined) {
+											partNumber = objinventory.BOATBUILDING__Part_Number__c;
+										}
+										inventoryHTML += '<tr> <td><a href="/'+objinventory.Id+'">'+name+'</a></td> <td>'+vendor+'</td> <td>'+partNumber+'</td> <td>'+category+'</td> <td>'+price+'</td> </tr>';
+									}
+								}
+								
+								inventoryHTML += '</tbody></table>';
+								inventoryHTML += '</div>';
+								htmlFor_popupIn_Div += inventoryHTML;
+							}
+							
+							
+							if(lstInvoice.length > 0) {
+								var invoiceHTML = '<hr/>';
+								invoiceHTML += '<div style="border: 1px solid #ddd; padding: 1%; border-radius: .25em;">';
+								invoiceHTML += '<span style="border-bottom: 1px solid #ddd;">';
+								invoiceHTML += '<b>Invoice</b>';
+								invoiceHTML += '</span>';
+								invoiceHTML += '<table id="invTblSearch" class="show slds-table slds-table--bordered slds-no-row-hover slds-table--cell-buffer slds-m-top--x-large slds-card" style="border-radius: .25em;">';
+								invoiceHTML += '<thead><tr style="background: #ddd;">';
+								invoiceHTML += '<th>Invoice Number</th>';
+								invoiceHTML += '<th>Invoice Name</th>';
+								invoiceHTML += '<th>Customer Name</th>';
+								invoiceHTML += '<th>Total Price</th>';
+								invoiceHTML += '</tr></thead><tbody>';
+								for(var j = 0; j < lstInvoice.length; j++) {
+									var objinvoice = lstInvoice[j];
+									if(objinvoice.RecordTypeId != undefined 
+										&& objinvoice.RecordType.DeveloperName == 'Standard_Invoice') {
+										var invNum = '', invName = '', customerName = '', totalPrice = '0.00'; 
+										
+										if(objinvoice.BOATBUILDING__Invoice_Number__c != undefined) {
+											invNum = objinvoice.BOATBUILDING__Invoice_Number__c;
+										}
+										if(objinvoice.Name != undefined) {
+											name = objinvoice.Name;
+										}
+										if(objinvoice.BOATBUILDING__Customer_Name__c != undefined) {
+											customerName = objinvoice.BOATBUILDING__Customer_Name__c;
+										}
+										if(objinvoice.BOATBUILDING__Sum_Price_Line_Items__c != undefined) {
+											totalPrice = objinvoice.BOATBUILDING__Sum_Price_Line_Items__c;
+										}
+										
+										invoiceHTML += '<tr> <td><a href="/apex/BOATBUILDING__InvoiceDetail?id='+objinvoice.Id+'">'+invNum+'</a></td> <td>'+name+'</td> <td>'+customerName+'</td> <td>'+totalPrice+'</td> </tr>';
+									}
+								}
+								invoiceHTML += '</tbody></table>';
+								invoiceHTML += '</div>';
+								htmlFor_popupIn_Div += invoiceHTML;
+							}
+							
+							
+							
+							if(lstWorkOrder.length > 0) {
+								var woHTML = '<hr/>';
+								woHTML += '<div style="border: 1px solid #ddd; padding: 1%; border-radius: .25em;">';
+								woHTML += '<span style="border-bottom: 1px solid #ddd;">';
+								woHTML += '<b>Work Order</b>';
+								woHTML += '</span>';
+								woHTML += '<table id="woTblSearch" class="show slds-table slds-table--bordered slds-no-row-hover slds-table--cell-buffer slds-m-top--x-large slds-card" style="border-radius: .25em;">';
+								woHTML += '<thead><tr style="background: #ddd;">';
+								woHTML += '<th>Work Order Name</th>';
+								woHTML += '<th>Contact Name</th>';
+								woHTML += '<th>Boat Name</th>';
+								woHTML += '<th>Status</th>';
+								woHTML += '</tr></thead><tbody>';
+								for(var j = 0; j < lstWorkOrder.length; j++) {
+									var objwo = lstWorkOrder[j];
+									var woName = '', boatName = '', contactName = '', woStatus = '', woId = '', woBalance = '0.00'; 
+									
+									if(objwo.Id != undefined) {
+										woId = objwo.Id;
+									}
+									if(objwo.Name != undefined) {
+										woName = objwo.Name;
+									}
+									if(objwo.BOATBUILDING__Balance__c != undefined) {
+										woBalance = objwo.BOATBUILDING__Balance__c;
+									}
+									if(objwo.BOATBUILDING__Status__c != undefined) {
+										woStatus = objwo.BOATBUILDING__Status__c;
+									}
+									if(objwo.BOATBUILDING__Contact__c != undefined) {
+										contactName = objwo.BOATBUILDING__Contact__r.Name;
+									}
+									if(objwo.BOATBUILDING__Boat__c != undefined) {
+										boatName = objwo.BOATBUILDING__Boat__r.Name;
+									}
+									
+									woHTML += '<tr> <td><a  href="/apex/BOATBUILDING__ServicePage?type=WO&WOId='+woName+'">'+woName+'</a></td> <td>'+contactName+'</td> <td>'+boatName+'</td> <td>'+woStatus+'</td> </tr>';
+									//onclick="fetchWorkOrder(this,\''+woId+'\',\''+woName+'\',\''+woBalance+'\',\''+woStatus+'\'); openCity(event, \'workReq\'); hideAllForPopup(); "
+								}
+								woHTML += '</tbody></table>';
+								woHTML += '</div>';
+								htmlFor_popupIn_Div += woHTML;
+							}
+							
+							
+							if(lstWarrentyWorkOrder.length > 0) {
+								console.log("lstWarrentyWorkOrder");
+								console.log(lstWarrentyWorkOrder);
+								var wwoHTML = '<hr/>';
+								wwoHTML += '<div style="border: 1px solid #ddd; padding: 1%; border-radius: .25em;">';
+								wwoHTML += '<span style="border-bottom: 1px solid #ddd;">';
+								wwoHTML += '<b>Warranty Work Order</b>';
+								wwoHTML += '</span>';
+								wwoHTML += '<table id="wwoTblSearch" class="show slds-table slds-table--bordered slds-no-row-hover slds-table--cell-buffer slds-m-top--x-large slds-card" style="border-radius: .25em;">';
+								wwoHTML += '<thead><tr style="background: #ddd;">';
+								wwoHTML += '<th>Warranty Work Order Name</th>';
+								wwoHTML += '<th>Contact Name</th>';
+								wwoHTML += '<th>Boat Name</th>';
+								wwoHTML += '<th>Status</th>';
+								wwoHTML += '</tr></thead><tbody>';
+								for(var j = 0; j < lstWarrentyWorkOrder.length; j++) {
+									var objwo = lstWarrentyWorkOrder[j];
+									var woName = '', boatName = '', contactName = '', woStatus = '', woId = '', woBalance = '0.00'; 
+									
+									if(objwo.Id != undefined) {
+										woId = objwo.Id;
+									}
+									if(objwo.Name != undefined) {
+										woName = objwo.Name;
+									}
+									if(objwo.BOATBUILDING__Balance__c != undefined) {
+										woBalance = objwo.BOATBUILDING__Balance__c;
+									}
+									if(objwo.BOATBUILDING__Status__c != undefined) {
+										woStatus = objwo.BOATBUILDING__Status__c;
+									}
+									if(objwo.BOATBUILDING__Contact__c != undefined) {
+										contactName = objwo.BOATBUILDING__Contact__r.Name;
+									}
+									if(objwo.BOATBUILDING__Boat__c != undefined) {
+										boatName = objwo.BOATBUILDING__Boat__r.Name;
+									}
+									
+									wwoHTML += '<tr> <td><a  href="/apex/BOATBUILDING__ServicePage?type=WWO&WWOId='+woName+'">'+woName+'</a></td> <td>'+contactName+'</td> <td>'+boatName+'</td> <td>'+woStatus+'</td> </tr>';
+									//onclick="fetchWorkOrder(this,\''+woId+'\',\''+woName+'\',\''+woBalance+'\',\''+woStatus+'\'); openCity(event, \'workReq\'); hideAllForPopup(); "
+								}
+								wwoHTML += '</tbody></table>';
+								wwoHTML += '</div>';
+								htmlFor_popupIn_Div += wwoHTML;
+							}  
+							
+							
+							$("#popupIn").html(htmlFor_popupIn_Div);
+							
+							$('#prtTblSearch').DataTable( {
+		                      "pageLength": 5,
+		                      "lengthMenu": [[5, 10, -1], [5, 10, "All"]],
+		                      "order": [[ 0, "desc" ]]
+		                    } );
+		                    $('#invSearchResult').DataTable( {
+		                      "pageLength": 5,
+		                      "lengthMenu": [[5, 10, -1], [5, 10, "All"]],
+		                      "order": [[ 0, "desc" ]]
+		                    } );
+		                    $('#invTblSearch').DataTable( {
+		                      "pageLength": 5,
+		                      "lengthMenu": [[5, 10, -1], [5, 10, "All"]],
+		                      "order": [[ 0, "desc" ]]
+		                    } );
+		                    $('#woTblSearch').DataTable( {
+		                      "pageLength": 5,
+		                      "lengthMenu": [[5, 10, -1], [5, 10, "All"]],
+		                      "order": [[ 0, "desc" ]]
+		                    } );
+		                    $('#wwoTblSearch').DataTable( {
+		                      "pageLength": 5,
+		                      "lengthMenu": [[5, 10, -1], [5, 10, "All"]],
+		                      "order": [[ 0, "desc" ]]
+		                    } );
+							
+							$("#popOut").fadeIn();                 
+							
+							
+							         
+	                    }
+                    }
+                }
+            });
+        });
+        $("#Btn").click(function(){
+       		hideAllForPopup();
+        });
+        function hideAllForPopup() {
+        	$("#popOut").fadeOut();
+            $("#popupIn").html("");
+        }
+    </script>
+</apex:component>

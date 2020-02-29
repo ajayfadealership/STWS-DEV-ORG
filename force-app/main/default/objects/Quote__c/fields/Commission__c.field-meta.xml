@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Commission__c</fullName>
+    <deprecated>false</deprecated>
+    <externalId>false</externalId>
+    <formula>IF(
+  Costline_Sell_Price__c &lt; Booked_Sale_Price__c ,
+
+  Booked_Sale_Price__c * IF
+  (
+    ISNULL($Setup.System_Configure__c.Above_Costline__c),
+    2,
+    $Setup.System_Configure__c.Above_Costline__c
+  )
+  /100,
+
+  Booked_Sale_Price__c * IF
+  (
+    ISNULL($Setup.System_Configure__c.Under_Costline__c),
+    1,
+    $Setup.System_Configure__c.Under_Costline__c
+  )
+  /100
+)
++ Commission_Stip__c</formula>
+    <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+    <label>Commission</label>
+    <precision>18</precision>
+    <required>false</required>
+    <scale>2</scale>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Currency</type>
+</CustomField>

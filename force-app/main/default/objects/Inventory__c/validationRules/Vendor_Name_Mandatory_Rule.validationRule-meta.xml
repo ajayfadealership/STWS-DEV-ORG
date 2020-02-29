@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Vendor_Name_Mandatory_Rule</fullName>
+    <active>false</active>
+    <errorConditionFormula>RecordType.Name = &#39;Inventory for Parts&#39; &amp;&amp; ISBLANK( Vendor__c )</errorConditionFormula>
+    <errorDisplayField>Vendor__c</errorDisplayField>
+    <errorMessage>Selecting a Vendor is mandatory for this record type.</errorMessage>
+</ValidationRule>

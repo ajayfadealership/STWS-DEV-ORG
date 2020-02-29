@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ListView xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Closed_Part_Request</fullName>
+    <columns>NAME</columns>
+    <columns>Vendor_Name__c</columns>
+    <columns>Part_Number__c</columns>
+    <columns>Part_description__c</columns>
+    <columns>Part_Request_Status__c</columns>
+    <columns>CREATEDBY_USER</columns>
+    <columns>CREATED_DATE</columns>
+    <columns>Store_Location__c</columns>
+    <columns>Used_For__c</columns>
+    <columns>WO_for__c</columns>
+    <filterScope>Everything</filterScope>
+    <filters>
+        <field>RECORDTYPE</field>
+        <operation>equals</operation>
+        <value>Order__c.Part_Request</value>
+    </filters>
+    <filters>
+        <field>Part_Request_Status__c</field>
+        <operation>equals</operation>
+        <value>PO Created</value>
+    </filters>
+    <label>Closed Part Request</label>
+</ListView>

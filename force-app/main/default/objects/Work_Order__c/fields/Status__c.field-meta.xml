@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Status__c</fullName>
+    <deprecated>false</deprecated>
+    <externalId>false</externalId>
+    <label>Status</label>
+    <required>false</required>
+    <trackFeedHistory>false</trackFeedHistory>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>New</fullName>
+                <default>false</default>
+                <label>New</label>
+            </value>
+            <value>
+                <fullName>Scheduled</fullName>
+                <default>false</default>
+                <label>Scheduled</label>
+            </value>
+            <value>
+                <fullName>On Hold</fullName>
+                <default>false</default>
+                <label>On Hold</label>
+            </value>
+            <value>
+                <fullName>Waiting To Schedule</fullName>
+                <default>false</default>
+                <label>Waiting To Schedule</label>
+            </value>
+            <value>
+                <fullName>Waiting on Customer Approval</fullName>
+                <default>false</default>
+                <label>Waiting on Customer Approval</label>
+            </value>
+            <value>
+                <fullName>Warranty Waiting on Approval</fullName>
+                <default>false</default>
+                <label>Warranty Waiting on Approval</label>
+            </value>
+            <value>
+                <fullName>Waiting on Customer</fullName>
+                <default>false</default>
+                <label>Waiting on Customer Drop Off</label>
+            </value>
+            <value>
+                <fullName>Waiting on Parts</fullName>
+                <default>false</default>
+                <label>Waiting on Parts</label>
+            </value>
+            <value>
+                <fullName>In Progress</fullName>
+                <default>false</default>
+                <label>In Progress</label>
+            </value>
+            <value>
+                <fullName>Waiting on Sub-let</fullName>
+                <default>false</default>
+                <label>Waiting on Sub-let</label>
+            </value>
+            <value>
+                <fullName>Waiting On Payment</fullName>
+                <default>false</default>
+                <label>Waiting On Payment</label>
+            </value>
+            <value>
+                <fullName>Warranty Waiting on Payment</fullName>
+                <default>false</default>
+                <label>Warranty Waiting on Payment</label>
+            </value>
+            <value>
+                <fullName>Closed</fullName>
+                <default>false</default>
+                <label>Closed</label>
+            </value>
+            <value>
+                <fullName>Closed Internal</fullName>
+                <default>false</default>
+                <label>Closed Internal</label>
+            </value>
+            <value>
+                <fullName>Escalated</fullName>
+                <default>false</default>
+                <label>Escalated</label>
+            </value>
+            <value>
+                <fullName>Quote</fullName>
+                <default>false</default>
+                <label>Quote</label>
+            </value>
+            <value>
+                <fullName>Queued</fullName>
+                <default>false</default>
+                <label>Queued</label>
+            </value>
+            <value>
+                <fullName>Ordered</fullName>
+                <default>false</default>
+                <label>Ordered</label>
+            </value>
+            <value>
+                <fullName>Received</fullName>
+                <default>false</default>
+                <label>Received</label>
+            </value>
+            <value>
+                <fullName>Delivered</fullName>
+                <default>false</default>
+                <label>Delivered</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

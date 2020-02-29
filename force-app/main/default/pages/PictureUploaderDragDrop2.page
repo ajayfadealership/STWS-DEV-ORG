@@ -1,0 +1,267 @@
+<apex:page standardController="Inventory__c" docType="html-5.0" showHeader="false"  sidebar="false" standardStylesheets="false" extensions="DradNUploadController">
+<apex:includeScript value="{!URLFOR($Resource.Signature, 'jquery.min.js')}"/>
+    <style>
+        .hidden {
+        display: none !important;
+        }
+        .flex-row {
+        display: flex; 
+        flex-wrap: wrap;
+        justify-content: center;
+        }
+        .flex-col {
+        width: 250px;
+        padding: 20px;
+        }
+        .dragDropComponentSize {
+        height: 170px !important; 
+        overflow: hidden !important;
+        padding: 5px !important;
+        }
+        .file-name {
+        margin-top: 0px !important;
+        margin-bottom: 5px !important;
+        font-size: 18px !important;
+        padding-left: 10px !important;
+        }
+        .dragDropComponentSize p {
+        text-align: center;
+        margin-bottom: 0px; 
+        margin-top: calc(50% - 40px);
+        }
+        .dragDropComponentSize p span {
+        text-shadow: none !important;
+        font-size: 16px !important;
+        }    
+        .dragDropComponentSize >[id*="holder"] {
+        width: 100% !important; 
+        height: 100% !important;
+        background: rgba(204, 204, 204, 0.18) !important;
+        display: flex;
+        flex-direction: column !important;
+        justify-content: center !important;
+        }
+        .dragDropComponentSize >[id*="holder"] >span {
+        position: relative !important;
+        top: 0px !important;
+        transform: none !important;
+        text-shadow: none !important;
+        font-size: 17px !important;
+        color: #A3A3A3 !important;
+        }
+        .popup{
+            position: fixed;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(0,0,0,0.5);
+            display: none;
+            z-index: 999;
+        }
+        .popup.active {
+            background-color: rgba(0,0,0,0.5);
+            display:block;
+        }
+        .popup img {
+            margin: 15% auto;
+        }
+    </style>
+    <div  class="popup">
+        <apex:image id="theImage2" value="{!$Resource.Process}" style="display:block;" width="40" height="40"/>
+    </div>
+     <span style="color:red;align:center">Note : All images should be less than 2 mb.</span>
+    <div class="flex-row">
+        <div class="flex-col">
+            <apex:outputPanel >
+                <div id ="Side">
+                    <h1 class="file-name">Side__c.jpg</h1>
+                    <c:DragDropSide parentId="{!$CurrentPage.parameters.id}" DragDropHeight="100px" HostName="{!baseURL}"/>
+                </div>
+            </apex:outputPanel>
+        </div>
+        <div class="flex-col">
+            <apex:outputPanel >
+                <div id ="BRoll">
+                    <h1 class="file-name">B_Roll__c.jpg</h1>
+                    <c:DragnDropBRoll parentId="{!$CurrentPage.parameters.id}" DragDropHeight="100px" HostName="{!baseURL}"/>
+                </div>
+            </apex:outputPanel>
+        </div>
+        <div class="flex-col">
+            <apex:outputPanel >
+                <div id ="Trailerwheels">
+                    <h1 class="file-name">Trailer_wheels__c.jpg</h1>
+                    <c:DragnDropTrailerwheels parentId="{!$CurrentPage.parameters.id}" DragDropHeight="100px" HostName="{!baseURL}"/>
+                </div>
+            </apex:outputPanel>
+        </div>
+        <apex:outputPanel rendered="{!if(Inventory__c.RecordType.Name != 'Trailer',true,false)}" >
+            <div class="flex-row">
+            <div class="flex-col">
+                <apex:outputPanel >
+                    <div id="div1">
+                        <h1 class="file-name">Bow__c.jpg</h1>
+                        <c:DragDropBow parentId="{!$CurrentPage.parameters.id}" DragDropHeight="500px" HostName="{!baseURL}"/>
+                    </div>
+                </apex:outputPanel>
+            </div>
+            <div class="flex-col">
+                <apex:outputPanel >
+                    <div id = "Cabin">
+                        <h1 class="file-name">Cabin__c.jpg</h1>
+                        <c:DragDropCabin parentId="{!$CurrentPage.parameters.id}" DragDropHeight="100px"  HostName="{!baseURL}"/>
+                    </div>
+                </apex:outputPanel>
+            </div>
+            <div class="flex-col">
+                <apex:outputPanel >
+                    <div id ="Cooler">
+                        <h1 class="file-name">Cooler__c.jpg</h1>
+                        <c:DragnDropCooler parentId="{!$CurrentPage.parameters.id}" DragDropHeight="100px" HostName="{!baseURL}"/>
+                    </div>
+                </apex:outputPanel>
+            </div>
+            <div class="flex-col">
+                <apex:outputPanel >
+                    <div id ="Dashcluster">
+                        <h1 class="file-name">Dash_cluster__c.jpg</h1>
+                        <c:DragnDropDashcluster parentId="{!$CurrentPage.parameters.id}" DragDropHeight="100px" HostName="{!baseURL}"/>
+                    </div>
+                </apex:outputPanel>
+            </div>
+            <div class="flex-col">
+                <apex:outputPanel >
+                    <div id ="DragnDropBoard">
+                        <h1 class="file-name">Board_racks__c.jpg</h1>
+                        <c:DragnDropBoard parentId="{!$CurrentPage.parameters.id}" DragDropHeight="100px" HostName="{!baseURL}"/>
+                    </div>
+                </apex:outputPanel>
+            </div>
+            <div class="flex-col">
+                <apex:outputPanel >
+                    <div id ="DashScreen">
+                        <h1 class="file-name">Dash_Screen__c.jpg</h1>
+                        <c:DragnDropDashScreen parentId="{!$CurrentPage.parameters.id}" DragDropHeight="100px" HostName="{!baseURL}"/>
+                    </div>
+                </apex:outputPanel>
+            </div>
+            <div class="flex-col">
+                <apex:outputPanel >
+                    <div id ="InteriorDesignBow">
+                        <h1 class="file-name">Interior_Design_Bow__c.jpg</h1>
+                        <c:DragDropInteriorDesignBow parentId="{!$CurrentPage.parameters.id}" DragDropHeight="100px" HostName="{!baseURL}"/>
+                    </div>
+                </apex:outputPanel>
+            </div>
+            <div class="flex-col">
+                <apex:outputPanel >
+                    <div id ="Phoneholder">
+                        <h1 class="file-name">Phone_holder__c.jpg</h1>
+                        <c:DragDropPhoneholder parentId="{!$CurrentPage.parameters.id}" DragDropHeight="100px" HostName="{!baseURL}" />
+                    </div>
+                </apex:outputPanel>
+            </div>
+            <div class="flex-col">
+                <apex:outputPanel >
+                    <div id ="Runninggear">
+                        <h1 class="file-name">Running_gear__c.jpg</h1>
+                        <c:DragDropRunninggear parentId="{!$CurrentPage.parameters.id}" DragDropHeight="100px" HostName="{!baseURL}"/>
+                    </div>
+                </apex:outputPanel>
+            </div>
+            <div class="flex-col">
+                <apex:outputPanel >
+                    <div id ="SurfSystem">
+                        <h1 class="file-name">Surf_system__c.jpg</h1>
+                        <c:DragnDropSurfsystem parentId="{!$CurrentPage.parameters.id}" DragDropHeight="100px" HostName="{!baseURL}"/>
+                    </div>
+                </apex:outputPanel>
+            </div>
+            <div class="flex-col">
+                <apex:outputPanel >
+                    <div id ="Towerspeakers">
+                        <h1 class="file-name">Tower_speakers__c.jpg</h1>
+                        <c:DragnDropTowerspeakers parentId="{!$CurrentPage.parameters.id}" DragDropHeight="100px" HostName="{!baseURL}"/>
+                    </div>
+                </apex:outputPanel>
+            </div>
+            
+            <div class="flex-col">
+                <apex:outputPanel >
+                    <div id ="BackupCamera">
+                        <h1 class="file-name">Backup_camera__c.jpg</h1>
+                        <c:DragnDropBackupCamera parentId="{!$CurrentPage.parameters.id}" DragDropHeight="100px" HostName="{!baseURL}"/>
+                    </div>
+                </apex:outputPanel>
+            </div>
+            <div class="flex-col">
+                <apex:outputPanel >
+                    <div id ="EngineCompartment">
+                        <h1 class="file-name">Engine_Compartment__c.jpg</h1>
+                        <c:DragnDropEngineCompartment parentId="{!$CurrentPage.parameters.id}" DragDropHeight="100px" HostName="{!baseURL}"/>
+                    </div>
+                </apex:outputPanel>
+            </div>        
+            <div class="flex-col">
+                <apex:outputPanel >
+                    <div id ="Transomremote">
+                        <h1 class="file-name">Transom_remote__c.jpg</h1>
+                        <c:DragnDropTransomremote parentId="{!$CurrentPage.parameters.id}" DragDropHeight="100px" HostName="{!baseURL}"/>
+                    </div>
+                </apex:outputPanel>
+            </div>
+            <div class="flex-col">
+                <apex:outputPanel >
+                    <div id ="Transom">
+                        <h1 class="file-name">Transom__c.jpg</h1>
+                        <c:DragnDropTransom parentId="{!$CurrentPage.parameters.id}" DragDropHeight="100px" HostName="{!baseURL}"/>
+                    </div>
+                </apex:outputPanel>
+            </div>
+            <div class="flex-col">
+                <apex:outputPanel >
+                    <div id ="SpeedWakeplatelevers">
+                        <h1 class="file-name">Speed_Wakeplate_levers__c.jpg</h1>
+                        <c:DragnDropSpeedWakeplatelevers parentId="{!$CurrentPage.parameters.id}" DragDropHeight="100px" HostName="{!baseURL}"/>
+                    </div>
+                </apex:outputPanel>
+            </div>
+            <div class="flex-col">
+                <apex:outputPanel >
+                    <div id ="Walkthrough">
+                        <h1 class="file-name">Walkthrough__c.jpg</h1>
+                        <c:DragnDropWalkthrough parentId="{!$CurrentPage.parameters.id}" DragDropHeight="100px" HostName="{!baseURL}"/>
+                    </div>
+                </apex:outputPanel>
+            </div>
+            
+            <div class="flex-col">
+                <apex:outputPanel >
+                    <div id ="UnderwaterLights">
+                        <h1 class="file-name">Underwater_Lights__c.jpg</h1>
+                        <c:DragnDropUnderwaterLights parentId="{!$CurrentPage.parameters.id}" DragDropHeight="100px" HostName="{!baseURL}"/>
+                    </div>
+                </apex:outputPanel>
+            </div>
+            <div class="flex-col">
+                <apex:outputPanel >
+                    <div id ="ConvertibleSeating">
+                        <h1 class="file-name">Convertible_Seating__c.jpg</h1>
+                        <c:DragnDropConvertibleSeating parentId="{!$CurrentPage.parameters.id}" DragDropHeight="100px" HostName="{!baseURL}"/>
+                    </div>
+                </apex:outputPanel>
+            </div>
+            <div class="flex-col">
+                <apex:outputPanel >
+                    <div id ="SteeringWakeplatelevers">
+                        <h1 class="file-name">Steering_wakeplate_controls__c.jpg</h1>
+                        <c:DragnDropSteeringWakeplatelevers parentId="{!$CurrentPage.parameters.id}" DragDropHeight="100px" HostName="{!baseURL}"/>
+                    </div>
+                </apex:outputPanel>
+            </div>
+            </div>
+        </apex:outputPanel>
+        
+    </div>
+</apex:page>

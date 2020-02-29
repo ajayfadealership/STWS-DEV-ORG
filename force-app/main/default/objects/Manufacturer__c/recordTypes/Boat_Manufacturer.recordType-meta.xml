@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<RecordType xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Boat_Manufacturer</fullName>
+    <active>true</active>
+    <label>Boat Manufacturer</label>
+    <picklistValues>
+        <picklist>Terms__c</picklist>
+        <values>
+            <fullName>120 Days</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>30 Days</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>60 Days</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>90 Days</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>COD</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Card on File</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Parts Account</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+</RecordType>

@@ -1,0 +1,3 @@
+<aura:event type="APPLICATION" description="Dealer Option Price" access="public">
+    <aura:attribute name="newPLstDealerOptionWraper" type="DealerOptionWraper[]"/> 
+</aura:event>

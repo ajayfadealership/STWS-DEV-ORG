@@ -1,0 +1,228 @@
+<apex:page controller="VfTemplateContrl" showHeader="false" standardStylesheets="false" renderAs="pdf">
+<html>
+
+    <head>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.5/jspdf.debug.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.5/jspdf.min.js"></script>
+        <script src="https://raw.githubusercontent.com/MrRio/jsPDF/master/plugins/from_html.js"></script>
+        <script src="https://raw.githubusercontent.com/MrRio/jsPDF/master/plugins/split_text_to_size.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/0.4.1/html2canvas.min.js"></script>
+        <script src="https://raw.githubusercontent.com/MrRio/jsPDF/master/plugins/standard_fonts_metrics.js"></script>
+        <meta charset="utf-8"/>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+        <title>::STWS - SUPRA::</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1"/>
+        <!-- Description / Keywords -->
+        <meta name="description" content=""/>
+        <meta name="keywords" content=""/>
+        <!-- Mobile web app capable -->
+        <meta name="apple-mobile-web-app-capable" content="yes"/>
+        <meta name="apple-touch-fullscreen" content="yes"/>
+        <meta name="format-detection" content="telephone=no"/>
+        <meta name="mobile-web-app-capable" content="yes"/>
+        <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+        <meta name="HandheldFriendly" content="true"/>
+
+        <!-- Facebook Open Graph -->
+        <meta property="og:title" content=""/>
+        <meta property="og:url" content=""/>
+        <meta property="og:image" content=""/>
+        <meta property="og:site_name" content=""/>
+        <meta property="og:description" content=""/>
+        <!-- Bootstrap and core app CSS -->
+        <link rel="stylesheet" href="{!URLFOR($Resource.STWS,
+                  'assets/css/bootstrap.css')}"/>
+        <link rel="stylesheet" href="{!URLFOR($Resource.STWS,
+                  'assets/css/style.css')}"/>
+              
+        }
+    </head>
+    <style>
+        body {
+        width: 100%;
+        height: 100%;
+        margin: 0;
+        padding: 0;
+        background-color: #FAFAFA;
+        font: 12pt "Tahoma";
+    }
+    * {
+        box-sizing: border-box;
+        -moz-box-sizing: border-box;
+    }
+    .page {
+        width: 210mm;
+        min-height: 297mm;
+        padding: 20mm;
+        margin: 10mm auto;
+        border: 1px #D3D3D3 solid;
+        border-radius: 5px;
+        background: white;
+        box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+    }
+    .subpage {
+        padding: 1cm;
+        border: 5px red solid;
+        height: 257mm;
+        outline: 2cm #FFEAEA solid;
+    }
+    
+    @page {
+        size: A4;
+        margin: 0;
+    }
+    @media print {
+        html, body {
+            width: 210mm;
+            height: 297mm;        
+        }
+        .page {
+            margin: 0;
+            border: initial;
+            border-radius: initial;
+            width: initial;
+            min-height: initial;
+            box-shadow: initial;
+            background: initial;
+            page-break-after: always;
+        }
+    }
+    </style>
+    <body>
+        <div class="wrapper page-home" id="abcd">
+            <section class="banner-section">
+                <div class="container">
+                    <div id="stsw-carousel" class="carousel slide carousel-home" data-ride="carousel" data-interval="2000">
+                        <div class="boat-details">
+                            <div class="image-cover">
+                                <img src="{!URLFOR($Resource.STWS,
+                  'assets/img/logo.png')}" alt=""/>
+                            </div>
+                            <span class="modal-name">SUPRA SR-<b>400</b></span>
+                        </div>
+                      <!-- Wrapper for slides -->
+                      <div class="carousel-inner">
+                        <div class="item active">
+                          <!--<apex:image url="{!URLFOR($Action.Attachment.Download,sideimageid)}" /> -->
+                          <img src="{!URLFOR($Action.Attachment.Download,sideimageid)}" />
+                        </div>
+
+                        
+                      </div>
+                    </div>
+                    <!-- / carousel-home -->
+                    <div class="price-block">
+                        <div class="flex-row">
+                            <div class="col-flex">
+                                <h4 class="heading">MSRP PRICE:</h4>
+                            </div>
+                            <div class="col-flex">
+                                <span class="price">${!listInventory[0].BOATBUILDING__Window_Sticker_MSRP__c}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <!-- banner-section -->
+            <section class="why-buy-from-us">
+                <div class="container">
+                    <div class="content-cover">
+                        <div class="flex-row flex-row-wrap flex-row-no-padding">
+                            <div class="col-flex left-side why-us">
+                                <h4 class="heading">Why buy from us?</h4>
+                                <ul class="list-block">
+                                    <li>{!tempInfoList[0]}</li>
+                                    <li>{!tempInfoList[1]}</li>
+                                    <li>{!tempInfoList[2]}</li>
+                                    <li>{!tempInfoList[3]}</li>
+                                    <li>{!tempInfoList[4]}</li>
+                                </ul>
+                            </div>
+                            <div class="col-flex right-side">
+                                <h4 class="heading">SPECS:</h4>
+                                <ul class="list-block">
+                                    <li>Length: {!listInventory[0].BOATBUILDING__Boat_Length_in_feets__c} Ft</li>
+                                    <li>Ballast: {!listInventory[0].BOATBUILDING__Boat_Ballast_Weight__c} LBS</li>
+                                    <li>Cpacity: {!listInventory[0].BOATBUILDING__Boat_Seating_Capacity__c} People</li>
+                                    <li>Weight: {!listInventory[0].BOATBUILDING__Boat_Ballast_Weight__c} LBS</li>
+                                    <li>Fuel Capacity: {!listInventory[0].BOATBUILDING__Boat_Fuel_Capacity__c } Gals</li>
+                                    <li>Overall Length: {!listInventory[0].BOATBUILDING__Boat_Overall_Length__c}</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- /content-cover -->
+                </div>
+                <!-- /container -->
+            </section>
+            <!-- /why-buy-from-us -->
+
+            <section class="our-price">
+                <div class="container">
+                    <div class="content-cover">
+                        <div class="flex-row">
+                            <div class="col-flex left-side">
+                                <h1 class="hd">Our Price:</h1>
+                                <span class="dealer-discount">Dealer discounted: {!listInventory[0].BOATBUILDING__Window_Sticker_Our_Discount__c}</span>
+                            </div>
+                            <div class="col-flex right-side">
+                                <span class="price">${!listInventory[0].BOATBUILDING__Window_Sticker_Your_Price__c}</span>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- // content-cover -->
+                </div>
+            </section>
+            <!-- our-price -->
+            <section class="banner-section">
+                <div class="container">
+                    <div id="stsw-carousel" class="carousel slide carousel-home carousel-home-footer" data-ride="carousel" data-interval="2000">
+                        <div class="boat-details wender-address">
+                            <div class="image-cover">
+                                <img src="{!URLFOR($Resource.STWS,
+                  'assets/img/logo.png')}" alt=""/>
+                            </div>
+                            <span class="modal-name sales-name"></span>
+                            <address class="address">
+                                <p>3333 Scott Futrell Drive,<br/>Charlotte NC, 28208</p>
+                                <a href="www.southtownwatersports.com" class="website-link">www.southtownwatersports.com</a>
+                            </address>
+                        </div>
+                      <!-- Wrapper for slides -->
+                      <div class="carousel-inner">
+                        <div class="item active" style="margin-left: 180px">
+                        <!--<apex:image url="{!URLFOR($Action.Attachment.Download,Interiorimageid)}" /> -->
+                         <img src="{!URLFOR($Action.Attachment.Download,Interiorimageid)}" />                      
+                         </div>
+
+                        
+                      </div>
+                    </div>
+                </div>
+            </section>
+            <!-- banner-section -->
+        </div>
+
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+        <script>window.jQuery || document.write('<script src="assets/js/jquery-3.2.1.min.js"><\/script>')</script>
+        <!-- Latest compiled and minified JavaScript -->
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+        
+    </body>
+    <script>
+        window.onload = function(){
+            
+                     setTimeout(function(){ 
+                        var element = document.getElementById('abcd');
+                        html2pdf(element);
+                    }, 10000);
+                
+            }
+            
+        
+                        
+         
+    </script>
+</html>
+    
+</apex:page>

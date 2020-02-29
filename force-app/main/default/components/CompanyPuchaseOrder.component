@@ -1,0 +1,470 @@
+<apex:component id="prchsordr" controller="CompanyPurchaseOrderController">
+<style>
+    .prtTblId_table tr th:nth-child(3),.prtTblId_table tr td:nth-child(3)
+        {max-width :100px;width:100px}
+   	.popupDiv{
+        position: fixed;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background: rgba(0,0,0,0.5);
+        display: none;
+        z-index: 999;
+    }
+</style>
+    <div class="popupDiv" id="doId">
+        <div style="border: 5px solid #d9dee6; padding: 2%; position: fixed; top: 20%; left: 30%; z-index: 999; background: #fff; border-radius: 14px; height: auto; width: 500px;">
+            <div>
+                <i id="closeIcn" class="fa fa-close" style="font-size:24px; position: absolute; bottom: 85%; right: 3%;"></i>
+            </div>
+            <table>
+                <tr>
+                    <td colspan="2" style="text-align: center;">
+                        <h2 style="font-size: 1.25em; font-weight: 600; color: #6f809c;">Quick Vendor Creation</h2>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2" style="text-align: center;">
+                        &nbsp;
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        Vendor Name<span style="color: red;">*</span>
+                    </td>
+                    <td>
+                        <input type="text" id="VendName"  class="slds-input"/>
+                    </td> 
+                </tr>
+                <tr>
+                    <td colspan="2" style="text-align: center;">
+                        &nbsp;
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        Vendor Id
+                    </td>
+                    <td>
+                        <input type="text" id="VendId" class="slds-input"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2" style="text-align: center;">
+                        &nbsp;
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2" style="text-align: center;">
+                        <a class="slds-button slds-button--neutral slds-button--brand" onclick="CreateVendor();">Create Vendor</a>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+    <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-1" id="Customer_Datails">
+        <div class="slds-grid slds-wrap">
+        <!-- ======= Second Table   -->
+        <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-1 slds-col--padded slds-m-top--x-large">
+                <div class="slds-card__body slds-col--padded">
+                    <div id="tableDivePO">
+                        <div class="slds-col slds-size--1-of-1 slds-align--absolute-center Create_button" >
+                            <a class="slds-button slds-button--neutral slds-button--brand" type="button" onclick="changeToPurchaseOrderForm(this);">Create Company Purchase Order</a>
+                        </div>
+                        <table id="POTable" class="show slds-table slds-table--bordered slds-no-row-hover slds-table--cell-buffer slds-m-top--x-large Table1 slds-card">
+                            <thead>
+                                <tr class="slds-text-heading--label">
+                                    <th scope="col">PO Number</th>
+                                    <th scope="col">Vendor</th>
+                                    <th scope="col">PO Date</th>
+                                    <th scope="col"></th>
+                                    <th scope="col">Amount On Order</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <apex:repeat value="{!lstOfPurchaseOrder}" var="objPO">
+                                    <tr class="slds-hint-parent">
+                                        <td>
+                                            <a href="/{!objPO.Id}">
+                                                <apex:outputField value="{!objPO.Name}"/>
+                                            </a>
+                                        </td>
+                                        <td><apex:outputField value="{!objPO.Vendor_Name__r.Name}"/></td>
+                                        <td><apex:outputField value="{!objPO.PO_Date__c}"/></td>
+                                        <td></td>
+                                        <td><apex:outputField value="{!objPO.Amount_On_Order__c}"/></td>
+                                    </tr>
+                                </apex:repeat>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        
+            <!-- search section  -->
+            <!-- modification date 22 Nov 2016 -->
+            
+            <div id ="purchaseVendorId" style ="display:none;" class="slds-col slds-size--1-of-1 slds-medium-size--1-of-1 slds-col--padded">
+                <div class="slds-grid slds-wrap">
+                    <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-1 ">
+                        <div class="slds-grid slds-wrap">
+                            <div class="slds-col slds-size--1-of-1 slds-align--absolute-center Create_button">
+                                <div class="slds-form-element__control">
+                                    <a class="slds-button slds-button--neutral slds-button--brand" type="button" onclick="$('#doId').fadeIn();">Create Vendor</a>
+                                    <a class="slds-button slds-button--neutral slds-button--brand" type="button" onclick="createPurchaseOrder(this);">Create Company Purchase Order</a>
+                                    <a class="slds-button slds-button--neutral slds-button--brand" type="button" onclick="changeToPurchaseOrderList(this);">Cancel</a>
+                                </div>
+                            </div>
+                        </div>  
+                    </div>
+                    <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-1 slds-col--padded">
+                            <div class="slds-grid slds-wrap">
+                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                                    <div class="slds-form-element">
+                                    <label class="slds-form-element__label">Vendor:</label>
+                                        <div class="slds-form-element__control">
+                                            <apex:inputField value="{!objOrder.Vendor_Name__c}" styleClass="slds-input" id="ifPOV" />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                                    <div class="slds-form-element">
+                                    <label class="slds-form-element__label">Items Needed</label>
+                                        <div class="slds-form-element__control">
+                                            <input id="ItemsNeeded" type="text" class="slds-input"/>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                                    <div class="slds-form-element">
+                                    <label class="slds-form-element__label">Department</label>
+                                        <div class="slds-form-element__control">
+                                            <apex:inputField id="Department" value="{!objOrder.Department__c}" styleClass="slds-select"/>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                                    <div class="slds-form-element">
+                                    <label class="slds-form-element__label">Used For</label>
+                                        <div class="slds-form-element__control">
+                                            <apex:inputField id="UsedFor" value="{!objOrder.Used_For__c}" styleClass="slds-select"/>
+                                        </div>
+                                        
+                                    </div>
+                                </div>
+                            </div>
+                    </div>
+                    <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-1 slds-col--padded">
+                            <div class="slds-grid slds-wrap">
+                                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                                    <div class="slds-form-element">
+                                    <label class="slds-form-element__label">Amount Requested</label>
+                                        <div class="slds-form-element__control">
+                                            <apex:inputField id="AmountRequested" value="{!objOrder.Amount_Requested__c}" styleClass="slds-input"/>
+                                        </div>
+                                        
+                                    </div>
+                                </div>
+                                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                                    <div class="slds-form-element">
+                                     <label class="slds-form-element__label">Date Requested</label>
+                                        <div class="slds-form-element__control">
+                                            <!--<apex:inputField id="DateRequested" value="{!objOrder.Date_Requested__c}" styleClass="slds-input"/>-->
+                                            <input type="date" id="DateRequested" class="slds-input"/>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                                    <div class="slds-form-element">
+                                    <label class="slds-form-element__label">Scanned Receipt</label>
+                                        <div class="slds-form-element__control">
+                                            <apex:inputField id="ScannedReceipt" value="{!objOrder.Scanned_Receipt__c}" styleClass="slds-input"/>
+                                        </div>
+                                        
+                                    </div>
+                                </div>
+                                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                                    <div class="slds-form-element">
+                                    <label class="slds-form-element__label">Vendor State</label>
+                                        <div class="slds-form-element__control">
+                                            <input id="vendorState" type="text" class="slds-input" disabled="disabled"/>
+                                        </div>
+                                        
+                                    </div>
+                                </div>
+                                
+                            </div>
+                    </div>
+                    <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-1 slds-col--padded">
+                            <div class="slds-grid slds-wrap">
+                                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                                    <div class="slds-form-element">
+                                     <label class="slds-form-element__label">Vendor Zip</label>
+                                        <div class="slds-form-element__control">
+                                            <input id="vendorZip" type="text" class="slds-input" disabled="disabled"/>
+                                        </div>
+                                        
+                                    </div>
+                                </div>
+                                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                                    <div class="slds-form-element">
+                                     <label class="slds-form-element__label">Vendor Terms</label>
+                                        <div class="slds-form-element__control">
+                                            <input id="vendorTerms" type="text" class="slds-input" disabled="disabled"/>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                                    <div class="slds-form-element">
+                                     <label class="slds-form-element__label">Store Location</label>
+                                        <div class="slds-form-element__control">
+                                            <apex:inputField id="strLoc"  styleClass="slds-select" value="{!objOrder.Store_Location__c}"/>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                                    <div class="slds-form-element">
+                                    </div>
+                                </div>
+                            </div>
+                    </div>
+                </div>
+            </div> 
+        </div>
+    </div>
+    <script>
+    	$("#closeIcn").click(function() {
+            $("#doId").fadeOut();
+        });
+    
+    	function CreateVendor() {
+        	var VendorName = $("#VendName").val();    
+            var VendorId = $("#VendId").val();    
+            if(VendorName != null && VendorName != "") {
+                BOATBUILDING.CompanyPurchaseOrderController.saveVendDetails(VendorName, VendorId, function(result, event) {
+                	if(result != null) {
+                        document.getElementById("pge:frm:prchsOrdrCompCall:prchsordr:ifPOV").value = VendorName;	
+                        document.getElementById("pge:frm:prchsOrdrCompCall:prchsordr:ifPOV_lkold").value = VendorName;	
+                        document.getElementById("pge:frm:prchsOrdrCompCall:prchsordr:ifPOV_lkid").value = result;
+                        $("#doId").fadeOut();
+                        fetchVendor(document.getElementById("pge:frm:prchsOrdrCompCall:prchsordr:ifPOV"));
+                    } else {
+                    	alert('Something went wrong.\nPlease try again.'); 
+                        $("#doId").fadeOut();
+                    }
+                });
+            }
+        }
+    	
+        $(document).ready(function() {
+            $('#POTable').DataTable( {
+              "pageLength": 25,
+              "lengthMenu": [[25, 50, -1], [25, 50, "All"]]
+            } );
+        });
+        
+        var map = new Object();
+        var mapPartList = new Object();
+         function searchPart(obj){
+            $('.popup').addClass('active');
+            var strPN = document.getElementById("pNId").value;
+            if(strPN != null && strPN != ''){
+                console.log("strPN : "+strPN);
+                strPN = strPN.trim();
+                BOATBUILDING.CompanyPurchaseOrderController.getLstOfPart(strPN, function(result, event) {
+                    if(event.status) {
+                        var partlst = [];
+                        partlst = result;
+                        
+                        if(partlst.length > 0) {
+                            var tableHTML = "<table id='prtTblId' class='slds-table slds-table--bordered slds-table--cell-buffer'  style='border-collapse: collapse;border-spacing: 3px;table-layout : fixed;'> <tr> <th>Part Number </th> <th>Description</th> <th>Quantity</th> <th>Cost</th> <th>Total</th> <th>&nbsp;</th> </tr>";
+                            for(var i = 0 ; i < partlst.length ; i++){
+                                map[partlst[i].BOATBUILDING__Part_Number__c] = '1';
+                                
+                                tableHTML = tableHTML + "<tr><td>" + partlst[i].BOATBUILDING__Part_Number__c + "</td><td>" + partlst[i].Name + "</td><td> <input class='slds-input' type='text' id='t1' value='1' onkeyUp='calculateTotal(this,\""+partlst[i].BOATBUILDING__Part_Number__c+"\",\""+strPN+"\")'/> </td><td> $" + parseFloat(partlst[i].BOATBUILDING__Part_Cost__c).toFixed(2) + "</td><td> $" + parseFloat(partlst[i].BOATBUILDING__Part_Cost__c).toFixed(2) + "</td> <td><input class='slds-button slds-button--neutral slds-button--brand' type='button' id='poAddBtn-"+i+"' value='Add' onclick='createFinalListOfPO(this, 1,\""+partlst[i].BOATBUILDING__Part_Number__c+"\");'/></td></tr>";   
+                                
+                            }
+                            tableHTML = tableHTML + "</table>";
+                            document.getElementById('tablePODataSearch').style.display = "block";
+                            document.getElementById('tablePODataSearch').innerHTML = tableHTML; 
+                            $('.popup').removeClass('active');
+                        }
+                        else {
+                            document.getElementById('tablePODataSearch').style.display = "block";
+                            document.getElementById('tablePODataSearch').innerHTML = "<span style='color:red;font-weight: bold;'>No record found.</span>"
+                            $('.popup').removeClass('active');
+                        }
+                        partlst = [];
+                    }                               
+                });
+            } else {
+                document.getElementById('tablePODataSearch').style.display = "block";
+                document.getElementById('tablePODataSearch').innerHTML = "<span style='color:red;font-weight: bold;'>Please enter a value.</span>"
+                $('.popup').removeClass('active');
+            }
+        }
+        
+        function calculateTotal(obj, prtNum, strPN) {
+            $('.popup').addClass('active');
+            if(obj.value != null && obj.value != "" && /^\d*$/.test(obj.value)) {
+                map[prtNum] = obj.value;
+                console.log(map);
+                BOATBUILDING.CompanyPurchaseOrderController.getLstOfPart(strPN, function(result, event) {
+                
+                    if (event.status) {
+                        var partlst = [];
+                        console.log(result);
+                        partlst = result;
+                        if (partlst.length > 0) {
+                            var tableHTML = "<table id='prtTblId' class='slds-table slds-table--bordered slds-table--cell-buffer prtTblId_table'  style='border-collapse: collapse;'> <tr> <th>Part Number</th> <th>Description</th> <th>Quantity</th> <th>Cost</th> <th>Total</th> <th>&nbsp;</th> </tr>";
+                            for (var i = 0; i < partlst.length; i++) {
+                                if(partlst[i].BOATBUILDING__Part_Number__c === prtNum){
+                                    console.log("If Check Section : "+partlst);
+                                    var total = parseFloat(partlst[i].BOATBUILDING__Part_Cost__c).toFixed(2) * parseFloat(obj.value).toFixed(2);
+                                    if(partlst[i].BOATBUILDING__Part_Number__c in mapPartList) {
+                                        tableHTML = tableHTML + "<tr><td>" + partlst[i].BOATBUILDING__Part_Number__c + "</td><td>" + partlst[i].Name + "</td><td> <input class='slds-input' type='text' value='"+map[partlst[i].BOATBUILDING__Part_Number__c]+"' onkeyUp='calculateTotal(this,\""+partlst[i].BOATBUILDING__Part_Number__c+"\", \""+strPN+"\")'/> </td><td> $" +parseFloat(partlst[i].BOATBUILDING__Part_Cost__c).toFixed(2) + "</td><td> $" + total.toFixed(2) + "</td> <td><input class='slds-button slds-button--neutral slds-button--brand' id='poAddBtn-"+i+"' type='button' value='Update' onclick='createFinalListOfPO(this,\""+map[partlst[i].BOATBUILDING__Part_Number__c]+"\",\""+partlst[i].BOATBUILDING__Part_Number__c+"\");'/></td> </tr>";
+                                    }
+                                    else {
+                                        tableHTML = tableHTML + "<tr><td>" + partlst[i].BOATBUILDING__Part_Number__c + "</td><td>" + partlst[i].Name + "</td><td> <input class='slds-input' type='text' value='"+map[partlst[i].BOATBUILDING__Part_Number__c]+"' onkeyUp='calculateTotal(this,\""+partlst[i].BOATBUILDING__Part_Number__c+"\", \""+strPN+"\")'/> </td><td> $" +parseFloat(partlst[i].BOATBUILDING__Part_Cost__c).toFixed(2) + "</td><td> $" + total.toFixed(2) + "</td> <td><input class='slds-button slds-button--neutral slds-button--brand' id='poAddBtn-"+i+"' type='button' value='Add' onclick='createFinalListOfPO(this,\""+map[partlst[i].BOATBUILDING__Part_Number__c]+"\",\""+partlst[i].BOATBUILDING__Part_Number__c+"\");'/></td> </tr>";
+                                    }
+                                } else {
+                                    var total2 = parseFloat(map[partlst[i].BOATBUILDING__Part_Number__c]).toFixed(2) * parseFloat(partlst[i].BOATBUILDING__Part_Cost__c).toFixed(2);
+                                    if(partlst[i].BOATBUILDING__Part_Number__c in mapPartList) {
+                                        tableHTML = tableHTML + "<tr><td>" + partlst[i].BOATBUILDING__Part_Number__c + "</td><td>" + partlst[i].Name + "</td><td> <input class='slds-input' type='text' value='"+map[partlst[i].BOATBUILDING__Part_Number__c]+"' onkeyUp='calculateTotal(this,\""+partlst[i].BOATBUILDING__Part_Number__c+"\", \""+strPN+"\")'/> </td><td> $" + parseFloat(partlst[i].BOATBUILDING__Part_Cost__c).toFixed(2) + "</td><td> $" + total2.toFixed(2) + "</td> <td><input class='slds-button slds-button--neutral slds-button--brand' id='poAddBtn-"+i+"' type='button' value='Update' onclick='createFinalListOfPO(this,\""+map[partlst[i].BOATBUILDING__Part_Number__c]+"\",\""+partlst[i].BOATBUILDING__Part_Number__c+"\");'/></td> </tr>";
+                                    }
+                                    else {
+                                        tableHTML = tableHTML + "<tr><td>" + partlst[i].BOATBUILDING__Part_Number__c + "</td><td>" + partlst[i].Name + "</td><td> <input class='slds-input' type='text' value='"+map[partlst[i].BOATBUILDING__Part_Number__c]+"' onkeyUp='calculateTotal(this,\""+partlst[i].BOATBUILDING__Part_Number__c+"\", \""+strPN+"\")'/> </td><td> $" + parseFloat(partlst[i].BOATBUILDING__Part_Cost__c).toFixed(2) + "</td><td> $" + total2.toFixed(2) + "</td> <td><input class='slds-button slds-button--neutral slds-button--brand' id='poAddBtn-"+i+"' type='button' value='Add' onclick='createFinalListOfPO(this,\""+map[partlst[i].BOATBUILDING__Part_Number__c]+"\",\""+partlst[i].BOATBUILDING__Part_Number__c+"\");'/></td> </tr>";
+                                    }
+                                }   
+                            }
+                            tableHTML = tableHTML + "</table>";
+                            document.getElementById('purchaseVendorId').style.display = "block";
+                            document.getElementById('tablePODataSearch').style.display = "block";
+                            document.getElementById('tablePODataSearch').innerHTML = tableHTML;
+                            $('.popup').removeClass('active');
+                            
+                        } else {
+                            $('.popup').removeClass('active');
+                        }
+                        partlst = [];
+                    }
+                    $('.popup').removeClass('active');
+                });
+            }
+            else if(obj.value != ""){
+                obj.value = "";
+                alert("Please enter only a number.");
+                $('.popup').removeClass('active');
+            }
+            else if(obj.value == ""){
+                $('.popup').removeClass('active');
+            }
+        }
+
+        var mapForPOQuantity = new Object();
+        var cartItemCount = 0;
+        function createFinalListOfPO(obj, quantity, prtNum) {
+            cartItemCount++;
+            $('.popup').addClass('active');
+            console.log("***createFinalListOfPO() Called : ***" + prtNum);
+            console.log("***quantity : ***" + quantity);
+            if(quantity > 0) {
+                obj.value = "Update";
+                BOATBUILDING.CompanyPurchaseOrderController.getLstOfPart2(prtNum, function(result, event) {
+                    if (event.status) {
+                        var partlst = [];
+                        partlst = result;
+                        if (partlst.length > 0) {
+                            for (var i = 0; i < partlst.length; i++) {
+                                mapPartList[partlst[i].BOATBUILDING__Part_Number__c] = partlst[i];
+                                mapForPOQuantity[partlst[i].BOATBUILDING__Part_Number__c] = quantity;
+                            }
+                            var tableHTML = "<table id='prtTblId' class='slds-table slds-table--bordered slds-table--cell-buffer'  style='border: 1px 1px #a8b7c7; background-color: #e0e5ee;'> <tr> <th>Part Number</th> <th>Description</th> <th>Quantity</th> <th>Cost</th> <th>Total</th></tr>";
+                            var grndTotal = 0;
+                            for (var key in mapPartList) {
+                                console.log(mapPartList[key]);
+                                var total3 = parseFloat(mapPartList[key].BOATBUILDING__Part_Cost__c).toFixed(2) * parseFloat(map[mapPartList[key].BOATBUILDING__Part_Number__c]).toFixed(2);
+                                grndTotal += total3;
+                                tableHTML = tableHTML + "<tr><td>" + mapPartList[key].BOATBUILDING__Part_Number__c + "</td><td>" + mapPartList[key].Name + "</td><td> " + mapForPOQuantity[mapPartList[key].BOATBUILDING__Part_Number__c] + " </td><td> $" + parseFloat(mapPartList[key].BOATBUILDING__Part_Cost__c).toFixed(2) + "</td><td> $" + parseFloat(total3).toFixed(2) + "</td></tr>";
+                            }  
+                            tableHTML = tableHTML + "<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Total: </td><td>$" + parseFloat(grndTotal).toFixed(2) + "</td></tr></table>";
+                            document.getElementById('purchaseVendorId').style.display = "block";
+                            document.getElementById('purchaseVendorId1').style.display = "block";
+                            document.getElementById('purchaseVendorId1').innerHTML = tableHTML;
+                            $('.popup').removeClass('active');
+                        }
+                        partlst = [];
+                    }else {
+                        $('.popup').removeClass('active');
+                    }
+                });
+            }
+            else {
+                alert("Sorry you can't add part in cart with 0 quantity.");
+                $('.popup').removeClass('active');
+            }
+        }
+
+        function createPurchaseOrder(obj) {
+            $('.popup').addClass('active');
+            console.log(mapForPOQuantity);
+            var manufacturer = document.getElementById("pge:frm:prchsOrdrCompCall:prchsordr:ifPOV_lkid").value;
+            var StoreLocationPO = document.getElementById("pge:frm:prchsOrdrCompCall:prchsordr:strLoc").value;
+            if(StoreLocationRequired == true && (StoreLocationPO == null || StoreLocationPO == "")) {
+                alert("Please select Store Location.");
+                $('.popup').removeClass('active');
+                return false;
+            }
+            if(manufacturer != null && manufacturer != "" && manufacturer != "000000000000000") { 
+                if(cartItemCount > 0){ 
+                    BOATBUILDING.CompanyPurchaseOrderController.createPurchaseOrder( manufacturer, StoreLocationPO, function(result, event) {
+                        if(event.status) { 
+                            if(result != null){
+                                $('.popup').removeClass('active');
+                                        window.top.location = '/apex/VendorCreation';
+                            }else{
+                                $('.popup').removeClass('active');
+                                alert("We're sorry, the content you've requested is temporarily unavailable. Please try again.")
+                            }
+                        }
+                    });
+                }
+                else {
+                    alert("Please add some part first.");
+                    $('.popup').removeClass('active');
+                }
+            } 
+            else {
+                alert("Please select manufacturer.");
+                $('.popup').removeClass('active');
+            }
+        }
+        function changeToPurchaseOrderForm(obj) {
+            document.getElementById("tableDivePO").style.display = "none";
+            document.getElementById("purchaseVendorId").style.display = "block";
+        }
+        function changeToPurchaseOrderList(obj) {
+            document.getElementById("vendorName").value = "";
+            document.getElementById("vendorPhone").value = "";
+            document.getElementById("vendorEmail").value = "";
+            document.getElementById("vendorConPer").value = "";
+            document.getElementById("vendorStreet").value = "";
+            document.getElementById("vendorCity").value = "";
+            document.getElementById("vendorState").value = "";
+            document.getElementById("vendorZip").value = "";
+            document.getElementById("vendorTerms").value = "";
+            document.getElementById("pge:frm:prchsOrdrCompCall:prchsordr:ifPOV").value ="";
+            document.getElementById("pNId").value = "";
+            
+            if(document.getElementById("prtTblId") != null) {
+                document.getElementById("prtTblId").style.display = "none";
+            }
+            if(document.getElementById("purchaseVendorId1") != null) {
+                document.getElementById("purchaseVendorId1").style.display = "none";
+            }
+            document.getElementById("tableDivePO").style.display = "block";
+            document.getElementById("purchaseVendorId").style.display = "none";
+        }
+    </script>
+</apex:component>

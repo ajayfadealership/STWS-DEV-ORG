@@ -1,0 +1,907 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<RecordType xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Trailer</fullName>
+    <active>true</active>
+    <label>Trailer</label>
+    <picklistValues>
+        <picklist>Boat_Type__c</picklist>
+        <values>
+            <fullName>Inboard</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Inboard%2FOutboard</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Outboard</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>V-drive</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Location__c</picklist>
+        <values>
+            <fullName>Over Flow Lot</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Showroom</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Used Boat Lot</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Options__c</picklist>
+        <values>
+            <fullName>Canvas</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Electronics</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Entertainment</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Fishing</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Gallery</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Jet Drives</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Misc</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Personal Watercraft</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Pontoon Boat</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Ski Boats</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Owner__c</picklist>
+        <values>
+            <fullName>Consignment</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Dealership</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Select_Category__c</picklist>
+        <values>
+            <fullName>%C2%A0Double Bimini</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>%C2%A0Full Enclosure</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>%C2%A0Hydraulic Steering System with Tilt Wheel</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>%C2%A0Lifting Strakes - 2%22</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>%C2%A0Lifting Strakes - 4%22</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>%C2%A0Lifting Strakes - 6%22</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>%C2%A0Playpen Cover 16%27 - 18%27 Boat</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>%C2%A0Playpen Cover 19%27 - 21%27 Boat</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>%C2%A0Playpen Cover 22%27 - 25%27 Boat</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>%C2%A0Playpen Cover 26%27 - 28%27 Boat</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>%C2%A0Ski Tow Bar</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>%C2%A0Triple Pontoon - 22%27 Boat</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>%C2%A0Triple Pontoon - 24%27 Boat</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>%C2%A0Triple Pontoon - 26%27 Boat</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>%C2%A0Triple Pontoon - 28%27 Boat</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Air Conditioning %2F Heating System - 12%2C000btu</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Air Conditioning %2F Heating System - 16%2C000btu</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Air Conditioning - Carry On</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Air Conditioning - Self Contained - 12%2C000btu</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Air Conditioning - Self Contained - 16%2C000btu</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Anchor Pole %28Automatic%29</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Audio Zone Control</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Auto Pilot - 20%2C000 - 40%2C000lbs boats</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Auto Pilot - boats to 20%2C000lbs</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Auto Pilot w%2FRemote - 20%2C000 - 40%2C000lbs boats</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Auto Pilot w%2FRemote - boats to 20%2C000lbs</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Bait Tank - 22 Gallon</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Bait Tank - 32 Gallon</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Bar %2F Console</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Barefoot Ski Boom</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Barefoot Ski Training Boom</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Batteries - Dual w%2FSwitch</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Battery Charger - Dual 10 amp</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Battery Charger - Triple 10 amp</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Bimini Top</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Blueprinted Jet</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Bluetooth</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Boat Cover - 15 ft%2E thru 19 ft%2E</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Boat Cover - 20 ft%2E thru 25 ft%2E</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Boat Cover - 26 ft%2E thru 31 ft%2E</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Boat Cover - 32 ft%2E thru 42 ft%2E</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Boat Cover - 7 ft%2E thru 14 ft%2E</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Boat Cover - Custom - 18 ft%2E thru 25 ft%2E</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Bow Cover</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Bridge Enclosure</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Carburetion Kit</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Carburetion Kit - Dual</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Cavitation Plates %2F Adjustable</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Cockpit Cover</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Cockpit Freezer</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Cockpit Heaters</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Cover</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Cruise Control</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>DVD Player</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Depth Sounder</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Dishwasher</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Docking Lights</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Downrigger - Electric</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Downrigger - Manual</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Dual-Prop</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Dual-Prop - Twin</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Exhaust - High Performance</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Exhaust - Silent Choice</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Extended Pylon</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>External Steering - Single Hydraulic</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>External Steering - Twin Hydraulic</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Fire Ext%2E 100 - 200 cu%2E ft%2E</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Fire Ext%2E 75 - 100 cu%2E ft%2E</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Fish Box - Insulated 10 cu%2E ft%2E</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Fish Finder - Max Depth 1000%27</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Fish Finder - Max Depth 1000%27 %28Color screen under 5%22%29</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Fish Finder - Max Depth 2500%27</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Fish Finder - Max Depth 600%27</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Fish Finder w%2FGPS - Max Depth 1000%27 %28Color screen under 5%22%29</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Fish Finder w%2FGPS - Max Depth 3000%27 %28Color screen over 5%22%29</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Flat Panel T%2EV%2E 19%22</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Flat Panel T%2EV%2E 20%22 - 29%22</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Flat Panel T%2EV%2E 30%22 - 39%22</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Flat Panel T%2EV%2E 40%22 - 49%22</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Flat Panel T%2EV%2E 50%22 - 59%22</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Flat Panel T%2EV%2E 60%22</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Flooring - Snap In%2FOut Carpet</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Flooring - Vinyl with Snap In%2FOut Carpet</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Fresh Water Cooling System</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Fuel Injection</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>GPS - Color Fixed Mount w%2FCartography</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>GPS - Fixed Mount</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>GPS - Fixed Mount w%2FCartography</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Generator %2F 3 KW - Diesel</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Generator %2F 3 KW - Gas</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Generator %2F 4 KW - Diesel</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Generator %2F 4 KW - Gas</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Generator %2F 5 KW - Diesel</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Generator %2F 5 KW - Gas</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Generator %2F 6%2E5 KW - Diesel</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Generator %2F 6%2E5 KW - Gas</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Grate - Race</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Grate - Ski</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Hardtop 16%27 - 20%27 Boat</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Hardtop 21%27 - 25%27 Boat</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Hardtop 26%27 - 30%27 Boat</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Hardtop 31%27 - 35%27 Boat</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Headers - Water Injected</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Ice Maker 20 lbs%2E Per Day</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Impeller - Stainless Steel - Installed</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Inverter %2F Charger - 1000w</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Inverter %2F Charger - 1500w</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Inverter %2F Charger - 2000w</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Inverter %2F Charger - 2500w</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Inverter %2F Charger - 3000w</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Inverter %2F Charger - 600w</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Inverter %2F Charger - 800w</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Jet Ski%2FWatercraft Trailer - 1-Craft</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Jet Ski%2FWatercraft Trailer - 2-Craft</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Jet-A-Vator - Electric</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Jet-A-Vator - Manual</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>LED Cupholders</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Microwave Oven</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Nozzle Reducer - Installed</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Outbd%2E Hydraulic Steering</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Outbd%2E Power Tilt%2FTrim %28101-300 HP%29</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Outbd%2E Power Tilt%2FTrim %2850-100 HP%29</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Outriggers</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Porta Potti</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Pressure Water System</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Propeller %2F Stainless Steel %283-Blade%29</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Propeller %2F Stainless Steel %284-Blade%29</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Radar %2F 16 Mile</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Radar %2F 24 Mile CRT</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Radar %2F 24 Mile CRT w%2FCartography</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Radar %2F 24 Mile LCD</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Radar %2F 24 Mile LCD w%2FCartography</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Radar %2F 48 Mile CRT</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Radar %2F 48 Mile CRT w%2FCartography</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Radar %2F 48 Mile LCD</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Radar %2F 48 Mile LCD w%2FCartography</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Radar Arch</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Radio %2F 25 Watt VHF - Fixed Mount</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Range - C%2EN%2EG%2E</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Range - Electric</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Refrigerator %2F Freezer 10 cu%2E ft%2E</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Refrigerator %2F Ice Maker Combo</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Refrigerator - AC%2FDC - 6 cu%2E ft%2E</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Salon Enclosures</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Spotlight - Remote Control</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Steering System</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Stereo - AM%2FFM%2FCD player w%2F4 speakers</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Stereo - AM%2FFM%2FCD%2FAux Plug-in%2FSatellite Ready w%2F4 speakers</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Storage Tackle Center - Six Drawer</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Subwoofer</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Swim Step - Fiberglass</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Swim Step - Teak</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Swim Step w%2FFold Down Ladder</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>T-Tops w%2FCanvas</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Touch Screen</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Tournament Ski Pylon</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Tower</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Transom Audio Remotes</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Transom Bracket Sgl Eng w%2FSwim Pltfrm%2E</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Transom Bracket Single Engine</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Transom Bracket Twin Eng w%2FSwim Pltfrm%2E</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Transom Bracket Twin Engine</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Transom Jack %2F Hydraulic</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Transom Lift Bracket Sgl Eng %2812%22 to 23%22%29</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Transom Lift Bracket Twin Eng %2812%22 to 23%22%29</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Transom Live Well</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Transom Shower - Cold</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Transom Shower - Hot %26 Cold</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Trash Compactor</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Trim Indicator</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Trim Tabs %2F Hydraulic</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Vacuum Flush Head - w%2FHolding Tank %26 Pump Out</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Wake Surf System</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Wake-Board Racks</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Wake-Board Tower</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Wake-Board Tower Lights</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Wake-Board Tower Speakers</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Washer %2F Dryer Combo</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Water Ballast System</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Water Heater - 6 Gallon</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Watermaker Reverse-Osmosis 1%2E5gph</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Watermaker Reverse-Osmosis 200gpd</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Watermaker Reverse-Osmosis 500gpd</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Watermaker Reverse-Osmosis 6%2E7gph</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Windlass - Boats 18%27 - 24%27</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Windlass - Boats 25%27 - 30%27</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Windlass - Boats 31%27 - 45%27</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Windlass - Boats 46%27 - 58%27</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Windlass - Boats 59%27 - 60%27</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Status__c</picklist>
+        <values>
+            <fullName>Cleaning</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Inspection</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Marketing</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Service</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Showroom</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Vehicle_Type__c</picklist>
+        <values>
+            <fullName>4 Wheeler</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Jet Ski</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Pontoon</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>RV</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Runabout</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Sailboat</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Ski Boat</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+</RecordType>

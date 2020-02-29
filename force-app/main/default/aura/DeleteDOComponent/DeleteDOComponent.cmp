@@ -1,0 +1,13 @@
+<aura:component controller="NewDealerOptionController">
+	<aura:attribute name="objDO" type="Object" access="global"/>  
+    <!--BOATBUILDING__Dealer_Option__c--> 
+    <aura:attribute name="objDODLCheck" type="BOOLEAN" />
+    <aura:attribute name="DealerOptionIdListCCCC" type="String[]"/>
+    <aura:attribute name="newPLstDealerOptionWraperDLT" type="DealerOptionWraper[]"/>
+    
+    <aura:attribute name="newPLstDealerOptionWraperBlank" type="DealerOptionWraper[]"/>
+    
+    <aura:if isTrue="{!v.objDODLCheck == true}">
+        <span style="position: relative; left: 58%;"><a onclick="{!c.RemoveItem}" ><lightning:icon iconName="utility:delete" size="x-small"/></a></span>
+    </aura:if>
+</aura:component>

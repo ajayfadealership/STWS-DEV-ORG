@@ -1,0 +1,15 @@
+<apex:page controller="GoogleAnalyticsIntegration" action="{!getAccessToken}" sidebar="false" >
+    <apex:pageBlock title="Connect to Google Drive">
+        <apex:form id="frm">
+            <apex:outputPanel id="opt1">
+                 <apex:commandButton disabled="{!authCode!=null}" action="{!DriveAuth}" value="Click here to Authenticate" reRender="opt1"/>
+                <span>
+                    <apex:outputPanel style="color:green" rendered="{!authCode!=null}">
+                        <div>Authenticated successfully and Access Token received......</div>
+                    </apex:outputPanel>
+                </span>                        
+                
+            </apex:outputPanel>
+        </apex:form>
+    </apex:pageBlock>
+</apex:page>

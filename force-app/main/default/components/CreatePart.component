@@ -1,0 +1,957 @@
+<apex:component id="crtPrt" controller="CreatePartController">
+  <style>
+  
+      .slds-select_container select {
+          -moz-appearance: none;
+            -webkit-appearance: none;
+            padding-left: .5rem; 
+            padding-right: 1.5rem;
+            background-color: #fff;
+            color: #16325c;
+            border: 1px solid #d8dde6;
+            border-radius: .25rem;
+            width: 100%;
+            transition: border .1s linear,background-color .1s linear;
+            height: calc(1.875rem + (1px * 2));
+        }
+      #tab-default-4 .dataTables_filter,#tab-default-4 .dataTables_length {
+        font-size: 0.85rem;
+        margin: 10px 0px;
+    }
+    #tab-default-4 .dataTables_length select {
+        height: 34px;
+        border-radius: 5px;
+        border: 1px solid rgb(169, 169, 169);
+    }
+    #tab-default-4 .dataTables_filter input {
+        height: 34px;
+        border-radius: 5px;
+        border: 1px solid rgb(169, 169, 169);
+        padding: 10px;
+    }
+    body {font-family: "Lato", sans-serif;}
+            
+            .slds-button--brand:hover {
+                background-color: rgba(21, 137, 238, 0.75);
+            }
+            
+            .slds-button--brand {
+                background-color : #29abe2;
+                border : 1px solid #29abe2;
+            }
+            
+            /*  time management style sheet */
+            .disablebtn{
+            disabled: disabled;
+            background-color: #e0e5ee;
+            border-color: #a8b7c7;
+            cursor: not-allowed;
+            user-select: none;
+            color: #16325c
+            
+            }
+            /*  time management style sheet */
+            .disablebtn:hover{
+            background-color: #e0e5ee;
+            border-color: #a8b7c7;
+            cursor: not-allowed;
+            user-select: none;
+            color: #16325c
+            
+            }
+            
+            
+            
+            .slds-tabs--default__item.slds-active .slds-tabs--default__link:focus {
+                
+                color: #fff;
+            }
+            .slds-tabs--default__link:focus, .slds-tabs--default__link:hover {
+                text-decoration: none;
+                color: #fff;
+                background-color: rgba(21, 137, 238, 0.75);
+            }
+            .slds-tabs--default__item.slds-active .slds-tabs--default__link {
+                border-color: #fff;
+                color: #fff;
+                background-color: rgba(21, 137, 238, 0.75);
+            }
+
+            .slds-tabs--default__nav {
+                background-color: #29abe2;
+            }
+
+            .slds-tabs--default__link {
+                color : #fff;
+            }
+
+            .slds-icon-standard-recent {
+                background-color: #29abe2;
+            }
+
+            ul.tab {
+                list-style-type: none;
+                margin: 0px;
+                padding: 0px;
+                overflow: hidden;
+                max-width: 1280px;
+                margin: 0 auto;
+            }
+            
+            /* Float the list items side by side */
+            ul.tab li {
+                float: left;
+                width: 25%;
+            }
+            
+            /* Style the links inside the list items */
+            ul.tab li a {
+                display: inline-block;
+                color: black;
+                text-align: center; 
+                padding: 8px 16px;
+                text-decoration: none;
+                transition: 0.1s;
+                font-size: 17px;
+            }
+            
+            /* Change background color of links on hover */
+            ul.tab li a:hover {
+                background-color: rgba(21, 137, 238, 0.75);;
+                color: #fff;
+            }
+            
+            /* Create an active/current tablink class */
+            ul.tab li a:focus, .active {
+                background-color: #29abe2;
+                color: #fff !important;
+                box-shadow: inset 0 0 7px 0px rgba(0, 0, 0, 0.31);
+            }
+            
+            /* Style the tab content */
+            .tabcontent {
+            display: none;
+            padding: 6px 12px;
+            border: 1px solid #ccc;
+            border-top: none;
+            }
+            /*  time management style sheet */
+            .slds-form--inline.main_page{
+            text-align: center;
+            padding-top: 10%;
+            color: #fff;
+            overflow: 
+            }
+            .slds-box{
+            margin: 5% auto;
+            max-width: 600px;
+            padding: 0;
+            }
+            .slds-form-element__control .slds-button{
+            box-shadow: 0 0 10px 0px #ddd;
+            color: #fff;
+            }
+            .login_box {
+            margin: 5% auto;
+            max-width: 600px;
+            box-shadow: 0 0 10px 0px #ddd;
+            border: 1px solid #ccc;
+            }
+            
+            .login_box .slds-card__body {
+            padding: 1.5rem 1.5rem 0;
+            }
+            
+            .login_box .slds-card__header {
+            background: #29abe2;
+            padding-bottom: .5rem;
+            }
+            
+            .login_box .slds-text-heading--small {
+            color : #fff;
+            font-weight: 600;
+            }
+            .tab_mid{
+            text-align: center;
+            }
+            .timer{
+            float:right;
+            }
+            
+            .margin-top {
+            margin: 1rem 0 0;
+            }
+            
+            .slds-input,
+            .slds-select {
+            max-width: 25rem;
+            }
+            
+            .slds-select {
+            padding: 0 0.5rem;
+            }
+            
+            .slds-card__body {
+            overflow: auto;
+            }
+            
+            table.slds-table--custom tr th:last-child,
+            table.slds-table--custom tr td:last-child,
+            table.payment-cal tr th:last-child,
+            table.payment-cal tr td:last-child {
+            width: 200px;
+            text-align: right;
+            }
+            
+            table.payment-cal .slds-input {
+            margin-bottom: 0;
+            }
+            
+            .slds-card .slds-card__header h2 {
+            font-size: 1.25em;
+            font-weight: 600;
+            color: #6f809c;
+            }
+            
+            .slds-card__body .slds-table--bordered {
+            border-bottom: 0;
+            }
+            
+            .slds-table th {
+            font-weight: 600;
+            }
+            /* style for lookup field */
+            
+            .lookupInput {
+            display: flex
+            }
+            
+            .lookupInput .slds-input {
+            margin: 0
+            }
+            
+            .lookupInput a.slds-input {
+            width: 28px;
+            margin: 0;
+            display: inline-block;
+            /*background: url('/resource/BOATBUILDING__BoatBuilderSR/assets/icons/utility/search_60.png');*/
+            background-size: contain;
+            background-repeat: no-repeat;
+            border: none;
+            margin-left: 5px;
+            }
+            
+            a.slds-input:active,
+            a.slds-input:focus {
+            box-shadow: none
+            }
+            
+            .Modal_border {
+            border-bottom: 1px solid #aaa;
+            padding-top: 10px;
+            padding-bottom: 10px;
+            }
+            
+            .popup {
+            position: fixed;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(0, 0, 0, 0.5);
+            display: none;
+            z-index: 999;
+            }
+            
+            .popup.active {
+            display: block
+            }
+            
+            .popup img {
+            margin: 15% auto
+            }
+            
+            .slds-table--cell-buffer tr>td:first-child,
+            .slds-table--cell-buffer tr>th:first-child {
+            padding-left: 1.5rem;
+            }
+            
+            .Sidebar {
+            position: fixed;
+            margin-right: 15px;
+            overflow: auto;
+            height: 95vh;
+            }
+            
+            .card-wrapper {
+            max-width: 1280px;
+            margin: 1rem auto;
+            }
+            
+            .slds-input,
+            .slds-select {
+            overflow: hidden
+            }
+            
+            .slds-grid>span {
+            width: 100%
+            }
+            /*
+            .Sidebar::-webkit-scrollbar {
+            width: 12px;
+            }
+            .Sidebar::-webkit-scrollbar {
+            width: 12px;
+            }     
+            
+            .Sidebar::-webkit-scrollbar-track {
+            -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3); 
+            -webkit-border-radius: 10px;
+            border-radius: 10px;
+            }
+            
+            .Sidebar::-webkit-scrollbar-thumb {
+            -webkit-border-radius: 10px;
+            border-radius: 10px;
+            background: #; 
+            -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.5); 
+            }
+            .Sidebar::-webkit-scrollbar-thumb:window-inactive {
+            background: rgba(255,0,0,0.4); 
+            }
+            
+            */
+            
+            .slds-button--brand {
+            padding-left: 0.5rem;
+            padding-right: 0.5rem;
+            }
+            
+            label.slds-input {
+            padding: 0.5rem 1rem 0.5rem .75rem;
+            line-height: 1rem;
+            }
+            
+            #tab-default-1 .dataTables_filter, #tab-default-2 .dataTables_filter, #tab-default-7 .dataTables_filter,
+            #tab-default-1 .dataTables_length, #tab-default-2 .dataTables_length, #tab-default-7 .dataTables_length{
+            font-size: 0.85rem;
+            margin: 10px 0px;
+            }
+            
+            #tab-default-1 .dataTables_filter input, #tab-default-2 .dataTables_filter input, #tab-default-7 .dataTables_filter input {
+            height: 34px;
+            border-radius: 5px;
+            border: 1px solid rgb(169, 169, 169);
+            padding: 10px;
+            }
+            
+            #tab-default-2 .dataTables_length select, #tab-default-1 .dataTables_length select, #tab-default-7 .dataTables_length select {
+            height: 34px;
+            border-radius: 5px;
+            border: 1px solid rgb(169, 169, 169);
+            }
+            .slds-tabs--default__content{
+            background :#fff !important;
+            }
+            #prtTblId{
+            border: 1px solid #d8dde6;
+            }
+            #purchaseVendorId1{
+            margin: 20px 0px;
+            }
+            table#prtTblId input#t1{
+            width: 60px;
+            }
+            #tab-default-3 tfoot{
+            border-bottom: 1px solid #d8dde6;
+            }
+            #tab-default-6 table{
+                border: 1px solid #d8dde6;
+            }
+            ul.tab .slds-media__body{
+                flex: inherit;
+            }
+            ul.tab .slds-page-header__title {
+                font-size: 1rem !important;
+                text-transform: uppercase;
+            }
+            ul.tab li a {
+                width: 100%;
+                min-width: 170px;
+            }
+            ul.tab li a p{
+                margin-top: 4px;
+            }
+            .slds-table--bordered{
+                border-bottom: 1px solid #d8dde6 !important;
+            }
+            .slds-checkbox{display: inline-block;}
+            .slds-form-element__label {
+                display: inline-block;
+                color: #54698d;
+                font-size: .75rem;
+                line-height: 1.5;
+                margin-right: .75rem;
+                margin-bottom: .25rem;
+                padding-top: 1rem;
+            }
+            ul.tab li{
+                line-height: 0rem;
+            }
+            .border_row{
+                border-bottom: 1px solid #ddd;
+            }
+  </style>
+  
+        <div class="slds-grid slds-wrap">
+
+            <!-- ======= Second Table   -->
+            
+            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-1 slds-col--padded slds-m-top--x-large">
+                <div class="slds-card__body slds-col--padded">
+                    <!-- <div class="slds-col slds-size--1-of-1 slds-align--absolute-center Create_button" id="createPartId" style="display: none;">
+                        
+                        
+                    </div> -->
+                    <div id="tableDivePart">
+                        <div class="slds-col slds-size--1-of-1 slds-align--absolute-center Create_button" >
+                            <a class="slds-button slds-button--neutral slds-button--brand" type="button" onclick="changeToPartForm(this);">Create Part</a>
+                        </div>
+                         <apex:outputPanel id="tableOPPart">
+                            <table id = "table3" class="show slds-table slds-table--bordered slds-no-row-hover slds-table--cell-buffer slds-m-top--x-large Table1 slds-card">
+                                <thead>
+                                    <tr class="slds-text-heading--label">
+                                        <th scope="col">Vendor</th>
+                                        <th scope="col">Name</th>
+                                        <th scope="col">Cost</th>
+                                        <th scope="col">Map Price</th>
+                                        <th scope="col">Retail Price</th>
+                                        <th scope="col">Part Number</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <apex:repeat value="{!lstOfParts}" var="objPart">
+                                        <tr class="slds-hint-parent">
+                                            <td>
+                                                <a href="/{!objPart.Id}">
+                                                    <apex:outputField value="{!objPart.Vendor_Name__r.Name}"/>
+                                                </a>
+                                                &nbsp; <a href="/{!objPart.Id}" target="blank"><img src="https://image.flaticon.com/icons/png/512/376/376007.png" style="height: 10px; width: 10px;"/></a>
+                                            </td>
+                                            <td>
+                                                <a href="/{!objPart.Id}">
+                                                    <apex:outputField value="{!objPart.Name}"/>
+                                                </a> 
+                                                &nbsp; <a href="/{!objPart.Id}" target="blank"><img src="https://image.flaticon.com/icons/png/512/376/376007.png" style="height: 10px; width: 10px;"/></a>
+                                            </td>
+                                            <td><apex:outputField value="{!objPart.Part_Cost__c}"/></td>
+                                            <td><apex:outputField value="{!objPart.Map_Price__c}"/></td>
+                                            <td><apex:outputField value="{!objPart.Retail_Price__c}"/></td>
+                                            
+                                            
+                                            <td><apex:outputField value="{!objPart.Part_Number__c}"/></td>
+                                        </tr>
+                                    </apex:repeat>
+                                </tbody>
+                            </table>
+                        </apex:outputPanel>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="slds-grid slds-wrap" style="display:none;" id="partForm">
+            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-1 slds-col--padded">
+                <div class="slds-grid slds-wrap">
+                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-1 ">
+                    <div class="slds-grid slds-wrap">
+                        <div class="slds-col slds-size--1-of-1 slds-align--absolute-center Create_button">
+                            <div class="slds-form-element__control">
+                                <a class="slds-button slds-button--neutral slds-button--brand inside_row_button" type="button" onclick="createPart(this);">Create Part</a>
+                                <a class="slds-button slds-button--neutral slds-button--brand inside_row_button " type="button" onclick="changeToPartList(this);">Back to List</a>
+                            </div>
+                        </div>
+                    </div>  
+                </div>
+                    <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-1 slds-col--padded">
+                        <div class="slds-grid slds-wrap">
+                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                                <div class="slds-form-element">
+                                <label class="slds-form-element__label">Vendor:</label>
+                                    <div class="slds-form-element__control">
+                                        <apex:inputField value="{!objPart1.Vendor_Name__c}" styleClass="slds-input" id="ifPartVendor" onchange="fetchVendorforPart(this);"/>
+                                    </div>
+                                    
+                                </div>
+                            </div>
+                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                                <div class="slds-form-element">
+                                <label class="slds-form-element__label">Part Number</label>
+                                    <div class="slds-form-element__control">
+                                        <input class="slds-input" type="text" id="Part_Number" onclick="document.getElementById('Part_NumberSpanId').innerHTML = '';"/>
+                                        <span id="Part_NumberSpanId" style="color:red;font-weight: bold;"></span>
+                                    </div>
+                                    
+                                </div>
+                            </div>
+                            
+                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                                <div class="slds-form-element">
+                                    <label class="slds-form-element__label">Description</label>
+                                    <div class="slds-form-element__control">
+                                        <input class="slds-input" type="text" id="Part_Description" onclick="document.getElementById('Part_DescriptionSpanId').innerHTML = '';"/>
+                                        <span id="Part_DescriptionSpanId" style="color:red;font-weight: bold;"></span>
+                                    </div>
+                                    
+                                </div>
+                            </div>
+                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                                <div class="slds-form-element">
+                                    <label class="slds-form-element__label">Msrp</label>
+                                    <div class="slds-form-element__control">
+                                        <input class="slds-input" type="text" id="Part_MSRP" onclick="document.getElementById('Part_MSRPSpanId').innerHTML = '';"/>
+                                        <span id="Part_MSRPSpanId" style="color:red;font-weight: bold;"></span>
+                                    </div>
+                                    
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                        <div class="slds-form-element">
+                            <label class="slds-form-element__label">Vendor</label>
+                            <div class="slds-form-element__control">
+                                <input class="slds-input" type="text" id="vendorNameForPart"  disabled="disabled" />
+                            </div>
+                        </div>
+                    </div> -->
+                   <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-1 slds-col--padded">
+                        <div class="slds-grid slds-wrap">
+                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                                <div class="slds-form-element">
+                                    <label class="slds-form-element__label">Map Price</label>
+                                    <div class="slds-form-element__control">
+                                        <input class="slds-input" type="text" id="Part_MapPrice" onclick="document.getElementById('Part_MapPriceId').innerHTML = '';"/>
+                                        <span id="Part_MapPriceId" style="color:red;font-weight: bold;"></span>
+                                    </div>
+                                    
+                                </div>
+                            </div>
+                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                                <div class="slds-form-element">
+                                    <label class="slds-form-element__label">Color</label>
+                                    <div class="slds-form-element__control">
+                                        <input class="slds-input" type="text" id="Part_Color"/>
+                                    </div>
+                                    
+                                </div>
+                            </div>
+                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                                <div class="slds-form-element">
+                                    <label class="slds-form-element__label">Size</label>
+                                    <div class="slds-form-element__control">
+                                        <input class="slds-input" type="text" id="Part_Size"/>
+                                    </div>
+                                    
+                                </div>
+                            </div>
+                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                                <div class="slds-form-element">
+                                    <label class="slds-form-element__label">Discount %</label>
+                                    <div class="slds-form-element__control">
+                                        <input class="slds-input" type="text" id="Part_Discount" onclick="document.getElementById('Part_DiscountId').innerHTML = '';"/>
+                                        <span id="Part_DiscountId" style="color:red;font-weight: bold;"></span>
+                                    </div>
+                                    
+                                </div>
+                            </div>
+                        </div>
+                    </div> 
+                    <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-1 slds-col--padded">
+                        <div class="slds-grid slds-wrap">
+                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                                <div class="slds-form-element">
+                                    <label class="slds-form-element__label">Cost</label>
+                                    <div class="slds-form-element__control">
+                                        <input class="slds-input" type="text" id="Part_Cost" onclick="document.getElementById('Part_CostSpanId').innerHTML = '';"/>
+                                        <span id="Part_CostSpanId" style="color:red;font-weight: bold;"></span>
+                                    </div>
+                                    
+                                </div>
+                            </div>
+                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                                <div class="slds-form-element">
+                                    <label class="slds-form-element__label">Category</label>
+                                    <div class="slds-form-element__control">
+                                        <!-- <input class="slds-input" type="text" id="Part_Category"/> -->
+                                        <div class = "slds-select_container">
+                                        <apex:inputField value="{!objPart1.Category1__c}"  id="Part_Category" styleClass="slds-input"/>
+                                        </div>
+                                    </div>
+                                    
+                                </div>
+                            </div>
+                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                                <div class="slds-form-element">
+                                    <label class="slds-form-element__label">Family</label>
+                                    <div class="slds-form-element__control">
+                                        <!-- <input class="slds-input" type="text" id="Part_Family"/> -->
+                                        <div class = "slds-select_container">
+                                        <apex:inputField value="{!objPart1.Family1__c}" id="Part_Family" styleClass="slds-select"/>
+                                        </div>
+                                    </div>
+                                    
+                                </div>
+                            </div>
+                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                                <div class="slds-form-element">
+                                    <label class="slds-form-element__label">Minimum Amount</label>
+                                    <div class="slds-form-element__control">
+                                        <input class="slds-input" type="decimal" id="Part_Minimum_Amount" onclick="document.getElementById('Part_MinAmountId').innerHTML = '';"/>
+                                        <span id="Part_MinAmountId" style="color:red;font-weight: bold;"></span>
+                                    </div>
+                                    
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-1 slds-col--padded">
+                        <div class="slds-grid slds-wrap">
+                         <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                                <div class="slds-form-element">
+                                    <label class="slds-form-element__label">Weight</label>
+                                    <div class="slds-form-element__control">
+                                        <input class="slds-input" type="text" id="Part_Weight" onclick="document.getElementById('Part_WeightSpan').innerHTML = '';"/>
+                                        <span id="Part_WeightSpan" style="color:red;font-weight: bold;"></span>
+                                    </div>
+                                    
+                                </div>
+                            </div>
+                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                                <div class="slds-form-element">
+                                    <label class="slds-form-element__label">Location</label>
+                                    <div class="slds-form-element__control">
+                                        <input class="slds-input" type="text" id="Part_Location"/>
+                                    </div>
+                                    
+                                </div>
+                            </div>
+                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                                <div class="slds-form-element">
+                                    <label class="slds-form-element__label">Bin</label>
+                                    <div class="slds-form-element__control">
+                                        <input class="slds-input" type="text" id="Part_Bin"/>
+                                    </div>  
+                                </div>
+                            </div>
+                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                                <div class="slds-form-element">
+                                    <label class="slds-form-element__label">Store Location</label>
+                                    <div class="slds-form-element__control">
+                                        <apex:inputField value="{!objPart1.Store_Location__c}" styleClass="slds-select" id="slP"/>
+                                    </div>  
+                                </div>
+                            </div>
+                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                                <div class="slds-form-element">
+                                <label class="slds-form-element__label">OEM Part Number</label>
+                                    <div class="slds-form-element__control">
+                                        <input class="slds-input" type="text" id="OEM_Part_Number" />
+<!--                                         <span id="Part_NumberSpanId" style="color:red;font-weight: bold;"></span> -->
+                                    </div>
+                                    
+                                </div>
+                            </div>
+                            <!--<div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                                <div class="slds-form-element">
+                                    <label class="slds-form-element__label">Shipping Charge</label>
+                                    <div class="slds-form-element__control">
+                                        <input class="slds-input" type="text" id="shippingCharge"/>
+                                        <span id="ShippingChargeSpanId" style="color:red;font-weight: bold;"></span>
+                                    </div>  
+                                </div>
+                            </div>-->
+                            
+                            
+                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                                <div class="slds-form-element">
+                                    
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>                                            
+    <script>
+     $(document).ready(function() {
+            $('#table3').DataTable( {
+              "pageLength": 25,
+              "lengthMenu": [[25, 50, -1], [25, 50, "All"]]
+            } );
+        });
+        var vendr = "";
+        function fetchVendorforPart(obj) {
+            console.log(obj.value);
+            var manufacturer = document.getElementById("pge:frm:crtPrtCompCall:crtPrt:ifPartVendor_lkid").value;
+            if(document.getElementById("pge:frm:crtPrtCompCall:crtPrt:ifPartVendor").value == null || document.getElementById("pge:frm:crtPrtCompCall:crtPrt:ifPartVendor").value == ""){
+                manufacturer = "";
+            } 
+            
+            if(manufacturer != null && manufacturer != "" && manufacturer != "000000000000000") {
+                BOATBUILDING.CreatePartController.fetchManufacturer(manufacturer, function(result, event) {
+                    if(event.status) {
+                        if(result != null) {
+                            console.log(result);
+                            var manuList = [];
+                            manuList = result;
+                            if(manuList.length > 0) {
+                                    vendr = manuList[0].Id;
+                                
+                            }
+                        } 
+                        else {
+                             alert("We're sorry, the content you've requested is temporarily unavailable. Please try again.");
+
+                        }
+                    }
+                });
+            }
+            else {
+                <!-- document.getElementById("vendorNameForPart").value = ""; -->
+                
+            }
+        }
+
+      function createPart(obj) {
+                    
+            var vendor = vendr;
+            var partMSRP;
+            var MapPrice;
+            var MinAmount;
+            var partDescription =document.getElementById("Part_Description").value;
+            var partNumber =document.getElementById("Part_Number").value;
+            var partCost = document.getElementById("Part_Cost").value;
+            var partDiscount = document.getElementById("Part_Discount").value;
+            var partWeight;
+            
+            var StoreLocationP = document.getElementById("pge:frm:crtPrtCompCall:crtPrt:slP").value;
+            
+            if(StoreLocationRequired == true && (StoreLocationP == null || StoreLocationP == "")) {
+                alert("Please select Store Location.");
+                return false;  
+            }
+            
+            
+            
+            if(document.getElementById("Part_MSRP").value!=null && document.getElementById("Part_MSRP").value!="") {
+                partMSRP = parseFloat(document.getElementById("Part_MSRP").value);
+            }
+            else{
+                partMSRP = 0.00;
+            }
+            
+            if(document.getElementById("Part_Weight").value!=null && document.getElementById("Part_Weight").value!="") {
+                partWeight = document.getElementById("Part_Weight").value;
+            }
+            
+            if(document.getElementById("Part_MapPrice").value!=null && document.getElementById("Part_MapPrice").value!="") {
+                MapPrice = parseFloat(document.getElementById("Part_MapPrice").value);
+            }
+            else {
+                MapPrice = 0.00;
+            }
+            
+            if(document.getElementById("Part_Minimum_Amount").value!=null && document.getElementById("Part_Minimum_Amount").value!="") {
+                MinAmount = parseFloat(document.getElementById("Part_Minimum_Amount").value);
+            }
+            else{
+                MinAmount = 0.00;
+            }
+            
+            
+            var flag = 1;
+            var objPart = new Object();
+            
+            //alert(vendor);
+            //alert(partDescription);
+            //alert(partNumber);
+            if(vendor!=null && vendor!="") {
+            objPart["vendor"] = vendr;
+            
+            if(partMSRP!="") {
+            
+                if(/^\d*$/.test(partMSRP) || /^\d+\.\d{0,2}$/.test(partMSRP) || /^\.\d{0,2}$/.test(partMSRP)){
+                objPart["partMSRP"] = partMSRP;
+                }
+                else {
+                    document.getElementById("Part_MSRPSpanId").innerHTML = "Invalid value for Currency (Enter in 0.00 Format)"
+                    flag = 0;
+                }
+            }
+            
+            
+            
+            objPart["partSize"] = document.getElementById("Part_Size").value;
+            objPart["OEM_Part_Number"] = document.getElementById("OEM_Part_Number").value;
+            
+            if(partNumber!=null && partNumber!=""){
+                objPart["partNumber"] = document.getElementById("Part_Number").value;
+            }
+            else{
+                document.getElementById("Part_NumberSpanId").innerHTML = "You must enter Part Number.";
+                flag = 0;
+            }
+            
+            if(partWeight!=null && partWeight!=""){
+                objPart["partWeight"] = partWeight ;
+            }
+            
+            else{
+                document.getElementById("Part_WeightSpan").innerHTML = "You must enter Weight of the Part.";
+                flag = 0;
+            }
+            
+            objPart["partColor"] = document.getElementById("Part_Color").value;
+            
+            if(partDescription!=null && partDescription!=""){
+                objPart["partDescription"] = document.getElementById("Part_Description").value;
+            }
+            else {
+                document.getElementById("Part_DescriptionSpanId").innerHTML = "You must enter a Description.";
+                flag = 0;
+            }
+            
+            if(/^\d*$/.test(partDiscount) || /^\d+\.\d{0,2}$/.test(partDiscount) || /^\.\d{0,2}$/.test(partDiscount)) {
+            
+            objPart["partDiscount"] = partDiscount;
+            
+            }
+            else {
+                document.getElementById("Part_DiscountId").innerHTML = 'Invalid Decimal for Discount (%)';
+                flag = 0;
+            }
+            
+            if(partCost!=null && partCost!="") {
+                if(/^\d*$/.test(partCost) || /^\d+\.\d{0,2}$/.test(partCost) || /^\.\d{0,2}$/.test(partCost)) {
+                    objPart["partCost"] = partCost;
+                }
+                else {
+                    document.getElementById("Part_CostSpanId").innerHTML = "Invalid value for Currency (Enter in 0.00 Format)";
+                    flag = 0;
+                }
+            }
+            else {
+                document.getElementById("Part_CostSpanId").innerHTML = "You must enter Cost.";
+                flag = 0;
+            }
+            
+            objPart["partCategory"] = document.getElementById("pge:frm:crtPrtCompCall:crtPrt:Part_Category").value;
+            
+            if(MapPrice != "") {
+                
+                if(/^\d*$/.test(MapPrice) || /^\d+\.\d{0,2}$/.test(MapPrice) || /^\.\d{0,2}$/.test(MapPrice)) {
+                objPart["MapPrice"] = MapPrice;
+                }
+                else {
+                    document.getElementById("Part_MapPriceId").innerHTML = "Invalid value for Currency (Enter in 0.00 Format)";
+                    flag = 0;
+                }
+            
+            }
+            
+            objPart["partFamily"] = document.getElementById("pge:frm:crtPrtCompCall:crtPrt:Part_Family").value;
+            
+            
+            if(MinAmount != "") {
+                
+                if(/^\d*$/.test(MinAmount) || /^\d+\.\d{0,2}$/.test(MinAmount) || /^\.\d{0,2}$/.test(MinAmount)) {
+                objPart["partMinAmount"] = MinAmount;
+                }
+                else {
+                    document.getElementById("Part_MinAmountId").innerHTML = "Invalid value for Currency (Enter in 0.00 Format)";
+                    flag = 0;
+                }
+            
+            }
+            
+            
+            
+            objPart["partLocation"] = document.getElementById("Part_Location").value;
+            
+            objPart["partBin"] = document.getElementById("Part_Bin").value;
+            objPart["StoreLocation"] = StoreLocationP;
+            
+            if(flag!=0) {
+                BOATBUILDING.CreatePartController.savePart(objPart,function(result, event) {
+                //alert(result);
+                    if(event.status) {
+                        if(result != null){
+                            if(result == 'DUPLICATE'){
+                                alert("The part you are attempting to create is already created.");
+                            }
+                            else{
+                                window.top.location = '/apex/ServicePage?subTabName=tab-default-4';
+                                }
+                            
+                           
+                           
+                        }else{
+                            alert("We're sorry, the content you've requested is temporarily unavailable. Please try again.");
+                        }
+                    }
+                    
+                }
+                );
+            }
+            
+              }
+              else {
+                alert("Please select a Vendor");        
+              }
+                        
+        }
+
+
+
+        function changeToPartList(obj) {
+            document.getElementById("tableDivePart").style.display = "block";
+            document.getElementById("Part_MinAmountId").innerHTML = "";
+            document.getElementById("Part_MapPriceId").innerHTML = "";
+            document.getElementById("Part_CostSpanId").innerHTML = "";
+            document.getElementById("Part_DescriptionSpanId").innerHTML = "";
+            document.getElementById("Part_NumberSpanId").innerHTML = "";
+            document.getElementById("Part_MSRPSpanId").innerHTML = "";
+            document.getElementById("Part_DiscountId").innerHTML ="";
+            document.getElementById("pge:frm:crtPrtCompCall:crtPrt:ifPartVendor").value= "";
+            <!--document.getElementById("vendorNameForPart").value = "";-->
+            document.getElementById("Part_MSRP").value = "";
+            document.getElementById("Part_Size").value = "";
+            document.getElementById("Part_Number").value = "";
+            document.getElementById("Part_Color").value = "";
+            document.getElementById("Part_Description").value = "";
+            document.getElementById("Part_Discount").value = "";
+            document.getElementById("Part_Cost").value = "";
+            document.getElementById("Part_MapPrice").value = "";
+            document.getElementById("pge:frm:crtPrtCompCall:crtPrt:Part_Category").value = "";
+            document.getElementById("pge:frm:crtPrtCompCall:crtPrt:Part_Family").value = "";
+            document.getElementById("Part_WeightSpan").innerHTML = "";
+            document.getElementById("Part_Minimum_Amount").value = "";
+            document.getElementById("Part_Location").value = "";
+            document.getElementById("Part_Bin").value = "";
+           
+            <!-- document.getElementById("vendorSearchId1").style.display = "none"; -->
+            document.getElementById("purchaseVendorId1").style.display = "none";
+            <!-- document.getElementById("createPartId").style.display = "none"; -->
+            document.getElementById("partForm").style.display = "none";       
+        }
+
+        function changeToPartForm(obj) {
+            document.getElementById("tableDivePart").style.display = "none";
+            <!-- document.getElementById("vendorSearchId1").style.display = "block"; -->
+            document.getElementById("purchaseVendorId1").style.display = "block";
+            <!-- document.getElementById("createPartId").style.display = "block"; -->
+            document.getElementById("partForm").style.display = "block";
+        }
+    </script>
+</apex:component>

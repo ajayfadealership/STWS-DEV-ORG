@@ -1,0 +1,1202 @@
+<apex:component controller="ScheduleController" allowDML="true" id="schdleCompnnt">
+    
+    <apex:stylesheet value="{!URLFOR($Resource.FC, 'fullcalendar-3.4.0/FC/fullcalendar.css')}" />
+    <!--  <apex:includeScript value="{!URLFOR($Resource.FC, 'fullcalendar-3.4.0/FC/lib/jquery.min.js')}"/>-->
+    <apex:includeScript value="{!URLFOR($Resource.FC, 'fullcalendar-3.4.0/FC/lib/moment.min.js')}"/>
+    <apex:includeScript value="{!URLFOR($Resource.FC, 'fullcalendar-3.4.0/FC/fullcalendar.js')}"/> 
+    <apex:includeScript value="https://cdnjs.cloudflare.com/ajax/libs/moment-timezone/0.5.13/moment-timezone-with-data-2012-2022.min.js"/>
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.12/css/jquery.dataTables.min.css"/>
+    <script src="https://cdn.datatables.net/1.10.12/js/jquery.dataTables.min.js"/>
+    
+    <script>
+        
+        $(document).ready(function() { 
+        
+        
+        BOATBUILDING.ScheduleController.getUserDetails(function(result, event) { 
+            if(event.status) {
+                if(result != null && result.length > 0) {
+                    for(var i=0; i<result.length; i++) {
+                        if(result[i].Id == "{!UId}") {
+                            $("#userLst").append("<option value='"+result[i].Id+"' selected='selected'><span></span>"+result[i].Name+"</option>")
+                        } else {
+                            $("#userLst").append("<option value='"+result[i].Id+"'><span></span>"+result[i].Name+"</option>")
+                        }
+                    }
+                    fetchEvents();
+                }
+            }   
+        });
+        
+        $("#typePickList").change(function() {
+            //$("#userLst").val("0");
+            fetchEventsWithtype();
+            //fetchWorkOrder1(); 
+        });
+        
+        $("#userLst").change(function() {
+            //$("#typePickList").val("0");
+            fetchEvents();
+            //fetchWorkOrder1();
+        });
+        
+        
+    });
+    
+    
+    
+    function fetchEventsWithtype() {
+        var type = $("#typePickList").val();
+        var userId = $("#userLst").val();
+        if(type != "0") {
+            $('#calendar').fullCalendar("removeEventSources");
+            $("#woList").fadeIn();
+            BOATBUILDING.ScheduleController.fetchRelatedEventsWithType(type, userId, function(result, event) {
+                if(event.status) {
+                	var eventResults = [];
+                    var newEvents = []; 
+                    if(result != null & result.length > 0) {
+                        
+                        for(var i = 0; i < result.length; i++) {
+                            
+                            var evtId = "", evtTitle = "", evtStart = "", eventEnd = "";
+                            if(result[i].BOATBUILDING__Schedule_Date_Time__c != undefined) {
+                                evtId = result[i].Id;
+                                if(result[i].BOATBUILDING__Event_Name__c != undefined) {
+                                    evtTitle = result[i].BOATBUILDING__Event_Name__c;
+                                }
+                                
+                                var dt = new Date(result[i].BOATBUILDING__Schedule_Date_Time__c);
+                                var endDate = new Date(result[i].BOATBUILDING__End_Schedule_Date_Time__c);
+                                
+                                var sh = dt.getHours();
+                                var sm = dt.getMinutes();
+                                var ss = dt.getSeconds();
+                                var eh = endDate.getHours();
+                                var em = endDate.getMinutes();                                  
+                                var es = endDate.getSeconds();
+                                evtStart = dt.getFullYear() + "-" + pad(dt.getMonth()+1) + "-" + pad(dt.getDate())+"T"+pad(sh)+":"+pad(sm)+":"+pad(ss); 
+                                eventEnd = endDate.getFullYear() + "-" + pad(endDate.getMonth()+1) + "-" + pad(endDate.getDate())+"T"+pad(eh)+":"+pad(em)+":"+pad(es); 
+                                var newEvent = new Object(eventEnd);
+                                newEvent.id = evtId;
+                                newEvent.title = evtTitle;
+                                newEvent.start = evtStart;
+                                newEvent.end = eventEnd;
+                                newEvent.allDay = false;
+                                console.log(result[i].Name);
+                                console.log(evtStart);
+                                console.log(eventEnd);
+                                
+                                if(result[i].BOATBUILDING__Related_Work_Order_Job__c != undefined) {
+                                    if(result[i].BOATBUILDING__Related_Work_Order_Job__r.BOATBUILDING__Completed__c == true) {
+                                        newEvent.color = 'red';  
+                                    }
+                                } else  if(result[i].BOATBUILDING__Work_Order__c != undefined) {
+                                    
+                                    if(result[i].BOATBUILDING__Work_Order__r.BOATBUILDING__Status__c != undefined 
+                                       && (result[i].BOATBUILDING__Work_Order__r.BOATBUILDING__Status__c == 'Closed' || result[i].BOATBUILDING__Work_Order__r.BOATBUILDING__Status__c == 'Closed Internal')) {
+                                        newEvent.color = 'red';
+                                    } else if(result[i].BOATBUILDING__Technician__c != undefined 
+                                              && result[i].BOATBUILDING__Technician__r.BOATBUILDING__Schedule_Color_Code__c != undefined
+                                              &&	result[i].BOATBUILDING__Technician__r.BOATBUILDING__Schedule_Texted_Color_Code__c != undefined) {
+                                        newEvent.color = result[i].BOATBUILDING__Technician__r.BOATBUILDING__Schedule_Color_Code__c;
+                                        newEvent.textColor = result[i].BOATBUILDING__Technician__r.BOATBUILDING__Schedule_Texted_Color_Code__c;
+                                    }else {
+                                        if(result[i].BOATBUILDING__Work_Order__r.RecordType.Name == 'Work Order') {
+                                            if(result[i].BOATBUILDING__Work_Order__r.BOATBUILDING__Status__c != undefined 
+                                               && (result[i].BOATBUILDING__Work_Order__r.BOATBUILDING__Status__c == 'Waiting On Payment' 
+                                                   || result[i].BOATBUILDING__Work_Order__r.BOATBUILDING__Status__c == 'Warranty Waiting on Payment')) {
+                                                newEvent.color = 'yellow';
+                                                newEvent.textColor = '#020202';
+                                            } else {    
+                                                newEvent.color = 'green';
+                                            }
+                                        } else if(result[i].BOATBUILDING__Work_Order__r.RecordType.Name == 'Warranty Work Order') { 
+                                            if(result[i].BOATBUILDING__Work_Order__r.BOATBUILDING__Status__c != undefined 
+                                               && (result[i].BOATBUILDING__Work_Order__r.BOATBUILDING__Status__c == 'Waiting On Payment' 
+                                                   || result[i].BOATBUILDING__Work_Order__r.BOATBUILDING__Status__c == 'Warranty Waiting on Payment')) {
+                                                newEvent.color = 'yellow';
+                                                newEvent.textColor = '#020202';
+                                            } else {     
+                                                newEvent.color = 'blue';
+                                            }     
+                                            
+                                        }
+                                    } 
+                                    
+                                    
+                                    
+                                } else if(result[i].BOATBUILDING__Technician__c != undefined 
+                                          && result[i].BOATBUILDING__Technician__r.BOATBUILDING__Schedule_Color_Code__c != undefined
+                                          &&	result[i].BOATBUILDING__Technician__r.BOATBUILDING__Schedule_Texted_Color_Code__c != undefined) {
+                                    newEvent.color = result[i].BOATBUILDING__Technician__r.BOATBUILDING__Schedule_Color_Code__c;
+                                    newEvent.textColor = result[i].BOATBUILDING__Technician__r.BOATBUILDING__Schedule_Texted_Color_Code__c;
+                                } 
+                                
+                                newEvents.push(newEvent);
+                                //  $('#calendar').fullCalendar( 'renderEvent', newEvent );
+                            }
+                        }
+                        $('#calendar').fullCalendar( 'destroy' );
+                        initCal(newEvents);
+                    } else {
+                        $('#calendar').fullCalendar("removeEventSources");
+                        initCal(newEvents); 
+                    }
+                    
+                }
+            });
+        } else {
+            $('#calendar').fullCalendar("removeEventSources");
+        }    
+    }
+    
+    function initCal(inputEvents)
+    {
+        $('#calendar').fullCalendar({
+            header: {
+                left: 'prev,next today', 
+                center: 'title',
+                right: 'month,agendaWeek,agendaDay,listWeek'
+            }, 
+            editable: true,
+            ignoreTimezone : false,
+            eventLimit: true, // allow "more" link when too many events
+            navLinks: true,
+            displayEventTime: true,
+            displayEventEnd: true,
+            timeFormat: 'h(:mm)',
+            events: inputEvents,
+            
+            
+            dayClick: function(date, jsEvent, view) {
+                
+                $("#addEventDiv").fadeIn();
+                
+            },
+            eventMouseover: function( event, jsEvent, view ) { 
+                //alert(event.title + " end is now " + event.end.format());
+            },
+            eventResize: function(event, delta, revertFunc) {
+                
+                //alert(event.title + " end is now " + event.end.format()+"start"+event.start.format()+"id"+event.id);
+                
+                if (!confirm("Are you sure for the same change?")) {
+                    revertFunc();
+                } else {
+                    var evntEndDate = event.end.format();
+                    var evId = event.id;
+                    BOATBUILDING.ScheduleController.resizeEvent(evntEndDate, evId, function(result, event) {
+                        if(event.status) {
+                            if(result == "SUCCESS") {
+                                console.log(result);
+                            } else {
+                                alert(result);
+                                revertFunc();
+                            }
+                        }   
+                    });
+                }
+            },
+            eventDrop: function(event, delta, revertFunc) {
+                
+                if(!confirm("Are you sure about this change?")) {
+                    
+                    revertFunc();
+                } else {
+                    var evntStartDate = event.start.format();
+                    var evntEndDate = event.end.format();
+                    var evId = event.id;
+                    
+                    BOATBUILDING.ScheduleController.drageEvent(evntStartDate, evntEndDate, evId, function(result, event) {
+                        if(event.status) {
+                            if(result == "SUCCESS") {
+                                console.log(result);
+                            } else {
+                                alert(result);
+                                revertFunc();
+                            }  
+                        }   
+                    });
+                    
+                } 
+                
+            },
+            eventClick: function(calEvent, jsEvent, view) {
+                document.getElementById("pge:frm:schdlCompCall:schdleCompnnt:swo1").disabled = true;
+                document.getElementById("pge:frm:schdlCompCall:schdleCompnnt:swo1_lkwgt").style.display = "none";
+                document.getElementById("pge:frm:schdlCompCall:schdleCompnnt:swoj1").disabled = true;
+                document.getElementById("pge:frm:schdlCompCall:schdleCompnnt:swoj1_lkwgt").style.display = "none";
+                
+                if("{!techCheck}" == "false") {
+                    document.getElementById("pge:frm:schdlCompCall:schdleCompnnt:swt1").disabled = true;
+                    document.getElementById("pge:frm:schdlCompCall:schdleCompnnt:swt1_lkwgt").style.display = "none";
+                } 
+                
+                $("#oaWO").show();
+                $("#oaTWO").show();
+                $("#evntTitleId").html("<b>Work Order</b>");
+                BOATBUILDING.ScheduleController.checkEvent(calEvent.id, function(result, event) {
+                    if(event.status) {
+                        document.getElementById("hiddenEvtId").value = calEvent.id;
+                        if(result.length == 2) {
+                            console.log("WO");
+                            document.getElementById("pge:frm:schdlCompCall:schdleCompnnt:swo1_lkid").value = result[0].Id; 
+                            document.getElementById("pge:frm:schdlCompCall:schdleCompnnt:swo1").value = result[0].Name;
+                            document.getElementById("swta1").value = result[1].BOATBUILDING__Description__c;
+                            document.getElementById("pge:frm:schdlCompCall:schdleCompnnt:ssl2").value = result[1].BOATBUILDING__Service_Location__c;
+                            document.getElementById("hiddenId").value = result[0].Id;
+                            document.getElementById("hiddenName").value = result[0].Name;
+                            document.getElementById("hiddenBal").value = result[0].BOATBUILDING__Balance__c;
+                            document.getElementById("hiddenRecType").value = result[0].RecordType.DeveloperName;
+                            if(result[1].BOATBUILDING__Technician__r.Name != undefined) {
+                                document.getElementById("pge:frm:schdlCompCall:schdleCompnnt:swt1").value = result[1].BOATBUILDING__Technician__r.Name;
+                                document.getElementById("pge:frm:schdlCompCall:schdleCompnnt:swt1_lkid").value = result[1].BOATBUILDING__Technician__c;
+                            }
+                        } else if(result.length == 3) {
+                            console.log("JOB"); 
+                            document.getElementById("pge:frm:schdlCompCall:schdleCompnnt:swoj1_lkid").value = result[0].Id; 
+                            document.getElementById("pge:frm:schdlCompCall:schdleCompnnt:swoj1").value = result[0].Name; 
+                            document.getElementById("swta1").value = result[2].BOATBUILDING__Description__c;
+                            document.getElementById("pge:frm:schdlCompCall:schdleCompnnt:ssl2").value = result[2].BOATBUILDING__Service_Location__c;
+                            document.getElementById("hiddenId").value = result[1].Id;
+                            document.getElementById("hiddenName").value = result[1].Name;
+                            document.getElementById("hiddenBal").value = result[1].BOATBUILDING__Balance__c;
+                            document.getElementById("hiddenRecType").value = result[1].RecordType.DeveloperName;
+                            
+                            if(result[2].BOATBUILDING__Technician__r.Name != undefined) {
+                                document.getElementById("pge:frm:schdlCompCall:schdleCompnnt:swt1").value = result[2].BOATBUILDING__Technician__r.Name;
+                                document.getElementById("pge:frm:schdlCompCall:schdleCompnnt:swt1_lkid").value = result[2].BOATBUILDING__Technician__c;
+                            }
+                            
+                        } else if(result.length == 4) {
+                            console.log("Inv"); 
+                            console.log(result);
+                            document.getElementById("swta1").value = result[3].BOATBUILDING__Description__c;
+                            document.getElementById("pge:frm:schdlCompCall:schdleCompnnt:ssl2").value = result[3].BOATBUILDING__Service_Location__c;
+                            $("#oaWO").hide();
+                            $("#oaTWO").hide();
+                            $("#evntTitleId").html("<b>Inventory</b>");
+                            document.getElementById("pge:frm:schdlCompCall:schdleCompnnt:swo1_lkid").value = result[2].Id; 
+                            document.getElementById("pge:frm:schdlCompCall:schdleCompnnt:swo1").value = result[2].Name;
+                            if(result[3].BOATBUILDING__Technician__c != undefined && result[3].BOATBUILDING__Technician__r.Name != undefined) {
+                                document.getElementById("pge:frm:schdlCompCall:schdleCompnnt:swt1").value = result[3].BOATBUILDING__Technician__r.Name;
+                                document.getElementById("pge:frm:schdlCompCall:schdleCompnnt:swt1_lkid").value = result[3].BOATBUILDING__Technician__c;
+                            }
+                        }
+                            else if(result.length == 5) {
+                                console.log("QT");
+                                console.log(result);
+                                document.getElementById("swta1").value = result[4].BOATBUILDING__Description__c;
+                                document.getElementById("pge:frm:schdlCompCall:schdleCompnnt:ssl2").value = result[4].BOATBUILDING__Service_Location__c;
+                                $("#oaWO").hide();
+                                $("#oaTWO").hide();
+                                $("#evntTitleId").html("<b>Quote</b>");
+                                document.getElementById("pge:frm:schdlCompCall:schdleCompnnt:swo1_lkid").value = result[3].Id; 
+                                document.getElementById("pge:frm:schdlCompCall:schdleCompnnt:swo1").value = result[3].Name;
+                                if(result[4].BOATBUILDING__Technician__r.Name != undefined) {
+                                    document.getElementById("pge:frm:schdlCompCall:schdleCompnnt:swt1").value = result[4].BOATBUILDING__Technician__r.Name;
+                                    document.getElementById("pge:frm:schdlCompCall:schdleCompnnt:swt1_lkid").value = result[4].BOATBUILDING__Technician__c;
+                                }
+                                
+                            } else if(result.length == 7 || result.length == 8) {  
+                                console.log(result);
+                                
+                                if(result.length == 7) {
+                                    if(result[6].BOATBUILDING__Description__c != undefined) {
+                                        document.getElementById("swta1").value = result[6].BOATBUILDING__Description__c;
+                                        document.getElementById("pge:frm:schdlCompCall:schdleCompnnt:ssl2").value = result[6].BOATBUILDING__Service_Location__c;
+                                    }
+                                    if(result[6].BOATBUILDING__Technician__c != undefined && result[6].BOATBUILDING__Technician__r.Name != undefined) {
+                                        document.getElementById("pge:frm:schdlCompCall:schdleCompnnt:swt1").value = result[6].BOATBUILDING__Technician__r.Name;
+                                        document.getElementById("pge:frm:schdlCompCall:schdleCompnnt:swt1_lkid").value = result[6].BOATBUILDING__Technician__c;
+                                    } 
+                                    
+                                } else if(result.length == 8) {
+                                    document.getElementById("pge:frm:schdlCompCall:schdleCompnnt:swo1_lkid").value = result[6].Id; 
+                                    document.getElementById("pge:frm:schdlCompCall:schdleCompnnt:swo1").value = result[6].Name;
+                                    if(result[7].BOATBUILDING__Description__c != undefined) {
+                                        document.getElementById("swta1").value = result[7].BOATBUILDING__Description__c;
+                                    }
+                                    
+                                    document.getElementById("hiddenId").value = result[6].Id;
+                                    document.getElementById("hiddenName").value = result[6].Name;
+                                    document.getElementById("hiddenBal").value = result[6].BOATBUILDING__Balance__c;
+                                    document.getElementById("hiddenRecType").value = result[6].RecordType.DeveloperName;
+                                    
+                                    
+                                    if(result[7].BOATBUILDING__Technician__r.Name != undefined) {
+                                        document.getElementById("pge:frm:schdlCompCall:schdleCompnnt:swt1").value = result[7].BOATBUILDING__Technician__r.Name;
+                                        document.getElementById("pge:frm:schdlCompCall:schdleCompnnt:swt1_lkid").value = result[7].BOATBUILDING__Technician__c;
+                                        
+                                    }
+                                }
+                            } else if(result.length == 11) {
+                                if(result[10].BOATBUILDING__Description__c != undefined) {
+                                    document.getElementById("swta1").value = result[10].BOATBUILDING__Description__c;
+                                    document.getElementById("pge:frm:schdlCompCall:schdleCompnnt:ssl2").value = result[10].BOATBUILDING__Service_Location__c;
+                                }
+                            }
+                        
+                        console.log(calEvent);
+                        document.getElementById("swsd1").value = calEvent.start.format()+".000";
+                        console.log(calEvent.start.format());
+                        document.getElementById("swed1").value = calEvent.end.format()+".000";
+                        if(document.getElementById("pge:frm:schdlCompCall:schdleCompnnt:swen1").value == "") {
+                            document.getElementById("pge:frm:schdlCompCall:schdleCompnnt:swen1").value = calEvent.title;
+                        }
+                        $("#updateEventDiv").fadeIn(); 
+                    }
+                });
+            }
+        });            
+        var tZVAL = '{!timeZone}';
+        
+        //  $('#calendar').fullCalendar('option', 'timezone', 'America/Los_Angeles' || false);
+        
+        
+    }
+    function fetchEvents() {
+        //  document.getElementsByClassName("fc-today-button")[0].click();
+        
+        var userId = $("#userLst").val();
+        var type = $("#typePickList").val();
+        if(userId != "0") {
+            $('#calendar').fullCalendar("removeEventSources");
+            $("#woList").fadeIn();
+            BOATBUILDING.ScheduleController.fetchRelatedEvents(userId, type, function(result, event) {
+                if(event.status) {
+                	var eventResults = [];
+                    var newEvents = []; 
+                    if(result != null & result.length > 0) {
+                        
+                        for(var i = 0; i < result.length; i++) {
+                            var evtId = "", evtTitle = "", evtStart = "", eventEnd = "";
+                            if(result[i].BOATBUILDING__Schedule_Date_Time__c != undefined) {
+                                evtId = result[i].Id;
+                                if(result[i].BOATBUILDING__Event_Name__c != undefined) {
+                                    evtTitle = result[i].BOATBUILDING__Event_Name__c;
+                                }
+                                var dt = new Date(result[i].BOATBUILDING__Schedule_Date_Time__c);
+                                
+                                var endDate = new Date(result[i].BOATBUILDING__End_Schedule_Date_Time__c);
+                                var sh = dt.getHours();
+                                var sm = dt.getMinutes();
+                                var ss = dt.getSeconds();
+                                var eh = endDate.getHours();
+                                var em = endDate.getMinutes();                                  
+                                var es = endDate.getSeconds();
+                                evtStart = dt.getFullYear() + "-" + pad(dt.getMonth()+1) + "-" + pad(dt.getDate())+"T"+pad(sh)+":"+pad(sm)+":"+pad(ss); 
+                                eventEnd = endDate.getFullYear() + "-" + pad(endDate.getMonth()+1) + "-" + pad(endDate.getDate())+"T"+pad(eh)+":"+pad(em)+":"+pad(es); 
+                                var newEvent = new Object(eventEnd);
+                                newEvent.id = evtId;
+                                newEvent.title = evtTitle;
+                                newEvent.start = evtStart;
+                                newEvent.end = eventEnd;
+                                newEvent.allDay = false;
+                                
+                                if(result[i].BOATBUILDING__Related_Work_Order_Job__c != undefined) {
+                                    if(result[i].BOATBUILDING__Related_Work_Order_Job__r.BOATBUILDING__Completed__c == true) {
+                                        newEvent.color = 'red';  
+                                    } 
+                                } else  if(result[i].BOATBUILDING__Work_Order__c != undefined) {
+                                    console.log(result[i]);
+                                    if(result[i].BOATBUILDING__Work_Order__r.BOATBUILDING__Status__c != undefined 
+                                       && (result[i].BOATBUILDING__Work_Order__r.BOATBUILDING__Status__c == 'Closed' || result[i].BOATBUILDING__Work_Order__r.BOATBUILDING__Status__c == 'Closed Internal')) {
+                                        
+                                        newEvent.color = 'red';  
+                                    } else if(result[i].BOATBUILDING__Technician__c != undefined 
+                                              && result[i].BOATBUILDING__Technician__r.BOATBUILDING__Schedule_Color_Code__c != undefined
+                                              &&	result[i].BOATBUILDING__Technician__r.BOATBUILDING__Schedule_Texted_Color_Code__c != undefined) {
+                                        newEvent.color = result[i].BOATBUILDING__Technician__r.BOATBUILDING__Schedule_Color_Code__c;
+                                        newEvent.textColor = result[i].BOATBUILDING__Technician__r.BOATBUILDING__Schedule_Texted_Color_Code__c;
+                                    } else {
+                                        if(result[i].BOATBUILDING__Work_Order__r.RecordType.Name == 'Work Order') {
+                                            if(result[i].BOATBUILDING__Work_Order__r.BOATBUILDING__Status__c != undefined 
+                                               && (result[i].BOATBUILDING__Work_Order__r.BOATBUILDING__Status__c == 'Waiting On Payment' 
+                                                   || result[i].BOATBUILDING__Work_Order__r.BOATBUILDING__Status__c == 'Warranty Waiting on Payment')) {
+                                                newEvent.color = 'yellow';
+                                                newEvent.textColor = '#020202'; 
+                                            } else {    
+                                                newEvent.color = 'green';
+                                            }
+                                        } else if(result[i].BOATBUILDING__Work_Order__r.RecordType.Name == 'Warranty Work Order') {
+                                            
+                                            if(result[i].BOATBUILDING__Work_Order__r.BOATBUILDING__Status__c != undefined 
+                                               && (result[i].BOATBUILDING__Work_Order__r.BOATBUILDING__Status__c == 'Waiting On Payment' 
+                                                   || result[i].BOATBUILDING__Work_Order__r.BOATBUILDING__Status__c == 'Warranty Waiting on Payment')) {
+                                                newEvent.color = 'yellow';
+                                                newEvent.textColor = '#020202';
+                                            } else {    
+                                                newEvent.color = 'blue';
+                                            } 
+                                        }
+                                    } 
+                                } else if(result[i].BOATBUILDING__Technician__c != undefined 
+                                          && result[i].BOATBUILDING__Technician__r.BOATBUILDING__Schedule_Color_Code__c != undefined
+                                          &&	result[i].BOATBUILDING__Technician__r.BOATBUILDING__Schedule_Texted_Color_Code__c != undefined) {
+                                    newEvent.color = result[i].BOATBUILDING__Technician__r.BOATBUILDING__Schedule_Color_Code__c;
+                                    newEvent.textColor = result[i].BOATBUILDING__Technician__r.BOATBUILDING__Schedule_Texted_Color_Code__c;
+                                }
+                                
+                                newEvents.push(newEvent);
+                                //  $('#calendar').fullCalendar( 'renderEvent', newEvent );
+                            }
+                        }
+                        $('#calendar').fullCalendar( 'destroy' );
+                        initCal(newEvents);
+                    } else {
+                        $('#calendar').fullCalendar("removeEventSources");
+                        initCal(newEvents); 
+                    }
+                    
+                }
+            });
+        } else {
+            $('#calendar').fullCalendar("removeEventSources");
+        }
+    }
+    
+    function fetchWorkOrder1(){
+        var userId = "";
+        $("#wotableDiv").html("");
+        $("#woList").fadeIn();
+        
+        BOATBUILDING.ScheduleController.fetchRelatedWorkOrders(userId, function(result, event) {
+            if(event.status) { 
+                var htmlTable = "";
+                if(result != null & result.length > 0) {
+                    htmlTable = "<table width='100%'' id='wotable'><thead><th>WO Name</th><th>Customer</th><th>Action</th></thead><tbody>";
+                    for(var i = 0; i < result.length; i++) {
+                        if(result[i].RecordType.DeveloperName != undefined) {
+                            if(result[i].BOATBUILDING__Balance__c != undefined) {
+                                htmlTable += "<tr> <th> <a onclick='redirectToWorkorder(this, \"" + result[i].Id + "\", \"" + result[i].Name + "\", \"" + result[i].BOATBUILDING__Balance__c + "\" " + ", \"" + result[i].RecordType.DeveloperName + "\" )'>" + result[i].Name + " </a> </th>  <td style='border-left: 1px solid rgb(221, 221, 221); padding-left: 2%;'> " + result[i].BOATBUILDING__Contact__r.Name + " </td> <td style='border-left: 1px solid rgb(221, 221, 221); padding-left: 2%;'> <a onclick='addWOToEvent(\""+result[i].Id+"\", \""+result[i].Name+"\");'> Schedule </a> </td> </tr>";
+                            } else {
+                                htmlTable += "<tr> <th> <a onclick='redirectToWorkorder(this, \"" + result[i].Id + "\", \"" + result[i].Name + "\", \"\"" + ", \"" + result[i].RecordType.DeveloperName + "\" )'>" + result[i].Name + " </a> </th>  <td style='border-left: 1px solid rgb(221, 221, 221); padding-left: 2%;'> " + result[i].BOATBUILDING__Contact__r.Name + " </td> <td style='border-left: 1px solid rgb(221, 221, 221); padding-left: 2%;'> <a onclick='addWOToEvent(\""+result[i].Id+"\", \""+result[i].Name+"\");'> Schedule </a> </td> </tr>";
+                            } 
+                        }
+                    }
+                    htmlTable +="</tbody><tfoot><tr>&nbsp;</tr><tr>&nbsp;</tr><tr>&nbsp;</tr></tfoot> </table>";
+                    $("#wotableDiv").html(htmlTable);
+                    
+                    $('#wotable').delay(1000).DataTable( {
+                        "bPaginate": false
+                    } );
+                    
+                } else {
+                    htmlTable = "<th><span style='color: red;'>There is no work order.<span></th>";
+                    $("#wotable").html(htmlTable);
+                }
+            }
+        });
+    }
+    
+    function addWOToEvent(woId, woName) {
+        document.getElementById("pge:frm:schdlCompCall:schdleCompnnt:swo_lkid").value = woId; 
+        document.getElementById("pge:frm:schdlCompCall:schdleCompnnt:swo").value = woName; 
+        $("#addEventDiv").fadeIn();
+    }
+    
+    function pad(val) {
+        var valString = val + "";
+        if(valString.length < 2) {
+            return "0" + valString;
+        }
+        else {
+            return valString;
+        } 
+    }
+    </script>
+    <style>
+        /* The Modal (background) */ 
+        .modal {
+        display: none;  /*Hidden by default */
+        z-index: 999 !important;
+        position: fixed; /* Stay in place */
+        z-index: 1; /* Sit on top */
+        left: 0;
+        top: 0;
+        width: 100%; /* Full width */ 
+        height: 100%; /* Full height */
+        overflow: auto; /* Enable scroll if needed */
+        background-color: rgb(0,0,0); /* Fallback color */
+        background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+        padding-top: 60px;
+        }
+        
+        /* Modal Content/Box */
+        .modal-content {
+        background-color: #fefefe;
+        margin: 1% auto 15% auto; /* 5% from the top, 15% from the bottom and centered */
+        border: 5px solid #888;
+        border-radius: 8px;
+        }
+        table {
+        border-collapse: collapse;
+        }
+        
+        td {
+        padding-top: .5em;
+        padding-bottom: .5em;
+        }
+        .spinnerClass {
+        position: fixed;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background: rgba(0,0,0,0.5);
+        z-index: 999;
+        }
+    </style>
+    <a id="refereshBtnSCH" class="slds-button slds-button_icon" style="position: fixed; z-index: 99; left: 96.25%; top: 14%; background-color: #29abe2;" title= "Referesh">
+        <apex:image id="refereshBtnSCH" value="{!URLFOR($Resource.RefreshIcon)}" width="40" height="40" />
+    </a>
+    <script>
+    $("#refereshBtnSCH").click(function() {
+        fetchEvents();
+    });
+    </script>
+    <div class="spinnerClass" id="spinner" style="display: none;"> 
+        <i  class="fa fa-spinner fa-spin fa-3x fa-fw margin-bottom fa-5x" style="margin-left: 45%; margin-top: 20%;" aria-hidden="true"></i>
+    </div>
+    <div class="slds-grid slds-wrap">
+        <div class="slds-col--padded slds-size--3-of-5">
+            <article class="slds-card card-wrapper">
+                <div class="slds-card__body">
+                    <div class="slds-tabs--default" style="padding: 1%;">
+                        <span style="width: 10px; height: 10px;"></span>
+                        <select class="slds-select" id="userLst">
+                            <option value="0">--None--</option>
+                        </select>
+                        <select class="slds-select" id="typePickList"> 
+                            <option value="0">--None--</option>
+                            <option value="Event">Event</option>
+                            <option value="Sales">Sales</option>
+                            <option value="Test Drive">Test Drive</option>
+                            <option value="Work Order/Jobs">Work Order/Jobs</option>
+                        </select>
+                        <table> 
+                            <tr>
+                                <!--                                 <td> -->
+                                <!--                                     <div id="woList" style=" position: absolute; border: 1px solid #ddd; height: 44.25rem; width: 23rem; top: 19.2%; padding:1%; display: none; overflow: auto;"> -->
+                                <!--                                         <div> -->
+                                <!--                                             <label style="position: relative; left: 15%; font-size: 21px;"><b>Related Work Order</b></label> -->
+                                <!--                                         </div> -->
+                                <!--                                         <hr/> -->
+                                <!--                                         <div id="wotableDiv"> -->
+                                
+                                <!--                                         </div> -->
+                                <!--                                         <hr/> -->
+                                <!--                                         <div> -->
+                                <!--                                             <label style="position: relative; left: 45%; font-size: 21px;"><b>* * *</b></label> -->
+                                <!--                                         </div>    -->
+                                <!--                                     </div> -->
+                                <!--                                 </td>  -->
+                                <td>
+                                    <div style="padding: 1%;">
+                                        <div style="width: 102%; position: relative; left: -1%;" id="calendar"></div>
+                                    </div> 
+                                </td>
+                            </tr>
+                        </table>
+                    </div> 
+                </div>
+            </article>
+        </div>
+    </div>
+    
+    
+    <!--* Popup for New Events *-->
+    
+    <div id="addEventDiv" class="modal" >
+        <div class="modal-content animate" style="padding: 1%; height: 88%; width: 60%; overflow: auto;">
+            <a style="position: absolute; left: 77.5%;" id="closeSign"><i class="fa fa-times fa-lg __web-inspector-hide-shortcut__" aria-hidden="true"></i></a>  
+            <div>
+                <label style="position: relative; left: 39%; font-size: 24px;"><b>Create Event</b></label>
+            </div>    
+            <hr/>
+            <div style="padding: 2%;"> 
+                <table border-spacing="2"  width="100%">
+                    <tr>
+                        <td ><b>Type</b></td>
+                        <td >
+                            <select style="width: 80%;" class="slds-select" id="selectType">
+                                <option value="SEvent">Simple Event</option>
+                                <option value="Standard" selected="selected">Standard</option>
+                                <option value="Pickup">Pickup</option>
+                                <option value="Drop">Drop</option>
+                            </select>
+                        </td>
+                        <td >&nbsp;</td>
+                        <td >&nbsp;</td>
+                    </tr>
+                    <tr>
+                        <td ><span id="WOlable"><b>Work Order</b></span></td>
+                        <td>
+                            <span id="WOWO"><apex:inputField value="{!objTM.Work_Order__c}" style="width: 100%;" onchange="getWOInfo();" styleClass="slds-input" id="swo"/></span>
+                            
+                        </td>
+                        <td ><span id="Jblable" style="display:none;"><b>Job</b></span><span id="Custlable" style="display: none;"><b>Customer</b><span style="color: red;">*</span></span></td>
+                        <td >
+                            <span id="JBJB" style="display:none;"><apex:inputField value="{!objTM.Related_Work_Order_Job__c}" style="width: 100%;" styleClass="slds-input" id="swoj"/>
+                            </span>
+                            <span id="WOCust" style="display: none;"><apex:inputField value="{!objTM.Contact__c}" style="width: 100%;" styleClass="slds-input" id="sCust"/>
+                            </span>
+                        </td> 
+                    </tr>
+                    <tr>
+                        <td ><b id="techId">Technician</b></td>
+                        <td ><span id="techLook"><apex:inputField value="{!objTM.Technician__c}" style="width: 80%;" styleClass="slds-input" id="swt"/></span></td>
+                        <td ><b>Event Name</b><span style="color: red;">*</span></td>
+                        <td ><input type="text" style="width: 80%;" disabled="true"  class="slds-input" id="swen"/></td>
+                    </tr>
+                    <tr>
+                        <td ><b id="strtDateLbl">Start Date</b><span style="color: red;">*</span></td>
+                        <td ><input type="datetime-local" style="width: 80%;" class="slds-input" id="swsd"/></td>
+                        <td ><span id="endDateLbl"><b>End Date</b><span style="color: red;">*</span></span></td>
+                        <td ><span id="endDate"><input type="datetime-local" style="width: 80%;" class="slds-input" id="swed"/></span></td>
+                    </tr>
+                    <tr>
+                        <td rowspan="2"  ><b>Description</b></td>
+                        <td rowspan="2" ><textarea value="" id="swta" style="overflow-y: scroll; height: 200px; resize: none;" rows="3" cols="30" class="slds-input"></textarea></td>
+                        <td style="text-align: right;"><b>Service Location</b></td>
+                        <td ><apex:inputField value="{!objTM.Service_Location__c}" style="width: 50%;" styleClass="slds-select" id="ssl"/></td>
+                    </tr>
+                </table>
+            </div>
+            <hr/>
+            <div>
+                <input type="button" style="position: relative; left: 47%;" value="Save" id="svEvnt" class="slds-button slds-button--brand" />  
+            </div>
+        </div>
+    </div>
+    <script>
+    function getWOInfo() {
+    	var WOId = document.getElementById("pge:frm:schdlCompCall:schdleCompnnt:swo_lkid").value; 
+        var WOName = document.getElementById("pge:frm:schdlCompCall:schdleCompnnt:swo").value;
+        console.log('getWOInfo');
+        console.log(WOId);
+        console.log(WOName); 
+        if(WOName != "" && WOId != "000000000000000"  ) {
+        	console.log(WOId);
+        	console.log(WOName);
+      		BOATBUILDING.ScheduleController.getWoTechInfoApex(WOId, function(result, event) {
+      			console.log(result);
+      			if(result != null && result != 'NONE') {
+      				
+      				var res = result.split(':');
+      				document.getElementById("pge:frm:schdlCompCall:schdleCompnnt:swt_lkid").value = res[0];
+        			document.getElementById("pge:frm:schdlCompCall:schdleCompnnt:swt").value = res[1];
+      			}
+      		});
+        } else {
+        	document.getElementById("pge:frm:schdlCompCall:schdleCompnnt:swt1_lkid").value = "000000000000000";
+   			document.getElementById("pge:frm:schdlCompCall:schdleCompnnt:swt1").value = '';
+        }	
+    }
+    $("#selectType").change(function() {
+        
+        if(this.value == 'Pickup' || this.value == 'Drop') {
+            $("#Custlable").show();
+            $("#WOCust").show();
+            $("#Jblable").hide();
+            $("#JBJB").hide();
+            $("#WOWO").show();
+            $("#WOlable").show();
+            if(this.value == 'Pickup') {
+                $("#strtDateLbl").html("Pickup Date");
+            } else {
+                $("#strtDateLbl").html("Drop Date");
+            }
+            $("#endDateLbl").hide();
+            $("#endDate").hide();
+        } else if(this.value == 'SEvent') {
+            $("#Jblable").hide();
+            $("#JBJB").hide();
+            $("#WOWO").hide();
+            $("#WOlable").hide();
+            $("#techId").show();
+            $("#techLook").show();
+            $("#strtDateLbl").html("Start Date");
+            $("#endDateLbl").show();
+            $("#endDate").show();
+            $("#hide").show();
+            $("#hide").show();
+        } else {
+            $("#Custlable").hide();
+            $("#WOCust").hide();
+            $("#Jblable").show();
+            $("#JBJB").show();
+            $("#strtDateLbl").html("Start Date");
+            $("#endDateLbl").show();
+            $("#endDate").show();
+            $("#WOWO").show();
+            $("#WOlable").show();
+            $("#techId").show();
+            $("#techLook").show();
+        }
+    });
+    </script>
+    
+    
+    <!--* Popup for New Events *-->
+    
+    <div id="updateEventDiv" class="modal" >
+        <div class="modal-content animate" style="padding: 1%; height: 88%; width: 60%; overflow: auto;">
+            <a style="position: absolute; left: 77.5%;" id="updateCloseSign"><i class="fa fa-times fa-lg __web-inspector-hide-shortcut__" aria-hidden="true"></i></a>  
+            <input type="hidden" value="" id="hiddenEvtId"/>
+            <input type="hidden" value="" id="hiddenId"/>
+            <input type="hidden" value="" id="hiddenName"/>
+            <input type="hidden" value="" id="hiddenBal"/>
+            <input type="hidden" value="" id="hiddenRecType"/>
+            <div>
+                <label style="position: relative; left: 39%; font-size: 24px;"><b>Edit Event</b></label>
+            </div>    
+            <hr/>
+            <div style="padding: 2%;"> 
+                <table border-spacing="2"  width="100%">
+                    <tr>
+                        <td id="evntTitleId"><b>Work Order</b></td>
+                        <td ><apex:inputField value="{!objTM.Work_Order__c}" style="width: 50%;" styleClass="slds-input" id="swo1"/></td>
+                        <td ><b>Job</b></td>
+                        <td ><apex:inputField value="{!objTM.Related_Work_Order_Job__c}" style="width: 50%;" styleClass="slds-input" id="swoj1"/></td>
+                    </tr>
+                    <tr>
+                        <td ><b>Technician</b><span style="color: red;">*</span></td>
+                        <td ><apex:inputField value="{!objTM.Technician__c}" style="width: 50%;" styleClass="slds-input" id="swt1"/></td>
+                        <td ><b>Event Name</b><span style="color: red;">*</span></td>
+                        <td ><apex:inputText value="{!objTM.Event_Name__c}" disabled="true" style="width: 80%;" styleClass="slds-input" id="swen1"/></td>
+                    </tr>
+                    <tr>
+                        <td ><b>Start Date</b><span style="color: red;">*</span></td>
+                        <td ><input type="datetime-local" style="width: 80%;" class="slds-input" id="swsd1"/></td>
+                        <td ><span id="updateEndDTLbl"><b>End Date</b><span style="color: red;">*</span></span></td>
+                        <td ><span id="updateEndDT"><input type="datetime-local" style="width: 80%;" class="slds-input" id="swed1"/></span></td>
+                    </tr>
+                    <tr>
+                        <td rowspan="3" ><b>Description</b></td>
+                        <td rowspan="3" ><textarea value="" id="swta1" style="overflow-y: scroll; height: 200px; resize: none;" rows="3" cols="30" class="slds-input"></textarea></td>
+                        <td style="text-align: right;"><b>Service Location</b></td>
+                        <td ><apex:inputField value="{!objTM.Service_Location__c}" style="width: 50%;" styleClass="slds-select" id="ssl2"/></td>
+                    </tr>
+                </table>
+            </div>
+            <hr/>
+            <div>
+                <span style="position: relative; left: 23%;">
+                    <input type="button" style="position: relative; " value="Update Event" id="upEvnt" class="slds-button slds-button--brand" />  
+                    <input type="button" style="position: relative; " onclick="redirectToWorkorder11(this);" value="Open As Work Order" id="oaWO" class="slds-button slds-button--brand" />  
+                    <input type="button" style="position: relative; " onclick="redirectToTechWO(this);" value="Open As Tech Work Order" id="oaTWO" class="slds-button slds-button--brand" />
+                    <input type="button" style="position: relative; " onclick="deleteThisEvent(this);" value="Delete" id="dTE" class="slds-button slds-button--brand" />
+                </span>
+            </div>
+        </div>
+    </div>
+    
+    
+    
+    <script>
+    window.onclick = function(event) {
+        if (event.target == document.getElementById("addEventDiv") || event.target == document.getElementById("updateEventDiv")) {
+            hideAll();
+        } 
+    } 
+    $("a#closeSign").click(function() {
+        hideAll();
+    });
+    
+    $("a#updateCloseSign").click(function() {
+        hideAll();
+    });
+    
+    
+    function hideAll() { 
+        $("#addEventDiv").fadeOut();
+        $("#updateEventDiv").fadeOut();
+        clearAllDetails();
+    }
+    
+    var existing = false;
+    var lstjob = [];
+    var selectedPartNumber1 = '';
+    var existingCaseId = '';
+    var lstjob = [];
+    var alllstjob = [];
+    var lstContact = [];
+    var lsttax = [] , lstss = [];
+    var Percentage = '' , Cap_Amount_for_percent = '';  
+    
+    function redirectToWorkorder11(obj) {
+        var rec = $("#hiddenRecType").val();
+        var woId = $("#hiddenId").val();
+        var woName = $("#hiddenName").val();
+        var woBal = $("#hiddenBal").val();
+        if(rec == "Work_Order") {
+            openCity(event, 'workReq');
+            document.getElementById("tab-default-8__item").click();
+            //$("#workOrderListViewDiv").hide();
+            //$("#workOrderFormDiv").show();
+            //fetchWorkOrder2(obj, woId, woName, woBal);
+            var existing = false;
+            var lstjob = [];
+            var selectedPartNumber1 = '';
+            var existingCaseId = '';
+            var lstjob = [];
+            var alllstjob = [];
+            var lstContact = [];
+            var lsttax = [] , lstss = [];
+            var Percentage = '' , Cap_Amount_for_percent = ''; 
+            document.getElementById('DivValue').value = 0;
+            $("#AddDivForJob").html("");
+            
+            fetchWorkOrder(obj, woId, woName, woBal, 'Status'); 
+            
+        } else if(rec == "Warranty_Work_Order") {
+            openCity(event, 'workReq');
+            document.getElementById("tab-default-9__item").click();
+            //$("#workOrderListViewDiv").hide();
+            //$("#workOrderFormDiv").show();
+            var Wwolstjob = [];
+            var Wwoalllstjob = [];
+            var WwolstContact = [];
+            var Wwolsttax = [],Wwolstss = [];
+            var WwoPercentage = '' , WwoCap_Amount_for_percent = '';
+            var WwoselectedPartNumber1 = '';
+            var WWOexisting = false;
+            document.getElementById('WwoDivValue').value = 0;
+            $("#WwoAddDivForJob").html("");
+            
+            fetchWrntyWorkOrder(obj, woId, woName, woBal, "Status");
+            
+        }
+        
+    }
+    
+    function redirectToWorkorder(obj, woId, woName, woBal, recType) {
+        if(recType == "Work_Order") {
+            openCity(event, 'workReq');
+            document.getElementById("tab-default-8__item").click();
+            //fetchWorkOrder2(obj, woId, woName, woBal);
+            fetchWorkOrder(obj, woId, woName, woBal, 'Status'); 
+        } else if(recType == "Warranty_Work_Order"){
+            openCity(event, 'workReq');
+            document.getElementById("tab-default-9__item").click();
+            fetchWrntyWorkOrder(obj, woId, woName, woBal, "Status");  
+        } 
+    }
+    
+    
+    
+    function redirectToTechWO(obj) {
+        var woId = $("#hiddenId").val();
+        var woName = $("#hiddenName").val(); 
+        var woBal = $("#hiddenBal").val();
+        openCity(event, 'workReq');
+        document.getElementById("tab-default-10__item").click();
+        document.getElementById("pge:frm:tchWrkOrderCompCall:tchWrkOrdr:existingWorkOrdersId_lkid").value = woId;    
+        document.getElementById("pge:frm:tchWrkOrderCompCall:tchWrkOrdr:existingWorkOrdersId").value  = woName;
+        fetchWorkOrderParameters(obj);
+    }
+    
+    
+    $("input#svEvnt").click(function() {
+        var typeSelect = $("#selectType").val();
+        if(typeSelect == 'Standard' || typeSelect == 'SEvent') {        
+            var erroStatus = false;
+            var EventDetails = new Object();
+            
+            var WOId = document.getElementById("pge:frm:schdlCompCall:schdleCompnnt:swo_lkid").value; 
+            var WOName = document.getElementById("pge:frm:schdlCompCall:schdleCompnnt:swo").value; 
+            if(WOName != null && WOName != "" && WOId != "000000000000000"  ) {
+                EventDetails["WOId"] = WOId;
+            } else {
+                EventDetails["WOId"] = "";
+            }
+            
+            var JobId = document.getElementById("pge:frm:schdlCompCall:schdleCompnnt:swoj_lkid").value; 
+            var JobName = document.getElementById("pge:frm:schdlCompCall:schdleCompnnt:swoj").value; 
+            if(JobName != null && JobName != "" && JobId != "000000000000000"  ) {
+                EventDetails["JobId"] = JobId;
+            } else {
+                EventDetails["JobId"] = "";
+            }
+            
+            var TechnicianId = document.getElementById("pge:frm:schdlCompCall:schdleCompnnt:swt_lkid").value;
+            var TechnicianName = document.getElementById("pge:frm:schdlCompCall:schdleCompnnt:swt").value;
+            if(TechnicianName != null && TechnicianName != "" && TechnicianId != "000000000000000"  ) {
+                EventDetails["TechnicianId"] = TechnicianId;
+            } else {
+                //erroStatus = true;
+                //alert("Please select Technician.\nThank you!!");
+                //return false;
+            }
+            
+            
+            var StartDate = document.getElementById("swsd").value;
+            if(StartDate != null && StartDate != "") {
+                EventDetails["StartDate"] = StartDate;
+            } else {
+                erroStatus = true;
+                alert("Please enter start date and time.\nThank you!!");
+                return false;
+            }
+            
+            var EndDate = document.getElementById("swed").value; 
+            if(EndDate != null && EndDate != "") {
+                EventDetails["EndDate"] = EndDate;
+            } else {
+                erroStatus = true;
+                alert("Please enter end date and time.\nThank you!!");
+                return false;
+            }
+            if(StartDate == EndDate) {
+                erroStatus = true;
+                alert("Start Date and End Date can't be equal.\nThank you!!");
+                return false; 
+            }
+            var Description= document.getElementById("swta").value;
+            if(Description != null && Description != "") {
+                EventDetails["Description"] = Description;
+            } else {
+                EventDetails["Description"] = "";
+            }
+            var ServiceLocation = document.getElementById("pge:frm:schdlCompCall:schdleCompnnt:ssl").value;
+	        if(ServiceLocation != null && ServiceLocation != "") {
+	            EventDetails["ServiceLocation"] = ServiceLocation;
+	        } else {
+	            EventDetails["ServiceLocation"] = "";
+	        }
+            //if(EventDetails["WOId"] != "" && EventDetails["JobId"] != "") {
+            //alert("You can either select Work Order Or Job.\nThank you!!");
+            //return false;
+            //} 
+            //else if(EventDetails["WOId"] == "" && EventDetails["JobId"] == "") {
+            //alert("Please select select Work Order Or Job.\nThank you!!");
+            //return false;
+            //}
+            
+            if(!erroStatus) {
+                BOATBUILDING.ScheduleController.SaveEvent(EventDetails, function(result, event) {
+                    if(event.status) {
+                        if(result != 'SUCCESS') {
+                            alert(result);
+                        } else {  
+                            //alert("Event has been saved.\nPress ok to continue.");
+                            if($("#typePickList").val() == "0") {
+                                fetchEvents();
+                            } else if($("#userLst").val() == "0") {
+                                fetchEventsWithtype();
+                            } 
+                            hideAll();
+                        }
+                    }
+                });
+            }
+        } else {
+            var erroStatus = false;
+            var EventDetails = new Object();
+            
+            var WOId = document.getElementById("pge:frm:schdlCompCall:schdleCompnnt:swo_lkid").value; 
+            var WOName = document.getElementById("pge:frm:schdlCompCall:schdleCompnnt:swo").value; 
+            if(WOName != null && WOName != "" && WOId != "000000000000000"  ) {
+                EventDetails["WOId"] = WOId;
+            } else {
+                EventDetails["WOId"] = "";
+            }
+            
+            var CustomerId = document.getElementById("pge:frm:schdlCompCall:schdleCompnnt:sCust_lkid").value;
+            var CustomerName = document.getElementById("pge:frm:schdlCompCall:schdleCompnnt:sCust").value;
+            if(CustomerName != null && CustomerName != "" && CustomerId != "000000000000000"  ) {
+                EventDetails["CustomerId"] = CustomerId;
+            } else {
+                erroStatus = true;
+                alert("Please select Customer.\nThank you!!");
+                return false;
+            }
+            
+            var TechnicianId = document.getElementById("pge:frm:schdlCompCall:schdleCompnnt:swt_lkid").value;
+            var TechnicianName = document.getElementById("pge:frm:schdlCompCall:schdleCompnnt:swt").value;
+            if(TechnicianName != null && TechnicianName != "" && TechnicianId != "000000000000000"  ) {
+                EventDetails["TechnicianId"] = TechnicianId;
+            } else {
+                //erroStatus = true;
+                //alert("Please select Technician.\nThank you!!");
+                //return false;
+            }
+            
+            var StartDate = document.getElementById("swsd").value;
+            if(StartDate != null && StartDate != "") {
+                EventDetails["StartDate"] = StartDate;
+            } else {
+                erroStatus = true;
+                alert("Please enter start date and time.\nThank you!!");
+                return false;
+            }
+            
+            var Description= document.getElementById("swta").value;
+            if(Description != null && Description != "") {
+                EventDetails["Description"] = Description;
+            } else {
+                EventDetails["Description"] = "";
+            } 
+            
+            var TypeOfEvent = document.getElementById("selectType").value;
+            if(TypeOfEvent != null && TypeOfEvent != "") {
+                EventDetails["TypeOfEvent"] = TypeOfEvent;
+            } else {
+                EventDetails["TypeOfEvent"] = "";
+            } 
+            
+            var ServiceLocation = document.getElementById("pge:frm:schdlCompCall:schdleCompnnt:ssl").value;
+	        if(ServiceLocation != null && ServiceLocation != "") {
+	            EventDetails["ServiceLocation"] = ServiceLocation;
+	        } else {
+	            EventDetails["ServiceLocation"] = "";
+	        }
+            
+            if(!erroStatus) {
+                BOATBUILDING.ScheduleController.SaveEventPD(EventDetails, function(result, event) {
+                    if(event.status) {
+                        if(result != 'SUCCESS') {
+                            alert(result);
+                        } else {  
+                            //alert("Event has been saved.\nPress ok to continue.");
+                            if($("#typePickList").val() == "0") {
+                                fetchEvents();
+                            } else if($("#userLst").val() == "0") {
+                                fetchEventsWithtype();
+                            } 
+                            hideAll();
+                        }
+                    }
+                });
+            }
+            
+        }
+    });
+    
+    
+    $("#upEvnt").click(function() {
+        
+        var erroStatus = false;
+        var EventDetailsUpdate = new Object();
+        var eventId = $("#hiddenEvtId").val();
+        
+        EventDetailsUpdate["EventId"] = eventId;
+        
+        var StartDate = document.getElementById("swsd1").value;
+        if(StartDate != null && StartDate != "") {
+            EventDetailsUpdate["StartDate"] = StartDate;
+        } else {
+            erroStatus = true;
+            alert("Please enter start date and time.\nThank you!!");
+            return false;
+        }
+        
+        var EndDate = document.getElementById("swed1").value; 
+        if(EndDate != null && EndDate != "") {
+            EventDetailsUpdate["EndDate"] = EndDate;
+        } else {
+            erroStatus = true;
+            alert("Please enter end date and time.\nThank you!!");
+            return false;
+        }
+        
+        if(StartDate == EndDate) {
+            erroStatus = true;  
+            alert("Start Date and End Date can't be equal.\nThank you!!");
+            return false; 
+        }  
+        
+        var Description= document.getElementById("swta1").value;
+        if(Description != null && Description != "") {
+            EventDetailsUpdate["Description"] = Description;
+        } else {
+            EventDetailsUpdate["Description"] = "";
+        }
+        
+        var ServiceLocation = document.getElementById("pge:frm:schdlCompCall:schdleCompnnt:ssl2").value;
+        if(ServiceLocation != null && ServiceLocation != "") {
+            EventDetailsUpdate["ServiceLocation"] = ServiceLocation;
+        } else {
+            EventDetailsUpdate["ServiceLocation"] = "";
+        }
+        
+        
+        var TechnicianId = document.getElementById("pge:frm:schdlCompCall:schdleCompnnt:swt1_lkid").value;
+        var TechnicianName = document.getElementById("pge:frm:schdlCompCall:schdleCompnnt:swt1").value;
+        if(TechnicianName != null && TechnicianName != "" && TechnicianId != "000000000000000"  ) {
+            EventDetailsUpdate["TechnicianId"] = TechnicianId;
+        } else {
+            //erroStatus = true;
+            //alert("Please select Technician.\nThank you!!");
+            //return false;
+        }
+        
+        
+        BOATBUILDING.ScheduleController.updateEvent(EventDetailsUpdate, function(result, event) {
+            if(event.status) {
+                if(result == "SUCCESS"){
+                    if($("#typePickList").val() == "0") {
+                        fetchEvents();
+                    } else if($("#userLst").val() == "0") {
+                        fetchEventsWithtype();
+                    }
+                    hideAll();
+                } else {
+                    alert(result);
+                }
+            }
+        });
+        
+    });
+    
+    function deleteThisEvent(obj) {
+        
+        var eventId = $("#hiddenEvtId").val();
+        BOATBUILDING.ScheduleController.deleteEvent(eventId, function(result, event) {
+            if(event.status) {
+                if(result == "SUCCESS"){
+                    if($("#typePickList").val() == "0") {
+                        fetchEvents();
+                    } else if($("#userLst").val() == "0") {
+                        fetchEventsWithtype();
+                    }
+                    hideAll();
+                } else {
+                    alert(result);
+                }
+            }
+        });
+    }
+    
+    function clearAllDetails() {
+        //Create Popup
+        document.getElementById("pge:frm:schdlCompCall:schdleCompnnt:swo").value = "";
+        document.getElementById("pge:frm:schdlCompCall:schdleCompnnt:swo_lkid").value = "000000000000000";
+        document.getElementById("pge:frm:schdlCompCall:schdleCompnnt:swoj").value = "";
+        document.getElementById("pge:frm:schdlCompCall:schdleCompnnt:swoj_lkid").value = "000000000000000";
+        document.getElementById("pge:frm:schdlCompCall:schdleCompnnt:swt").value = "";
+        document.getElementById("pge:frm:schdlCompCall:schdleCompnnt:swt_lkid").value = "000000000000000";
+        document.getElementById("pge:frm:schdlCompCall:schdleCompnnt:sCust").value = "";
+        document.getElementById("pge:frm:schdlCompCall:schdleCompnnt:sCust_lkid").value = "000000000000000";
+        document.getElementById("swsd").value = "";
+        document.getElementById("swed").value = "";
+        document.getElementById("swta").value = "";
+        
+        //Update Popup
+        document.getElementById("pge:frm:schdlCompCall:schdleCompnnt:swo1").value = "";
+        document.getElementById("pge:frm:schdlCompCall:schdleCompnnt:swo1_lkid").value = "000000000000000";
+        document.getElementById("pge:frm:schdlCompCall:schdleCompnnt:swoj1").value = "";
+        document.getElementById("pge:frm:schdlCompCall:schdleCompnnt:swoj1_lkid").value = "000000000000000";
+        document.getElementById("pge:frm:schdlCompCall:schdleCompnnt:swt1").value = "";
+        document.getElementById("pge:frm:schdlCompCall:schdleCompnnt:swt1_lkid").value = "000000000000000";
+        document.getElementById("pge:frm:schdlCompCall:schdleCompnnt:swen1").value = "";
+        document.getElementById("swsd1").value = "";
+        document.getElementById("swed1").value = "";
+        document.getElementById("swta1").value = "";
+    }
+    
+    </script>
+</apex:component>

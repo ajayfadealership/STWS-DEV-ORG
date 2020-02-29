@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Payoff_Account_Payable__c</fullName>
+    <deprecated>false</deprecated>
+    <externalId>false</externalId>
+    <label>Payoff Account Payable</label>
+    <required>false</required>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Wells Fargo</fullName>
+                <default>false</default>
+                <label>Wells Fargo</label>
+            </value>
+            <value>
+                <fullName>North Pointe</fullName>
+                <default>false</default>
+                <label>North Pointe</label>
+            </value>
+            <value>
+                <fullName>Consignment Pay-off Bank</fullName>
+                <default>false</default>
+                <label>Consignment Pay-off Bank</label>
+            </value>
+            <value>
+                <fullName>Consignment Customer Pay-off</fullName>
+                <default>false</default>
+                <label>Consignment Customer Pay-off</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

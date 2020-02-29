@@ -1,0 +1,21 @@
+<apex:page controller="PartSwappingForInventoryController" tabStyle="Custom_Setting_Configuration__tab">
+	<apex:form title="Part Swapping">
+		<apex:pageMessages />
+		<apex:pageBlock title="Part Swapping">
+			<apex:pageBlockSection title="Store Location List (Part Name: {!PartName}), (Total Quantity : {!totalQuantityCount})" columns="1" collapsible="true" >
+				<apex:commandButton action="{!saveSwapping}" value="Update" /><br/>
+				<apex:pageBlockTable value="{!PAList}" var="tbl">
+    					<apex:column headerValue="Part No."> 
+    						<apex:inputField value="{!tbl.Name}"/>
+    					</apex:column>
+    					<apex:column headerValue="Store Location">
+    						<apex:outputField value="{!tbl.Store_Location__c}"/>
+    					</apex:column>
+    					<apex:column headerValue="Part No.">
+    						<apex:inputField value="{!tbl.Quantity__c}"/>
+    					</apex:column>
+    				</apex:pageBlockTable> 
+			</apex:pageBlockSection>
+		</apex:pageBlock>
+	</apex:form>
+</apex:page>

@@ -1,0 +1,104 @@
+<aura:component controller="PartRequestLightningCompController" implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction" access="global" >
+    <aura:handler name="init" value="{!this}" action="{!c.getRecordTypeId}"/>
+    <aura:attribute name="showSpinner" type="boolean" default="false" access="global"/>
+    <aura:attribute name="showform" type="boolean" default="false" access="global"/>
+    <aura:attribute name="showlist" type="boolean" default="true" access="global"/>
+    <aura:attribute name="attrWO" type="Work_Order__c"/>
+    <aura:attribute name="attrRecordType" type="String" />
+    <aura:handler name="change" value="{!v.value}" action="{!c.valueChangeValidation}"/>
+    <aura:if isTrue="{!v.showSpinner}">
+        <lightning:spinner />
+    </aura:if>
+    <lightning:recordEditForm aura:id="partreqId" recordId="{!v.recordId}" onload="{!c.handleLoad}" onsubmit="{!c.handleSubmit}"  onsuccess="{!c.handleSuccess}" recordTypeId="{!v.attrRecordType}" objectApiName="BOATBUILDING__Order__c">      
+        <div class = "slds-col slds-size--1-of-1">
+            <div class = "slds-grid slds-wrap" >
+                <div class = "slds-col slds-size--1-of-1 slds-medium-size--2-of-6 slds-col--padded">
+                    <div class = "slds-form-element">
+                        <div class = "slds-form-element__control">
+                            <lightning:inputField fieldName="BOATBUILDING__Part_Number__c" />
+                        </div>
+                    </div>
+                </div>
+                <div class = "slds-col slds-size--1-of-1 slds-medium-size--2-of-6 slds-col--padded">
+                    <div class = "slds-form-element">
+                        <div class = "slds-form-element__control">
+                            <lightning:inputField fieldName="BOATBUILDING__Part_description__c" required="true" />
+                        </div>
+                    </div>
+                </div>
+                <div class = "slds-col slds-size--1-of-1 slds-medium-size--2-of-6 slds-col--padded">
+                    <div class = "slds-form-element">
+                        <div class = "slds-form-element__control">
+                            <lightning:inputField fieldName="BOATBUILDING__Vendor_Name__c" />
+                        </div>
+                    </div>
+                </div>
+                <div class = "slds-col slds-size--1-of-1 slds-medium-size--2-of-6 slds-col--padded">
+                    <div class = "slds-form-element">
+                        <div class = "slds-form-element__control">
+                            <lightning:inputField fieldName="BOATBUILDING__Customer_Name__c" />
+                        </div>
+                    </div>
+                </div>
+                <div class = "slds-col slds-size--1-of-1 slds-medium-size--2-of-6 slds-col--padded">
+                    <div class = "slds-form-element">
+                        <div class = "slds-form-element__control">
+                            <lightning:inputField fieldName="BOATBUILDING__WO_for__c" />
+                        </div>
+                    </div>
+                </div>
+                <div class = "slds-col slds-size--1-of-1 slds-medium-size--2-of-6 slds-col--padded">
+                    <div class = "slds-form-element">
+                        <div class = "slds-form-element__control">
+                            <lightning:inputField fieldName="BOATBUILDING__Invoice_for__c" />
+                        </div>
+                    </div>
+                </div>
+                <div class = "slds-col slds-size--1-of-1 slds-medium-size--2-of-6 slds-col--padded">
+                    <div class = "slds-form-element">
+                        <div class = "slds-form-element__control">
+                            <lightning:inputField fieldName="BOATBUILDING__Assigned_to__c" />
+                        </div>
+                    </div>
+                </div>
+                <div class = "slds-col slds-size--1-of-1 slds-medium-size--2-of-6 slds-col--padded">
+                    <div class = "slds-form-element">
+                        <div class = "slds-form-element__control">
+                            <lightning:inputField fieldName="BOATBUILDING__Part_Request_Status__c" />
+                        </div>
+                    </div>
+                </div>
+                <div class = "slds-col slds-size--1-of-1 slds-medium-size--2-of-6 slds-col--padded">
+                    <div class = "slds-form-element">
+                        <div class = "slds-form-element__control">
+                            <lightning:inputField fieldName="BOATBUILDING__Store_Location__c"  required="true" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="slds-grid slds-grid--vertical-align-center slds-grid--align-center">
+            <div class = "slds-col--padded">
+                <div class = "slds-form-element">
+                    <div class = "slds-form-element__control">
+                        <lightning:button  type="submit" iconName="utility:save" label="Create Part Request" class = "slds-m-top_medium" />
+                    </div>
+                </div>
+            </div>
+            <div class = "slds-col--padded">
+                <div class = "slds-form-element">
+                    <div class = "slds-form-element__control">
+                        <lightning:button onclick="{!c.backToList}" label="Back To List" iconName="utility:back" class = "slds-m-top_medium"/>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </lightning:recordEditForm> 
+    <lightning:accordion aura:id="accordion" activeSectionName="A"  allowMultipleSectionsOpen="true" onsectiontoggle="{! c.handleSectionToggle }">   
+        <lightning:accordionSection name="woPhotos" label="Upload Photos">
+                    <lightning:fileUpload multiple="true" recordId="{!v.recordId}" accept=".pdf, .png, .jpeg, .jpg" label="Upload photos for this work order" onuploadfinished="{!c.uplaodFinished}" />
+                    <lightning:button variant="base" label="Refresh Preview" class="saveJobs" title="Click to see file preview" onclick="{! c.uplaodFinished }"  iconName="action:preview" iconPosition="right"/>
+                    <c:WorkOrderPhotoInspectionPreview recordId="{!v.recordId}" aura:id="photoCmp"/> 
+        </lightning:accordionSection>   
+    </lightning:accordion> 
+</aura:component>

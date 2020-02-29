@@ -1,0 +1,39 @@
+<aura:component controller="RegistrationFeesController" implements="force:appHostable,lightning:isUrlAddressable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction" access="global" >
+    <aura:attribute name="customSettingSobj" type="System_Configure__c" access="global"/>
+    <aura:attribute name="ObjQuoteC"  type="Quote__c" access="global" default="{'sobjectType ': 'BOATBUILDING__Quote__c'}"/>
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    <aura:attribute name="StateSelect" type="Key_Value[]"/>
+    <div class="slds-grid slds-gutters" style="border-radius: 0.5em; padding: 2%; border: 1px solid #cccccc;">
+        <div class="slds-col">
+            <ui:inputCurrency aura:id="docFee" change="{!c.valChange}" label="Doc Fee" class="field" value="{!v.customSettingSobj.BOATBUILDING__Doc_Fee__c }"/>
+        </div>
+        <div class="slds-col">
+            <ui:inputCurrency aura:id="regFee" change="{!c.valChange}" label="Boat Registration Fee" class="field" value="{!v.customSettingSobj.BOATBUILDING__Registration_Fee__c}"/>
+            
+        </div>
+        <div class="slds-col">
+            <ui:inputCurrency aura:id="trlRegFee" change="{!c.valChange}" label="Trailer Registration Fee" class="field" value="{!v.customSettingSobj.BOATBUILDING__Trailer_Registration_Fee__c}"/>
+        </div>
+    </div>
+    <br/>
+    <div class="slds-grid slds-gutters" style="border-radius: 0.5em; padding: 2%; border: 1px solid #cccccc;">
+        <div class="slds-col">
+            State<br/>
+            <select class="slds-select" id="regStateST" onchange="{!c.updateState}">
+                <option value="">--None--</option>
+                <aura:iteration items="{!v.StateSelect}" var="item">
+                    <option value="{!item.key}">{!item.value}</option>
+                </aura:iteration>
+            </select>
+        </div>
+        <div class="slds-col" id="manualTaxOption" style="display: none;">
+            <ui:inputCurrency change="{!c.valChange}" value="{!v.ObjQuoteC.BOATBUILDING__Manual_Sales_Tax_Entry__c}" class="slds-input" label="Manual Sales Tax" />
+        </div>
+        <div class="slds-col">
+            &nbsp;
+        </div>
+        <div class="slds-col">
+            &nbsp;
+        </div>
+    </div>
+</aura:component>

@@ -1,0 +1,36 @@
+.THIS .tooltiptext {
+  visibility: hidden;
+  width: auto;
+    min-width:100px !important;
+    
+  background-color: #fffdc5;
+  color: Black;
+    padding:5px 4px ;
+  text-align: center;
+  border-radius: 2px;
+   overflow:visible;
+  position: absolute;
+  z-index: 1;
+}
+.THIS .tooltip:hover .tooltiptext {
+  visibility: visible;
+  overflow:visible;
+}
+.THIS .tooltip:hover .tooltip{
+  overflow:visible; 
+    width: auto;
+     position: absolute;
+}
+.THIS .mediumWidth{
+    min-width: 100px;
+    max-width:100px;
+    text-align:left;
+  
+}
+.THIS .minWidth{
+    min-width: 80px;
+    max-width:80px;
+    text-align:left;
+}
+.THIS .fontStyle{
+}

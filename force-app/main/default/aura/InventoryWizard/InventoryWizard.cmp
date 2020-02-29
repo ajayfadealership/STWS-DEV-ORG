@@ -1,0 +1,164 @@
+<aura:component controller="InventoryWizardController" implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction,lightning:isUrlAddressable" access="global" >
+    <!--First Tab-->
+    <aura:attribute name="strProId" type="String"/> 
+    <!--Second Tab-->
+    <aura:attribute name="ProductPriceIdList" type="String[]"/>
+    <aura:attribute name="DealerOptionIdList" type="String[]"/> 
+    
+    <aura:attribute name="lstDealerOptionWraper" type="DealerOptionWraper[]"/>
+    
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    <aura:attribute name="objInv" type="Inventory__c" default="{'sobjectType': 'Inventory__c'}"/>
+    <aura:handler  event="c:InventoryChildToParent" action="{!c.HandelInvEvent}"/> 
+    <aura:attribute name="NoSalesmanWithoutCost" type="boolean" default="false"/>
+    <div id="invSpinnerWiz" style="display:none; position: fixed; z-index: 999; left: 0; right: 0; top: 0; bottom: 0; background: #0000004f;">
+        <img src="{!$Resource.Process}" style="position: fixed; left: 48%; top: 48%;" width="50" height="50"/>
+    </div>
+    
+    
+    <article class="slds-card">
+        <div class="slds-path"> 
+            <div class="slds-grid slds-path__track">
+                <div class="slds-grid slds-path__scroller-container">
+                    <div class="slds-path__scroller" role="application">
+                        <div class="slds-path__scroller_inner">
+                            <ul class="slds-path__nav" role="listbox" aria-orientation="horizontal">
+                                <li class="slds-path__item slds-is-current slds-is-active" id="in1LI" role="presentation">
+                                    <a aria-selected="false" class="slds-path__link" href="javascript:void(0);" id="path-6" role="option" tabindex="-1">
+                                        <span class="slds-path__stage">
+                                            
+                                            <lightning:icon iconName="standard:product_item" size="small" class="checkClass"/>   
+                                            
+                                            <span class="slds-assistive-text">Product Type</span>
+                                        </span> 
+                                        <span class="slds-path__title">New Inventory</span>
+                                    </a>
+                                </li>
+                                <li class="slds-path__item slds-is-incomplete" id="in2LI" role="presentation">
+                                    <a aria-selected="false" class="slds-path__link" href="javascript:void(0);" id="path-7" role="option" tabindex="-1">
+                                        <span class="slds-path__stage">
+                                            <!--  <svg class="slds-icon slds-icon_x-small" aria-hidden="true">
+                                                <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/assets/icons/utility-sprite/svg/symbols.svg#check" />
+                                            </svg> -->
+                                            <lightning:icon iconName="standard:product_required" size="small" class="checkClass"/>
+                                            <span class="slds-assistive-text">Product Options</span>
+                                        </span>
+                                        <span class="slds-path__title">Product Options</span>
+                                    </a>
+                                </li>
+                                <li class="slds-path__item slds-is-incomplete" id="in3LI" role="presentation">
+                                    <a aria-selected="false" class="slds-path__link" href="javascript:void(0);" id="path-8" role="option" tabindex="-1">
+                                        <span class="slds-path__stage">
+                                            <!-- <svg class="slds-icon slds-icon_x-small" aria-hidden="true">
+                                                <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/assets/icons/utility-sprite/svg/symbols.svg#check" />
+                                            </svg> -->
+                                            <lightning:icon iconName="action:description" size="small" class="checkClass"/> 
+                                            <span class="slds-assistive-text">Product Details</span>
+                                        </span>
+                                        <span class="slds-path__title">Product Details</span>
+                                    </a>
+                                </li>
+                                <li class="slds-path__item slds-is-incomplete" id="in4LI" role="presentation">
+                                    <a aria-selected="true" class="slds-path__link" href="javascript:void(0);" id="path-9" role="option" tabindex="0">
+                                        <span class="slds-path__stage">
+                                            <lightning:icon iconName="action:update" size="small" class="checkClass"/> 
+                                            <span class="slds-assistive-text">Product Pricing</span>
+                                        </span> 
+                                        <span class="slds-path__title">Product Pricing</span>
+                                    </a>
+                                </li>
+                                <li class="slds-path__item slds-is-incomplete" id="in5LI" role="presentation">
+                                    <a aria-selected="false" class="slds-path__link" href="javascript:void(0);" id="path-10" role="option" tabindex="-1">
+                                        <span class="slds-path__stage">
+                                            <lightning:icon iconName="utility:date_input" size="small" class="checkClass"/> 
+                                            <span class="slds-assistive-text">Dates</span>
+                                        </span>
+                                        <span class="slds-path__title">Dates</span>
+                                    </a>
+                                </li>
+                            </ul>
+                            <div id="intab-default-1" class="slds-tabs_default__content slds-show" role="tabpanel" aria-labelledby="tab-default-1__item">
+                                <c:InvProductType ProductIdTOSearch="{!v.strProId}"/>
+                                
+                            </div>
+                            <div id="intab-default-2" class="slds-tabs_default__content slds-hide" role="tabpanel" aria-labelledby="tab-default-2__item">
+                                <c:InvProductOption lstDealerOptionWraperC="{!v.lstDealerOptionWraper}" NoSalesmanWithoutCostC="{!v.NoSalesmanWithoutCost}" ProductPriceIdListC="{!v.ProductPriceIdList}" DealerOptionIdListC="{!v.DealerOptionIdList}"/>
+                            </div> 
+                            <div id="intab-default-3" class="slds-tabs_default__content slds-hide" role="tabpanel" aria-labelledby="tab-default-3__item">
+                                <c:InvProductDetails/>
+                            </div>
+                            <div id="intab-default-4" class="slds-tabs_default__content slds-hide" role="tabpanel" aria-labelledby="tab-default-4__item">
+                                <c:InvProductPricing/>
+                            </div>
+                            <div id="intab-default-5" style="padding: 2%;" class="slds-tabs_default__content slds-hide" role="tabpanel" aria-labelledby="tab-default-5__item">
+                                <div class="slds-grid slds-wrap slds-col--padded">
+                                    <h1><b>Dates</b></h1>
+                                    <div class="slds-col slds-size--1-of-1">
+                                        <div class="slds-grid slds-wrap" >
+                                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-3 slds-col--padded">
+                                                <div class="slds-form-element">
+                                                    <label class="slds-form-element__label">Boat EST Arrival Date:</label>
+                                                    <div class="slds-form-element__control">
+                                                        <force:inputField value="{!v.objInv.BOATBUILDING__Boat_EST_Arrival_Date__c}" class="slds-input"/>
+                                                    </div> 
+                                                </div>
+                                            </div>
+                                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-3 slds-col--padded">
+                                                <div class="slds-form-element">
+                                                    <label class="slds-form-element__label">Date Arrived:</label>
+                                                    <div class="slds-form-element__control">
+                                                        <force:inputField value="{!v.objInv.BOATBUILDING__Date_Arrived__c}" class="slds-input"/>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-3 slds-col--padded">
+                                                <div class="slds-form-element">
+                                                    <label class="slds-form-element__label">Curtailment Start Date:</label>
+                                                    <div class="slds-form-element__control">
+                                                        <force:inputField value="{!v.objInv.BOATBUILDING__Curtailment_Start_Date__c }" class="slds-input"/>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-3 slds-col--padded">
+                                                <div class="slds-form-element">
+                                                    <label class="slds-form-element__label">Interest Start Date:</label>
+                                                    <div class="slds-form-element__control">
+                                                        <force:inputField value="{!v.objInv.BOATBUILDING__Interest_Start_Date__c}" class="slds-input"/>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-3 slds-col--padded">
+                                                <div class="slds-form-element">
+                                                    <label class="slds-form-element__label">Floor Plan Bank:</label>
+                                                    <div class="slds-form-element__control">
+                                                        <force:inputField value="{!v.objInv.BOATBUILDING__Floor_Plan_Bank__c}" class="slds-input"/>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <hr/>
+                                <table>
+                                    <tr> 
+                                        <td>
+                                            <div data-value="5" style="height:0px;max-width:auto;" onclick="{!c.previousClick}">
+                                                <lightning:button variant="brand" label="Previous" iconName="utility:chevronleft" iconPosition="left" />
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div data-value="5" style="height:0px;max-width:auto;" onclick="{!c.handleClick}">
+                                                <lightning:button variant="brand" label="Finish" iconName="utility:chevronright" iconPosition="right" class="rightElement" value="2" />
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+    </article>
+</aura:component>

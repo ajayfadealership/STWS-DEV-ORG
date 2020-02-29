@@ -1,0 +1,2472 @@
+<apex:page id="pge" sidebar="false" controller="ServicePageController" showHeader="false"  lightningStylesheets="True" standardStylesheets="false" docType="html-5.0" action="{!checkAccess}">
+    
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.12/css/jquery.dataTables.min.css"/>
+    
+    <script type="text/javascript" src="/js/functions.js"></script>
+    <script src="/soap/ajax/11.1/connection.js"></script>
+    <script src="/soap/ajax/10.0/apex.js"></script>
+    
+    
+    <apex:includeScript value="{!URLFOR($Resource.Signature, 'jquery.min.js')}"/>
+    <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.0/jquery.min.js"/>-->
+    <script src="https://cdn.datatables.net/1.10.12/js/jquery.dataTables.min.js"/>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <apex:stylesheet value="{!URLFOR($Resource.BoatBuilderSR, 'assets/styles/salesforce-lightning-design-system.min.css')}" />
+     
+    <apex:includeScript value="{!URLFOR($Resource.Signature, 'jquery.jqscribble.js')}"/> 
+    <apex:includeScript value="{!URLFOR($Resource.Signature, 'jqscribble.extrabrushes.js')}"/>
+    <script>
+    Visualforce.remoting.timeout = 120000;
+    </script>
+    <html xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" >
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" />
+    
+    <script src="https://cdn.rawgit.com/harvesthq/chosen/gh-pages/chosen.jquery.min.js"></script> 
+    <link href="https://cdn.rawgit.com/harvesthq/chosen/gh-pages/chosen.min.css" rel="stylesheet"/>
+    
+        <title>Service Department</title>
+        <style> 
+            .popup{
+                position: fixed;
+                top: 0;
+                bottom: 0;
+                left: 0;
+                right: 0;
+                background: rgba(0,0,0,0.5);
+                display: none;
+                z-index: 999; 
+            }
+            .popup.active {
+                background-color: rgba(0,0,0,0.5);
+                display:block;
+            }
+            .popup img {
+                margin: 15% auto;
+            }
+
+            body {font-family: "Lato", sans-serif;}
+            
+            .slds-button--brand:hover {
+                background-color: rgba(21, 137, 238, 0.75);
+            }
+            
+            .slds-button--brand {
+                background-color : #29abe2;
+                border : 1px solid #29abe2;
+            }
+            
+            /*  time management style sheet */
+            .disablebtn{
+            disabled: disabled;
+            background-color: #e0e5ee;
+            border-color: #a8b7c7;
+            cursor: not-allowed;
+            user-select: none;
+            color: #16325c
+            
+            }
+            /*  time management style sheet */
+            .disablebtn:hover{
+            background-color: #e0e5ee;
+            border-color: #a8b7c7;
+            cursor: not-allowed;
+            user-select: none;
+            color: #16325c
+            
+            }
+            
+            
+            
+            .slds-tabs--default__item.slds-active .slds-tabs--default__link:focus {
+                
+                color: #fff;
+            }
+            .slds-tabs--default__link:focus, .slds-tabs--default__link:hover {
+                text-decoration: none;
+                color: #fff;
+                background-color: rgba(21, 137, 238, 0.75);
+            }
+            .slds-tabs--default__item.slds-active .slds-tabs--default__link {
+                border-color: #fff;
+                color: #fff;
+                background-color: rgba(21, 137, 238, 0.75);
+            }
+
+            .slds-tabs--default__nav {
+                background-color: #29abe2;
+            }
+
+            .slds-tabs--default__link {
+                color : #fff;
+            }
+
+            .slds-icon-standard-recent {
+                background-color: #29abe2;
+            }
+
+            ul.tab {
+                list-style-type: none;
+                margin: 0px;
+                padding: 0px;
+                overflow: hidden;
+                max-width: 1280px;
+                margin: 0 auto;
+            }
+            
+            /* Float the list items side by side */
+            ul.tab li {
+                float: left;
+                width: 25%;
+            }
+            
+            /* Style the links inside the list items */
+            ul.tab li a {
+                display: inline-block;
+                color: black;
+                text-align: center; 
+                padding: 8px 16px;
+                text-decoration: none;
+                transition: 0.1s;
+                font-size: 17px;
+            }
+            
+            /* Change background color of links on hover */
+            ul.tab li a:hover {
+                background-color: rgba(21, 137, 238, 0.75);;
+                color: #fff;
+            }
+            
+            /* Create an active/current tablink class */
+            ul.tab li a:focus, .active {
+                background-color: #29abe2;
+                color: #fff !important;
+                //box-shadow: inset 0 0 7px 0px rgba(0, 0, 0, 0.31);
+                box-shadow: none !important;
+                
+            }
+            ul.tab li a:focus .slds-icon-standard-recent, .active .slds-icon-standard-recent {
+                background: transparent !important;
+            }
+            .tab div {
+                background: none !important;
+            }
+            
+            
+            /* Style the tab content */
+            .tabcontent {
+            display: none;
+            padding: 6px 12px;
+            border: 1px solid #ccc;
+            border-top: none;
+            }
+            /*  time management style sheet */
+            .slds-form--inline.main_page{
+            text-align: center;
+            padding-top: 10%;
+            color: #fff;
+            overflow: 
+            }
+            .slds-box{
+            margin: 5% auto;
+            max-width: 600px;
+            padding: 0;
+            }
+            .slds-form-element__control .slds-button{
+            box-shadow: 0 0 10px 0px #ddd;
+            color: #fff;
+            }
+            .login_box {
+            margin: 5% auto;
+            max-width: 600px;
+            box-shadow: 0 0 10px 0px #ddd;
+            border: 1px solid #ccc;
+            }
+            
+            .login_box .slds-card__body {
+            padding: 1.5rem 1.5rem 0;
+            }
+            
+            .login_box .slds-card__header {
+            background: #29abe2;
+            padding-bottom: .5rem;
+            }
+            
+            .login_box .slds-text-heading--small {
+            color : #fff;
+            font-weight: 600;
+            }
+            .tab_mid{
+            text-align: center;
+            }
+            .timer{
+            float:right;
+            }
+            
+            .margin-top {
+            margin: 1rem 0 0;
+            }
+            
+            .slds-input,
+            .slds-select {
+            max-width: 25rem;
+            }
+            
+            .slds-select {
+            padding: 0 0.5rem;
+            }
+            
+            .slds-card__body {
+            overflow: auto;
+            }
+            
+            table.slds-table--custom tr th:last-child,
+            table.slds-table--custom tr td:last-child,
+            table.payment-cal tr th:last-child,
+            table.payment-cal tr td:last-child {
+            width: 200px;
+            text-align: right;
+            }
+            
+            table.payment-cal .slds-input {
+            margin-bottom: 0;
+            }
+            
+            .slds-card .slds-card__header h2 {
+            font-size: 1.25em;
+            font-weight: 600;
+            color: #6f809c;
+            }
+            
+            .slds-card__body .slds-table--bordered {
+            border-bottom: 0;
+            }
+            
+            .slds-table th {
+            font-weight: 600;
+            }
+            /* style for lookup field */
+            
+            .lookupInput {
+            display: flex
+            }
+            
+            .lookupInput .slds-input {
+            margin: 0
+            }
+            
+            .lookupInput a.slds-input {
+            width: 28px;
+            margin: 0;
+            display: inline-block;
+            /*background: url('/resource/BOATBUILDING__BoatBuilderSR/assets/icons/utility/search_60.png');*/
+            background-size: contain;
+            background-repeat: no-repeat;
+            border: none;
+            margin-left: 5px;
+            }
+            
+            a.slds-input:active,
+            a.slds-input:focus {
+            box-shadow: none
+            }
+            
+            .Modal_border {
+            border-bottom: 1px solid #aaa;
+            padding-top: 10px;
+            padding-bottom: 10px;
+            }
+            
+            
+            
+            .slds-table--cell-buffer tr>td:first-child,
+            .slds-table--cell-buffer tr>th:first-child {
+            padding-left: 1.5rem;
+            }
+            
+            .Sidebar {
+            position: fixed;
+            margin-right: 15px;
+            overflow: auto;
+            height: 95vh;
+            }
+            
+            .card-wrapper {
+            max-width: 1280px;
+            margin: 1rem auto;
+            }
+            
+            .slds-input,
+            .slds-select {
+            overflow: hidden
+            }
+            
+            .slds-grid>span {
+            width: 100%
+            }
+            
+            .slds-button--brand {
+            padding-left: 0.5rem;
+            padding-right: 0.5rem;
+            }
+            
+            label.slds-input {
+            padding: 0.5rem 1rem 0.5rem .75rem;
+            line-height: 1rem;
+            }
+            
+            #tab-default-6 .dataTables_filter,#tab-default-1 .dataTables_filter, #tab-default-2 .dataTables_filter, #tab-default-7 .dataTables_filter,
+            #tab-default-6 .dataTables_length,#tab-default-1 .dataTables_length, #tab-default-2 .dataTables_length, #tab-default-7 .dataTables_length{
+            font-size: 0.85rem;
+            margin: 10px 0px;
+            }
+            
+            #tab-default-6 .dataTables_filter input,#tab-default-1 .dataTables_filter input, #tab-default-2 .dataTables_filter input, #tab-default-7 .dataTables_filter input {
+            height: 34px;
+            border-radius: 5px;
+            border: 1px solid rgb(169, 169, 169);
+            padding: 10px;
+            }
+            
+            #tab-default-6 .dataTables_length select,#tab-default-2 .dataTables_length select, #tab-default-1 .dataTables_length select, #tab-default-7 .dataTables_length select {
+            height: 34px;
+            border-radius: 5px;
+            border: 1px solid rgb(169, 169, 169);
+            }
+            .slds-tabs--default__content{
+            background :#fff !important;
+            }
+            #prtTblId{
+            border: 1px solid #d8dde6;
+            }
+            #purchaseVendorId1{
+            margin: 20px 0px;
+            }
+            table#prtTblId input#t1{
+            width: 60px;
+            }
+            #tab-default-3 tfoot{
+            border-bottom: 1px solid #d8dde6;
+            }
+            #tab-default-6 table{
+                border: 1px solid #d8dde6;
+            }
+            ul.tab .slds-media__body{
+                flex: inherit;
+            }
+            ul.tab .slds-page-header__title {
+                font-size: 1rem !important;
+                text-transform: uppercase;
+            }
+            ul.tab li a {
+                width: 100%;
+                min-width: 170px;
+            }
+            ul.tab li a p{
+                margin-top: 4px;
+            }
+            .slds-table--bordered{
+                border-bottom: 1px solid #d8dde6 !important;
+            }
+            .slds-checkbox{display: inline-block;}
+            .slds-form-element__label {
+                display: inline-block;
+                color: #54698d;
+                font-size: .75rem;
+                line-height: 1.5;
+                margin-right: .75rem;
+                margin-bottom: .25rem;
+                padding-top: 1rem;
+            }
+            ul.tab li{
+                line-height: 0rem;
+            }
+            .border_row{
+                border-bottom: 1px solid #ddd;
+            }
+            .TECH_WORK_ORDER.slds-card__header {
+                background: #29abe2;
+                padding-bottom: .5rem;
+            }
+            .TECH_WORK_ORDER .slds-text-heading--small {
+                color: #fff;
+                font-weight: 600;
+            }
+            /*changes by design team*/
+            table.dataTable thead th, table.dataTable thead td {
+                border-bottom: none;
+            }
+            
+            .dataTables_wrapper .dataTables_paginate .paginate_button.current, 
+            .dataTables_wrapper .dataTables_paginate .paginate_button.current:hover,
+            .dataTables_wrapper .dataTables_paginate .paginate_button:hover {
+                color: #fff !important;
+                border: 1px solid #29abe2;
+                background: #29abe2;
+            }
+            
+            .dataTables_wrapper .dataTables_paginate .paginate_button.disabled, 
+            .dataTables_wrapper .dataTables_paginate .paginate_button.disabled:hover, 
+            .dataTables_wrapper .dataTables_paginate .paginate_button.disabled:active {
+                cursor: no-drop;
+            }
+            
+            #signDiv {
+                border: 1px dashed #aaa;
+                border-radius: 3px;
+                height: 130px;
+                width: 300px;
+            }
+            
+            /* The Modal (background) */
+            .modal {
+                display: none; /* Hidden by default */
+                position: fixed; /* Stay in place */
+                z-index: 1; /* Sit on top */
+                left: 0;
+                top: 0;
+                width: 100%; /* Full width */
+                height: 100%; /* Full height */
+                overflow: auto; /* Enable scroll if needed */
+                background-color: rgb(0,0,0); /* Fallback color */
+                background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+                padding-top: 60px;
+            }
+            
+            /* Modal Content/Box */
+            .modal-content {
+                background-color: #fefefe;
+                margin: 1% auto 15% auto; /* 5% from the top, 15% from the bottom and centered */
+                border: 10px solid #888;
+            }
+        </style>
+        <script>
+        var StoreLocationRequired = false;
+        /* Script for Tabs */
+        $(function() {
+            $('.slds-tabs--default__item').on('click', function() {
+
+                $(this).addClass('slds-active');
+                $(this).find('a').attr('aria-selected', true);
+                var $contentToShow = $('#' + $(this).find('a').attr('aria-controls'));
+                $contentToShow.removeClass('slds-hide');
+                $contentToShow.addClass('slds-show');
+                
+                $(this).siblings().removeClass('slds-active');
+                $(this).siblings().find('a').attr('aria-selected', false);
+                $contentToShow.siblings('.slds-tabs--default__content').removeClass('slds-show');
+                $contentToShow.siblings('.slds-tabs--default__content').addClass('slds-hide');
+            });
+            
+            
+            $(".data_hide").click(function() {
+                $(".show").toggle();
+            });
+        });
+        $(document).ready(function() {
+            BOATBUILDING.ServicePageController.storeLocationStatus(function(result, event) {
+                console.log("Store Location: "+result);
+                StoreLocationRequired = result; 
+            });
+            var i = 0;
+            var autoReferesh = setInterval(function () {
+                i++;
+                console.log(i);
+                //Vendor
+                refreshVendor();
+                //Part
+                refreshPart();
+                //Purchase Order
+                refreshPO();
+                //Order
+                refreshO(); 
+                //Inventory
+                getInvList();   
+                //Invoice
+                refreshInvoice();
+                //Work Order
+                getWOWholeListTable();
+                //Warranty Work Order
+                refreshWWO();
+                //Schedule
+                //fetchEventsWithtype();
+             }, 60*1000);
+        });      
+        function loadDataTableVendor() {
+            console.log('Vendor data Table Load');
+            if ( $.fn.dataTable.isDataTable( '#Table2' ) ) {
+                table = $('#Table2').delay(1000).DataTable({
+                  "pageLength": 25,
+                  "lengthMenu": [[25, 50, -1], [25, 50, "All"]],
+                  destroy: true
+                } );
+            }
+            else {
+                table = $('#Table2').delay(1000).DataTable( {
+                    paging: false,
+                    destroy: true
+                } );
+            }
+                    
+            /*$('#Table2').DataTable( {
+              "pageLength": 25,
+              "lengthMenu": [[25, 50, -1], [25, 50, "All"]]
+            } );*/
+        }
+        function loadDataTablePart() {
+            if ( $.fn.dataTable.isDataTable( '#table3' ) ) {
+                table = $('#table3').delay(1000).DataTable({
+                  "pageLength": 25,
+                  "lengthMenu": [[25, 50, -1], [25, 50, "All"]],
+                  destroy: true
+                } );
+            }
+            else {
+                table = $('#table3').delay(1000).DataTable( {
+                    paging: false,
+                    destroy: true
+                } );
+            }
+            /*$('#table3').DataTable( {
+              "pageLength": 25,
+              "lengthMenu": [[25, 50, -1], [25, 50, "All"]]
+            } );*/
+        }
+        function loadDataTablePO() {
+            if ( $.fn.dataTable.isDataTable( '#POTable' ) ) {
+                table = $('#POTable').delay(1000).DataTable({
+                  "pageLength": 25,
+                  "lengthMenu": [[25, 50, -1], [25, 50, "All"]],
+                  destroy: true
+                } );
+            }
+            else {
+                table = $('#POTable').delay(1000).DataTable( {
+                    paging: false,
+                    destroy: true
+                } );
+            }
+        
+            /*$('#POTable').DataTable( {
+              "pageLength": 25,
+              "lengthMenu": [[25, 50, -1], [25, 50, "All"]]
+            } );*/
+        }    
+        function loadDataTableO() {
+        
+            if ( $.fn.dataTable.isDataTable( '#ordrTableFinal' ) ) {
+                table = $('#ordrTableFinal').delay(1000).DataTable({
+                  "pageLength": 25,
+                  "lengthMenu": [[25, 50, -1], [25, 50, "All"]],
+                  destroy: true
+                } );
+            }
+            else {
+                table = $('#ordrTableFinal').delay(1000).DataTable( {
+                    paging: false,
+                    destroy: true
+                } );
+            }
+        
+            /*$('#ordrTableFinal').DataTable( {
+              "pageLength": 25,
+              "lengthMenu": [[25, 50, -1], [25, 50, "All"]]
+            } );*/
+        }
+        function loadDataTableInventory() {
+            
+            if ( $.fn.dataTable.isDataTable( '#InvTable' ) ) {
+                table = $('#InvTable').delay(1000).DataTable({
+                  "pageLength": 25,
+                  "lengthMenu": [[25, 50, -1], [25, 50, "All"]],
+                  destroy: true
+                } );
+            }
+            else {
+                table = $('#InvTable').delay(1000).DataTable( {
+                    paging: false,
+                    destroy: true
+                } );
+            }
+            /*
+            $('#ordrTableFinal').DataTable( {
+              "pageLength": 25,
+              "lengthMenu": [[25, 50, -1], [25, 50, "All"]]
+            } );
+            */
+        }
+        function loadDataTableInvoice() {
+        
+            if ( $.fn.dataTable.isDataTable( '#InvTable2' ) ) {
+                table = $('#InvTable2').delay(1000).DataTable({
+                  "pageLength": 25,
+                  "lengthMenu": [[25, 50, -1], [25, 50, "All"]],
+                  destroy: true
+                } );
+            }
+            else {
+                table = $('#InvTable2').delay(1000).DataTable( {
+                    paging: false,
+                    destroy: true
+                } );
+            }
+        /*
+            $('#InvTable2').DataTable( {
+              "pageLength": 25,
+              "lengthMenu": [[25, 50, -1], [25, 50, "All"]],
+              "order": [[ 0, "desc" ]]
+            } );
+            */
+        }
+        function loadDataTableWWO() {
+            
+            if ( $.fn.dataTable.isDataTable( '#wwolstId' ) ) {
+                table = $("#wwolstId").delay(1000).DataTable( {
+                  "pageLength": 25,
+                  "lengthMenu": [[25, 50, -1], [25, 50, "All"]],
+                  "order": [[ 0, "desc" ]],
+                  destroy: true
+                });
+            } else {
+                table = $('#wwolstId').delay(1000).DataTable( {
+                    paging: false,
+                    destroy: true
+                } );
+            }
+            
+        }
+        </script> 
+        
+        <body> 
+            <a class="slds-button slds-button--neutral slds-button--brand" style="border: 1px solid white; box-shadow: 3px 5px 15px #888888; position: fixed; z-index: 99; left: 1%; top: 2%;background-color: #29abe2;" title= "Home" onclick="window.top.location='/';">
+                <apex:image id="homeIcon" value="{!URLFOR($Resource.HomeIcon)}" width="40" height="40" />
+            </a>  
+            <apex:form id="frm">
+                <apex:actionFunction name="refreshVendor" action="{!blankMethod}" reRender="pge:frm:vndrCompCall:vndr:tableOPPanle" oncomplete="loadDataTableVendor();"/>
+                <apex:actionFunction name="refreshPart" action="{!blankMethod}" reRender="pge:frm:crtPrtCompCall:crtPrt:tableOPPart" oncomplete="loadDataTablePart();"/>
+                <apex:actionFunction name="refreshPO" action="{!blankMethod}" reRender="pge:frm:prchsOrdrCompCall:prchsordr:POTableOP" oncomplete="loadDataTablePO();"/>
+                <apex:actionFunction name="refreshO" action="{!blankMethod}" reRender="pge:frm:ordrCompCall:ordrComp:orderTbleOP" oncomplete="loadDataTableO();"/>
+                 <apex:actionFunction name="refreshInvoice" action="{!blankMethod}" reRender="pge:frm:invoiceListPO" oncomplete="loadDataTableInvoice();"/>
+                 <apex:actionFunction name="refreshWWO" action="{!blankMethod}" reRender="pge:frm:wrntyWrkOrdrCompCall:wrkOrdr:wwolstIdOP" oncomplete="loadDataTableWWO();"/>
+                 
+                <a href="javascript:void(0);" onclick="callNewAccoutPage();" class="slds-button slds-button_icon" style="position: fixed; z-index: 99; left: 96.25%; top: 8%;background-color: #29abe2;" title= "Create Account">
+                    <apex:image id="createCustomer" value="{!URLFOR($Resource.CreateAccount)}" width="40" height="40" />
+                   
+                </a>
+                <div  class="popup">
+                    <apex:image id="theImage2" value="{!$Resource.Process}" style="display:block;" width="40" height="40"/>
+                </div>     
+                <div style="padding: 1%; border-bottom: 1px solid #ccc;" >
+                    <c:ServiceGlobalSearch />
+                </div>
+                
+                <script>
+                    function callNewAccoutPage() {
+                    
+                        if(document.getElementsByClassName("slds-active")[0].title != undefined && document.getElementsByClassName("slds-active")[0].title == "Invoice") { 
+                            window.top.location = '/apex/CreateAccount?redType=PartInvoiceTab';
+                        } else {
+                            window.top.location = '/apex/CreateAccount';
+                        }
+                    
+                        
+                    }
+                </script>
+                
+                <div class="border_row">
+                    <ul class="tab">                    
+                        <li>
+                            <a href="javascript:void(0)" class="tablinks" onclick="openCity(event, 'part')" id="defaultOpen">
+             
+                               <div class="slds-media">
+                                  <div class="slds-media__figure">
+                                     <svg aria-hidden="true" class="slds-icon slds-icon-standard-recent">
+                                        <use xlink:href="/resource/BOATBUILDING__BoatBuilderSR/assets/icons/standard-sprite/svg/symbols.svg#canvas"></use>
+                                      </svg>
+                                    </div>
+                                    <div class="slds-media__body">
+                                      <p class="slds-page-header__title slds-truncate" title="Rohde Corp - 80,000 Widgets"> Part</p>
+                                  </div>
+                              </div>      
+                            </a>
+                        </li>
+                        <li>
+                            <a href="javascript:void(0)" class="tablinks" onclick="openCity(event, 'workReq')" id="wrkTb">
+                                <div class="slds-media">
+                                  <div class="slds-media__figure">
+                                     <svg aria-hidden="true" class="slds-icon slds-icon-standard-recent">
+                                        <use xlink:href="/resource/BOATBUILDING__BoatBuilderSR/assets/icons/standard-sprite/svg/symbols.svg#custom"></use>
+                                      </svg>
+                                    </div>
+                                    <div class="slds-media__body">
+                                      <p class="slds-page-header__title slds-truncate" title="Rohde Corp - 80,000 Widgets">Work</p>
+                                  </div>
+                              </div> 
+                            </a>
+                        </li>
+                        <li>
+                            <a href="javascript:void(0)" class="tablinks" onclick="openCity(event, 'schedule')">
+                               <div class="slds-media">
+                                  <div class="slds-media__figure">
+                                     <svg aria-hidden="true" class="slds-icon slds-icon-standard-recent">
+                                        <use xlink:href="/resource/BOATBUILDING__BoatBuilderSR/assets/icons/standard-sprite/svg/symbols.svg#event"></use>
+                                      </svg>
+                                    </div>
+                                    <div class="slds-media__body">
+                                      <p class="slds-page-header__title slds-truncate" title="Rohde Corp - 80,000 Widgets">Schedule</p>
+                                  </div>
+                              </div>                         
+                            </a>
+                        </li>
+                        <li style="width: 18%;">
+                            <a href="javascript:void(0)" class="tablinks" onclick="openCity(event, 'time')">
+                                <div class="slds-media">
+                                  <div class="slds-media__figure">
+                                     <svg aria-hidden="true" class="slds-icon slds-icon-standard-recent">
+                                        <use xlink:href="/resource/BOATBUILDING__BoatBuilderSR/assets/icons/standard-sprite/svg/symbols.svg#dashboard"></use>
+                                      </svg>
+                                    </div>
+                                    <div class="slds-media__body">
+                                      <p class="slds-page-header__title slds-truncate" title="Rohde Corp - 80,000 Widgets">Time</p>
+                                  </div>
+                              </div> 
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div id="part" class="tabcontent">
+                    <apex:outputPanel rendered="{!part}">
+                    <div class="slds-grid slds-wrap">
+                        <div class="slds-col--padded slds-size--3-of-5">
+                            <article class="slds-card card-wrapper">
+                                <div class="slds-card__body">
+                                    <div class="slds-tabs--default">
+                                        <ul class="slds-tabs--default__nav" role="tablist">
+                                        <li class="slds-tabs--default__item slds-text-heading--label slds-active" title="Item One" role="presentation">
+                                                <a class="slds-tabs--default__link" href="javascript:void(0);" role="tab" tabindex="0" aria-selected="true" aria-controls="tab-default-13" id="tab-default-13__item">Part Request</a>
+                                            </li>
+                                            <li class="slds-tabs--default__item slds-text-heading--label " title="Item One" role="presentation">
+                                                <a class="slds-tabs--default__link" href="javascript:void(0);" role="tab" tabindex="0" aria-selected="true" aria-controls="tab-default-1" id="tab-default-1__item">Vendors</a>
+                                            </li>
+                                            
+                                             <li class="slds-tabs--default__item slds-text-heading--label" title="Important Details" role="presentation">
+                                                <a class="slds-tabs--default__link" href="javascript:void(0);" role="tab" tabindex="-1" aria-selected="false" aria-controls="tab-default-4" id="tab-default-4__item">Parts</a>
+                                            </li>
+                                            
+                                            <li class="slds-tabs--default__item slds-text-heading--label" title="Product Info" role="presentation">
+                                                <a class="slds-tabs--default__link" href="javascript:void(0);" role="tab" tabindex="-1" aria-selected="false" aria-controls="tab-default-2" id="Customer_Datails">Purchase Order</a>
+                                            </li>
+                                            
+                                            <li class="slds-tabs--default__item slds-text-heading--label" title="Important Details" role="presentation">
+                                                <a class="slds-tabs--default__link" href="javascript:void(0);" role="tab" tabindex="-1" aria-selected="false" aria-controls="tab-default-3" id="tab-default-3__item">Orders</a>
+                                            </li>
+                                            
+                                           
+                                            
+                                            <li class="slds-tabs--default__item slds-text-heading--label" title="Important Details" role="presentation">
+                                                <a class="slds-tabs--default__link" href="javascript:void(0);" role="tab" tabindex="-1" aria-selected="false" aria-controls="tab-default-5" id="tab-default-5__item">Inventory </a>
+                                            </li>
+                                            
+                                            <li class="slds-tabs--default__item slds-text-heading--label" title="Invoice" role="presentation">
+                                                <a class="slds-tabs--default__link" href="javascript:void(0);" role="tab" tabindex="-1" aria-selected="false" aria-controls="tab-default-6" id="tab-default-6__item">Invoices</a>
+                                            </li>
+                                            
+                                        </ul>
+                                        <!-- tab section     -->
+                                        <div id="tab-default-13" class="slds-tabs--default__content slds-show" role="tabpanel" aria-labelledby="tab-default-13__item" style="padding: 2%;">
+                                            <c:PartRequestComponent id="PartRequestCompCall"/>
+                                        </div>
+                                        <div id="tab-default-1" class="slds-tabs--default__content slds-hide" role="tabpanel" aria-labelledby="tab-default-1__item">
+                                            <c:Vendor id="vndrCompCall" />
+                                        </div>
+                                        <!-- tab section     -->
+                                        <div id="tab-default-2" class="slds-tabs--default__content slds-hide" role="tabpanel" aria-labelledby="tab-default-2__item">
+                                            <c:PurchaseOrder id="prchsOrdrCompCall"/>
+                                        </div>
+                                        <!-- tab section     -->
+                                        <div id="tab-default-3" class="slds-tabs--default__content slds-hide" role="tabpanel" aria-labelledby="tab-default-3__item">
+                                            <c:Orders id="ordrCompCall"/>
+                                        </div>
+                                        <!-- tab section     -->
+                                        <div id="tab-default-4" class="slds-tabs--default__content slds-hide" role="tabpanel" aria-labelledby="tab-default-4__item">
+                                            <c:CreatePart id="crtPrtCompCall"/>
+<!--                                                <c:PartClone id="crtPrtCompCall"/>  -->
+                                        </div> 
+                                        <!-- tab section     -->
+                                        <div id="tab-default-5" class="slds-tabs--default__content slds-hide" role="tabpanel" aria-labelledby="tab-default-5__item">
+                                            <c:Inventory id="invntryConpCall"/>
+<!--                                            <c:InvComp id="invntryConpCall"/>  -->
+                                        </div>
+                                        <!-- tab section     -->
+                                        <div id="tab-default-6" class="slds-tabs--default__content slds-hide" role="tabpanel" aria-labelledby="tab-default-6__item">
+
+                                            <div id="invoiceTable" class="slds-col slds-size--1-of-1 slds-medium-size--1-of-1 slds-col--padded slds-m-top--x-large">
+                                                <div class="slds-card__body slds-col--padded">
+                                                    <div >
+                                                        <div class="slds-col slds-size--1-of-1 slds-align--absolute-center Create_button">
+                                                            <p id="buttonPnlInvoice">
+                                                                <button class="slds-button slds-button--neutral slds-button--brand" type="button" value="CreateInvoice" id="disInvFrmSer" onclick="displayInvoiceForm(this);">Create Invoice</button>
+
+                                                            </p>
+                                                        </div>
+                                                        <apex:outputPanel id="invoiceListPO">
+                                                            <table id="InvTable2" class="slds-table slds-table--bordered slds-no-row-hover slds-table--cell-buffer slds-m-top--x-large Table1 slds-card">
+                                                                <thead>
+                                                                    <tr class="slds-text-heading--label">
+                                                                        <th scope="col">Invoice Number</th>
+                                                                        <th scope="col">Invoice</th>
+                                                                        <th scope="col">Customer Name</th>
+                                                                        <th scope="col">Total Price</th>
+                                                                        <th scope="col">Total Discount Availed on Parts</th>
+                                                                        <th scope="col">Payment</th>
+                                                                        <th scope="col">Created Date</th>
+                                                                        <th scope="col">Add Payment</th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                    <apex:repeat value="{!listOrInvoice}" var="objInvo">
+                                                                        <tr>
+                                                                            <td>
+                                                                                <a href="/apex/BOATBUILDING__InvoiceDetail?id={!objInvo.Id}"> 
+                                                                                <!--<a href="/apex/InvoiceDetail?id={!objInvo.Id}"> -->
+                                                                                    <apex:outputField value="{!objInvo.Invoice_Number__c}" />
+                                                                                </a>
+                                                                                &nbsp; <a href="/apex/BOATBUILDING__InvoiceDetail?id={!objInvo.Id}" target="blank"><img src="https://image.flaticon.com/icons/png/512/376/376007.png" style="height: 10px; width: 10px;"/></a>
+                                                                            </td>  
+                                                                            <td><apex:outputField value="{!objInvo.Name}" /></td>
+                                                                            <td><apex:outputField value="{!objInvo.Customer_Name__c}" /></td>
+                                                                            <td><apex:outputField value="{!objInvo.Sum_Price_Line_Items__c}" /></td>
+                                                                            <td><apex:outputField value="{!objInvo.Sum_Discount_Availed_on_Line_Items__c}" /></td>
+                                                                            <td><apex:outputField value="{!objInvo.Payment__c}" /></td>
+                                                                            <td><apex:outputField value="{!objInvo.Created_Date__c}" /></td>
+                                                                            <td style="text-align: right;">
+                                                                            <a id="addpayment"  class="" onclick="addPaymentinvoice(this,'{!objInvo.Id}','{!objInvo.Name}','{!objInvo.BOATBUILDING__Total_Amount_on_Invoice__c}','{!objInvo.BOATBUILDING__Balance__c}');" >Add Payment</a> 
+                                                                            </td>
+                                                                        </tr>
+                                                                    </apex:repeat>
+                                                                </tbody>
+                                                            </table>
+                                                        </apex:outputPanel>
+                                                    </div>
+                                                </div>
+                                            </div>
+        <!-- -- for Payment Add--- -->       
+        <div id="id01" class="modal" >
+            <div class="modal-content animate" style="height: 90%; width: 80%;overflow: auto;">
+            <div class="slds-grid slds-wrap slds-col--padded slds-m-top--medium slds-align--absolute-center">
+                <div class="slds-col slds-size--1-of-1">
+                    <a id="createPaymentBtninvoice" style="margin-left: 45%;" class="slds-button slds-button--brand abc">Create Payment</a>
+                </div>
+            </div>
+                
+                <a style="position: absolute;left: 86.8%;" id="closeSign"><i class="fa fa-times fa-lg __web-inspector-hide-shortcut__" aria-hidden="true"></i></a>
+                <section style="padding: 2%;">
+                    <div class="slds-col slds-size--1-of-1">
+                        <div class="slds-grid slds-wrap">
+                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-2 slds-col--padded">
+                                <div class="slds-form-element">
+                                    <label class="slds-form-element__label">Payment Type</label>
+                                    <div class="slds-form-element__control">
+                                        <apex:inputField value="{!objPayment.Payment_Type__c}" onchange="checkForCard(this);" styleClass="slds-select" id="PaymentType"/>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-2 slds-col--padded">
+                                <div class="slds-form-element">
+                                    <label class="slds-form-element__label">Total Amount Due</label>
+                                    <div class="slds-form-element__control">
+                                        <input type="text" class="slds-input" id="TotalAmtDue" disabled="disabled"/>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-2 slds-col--padded">
+                                <div class="slds-form-element">
+                                    <label class="slds-form-element__label">Check Number</label>
+                                    <div class="slds-form-element__control">
+                                        <apex:inputField value="{!objPayment.Check_Number__c}" styleClass="slds-input" id="CheckNumber" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-2 slds-col--padded">
+                                <div class="slds-form-element">
+                                    <label class="slds-form-element__label">Amount</label>
+                                    <div class="slds-form-element__control">
+                                        <apex:inputField value="{!objPayment.Amount__c}" styleClass="slds-input" id="PaymentAmount"  onkeyup="UpdateBalance(this.value);" />
+                                    </div>
+                                </div> 
+                            </div>
+                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-2 slds-col--padded">
+                                <div class="slds-form-element">
+                                    <label class="slds-form-element__label">Credit Card Type</label>
+                                    <div class="slds-form-element__control">
+                                        <apex:inputField value="{!objPayment.Credit_Card_Type__c}" styleClass="slds-select" id="CreditCardType" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-2 slds-col--padded">
+                                <div class="slds-form-element">
+                                    <label class="slds-form-element__label">Balance</label>
+                                    <div class="slds-form-element__control">
+                                        <input type="text" class="slds-input" id="invoiceBalance" disabled="disabled"/>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-2 slds-col--padded">
+                                <div class="slds-form-element">
+                                    <label class="slds-form-element__label">&nbsp;</label>
+                                    <div class="slds-form-element__control">
+                                        &nbsp;
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-2 slds-col--padded" id="paymentRChangesec" style="display: none;"> 
+                                <div class="slds-form-element">
+                                    <label class="slds-form-element__label">Return Change</label>
+                                    <div class="slds-form-element__control">
+                                        <input type="text" class="slds-input" value="0.00" id="paymentRChange" disabled="disabled"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </div>
+                
+        <script>
+            
+            var woId;
+            function addPaymentinvoice(obj, objWorkOrderId, objWorkOrderName, objInvoTotalPayment, objInvoiceBalance){
+                document.getElementById('id01').style.display='block';
+                woId = objWorkOrderId;
+                console.log(woId);
+                console.log(objInvoTotalPayment);
+                console.log(objInvoiceBalance);
+                document.getElementById('TotalAmtDue').value = objInvoTotalPayment;
+                document.getElementById('invoiceBalance').value = objInvoiceBalance;
+            }
+           
+            var objPaymentData = new Object();
+            $("#createPaymentBtninvoice").click(function() {
+            console.log('called');
+                
+            
+            
+                objPaymentData["PaymentType"] = document.getElementById("pge:frm:PaymentType").value;
+                objPaymentData["Amount"] = document.getElementById("pge:frm:PaymentAmount").value;
+                objPaymentData["CheckNumber"] = document.getElementById("pge:frm:CheckNumber").value;
+                objPaymentData["CreditCardType"] = document.getElementById("pge:frm:CreditCardType").value;
+                objPaymentData["ChangeRTN"] = document.getElementById("paymentRChange").value;
+                console.log(document.getElementById("paymentRChange").value);
+                if(objPaymentData["PaymentType"] == 'Credit_Card' && '{!baseUrlINV}' != "") {
+                    if(document.getElementById("pge:frm:CreditCardType").value != null && document.getElementById("pge:frm:CreditCardType").value != "" && document.getElementById("pge:frm:CreditCardType").value != "None") {
+                        window.top.location = '{!baseUrlINV}'+'?invId='+woId+'&CardType='+objPaymentData["CreditCardType"]+'&amount='+objPaymentData["Amount"]; 
+                        return; 
+                    } else {
+                        alert("Please select card type");    
+                        return; 
+                    }    
+                }
+                
+                BOATBUILDING.ServicePageController.addPayment(objPaymentData, woId, function(result, event) {
+                console.log(result);
+                    if(event.status) {
+                        if(result == 'Payment Created'){
+                            $('#id01').fadeOut();
+                        } 
+                    }
+                });
+            });
+            
+            var modal = document.getElementById('id01');
+                window.onclick = function(event) {
+                   if (event.target == modal) {
+                        $('#id01').fadeOut();
+                    }
+                }
+                $("#closeSign").click(function() {
+                    $('#id01').fadeOut();
+                });
+                
+            
+             
+            
+        </script>
+       <!-- ---Script for Payment Add-- -->
+                                            <div class="slds-grid slds-wrap">
+                                                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-1 slds-col--padded slds-m-top--x-large">
+                                                    <div class="slds-card__body slds-col--padded">
+                                                    </div>
+                                                </div>
+                                            </div>                                           
+                                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-1" id="invoicefrmId" style="display: none;">
+                                                <div class="slds-grid slds-wrap">
+                                                    <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-1 ">
+                                                        <div class="slds-grid slds-wrap">
+                                                            <div class="slds-col slds-size--1-of-1 slds-align--absolute-center Create_button">
+                                                                <div class="slds-form-element__control">
+                                                                    <a class="slds-button slds-button--neutral slds-button--brand" id="createInvoiceBttn" type="button" >Create Invoice</a>
+                                                                    <a class="slds-button slds-button--neutral slds-button--brand" type="button" value="CreateInvoice" onclick="hideInvoiceForm(this);">Back to List</a>
+                                                                </div>
+                                                            </div> 
+                                                        </div>  
+                                                    </div>
+
+                                                    <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-1 slds-col--padded">
+                                                        
+                                                        <div class="slds-grid slds-wrap">
+                                                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                                                                <div class="slds-form-element">
+                                                                    <label class="slds-form-element__label">Customer Name</label>
+                                                                    <div class="slds-form-element__control">
+                                                                        <apex:inputField value="{!objInvoice.Related_to_Contact__c}" styleClass="slds-input" id="ifC" onchange="fetchRelatedContact(this);"/>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            
+                                                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                                                                <div class="slds-form-element">
+                                                                    <label class="slds-form-element__label">Phone Number</label>
+                                                                    <div class="slds-form-element__control">
+                                                                        <input class="slds-input" type="text" id="ConPhoneId" disabled="disabled"/>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            
+                                                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                                                                <div class="slds-form-element">
+                                                                    <label class="slds-form-element__label">Customer Address</label>
+                                                                    <div class="slds-form-element__control">
+                                                                        <input class="slds-input" type="text" id="ConStreetId" disabled="disabled"/>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            
+                                                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                                                                <div class="slds-form-element">
+                                                                    <label class="slds-form-element__label">Contact</label>
+                                                                    <div class="slds-form-element__control">
+                                                                        <input class="slds-input" type="text" />
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    
+                                                    <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-1 slds-col--padded">
+                                                        <div class="slds-grid slds-wrap">
+                                                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                                                                <div class="slds-form-element">
+                                                                    <label class="slds-form-element__label">City</label>
+                                                                    <div class="slds-form-element__control">
+                                                                        <input class="slds-input" type="text" id="ConCityId" disabled="disabled"/>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            
+                                                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                                                                <div class="slds-form-element">
+                                                                    <label class="slds-form-element__label"> Email</label>
+                                                                    <div class="slds-form-element__control">
+                                                                        <input class="slds-input" type="text" id="ConEmailId" disabled="disabled"/>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            
+                                                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                                                                <div class="slds-form-element">
+                                                                    <label class="slds-form-element__label"> State</label>
+                                                                    <div class="slds-form-element__control">
+                                                                        <input class="slds-input" type="text" id="ConStateId" disabled="disabled"/>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            
+                                                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                                                                <div class="slds-form-element">
+                                                                    <label class="slds-form-element__labela">Total Inv Discount</label>
+                                                                    <div class="slds-form-element__control">
+                                                                        <input class="slds-input" type="text" id="ConTotalInvDisId" />
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    
+                                                    <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-1 slds-col--padded">
+                                                        <div class="slds-grid slds-wrap">
+                                                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                                                                <div class="slds-form-element">
+                                                                    <label class="slds-form-element__label"> Zip</label>
+                                                                    <div class="slds-form-element__control">
+                                                                        <input class="slds-input" type="text" id="ConZipId" disabled="disabled"/>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                                                                <div class="slds-form-element">
+                                                                    <label class="slds-form-element__label"> Sold By</label>
+                                                                    <div class="slds-form-element__control">
+                                                                        <apex:inputfield value="{!objInvoice.Sold_By_Ref__c}" styleClass="slds-input" id="invSldBy"/>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                                                                <div class="slds-form-element">
+                                                                    <label class="slds-form-element__label"> Store Location</label>
+                                                                    <div class="slds-form-element__control">
+                                                                        <apex:inputField styleClass="slds-select" value="{!objInvoice.Store_Location__c}" id="invSL" />
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            
+                                                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                                                                <div class="slds-form-element">
+                                                                    <label class="slds-form-element__label">Available Promocode</label>
+                                                                    <div class="slds-form-element__control">
+                                                                       <select class="slds-select" id="invPromocode">
+                                                                            <option value="0">--None--</option>
+                                                                       </select>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div> 
+                                                    <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-1 slds-col--padded">
+                                                        <div class="slds-grid slds-wrap">
+                                                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                                                                <div class="slds-form-element">
+                                                                    <span class="slds-form-element__label">Search By:</span>
+                                                                    <div class="slds-form-element__control" style="padding: 2.1%;">
+                                                                        <select id="selectSearchById" class="slds-select">
+                                                                            <option value="0">--None--</option>
+                                                                            <option value="1">Vendor</option>
+                                                                            <option value="2" selected="selected">Part Number</option>
+                                                                            <option value="3">Description</option>
+                                                                            <option value="4">Category</option>
+                                                                        </select>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            
+                                                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-3 slds-small-size--1-of-2 slds-col--padded">
+                                                                <div class="slds-form-element">
+                                                                    <span class="slds-form-element__label">Search Part:</span>
+                                                                    <div class="slds-form-element__control">
+                                                                        <table style="border: 1px solid #fff;"> 
+                                                                            <tr>
+                                                                                <td>
+                                                                                    <input type="text" class="slds-input slds-size--1-of-1" placeholder="search" id="searchPartInvoiceId"  />
+                                                                                </td>
+                                                                                <td style="text-align: center;">
+                                                                                    <button class="slds-button slds-button--neutral slds-button--brand inside_row_button " type="button" onclick="searchPartForInvoice(this);">Search</button> 
+                                                                                </td>
+                                                                                <td style="text-align: center;">
+<!--                                                                                    <button class="slds-button slds-button--neutral slds-button--brand inside_row_button " type="button" onclick="addMiscPart(this);">Add MISC Part</button> -->
+                                                                                </td>
+                                                                            </tr> 
+                                                                         </table>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            
+                                                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                                                                <div class="slds-form-element">
+                                                                
+                                                                <div class="slds-form-element__control">
+                                                                        
+                                                                          
+                                                                    </div>
+                                                                  
+                                                                </div>
+                                                            </div>
+                                                            
+                                                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                                                                <div class="slds-form-element">
+                                                                    
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    
+                                                    
+                                                    <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-1 slds-col--padded slds-m-top--x-large">
+
+                                                        <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-1 slds-col--padded slds-m-top--x-large" id="infoDivPOMisc4" >
+                                                            <div class="">
+                                                                <span class="slds-text-heading--small"></span>
+                                                                <div class="slds-form-element__control">
+                                                                    <div id="MiscDivId"  class="slds-card__body slds-col--padded">
+                                                        
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        
+                                                        <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-1 slds-col--padded slds-m-top--x-large" id="infoDivPO2" >
+                                                            <div class="">
+                                                                <span class="slds-text-heading--small"></span>
+                                                                <div class="slds-form-element__control">
+                                                                    <div id="orderLineItemDivId"  class="slds-card__body slds-col--padded">
+                                                        
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                         
+                                                        <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-1 slds-col--padded slds-m-top--x-large" id="infoDivPO3" style="display: none;">
+                                                            <div class="">
+                                                                <span class="slds-text-heading--small"></span>
+                                                                <div class="slds-form-element__control">
+                                                                    <div id="addedInvoiceLineItemDetailSection"  class="slds-card__body slds-col--padded">
+                                                        
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div> 
+                                                        
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            
+                                            
+                                           
+                                        </div>
+                                    </div>
+                                </div>
+                            </article>
+                        </div>
+                    </div>
+                    </apex:outputPanel>
+                    <apex:outputPanel rendered="{!if(part == false, true, false)}">
+                        <label><b style="position: relative; left: 30%;font-size:20px">Sorry! You don't have right to access this module.<br/>Please contact to your administrator. </b></label>
+                    </apex:outputPanel>
+                </div>
+                
+                <div id="workReq" class="tabcontent">
+                    <apex:outputPanel rendered="{!work}">
+                    <div class="slds-grid slds-wrap">
+                        <div class="slds-col--padded slds-size--3-of-5">
+                            <article class="slds-card card-wrapper">
+                                <div class="slds-card__body">
+                                    <div class="slds-tabs--default">
+                                        <ul class="slds-tabs--default__nav" role="tablist">
+                                            <li class="slds-tabs--default__item slds-text-heading--label slds-active" title="Item One" role="presentation">
+                                                <a class="slds-tabs--default__link" href="javascript:void(0);" role="tab" tabindex="0" aria-selected="true" aria-controls="tab-default-7" id="tab-default-7__item">WORK REQUEST</a>
+                                            </li>
+                                            
+                                            <li class="slds-tabs--default__item slds-text-heading--label" title="Product Info" role="presentation">
+                                                <a class="slds-tabs--default__link" href="javascript:void(0);" role="tab" tabindex="-1" aria-selected="false" aria-controls="tab-default-8" id="tab-default-8__item">WORK ORDER</a>
+                                            </li>
+                                            
+                                            <li class="slds-tabs--default__item slds-text-heading--label" title="Important Details" role="presentation">
+                                                <a class="slds-tabs--default__link" href="javascript:void(0);" role="tab" tabindex="-1" aria-selected="false" aria-controls="tab-default-9" id="tab-default-9__item">WARRANTY WORK ORDER</a>
+                                            </li>
+                                            
+                                            <li class="slds-tabs--default__item slds-text-heading--label" title="Important Details" role="presentation">
+                                                <a class="slds-tabs--default__link" href="javascript:void(0);" role="tab" tabindex="-1" aria-selected="false" aria-controls="tab-default-10" id="tab-default-10__item">TECH WORK ORDER</a>
+                                            </li>
+                                            
+                                            
+                                        </ul>
+                                        <div id="tab-default-7" class="slds-tabs--default__content slds-show" role="tabpanel" aria-labelledby="tab-default-7__item" style="padding: 2%;">
+                                            <c:WorkRequestClone id="WorkRequestCompCall"/>
+                                            
+                                        </div>
+                                        <div id="tab-default-8" class="slds-tabs--default__content slds-hide" role="tabpanel" aria-labelledby="tab-default-8__item">
+                                            <c:WorkOrderClone id="wrkOrdrCompCall"/> 
+                                        </div>  
+                                        <div id="tab-default-9" class="slds-tabs--default__content slds-hide" role="tabpanel" aria-labelledby="tab-default-9__item">
+                                           <c:WarrantyWorkOrderClone id="wrntyWrkOrdrCompCall"/>
+                                        </div>
+                                        <div id="tab-default-10" class="slds-tabs--default__content slds-hide" role="tabpanel" aria-labelledby="tab-default-10__item">
+                                            <c:TechWorkOrderClone id="tchWrkOrderCompCall" /> 
+                                        </div>
+                                    </div>
+                                </div>
+                            </article>
+                        </div>
+                    </div>
+                    </apex:outputPanel>
+                    <apex:outputPanel rendered="{!if(work == false, true, false)}">
+                        <label><b style="position: relative; left: 30%;font-size:20px">Sorry! You don't have right to access this module.<br/>Please contact to your administrator. </b></label>
+                    </apex:outputPanel>
+                </div>
+                
+                <div id="schedule" class="tabcontent">
+                    <apex:outputPanel rendered="{!schedule}" id="sclOPP">
+                        <c:Schedule id="schdlCompCall" />
+                        
+                    </apex:outputPanel>
+                    <apex:outputPanel rendered="{!if(schedule == false, true, false)}">
+                        <label><b style="position: relative; left: 30%;font-size:20px">Sorry! You don't have right to access this module.<br/>Please contact to your administrator. </b></label>
+                    </apex:outputPanel>
+                </div>
+                
+                <div id="time" class="tabcontent">
+                
+                        <a id="refereshBtnTM" class="slds-button slds-button_icon" style="position: fixed; z-index: 99; left: 96.25%; top: 14%; background-color: #29abe2;" title= "Referesh">
+                          <apex:image id="refereshBtnTM" value="{!URLFOR($Resource.RefreshIcon)}" width="40" height="40" />
+                      </a>
+                      <script>
+                            $("#refereshBtnTM").click(function() {
+                                window.top.location = '/apex/BOATBUILDING__ServicePage?type=TMM';
+                            });
+                        </script>
+                    <!-- second section -->
+                    <apex:outputPanel rendered="{!timeBool}">
+                    <div class="background_img img-responsive">
+                        <div class="slds-card login_box">
+                            <div class="slds-card__header slds-grid">
+                                <header class="slds-media slds-media--center slds-has-flexi-truncate">
+                                    <div class="slds-media__body slds-truncate">
+                                        <h2>
+                                            <a href="javascript:void(0);" class="slds-text-link--reset">
+                                                <span class="slds-text-heading--small">Time Management</span>
+                                            </a>
+                                        </h2>
+                                        
+                                    </div>
+                                </header>
+                                {!objDateTime}
+                            </div>
+                            
+                            <div class="slds-card__body">
+                                <div class="slds-form-element slds-m-bottom--x-large">
+                                    <div class="slds-form-element tab_mid">
+                                        <a class="slds-button slds-button--brand" id="day_in_btn">Day In</a>
+                                        <a class="slds-button slds-button--brand" id="lunch_out_btn">Lunch Out</a>
+                                        <a class="slds-button slds-button--brand" id="lunch_in_btn">Lunch In</a>
+                                        <a class="slds-button slds-button--brand" id="day_out_btn">Day Out</a>
+                                    </div>
+                                </div>
+                            </div>
+                            <apex:outputPanel id="timeDiv">
+                             <div class="slds-card__body" id="asdasd"> 
+                                <div class="slds-form-element slds-m-bottom--x-large">
+                                    <div class="slds-form-element tab_mid">
+                                        <table width="100%">
+                                            <tr>
+                                                <th>Day In</th>
+                                                <th>Lunch Out</th>
+                                                <th>Lunch In</th>
+                                                <th>Day Out</th>
+                                                <th>Total Working Hours</th>
+                                            </tr>
+                                            <tr>
+                                                <td><span id="dinSpan">{!dayInTime}</span></td>
+                                                <td><span id="loutSpan">{!LunchOutTime}</span></td>
+                                                <td><span id="linSpan">{!LunchInTime}</span></td>
+                                                <td><span id="doutSpan">{!dayOutTime}</span></td>
+                                                <td><span id="tWH">{!TotalTimeWorked}</span></td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                            </apex:outputPanel>
+                        </div>
+                    </div>
+                    
+                    </apex:outputPanel>
+                    <apex:outputPanel rendered="{!if(timeBool == false, true, false)}">
+                        <label><b style="position: relative; left: 30%;font-size:20px">Sorry! You don't have right to access this module.<br/>Please contact to your administrator. </b></label>
+                    </apex:outputPanel>
+                    <apex:actionFunction name="timeDivAF" action="{!getTimes}" reRender="pge:frm:timeDiv"/>
+                </div>
+
+                <script>
+                $(document).ready(function(){
+                    $('#InvTable2').DataTable( {
+                      "pageLength": 25,
+                      "lengthMenu": [[25, 50, -1], [25, 50, "All"]],
+                      "order": [[ 0, "desc" ]]
+                    } );
+                    $('#opTable').DataTable({
+                        "sDom": '<"pull-left"f><"pull-right"l>tip'
+                    });
+                });
+                </script>
+            </apex:form>                
+            <script>
+                function openCity(evt, eveName) {
+                    var i, tabcontent, tablinks;
+                    tabcontent = document.getElementsByClassName("tabcontent");
+                    for (i = 0; i < tabcontent.length; i++) {
+                        tabcontent[i].style.display = "none";
+                    }
+                    tablinks = document.getElementsByClassName("tablinks");
+                    for (i = 0; i < tablinks.length; i++) {
+                        tablinks[i].className = tablinks[i].className.replace(" active", "");
+                    }
+                    document.getElementById(eveName).style.display = "block";
+                    evt.currentTarget.className += " active";
+                }
+                
+                
+ 
+              $(document).ready(function() { 
+                    try {  
+                        // Get the element with id="defaultOpen" and click on it
+                        document.getElementById("defaultOpen").click();
+                        
+                        console.log(">>>>URL: "+"{!pageURL}");
+
+                        var windowURL = "{!pageURL}";
+                        
+                        if(windowURL.indexOf("ltn_app_id") != -1) {
+                        	$('.popup').addClass('active');
+                            window.top.location = "/apex/BOATBUILDING__ServicePage";                            
+                        }
+
+                        console.log('URL: '+windowURL);
+                        if(windowURL.indexOf("subTabName=") !== -1) {
+                            if(windowURL.indexOf("tab-default-13") !== -1) {
+                                document.getElementById("tab-default-13__item").click();
+                            }else if(windowURL.indexOf("tab-default-1") !== -1) {
+                               document.getElementById("tab-default-1__item").click();    
+                            }else if(windowURL.indexOf("tab-default-2") !== -1) {
+                                document.getElementById("Customer_Datails").click();    
+                            }else if(windowURL.indexOf("tab-default-3") !== -1) {
+                                document.getElementById("tab-default-3__item").click();    
+                            }else if(windowURL.indexOf("tab-default-4") !== -1) {
+                                document.getElementById("tab-default-4__item").click();    
+                            }else if(windowURL.indexOf("tab-default-5") !== -1) {
+                                document.getElementById("tab-default-5__item").click();    
+                            }else if(windowURL.indexOf("tab-default-6") !== -1) {
+                                
+                                var condetails = "{!$CurrentPage.parameters.condetails}";
+                                if(condetails != null && condetails != undefined && condetails != '') {
+                                    var conDetailArray = [];
+                                    conDetailArray = condetails.split(':');
+                                    document.getElementById("pge:frm:ifC_lkid").value = conDetailArray[0];
+                                    document.getElementById("pge:frm:ifC").value = conDetailArray[1];
+                                    fetchRelatedContact(this);
+                                    document.getElementById("disInvFrmSer").click();
+                                }
+                                document.getElementById("tab-default-6__item").click();    
+                            } 
+                        }
+                        if(windowURL.indexOf("type") !== -1) {
+                        	if(windowURL.indexOf("WorkRequest") !== -1) {
+                        		openCity(event, 'workReq');
+                        		$("#wrkTb").addClass('active');
+                        		if(windowURL.indexOf("prId") !== -1) {
+                                    var prId = "{!$CurrentPage.parameters.prId}";
+                                    fetchWorkRequest(this,prId);
+                                    openCity(event, 'workReq');
+                                	document.getElementById("tab-default-7__item").click();
+                               	}
+                        	} else if(windowURL.indexOf("PartRequest") !== -1) {
+                        		var prId = "{!$CurrentPage.parameters.prId}";
+                                fetchRequestpart(this,prId);
+                                openCity(event, 'part');
+                                document.getElementById("tab-default-13__item").click(); 
+                        	}
+                            else if(windowURL.indexOf("WORKREQ") !== -1) {
+                                
+                            } else if(windowURL.indexOf("schedule") !== -1) {
+                               openCity(event, 'schedule');
+                            } else if(windowURL.indexOf("WWO") !== -1) {
+                                console.log('WWO')
+                               openCity(event, 'workReq');
+                               document.getElementById("tab-default-9__item").click(); 
+                               
+                               if(windowURL.indexOf("WWOId") !== -1) {
+                                    var WWOId = "{!$CurrentPage.parameters.WWOId}"; 
+                                    console.log(WOId); 
+                                    
+                                    BOATBUILDING.ServicePageController.fetchWO(WWOId, function(result, event) {
+                                        if(event.status) {
+                                            if(result != null) { 
+                                                console.log(result);
+                                                fetchWrntyWorkOrder(this,result[0].Id, result[0].Name, result[0].BOATBUILDING__Balance__c, 'abc');
+                                                
+                                            }
+                                        }
+                                    });
+                                }
+                               
+                            } else if(windowURL.indexOf("TO") !== -1) {
+                                console.log('TO')
+                                openCity(event, 'workReq');
+                                document.getElementById("tab-default-10__item").click();    
+                                if(windowURL.indexOf("TOId") !== -1) {
+                                console.log('TOId')
+                                    var WOId = "{!$CurrentPage.parameters.TOId}"; 
+                                    console.log(WOId);
+                                    BOATBUILDING.ServicePageController.fetchWO(WOId, function(result, event) {
+                                        if(event.status) {
+                                            if(result != null) { 
+                                                console.log(result);
+                                                document.getElementById("pge:frm:tchWrkOrderCompCall:tchWrkOrdr:existingWorkOrdersId").value = result[0].Name;
+                                                document.getElementById("pge:frm:tchWrkOrderCompCall:tchWrkOrdr:existingWorkOrdersId_lkid").value = result[0].Id;
+                                                document.getElementById("pge:frm:tchWrkOrderCompCall:tchWrkOrdr:existingWorkOrdersId_lkold").value = result[0].Name;
+                                                fetchWorkOrderParameters(this);
+                                                
+                                            }
+                                        }
+                                    }); 
+                                } 
+                            }
+                            else if(windowURL.indexOf("TWO") !== -1) {
+                                    console.log('TWO')
+                                    var TWOId = "{!$CurrentPage.parameters.TWOId}";
+                                    var TWOName = "{!$CurrentPage.parameters.TWOName}";
+                                    document.getElementById("pge:frm:tchWrkOrderCompCall:tchWrkOrdr:existingWorkOrdersId_lkid").value = TWOId;    
+                                document.getElementById("pge:frm:tchWrkOrderCompCall:tchWrkOrdr:existingWorkOrdersId").value  = TWOName;
+                                
+                                fetchWorkOrderParameters(this);
+                                openCity(event, 'workReq');
+                                document.getElementById("tab-default-10__item").click();
+                            } 
+                            else if(windowURL.indexOf("WO") !== -1) {
+                                console.log('WO')
+                                openCity(event, 'workReq');
+                                document.getElementById("tab-default-8__item").click();    
+                                if(windowURL.indexOf("WOId") !== -1) {
+                                    var WOId = "{!$CurrentPage.parameters.WOId}"; 
+                                    console.log(WOId);
+                                    BOATBUILDING.ServicePageController.fetchWO(WOId, function(result, event) {
+                                        if(event.status) {
+                                            if(result != null) { 
+                                                console.log(result);
+                                                fetchWorkOrder(this,result[0].Id, result[0].Name, result[0].BOATBUILDING__Balance__c, 'abc');
+                                                
+                                            }
+                                        }
+                                    });
+                                } 
+                            } else if(windowURL.indexOf("TMM") !== -1) {
+                                    openCity(event, 'time');
+                            }
+                            
+                        } else if("{!UR}" == "Service Tech") {
+                                openCity(event, 'schedule');
+                                console.log("UserId: "+"{!UId}");
+                                //$("#userLst").val("{!UId}");
+                                document.getElementById("userLst").value = "{!UId}"; 
+                                fetchEvents();
+                        }
+                        if(history.replaceState) {
+                            history.replaceState({}, "", "/apex/ServicePage");
+                        }
+                    } catch(e) {
+                            console.log(e.message);
+                    }   
+                }
+                );
+               function UpdateBalance(amount) {
+	            console.log(amount);
+	                document.getElementById('invoiceBalance').value = parseFloat(document.getElementById('TotalAmtDue').value - amount).toFixed(2);
+	                
+	                var ptype = document.getElementById("pge:frm:PaymentType").value;
+	                    if(ptype == 'Cash') {
+	                    	var changeReturn = amount - document.getElementById('TotalAmtDue').value;
+	                    	if(changeReturn > 0) {
+	                    		$("#paymentRChange").val(parseFloat(changeReturn).toFixed(2));
+	                    	} else {
+	                    		$("#paymentRChange").val(0.00);
+	                    	}
+	                    } else {
+	                    	$("#paymentRChange").val(0.00); 
+	                    }
+	            } 
+               
+               function checkForCard(obj) {
+                   var strPaymentType = obj.value;
+                   if(strPaymentType == 'Cash') {
+                    	$("#paymentRChangesec").show();
+                    } else {
+                    	$("#paymentRChangesec").hide();
+                    }
+                   
+                   if(obj.value == "Credit_Card" && '{!baseUrlINV}' != ""){
+                        //document.getElementById('pge:frm:PaymentAmount').disabled = true; 
+                        $("#createPaymentBtninvoice").html("Proceed to Gateway");
+                    } else {
+                        //document.getElementById('pge:frm:PaymentAmount').disabled = false;
+                        $("#createPaymentBtninvoice").html("Create Payment");
+                    }
+               }
+               
+               
+                function fetchRelatedContact(obj) {
+                    $('.popup').addClass('active');
+                    console.log('Contact Filled By : '+obj.value);    
+                    var conId = document.getElementById("pge:frm:ifC_lkid").value;
+                    var conName = document.getElementById("pge:frm:ifC").value;
+                    if(conName != null && conName != "") {
+                        if(conId != null && conId != "" && conId != "000000000000000") {
+                            BOATBUILDING.ServicePageController.getContact(conId, function(result, event) {
+                                if(event.status) {
+                                    if(result != null) {
+                                        var lstCon = [];
+                                        lstCon = result;
+                                        if(lstCon.length > 0) {
+                                            if(lstCon[0].Name != null) {
+                                                <!-- document.getElementById("ConNameId").value = lstCon[0].Name; -->
+                                            } 
+                                            if(lstCon[0].Phone != null) {
+                                                document.getElementById("ConPhoneId").value = lstCon[0].Phone;
+                                            }
+                                            if(lstCon[0].MailingStreet != null) {
+                                                document.getElementById("ConStreetId").value = lstCon[0].MailingStreet;
+                                            }
+                                            if(lstCon[0].MailingCity != null) {
+                                                document.getElementById("ConCityId").value = lstCon[0].MailingCity;
+                                            }
+                                            if(lstCon[0].Email != null) {
+                                                document.getElementById("ConEmailId").value = lstCon[0].Email;
+                                            }
+                                            if(lstCon[0].MailingState != null) {
+                                                document.getElementById("ConStateId").value = lstCon[0].MailingState;
+                                            }
+                                            if(lstCon[0].MailingPostalCode != null) {
+                                                document.getElementById("ConZipId").value = lstCon[0].MailingPostalCode;
+                                            }
+                                            $('.popup').removeClass('active');
+                                        }
+                                        else {
+                                            <!-- document.getElementById("ConNameId").value = ""; -->
+                                            document.getElementById("ConPhoneId").value = "";
+                                            document.getElementById("ConStreetId").value = "";
+                                            document.getElementById("ConCityId").value = "";
+                                            document.getElementById("ConEmailId").value = "";
+                                            document.getElementById("ConStateId").value = "";
+                                            document.getElementById("ConZipId").value = "";
+                                            $('.popup').removeClass('active');
+                                        }
+                                    }
+                                    else {
+                                        $('.popup').removeClass('active');
+                                    }
+                                }
+                                else {
+                                    $('.popup').removeClass('active');
+                                }
+                            });
+                            BOATBUILDING.ServicePageController.getPromocodes(function(result, event) {
+                                if(event.status) { 
+                                console.log(result); 
+                                    if(result != null && result.length > 0) {
+                                        var promoHTML = '<option value="0">--None--</option>';
+                                        for(var i = 0; i < result.length; i++) {
+                                            if(result[i].BOATBUILDING__Discount_In__c == 'Amount') {
+                                                promoHTML += '<option value="'+result[i].Id+'">' + result[i].BOATBUILDING__Promo_Code_Name__c + ' | $ ' +parseFloat(result[i].BOATBUILDING__Discount_Amount__c).toFixed(2)+ '</option>';
+                                            } else if(result[i].BOATBUILDING__Discount_In__c == 'Percentage') {
+                                                promoHTML += '<option value="'+result[i].Id+'">' + result[i].BOATBUILDING__Promo_Code_Name__c + ' | ' +result[i].BOATBUILDING__Discount_Percentage__c+ '%</option>';
+                                            }
+                                        }
+                                        $("#invPromocode").html(promoHTML); 
+                                    }else {
+                                            $("#invPromocode").html('<option value="0">--None--</option>');
+                                        }
+                                }
+                            });
+                            
+                        }
+                        else{
+                            $('.popup').removeClass('active');
+                        }
+                    }
+                    else {
+                        <!-- document.getElementById("ConNameId").value = ""; -->
+                        document.getElementById("ConPhoneId").value = "";
+                        document.getElementById("ConStreetId").value = "";
+                        document.getElementById("ConCityId").value = "";
+                        document.getElementById("ConEmailId").value = "";
+                        document.getElementById("ConStateId").value = "";
+                        document.getElementById("ConZipId").value = "";
+                        $('.popup').removeClass('active');
+                    }
+                }
+                
+                
+                
+                var retailTotal = 0.00;
+                var discountTotal = 0.00;
+                var totalOfGrandTotal = 0.00;
+                var lstOrder = [];
+                var mapOrderLineItemAndDiscount = new Object();
+                var mapOrderLineItemAndDiscountPER = new Object();
+                var mapInvoiceItemQuantity = new Object();
+
+                var finalQuantity = new Object();
+                var finalDiscount = new Object();
+                var finalDiscountPER = new Object();
+                var mapForTableValues = new Object();
+                var countInvoiceLineItem = 0;
+                
+                function searchPartForInvoice(obj) {
+                    $('.popup').addClass('active');
+                    var prtNumberEntered = document.getElementById("searchPartInvoiceId").value;
+                    var searchCriteriaValue = document.getElementById("selectSearchById").value;
+                    console.log('Fetching Part Please Wait... : '+prtNumberEntered);
+                    if(searchCriteriaValue != "0") {
+                        if(prtNumberEntered != null && prtNumberEntered != "") {
+                             BOATBUILDING.ServicePageController.getListOfInventoryViaPart(prtNumberEntered, searchCriteriaValue, function(result, event) {
+                                 if(event.status) {
+                                    if(result != null) {
+                                         lstOrder = [];
+                                         lstOrder = result;
+                                         mapOrderLineItemAndDiscount = new Object();
+                                         mapOrderLineItemAndDiscountPER = new Object();
+                                         mapInvoiceItemQuantity = new Object();
+                                         if(lstOrder.length > 0) {
+                                         	console.log('lstOrder');
+                                             console.log(lstOrder);
+                                             var tableHTML = "<table id='prtInvoiceTblId' class='slds-table slds-table--bordered slds-table--cell-buffer'  style='border-collapse: collapse;'> <tr> <th>Part Number</th> <th>Description</th> <th>Quantity</th> <th>MSRP</th> <th>Total</th> <th>Discount (%)</th> <th>Discount ($)</th> <th>Grand Total</th> <th>&nbsp;</th></tr>";
+                                             
+                                             for(var i = 0 ; i < lstOrder.length ; i++) {
+                                                 var partNumber = "";
+                                                 var partName = "" 
+                                                 var partQuantity = 0;
+                                                 var retailPrice = 0.00;
+                                                 var totalRetailPrice = 0.00;
+            
+                                                 if(lstOrder[i].PartNumber != null) {
+                                                     partNumber = lstOrder[i].PartNumber;
+                                                 }
+                                                 if(lstOrder[i].PartName != null) {
+                                                     partName = lstOrder[i].PartName;
+                                                 }
+                                                 if(lstOrder[i].Quantity != null) {
+                                                     partQuantity = parseInt(lstOrder[i].Quantity);
+                                                 }
+                                                 if(lstOrder[i].MSRP != null) {
+                                                     retailPrice = parseFloat(lstOrder[i].MSRP);
+                                                 }
+                                                 totalRetailPrice = partQuantity * retailPrice;
+                                                 retailTotal += totalRetailPrice;
+                                                 discountTotal = 0.00;
+                                                 totalOfGrandTotal = retailTotal;
+                                                 mapOrderLineItemAndDiscount[lstOrder[i].PartNumber] = 0.00;
+                                                 mapOrderLineItemAndDiscountPER[lstOrder[i].PartNumber] = 0.00;
+                                                 mapInvoiceItemQuantity[lstOrder[i].PartNumber] = partQuantity;
+                                                 if(lstOrder[i].PartNumber in finalQuantity) {
+                                                    tableHTML = tableHTML + "<tr class='slds-hint-parent'> <td>"+partNumber+"</td><td>"+partName+"</td><td><input type='text' class='slds-input' value='"+mapInvoiceItemQuantity[lstOrder[i].PartNumber]+"' onchange='calculateInvoiceAfterQuantityChange(this, \""+lstOrder[i].PartNumber+"\");'/></td><td>$"+(retailPrice).toFixed(2)+"</td> <td>$"+(totalRetailPrice).toFixed(2)+"</td><td><input type='text' value='"+(mapOrderLineItemAndDiscountPER[lstOrder[i].PartNumber]).toFixed(2)+"' class='slds-input' onchange='calculateInvoiceTotal(this,\""+lstOrder[i].PartNumber+"\", \"PER\");'/></td> <td><input type='text' value='"+(mapOrderLineItemAndDiscount[lstOrder[i].PartNumber]).toFixed(2)+"' class='slds-input' onchange='calculateInvoiceTotal(this,\""+lstOrder[i].PartNumber+"\", \"CUR\");'/></td><td>$"+(totalRetailPrice).toFixed(2)+"</td> <td><input type='button' value='Update' class='slds-button slds-button--neutral slds-button--brand' id='addBut"+i+"' onclick='addToCartOfInvoiceLineItem(this, \""+lstOrder[i].PartNumber+"\")'/></td></tr>";
+                                                 }
+                                                 else {
+                                                    tableHTML = tableHTML + "<tr class='slds-hint-parent'> <td>"+partNumber+"</td><td>"+partName+"</td><td><input type='text' class='slds-input' value='"+mapInvoiceItemQuantity[lstOrder[i].PartNumber]+"' onchange='calculateInvoiceAfterQuantityChange(this, \""+lstOrder[i].PartNumber+"\");'/></td><td>$"+(retailPrice).toFixed(2)+"</td> <td>$"+(totalRetailPrice).toFixed(2)+"</td><td><input type='text' value='"+(mapOrderLineItemAndDiscountPER[lstOrder[i].PartNumber]).toFixed(2)+"' class='slds-input' onchange='calculateInvoiceTotal(this,\""+lstOrder[i].PartNumber+"\",\"PER\");'/></td> <td><input type='text' value='"+(mapOrderLineItemAndDiscount[lstOrder[i].PartNumber]).toFixed(2)+"' class='slds-input' onchange='calculateInvoiceTotal(this,\""+lstOrder[i].PartNumber+"\", \"CUR\");'/></td><td>$"+(totalRetailPrice).toFixed(2)+"</td> <td><input type='button' value='Add' class='slds-button slds-button--neutral slds-button--brand' id='addBut"+i+"' onclick='addToCartOfInvoiceLineItem(this, \""+lstOrder[i].PartNumber+"\")'/></td></tr>";
+                                                 }
+                                             }
+                                             tableHTML = tableHTML + "</table>";
+                                             console.log(mapOrderLineItemAndDiscount);
+                                             document.getElementById("orderLineItemDivId").innerHTML = tableHTML;
+                                             console.log("mapOrderLineItemAndDiscount : ");     console.log(mapOrderLineItemAndDiscount);
+                                             console.log("mapInvoiceItemQuantity : ");          console.log(mapInvoiceItemQuantity);
+                                             $('.popup').removeClass('active');
+                                         }
+                                         else {
+                                             document.getElementById("orderLineItemDivId").innerHTML = "<span style='color:red;'>There is no related part available.</span>";
+                                             $('.popup').removeClass('active');
+                                         }
+                                     }
+                                 }
+                             });
+                        }else {
+                            document.getElementById("orderLineItemDivId").innerHTML = "<span style='color:red;'>Please enter a value and try again.</span>";
+                            $('.popup').removeClass('active');
+                        }
+                    }
+                    else {
+                       document.getElementById("orderLineItemDivId").innerHTML = "<span style='color:red;'>Please select a criteria and try again.</span>"; 
+                       $('.popup').removeClass('active');
+                    }
+                    
+                }
+                var miscPartName = new Object();
+                var miscPartQuantity = new Object();
+                var miscPartMSRP = new Object();
+                var miscPartTotal = new Object();
+                var miscPartDiscount = new Object();
+                var miscPartGrandTotal = new Object();
+                
+                function addMiscPart(obj) {
+                    var prtNo = Math.floor(Math.random()*100000);
+                    
+                    miscPartName[""+prtNo+""] = "";
+                    miscPartQuantity[""+prtNo+""] = 0;
+                    miscPartMSRP[""+prtNo+""] = 0.00;
+                    miscPartTotal[""+prtNo+""] = 0.00;
+                    miscPartDiscount[""+prtNo+""] = 0.00;
+                    miscPartGrandTotal[""+prtNo+""] = 0.00;
+                     
+                    console.log("prtNo: "+prtNo);
+                    var add = '<table id="miscPrtTableId"  class="slds-table slds-table--bordered slds-table--cell-buffer" style=" border-collapse: collapse;"><tr> <th>Description</th> <th>Quantity</th> <th>MSRP</th> <th>Total</th> <th>Discount ($)</th> <th>Grand Total</th> <th>&nbsp;</th></tr><tr class="slds-hint-parent"> <td><input onkeyup="updateMiscPartName(\''+prtNo+'\');" id="miscPrtName'+prtNo+'" type="text" class="slds-input" value="'+ miscPartName[prtNo]+'" placeholder="Misc part description"></td><td><input onkeyPress="return isNumber(event);" onkeyup="updateMiscQuantity(\''+prtNo+'\');" id="miscQntityName'+prtNo+'" value="'+miscPartQuantity[prtNo]+'" type="text" class="slds-input" placeholder="0"></td><td><input  onKeyPress="return isNumberKey(event);" onkeyup="updateMiscMSRP(\''+prtNo+'\');" id="miscMSRPName'+prtNo+'" value="'+miscPartMSRP[prtNo]+'" type="text" class="slds-input" placeholder="0.00" ></td><td>$<span id="miscTotalName'+prtNo+'">'+miscPartTotal[prtNo]+'</span></td> <td><input onKeyPress="return isNumberKey(event);"  onkeyup="updateMiscDiscount(\''+prtNo+'\');" id="miscDisName'+prtNo+'" value="'+miscPartDiscount[prtNo]+'" type="text" placeholder="0.00" class="slds-input" ></td><td>$<span id="miscGrndTotalName'+prtNo+'">'+miscPartGrandTotal[prtNo]+'</span></td> <td><a onclick="removeMiscPrtRow(\''+prtNo+'\');"><i class="fa fa-close" style="font-size: 20px;"></i></a></td></tr></table>';
+                    if(document.getElementById("miscPrtTableId") != null) {
+                        var htmlRow = '<tr class="slds-hint-parent"> <td><input onkeyup="updateMiscPartName(\''+prtNo+'\');" id="miscPrtName'+prtNo+'" type="text" class="slds-input" value="'+ miscPartName[prtNo]+'" placeholder="Misc part description"></td><td><input onkeyPress="return isNumber(event);" onkeyup="updateMiscQuantity(\''+prtNo+'\');" id="miscQntityName'+prtNo+'" value="'+miscPartQuantity[prtNo]+'" type="text" class="slds-input" placeholder="0"></td><td><input  onKeyPress="return isNumberKey(event);" onkeyup="updateMiscMSRP(\''+prtNo+'\');" id="miscMSRPName'+prtNo+'" value="'+miscPartMSRP[prtNo]+'" type="text" class="slds-input" placeholder="0.00" ></td><td>$<span id="miscTotalName'+prtNo+'">'+miscPartTotal[prtNo]+'</span></td> <td><input onKeyPress="return isNumberKey(event);"  onkeyup="updateMiscDiscount(\''+prtNo+'\');" id="miscDisName'+prtNo+'" value="'+miscPartDiscount[prtNo]+'" type="text" placeholder="0.00" class="slds-input" ></td><td>$<span id="miscGrndTotalName'+prtNo+'">'+miscPartGrandTotal[prtNo]+'</span></td> <td><a onclick="removeMiscPrtRow(\''+prtNo+'\');"><i class="fa fa-close" style="font-size: 20px;"></i></a></td></tr>'; 
+                        $("#miscPrtTableId").append(htmlRow);
+                    } else {
+                         document.getElementById("MiscDivId").innerHTML = add;
+                    }
+                    
+                }
+                
+                function isNumber(evt) {
+                    evt = (evt) ? evt : window.event;
+                    var charCode = (evt.which) ? evt.which : evt.keyCode;
+                    if (charCode > 31 && (charCode < 48 || charCode > 57)) {
+                        return false;
+                    }
+                    return true;
+                }
+                
+                function isNumberKey(evt) {
+                    var charCode = (evt.which) ? evt.which : evt.keyCode;
+                    if (charCode != 46 && charCode > 31 
+                        && (charCode < 48 || charCode > 57)){
+                        return false;
+                    }
+                    return true;
+                }
+                
+                function updateMiscPartName(rowId) {
+                    var keyWord = $("#miscPrtName"+rowId).val();
+                    miscPartName[""+rowId+""] = keyWord;
+                    console.log("miscPartName: ");
+                    console.log(miscPartName);
+                }
+                
+                function updateMiscQuantity(rowId) {
+                    var keyWord = $("#miscQntityName"+rowId).val();
+                    miscPartQuantity[""+rowId+""] = keyWord;
+                    
+                    var msrp = parseFloat(miscPartMSRP[""+rowId]);
+                    var qt = parseFloat($("#miscQntityName"+rowId).val());
+                    var total = msrp * qt;
+                    miscPartTotal[""+rowId+""] = total;
+                    var dis = parseFloat(miscPartDiscount[[""+rowId]]);
+                    var grndTotal = total - dis;
+                    miscPartGrandTotal[""+rowId+""] = grndTotal;
+                    
+                    $("#miscTotalName"+rowId).html(total.toFixed(2));
+                    $("#miscGrndTotalName"+rowId).html(grndTotal.toFixed(2));
+                }
+                
+                function updateMiscMSRP(rowId) {
+                    var keyWord = $("#miscMSRPName"+rowId).val();
+                    miscPartMSRP[""+rowId+""] = keyWord;
+                    
+                    var msrp = parseFloat(miscPartMSRP[""+rowId]);
+                    var qt = parseFloat(miscPartQuantity[""+rowId+""]);
+                    var total = msrp * qt;
+                    miscPartTotal[""+rowId+""] = total;
+                    var dis = parseFloat(miscPartDiscount[[""+rowId]]);
+                    var grndTotal = total - dis;
+                    miscPartGrandTotal[""+rowId+""] = grndTotal;
+                    
+                    $("#miscTotalName"+rowId).html(total.toFixed(2));
+                    $("#miscGrndTotalName"+rowId).html(grndTotal.toFixed(2));
+                }
+                
+                function updateMiscDiscount(rowId) {
+                    var keyWord = $("#miscDisName"+rowId).val();
+                    var msrp = parseFloat(miscPartMSRP[""+rowId]);
+                    var qt = parseFloat(miscPartQuantity[""+rowId+""]);
+                    var total = msrp * qt;
+                    if(parseFloat(keyWord) <= msrp && keyWord != '') {
+                        miscPartDiscount[""+rowId+""] = keyWord;
+                        
+                        
+                        miscPartTotal[""+rowId+""] = total;
+                        var dis = parseFloat(miscPartDiscount[[""+rowId]]);
+                        var grndTotal = total - dis;
+                        miscPartGrandTotal[""+rowId+""] = grndTotal;
+                        
+                        $("#miscTotalName"+rowId).html(total.toFixed(2));
+                        $("#miscGrndTotalName"+rowId).html(grndTotal.toFixed(2));
+                    } else if(keyWord != ''){
+                        alert("Discount is greater than total");
+                    } else if(keyWord == '') {
+                        miscPartDiscount[""+rowId+""] = 0.00;
+                    }
+                }
+                
+                function removeMiscPrtRow(rowId) {
+                    console.log('rowId: '+rowId);
+                    var objKeys = Object.keys(miscPartName);
+                    console.log("objKeys");
+                    console.log(objKeys);
+                    if(objKeys.length > 0) {
+                        var newHTMLTable = '<tr> <th>Description</th> <th>Quantity</th> <th>MSRP</th> <th>Total</th> <th>Discount ($)</th> <th>Grand Total</th> <th>&nbsp;</th></tr>';
+                        for(var i = 0; i < objKeys.length; i++) {
+                            if(objKeys[i] != rowId) {
+                                console.log('Remaining: '+objKeys[i]);
+                                var prtNo = objKeys[i];
+                                var newHTMLTable = newHTMLTable + '<tr class="slds-hint-parent"> <td><input onkeyup="updateMiscPartName(\''+prtNo+'\');" id="miscPrtName'+prtNo+'" type="text" class="slds-input" value="'+ miscPartName[prtNo]+'" placeholder="Misc part description"></td><td><input onkeyPress="return isNumber(event);" onkeyup="updateMiscQuantity(\''+prtNo+'\');" id="miscQntityName'+prtNo+'" value="'+miscPartQuantity[prtNo]+'" type="text" class="slds-input" placeholder="0"></td><td><input  onKeyPress="return isNumberKey(event);" onkeyup="updateMiscMSRP(\''+prtNo+'\');" id="miscMSRPName'+prtNo+'" value="'+miscPartMSRP[prtNo]+'" type="text" class="slds-input" placeholder="0.00" ></td><td>$<span id="miscTotalName'+prtNo+'">'+miscPartTotal[prtNo]+'</span></td> <td><input onKeyPress="return isNumberKey(event);"  onkeyup="updateMiscDiscount(\''+prtNo+'\');" id="miscDisName'+prtNo+'" value="'+miscPartDiscount[prtNo]+'" type="text" placeholder="0.00" class="slds-input" ></td><td>$<span id="miscGrndTotalName'+prtNo+'">'+miscPartGrandTotal[prtNo]+'</span></td> <td><a onclick="removeMiscPrtRow(\''+prtNo+'\');"><i class="fa fa-close" style="font-size: 20px;"></i></a></td></tr>';
+                            }
+                        }
+                        $("#miscPrtTableId").html(newHTMLTable);
+                    }
+                    
+                    delete miscPartName[rowId];
+                    delete miscPartQuantity[rowId];
+                    delete miscPartMSRP[rowId];
+                    delete miscPartTotal[rowId];
+                    delete miscPartDiscount[rowId];
+                    delete miscPartGrandTotal[rowId];
+                    
+                    console.log("miscPartName: ");
+                    console.log(miscPartName);
+                    if(Object.keys(miscPartName).length == 0) {
+                        $("#MiscDivId").html("");
+                    }
+                }
+                
+                function calculateInvoiceTotal(obj, prtDetail, type_PER_CUR) {
+                    $('.popup').addClass('active');
+                    console.log("Discount : "+obj.value);
+                    console.log("prtNum : "+prtDetail);
+                    console.log(lstOrder)
+                    var objValue = 0.00;
+                    if(/^\d*$/.test(obj.value) || /^\d+\.\d{0,2}$/.test(obj.value) || /^\.\d{0,2}$/.test(obj.value)) {
+                        objValue = parseFloat(obj.value);
+                    }
+                    else {
+                        obj.value = 0.00;
+                        objValue = 0.00;
+                        alert("Please enter currency only. Rounding to 2 decimal place.");
+                    }
+
+                        if(lstOrder.length > 0) {
+                            var tableHTML = "<table id='prtOrderlineTblId' class='slds-table slds-table--bordered slds-table--cell-buffer'  style='border-collapse: collapse;'> <tr> <th>Part Number</th> <th>Description</th> <th>Quantity</th> <th>MSRP</th> <th>Total</th> <th>Discount (%)</th> <th>Discount ($)</th> <th>Grand Total</th> <th></th></tr>";
+                            discountTotal = 0.00;
+                            totalOfGrandTotal = 0.00;
+                            for(var i = 0 ; i < lstOrder.length ; i++) {
+                                var partNumber = "";
+                                var partName = ""
+                                var partQuantity = 0;
+                                var retailPrice = 0.00;
+                                var totalRetailPrice = 0.00;
+                                var grndTotal = 0.00;
+
+                                if(lstOrder[i].PartNumber != null) {
+                                     partNumber = lstOrder[i].PartNumber;
+                                 }
+                                 if(lstOrder[i].PartName != null) {
+                                     partName = lstOrder[i].PartName;
+                                 }
+                                 if(lstOrder[i].Quantity != null) {
+                                     partQuantity = parseInt(lstOrder[i].Quantity);
+                                 }
+                                 if(lstOrder[i].MSRP != null) {
+                                     retailPrice = parseFloat(lstOrder[i].MSRP);
+                                 }
+                                totalRetailPrice = mapInvoiceItemQuantity[lstOrder[i].PartNumber] * retailPrice;
+                                
+                                var disAmount = 0.00;
+                                var disPer = 0.00;
+                                if(type_PER_CUR == "CUR") {
+                                	disAmount = parseFloat(objValue);
+                                	disPer = parseFloat(objValue * 100)/totalRetailPrice;
+                                } else {
+                                	disAmount = parseFloat(totalRetailPrice * objValue)/100;
+                                	disPer = objValue;
+                                }
+                                
+                                if(lstOrder[i].PartNumber == prtDetail) {
+	                                console.log('type_PER_CUR: '+type_PER_CUR);
+	                                console.log('disAmount: '+disAmount);
+	                                console.log('disPer: '+disPer);
+                                    if(totalRetailPrice >=  parseFloat(disAmount)) {
+                                        console.log("Part Number if : "+lstOrder[i].PartNumber);
+                                        mapOrderLineItemAndDiscountPER[lstOrder[i].PartNumber] = disPer;
+                                        mapOrderLineItemAndDiscount[lstOrder[i].PartNumber] = disAmount;
+                                        grndTotal = totalRetailPrice - disAmount;
+                                        if(lstOrder[i].PartNumber in finalQuantity) {
+                                            tableHTML = tableHTML + "<tr class='slds-hint-parent'> <td>"+partNumber+"</td><td>"+partName+"</td><td><input type='text' class='slds-input' value='"+mapInvoiceItemQuantity[lstOrder[i].PartNumber]+"' onchange='calculateInvoiceAfterQuantityChange(this, \""+lstOrder[i].PartNumber+"\");'/></td><td>$"+(retailPrice).toFixed(2)+"</td> <td>$"+(totalRetailPrice).toFixed(2)+"</td><td><input type='text' value='"+parseFloat(mapOrderLineItemAndDiscountPER[lstOrder[i].PartNumber]).toFixed(2)+"' class='slds-input' onchange='calculateInvoiceTotal(this,\""+lstOrder[i].PartNumber+"\", \"PER\");'/></td> <td><input type='text' value='"+parseFloat(mapOrderLineItemAndDiscount[lstOrder[i].PartNumber]).toFixed(2)+"' class='slds-input' onchange='calculateInvoiceTotal(this,\""+lstOrder[i].PartNumber+"\", \"CUR\");'/></td><td>$"+(grndTotal).toFixed(2)+"</td> <td><input type='button' value='Update' class='slds-button slds-button--neutral slds-button--brand' id='addBut"+i+"' onclick='addToCartOfInvoiceLineItem(this, \""+lstOrder[i].PartNumber+"\")'/></td></tr>";   
+                                        }
+                                        else {
+                                            tableHTML = tableHTML + "<tr class='slds-hint-parent'> <td>"+partNumber+"</td><td>"+partName+"</td><td><input type='text' class='slds-input' value='"+mapInvoiceItemQuantity[lstOrder[i].PartNumber]+"' onchange='calculateInvoiceAfterQuantityChange(this, \""+lstOrder[i].PartNumber+"\");'/></td><td>$"+(retailPrice).toFixed(2)+"</td> <td>$"+(totalRetailPrice).toFixed(2)+"</td><td><input type='text' value='"+parseFloat(mapOrderLineItemAndDiscountPER[lstOrder[i].PartNumber]).toFixed(2)+"' class='slds-input' onchange='calculateInvoiceTotal(this,\""+lstOrder[i].PartNumber+"\", \"PER\");'/> <td><input type='text' value='"+parseFloat(mapOrderLineItemAndDiscount[lstOrder[i].PartNumber]).toFixed(2)+"' class='slds-input' onchange='calculateInvoiceTotal(this,\""+lstOrder[i].PartNumber+"\", \"CUR\");'/></td><td>$"+(grndTotal).toFixed(2)+"</td> <td><input type='button' value='Add' class='slds-button slds-button--neutral slds-button--brand' id='addBut"+i+"' onclick='addToCartOfInvoiceLineItem(this, \""+lstOrder[i].PartNumber+"\")'/></td></tr>";     
+                                        }
+                                    }
+                                    else {
+                                        console.log("Part Number else : "+lstOrder[i].PartNumber);
+                                        alert("Discount cannot be more than total price.");
+                                        mapOrderLineItemAndDiscountPER[lstOrder[i].PartNumber] = 0.00;
+                                        mapOrderLineItemAndDiscount[lstOrder[i].PartNumber] = 0.00;
+                                        grndTotal = totalRetailPrice;
+                                        obj.value = 0.00;
+                                        if(lstOrder[i].PartNumber in finalQuantity) {
+                                            tableHTML = tableHTML + "<tr class='slds-hint-parent'> <td>"+partNumber+"</td><td>"+partName+"</td><td><input type='text' class='slds-input' value='"+mapInvoiceItemQuantity[lstOrder[i].PartNumber]+"' onchange='calculateInvoiceAfterQuantityChange(this, \""+lstOrder[i].PartNumber+"\");'/></td><td>$"+(retailPrice).toFixed(2)+"</td> <td>$"+(totalRetailPrice).toFixed(2)+"</td> <td><input type='text' value='"+parseFloat(mapOrderLineItemAndDiscountPER[lstOrder[i].PartNumber]).toFixed(2)+"' class='slds-input' onchange='calculateInvoiceTotal(this,\""+lstOrder[i].PartNumber+"\", \"PER\");'/></td> <td><input type='text' value='"+parseFloat(mapOrderLineItemAndDiscount[lstOrder[i].PartNumber]).toFixed(2)+"' class='slds-input' onchange='calculateInvoiceTotal(this,\""+lstOrder[i].PartNumber+"\", \"CUR\");'/></td><td>$"+(grndTotal).toFixed(2)+"</td> <td><input type='button' value='Update' class='slds-button slds-button--neutral slds-button--brand' id='addBut"+i+"' onclick='addToCartOfInvoiceLineItem(this, \""+lstOrder[i].PartNumber+"\")'/></td></tr>";   
+                                        }
+                                        else {
+                                            tableHTML = tableHTML + "<tr class='slds-hint-parent'> <td>"+partNumber+"</td><td>"+partName+"</td><td><input type='text' class='slds-input' value='"+mapInvoiceItemQuantity[lstOrder[i].PartNumber]+"' onchange='calculateInvoiceAfterQuantityChange(this, \""+lstOrder[i].PartNumber+"\");'/></td><td>$"+(retailPrice).toFixed(2)+"</td> <td>$"+(totalRetailPrice).toFixed(2)+"</td> <td><input type='text' value='"+parseFloat(mapOrderLineItemAndDiscountPER[lstOrder[i].PartNumber]).toFixed(2)+"' class='slds-input' onchange='calculateInvoiceTotal(this,\""+lstOrder[i].PartNumber+"\", \"PER\");'/></td> <td><input type='text' value='"+parseFloat(mapOrderLineItemAndDiscount[lstOrder[i].PartNumber]).toFixed(2)+"' class='slds-input' onchange='calculateInvoiceTotal(this,\""+lstOrder[i].PartNumber+"\", \"CUR\");'/></td><td>$"+(grndTotal).toFixed(2)+"</td> <td><input type='button' value='Add' class='slds-button slds-button--neutral slds-button--brand' id='addBut"+i+"' onclick='addToCartOfInvoiceLineItem(this, \""+lstOrder[i].PartNumber+"\")'/></td></tr>";     
+                                        }
+                                    }
+                                    
+                                }
+                                else {
+                                    grndTotal = totalRetailPrice - mapOrderLineItemAndDiscount[lstOrder[i].PartNumber];
+                                    if(lstOrder[i].PartNumber in finalQuantity) {
+                                        tableHTML = tableHTML + "<tr class='slds-hint-parent'> <td>"+partNumber+"</td><td>"+partName+"</td><td><input type='text' class='slds-input' value='"+mapInvoiceItemQuantity[lstOrder[i].PartNumber]+"' onchange='calculateInvoiceAfterQuantityChange(this, \""+lstOrder[i].PartNumber+"\");'/></td><td>$"+(retailPrice).toFixed(2)+"</td> <td>$"+(totalRetailPrice).toFixed(2)+"</td><td><input type='text' value='"+parseFloat(mapOrderLineItemAndDiscountPER[lstOrder[i].PartNumber]).toFixed(2)+"' class='slds-input' onchange='calculateInvoiceTotal(this,\""+lstOrder[i].PartNumber+"\", \"PER\");'/></td> <td><input type='text' value='"+parseFloat(mapOrderLineItemAndDiscount[lstOrder[i].PartNumber]).toFixed(2)+"' class='slds-input' onchange='calculateInvoiceTotal(this,\""+lstOrder[i].PartNumber+"\", \"CUR\");'/></td><td>$"+(grndTotal).toFixed(2)+"</td> <td><input type='button' value='Update' class='slds-button slds-button--neutral slds-button--brand' id='addBut"+i+"' onclick='addToCartOfInvoiceLineItem(this, \""+lstOrder[i].PartNumber+"\")'/></td></tr>";   
+                                    }
+                                    else {
+                                        tableHTML = tableHTML + "<tr class='slds-hint-parent'> <td>"+partNumber+"</td><td>"+partName+"</td><td><input type='text' class='slds-input' value='"+mapInvoiceItemQuantity[lstOrder[i].PartNumber]+"' onchange='calculateInvoiceAfterQuantityChange(this, \""+lstOrder[i].PartNumber+"\");'/></td><td>$"+(retailPrice).toFixed(2)+"</td> <td>$"+(totalRetailPrice).toFixed(2)+"</td><td><input type='text' value='"+parseFloat(mapOrderLineItemAndDiscountPER[lstOrder[i].PartNumber]).toFixed(2)+"' class='slds-input' onchange='calculateInvoiceTotal(this,\""+lstOrder[i].PartNumber+"\", \"PER\");'/></td> <td><input type='text' value='"+parseFloat(mapOrderLineItemAndDiscount[lstOrder[i].PartNumber]).toFixed(2)+"' class='slds-input' onchange='calculateInvoiceTotal(this,\""+lstOrder[i].PartNumber+"\", \"CUR\");'/></td><td>$"+(grndTotal).toFixed(2)+"</td> <td><input type='button' value='Add' class='slds-button slds-button--neutral slds-button--brand' id='addBut"+i+"' onclick='addToCartOfInvoiceLineItem(this, \""+lstOrder[i].PartNumber+"\")'/></td></tr>";   
+                                    }
+                                }
+                            }
+                            tableHTML = tableHTML + "</table>";
+                            console.log(mapOrderLineItemAndDiscountPER);
+                            console.log(mapOrderLineItemAndDiscount);
+                            document.getElementById("orderLineItemDivId").innerHTML = tableHTML;    
+                            $('.popup').removeClass('active');
+                        }
+                    
+                }
+                
+                
+                function calculateInvoiceAfterQuantityChange(obj, prtDetail) {
+                    $('.popup').addClass('active');
+                    console.log("Quantity Changed");
+                    console.log("Discount : "+obj.value);
+                    console.log("prtNum : "+prtDetail);
+                    console.log(lstOrder)
+                    if(/^\d*$/.test(obj.value)) {
+                        var objValue = parseFloat(obj.value);
+                        if(lstOrder.length > 0) {
+                            var tableHTML = "<table id='prtOrderlineTblId' class='slds-table slds-table--bordered slds-table--cell-buffer'  style='border-collapse: collapse;'> <tr> <th>Part Number</th> <th>Description</th> <th>Quantity</th> <th>MSRP</th> <th>Total</th> <th>Discount (%)</th> <th>Discount ($)</th> <th>Grand Total</th> <th></th></tr>";
+                            discountTotal = 0.00;
+                            totalOfGrandTotal = 0.00;
+                            retailTotal = 0.00;
+                            for(var i = 0 ; i < lstOrder.length ; i++) {
+                                var partNumber = "";
+                                var partName = ""
+                                var partQuantity = 0;
+                                var retailPrice = 0.00;
+                                var totalRetailPrice = 0.00;
+                                var grndTotal = 0.00;
+
+                                if(lstOrder[i].PartNumber != null) {
+                                     partNumber = lstOrder[i].PartNumber;
+                                 }
+                                 if(lstOrder[i].PartName != null) {
+                                     partName = lstOrder[i].PartName;
+                                 }
+                                 if(lstOrder[i].Quantity != null) {
+                                     partQuantity = parseInt(lstOrder[i].Quantity);
+                                 }
+                                 if(lstOrder[i].MSRP != null) {
+                                     retailPrice = parseFloat(lstOrder[i].MSRP);
+                                 }
+                                //totalRetailPrice = partQuantity * retailPrice; 
+                                if(lstOrder[i].PartNumber == prtDetail) {
+                                    console.log("Part Number if : "+lstOrder[i].PartNumber);
+                                    mapInvoiceItemQuantity[lstOrder[i].PartNumber] = objValue;
+                                    totalRetailPrice = retailPrice * parseFloat(mapInvoiceItemQuantity[lstOrder[i].PartNumber]);
+                                    mapOrderLineItemAndDiscount[lstOrder[i].PartNumber] = parseFloat(totalRetailPrice * mapOrderLineItemAndDiscountPER[lstOrder[i].PartNumber])/100;
+                                    console.log(totalRetailPrice);
+                                    console.log(mapOrderLineItemAndDiscountPER[lstOrder[i].PartNumber]);
+                                    console.log(mapOrderLineItemAndDiscount[lstOrder[i].PartNumber]);
+                                    //debugger;
+                                    
+                                    if(totalRetailPrice >= parseFloat(mapOrderLineItemAndDiscount[lstOrder[i].PartNumber])) {
+                                        grndTotal = totalRetailPrice - parseFloat(mapOrderLineItemAndDiscount[lstOrder[i].PartNumber]);
+                                    }
+                                    else {
+                                        mapOrderLineItemAndDiscount[lstOrder[i].PartNumber] = 0.00;
+                                        mapOrderLineItemAndDiscountPER[lstOrder[i].PartNumber] = 0.00;
+                                        grndTotal = totalRetailPrice;
+                                    }
+                                    if(lstOrder[i].PartNumber in finalQuantity) {
+                                        tableHTML = tableHTML + "<tr class='slds-hint-parent'> <td>"+partNumber+"</td><td>"+partName+"</td><td><input type='text' class='slds-input' value='"+mapInvoiceItemQuantity[lstOrder[i].PartNumber]+"' onchange='calculateInvoiceAfterQuantityChange(this, \""+lstOrder[i].PartNumber+"\");'/></td><td>$"+(retailPrice).toFixed(2)+"</td> <td>$"+(totalRetailPrice).toFixed(2)+"</td><td><input type='text' value='"+parseFloat(mapOrderLineItemAndDiscountPER[lstOrder[i].PartNumber]).toFixed(2)+"' class='slds-input' onchange='calculateInvoiceTotal(this,\""+lstOrder[i].PartNumber+"\");'/></td> <td><input type='text' value='"+parseFloat(mapOrderLineItemAndDiscount[lstOrder[i].PartNumber]).toFixed(2)+"' class='slds-input' onchange='calculateInvoiceTotal(this,\""+lstOrder[i].PartNumber+"\");'/></td><td>$"+(grndTotal).toFixed(2)+"</td> <td><input type='button' value='Update' class='slds-button slds-button--neutral slds-button--brand' id='addBut"+i+"' onclick='addToCartOfInvoiceLineItem(this, \""+lstOrder[i].PartNumber+"\")'/></td></tr>";   
+                                    }
+                                    else {
+                                        tableHTML = tableHTML + "<tr class='slds-hint-parent'> <td>"+partNumber+"</td><td>"+partName+"</td><td><input type='text' class='slds-input' value='"+mapInvoiceItemQuantity[lstOrder[i].PartNumber]+"' onchange='calculateInvoiceAfterQuantityChange(this, \""+lstOrder[i].PartNumber+"\");'/></td><td>$"+(retailPrice).toFixed(2)+"</td> <td>$"+(totalRetailPrice).toFixed(2)+"</td> <td><input type='text' value='"+parseFloat(mapOrderLineItemAndDiscountPER[lstOrder[i].PartNumber]).toFixed(2)+"' class='slds-input' onchange='calculateInvoiceTotal(this,\""+lstOrder[i].PartNumber+"\");'/></td> <td><input type='text' value='"+parseFloat(mapOrderLineItemAndDiscount[lstOrder[i].PartNumber]).toFixed(2)+"' class='slds-input' onchange='calculateInvoiceTotal(this,\""+lstOrder[i].PartNumber+"\");'/></td><td>$"+(grndTotal).toFixed(2)+"</td> <td><input type='button' value='Add' class='slds-button slds-button--neutral slds-button--brand' id='addBut"+i+"' onclick='addToCartOfInvoiceLineItem(this, \""+lstOrder[i].PartNumber+"\")'/></td></tr>";    
+                                    }
+                                    
+                                }
+                                else {
+                                    totalRetailPrice = retailPrice * parseFloat(mapInvoiceItemQuantity[lstOrder[i].PartNumber]);
+                                    grndTotal = totalRetailPrice - mapOrderLineItemAndDiscount[lstOrder[i].PartNumber];
+                                    if(lstOrder[i].PartNumber in finalQuantity) {
+                                        tableHTML = tableHTML + "<tr class='slds-hint-parent'> <td>"+partNumber+"</td><td>"+partName+"</td><td><input type='text' class='slds-input' value='"+mapInvoiceItemQuantity[lstOrder[i].PartNumber]+"' onchange='calculateInvoiceAfterQuantityChange(this, \""+lstOrder[i].PartNumber+"\");'/></td><td>$"+(retailPrice).toFixed(2)+"</td> <td>$"+(totalRetailPrice).toFixed(2)+"</td><td><input type='text' value='"+parseFloat(mapOrderLineItemAndDiscountPER[lstOrder[i].PartNumber]).toFixed(2)+"' class='slds-input' onchange='calculateInvoiceTotal(this,\""+lstOrder[i].PartNumber+"\");'/></td> <td><input type='text' value='"+parseFloat(mapOrderLineItemAndDiscount[lstOrder[i].PartNumber]).toFixed(2)+"' class='slds-input' onchange='calculateInvoiceTotal(this,\""+lstOrder[i].PartNumber+"\");'/></td><td>$"+(grndTotal).toFixed(2)+"</td> <td><input type='button' value='Update' class='slds-button slds-button--neutral slds-button--brand' id='addBut"+i+"' onclick='addToCartOfInvoiceLineItem(this, \""+lstOrder[i].PartNumber+"\")'/></td></tr>";   
+                                    }
+                                    else {
+                                        tableHTML = tableHTML + "<tr class='slds-hint-parent'> <td>"+partNumber+"</td><td>"+partName+"</td><td><input type='text' class='slds-input' value='"+mapInvoiceItemQuantity[lstOrder[i].PartNumber]+"' onchange='calculateInvoiceAfterQuantityChange(this, \""+lstOrder[i].PartNumber+"\");'/></td><td>$"+(retailPrice).toFixed(2)+"</td> <td>$"+(totalRetailPrice).toFixed(2)+"</td><td><input type='text' value='"+parseFloat(mapOrderLineItemAndDiscountPER[lstOrder[i].PartNumber]).toFixed(2)+"' class='slds-input' onchange='calculateInvoiceTotal(this,\""+lstOrder[i].PartNumber+"\");'/></td> <td><input type='text' value='"+parseFloat(mapOrderLineItemAndDiscount[lstOrder[i].PartNumber]).toFixed(2)+"' class='slds-input' onchange='calculateInvoiceTotal(this,\""+lstOrder[i].PartNumber+"\");'/></td><td>$"+(grndTotal).toFixed(2)+"</td> <td><input type='button' value='Add' class='slds-button slds-button--neutral slds-button--brand' id='addBut"+i+"' onclick='addToCartOfInvoiceLineItem(this, \""+lstOrder[i].PartNumber+"\")'/></td></tr>";   
+                                    }
+                                }
+                            }
+                            tableHTML = tableHTML + "</table>";
+                            console.log(mapOrderLineItemAndDiscount);
+                            console.log(mapOrderLineItemAndDiscountPER);
+                            document.getElementById("orderLineItemDivId").innerHTML = tableHTML;
+                            $('.popup').removeClass('active');    
+                        }
+                    }
+                    else {
+                        obj.value = 0;
+                        alert("Please enter only number.");
+                        $('.popup').removeClass('active');
+                    }
+                }
+                
+                function addToCartOfInvoiceLineItem(obj, partDetail) {
+                    
+                    $('.popup').addClass('active');
+                    if(mapInvoiceItemQuantity[partDetail] > 0) {
+                        obj.value = "Update";
+                        finalQuantity[partDetail] = mapInvoiceItemQuantity[partDetail];
+                        finalDiscount[partDetail] = mapOrderLineItemAndDiscount[partDetail];
+                        finalDiscountPER[partDetail] = mapOrderLineItemAndDiscountPER[partDetail];
+                        countInvoiceLineItem ++;
+                        var lstKeySet = [];
+                        if(lstOrder.length > 0) {
+                            for(var i = 0; i < lstOrder.length; i++) {
+                                if(lstOrder[i].PartNumber == partDetail) {
+                                   mapForTableValues[partDetail] = lstOrder[i];
+                                }
+                            }
+                        }
+                        retailTotal = 0.00;
+                        discountTotal = 0.00;
+                        grndTotal = 0.00;
+                        var tableHTML = "<table id='prtInvoiceTblId' class='slds-table slds-table--bordered slds-table--cell-buffer'  style='border-collapse: collapse;'> <tr> <th>Part Number</th> <th>Description</th> <th>Quantity</th> <th>MSRP</th> <th>Total</th> <th>Discount (%)</th> <th>Discount ($)</th> <th>Grand Total</th></tr>";
+                        for(var key in mapForTableValues) {
+                             var partNumber = "";
+                             var partName = "";
+                             var partQuantity = 0;
+                             var retailPrice = 0.00;
+                             var totalRetailPrice = 0.00;
+
+                             if(mapForTableValues[key].PartNumber != null) {
+                                 partNumber = mapForTableValues[key].PartNumber;
+                             }
+                             if(mapForTableValues[key].PartName != null) {
+                                 partName = mapForTableValues[key].PartName;
+                             }
+                             if(mapForTableValues[key].Quantity != null) {
+                                 partQuantity = parseInt(mapForTableValues[key].Quantity);
+                             }
+                             if(mapForTableValues[key].MSRP != null) {
+                                 retailPrice = parseFloat(mapForTableValues[key].MSRP);
+                             }
+                             totalRetailPrice = parseInt(finalQuantity[key]) * retailPrice;
+                             retailTotal += totalRetailPrice;
+                             discountTotal += parseFloat(finalDiscount[key]);
+                             totalOfGrandTotal = retailTotal - discountTotal;
+                             grndTotal = totalRetailPrice - parseFloat(finalDiscount[key]).toFixed(2);
+                             tableHTML = tableHTML + "<tr class='slds-hint-parent'> <td>"+partNumber+"</td><td>"+partName+"</td><td>"+finalQuantity[key]+"</td><td>$"+(retailPrice).toFixed(2)+"</td> <td>$ "+(totalRetailPrice).toFixed(2)+"</td><td>"+parseFloat(finalDiscountPER[key]).toFixed(2)+"%</td> <td>$"+parseFloat(finalDiscount[key]).toFixed(2)+"</td><td>$"+(grndTotal).toFixed(2)+"</td> </tr>";
+                        }
+                        tableHTML = tableHTML + "<tfoot> <tr> <td>&nbsp;</td> <td>&nbsp;</td> <td>&nbsp;</td> <td>Total:</td> <td>$ "+(retailTotal).toFixed(2)+"</td> <td>&nbsp;</td> <td>$ "+(discountTotal).toFixed(2)+"</td> <td>$ "+(totalOfGrandTotal).toFixed(2)+"</td></tr> </tfoot> </table>";
+                        document.getElementById("infoDivPO3").style.display = "block";
+                        document.getElementById("addedInvoiceLineItemDetailSection").innerHTML = tableHTML;
+                    }
+                    else {
+                        alert("Quantity should be greater than 0 for adding the part in cart.")
+                    }
+                    $('.popup').removeClass('active');
+                }
+
+                $('#createInvoiceBttn').click(function() {
+                    $('.popup').addClass('active');
+                    var conId = document.getElementById("pge:frm:ifC_lkid").value;
+                    var conName = document.getElementById("pge:frm:ifC").value;
+                    var stLocation = document.getElementById("pge:frm:invSL").value;
+                    if(StoreLocationRequired == true && (stLocation == null || stLocation == "")){
+                        alert("Please Select Store Location.");
+                        $('.popup').removeClass('active');
+                        return false;
+                    }
+                    var misPartCount = Object.keys(miscPartName).length;
+                    var sldById = document.getElementById("pge:frm:invSldBy_lkid").value;
+                    var sldByName = document.getElementById("pge:frm:invSldBy").value;
+                    if(sldById == null || sldById == "" || sldById == "000000000000000"){
+                        alert("Please Select Sold By.");
+                        $('.popup').removeClass('active');
+                        return false;
+                    } 
+                    var promoCode = $("#invPromocode").val();
+                    if(conName != null && conName != "") {
+                        if(conId != null && conId != "" && conId != "000000000000000") {
+                            if(countInvoiceLineItem > 0 || misPartCount > 0) {
+                                BOATBUILDING.ServicePageController.generateInvoice(promoCode, finalDiscount, finalQuantity, conId, stLocation, miscPartName, miscPartQuantity, miscPartMSRP, miscPartDiscount, sldById, finalDiscountPER, function(result, event) {
+                                    console.log('===event.status==='+event.status);
+                                    console.log('===event.status==='+result);
+                                    if(event.status) {
+                                        console.log('===result==='+result);
+                                        if(result != null && result.indexOf('Part:') == -1) {
+                                            $('.popup').removeClass('active');
+                                           window.top.location = '/apex/BOATBUILDING__InvoiceDetail?id='+result;
+                                        }else {
+                                            $('.popup').removeClass('active');
+                                            alert(result);
+                                        }
+                                    }
+                                }); 
+                            }
+                            else {
+                                alert("Please add parts in your cart first.");
+                                $('.popup').removeClass('active');
+                            }
+                        }
+                        else {
+                            alert("Something went wrong. Please select customer again");
+                            $('.popup').removeClass('active');
+                        }
+                    }
+                    else {
+                        alert("Please select customer and try again.");
+                        $('.popup').removeClass('active');
+                    }
+                    
+                });
+
+                function displayInvoiceForm(obj) {
+                    document.getElementById("invoiceTable").style.display = "none";
+                    document.getElementById("invoicefrmId").style.display = "block";
+                }
+                function hideInvoiceForm(obj) {
+                    document.getElementById("invoiceTable").style.display = "block";
+                    document.getElementById("invoicefrmId").style.display = "none";   
+                    document.getElementById("orderLineItemDivId").innerHTML = ""; 
+                    document.getElementById("addedInvoiceLineItemDetailSection").innerHTML = "";                       
+                    document.getElementById("selectSearchById").value = "0";
+                    document.getElementById("searchPartInvoiceId").value = "";
+                    document.getElementById("pge:frm:ifC").value = "";
+                    document.getElementById("ConPhoneId").value = "";
+                    document.getElementById("ConStreetId").value = "";
+                    document.getElementById("ConCityId").value = "";
+                    document.getElementById("ConEmailId").value = "";
+                    document.getElementById("ConStateId").value = "";
+                    document.getElementById("ConZipId").value = "";
+                    lstOrder = [];
+                    mapOrderLineItemAndDiscount = new Object();
+                    mapOrderLineItemAndDiscountPER = new Object();
+                    mapInvoiceItemQuantity = new Object();
+                    finalQuantity = new Object();
+                    finalDiscount = new Object();
+                    finalDiscountPER = new Object();
+                    mapForTableValues = new Object();
+                    countInvoiceLineItem = 0;
+                }
+                    
+                
+
+            </script>      
+            <script>
+            $(document).ready(function() {
+                $('.Table1').DataTable();
+            });
+           </script>
+            <!-- ________________________ Time MGMT___________________________-->
+           <script>
+            var tmid = '';
+            var dayout = '';
+            var dayin = '';
+            var lunchin = '';
+            var lunchout = '';
+            
+           $(document).ready(function()
+             {
+                BOATBUILDING.ServicePageController.checkrecordexists(function(result,event)
+                { 
+                    console.log('Result:'+ result);
+                    console.log('event'+ event);
+                    var res = [];
+                    res = result;
+                    console.log(res);
+                    if(event.status)
+                    {
+                    if(res != null)
+                        {
+                        tmid = res[0].Id;
+                            if(tmid != '')
+                            {
+                            if(res[0].BOATBUILDING__Day_In__c != undefined && res[0].BOATBUILDING__Day_In__c != null) {
+                                    dayin = res[0].BOATBUILDING__Day_In__c; 
+                                }
+                                if(res[0].BOATBUILDING__Day_Out__c != undefined && res[0].BOATBUILDING__Day_Out__c != null) {
+                                    dayout = res[0].BOATBUILDING__Day_Out__c; 
+                                }
+                                if(res[0].BOATBUILDING__Lunch_Out__c != undefined && res[0].BOATBUILDING__Lunch_Out__c != null) {
+                                    lunchout = res[0].BOATBUILDING__Lunch_Out__c ;
+                                }
+                                if(res[0].BOATBUILDING__Lunch_In__c != undefined && res[0].BOATBUILDING__Lunch_In__c != null) {
+                                    lunchin = res[0].BOATBUILDING__Lunch_In__c ;
+                                console.log('lunchin :' +res[0].BOATBUILDING__Lunch_In__c);
+                                }
+                                if(dayin != '' && lunchout == '' && dayout == '')
+                                {
+                                    $('#day_in_btn').addClass('disablebtn');
+                                    $('#lunch_out_btn').removeClass('disablebtn');
+                                    $('#lunch_in_btn').addClass('disablebtn');
+                                    $('#day_out_btn').removeClass('disablebtn');                                  
+                                } 
+                                else if(dayin != '' && lunchout != '' && lunchin == '' && dayout == '')
+                                {
+                                    $('#day_in_btn').addClass('disablebtn');
+                                    $('#lunch_out_btn').addClass('disablebtn');
+                                    $('#lunch_in_btn').removeClass('disablebtn');
+                                    $('#day_out_btn').removeClass('disablebtn'); 
+                                } 
+                                else if(dayin != '' && lunchout != '' && lunchin !='' && dayout == '')
+                                {
+                                    $('#day_in_btn').addClass('disablebtn');
+                                    $('#lunch_out_btn').addClass('disablebtn');
+                                    $('#lunch_in_btn').addClass('disablebtn');
+                                    $('#day_out_btn').removeClass('disablebtn'); 
+                                } 
+                                else if(dayout != ''){
+                                    $('#day_in_btn').addClass('disablebtn');
+                                    $('#lunch_out_btn').addClass('disablebtn');
+                                    $('#day_out_btn').addClass('disablebtn');
+                                    $('#lunch_in_btn').addClass('disablebtn');
+                                }
+                            }
+                            else
+                            {
+                              tmid='';
+                            }
+                        }
+                        else
+                        {
+                                $('#lunch_out_btn').addClass('disablebtn');
+                                $('#lunch_in_btn').addClass('disablebtn');
+                                $('#day_out_btn').addClass('disablebtn');
+                                
+                        }
+                   }
+                 });
+                
+                setTimeout(function(){
+                        $('#day_in_btn').click(function(){
+                                console.log("outer");
+                            if($('#day_in_btn').hasClass('disablebtn')){
+                                //$('#day_in_btn').off("click");
+                                console.log("inner else");
+                            }
+                            else{
+                                    console.log("inner else");
+                                $('#day_in_btn').addClass('disablebtn');
+                                BOATBUILDING.ServicePageController.dayin(function(result,event)
+                                { 
+                                    console.log('Result:'+ result);
+                                    console.log('event'+ event);
+                                    if(event.status){ 
+                                        if(result != 'ERROR') {
+                                        tmid  =  result ;
+                                        $('#day_in_btn').addClass('disablebtn');
+                                        $('#lunch_out_btn').removeClass('disablebtn');
+                                        $('#day_out_btn').removeClass('disablebtn');  
+                                        BOATBUILDING.ServicePageController.getTimes(function(response,event)
+                                        {
+                                                document.getElementById('dinSpan').innerHTML = response.dayIn;
+                                                document.getElementById('loutSpan').innerHTML = '';
+                                                document.getElementById('linSpan').innerHTML = '';
+                                                document.getElementById('doutSpan').innerHTML = '';
+                                                document.getElementById('tWH').innerHTML = '';
+                                        });
+                                       } 
+                                     }
+                                 });
+                            }
+                        });
+                    }, 500);
+                    
+                    setTimeout(function(){
+                        $('#lunch_out_btn').click(function(){
+                        if($('#lunch_out_btn').hasClass('disablebtn')){
+                            //do nothing
+                        }
+                        else{
+                            $('#lunch_out_btn').addClass('disablebtn');
+                            BOATBUILDING.ServicePageController.lunchout(tmid,function(result,event)
+                           { 
+                            
+                            console.log('Result:'+ result);
+                            console.log('event'+ event);
+                                    if(event.status){
+                                       if(result != 'ERROR'){
+                                        tmid = result;
+                                        //alert('record UPDATED lUNCHin!!!!');
+                                        $('#lunch_out_btn').addClass('disablebtn');
+                                        $('#lunch_in_btn').removeClass('disablebtn');
+                                        $('#day_out_btn').removeClass('disablebtn');
+                                        BOATBUILDING.ServicePageController.getTimes(function(response,event)
+                                        {
+                                                document.getElementById('loutSpan').innerHTML = response.LunchOut;
+                                        });
+                                       }
+                                       
+                                    }
+                            });
+                            }
+                        });  
+                    }, 500);
+                    
+                    
+                    setTimeout(function(){ 
+                    $('#lunch_in_btn').click(function(){
+                    if($('#lunch_in_btn').hasClass('disablebtn')){
+                        //do nothing
+                    }
+                    else{
+                     $('#lunch_in_btn').addClass('disablebtn');
+                     BOATBUILDING.ServicePageController.lunchin(tmid,function(result,event)
+                       { 
+                        console.log('Result:'+ result);
+                        console.log('event'+ event);
+                                if(event.status){
+                                   if(result != 'ERROR'){
+                                    tmid = result;
+                                    $('#lunch_in_btn').addClass('disablebtn');
+                                    $('#day_in_btn').addClass('disablebtn');
+                                    $('#lunch_out_btn').addClass('disablebtn');
+                                    $('#day_out_btn').removeClass('disablebtn');
+                                    BOATBUILDING.ServicePageController.getTimes(function(response,event)
+                                    {
+                                            document.getElementById('linSpan').innerHTML = response.LunchIn;
+                                            
+                                    });
+                                   }
+                                   
+                                }
+                        
+                        });
+                    }
+                    });  
+                    },500);
+                    
+                    
+                    setTimeout(function(){
+                    $('#day_out_btn').click(function(){
+                    if($('#day_out_btn').hasClass('disablebtn')){
+                        //do nothing
+                    }
+                    else{
+                        $('#day_out_btn').addClass('disablebtn');
+                        BOATBUILDING.ServicePageController.dayout(tmid,function(result,event)
+                       { 
+                        console.log('Result:'+ result);
+                        console.log('event'+ event);
+                                if(event.status){
+                                   if(result != 'ERROR'){
+                                    tmid = result;
+                                    $('#day_in_btn').addClass('disablebtn');
+                                    $('#lunch_out_btn').addClass('disablebtn');
+                                    $('#day_out_btn').addClass('disablebtn');
+                                    $('#lunch_in_btn').addClass('disablebtn');
+                                    console.log('hi there');
+                                    BOATBUILDING.ServicePageController.getTimes(function(response,event)
+                                    {
+                                            document.getElementById('doutSpan').innerHTML = response.dAYOUT;
+                                            document.getElementById('tWH').innerHTML = response.totalWorkingHours;
+                                    });
+                                   }
+                                   
+                                }
+                            });
+                            }
+                    }); 
+                    },500);
+
+            });
+    
+    </script>
+        <!-- ________________________ Time MGMT___________________________-->
+        </body>
+    </html>    
+</apex:page>

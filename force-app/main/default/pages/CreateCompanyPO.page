@@ -1,0 +1,110 @@
+<apex:page sidebar="false" showHeader="false" Controller="CreateCompanyPurchaseOrder">
+  <apex:slds />
+  <apex:includeLightning />
+    
+
+  <div class="slds-page-header">
+      <div class="slds-media">
+        <div class="slds-media__figure">
+          <span class="slds-icon_container slds-icon-standard-opportunity" title="Description of icon when needed">
+            <svg class="slds-icon slds-page-header__icon" aria-hidden="true">
+              <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/assets/icons/standard-sprite/svg/symbols.svg#opportunity" />
+            </svg>
+          </span>
+        </div>
+        <div class="slds-media__body">
+          <h1 class="slds-page-header__title slds-truncate slds-align-middle" title="Rohde Corp - 80,000 Widgets">Create Company Purchage Order</h1>
+          
+        </div>
+      </div>
+    </div>
+    <div class="slds-form slds-form_stacked">
+    <div class="demo-only slds-size_1-of-2">
+      <div class="slds-form-element">
+        <label class="slds-checkbox_toggle slds-grid">
+          <span class="slds-form-element__label slds-m-bottom_none">Create Vendor/Manufacturer </span>
+          <input type="checkbox" name="checkbox" aria-describedby="toggle-desc" value="on" id="createVendorCB" onchange="createVendor()"/>
+          <span id="toggle-desc" class="slds-checkbox_faux_container" aria-live="assertive">
+            <span class="slds-checkbox_faux"></span>
+            <span class="slds-checkbox_on">Create New</span>
+            <span class="slds-checkbox_off">Use Existing Vendor</span>
+          </span>
+        </label>
+      </div>
+    </div>
+    <div class="slds-form slds-form_stacked" id="createVendorDiv" style="display:none">
+      <div class="slds-form-element">
+        <label class="slds-form-element__label" for="input-id-01">Vendor Name</label>
+        <div class="slds-form-element__control">
+          <input type="text" id="input-id-vendorName" class="slds-input" placeholder="Vendor Name" />
+        </div>
+      </div>
+      <div class="slds-form-element">
+        <button class="slds-button slds-button_neutral" onclick="CreateVendor();">Save</button>
+      </div>
+      </div>
+      <div class="slds-form slds-form_stacked" id="createVendorDivResult" style="display:none">
+          This Vendor has been created. Now you can use it on next Page to create Purchase Order.
+          <div id="lightningComponent">
+              
+          
+          </div>
+      </div>
+    </div>
+    
+    <script>
+            
+    function createVendor()
+    {
+        var checkbox = document.getElementById('createVendorCB');
+       
+         if(checkbox.checked)
+         {
+             document.getElementById('createVendorDiv').style.display="block";
+         }
+         else
+         {
+          document.getElementById('createVendorDiv').style.display="none";
+         }
+        
+    }
+    
+    function CreateVendor()
+    {
+         var vendorName = document.getElementById('input-id-vendorName').value;
+         BOATBUILDING.CreateCompanyPurchaseOrder.createVendor(vendorName, function(result, event) {
+                    if(event.status) {
+                        if(result != null) {
+                           // console.log(result);
+                            
+                            //alert(recordId);
+                            var recordId = result.Id;
+                            var myUserContext = "{!$User.UITheme}";
+                            $Lightning.use("c:CreateCompanyPOApp", function() {
+                               $Lightning.createComponent("c:CreateCompanyPO",
+                                               {recordId: recordId,recordIdOFRomVF: recordId,callback:function(){
+            window.location =  '{!URLFOR($Action.BOATBUILDING__Order__c.New)}';
+          } },
+                                               "lightningComponent",
+                                               function(cmp) {
+                                                   
+                                               
+                               
+                              });
+                            });
+                            document.getElementById('createVendorDiv').style.display="none";
+                            document.getElementById('createVendorDivResult').style.display="block";
+                        }
+                        else {  
+                            
+                            console.log(result);
+                            
+                        }
+                    }
+            });
+        
+    }
+    
+    </script>
+    
+</apex:page>

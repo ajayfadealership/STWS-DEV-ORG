@@ -1,0 +1,127 @@
+<apex:page standardController="Product__c" extensions="NewProductCustomPageController" id="pge" action="{!checkAccess}">
+    <apex:form id="frm">
+     <p style="font-size:23px;font-family: 'Arial';">
+         <img src="/s.gif" alt="Product" class="pageTitleIcon" title="Product"/>
+         <font style="font-weight: bold;font-size:11px;color : #2F4F4F;"> Product Edit</font><br/>
+          <font > New Product</font>
+     </p>
+        <apex:pageBlock title="Product Edit">
+             <apex:pageBlockButtons id="pbb">
+                 <apex:commandButton value="Save" action="{!saveNewProduct}"/>
+                 <apex:commandButton value="Save & New" action="{!saveAndNewForm}"/>
+                 <apex:commandButton value="Cancel" action="{!cancelBack}"/>
+             </apex:pageBlockButtons>
+             <apex:messages style="color : red;"></apex:messages>
+             <apex:pageBlockSection title="Information" columns="1">
+                 <apex:inputField value="{!objProduct.ProductName__c}"/>
+                 <apex:selectList value="{!selectedManufacturer}" label="Manufacturer " size="1">
+                     <apex:selectOptions value="{!lstManufacturer}"/>
+                     <apex:actionSupport event="onchange" action="{!getYears}"  reRender="sLYID,sLMID,sLMVID,sLEID,sLOCID,sLSCID"/>
+                 </apex:selectList>
+                 <apex:selectList value="{!selectedYear}" label="Year " size="1" disabled="{! if( selectedManufacturer != null ,false , true )}" id="sLYID">
+                     <apex:selectOptions value="{!lstYear}"/>
+                     <apex:actionSupport event="onchange" action="{!getModel}" reRender="sLMID,sLMVID,sLEID"/>
+                 </apex:selectList>
+                 <apex:selectList value="{!selectedModel}" label="Model " size="1" disabled="{! if( selectedManufacturer != null && selectedYear != null ,false , true )}" id="sLMID">
+                     <apex:selectOptions value="{!lstModel}"/>
+                     <apex:actionSupport event="onchange" action="{!getEngineOptionCatAndModelVariant}" reRender="sLMVID,sLOCID"/>
+                 </apex:selectList>
+                 <apex:selectList value="{!selectedModelVariant}" label="Model Variant " size="1" disabled="{! if( selectedManufacturer != null && selectedYear != null && selectedModel != null && modelVariantCheck, false , true )}" id="sLMVID">
+                     <apex:selectOptions value="{!lstModelVariant}"/>
+                 </apex:selectList>
+<!--                  <apex:selectList value="{!selectedEngine}" label="Engine " disabled="{! if( selectedManufacturer != null && selectedYear != null && selectedModel != null , false , true )}" size="1" id="sLEID"> -->
+<!--                      <apex:selectOptions value="{!lstEngine}"/> -->
+<!--                  </apex:selectList> -->
+                  <apex:selectList value="{!selectedOptionCategory}" label="Option Category " size="1" disabled="{! if( selectedManufacturer != null && selectedYear != null && selectedModel != null, false , true )}" id="sLOCID">
+                     <apex:selectOptions value="{!lstOptionCategory}"/>
+                     <apex:actionSupport event="onchange" action="{!getSelectedCategory}" reRender="sLSCID"/>
+                 </apex:selectList>
+                  <apex:selectList value="{!selectedSCategory}" label="Selected Category " size="1" disabled="{! if( selectedOptionCategory != null, false , true )}" id="sLSCID">
+                     <apex:selectOptions value="{!lstSCategory}"/>
+                 </apex:selectList>
+                 <apex:inputField value="{!objProduct.MSRP__c}"/>
+                 <apex:inputField value="{!objProduct.Part_Number__c}"/>
+                 <apex:inputField value="{!objProduct.M_Product_Salesperson_new__c}"/>
+                 <apex:inputField value="{!objProduct.State__c}"/>                                  
+             </apex:pageBlockSection>
+             <apex:pageBlockSection title="Product Details">
+                 <apex:inputField value="{!objProduct.Hull_Id__c}"/>
+                 <apex:inputField value="{!objProduct.Engine_SN__c}"/>
+                 <apex:inputField value="{!objProduct.Trailer_VIN__c}"/>
+                 <!--<apex:inputField value="{!objProduct.M_Product_Code__c}"/>-->
+                 <!--<apex:inputField value="{!objProduct.M_Product_Family__c}"/>
+                 <apex:inputField value="{!objProduct.M_Manufacture_Status__c}"/>-->
+             </apex:pageBlockSection>
+             <!--<apex:pageBlockSection title="Address">
+                 <apex:inputField value="{!objProduct.M_Bill_To_Address_Line1__c}"/>
+                 <apex:inputField value="{!objProduct.M_Bill_To_State__c}"/>
+                 <apex:inputField value="{!objProduct.M_Bill_To_Address_Line2__c}"/>
+                 <apex:inputField value="{!objProduct.M_Bill_to_Postal_Code_Zip_Code__c}"/>
+                 <apex:inputField value="{!objProduct.M_Bill_To_City__c}"/>
+             </apex:pageBlockSection>-->
+             <apex:pageBlockSection title="Prices">
+                 <!--<apex:inputField value="{!objProduct.M_Product_Retail_Price_From__c}"/>
+                 <apex:inputField value="{!objProduct.M_Product_Retail_Price_To__c}"/>-->
+                 <apex:inputField value="{!objProduct.M_Retail_Price__c}"/>
+                 <!--<apex:inputField value="{!objProduct.M_Total_MSRP__c}"/>-->
+                 <!--<apex:inputField value="{!objProduct.M_Product_Price__c}"/>-->
+                 <apex:inputField value="{!objProduct.M_Boat_Trade_Allowance__c}"/>
+                 <apex:inputField value="{!objProduct.Sale_Price__c}"/>
+                 <apex:inputField value="{!objProduct.M_Boat_Actual_Cost_Value_ACV__c}"/>
+                 <apex:inputField value="{!objProduct.Cost_Price__c}"/>
+                 <apex:inputField value="{!objProduct.M_Trailer_Actual_Cost_Value_ACV__c}"/>
+                 <apex:inputField value="{!objProduct.M_Boat_MSRP_PRICE__c}"/>
+                 <apex:inputField value="{!objProduct.M_Trailer_Trade_Allowance__c}"/>
+                 <apex:inputField value="{!objProduct.M_Trailer_MSRP_PRICE__c}"/>
+             </apex:pageBlockSection>
+             <!--<apex:pageBlockSection title="Dates">
+                 <apex:inputField value="{!objProduct.M_Quote_Date__c}"/>
+                 <apex:inputField value="{!objProduct.M_Received_Date__c}"/>
+                 <apex:inputField value="{!objProduct.M_Order_Date_From__c}"/>
+                 <apex:inputField value="{!objProduct.M_Order_Date_To__c}"/>
+                 <apex:inputField value="{!objProduct.M_Delivered_Date_From__c}"/>
+                 <apex:inputField value="{!objProduct.M_Delivered_Date_To__c}"/>
+                 <apex:inputField value="{!objProduct.M_Requested_Ship_Date__c}"/>
+                 <apex:inputField value="{!objProduct.M_Estimated_Ship_Date__c}"/>
+                 <apex:inputField value="{!objProduct.M_Shipped_Date__c}"/>
+             </apex:pageBlockSection>-->
+             <apex:pageBlockSection title="Dealer">
+                 <apex:inputField value="{!objProduct.Dealer__c}"/>
+                 <apex:inputField value="{!objProduct.M_Dealer_Stock__c}"/>
+                 <!--<apex:inputField value="{!objProduct.M_Dealer_Price__c}"/>-->
+                 <apex:inputField value="{!objProduct.M_Dealer_Status__c}"/>
+                 <apex:inputField value="{!objProduct.M_Dealer_Discount__c}"/>
+                 <apex:inputField value="{!objProduct.M_Dealer_Comments__c}"/>
+                 <apex:inputField value="{!objProduct.M_Dealer_COD_Discount__c}"/>
+                 <apex:inputField value="{!objProduct.M_Dealer_Flat_Discount__c}"/>
+             
+             </apex:pageBlockSection>
+             <apex:pageBlockSection title="Taxes">
+                 <apex:inputField value="{!objProduct.M_Trailer_Sales_Tax__c}"/>
+                 <apex:inputField value="{!objProduct.M_Doc_Fee__c}"/>
+                 <apex:inputField value="{!objProduct.M_Boat_Reg_Fee__c}"/>
+                 <apex:inputField value="{!objProduct.M_Trade_PayOFF__c}"/>
+                 <apex:inputField value="{!objProduct.Freight__c}"/>
+                 <apex:inputField value="{!objProduct.M_Down_Payment__c}"/>
+                 <apex:inputField value="{!objProduct.Prep__c}"/>
+                 <apex:inputField value="{!objProduct.Custom__c}"/>
+                 <apex:inputField value="{!objProduct.M_Trailer_Reg_Fee__c}"/>
+             </apex:pageBlockSection>
+             <apex:pageBlockSection title="Finance">
+                 <apex:inputField value="{!objProduct.M_Finance_Term__c}"/>
+                 <apex:inputField value="{!objProduct.M_Payment__c}"/>
+                 <apex:inputField value="{!objProduct.M_Rfinance_Rate__c}"/>
+                 <apex:inputField value="{!objProduct.M_Total_Due__c}"/>
+             </apex:pageBlockSection>
+             <apex:pageBlockSection title="Allowances">
+                 <apex:inputField value="{!objProduct.M_Discount__c}"/>
+                 <apex:inputField value="{!objProduct.M_Description__c}"/>
+                 <apex:inputField value="{!objProduct.M_Quantity__c}"/>
+             </apex:pageBlockSection>
+             <apex:pageBlockSection title="Descriptions">
+                 <apex:inputField value="{!objProduct.Product_Short_Description__c}"/>
+                 <apex:inputField value="{!objProduct.Product_Long_Description__c}"/>
+             </apex:pageBlockSection>
+        </apex:pageBlock>
+    </apex:form>
+</apex:page>

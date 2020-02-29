@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Vendor_Manufacturer_Selection_Rule</fullName>
+    <active>false</active>
+    <errorConditionFormula>OR(IF( RecordType.Name  = &quot;Order For Boats&quot; &amp;&amp;  Vendor_Name__r.RecordType.Name  = &quot;Vendor&quot;, true, false) ,
+IF( RecordType.Name  = &quot;Order&quot; &amp;&amp;  Vendor_Name__r.RecordType.Name  = &quot;Boat Manufacturer&quot;,true, false) ,
+IF( RecordType.Name  = &quot;Purchase Order&quot; &amp;&amp;  Vendor_Name__r.RecordType.Name  = &quot;Boat Manufacturer&quot;, true, false) ,
+IF( RecordType.Name  = &quot;Purchase Order Approved&quot; &amp;&amp;  Vendor_Name__r.RecordType.Name  = &quot;Boat Manufacturer&quot;, true, false))</errorConditionFormula>
+    <errorMessage>Please select a Valid Manufacturer for Order Record Type, or a Valid Vendor for rest of the Record Types.</errorMessage>
+</ValidationRule>

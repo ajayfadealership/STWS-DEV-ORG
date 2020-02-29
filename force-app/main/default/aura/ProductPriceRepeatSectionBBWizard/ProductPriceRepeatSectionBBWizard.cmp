@@ -1,0 +1,181 @@
+<aura:component >
+    
+    <aura:attribute name="newPLstPriceAndProductOptionWraperClass" type="PriceAndProductOptionWraperClass[]"/>
+    <aura:attribute name="newPLstDealerOptionWraper" type="DealerOptionWraper[]"/>
+    <aura:handler  event="c:ProductPriceEvent" action="{!c.HandelPPEvent}"/>
+    <aura:handler  event="c:DealerOptionEvent" action="{!c.HandelDOEvent}"/>
+    <aura:attribute name="ProductPriceIdListCCCBlank" type="String[]" default="{}"/>
+    <aura:attribute name="ProductPriceIdListCCC" type="String[]"/>
+    <aura:attribute name="DealerOptionIdListCCC" type="String[]"/>
+    <aura:attribute name="NoSalesmanWithoutCostCCC" type="boolean" />
+    <aura:handler  event="c:AssignBlank" action="{!c.handelBlank}"/> 
+    
+    <div style="display: none; position: fixed; top: 0; bottom: 0; left: 0; right: 0; background: rgba(0,0,0,0.5); z-index: 999;" id="doId">
+        <c:NewDealerOptionComponent newPLstDealerOptionWraperND="{!v.newPLstDealerOptionWraper}" DealerOptionIdListCCCC="{!v.DealerOptionIdListCCC}"/>
+    </div>
+    <article class="slds-card card-wrapper" style="background-color: #f4f6f9;border: 1px solid #d8dde6;overflow: auto;">
+        <div class="slds-card__body slds-col--padded" style="background-color: #f4f6f9;">
+            <div class="slds-tabs--default" style="background-color: #f4f6f9;">
+                <ul class="slds-tabs--default__nav" role="tablist" style="background-color: #f4f6f9;">
+                    <li class="slds-tabs--default__item slds-text-heading--label slds-active" title="Item One" role="presentation"><a class="slds-tabs--default__link" href="javascript:void(0);" role="tab" tabindex="0" aria-selected="true" aria-controls="tab-default-1a" id="tab-default-1a__item">Price &amp; Options</a></li>
+                    
+                </ul>
+                
+                
+                <div id="tab-default-1a" class="slds-tabs--default__content slds-show" role="tabpanel" aria-labelledby="tab-default-2a__item" style="background-color: #f4f6f9;">
+                    
+                    <aura:iteration items="{!v.newPLstPriceAndProductOptionWraperClass}" var="lscM">
+                        <article class="slds-card" style="border: 1px solid #d8dde6;">
+                            <header class="slds-card__header slds-grid">
+                                <div class="slds-media slds-media--center slds-has-flexi-truncate"> 
+                                    <div class="slds-media__body slds-truncate">
+                                        <h2 style="color: #6f809c;"><b>Manufacturer option for {!lscM.strSelectedOption}</b></h2>
+                                        
+                                    </div>  
+                                </div>
+                            </header>
+                            <div class="slds-card__body" style="overflow: auto;">
+                                <table class="slds-table slds-table--bordered slds-no-row-hover slds-table--cell-buffer">
+                                    <thead>
+                                        <tr class="slds-text-heading--label">
+                                            <th style="padding: .5rem; white-space: nowrap; position: relative;" scope="col"><b>Description</b></th>
+                                            <th style="padding: .5rem; white-space: nowrap; position: relative;" scope="col">&nbsp;</th>
+                                            
+                                            <th style="padding: .5rem; white-space: nowrap; position: relative;" scope="col">
+                                                <aura:if isTrue="{!v.NoSalesmanWithoutCostCCC}">
+                                                    <b>Dealer Price</b>
+                                                </aura:if>
+                                            </th>
+                                            
+                                            <th style="padding: .5rem; white-space: nowrap; position: relative;" scope="col"><b>Retail Price</b></th>
+                                            <th style="padding: .5rem; white-space: nowrap; position: relative;" scope="col"><b>Part Number</b></th>
+                                        </tr>
+                                    </thead>
+                                    
+                                    <tbody>
+                                        <aura:iteration items="{!lscM.lstProductPriceForSelectedCategory}" var="lsc">
+                                            <tr class="slds-hint-parent">   
+                                                <td style="padding: .5rem; white-space: nowrap; position: relative;">
+                                                    <div class="slds-form-element">
+                                                        <div class="slds-form-element__control">
+                                                            <label class="slds-checkbox">
+                                                                
+                                                                <c:PPRSBBWizardCheckbox objDOCheck="{!lsc.checkBox }" strId="{!lsc.objProductPriceForSelectedCategory.Id}" ProductPriceIdListCCCC="{!v.ProductPriceIdListCCC}"/>
+                                                                <span class="slds-checkbox--faux"></span>
+                                                                <span class="slds-form-element__label" style="color: #54698d;"> 
+                                                                    {!lsc.objProductPriceForSelectedCategory.BOATBUILDING__ProductSelected_Category__c} 
+                                                                </span>
+                                                            </label>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td style="padding: .5rem; white-space: nowrap; position: relative;">&nbsp;</td>
+                                                
+                                                <td style="padding: .5rem; white-space: nowrap; position: relative;">
+                                                    <aura:if isTrue="{!v.NoSalesmanWithoutCostCCC}">
+                                                        {!lsc.objProductPriceForSelectedCategory.BOATBUILDING__Dealer_Price__c}
+                                                    </aura:if>
+                                                    
+                                                </td>
+                                                
+                                                <td style="padding: .5rem; white-space: nowrap; position: relative;">{!lsc.objProductPriceForSelectedCategory.BOATBUILDING__ProductRetail_Price__c}</td>
+                                                <td style="padding: .5rem; white-space: nowrap; position: relative;">{!lsc.objProductPriceForSelectedCategory.BOATBUILDING__Product_Code__c}</td> 
+                                                
+                                            </tr>
+                                        </aura:iteration>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </article>
+                    </aura:iteration>
+                </div>
+            </div>
+        </div>
+    </article>
+    <article class="slds-card card-wrapper" style="background-color: #f4f6f9;border: 1px solid #d8dde6;">
+        <header class="slds-card__header slds-grid">
+            <div class="slds-media slds-media--center slds-has-flexi-truncate">
+                <div class="slds-media__body slds-truncate">
+                    <table>
+                        <tr>
+                            <td style="padding: .5rem; white-space: nowrap; position: relative;">
+                                <table>
+                                    <tr>
+                                        <td>
+                                            <h2><b>Dealer Options</b></h2>
+                                        </td>  
+                                    </tr>
+                                </table> 
+                            </td>
+                            <td style="padding: .5rem; white-space: nowrap; position: relative;">
+                                <span style="position: relative; left: 88%;">
+                                    <a onclick="{!c.displayDOPopup}"><lightning:icon iconName="action:add_relationship" size="x-small" class="checkClass"/></a>
+                                </span>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </header>
+        
+        
+        
+        <div class="slds-card__body" style="padding: 10px;">
+            <table class="slds-table slds-table--bordered slds-no-row-hover slds-table--cell-buffer slds-table--custom" style="border: 1px solid #d8dde6;border-radius: .25rem;">
+                <thead>
+                    <tr class="slds-text-heading--label">
+                        <th style="padding: .5rem; white-space: nowrap; position: relative; color: #6f809c;" scope="col"><b>Description</b></th>
+                        <th style="padding: .5rem; white-space: nowrap; position: relative; color: #6f809c;" scope="col">&nbsp; </th>
+                        <th style="padding: .5rem; white-space: nowrap; position: relative; color: #6f809c;" scope="col">
+                            <aura:if isTrue="{!v.NoSalesmanWithoutCostCCC}">
+                                <b>Dealer Price</b>
+                            </aura:if>
+                        </th>
+                        <th style="padding: .5rem; white-space: nowrap; position: relative; color: #6f809c;" scope="col"><b>Retail Price</b></th>
+                        <th style="padding: .5rem; white-space: nowrap; position: relative; color: #6f809c;" scope="col"><b>Part Number</b></th>
+                        <th style="padding: .5rem; white-space: nowrap; position: relative; color: #6f809c;" scope="col"><b>Non Taxable</b></th>
+                    </tr>
+                </thead>
+                
+                <tbody>
+                    <aura:iteration items="{!v.newPLstDealerOptionWraper}" var="varDO">
+                        <tr class="slds-hint-parent">   
+                            <td style="padding: .5rem; white-space: nowrap; position: relative;">
+                                <label class="slds-checkbox"> 
+                                    <c:PPRSBBDOWizardCheckbox newPLstDealerOptionWraperC="{!v.newPLstDealerOptionWraper}" DealerOptionIdListCCCC="{!v.DealerOptionIdListCCC}" objDO="{!varDO}" objDOCheck="{!varDO.isSelect}"/>&nbsp;
+                                    <span class="slds-checkbox--faux">&nbsp;</span>
+                                    <span class="slds-form-element__label" style="color: #54698d;">
+                                        &nbsp;{!varDO.objDealerOption.Name} 
+                                    </span>
+                                </label>
+                            </td>
+                            <td style="padding: .5rem; white-space: nowrap; position: relative;">&nbsp;</td>
+                            <td style="padding: .5rem; white-space: nowrap; position: relative;">
+                                <aura:if isTrue="{!v.NoSalesmanWithoutCostCCC}">
+                                    {!varDO.objDealerOption.BOATBUILDING__Cost__c}
+                                </aura:if>
+                            </td >
+                            
+                            <td style="padding: .5rem; white-space: nowrap; position: relative;">{!varDO.objDealerOption.BOATBUILDING__Retail_Price__c}</td>
+                            <td style="padding: .5rem; white-space: nowrap; position: relative;"> 
+                                {!varDO.objDealerOption.BOATBUILDING__Part_Number__c}
+                            </td>
+                            <td style="padding: .5rem; white-space: nowrap; position: relative;"> 
+                                <table>
+                                    <tr>
+                                        <td>
+                                            <c:DOTaxableComp newPLstDealerOptionWraperC="{!v.newPLstDealerOptionWraper}" objDO="{!varDO}"/>
+                                        </td>
+                                        <td>
+                                            <c:DeleteDOComponent newPLstDealerOptionWraperDLT="{!v.newPLstDealerOptionWraper}" DealerOptionIdListCCCC="{!v.DealerOptionIdListCCC}" objDO="{!varDO.objDealerOption}" objDODLCheck="{!varDO.ShowRemoveIcon}"/>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+                    </aura:iteration>
+                </tbody>
+            </table>
+        </div>  
+    </article>
+</aura:component>

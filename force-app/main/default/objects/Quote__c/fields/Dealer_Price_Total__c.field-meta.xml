@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Dealer_Price_Total__c</fullName>
+    <deprecated>false</deprecated>
+    <externalId>false</externalId>
+    <inlineHelpText>Calculates the sum of Dealer Price of all the Quote Line Items</inlineHelpText>
+    <label>Dealer Price Total</label>
+    <summarizedField>Quote_Line_Item__c.Dealer_Price__c</summarizedField>
+    <summaryForeignKey>Quote_Line_Item__c.Quote__c</summaryForeignKey>
+    <summaryOperation>sum</summaryOperation>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Summary</type>
+</CustomField>

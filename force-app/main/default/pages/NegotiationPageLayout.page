@@ -1,0 +1,1932 @@
+<apex:page standardController="Quote__c" extensions="NegotiationPageLayoutController" id="page">
+	<html xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" >
+        <head>
+            <title>Negotiation</title>
+            <apex:stylesheet value="{!URLFOR($Resource.BoatBuilderSR, 'assets/styles/salesforce-lightning-design-system.min.css')}"/>
+            <apex:stylesheet value="{!URLFOR($Resource.BoatBuilderSR, 'css/style.css')}"/>
+            
+            <apex:includeScript value="{!URLFOR($Resource.BoatBuilderSR, 'js/jquery.min.js')}"/>
+            <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" />
+            <style>
+            	.additionalFirstTD {
+            		padding-left: 0.25em !important;
+				   	max-width: 60px !important;
+				   	white-space: pre-line !important;
+				   	width: 85px !important;
+				   
+            	}
+            	.additionalSecondTD {
+            		width: 149px !important;
+    				max-width: 60px !important;
+				   
+            	}
+            	.additionalThirdTD {
+            		padding-left: 0.25em !important;
+            		width: 85px !important;
+				    max-width: 60px !important;
+				    white-space: pre-line !important;
+            	}
+            	.slds-input {
+            		width: 118px !important;
+           		    max-width: 66% !important;
+            	} 
+            	.slds-select {
+            		    width: 119px !important;
+            	}
+            	.slds-table--cell-buffer tr>td:last-child, .slds-table--cell-buffer tr>th:last-child {
+            		text-align: left !important;
+            	}
+            	
+            	.slds-table--cell-buffer tr>td:first-child, .slds-table--cell-buffer tr>th:first-child {
+           		  /* padding-left: 0.25em !important;
+				   max-width: 60px !important;
+				   white-space: pre-line;*/
+            	}
+                body {
+                padding-top: 5rem;
+                }pe
+                .slds-input {
+                margin-bottom: 0 !important;
+                }
+                .slds-table--cell-buffer tr>td:last-child, 
+                .slds-table--cell-buffer tr>th:last-child {
+                width: 180px;
+                text-align: right;
+                }
+                .card-wrapper { 
+                margin: 2rem auto;
+                max-width: 500px;;
+                }
+                
+                .slds-card__header h2 {
+                text-transform: uppercase;
+                font-weight: 600;
+                }
+                
+                .slds-page-header {
+                position: fixed;
+                left: 0;
+                right: 0;
+                top: 0;
+                z-index: 9;
+                }
+                .slds-input {
+                margin-bottom: 0 !important;
+                }
+                .fa-percent{
+                    position: absolute;
+                    right: 30px;
+                    padding: 0px 10px;
+                    top: 17px;
+                    color: #828d9e;
+                }
+                .fa-usd {
+                    position: absolute;
+                    top: 20px;
+                    z-index: 1;
+                    display: block;
+                    left: 17px;
+                    color: #828d9e;
+                }
+                .input_spc{
+                    padding-left: 20px;
+                }
+                .input_spc2{
+                    padding-right: 20px; 
+                }
+                input.slds-input:before{
+                    content:"abc";
+                    display:block;
+                    width:50px;
+                    height:50px;
+                }
+                td .abc{
+                    background:red;
+                    
+                }
+                
+                .side_div {
+                        border: 1px solid #ccc;
+                        height: auto;
+                        width: auto;
+                        background-color: #f7f9fb;
+                        position: fixed;
+                        left: 69%;
+    					top: 15.3%;
+                        border-radius: .25rem;
+                }
+                
+            </style>
+            
+            
+        </head>
+        
+        <body> 
+             
+            
+            
+            <apex:form id="frm" >
+                
+                <script>
+	                
+	                $(document).ready(function() {
+	                		console.log('{!disStatus}');
+	                		
+	                		if('{!disStatus}' == '1') {
+	                			document.getElementById("hideCheck").disabled = true;
+	                			
+	                			hideDetails(this);
+	                		} else {
+	                			 
+	                			hideDetails(this);
+	                		}
+	                		//calculateDisval(this);
+	                });
+	                
+	                function callFunction1(){      
+	                    saveNegotiatedPrices();
+	                }
+	                function cancelCall(){
+	                    window.top.location = '/'+'{!objQuote.Id}';
+	                }
+	                
+	                
+	                function hideDetails(obj) {
+	                		//hideDetailsOpp
+	                
+	                		obj1 = document.getElementById("hideCheck");
+	                		var doc = document.getElementsByClassName("hideDetails");
+	                		
+	                		if(obj1.checked) {
+	                			for(var i = 0; i < doc.length; i++) {
+	                				doc[i].style.display = "none"; 
+	                			} 
+	                			
+	                		} else {
+	                			for(var i = 0; i < doc.length; i++) {
+	                				doc[i].style.display = "block";
+	                			}
+	                			$("#showMarsec").show();
+	                		}
+	                		
+	                		
+	                }
+                </script>
+                <div class="slds-page-header" role="banner">
+                    <div class="slds-grid">
+                        <div class="slds-col slds-has-flexi-truncate">
+                            <div class="slds-media slds-media--center slds-no-space slds-grow">
+                                <div class="slds-media__figure">
+<!--                                     <svg aria-hidden="true" class="slds-icon slds-icon-standard-user"> -->
+<!--                                         <use xlink:href="/assets/icons/standard-sprite/svg/symbols.svg#user"></use> -->
+<!--                                     </svg> -->
+                                </div>
+                                <div class="slds-media__body">
+                                    <h1 class="slds-page-header__title slds-m-right--small slds-truncate slds-align-middle" title="Record Title">Negotiation</h1>
+                                    <p class="slds-text-heading--label">Negotiate Here</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="slds-col slds-no-flex slds-grid slds-align-bottom">
+                            <div class="slds-button-group" role="group">
+                            		<span style="position: relative; top: 17%;">
+                            			<label class="slds-checkbox">
+                            				<input type="checkbox" id="hideCheck" onchange="hideDetails(this);" checked="checked"/>
+                            				
+                            				<span class="slds-checkbox--faux"></span> 
+                            					<span class="slds-form-element__label">Toggle Details  </span> 
+                            			</label>
+                            		</span>  
+                                <a class="slds-button slds-button--neutral" onclick="recordUpdate();">Save</a>
+<!--                                 <a class="slds-button slds-button--neutral" onclick="cancelCall();">Cancel</a> -->
+                                
+<!--                                 <a class="slds-button slds-button--neutral" onclick="window.location.href = '/home/home.jsp';"> -->
+<!--                                     <apex:image id="theImage2" value="{!$Resource.HomeLogo}" width="25" height="25"/> -->
+<!--                                 </a> -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- endof header section -->
+                
+                <!-- Side payment section -->
+                
+                <div class="side_div" >
+                    <div style="padding-top: 2%;padding-bottom: 2%;">
+                        <table style="background-color: #f7f9fb;" class="slds-table slds-no-row-hover">
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        <h2>MSRP</h2>
+                                    </td>
+                                    <td>
+                                        <i class="fa fa-usd" style="top: 38.5%;" aria-hidden="true"></i>
+                                        <apex:inputText styleClass="slds-input input_spc"  value="{!objQuote.Total_Price_Quote__c}" id="itMSRP" disabled="true"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <h2>Total Price</h2>
+                                    </td>
+                                    <td>
+                                        <i class="fa fa-usd" style="top: 38.5%;" aria-hidden="true"></i>
+                                        <apex:inputText styleClass="slds-input input_spc" value="{!objQuote.Quote_Total_Price_Calculated__c}"  id="sidit23" disabled="true"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <h2>Payment</h2>
+                                    </td>
+                                    <td>
+                                        <i class="fa fa-usd" style="top: 38.5%;" aria-hidden="true"></i>
+                                        <apex:inputText styleClass="slds-input input_spc"  disabled="true" value="{!objQuote.Quote_Payment__c}"  id="sidit28"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <h2>Term</h2>
+                                    </td>
+                                    <td>
+                                        <input type="text" id="sideTrm" value="--None--" class="slds-input" disabled="disabled"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <span class="hideDetails"><h2>Deal Margin (%)</h2></span>
+                                    </td>
+                                    <td>
+                                        <span class="hideDetails"><apex:inputText styleClass="slds-input input_spc2" value="{!objQuote.Quote_Deal_Margin__c}"  id="sidit32" disabled="true"/>
+                                        <i aria-hidden="true" style="top: 38.5%; right: 2%;" class="fa fa-percent"></i></span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <span class="hideDetails"><h2>Commission</h2></span>
+                                    </td>
+                                    <td>
+                                        <span class="hideDetails"><i class="fa fa-usd" style="top: 38.5%;" aria-hidden="true"></i>
+                                        <apex:inputText styleClass="slds-input input_spc" value="{!objQuote.Commission__c}"  id="sidcommission" disabled="true"/></span>
+                                    </td>
+                                </tr>
+                                
+                                <tr>
+                                    <td>
+                                        <span ><h2>Costline Sell Price</h2></span>
+                                    </td>
+                                    <td>
+                                        <span >
+	                                        <i class="fa fa-usd" style="top: 38.5%;" aria-hidden="true"></i>
+	                                        &nbsp;<apex:inputText styleClass="slds-input input_spc2" value="{!objQuote.Costline_Sell_Price__c}"  disabled="true"/>
+                                        </span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <span ><h2>Booked Sale Price</h2></span>
+                                    </td>
+                                    <td>
+                                        <span ><i class="fa fa-usd" style="top: 38.5%;" aria-hidden="true"></i>
+                                        <apex:inputText styleClass="slds-input input_spc" value="{!objQuote.Booked_Sale_Price__c}"  id="bspNav"  disabled="true"/></span>
+                                    </td>
+                                </tr>
+                                
+                            </tbody>
+                        </table>
+                    </div>
+                </div>   
+                <!-- negotiation section -->
+                <article class="slds-card card-wrapper" style=" margin-top: 7%;margin-left: -2%;">
+                    <header class="slds-card__header slds-grid">
+                        <div class="slds-media slds-media--center slds-has-flexi-truncate">
+                            <div class="slds-media__body slds-truncate">
+                                <h2>Negotiation </h2>
+                            </div>
+                        </div>
+                    </header>
+                    <div class="slds-card__body">
+                        <table class="slds-table slds-table--bordered slds-table--cell-buffer slds-no-row-hover" >                    
+                            <tbody>
+                                <tr>
+                                    <td class="additionalFirstTD">MSRP Boat Price</td>
+                                    <td class="additionalSecondTD">
+                                        <!-- <input class="slds-input" type="text" value="${!objQuote.Quote_MSRP_Boat_Price__c}" /> -->
+                                      <i class="fa fa-usd" aria-hidden="true"></i> 
+                                       <apex:inputText styleClass="slds-input input_spc"  value="{!objQuote.Total_Price_Quote__c}" id="it1" disabled="true"/> 
+                                    </td>
+                                    <td class="additionalThirdTD">MSRP Trailer Price</td>
+                                    <td>
+                                        <!-- <input class="slds-input" type="text" value="${!objQuote.Quote_MSRP_Trailer_Price__c}"/> -->
+                                        <i class="fa fa-usd" style="left: 82px !important;" aria-hidden="true"></i>
+                                        <apex:inputText styleClass="slds-input input_spc" value="{!objQuote.Quote_MSRP_Trailer_Price__c}" id="it2"  disabled="true"/> 
+                                    </td>
+                                </tr>
+                                <tr>
+                                	<td class="additionalFirstTD" colspan="2">
+                                		<select id="disMarginSelect" class="slds-select" style="width: 100% !important; margin-top: -17px;">
+                                			<option value="Discount in Dollar Amount">Discount in Dollar Amount</option>
+                                			<option value="Discount In Percentage">Discount In Percentage</option>
+                                			<option value="Margin">Margin</option>
+                                		</select>
+                                	</td>
+                                    <td class="additionalSecondTD" colspan="2"> 
+                                    	&nbsp;
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="additionalFirstTD">Discount($)<br/><br/><br/>Discount(%)<br/><br/><br/>Margin(%)</td>
+                                    <td class="additionalSecondTD">
+                                        <!--<input class="slds-input" type="text" value="{!objQuote.Discount_On_Quote__c}" onclick="ABC()" />-->
+                                         
+                                        <apex:inputText value="{!objQuote.Discount_On_Quote__c}" styleClass="slds-input input_spc"  onchange="calculatePrice(); NetSellValue();calculatePayment();"   id="discount"/>
+                                        <br/>
+                                        <br/>
+                                        
+                                        <input type="text"  disabled="disabled" class="slds-input input_spc" id="discountPer" onchange="calculateDisvalINPER();"/>
+                                        <br/>
+                                        <br/>
+                                        <span style="display: none;" id="showMarsec">
+	                                        
+	                                        <input type="text"  disabled="disabled" class="slds-input input_spc" id="dealMarginEdit" onchange="calculateDisval(this);"/>
+                                        </span>
+<!--                                         value="{!objQuote.Quote_Deal_Margin__c}" -->
+                                    </td>
+                                    <td class="additionalThirdTD">Your Price($)</td>
+                                    <td>
+                                        
+                                        <apex:inputHidden value="{!objQuote.Quote_Sale_Price__c}" id="navQuoteSalePrice"/>
+                                         
+                                        <apex:inputText styleClass="slds-input input_spc" value="{!objQuote.Quote_Your_Price_Formula__c}"  id="yourprice" disabled="true">
+                                           
+                                        </apex:inputText>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="additionalFirstTD">Trade Allowance</td>
+                                    <td class="additionalSecondTD">
+                                        <i class="fa fa-usd" aria-hidden="true"></i> 
+                                        <apex:inputText value="{!objQuote.Quote_Trade_Allowance__c}"  styleClass="slds-input input_spc"  onchange="NetSellValue();"  id="tradeAllowance">    
+                                        </apex:inputText>
+                                    </td>
+                                    <td class="additionalThirdTD">Trailer Allowance</td>
+                                    <td>
+                                        <i class="fa fa-usd" style="left: 82px !important;" aria-hidden="true"></i> 
+                                        <apex:inputText value="{!objQuote.Quote_Trailer_Allowance__c}" onchange="NetSellValue();"  styleClass="slds-input input_spc"  id="trailerAllowance">
+                                        </apex:inputText>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="additionalFirstTD">Net Selling Price</td>
+                                    <td class="additionalSecondTD">
+                                        <i class="fa fa-usd" aria-hidden="true"></i> 
+                                        <apex:inputText styleClass="slds-input input_spc" value="{!objQuote.Quote_Net_Selling_Price_Calculated__c}"  id="netSellingPrice"   disabled="true">
+                                            
+                                        </apex:inputText>           
+                                    </td>
+                                    <td class="additionalThirdTD">Trade ACV</td>
+                                    <td>
+                                       <i class="fa fa-usd" style="left: 82px !important;" aria-hidden="true"></i> 
+                                       <apex:inputText styleClass="slds-input input_spc" value="{!objQuote.Quote_Trade_ACV__c}"  id="tradeAcv" onchange="NetSellValue();" disabled="true"/ >
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="additionalFirstTD">Trailer ACV</td>
+                                    <td class="additionalSecondTD">
+                                       <i class="fa fa-usd" aria-hidden="true"></i> 
+                                        <apex:inputText styleClass="slds-input input_spc" value="{!objQuote.Quote_Trailer_ACV__c}"  id="Trailer" onchange="NetSellValue();"/>
+                                    </td>
+                                    <td class="additionalThirdTD">Boat Sales Tax</td>
+                                    <td>
+                                        <i class="fa fa-usd" style="left: 82px !important;" aria-hidden="true"></i> 
+                                        <apex:inputText styleClass="slds-input input_spc" value="{!objQuote.Boat_Sales_Tax2__c}"  id="BoatSalesTax"  onchange="totalPrice();" disabled="true" >
+                                            
+                                        </apex:inputText>  
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="additionalFirstTD">Trailer Sales Tax</td>
+                                    <td class="additionalSecondTD">
+                                        <i class="fa fa-usd" aria-hidden="true"></i> 
+                                        <apex:inputText value="{!objQuote.Quote_Trailer_Sales_Tax__c}" styleClass="slds-input input_spc" id="it16"  disabled="true">
+                                        </apex:inputText>
+                                    </td>
+                                    <td class="additionalThirdTD">Boat Reg Fee</td>
+                                    <td>
+                                        <i class="fa fa-usd" style="left: 82px !important;" aria-hidden="true"></i> 
+                                        <apex:inputText value="{!objQuote.Quote_Boat_Reg_Fee__c}"  styleClass="slds-input input_spc" id="it20" disabled="true" >
+                                        </apex:inputText>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="additionalFirstTD">Trailer Reg Fee</td>
+                                    <td class="additionalSecondTD">
+                                        <i class="fa fa-usd" aria-hidden="true"></i> 
+                                        <apex:inputText value="{!objQuote.Quote_Trailer_Reg_Fee__c}" styleClass="slds-input input_spc" id="it17" disabled="true">
+                                        </apex:inputText> 
+                                    </td>
+                                    <td class="additionalThirdTD">Doc Fee</td>
+                                    <td>
+                                        <i class="fa fa-usd" style="left: 82px !important;" aria-hidden="true"></i> 
+                                        <apex:inputText value="{!objQuote.Quote_Doc_Fee__c}"  styleClass="slds-input input_spc" id="it19" disabled="true">
+                                        </apex:inputText> 
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="additionalFirstTD">Trade Payoff </td>
+                                    <td class="additionalSecondTD">
+                                        <i class="fa fa-usd" aria-hidden="true"></i> 
+                                        <apex:inputText value="{!objQuote.Quote_Trade_Payoff__c}"  styleClass="slds-input input_spc" id="it21" onchange="NetSellValue(); "  >
+                                        </apex:inputText>
+                                    </td>
+                                    <td class="additionalThirdTD">Total Price</td>
+                                    <td><!--<input class="slds-input" type="text" value="${!objQuote.Quote_Total_Price_Calculated__c}" />-->
+                                        <i class="fa fa-usd" style="left: 82px !important;" aria-hidden="true"></i> 
+                                        <apex:inputText styleClass="slds-input input_spc" value="{!objQuote.Quote_Total_Price_Calculated__c}"  id="it23" disabled="true"    >
+                                            
+                                        </apex:inputText>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="additionalFirstTD">Down Payment</td>
+                                    <td class="additionalSecondTD">
+                                         <i class="fa fa-usd" aria-hidden="true"></i> 
+                                        <apex:inputText styleClass="slds-input input_spc" value="{!objQuote.Quote_Down_Payment__c}"  id="it26" onchange=" NetSellValue();calculatePayment();">
+                                        </apex:inputText>
+                                    </td>
+                                    <td class="additionalThirdTD">Total Amount Financed</td>
+                                    <td>
+                                         <i class="fa fa-usd" style="left: 82px !important;" aria-hidden="true"></i> 
+                                        <apex:inputText styleClass="slds-input input_spc" value="{!objQuote.Quote_Total_Amount_Financed_Calculated__c}"  id="it27" disabled="true" onchange="calculatePayment();">
+                                            
+                                        </apex:inputText>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="additionalFirstTD">Rate (%)</td>
+                                    <td class="additionalSecondTD">
+                                    	<apex:inputField styleClass="slds-input input_spc2"  value="{!objQuote.Quote_Rate__c}" id="it9" onchange="calculatePayment() "/ ><i class="fa fa-percent" aria-hidden="true"></i>
+                                   	</td>
+                                    <td class="additionalThirdTD">Term</td>
+                                    <td>
+                                        <div class="slds-select_container">
+                                            <apex:inputField styleClass="slds-select " value="{!objQuote.Quote_Term__c}" id="it29" onchange="calculatePayment();"/>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="additionalFirstTD">Payment</td>
+                                    <td class="additionalSecondTD">
+                                         <i class="fa fa-usd" aria-hidden="true"></i> 
+                                        <apex:inputText styleClass="slds-input input_spc"  disabled="true" value="{!objQuote.Quote_Payment__c}"  id="it28">
+                                            
+                                        </apex:inputText>
+                                    </td>
+                                    <td class="additionalThirdTD">Boat Trade Over Allowance</td>
+                                    <td>
+                                         <i class="fa fa-usd" style="left: 82px !important;" aria-hidden="true"></i> 
+                                        <apex:inputText styleClass="slds-input input_spc" value="{!objQuote.Quote_Boat_Trade_Over_Allowance_Calculat__c}"  id="it39" onchange="NetSellValue();" disabled="true">
+                                            
+                                        </apex:inputText>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="additionalFirstTD">Trailer Trade over Allowance</td>
+                                    <td class="additionalSecondTD">
+                                         <i class="fa fa-usd" aria-hidden="true"></i> 
+                                        <apex:inputText styleClass="slds-input input_spc" value="{!objQuote.Quote_Trailer_Allowance_Calculated__c}"  id="it30" onchange="NetSellValue();" disabled="true">
+                                            
+                                        </apex:inputText>
+                                    </td>
+                                    <td class="additionalThirdTD">Total Over Allowance</td>
+                                    <td>
+                                         <i class="fa fa-usd" style="left: 82px !important;" aria-hidden="true"></i> 
+                                        <apex:inputText styleClass="slds-input input_spc" value="{!objQuote.Quote_Total_Over_Allowance_Calculated__c}"  id="it31" disabled="true">
+                                            
+                                        </apex:inputText>
+                                    </td>
+                                </tr>
+                                <tr >
+                                    <td class="additionalFirstTD"><span class="hideDetails">Deal Margin (%)</span></td>
+                                    <td class="additionalSecondTD"><span class="hideDetails">
+                                    		<!--<input class="slds-input" type="text" value="${!objQuote.Quote_Deal_Margin__c}" />-->
+                                        <apex:inputText styleClass="slds-input input_spc2" value="{!objQuote.Quote_Deal_Margin__c}"  id="it32" disabled="true">
+                                            <i class="fa fa-percent" aria-hidden="true"></i>
+                                        </apex:inputText>
+                                        </span>
+                                    </td>
+                                    <td class="additionalThirdTD"><span class="hideDetails">Cost</span></td>
+                                    <td>
+                                    		<span class="hideDetails"><!--<input class="slds-input" type="text" value="${!objQuote.Quote_Cost__c}" />-->
+                                        <i class="fa fa-usd" style="left: 82px !important;" aria-hidden="true"></i> 
+                                        <apex:inputText styleClass="slds-input input_spc" value="{!objQuote.Quote_Cost_Clone__c}"  id="it33"  disabled="true">
+                                            
+                                        </apex:inputText>
+                                        </span>
+                                        
+                                    </td>
+                                </tr>
+                                <tr >
+                                    <td class="additionalFirstTD"><span class="hideDetails">Hidden Box</span></td>
+                                    <td class="additionalSecondTD"> 
+                                    		<span class="hideDetails"><!--<input class="slds-input" type="text" value="TBD" />-->
+                                        <i class="fa fa-usd" aria-hidden="true"></i> 
+                                        <apex:inputText styleClass="slds-input input_spc" value="{!objQuote.QuoteHiddenBox__c}"  id="hiddenbox" onchange=" NetSellValue();" disabled="true"/>
+                                    		</span>
+                                    </td>
+                                    <td class="additionalThirdTD"><span class="hideDetails">Commission </span></td>
+                                    <td>
+                                    		<span class="hideDetails"><!--<input class="slds-input" type="text" value="TBD" />-->
+                                        <i class="fa fa-usd" style="left: 82px !important;" aria-hidden="true"></i> 
+                                        <apex:inputText styleClass="slds-input input_spc" value="{!objQuote.Commission__c}"  id="commission" disabled="true"/>
+                                        </span>
+                                    </td>
+                                </tr>
+                            </tbody>
+                            
+                        </table>
+                    </div>
+                </article>
+                
+            </apex:form>
+        </body>
+        <script>
+        
+        function totalPrice(){
+            // alert('totalprice............');
+            var netSellingPrice  = parseFloat(document.getElementById('page:frm:netSellingPrice').value); 
+            
+            var  netSellingPrice21 =netSellingPrice.toFixed(2);
+            var boatSalesTax2 =  parseFloat(document.getElementById('page:frm:BoatSalesTax').value); 
+            var boatSalesTax21 = boatSalesTax2.toFixed(2);
+            var trailerSalesTax2 = parseFloat('{!objQuote.Quote_Trailer_Sales_Tax__c}');
+            var trailerSalesTax21 = trailerSalesTax2.toFixed(2);
+            var boatRegFee2 = parseFloat('{!objQuote.Quote_Boat_Reg_Fee__c}');
+            var boatRegFee21 = boatRegFee2.toFixed(2);
+            var trailerRegFee2 = parseFloat('{!objQuote.Quote_Trailer_Reg_Fee__c}');
+            var trailerRegFee21 = trailerRegFee2.toFixed(2);
+            
+            var docFee2 =   parseFloat('{!objQuote.Quote_Doc_Fee__c}');
+            var docFee21 = docFee2.toFixed(2);
+            
+            
+            
+            //Decimal And Number Validation
+            var numberss = /^[0-9]+$/;
+            var decimalss = /^\d+\.\d{0,2}$/;
+            var inputtxtPayOff = document.getElementById('page:frm:it21');
+            var tradePayOff2;
+            if(inputtxtPayOff.value.match(numberss) || inputtxtPayOff.value.match(decimalss)){  
+                tradePayOff2 = inputtxtPayOff.value;
+            }else if(inputtxtPayOff.value == ''){
+                tradePayOff2 = 0.00;
+            }else{
+                inputtxt2.value = '';
+                tradePayOff2 = 0.00;
+                alert('Only numbers allowed');
+            }    
+            //----------------------------------------------------
+            
+            
+            
+            //var tradePayOff2 = parseFloat(document.getElementById('page:frm:it21').value);
+            
+            
+            var tradePayOff21 =tradePayOff2.toFixed(2);
+            
+            var result =  netSellingPrice21 +boatSalesTax21 + trailerRegFee21 + boatRegFee21 + docFee21 + tradePayOff21 + trailerSalesTax21 ;
+            var result32 = result.toFixed(2);
+            document.getElementById('page:frm:it23').value = result32;
+            document.getElementById('page:frm:sidit23').value = result32;
+            var totalprice3 =   parseFloat(document.getElementById('page:frm:it23').value); 
+            var totalprice31 = totalprice3.toFixed(2);
+            if(totalprice31 && totalprice31 != 'undefined'){
+                
+                //Decimal And Number Validation
+                var inputtxtDwnPymmt = document.getElementById('page:frm:it26');
+                var downPayment;
+                if(inputtxtDwnPymmt.value.match(numberss) || inputtxtDwnPymmt.value.match(decimalss)){  
+                    downPayment = inputtxtDwnPymmt.value;
+                }else if(inputtxtDwnPymmt.value == ''){
+                    downPayment = 0.00;
+                }else{
+                    inputtxtDwnPymmt.value = '';
+                    downPayment = 0.00;
+                    alert('Only numbers allowed');
+                }    
+                //----------------------------------------------------
+                
+                //var downPayment = parseFloat(document.getElementById('page:frm:it26').value);
+            } 
+            var result32 = totalprice31 - downPayment;
+            if(downPayment>0 && downPayment< totalprice31 ){ 
+                
+                document.getElementById('page:frm:it27').value = result32;
+            }
+            else{
+                
+                alert('Discount value should not be in negative');
+            }
+        }
+        
+        /*  function payment(){
+        var tradeAllowance =    parseFloat(document.getElementById('page:frm:tradeAllowance').value); 
+        var tradeAcv =  parseFloat(document.getElementById('page:frm:tradeAcv').value); 
+        var result = 
+        
+        }*/
+    function recordUpdate(){
+        
+        // alert('dd');
+        
+        var map = new Object();
+        map["Id"] = "{!objQuote.Id}";
+        map["tempName"] = "{!objQuote.Name}";
+        map["accountName"] = "{!objQuote.Account_Name__c}";
+        map["additionalTo"] = "{!objQuote.Additional_To__c}";
+        map["additionalToName"] = "{!objQuote.Additional_To_Name__c}";
+        map["billTo"] = "{!objQuote.Bill_To__c}";
+        map["billToName"] = "{!objQuote.Bill_To_Name__c}";
+        map["contactName"] = "{!objQuote.Contact_Name__c}";
+        map["descriptionTemp"] = "{!objQuote.Description__c}";
+        map["discountTemp"] = parseFloat("{!objQuote.Discount__c}");
+        map["emailTemp"] = "{!objQuote.Email__c}";
+        map["expirationDate"] = "{!objQuote.Expiration_Date__c}";
+        map["faxTemp"] = "{!objQuote.Fax__c}";
+        map["grandTotal"] = parseFloat("{!objQuote.Grand_Total__c}");
+        map["phoneTemp"] = "{!objQuote.Phone__c}";
+        map["quoteToAddress"] = "{!objQuote.Quote_To_Address__c}";
+        map["quoteToName"] = "{!objQuote.Quote_To_Name__c}";
+        map["shippingAndHandling"] = parseFloat("{!objQuote.Shipping_And_Handling__c}");
+        map["shipTo"] = "{!objQuote.Ship_To__c}";
+        map["shipToName"] = "{!objQuote.Ship_To_Name__c}";
+        map["statusTemp"] = "{!objQuote.Status__c}";
+        map["relatedToOrder"] = "{!objQuote.Related_to_Order__c}";
+        map["taxTemp"] = parseFloat("{!objQuote.Tax__c}");
+        map["syncTemp"] = "{!objQuote.Syncing__c}";
+        map["quoteSalePrice"] = "{!objQuote.Quote_Sale_Price__c}";
+        map["totalPriceQuote"] = "{!objQuote.Total_Price_Quote__c}";
+        map["stateTemp"] = "{!objQuote.State__c}";
+        map["trailer"] = "{!objQuote.Trailer__c}";
+        
+        
+        map["engineSN"] = "{!objQuote.Mapped_Engine_SN__c}";
+        map["hin"] = "{!objQuote.Mapped_HIN__c}";
+        map["trailerVIN"] = "{!objQuote.Mapped_Trailer_VIN__c}";
+//         map["boatLength"] = "{!objQuote.Mapped_Boat_Length__c}"; 
+        map["tranGearSN"] = "{!objQuote.Transmission_Gearbox_SN__c}";
+        
+        
+        map["Sales_Tax_County__c"] = "{!objQuote.Sales_Tax_County__c}";
+        map["Additional_Sales_Tax_Percent__c"] = "{!objQuote.Additional_Sales_Tax_Percent__c}";
+        map["Manual_Sales_Tax_Entry__c"] = "{!objQuote.Manual_Sales_Tax_Entry__c}";
+        map["Additional_To_Name__c"] = "{!objQuote.Additional_To_Name__c}";
+         
+         
+        map["msrpBoatPrice"] = parseFloat("{!objQuote.Quote_MSRP_Boat_Price__c}");
+        map["msrpTrailerPrice"] = parseFloat("{!objQuote.Quote_MSRP_Trailer_Price__c}");
+        map["Discount"] =  parseFloat(document.getElementById('page:frm:discount').value); 
+        map["YourPrice"] =  parseFloat(document.getElementById('page:frm:yourprice').value); 
+        map["TradeAllowance"] =  parseFloat(document.getElementById('page:frm:tradeAllowance').value); 
+        map["TrailerAllowance"] =  parseFloat(document.getElementById('page:frm:trailerAllowance').value); 
+        map["NetSellingPrice"] =  parseFloat(document.getElementById('page:frm:netSellingPrice').value); 
+        
+        map["TradeACV"]       =    parseFloat(document.getElementById('page:frm:tradeAcv').value); 
+        map["TrailerACV"]     =   parseFloat(document.getElementById('page:frm:Trailer').value); 
+        map["BoatSalesTax"]     =   parseFloat(document.getElementById('page:frm:BoatSalesTax').value); 
+        map["TrailerSalesTax"]  = parseFloat('{!objQuote.Quote_Trailer_Sales_Tax__c}');
+        map["BoatRegfee"] =  parseFloat('{!objQuote.Quote_Boat_Reg_Fee__c}');
+        map["TrailerRegfee"] =  parseFloat('{!objQuote.Quote_Trailer_Reg_Fee__c}');
+        map["Docfee"] =  parseFloat('{!objQuote.Quote_Doc_Fee__c}');
+        map["Tradepayoff"] =  parseFloat(document.getElementById('page:frm:it21').value); 
+        map["Totalprice"] = parseFloat(document.getElementById('page:frm:it23').value); 
+        map["Downpayment"] = parseFloat(document.getElementById('page:frm:it26').value); 
+        map["TotalAmountFinanced"] = parseFloat(document.getElementById('page:frm:it27').value); 
+        map["Rate"]  = parseFloat(document.getElementById('page:frm:it9').value);
+        map["Payment"] = parseFloat(document.getElementById('page:frm:it28').value); 
+        map["BoatTradeoverallowance"] = parseFloat(document.getElementById('page:frm:it39').value); 
+        map["boatTraileroverAllowance"] = parseFloat(document.getElementById('page:frm:it30').value);
+        map["cost"] =parseFloat(document.getElementById('page:frm:it33').value);
+        map["totaloverAllowance"] = parseFloat(document.getElementById('page:frm:it31').value);
+        map["dealMargin"] = parseFloat(document.getElementById('page:frm:it32').value);
+        map["HiddenPrice"] =  parseFloat(document.getElementById('page:frm:hiddenbox').value);
+        map["relatedToProduct"] = "{!objQuote.Related_to_Product__c}"; 
+        map["lstQuoteLineItem"] = "{!objQuote.Quote_Line_Item__r}";
+        map["ACVFORM"] = "{!objQuote.ACV_FORM__c}";
+        map["relatedInv"] = "{!objQuote.Test_2__c}";
+        map["Term"] = (document.getElementById('page:frm:it29').value);
+        map["quoteTotalMSRP"] = "{!objQuote.Quote_Total_MSRP__c}";
+        map["QuoteTrailer"] = "{!objQuote.Trailer__c}";
+        map["QuoteEngine"] = "{!objQuote.Engine__c}";
+        
+        BOATBUILDING.NegotiationPageLayoutController.save(map,function(result, event) {
+            if(result != null && !result.includes('error')) {
+                window.top.location = '/'+result;
+            }else{
+                alert('Something went wrong, Please try again. '+result);
+            } 
+            
+        }
+        );
+    }
+    
+    </script>
+    
+    <script>
+    
+    
+    var  yourPriceComm = 0.00;
+    
+    $("#disMarginSelect").change(function() {
+    	var picVal = $("#disMarginSelect").val();
+    	if(picVal == 'Discount in Dollar Amount') 
+    	{
+    		document.getElementById("page:frm:discount").disabled = false;
+    		document.getElementById("discountPer").disabled = true;
+    		document.getElementById("dealMarginEdit").disabled = true;
+    	} else if(picVal == "Discount In Percentage")
+    	{
+    		document.getElementById("discountPer").disabled = false;
+    		document.getElementById("page:frm:discount").disabled = true;
+    		document.getElementById("dealMarginEdit").disabled = true; 
+    	} else 
+    	{
+    		document.getElementById("discountPer").disabled = true;		
+    		document.getElementById("page:frm:discount").disabled = true;
+    		document.getElementById("dealMarginEdit").disabled = false;
+    		$("#showMarsec").show();
+    	}
+    	 
+    });
+    function calculateDisvalINPER() {
+    	//var dis = parseFloat(document.getElementById('discountPer').value);
+    	var MSRPBoatPrice = parseFloat('{!objQuote.Total_Price_Quote__c}');
+        if(MSRPBoatPrice == null || MSRPBoatPrice < 0  )
+        {
+            
+            MSRPBoatPrice =0.00;
+        }
+    	var disPer = 0.00;
+    	if(document.getElementById('discountPer').value != '') {
+    		disPer =  parseFloat(document.getElementById('discountPer').value);
+    	}
+    	var disVal = 0.00;
+    	disVal = parseFloat(parseFloat(MSRPBoatPrice * disPer)/100).toFixed(2);
+    	document.getElementById('page:frm:discount').value = parseFloat(disVal).toFixed(2);
+    	calculatePrice(); 
+    	NetSellValue(); 
+    	calculatePayment();
+    }
+    function calculateDisval(obj) {
+    	console.log('Check '+this.value);
+    	if(document.getElementById('dealMarginEdit').value != '') {
+	    	console.log('Check2');
+	    	var yourprice1 = 0.00
+    	
+    		var MSRPBoatPrice = parseFloat('{!objQuote.Total_Price_Quote__c}');
+	        if(MSRPBoatPrice == null || MSRPBoatPrice < 0  )
+	        {
+	            
+	            MSRPBoatPrice =0.00;
+	        }
+	        
+	        
+	        
+	        var MSRPTrailerPrice = parseFloat('{!objQuote.Quote_MSRP_Trailer_Price__c}');
+	        if(MSRPTrailerPrice == null || MSRPTrailerPrice < 0){
+	            
+	            MSRPTrailerPrice =0.00;
+	        }
+	        // **Devimal Or Number Validation
+	        
+	                
+    		var dealMarginCom = parseFloat(document.getElementById('dealMarginEdit').value);
+    			dealMarginCom = parseFloat(dealMarginCom/100);
+	    	var totaloverAllowance1 = parseFloat(document.getElementById('page:frm:it31').value);
+	        
+	        
+	        var hiddenbox1 = parseFloat(document.getElementById('page:frm:hiddenbox').value);
+	        //var cost ='{!objQuote.Quote_Cost__c}';
+	        
+	        
+	        
+	        var cost = document.getElementById("page:frm:it33").value;
+	        if(cost==="" ||cost==="undefined"){
+	            cost = 0.00; 
+	        }
+	        cost1 = parseFloat(cost);
+	        cost2 = cost1.toFixed(2);
+	        
+			var finalMSRP = parseFloat(MSRPBoatPrice + MSRPTrailerPrice);
+			console.log('>>>>finalMSRP: '+finalMSRP);  
+	        var finalMSRP_Cal =  parseFloat(finalMSRP);
+	        console.log('>>>>cost: '+cost); 
+	        console.log('>>>>dealMarginCom: '+dealMarginCom);
+	        
+	        //Cost / (1- (Margin/100))
+	        var up = parseFloat(cost);
+	        var down = parseFloat(1-(dealMarginCom));
+	        console.log('>>>>up: '+up);
+	        console.log('>>>>down: '+down);
+	        var BSP = parseFloat(up/down);
+	        
+	        console.log('>>>>BSP: '+BSP);
+	        var dis = finalMSRP - BSP;
+	        console.log('>>>>finalMSRP: '+finalMSRP); 
+	        console.log('>>>>dis: '+dis); 
+	    	document.getElementById('page:frm:discount').value = dis.toFixed(2);
+	    	
+	    	var disINPer = 0.00;
+        
+	       	disINPer = parseFloat(parseFloat(dis * 100)/MSRPBoatPrice).toFixed(2);
+	       	console.log('>>>MSRPBoatPrice: '+MSRPBoatPrice);
+	        console.log('>>>disINPer: '+disINPer);
+	       	document.getElementById('discountPer').value =  parseFloat(disINPer).toFixed(2);
+	    	 
+	        NetSellValue2();    
+	        calculatePrice(); 
+        }
+    }
+    
+    function calculatePrice(){
+        var MSRPBoatPrice = parseFloat('{!objQuote.Total_Price_Quote__c}');
+        if(MSRPBoatPrice == null || MSRPBoatPrice < 0  )
+        {
+            
+            MSRPBoatPrice =0.00;
+        }
+        
+        
+        
+        var MSRPTrailerPrice = parseFloat('{!objQuote.Quote_MSRP_Trailer_Price__c}');
+        if(MSRPTrailerPrice == null || MSRPTrailerPrice < 0){
+            
+            MSRPTrailerPrice =0.00;
+        }
+        // **Devimal Or Number Validation
+        
+        var numbers = /^[0-9]+$/;
+        var decimals = /^\d+\.\d{0,2}$/;
+        var inputtxt = document.getElementById('page:frm:discount');
+        
+        
+        
+        var discountvalue ;
+        
+        if(inputtxt.value.match(numbers) || inputtxt.value.match(decimals)){
+            discountvalue =  parseFloat(inputtxt.value);
+        }else if(inputtxt.value == ''){
+            discountvalue  = 0.00;
+        }else{
+            inputtxt.value = '';
+            discountvalue = 0.00;
+            alert('Only numbers allowed');
+        } 
+        
+        var disINPer = 0.00;
+        
+       	disINPer = parseFloat(parseFloat(discountvalue * 100)/MSRPBoatPrice).toFixed(2);
+       	console.log('>>>MSRPBoatPrice: '+MSRPBoatPrice);
+        console.log('>>>discountvalue: '+discountvalue);
+        console.log('>>>disINPer: '+disINPer);
+       	document.getElementById('discountPer').value =  parseFloat(disINPer).toFixed(2);
+        
+        
+        //-------------------------------------
+        var discountvalue1 = discountvalue.toFixed(2);
+        if(discountvalue1 == null || discountvalue1 ==''){
+            discountvalue1 =0.00;
+            
+        }
+        totalvalue =MSRPTrailerPrice+MSRPBoatPrice ;
+        if(discountvalue1 >totalvalue  ){
+            alert('Discount Value is greater then total values');
+            discountvalue =0.00;
+        }
+        if(discountvalue1 <0){
+            alert('Value should be in positive');
+            discountvalue1 =0.00;
+            
+        }
+        
+        if(  discountvalue1 >0 && discountvalue1 !=null && discountvalue1 !='' && discountvalue1 <totalvalue ){
+            document.getElementById('page:frm:yourprice').value = parseFloat(MSRPBoatPrice + MSRPTrailerPrice - discountvalue1).toFixed(2) ;
+            yourPriceComm = parseFloat(MSRPBoatPrice + MSRPTrailerPrice - discountvalue1).toFixed(2) ;
+        }
+        else{
+            document.getElementById('page:frm:yourprice').value = parseFloat(MSRPBoatPrice + MSRPTrailerPrice).toFixed(2);
+            yourPriceComm = parseFloat(MSRPBoatPrice + MSRPTrailerPrice - discountvalue1).toFixed(2) ;
+        }
+        
+        var dealMarginCom = parseFloat('{!objQuote.Quote_Deal_Margin__c}');
+        var boatCostLine = parseFloat('{!objQuote.Boat_Costline__c}');
+        var AboveCostline = parseFloat('{!AboveCostline}');
+        var UnderCostline = parseFloat('{!UnderCostline}');
+        var stip = parseFloat('{!stip}').toFixed(2); 
+        
+        console.log('>>>>>AboveCostline: '+AboveCostline);
+        console.log('>>>>>UnderCostline: '+UnderCostline);
+        console.log('>>>>>stip: '+stip); 
+        
+        console.log('>>>>>boatCostLine: '+boatCostLine); 
+        console.log('>>>>>dealMarginCom: '+dealMarginCom);
+        var bkslP = 0.00;
+        if(document.getElementById("page:frm:bspNav").value != '' && document.getElementById("page:frm:bspNav").value != null) {
+        	bkslP = parseFloat(document.getElementById("page:frm:bspNav").value);
+        } 
+        console.log('>>>>>>bkslP: '+bkslP);
+        if(parseFloat(boatCostLine) < parseFloat(dealMarginCom)) {
+        	var comFinal = parseFloat((bkslP * AboveCostline)/100).toFixed(2);
+        	console.log('>>>>comFinal930: '+comFinal); 
+        	comFinal = parseFloat(comFinal)+parseFloat(stip);  
+            document.getElementById("page:frm:commission").value = comFinal
+            document.getElementById("page:frm:sidcommission").value = comFinal;
+            //document.getElementById("dealMarginEdit").value = comFinal;
+             
+        }
+        else {
+        	var comFinal = parseFloat((bkslP * UnderCostline)/100).toFixed(2);
+        	console.log('>>>>comFinal939: '+comFinal); 
+        	comFinal = parseFloat(comFinal) + parseFloat(stip);
+            document.getElementById("page:frm:commission").value = comFinal;
+            document.getElementById("page:frm:sidcommission").value = comFinal;
+            //document.getElementById("dealMarginEdit").value = comFinal; 
+        }
+        
+    }
+     
+    function NetSellValue(){
+        
+        //Decimal And Number Validation
+        var numbers = /^[0-9]+$/;
+        var decimals = /^\d+\.\d{0,2}$/;
+        var inputtxt = document.getElementById('page:frm:tradeAllowance');
+        var TradeAllowance = 0.00;
+        if(inputtxt.value.match(numbers) || inputtxt.value.match(decimals)){  
+            TradeAllowance = inputtxt.value;
+        }else if( inputtxt.value == ''){
+                    TradeAllowance = 0.00;
+         }else{
+            inputtxt.value = '';
+            TradeAllowance = 0.00;
+            alert('Only numbers allowed');
+        }    
+        //----------------------------------------------------
+        
+        if(TradeAllowance === null || TradeAllowance === '' || TradeAllowance === 'NaN' || TradeAllowance === 'undefined' || TradeAllowance <0)
+        {
+            TradeAllowance = 0.00;
+            //alert('Trade Allowance' + TradeAllowance );
+        }
+        
+        
+        //Decimal And Number Validation
+        var numberss = /^[0-9]+$/;
+        var decimalss = /^\d+\.\d{0,2}$/;
+        var inputtxt2 = document.getElementById('page:frm:trailerAllowance');
+        var TrailerAllowance = 0.00;
+        if(inputtxt2.value.match(numberss) || inputtxt2.value.match(decimalss)){  
+            TrailerAllowance = inputtxt2.value;
+        }else if( inputtxt2.value == ''){
+                    TrailerAllowance= 0.00;
+         }else{
+            inputtxt2.value = '';
+            TrailerAllowance = 0.00;
+            alert('Only numbers allowed.');
+        }    
+        //----------------------------------------------------
+        
+        if(TrailerAllowance === null || TrailerAllowance === '' || TrailerAllowance === 'NaN' || TrailerAllowance === 'undefined' || TrailerAllowance <0 ){
+            TrailerAllowance = 0.00;
+        }
+        var yourprice =  parseFloat(document.getElementById('page:frm:yourprice').value);
+        var yourprice1 = yourprice.toFixed(2);
+        // alert(TradeAllowance+'   '+ TrailerAllowance);
+        TradeAllowance1  = parseFloat(TradeAllowance);
+        //TradeAllowance11 = TradeAllowance1.toFixed(2);
+        
+        TrailerAllowance1 = parseFloat(TrailerAllowance);
+        //TrailerAllowance1 = TrailerAllowance1.toFixed(2);
+        
+        var result = TradeAllowance1 + TrailerAllowance1;
+        if( yourprice1 > result ){
+            
+            var value = TradeAllowance1 + TrailerAllowance1;
+            // alert('!!!value !!!! '+value);
+            var total = yourprice - value;
+            //alert('!!!!!!!!!!total !!!!!!!! '+total);
+            document.getElementById('page:frm:netSellingPrice').value =  parseFloat(total).toFixed(2);
+            
+        }
+        if(result >=yourprice ){
+            alert('Total of Allowance can not be more then your price');
+            
+        }
+        
+        
+        
+        var NetSellValue = parseFloat(document.getElementById('page:frm:netSellingPrice').value);
+        if(NetSellValue!=null && NetSellValue != "undefined" && NetSellValue > 0)
+        {
+        		console.log("RegularSalestax: {!RegularSalestax}");
+        		console.log("VehicleSalestax: {!VehicleSalestax}");
+        		console.log("CappingAmountForVehicleSalesTax: {!CappingAmountForVehicleSalesTax}");    
+         	var vehicleTax = parseFloat("{!VehicleSalestax}");
+         	var capAmount = parseFloat("{!CappingAmountForVehicleSalesTax}");
+         	var SalesTaxCal = (NetSellValue * vehicleTax)/100;
+         	console.log("SalesTaxCal: "+SalesTaxCal);
+         	if(capAmount > 0) {
+	         	if(SalesTaxCal <= capAmount) {
+	         		document.getElementById('page:frm:BoatSalesTax').value = parseFloat(SalesTaxCal).toFixed(2) ;
+	         	} else {
+	         		document.getElementById('page:frm:BoatSalesTax').value = parseFloat(capAmount).toFixed(2) ;
+	         	}
+         	} else {
+         		document.getElementById('page:frm:BoatSalesTax').value = parseFloat(SalesTaxCal).toFixed(2) ;
+         	}
+        }
+        
+        //var tradeAllowance =    parseFloat(inputtxt.value);
+        var tradeAllowance = TradeAllowance; 
+        if(tradeAllowance === null || tradeAllowance ===""|| tradeAllowance<0){
+            tradeAllowance =0;
+        }
+        
+        
+        
+        //Decimal And Number Validation
+        var inputtxtACV = document.getElementById('page:frm:tradeAcv'); 
+        var tradeAcv;
+        if(inputtxtACV.value.match(numberss) || inputtxtACV.value.match(decimalss)){  
+            tradeAcv = inputtxtACV.value;
+        }else if( inputtxtACV.value == ''){
+                    tradeAcv = 0.00;
+         }else{
+            inputtxtACV.value = '';
+            tradeAcv = 0.00;
+            alert('Only numbers allowed');
+        }    
+        //----------------------------------------------------
+        //   var tradeAcv =  parseFloat(document.getElementById('page:frm:tradeAcv').value); 
+        
+        
+        
+        if(tradeAcv === null || tradeAcv === "" || tradeAcv < 0){
+            tradeAcv = 0.00;
+        }
+        
+        var result1 = tradeAllowance - tradeAcv;
+        var result12 = result1.toFixed(2);
+        
+        // alert(result1 );
+        if((result1 > 0) || (tradeAcv < tradeAllowance) ){
+            document.getElementById('page:frm:it39').value = parseFloat(result12).toFixed(2) ;
+        } 
+        else if(tradeAcv < 0 || tradeAllowance < tradeAcv ) {
+            document.getElementById('page:frm:it39').value = 0.00;
+            alert('Trade Acv Should not more than Trade Allowance');
+            
+        } else {
+        	document.getElementById('page:frm:it39').value = 0.00;
+        }
+        
+        
+        var trailAllowance = parseFloat(inputtxt2.value);
+        if((trailAllowance === null) || (trailAllowance === "")|| trailAllowance < 0){
+            trailAllowance = 0.00;
+        }
+        //trailAllowance21 = parseFloat(inputtxt2.value);
+        trailAllowance21 = TrailerAllowance;
+        
+        
+        //Decimal And Number Validation
+        var inputtxtTrailerACV = document.getElementById('page:frm:Trailer');
+        var trailAcv;
+        if(inputtxtTrailerACV.value.match(numberss) || inputtxtTrailerACV.value.match(decimalss)){  
+            trailAcv = inputtxtTrailerACV.value;
+        }else if( inputtxtTrailerACV.value == ''){
+                    trailAcv = 0.00;
+         }else{
+            inputtxtTrailerACV.value = '';
+            trailAcv = 0.00;
+            alert('Only numbers allowed');
+        }    
+        //----------------------------------------------------
+        
+        
+        // var trailAcv = parseFloat(document.getElementById('page:frm:Trailer').value); 
+        
+        
+        var result2 =  trailAllowance21 - trailAcv; 
+        var result123 = result2.toFixed(2);
+        //alert(result2 );
+        if(result2 >0 && trailAllowance21 > trailAcv ) {
+            document.getElementById('page:frm:it30').value = parseFloat(result123).toFixed(2) ;     
+        }
+        else if(trailAcv < 0  || trailAllowance21 < trailAcv ){
+            document.getElementById('page:frm:it30').value =0;
+            alert('Trailer ACV should not more than trailer Allowance');
+        } else {
+        	document.getElementById('page:frm:it30').value = 0.00;
+        }
+        var totaloverAllowance = parseFloat(document.getElementById('page:frm:it31').value); 
+        var trailAllowance2 = document.getElementById('page:frm:it39').value;
+        
+        var tradeAllowance2 =    document.getElementById('page:frm:it30').value;
+        
+        if(trailAllowance2 == null || trailAllowance2 === ''){
+            trailAllowance2 = 0.00; 
+        }
+        if(tradeAllowance2  === null || tradeAllowance2 === '' ){
+            tradeAllowance2 = 0.00;
+        }
+        var value3 = parseFloat(trailAllowance2) +  parseFloat(tradeAllowance2);
+        console.log(value3);
+        debugger;
+        if(value3 <= yourprice){
+            document.getElementById('page:frm:it31').value= parseFloat(value3).toFixed(2) ;
+        }
+        else{
+            document.getElementById('page:frm:it31').value= 0.00; 
+            
+        }
+        // alert(totaloverAllowance );
+        
+        
+        
+        var netSellingPrice  = parseFloat(document.getElementById('page:frm:netSellingPrice').value); 
+        if(netSellingPrice ===null || netSellingPrice === ''){
+            netSellingPrice = 0.00; 
+        }
+        
+        var boatSalesTax2 =  parseFloat(document.getElementById('page:frm:BoatSalesTax').value); 
+        if(boatSalesTax2 === null && boatSalesTax2  === ''){
+            boatSalesTax2 = 0.00; 
+        }
+        
+        var trailerSalesTax2 = parseFloat('{!objQuote.Quote_Trailer_Sales_Tax__c}');
+        if(trailerSalesTax2 === null || trailerSalesTax2 == ''){
+            trailerSalesTax2 = 0.00; 
+        }
+        
+        var boatRegFee2 = parseFloat('{!objQuote.Quote_Boat_Reg_Fee__c}');
+        if(boatRegFee2 == null || boatRegFee2 === ''){
+            boatRegFee2 = 0.00; 
+        }
+        
+        var trailerRegFee2 = parseFloat('{!objQuote.Quote_Trailer_Reg_Fee__c}');
+        if(trailerRegFee2 === null || trailerRegFee2 === ''){
+            trailerRegFee2 = 0.00; 
+        }
+        
+        var docFee2 =   parseFloat('{!objQuote.Quote_Doc_Fee__c}');
+        if(docFee2 === null || docFee2 === ''){
+            docFee2 = 0.00; 
+        }
+        
+        
+        
+        //Decimal And Number Validation
+        var inputtxtPayOff = document.getElementById('page:frm:it21');
+        var tradePayOff2;
+        if(inputtxtPayOff.value.match(numberss) || inputtxtPayOff.value.match(decimalss)){  
+            tradePayOff2 = inputtxtPayOff.value;
+        }else if( inputtxtPayOff .value == ''){
+                    tradePayOff2= 0.00;
+         }else{
+            inputtxtPayOff.value = '';
+            tradePayOff2 = 0.00;
+            alert('Only numbers allowed');
+        }    
+        //----------------------------------------------------
+        
+        
+        //var tradePayOff2 = document.getElementById('page:frm:it21').value;
+        
+        
+        if(tradePayOff2 === null || tradePayOff2 === '' ||  tradePayOff2 === 'undefined' || tradePayOff2 === 'Nan'){
+            tradePayOff2 = 0.00; 
+        }
+        var tradePayOff21 = parseFloat(tradePayOff2 );
+        var result =  netSellingPrice +boatSalesTax2 + trailerSalesTax2 + boatRegFee2 + docFee2 +trailerRegFee2 ;
+        var result2 =  netSellingPrice +boatSalesTax2 + trailerSalesTax2 + boatRegFee2 + docFee2 +trailerRegFee2 +tradePayOff21;
+        if(result==0 ||  tradePayOff21!=null   ){
+            document.getElementById('page:frm:it23').value = parseFloat(result2).toFixed(2);
+            document.getElementById('page:frm:sidit23').value = parseFloat(result2).toFixed(2);
+            //  alert('Tradepayoff...'+ result2);
+        }
+        /* if(result>0 || tradePayOff21==null || tradepayoff21<=0  ){
+            
+             document.getElementById('page:frm:it23').value =  netSellingPrice +boatSalesTax2 + trailerSalesTax2 + boatRegFee2 + docFee2 +trailerRegFee2 ;                            
+             document.getElementById('page:frm:sidit23').value =  netSellingPrice +boatSalesTax2 + trailerSalesTax2 + boatRegFee2 + docFee2 +trailerRegFee2 ;
+        }*/
+        
+        var totalprice3 =   parseFloat(document.getElementById('page:frm:it23').value);      
+        if(totalprice3 && totalprice3 != 'undefined'){
+            
+            //Decimal And Number Validation
+            var inputtxtDwnPymnt = document.getElementById('page:frm:it26');
+            var downPayment;
+            if(inputtxtDwnPymnt.value.match(numberss) || inputtxtDwnPymnt.value.match(decimalss)){  
+                downPayment = inputtxtDwnPymnt.value;
+            }else if( inputtxtDwnPymnt.value == ''){
+                    downPayment  = 0.00;
+             }else{
+                inputtxtDwnPymnt.value = '';
+                downPayment = 0.00;
+                alert('Only numbers allowed');
+            }    
+            //----------------------------------------------------
+            
+            //var downPayment = document.getElementById('page:frm:it26').value;
+            
+            
+            if(downPayment=== null || downPayment==='')
+            {
+                downPayment =0.00;
+                
+            }
+            var downPayment1 = parseFloat(downPayment );
+            var result = totalprice3 - downPayment1;
+            var result1= result.toFixed(2);
+            if(downPayment == null ||downPayment == '' )
+            {
+                document.getElementById('page:frm:it27').value = parseFloat(totalprice3).toFixed(2);
+                
+            }
+            if(result>0 ){
+                
+                document.getElementById('page:frm:it27').value = parseFloat(result1).toFixed(2);
+                
+            }
+            
+            var totalAmountFinanced =  parseFloat(document.getElementById('page:frm:it27').value);
+            if(downPayment >= totalAmountFinanced ){
+                alert('Down payment should not be greater than totalAmountFinanced   ');
+                
+            }
+            
+            
+        }
+        var totaloverAllowance1 = parseFloat(document.getElementById('page:frm:it31').value); 
+        var yourprice1 =  parseFloat(document.getElementById('page:frm:yourprice').value);
+        var ttr= yourprice1 - totaloverAllowance1 ;
+        var ttr1 = ttr.toFixed(2);
+        var quoteSalesPrice = 0.00;
+        if(document.getElementById('page:frm:navQuoteSalePrice').value != null && document.getElementById('page:frm:navQuoteSalePrice').value != '') {
+        		quoteSalesPrice = parseFloat(document.getElementById('page:frm:navQuoteSalePrice').value);
+        }
+        var disssss = 0.00;
+        if(document.getElementById("page:frm:discount").value != '' && document.getElementById("page:frm:discount").value != undefined) {
+        		disssss = parseFloat(document.getElementById("page:frm:discount").value);
+        } 
+        var bsp = quoteSalesPrice - totaloverAllowance1;
+        bsp = bsp - disssss;
+        document.getElementById('page:frm:bspNav').value = parseFloat(bsp).toFixed(2)
+        
+        document.getElementById('page:frm:hiddenbox').value = parseFloat(ttr1).toFixed(2)
+        
+        if(yourprice1>totaloverAllowance1 && (!(yourprice1< 0)) ){
+            document.getElementById('page:frm:hiddenbox').value = parseFloat(ttr1).toFixed(2); 
+            
+        }
+        
+        var hiddenbox1 = parseFloat(document.getElementById('page:frm:hiddenbox').value);
+        //var cost ='{!objQuote.Quote_Cost__c}';
+        var cost = document.getElementById("page:frm:it33").value;
+        if(cost==="" ||cost==="undefined"){
+            cost = 0.00; 
+        }
+        cost1 = parseFloat(cost);
+        cost2 = cost1.toFixed(2);
+        
+        
+        
+        var cal =((hiddenbox1 - cost2)/ hiddenbox1) * 100;
+        var cal1= cal.toFixed(2);
+        // alert (cal); 
+        var dealMarginCom = 0.00;
+        console.log(cal1);
+        debugger;
+        if(hiddenbox1 !=null && hiddenbox1 !=" "  && cost2>=0 ){ //&& hiddenbox1 >= cost2
+            document.getElementById('page:frm:it32').value = parseFloat(cal1).toFixed(2);
+            document.getElementById('page:frm:sidit32').value = parseFloat(cal1).toFixed(2);
+            
+            document.getElementById('dealMarginEdit').value = parseFloat(cal1).toFixed(2);
+            dealMarginCom = parseFloat(cal1).toFixed(2); 
+        }
+        else{
+            document.getElementById('page:frm:it32').value = (0.00).toFixed(2);
+            document.getElementById('page:frm:sidit32').value = (0.00).toFixed(2);
+            document.getElementById('dealMarginEdit').value = (0.00).toFixed(2);     
+            dealMarginCom = 0.00;
+        }
+        
+        
+        var boatCostLine = parseFloat('{!objQuote.Boat_Costline__c}');
+        
+        var AboveCostline = parseFloat('{!AboveCostline}');
+        var UnderCostline = parseFloat('{!UnderCostline}');
+        var stip = parseFloat('{!stip}').toFixed(2);
+        
+        console.log('>>>>>AboveCostline: '+AboveCostline);
+        console.log('>>>>>UnderCostline: '+UnderCostline);
+        console.log('>>>>>stip: '+stip);
+        
+        console.log('>>>>>boatCostLine: '+boatCostLine);
+        console.log('>>>>>dealMarginCom: '+dealMarginCom);
+        var bkslP = 0.00;
+        if(document.getElementById("page:frm:bspNav").value != '' && document.getElementById("page:frm:bspNav").value != null) {
+        	bkslP = parseFloat(document.getElementById("page:frm:bspNav").value);
+        }
+        console.log('>>>>>>bkslP: '+bkslP);
+        if(parseFloat(boatCostLine) < parseFloat(dealMarginCom)) {
+        	var comFinal = parseFloat((bkslP * AboveCostline)/100).toFixed(2);
+        	console.log('>>>>comFinal1329: '+comFinal);
+        	comFinal = parseFloat(comFinal)+parseFloat(stip); 
+            document.getElementById("page:frm:commission").value = comFinal;
+            document.getElementById("page:frm:sidcommission").value = comFinal;
+        }
+        else {
+        	var comFinal = parseFloat((bkslP * UnderCostline)/100).toFixed(2);
+        	console.log('>>>>comFinal1336: '+comFinal);
+        	comFinal = parseFloat(comFinal) + parseFloat(stip);
+            document.getElementById("page:frm:commission").value = comFinal;
+            document.getElementById("page:frm:sidcommission").value = comFinal;
+        } 
+        
+        
+    }
+    function NetSellValue2(){
+        
+        //Decimal And Number Validation
+        var numbers = /^[0-9]+$/;
+        var decimals = /^\d+\.\d{0,2}$/;
+        var inputtxt = document.getElementById('page:frm:tradeAllowance');
+        var TradeAllowance;
+        if(inputtxt.value.match(numbers) || inputtxt.value.match(decimals)){  
+            TradeAllowance = inputtxt.value;
+        }else if( inputtxt.value == ''){
+                    TradeAllowance = 0.00;
+         }else{
+            inputtxt.value = '';
+            TradeAllowance = 0.00;
+            alert('Only numbers allowed');
+        }    
+        //----------------------------------------------------
+        
+        if(TradeAllowance === null || TradeAllowance === '' || TradeAllowance === 'NaN' || TradeAllowance === 'undefined' || TradeAllowance <0)
+        {
+            TradeAllowance = 0.00;
+            //alert('Trade Allowance' + TradeAllowance );
+        }
+        
+        
+        //Decimal And Number Validation
+        var numberss = /^[0-9]+$/;
+        var decimalss = /^\d+\.\d{0,2}$/;
+        var inputtxt2 = document.getElementById('page:frm:trailerAllowance');
+        var TrailerAllowance;
+        if(inputtxt2.value.match(numberss) || inputtxt2.value.match(decimalss)){  
+            TrailerAllowance = inputtxt2.value;
+        }else if( inputtxt2.value == ''){
+                    TrailerAllowance= 0.00;
+         }else{
+            inputtxt2.value = '';
+            TrailerAllowance = 0.00;
+            alert('Only numbers allowed.');
+        }    
+        //----------------------------------------------------
+        
+        if(TrailerAllowance === null || TrailerAllowance === '' || TrailerAllowance === 'NaN' || TrailerAllowance === 'undefined' || TrailerAllowance <0 ){
+            TrailerAllowance = 0.00;
+        }
+        var yourprice =  parseFloat(document.getElementById('page:frm:yourprice').value);
+        var yourprice1 = yourprice.toFixed(2);
+        // alert(TradeAllowance+'   '+ TrailerAllowance);
+        TradeAllowance1  = parseFloat(TradeAllowance);
+        //TradeAllowance11 = TradeAllowance1.toFixed(2);
+        
+        TrailerAllowance1 = parseFloat(TrailerAllowance);
+        //TrailerAllowance1 = TrailerAllowance1.toFixed(2);
+        
+        var result = TradeAllowance1 + TrailerAllowance1;
+        if( yourprice1 > result ){
+            
+            var value = TradeAllowance1 + TrailerAllowance1;
+            // alert('!!!value !!!! '+value);
+            var total = yourprice - value;
+            //alert('!!!!!!!!!!total !!!!!!!! '+total);
+            document.getElementById('page:frm:netSellingPrice').value =  parseFloat(total).toFixed(2);
+            
+        }
+        if(result >=yourprice ){
+            alert('Total of Allowance can not be more then your price');
+            
+        }
+        
+        
+        
+        var NetSellValue = parseFloat(document.getElementById('page:frm:netSellingPrice').value);
+        if(NetSellValue!=null && NetSellValue != "undefined" && NetSellValue > 0)
+        {
+        		console.log("RegularSalestax: {!RegularSalestax}");
+        		console.log("VehicleSalestax: {!VehicleSalestax}");
+        		console.log("CappingAmountForVehicleSalesTax: {!CappingAmountForVehicleSalesTax}");    
+         	var vehicleTax = parseFloat("{!VehicleSalestax}");
+         	var capAmount = parseFloat("{!CappingAmountForVehicleSalesTax}");
+         	var SalesTaxCal = (NetSellValue * vehicleTax)/100;
+         	console.log("SalesTaxCal: "+SalesTaxCal);
+         	if(capAmount > 0) {
+	         	if(SalesTaxCal <= capAmount) {
+	         		document.getElementById('page:frm:BoatSalesTax').value = parseFloat(SalesTaxCal).toFixed(2) ;
+	         	} else {
+	         		document.getElementById('page:frm:BoatSalesTax').value = parseFloat(capAmount).toFixed(2) ;
+	         	}
+         	} else {
+         		document.getElementById('page:frm:BoatSalesTax').value = parseFloat(SalesTaxCal).toFixed(2) ;
+         	}
+        }
+        
+        var tradeAllowance =    parseFloat(inputtxt.value); 
+        if(tradeAllowance === null || tradeAllowance ===""|| tradeAllowance<0){
+            tradeAllowance =0;
+        }
+        
+        
+        
+        //Decimal And Number Validation
+        var inputtxtACV = document.getElementById('page:frm:tradeAcv'); 
+        var tradeAcv;
+        if(inputtxtACV.value.match(numberss) || inputtxtACV.value.match(decimalss)){  
+            tradeAcv = inputtxtACV.value;
+        }else if( inputtxtACV.value == ''){
+                    tradeAcv = 0.00;
+         }else{
+            inputtxtACV.value = '';
+            tradeAcv = 0.00;
+            alert('Only numbers allowed');
+        }    
+        //----------------------------------------------------
+        //   var tradeAcv =  parseFloat(document.getElementById('page:frm:tradeAcv').value); 
+        
+        
+        
+        if(tradeAcv === null || tradeAcv ==="" || tradeAcv<0){
+            tradeAcv =0.00;
+        }
+        
+        var result1 = tradeAllowance - tradeAcv;
+        var result12 = result1.toFixed(2);
+        
+        // alert(result1 );
+        if((result1>0)||(tradeAcv<tradeAllowance) ){
+            document.getElementById('page:frm:it39').value = parseFloat(result12).toFixed(2) ;
+        }
+        else if(tradeAcv<0 || tradeAllowance<tradeAcv ) {
+            document.getElementById('page:frm:it39').value =0.00;
+            alert('Trade Acv Should not more than Trade Allowance');
+            
+        } else {
+        	document.getElementById('page:frm:it39').value =0.00;
+        }
+        
+        
+        var trailAllowance = parseFloat(inputtxt2.value);
+        if((trailAllowance === null) || (trailAllowance ==="")|| trailAllowance<0){
+            trailAllowance =0.00;
+        }
+        trailAllowance21 = parseFloat(inputtxt2.value);
+        
+        
+        
+        //Decimal And Number Validation
+        var inputtxtTrailerACV = document.getElementById('page:frm:Trailer');
+        var trailAcv;
+        if(inputtxtTrailerACV.value.match(numberss) || inputtxtTrailerACV.value.match(decimalss)){  
+            trailAcv = inputtxtTrailerACV.value;
+        }else if( inputtxtTrailerACV.value == ''){
+                    trailAcv = 0.00;
+         }else{
+            inputtxtTrailerACV.value = '';
+            trailAcv = 0.00;
+            alert('Only numbers allowed');
+        }    
+        //----------------------------------------------------
+        
+        
+        // var trailAcv = parseFloat(document.getElementById('page:frm:Trailer').value); 
+        
+        
+        var result2 =  trailAllowance21 - trailAcv; 
+        var result123 = result2.toFixed(2);
+        //alert(result2 );
+        if(result2 >0 && trailAllowance21 > trailAcv ) {
+            document.getElementById('page:frm:it30').value = parseFloat(result123).toFixed(2) ;     
+        }
+        else if(trailAcv < 0  || trailAllowance21 < trailAcv ){
+            document.getElementById('page:frm:it30').value =0;
+            alert('Trailer ACV should not more than trailer Allowance');
+        } else {
+        	document.getElementById('page:frm:it30').value =0.00;
+        }
+        var totaloverAllowance = parseFloat(document.getElementById('page:frm:it31').value); 
+        var trailAllowance2 = document.getElementById('page:frm:it39').value;
+        
+        var tradeAllowance2 =    document.getElementById('page:frm:it30').value;
+        
+        if(trailAllowance2 == null || trailAllowance2 === ''){
+            trailAllowance2 = 0.00; 
+        }
+        if(tradeAllowance2  === null || tradeAllowance2 === '' ){
+            tradeAllowance2 = 0.00;
+        }
+        var value3 = parseFloat(trailAllowance2) +  parseFloat(tradeAllowance2);
+        console.log('value3:::: '+value3);
+        //debugger;
+        if(value3 <= yourprice){
+            document.getElementById('page:frm:it31').value= parseFloat(value3).toFixed(2) ;
+        }
+        else{
+            document.getElementById('page:frm:it31').value= 0.00; 
+            
+        }
+        // alert(totaloverAllowance );
+        
+        
+        
+        var netSellingPrice  = parseFloat(document.getElementById('page:frm:netSellingPrice').value); 
+        if(netSellingPrice ===null || netSellingPrice === ''){
+            netSellingPrice = 0.00; 
+        }
+        
+        var boatSalesTax2 =  parseFloat(document.getElementById('page:frm:BoatSalesTax').value); 
+        if(boatSalesTax2 === null && boatSalesTax2  === ''){
+            boatSalesTax2 = 0.00; 
+        }
+        
+        var trailerSalesTax2 = parseFloat('{!objQuote.Quote_Trailer_Sales_Tax__c}');
+        if(trailerSalesTax2 === null || trailerSalesTax2 == ''){
+            trailerSalesTax2 = 0.00; 
+        }
+        
+        var boatRegFee2 = parseFloat('{!objQuote.Quote_Boat_Reg_Fee__c}');
+        if(boatRegFee2 == null || boatRegFee2 === ''){
+            boatRegFee2 = 0.00; 
+        }
+        
+        var trailerRegFee2 = parseFloat('{!objQuote.Quote_Trailer_Reg_Fee__c}');
+        if(trailerRegFee2 === null || trailerRegFee2 === ''){
+            trailerRegFee2 = 0.00; 
+        }
+        
+        var docFee2 =   parseFloat('{!objQuote.Quote_Doc_Fee__c}');
+        if(docFee2 === null || docFee2 === ''){
+            docFee2 = 0.00; 
+        }
+        
+        
+        
+        //Decimal And Number Validation
+        var inputtxtPayOff = document.getElementById('page:frm:it21');
+        var tradePayOff2;
+        if(inputtxtPayOff.value.match(numberss) || inputtxtPayOff.value.match(decimalss)){  
+            tradePayOff2 = inputtxtPayOff.value;
+        }else if( inputtxtPayOff .value == ''){
+                    tradePayOff2= 0.00;
+         }else{
+            inputtxtPayOff.value = '';
+            tradePayOff2 = 0.00;
+            alert('Only numbers allowed');
+        }    
+        //----------------------------------------------------
+        
+        
+        //var tradePayOff2 = document.getElementById('page:frm:it21').value;
+        
+        
+        if(tradePayOff2 === null || tradePayOff2 === '' ||  tradePayOff2 === 'undefined' || tradePayOff2 === 'Nan'){
+            tradePayOff2 = 0.00; 
+        }
+        var tradePayOff21 = parseFloat(tradePayOff2 );
+        var result =  netSellingPrice +boatSalesTax2 + trailerSalesTax2 + boatRegFee2 + docFee2 +trailerRegFee2 ;
+        var result2 =  netSellingPrice +boatSalesTax2 + trailerSalesTax2 + boatRegFee2 + docFee2 +trailerRegFee2 +tradePayOff21;
+        if(result==0 ||  tradePayOff21!=null   ){
+            document.getElementById('page:frm:it23').value = parseFloat(result2).toFixed(2);
+            document.getElementById('page:frm:sidit23').value = parseFloat(result2).toFixed(2);
+            //  alert('Tradepayoff...'+ result2);
+        }
+        /* if(result>0 || tradePayOff21==null || tradepayoff21<=0  ){
+            
+             document.getElementById('page:frm:it23').value =  netSellingPrice +boatSalesTax2 + trailerSalesTax2 + boatRegFee2 + docFee2 +trailerRegFee2 ;                            
+             document.getElementById('page:frm:sidit23').value =  netSellingPrice +boatSalesTax2 + trailerSalesTax2 + boatRegFee2 + docFee2 +trailerRegFee2 ;
+        }*/
+        
+        var totalprice3 =   parseFloat(document.getElementById('page:frm:it23').value);      
+        if(totalprice3 && totalprice3 != 'undefined'){
+            
+            //Decimal And Number Validation
+            var inputtxtDwnPymnt = document.getElementById('page:frm:it26');
+            var downPayment;
+            if(inputtxtDwnPymnt.value.match(numberss) || inputtxtDwnPymnt.value.match(decimalss)){  
+                downPayment = inputtxtDwnPymnt.value;
+            }else if( inputtxtDwnPymnt.value == ''){
+                    downPayment  = 0.00;
+             }else{
+                inputtxtDwnPymnt.value = '';
+                downPayment = 0.00;
+                alert('Only numbers allowed');
+            }    
+            //----------------------------------------------------
+            
+            //var downPayment = document.getElementById('page:frm:it26').value;
+            
+            
+            if(downPayment=== null || downPayment==='')
+            {
+                downPayment =0.00;
+                
+            }
+            var downPayment1 = parseFloat(downPayment );
+            var result = totalprice3 - downPayment1;
+            var result1= result.toFixed(2);
+            if(downPayment == null ||downPayment == '' )
+            {
+                document.getElementById('page:frm:it27').value = parseFloat(totalprice3).toFixed(2);
+                
+            }
+            if(result>0 ){
+                
+                document.getElementById('page:frm:it27').value = parseFloat(result1).toFixed(2);
+                
+            }
+            
+            var totalAmountFinanced =  parseFloat(document.getElementById('page:frm:it27').value);
+            if(downPayment >= totalAmountFinanced ){
+                alert('Down payment should not be greater than totalAmountFinanced   ');
+                
+            }
+            
+            
+        }
+        var totaloverAllowance1 = parseFloat(document.getElementById('page:frm:it31').value); 
+        var yourprice1 =  parseFloat(document.getElementById('page:frm:yourprice').value);
+        var ttr= yourprice1 - totaloverAllowance1 ;
+        var ttr1 = ttr.toFixed(2);
+        var quoteSalesPrice = 0.00;
+        if(document.getElementById('page:frm:navQuoteSalePrice').value != null && document.getElementById('page:frm:navQuoteSalePrice').value != '') {
+        		quoteSalesPrice = parseFloat(document.getElementById('page:frm:navQuoteSalePrice').value);
+        }
+        var disssss = 0.00;
+        if(document.getElementById("page:frm:discount").value != '' && document.getElementById("page:frm:discount").value != undefined) {
+        		disssss = parseFloat(document.getElementById("page:frm:discount").value);
+        } 
+        var bsp = quoteSalesPrice - totaloverAllowance1;
+        bsp = bsp - disssss;
+        document.getElementById('page:frm:bspNav').value = parseFloat(bsp).toFixed(2)
+        
+        document.getElementById('page:frm:hiddenbox').value = parseFloat(ttr1).toFixed(2)
+        
+        if(yourprice1>totaloverAllowance1 && (!(yourprice1< 0)) ){
+            document.getElementById('page:frm:hiddenbox').value = parseFloat(ttr1).toFixed(2); 
+            
+        }
+        
+        var hiddenbox1 = parseFloat(document.getElementById('page:frm:hiddenbox').value);
+        //var cost ='{!objQuote.Quote_Cost__c}';
+        var cost = document.getElementById("page:frm:it33").value;
+        if(cost==="" ||cost==="undefined"){
+            cost = 0.00; 
+        }
+        cost1 = parseFloat(cost);
+        cost2 = cost1.toFixed(2);
+        
+        
+        
+        var cal =((hiddenbox1 - cost2)/ hiddenbox1) * 100;
+        var cal1= cal.toFixed(2);
+        // alert (cal); 
+        console.log(cal1);
+        debugger;
+        var dynamicVal = 0.00; 
+        if(document.getElementById("dealMarginEdit").value != '') {
+        	dynamicVal = parseFloat(document.getElementById("dealMarginEdit").value);
+        } 
+        var dealMarginCom = 0.00;
+        if(hiddenbox1 !=null && hiddenbox1 !=" "  && cost2>=0 ){ //&& hiddenbox1 >= cost2
+            document.getElementById('page:frm:it32').value = parseFloat(dynamicVal).toFixed(2);
+            document.getElementById('page:frm:sidit32').value = parseFloat(dynamicVal).toFixed(2);
+            dealMarginCom = parseFloat(dynamicVal).toFixed(2); 
+        }
+        else{
+            document.getElementById('page:frm:it32').value = (0.00).toFixed(3);
+            document.getElementById('page:frm:sidit32').value = (0.00).toFixed(2);
+            //document.getElementById('dealMarginEdit').value = (0.00).toFixed(2);     
+            dealMarginCom = 0.00;
+        }
+        
+        
+        var boatCostLine = parseFloat('{!objQuote.Boat_Costline__c}');
+        
+        var AboveCostline = parseFloat('{!AboveCostline}');
+        var UnderCostline = parseFloat('{!UnderCostline}');
+        var stip = parseFloat('{!stip}').toFixed(2);
+        
+        console.log('>>>>>AboveCostline: '+AboveCostline);
+        console.log('>>>>>UnderCostline: '+UnderCostline);
+        console.log('>>>>>stip: '+stip);
+        
+        console.log('>>>>>boatCostLine: '+boatCostLine); 
+        console.log('>>>>>dealMarginCom: '+dealMarginCom); 
+        var bkslP = 0.00;
+        if(document.getElementById("page:frm:bspNav").value != '' && document.getElementById("page:frm:bspNav").value != null) {
+        	bkslP = parseFloat(document.getElementById("page:frm:bspNav").value);
+        }
+        console.log('>>>>>>bkslP: '+bkslP);
+        if(boatCostLine < dealMarginCom) {
+        	var comFinal = parseFloat((bkslP * AboveCostline)/100).toFixed(2);
+        	console.log('>>>>comFinal1725: '+comFinal);
+        	comFinal = parseFloat(comFinal)+parseFloat(stip);
+            //document.getElementById("page:frm:commission").value = comFinal;
+            //document.getElementById("page:frm:sidcommission").value = comFinal;
+        }
+        else { 
+        	var comFinal = parseFloat((bkslP * UnderCostline)/100).toFixed(2);
+        	console.log('>>>>comFinal1732: '+comFinal);
+        	comFinal = parseFloat(comFinal) + parseFloat(stip);
+            //document.getElementById("page:frm:commission").value = comFinal;
+            //document.getElementById("page:frm:sidcommission").value = comFinal;
+        } 
+        
+        
+    }
+    onload = function(){
+        var tradePayOff21 = parseFloat(document.getElementById('page:frm:it21').value);  
+        if(!(tradePayOff21 > 0)){
+            document.getElementById('page:frm:it21').value =null;
+        }
+        var discount21 = parseFloat(document.getElementById('page:frm:discount').value); 
+        if(!(discount21 > 0)){
+            document.getElementById('page:frm:discount').value =null;
+        }
+        
+        var yourprice21 = parseFloat(document.getElementById('page:frm:yourprice').value); 
+        if(!(yourprice21 > 0)){
+            document.getElementById('page:frm:yourprice').value =null;
+        }
+        var tradeAllowance21 = parseFloat(document.getElementById('page:frm:tradeAllowance').value); 
+        if(!(tradeAllowance21 > 0)){
+            document.getElementById('page:frm:tradeAllowance').value =null;
+        }
+        var trailerAllowance21 = parseFloat(document.getElementById('page:frm:trailerAllowance').value); 
+        if(!(trailerAllowance21 > 0)){
+            document.getElementById('page:frm:trailerAllowance').value =null;
+        }
+        var netSellingPrice21 = parseFloat(document.getElementById('page:frm:netSellingPrice').value); 
+        if(!(netSellingPrice21 > 0)){
+            document.getElementById('page:frm:netSellingPrice').value =null;
+        }
+        var tradeAcv21= parseFloat(document.getElementById('page:frm:tradeAcv').value); 
+        if(!(tradeAcv21> 0)){
+            document.getElementById('page:frm:tradeAcv').value =null;
+        }
+        var trailerAcv21= parseFloat(document.getElementById('page:frm:Trailer').value); 
+        if(!(trailerAcv21> 0)){
+            document.getElementById('page:frm:Trailer').value =null;
+        }
+        var boatsalestax21= parseFloat(document.getElementById('page:frm:BoatSalesTax').value); 
+        if(!(boatsalestax21 > 0)){
+            document.getElementById('page:frm:BoatSalesTax').value =null;
+        }
+        
+        var totalprice21= parseFloat(document.getElementById('page:frm:it23').value); 
+        if(!(totalprice21> 0)){
+            document.getElementById('page:frm:it23').value =null;
+            document.getElementById('page:frm:sidit23').value =null;
+        }
+        var downpayment21= parseFloat(document.getElementById('page:frm:it26').value); 
+        if(!(downpayment21> 0)){
+            document.getElementById('page:frm:it26').value =null;
+        }
+        var totalAmountFinanced21= parseFloat(document.getElementById('page:frm:it27').value); 
+        if(!(totalAmountFinanced21> 0)){
+            document.getElementById('page:frm:it27').value =null;
+        }
+        var rate21= parseFloat(document.getElementById('page:frm:it9').value); 
+        if(!(rate21> 0)){
+            document.getElementById('page:frm:it9').value =null;
+        } 
+        var payment21= parseFloat(document.getElementById('page:frm:it28').value); 
+        if(!(payment21> 0)){
+            document.getElementById('page:frm:it28').value =null;
+            document.getElementById('page:frm:sidit28').value =null;
+            
+        } 
+        var boatTradeOverAllowance21= parseFloat(document.getElementById('page:frm:it39').value); 
+        if(!(boatTradeOverAllowance21> 0)){
+            document.getElementById('page:frm:it39').value =null;
+        } 
+        var boatTrailerOverAllowance21= parseFloat(document.getElementById('page:frm:it30').value); 
+        if(!(boatTrailerOverAllowance21> 0)){
+            document.getElementById('page:frm:it30').value =null;
+        } 
+        var totalOverAllowance21= parseFloat(document.getElementById('page:frm:it31').value); 
+        if(!(totalOverAllowance21> 0)){
+            document.getElementById('page:frm:it31').value =null;
+        } 
+        var dealMargin21= parseFloat(document.getElementById('page:frm:it32').value); 
+        if(!(dealMargin21> 0)){
+            document.getElementById('page:frm:it32').value =null; 
+            document.getElementById('page:frm:sidit32').value =null;
+            document.getElementById('dealMarginEdit').value = '';
+        }  
+        var cost21= parseFloat(document.getElementById('page:frm:it33').value); 
+        if(!(cost21> 0)){
+            document.getElementById('page:frm:it33').value =null;
+        } 
+        var trailersalestax21= parseFloat(document.getElementById('page:frm:it16').value); 
+        if(!(trailersalestax21> 0)){
+            document.getElementById('page:frm:it16').value =null;
+        }
+        var boatRegFee21= parseFloat(document.getElementById('page:frm:it20').value); 
+        if(!(boatRegFee21> 0)){
+            document.getElementById('page:frm:it20').value =null;
+        }
+        var trailerRegFee21= parseFloat(document.getElementById('page:frm:it17').value); 
+        if(!(trailerRegFee21> 0)){
+            document.getElementById('page:frm:it17').value =null;
+        }
+        var doc21= parseFloat(document.getElementById('page:frm:it19').value); 
+        if(!(doc21> 0)){
+            document.getElementById('page:frm:it19').value =null;
+        }
+        var hidden21= parseFloat(document.getElementById('page:frm:hiddenbox').value); 
+        if(!(hidden21> 0)){
+            document.getElementById('page:frm:hiddenbox').value =null;
+        }
+        var boatprice21= parseFloat(document.getElementById('page:frm:it1').value); 
+        if(!(boatprice21> 0)){
+            document.getElementById('page:frm:it1').value =null;
+        }
+        var trailerprice21 = parseFloat(document.getElementById('page:frm:it2').value); 
+        if(!(trailerprice21 > 0)){
+            document.getElementById('page:frm:it2').value =null;
+        }
+        
+    }
+    function calculatePayment(){
+        var term = document.getElementById('page:frm:it29').value;
+        document.getElementById("sideTrm").value = term;
+        var term1 = term.substring(0,2).trim();
+        var term2 = parseInt(term1);
+        var term3 = term2 * 12;
+        
+        //Decimal And Number Validation
+        var numbers = /^[0-9]+$/;
+        var decimals = /^\d+\.\d{0,2}$/;
+        var inputtxtRt = document.getElementById('page:frm:it9');
+        var interestRate;
+        if(inputtxtRt.value.match(numbers) || inputtxtRt.value.match(decimals)){  
+            interestRate = inputtxtRt.value;
+        }else if( inputtxtRt.value == ''){
+                    interestRate  = 0.00;
+        }else{
+            inputtxtRt.value = '';
+            interestRate = 0.00;
+            alert('Only numbers allowed');
+        }    
+        //----------------------------------------------------
+        
+        
+        // var interestRate = document.getElementById('page:frm:it9').value;
+        if(interestRate ===""||interestRate ===null||interestRate <0 ||interestRate ==="undefined" ){
+            
+            interestRate =0.00;
+        }
+        var interestRate2 =parseFloat(interestRate );
+        interestRate2 = interestRate2 / 1200;
+        //total Amount Financed
+        var presentvalue = document.getElementById('page:frm:it27').value;
+        if(presentvalue ===""||presentvalue ===null||presentvalue <0 || presentvalue ==="undefined "){
+            presentvalue =0.00;
+            
+        }
+        
+        
+        var presentvalue2 = parseFloat(presentvalue);
+        var value = presentvalue2 * interestRate2  / (1 - Math.pow(1/(1 + interestRate2) , term3 ));
+        var value1 = value.toFixed(2);
+        if(presentvalue2 >0&& presentvalue2!= null && term3 >0 && term3 !=null && interestRate2>0 && interestRate2!=null){
+            document.getElementById('page:frm:it28').value = parseFloat(value1).toFixed(2);
+            document.getElementById('page:frm:sidit28').value = parseFloat(value1).toFixed(2);
+        }
+        else{
+            document.getElementById('page:frm:it28').value = 0.00;
+            document.getElementById('page:frm:sidit28').value = 0.00;
+        }
+    }
+    
+    
+    </script>
+    
+    
+    </html>
+</apex:page>

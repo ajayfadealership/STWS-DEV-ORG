@@ -1,0 +1,101 @@
+<aura:component controller="VendorsLightningCompController" implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction" access="global" >
+    <aura:handler name="init" value="{!this}" action="{!c.getRecordTypeId}"/>
+    <aura:attribute name="attrRecordType" type="String" />
+    <aura:attribute name="attrVender" type="Manufacturer__c"/>
+    <aura:attribute name="showSpinner" type="boolean" default="false" access="global"/>
+    <aura:attribute name="showform" type="boolean" default="false" access="global"/>
+    <aura:attribute name="showlist" type="boolean" default="true" access="global"/>
+    <aura:if isTrue="{!v.showSpinner}">
+        <lightning:spinner />
+    </aura:if>
+    
+    <lightning:recordEditForm aura:id="recordEditForm" onload="{!c.handleLoad}" onsubmit="{!c.handleSubmit}" onerror="{!c.handleError}" onsuccess="{!c.handleSuccess}" recordTypeId="{!v.attrRecordType}" objectApiName="BOATBUILDING__Manufacturer__c">
+        
+     
+        <div class = "slds-col slds-size--1-of-1">
+            <div class = "slds-grid slds-wrap" >
+                <div class = "slds-col slds-size--1-of-1 slds-medium-size--2-of-6 slds-col--padded">
+                    <div class = "slds-form-element">
+                        <div class = "slds-form-element__control">
+                            <lightning:inputField fieldName="Name" />
+                        </div>
+                    </div>
+                </div>
+                <div class = "slds-col slds-size--1-of-1 slds-medium-size--2-of-6 slds-col--padded">
+                    <div class = "slds-form-element">
+                        <div class = "slds-form-element__control">
+                            <lightning:inputField fieldName="BOATBUILDING__Phone__c" />
+                        </div>
+                    </div>
+                </div>
+                <div class = "slds-col slds-size--1-of-1 slds-medium-size--2-of-6 slds-col--padded">
+                    <div class = "slds-form-element">
+                        <div class = "slds-form-element__control">
+                            <lightning:inputField fieldName="BOATBUILDING__Email__c" />
+                        </div>
+                    </div>
+                </div>
+                <div class = "slds-col slds-size--1-of-1 slds-medium-size--2-of-6 slds-col--padded">
+                    <div class = "slds-form-element">
+                        <div class = "slds-form-element__control">
+                            <lightning:inputField fieldName="BOATBUILDING__Contact_Person__c" />
+                        </div>
+                    </div>
+                </div>
+                <div class = "slds-col slds-size--1-of-1 slds-medium-size--2-of-6 slds-col--padded">
+                    <div class = "slds-form-element">
+                        <div class = "slds-form-element__control">
+                            <lightning:inputField fieldName="BOATBUILDING__Street__c" />
+                        </div>
+                    </div>
+                </div>
+                <div class = "slds-col slds-size--1-of-1 slds-medium-size--2-of-6 slds-col--padded">
+                    <div class = "slds-form-element">
+                        <div class = "slds-form-element__control">
+                            <lightning:inputField fieldName="BOATBUILDING__City__c" />
+                        </div>
+                    </div>
+                </div>
+                <div class = "slds-col slds-size--1-of-1 slds-medium-size--2-of-6 slds-col--padded">
+                    <div class = "slds-form-element">
+                        <div class = "slds-form-element__control">
+                            <lightning:inputField fieldName="BOATBUILDING__State__c" />
+                        </div>
+                    </div>
+                </div>
+                <div class = "slds-col slds-size--1-of-1 slds-medium-size--2-of-6 slds-col--padded">
+                    <div class = "slds-form-element">
+                        <div class = "slds-form-element__control">
+                            <lightning:inputField fieldName="BOATBUILDING__Zip__c" />
+                        </div>
+                    </div>
+                </div>
+                <div class = "slds-col slds-size--1-of-1 slds-medium-size--2-of-6 slds-col--padded">
+                    <div class = "slds-form-element">
+                        <div class = "slds-form-element__control">
+                            <lightning:inputField fieldName="BOATBUILDING__Terms__c" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="slds-grid slds-grid--vertical-align-center slds-grid--align-center">
+            <div class = "slds-col--padded">
+                <div class = "slds-form-element">
+                    <div class = "slds-form-element__control">
+                        <lightning:button type="submit" iconName="utility:save" label="Create Vendor" class = "slds-m-top_medium"/>
+                    </div>
+                </div>
+            </div>
+            <div class = "slds-col--padded">
+                <div class = "slds-form-element">
+                    <div class = "slds-form-element__control">
+                        <lightning:button onclick="{!c.backToList}" label="Back To List" iconName="utility:back" class = "slds-m-top_medium"/>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </lightning:recordEditForm> 
+       
+    
+</aura:component>

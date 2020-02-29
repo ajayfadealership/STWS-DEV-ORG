@@ -1,0 +1,121 @@
+<apex:page showHeader="false" controller="WindowStickerController" standardStylesheets="false" applyBodyTag="false" applyHtmlTag="false">
+    <apex:stylesheet value="{!URLFOR($Resource.WindowSticker, 'styles/window-style.css')}"/>
+    
+    <body>
+        <div id="page1">
+            <!-- Header Block -->
+            <div class="row bg-{!logoBackgroundColor}" id="header-block">
+                <div class="col-7 no-margin">
+                    <div class="header-image" style="background-image: url({!URLFOR($Action.Attachment.Download, sideImageId)});"></div>
+                </div>
+                <div class="col-5 center">
+                    <div class="header-logo">
+                        <img src="{!LogoURL}" width="{!logowidthPercent}" />
+                        <h1 class="boat-model">{!listInventory[0].BOATBUILDING__Year__c} {!listInventory[0].BOATBUILDING__Web_Product_Name__c}</h1>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="container">
+                
+                <!-- MSRP Block -->
+                <div class="row" id="msrp-block">
+                    <div class="col-4 msrp">
+                        <span>MSRP PRICE: </span>
+                    </div>
+                    <div class="col-8 price">
+                        <span class="usd-price">{!listInventory[0].BOATBUILDING__Window_Sticker_MSRP__c}</span>
+                    </div>
+                </div>
+                
+                <!-- Why buy from Us, Specs -->
+                <div class="row" id="why-buy-spec-block">
+                    <div class="col-6">
+                        <div id="why-buy-block">
+                            <div class="desc-header">
+                                <span>WHY BUY FROM US?</span>
+                            </div>
+                            <ul>
+                                <apex:repeat value="{!tempInfoList}" var="v">
+                                    <li>{!v}</li>
+                                </apex:repeat>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div id="spec-block">
+                            <div class="desc-header right">
+                                <span>SPECS</span>
+                            </div>
+                            <ul class="right" style="list-style-type:none;">
+                                <li>Length: {!listInventory[0].BOATBUILDING__Boat_Length_in_feets__c} Ft</li>
+                                <li>Ballast: {!listInventory[0].BOATBUILDING__Boat_Ballast_Weight__c} LBS</li>
+                                <li>Capacity: {!listInventory[0].BOATBUILDING__Boat_Seating_Capacity__c} People</li>
+                                <li>Weight: {!listInventory[0].BOATBUILDING__Boat_Weight__c} LBS</li>
+                                <li>Fuel Capacity: {!listInventory[0].BOATBUILDING__Boat_Fuel_Capacity__c } Gals</li>
+                                <li>Overall Length: {!listInventory[0].BOATBUILDING__Boat_Overall_Length__c} Ft</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Our Price, Payment -->
+                <div class="row" id="price-payment-block">
+                    <div class="col-6">
+                        <span>OUR PRICE: <span class="usd-price">{!listInventory[0].BOATBUILDING__Window_Sticker_Your_Price__c}</span></span>
+                    </div>
+                    <div class="col-6 right">
+                        <span class="total title">PAYMENT: <span class="usd-price">{!listInventory[0].BOATBUILDING__Window_Sticker_Payment__c}</span></span>
+                    </div>
+                </div>
+                
+                <!-- Dealer Disc, Down Payment, Int rate, Term -->
+                <div class="row" id="dealer-disc-down-int-term-block">
+                    <div class="col-3">
+                        <span>Dealer Discount: <span class="usd-price">{!listInventory[0].BOATBUILDING__Window_Sticker_Our_Discount__c}</span></span>
+                    </div>
+                    <div class="col-3">
+                        <span>Down Payment: <span class="usd-price">{!listInventory[0].BOATBUILDING__Window_Sticker_Down_Payment__c}</span></span>
+                    </div>
+                    <div class="col-3 right">
+                        <span>Interest Rate: {!listInventory[0].BOATBUILDING__Window_Sticker_Interest_Rate__c}%</span>
+                    </div>
+                    <div class="col-3 right">
+                        <span>Term: {!listInventory[0].BOATBUILDING__Window_sticker_Term__c} months</span>
+                    </div>
+                </div>
+                
+            </div>
+            
+            <!-- Footer Block -->
+            <div class="row bg-{!logoBackgroundColor}" id="footer-block">
+                <div class="col-5 center">
+                    <div class="footer-logo">
+                        <img src="{!LogoURL}" width="{!logowidthPercent}" />
+                        <h3 class="boat-model">{!windowStickerConfig.BOATBUILDING__Company_Address__c}</h3>
+                        <h3>{!windowStickerConfig.BOATBUILDING__Company_Website__c}</h3>
+                    </div>
+                </div>
+                <div class="col-7 ">
+                    <div class="header-image" style="background-image: url({!URLFOR($Action.Attachment.Download, interiorImageId)});"></div>
+                </div>
+            </div>
+        </div>
+    </body>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+        $(".usd-price").each(function () {
+            var price = $(this).text();
+            price = parseInt(price);
+            function commafy(n) {
+                var str = n.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, "$1,");
+                str = str.split(".");
+                return str[0];
+            }
+            price = '$'+commafy(price);
+            $(this).text(price);
+        });
+    });
+    </script>
+</apex:page>

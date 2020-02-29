@@ -1,0 +1,361 @@
+<apex:page showHeader="false" sidebar="false" standardStylesheets="false" applyBodyTag="false" applyHtmlTag="false">
+    <html>
+
+    <head>
+        <link media="all" type="text/css" rel="stylesheet" href="{!URLFOR($Resource.invoicestyle)}" />
+    </head>
+
+    <body>
+        <div id="page1">
+            <div id="header">
+                <img src="{!URLFOR($Resource.invoiceheader)}" class="stretch" alt="" />
+            </div>
+
+            <div class="container">
+
+                <!-- Header Block -->
+                <div class="row" id="header-block">
+                    <!-- Logo Block -->
+                    <div class="col-5">
+                        <img src="{!URLFOR($Resource.invoicelogo)}" width="100%" />
+                    </div>
+
+                    <!-- Address Block-->
+                    <div class="col-7">
+                        <div class="row italic">
+                            <div class="col-6">
+                                <p class="title2">BEAVERTON</p>
+                                <p class="address-line">12050 SW Canyon Rd</p>
+                                <p class="address-line">Beaverton, Oregon 97005</p>
+                                <p class="address-line">(503) 643-5018</p>
+                            </div>
+                            <div class="col-6">
+                                <p class="title2">OREGON CITY</p>
+                                <p class="address-line">1224 McLoughlin Blvd</p>
+                                <p class="address-line">Oregon City, OR 97045</p>
+                                <p class="address-line">(503) 650-5991</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Website Block -->
+                <div class="row" id="website-block">
+                    <div class="col-12 center title italic">
+                        activewatersports.com
+                    </div>
+                </div>
+
+                <!-- Customer Info, Boat Mode, Total, Boat Images -->
+                <div class="row" id="customer-total-block">
+
+                    <div class="col-4">
+                        <div id="customer-block" class="right">
+                            <div class="title">Customer Info</div>
+                            <div class="">
+                                <p class="title2 cust-name">MILES JOHNSON</p>
+                                <p class="address-line">4905 SW Hewett Blvd</p>
+                                <p class="address-line">Portland, Oregon 97221</p>
+                                <p class="address-line cust-mobile">503-758-9164</p>
+                                <p class="address-line">MJ.JOHNSON129@GMAIL.COM</p>
+                            </div>
+
+                            <h2 class="boat-model">2019 G-23</h2>
+                        </div>
+                    </div>
+                    <div class="col-8" style="margin-right: 0px; margin-left: 4%;">
+
+                        <div id="total-image-block">
+                            <div id="total-block" class="row">
+                                <div class="col-4">
+                                    <p class="total title2">TOTAL</p>
+                                </div>
+                                <div class="col-8">
+                                    <p class="totalprice right">$207,401.88</p>
+                                </div>
+                            </div>
+                            <div id="image-block" class="row">
+                                <div class="col-6" style="margin: 0px 0px 0px 2%; float: right;">
+                                    <img src="{!URLFOR($Resource.invoiceboat2)}" style="width: 100%; " />
+                                </div>
+                                <div class="col-6" style="margin: 0px; float: right;">
+                                    <img src="{!URLFOR($Resource.invoiceboat1)}" style="width: 100%; " />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Customer Info, Boat Mode, Total, Boat Images - End -->
+
+                <!-- Boat Info Section -->
+                <div class="row">
+                    <div class="col-12">
+                        <div class="col-12">
+                            <h2 class="title">Boat Information</h2>
+                        </div>
+
+                        <div class="col-5 value-group">
+                            <div class="col-5 label">Inventory ID: </div>
+                            <div class="col-7 val">Inventory - 0040</div>
+                        </div>
+                        <div class="col-3 value-group">
+                            <div class="col-5 label">Year: </div>
+                            <div class="col-7 val">2019</div>
+                        </div>
+                        <div class="col-4 value-group">
+                            <div class="col-5 label">Make: </div>
+                            <div class="col-7 val">Nautique</div>
+                        </div>
+
+                        <div class="col-6 value-group">
+                            <div class="col-5 label">Model: </div>
+                            <div class="col-7 val">Super Air G-23</div>
+                        </div>
+                        <div class="col-6 value-group">
+                            <div class="col-5 label">HIN #: </div>
+                            <div class="col-7 val">US-CTC95084J819</div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Boat Info Section - End-->
+
+                <!-- Engine Info Section -->
+                <div class="row">
+
+                    <div class="col-12">
+                        <div class="col-12">
+                            <h2 class="title">Engine Information</h2>
+                        </div>
+
+                        <div class="col-3 value-group">
+                            <div class="col-5 label">Make: </div>
+                            <div class="col-7 val">PCM</div>
+                        </div>
+                        <div class="col-3 value-group">
+                            <div class="col-5 label">Year: </div>
+                            <div class="col-7 val">2019</div>
+                        </div>
+                        <div class="col-6 value-group">
+                            <div class="col-5 label">Model: </div>
+                            <div class="col-7 val">XR7 Supercharged MPI 6.2L</div>
+                        </div>
+
+                        <div class="col-4 value-group">
+                            <div class="col-5 label">Serial #1: </div>
+                            <div class="col-7 val">02-621V-05-582354</div>
+                        </div>
+                        <div class="col-4 value-group">
+                            <div class="col-5 label">Serial #2: </div>
+                            <div class="col-7 val">2019</div>
+                        </div>
+                        <div class="col-4 value-group">
+                            <div class="col-5 label">Trans #: </div>
+                            <div class="col-7 val">1639/V#6844</div>
+                        </div>
+
+                    </div>
+                </div>
+                <!-- Engine Info Section - End-->
+
+                <div class="row">
+                    <div class="col-6">
+
+                        <!-- Trailer -->
+                        <div class="row">
+                            <div class="col-12">
+                                <h2 class="title">Trailer</h2>
+                            </div>
+
+                            <div class="col-4 value-group">
+                                <div class="col-5 label">Make: </div>
+                                <div class="col-7 val">Boatmate</div>
+                            </div>
+                            <div class="col-4 value-group">
+                                <div class="col-5 label">Year: </div>
+                                <div class="col-7 val">2019</div>
+                            </div>
+                            <div class="col-4 value-group">
+                                <div class="col-5 label">Axles: </div>
+                                <div class="col-7 val"></div>
+                            </div>
+
+                            <div class="col-4 value-group">
+                                <div class="col-5 label">Model: </div>
+                                <div class="col-7 val">G-23</div>
+                            </div>
+                            <div class="col-8 value-group">
+                                <div class="col-5 label">VIN #: </div>
+                                <div class="col-7 val">5A7BB2323KT001775</div>
+                            </div>
+                        </div>
+                        <!-- Trailer - End -->
+
+                        <!-- Trade In Info -->
+                        <div class="row">
+                            <div class="col-12">
+                                <h2 class="title">Trade-In Info</h2>
+                            </div>
+
+                            <div class="col-4 value-group">
+                                <div class="col-5 label">Make: </div>
+                                <div class="col-7 val">Malibu</div>
+                            </div>
+                            <div class="col-4 value-group">
+                                <div class="col-5 label">Year: </div>
+                                <div class="col-7 val">2019</div>
+                            </div>
+                            <div class="col-4 value-group">
+                                <div class="col-6 label">Model: </div>
+                                <div class="col-6 val">23LSV</div>
+                            </div>
+
+                            <div class="col-6 value-group">
+                                <div class="col-5 label">HIN: </div>
+                                <div class="col-7 val">MB2S3748C111</div>
+                            </div>
+                            <div class="col-6 value-group">
+                                <div class="col-6 label">Engine SN: </div>
+                                <div class="col-6 val">166132</div>
+                            </div>
+
+                            <div class="col-6 value-group">
+                                <div class="col-5 label">Engine Model: </div>
+                                <div class="col-7 val"></div>
+
+                            </div>
+                            <div class="col-6 value-group">
+                                <div class="col-5 label">Trailer Make: </div>
+                                <div class="col-7 val"></div>
+                            </div>
+
+                            <div class="col-6 value-group">
+                                <div class="col-5 label">Trailer Model: </div>
+                                <div class="col-7 val"></div>
+                            </div>
+                            <div class="col-6 value-group">
+                                <div class="col-5 label">Axles: </div>
+                                <div class="col-7 val"></div>
+                            </div>
+
+                            <div class="col-6 value-group">
+                                <div class="col-5 label">VIN: </div>
+                                <div class="col-7 val"></div>
+                            </div>
+                            <div class="col-6 value-group">
+                                <div class="col-5 label">Lien Holder: </div>
+                                <div class="col-7 val"></div>
+                            </div>
+
+                            <div class="col-12 value-group">
+                                <div class="col-5 label">Lien Amount: </div>
+                                <div class="col-7 val"></div>
+                            </div>
+
+                        </div>
+                        <!-- Trade In Info - End -->
+                    </div>
+                    <div class="col-6">
+
+                        <div class="row">
+                            <div class="col-12">
+                                <h2 class="title">Payment Info</h2>
+                            </div>
+                            <div class="col-6">
+                                <div class="row">
+                                    <div class="col-12 value-group">
+                                        <div class="col-6 label">Bill of Sale: </div>
+                                        <div class="col-6 val">0027</div>
+                                    </div>
+                                    <div class="col-12 value-group">
+                                        <div class="col-6 label">Payment: </div>
+                                        <div class="col-6 val">$0.00</div>
+                                    </div>
+                                    <div class="col-12 value-group">
+                                        <div class="col-6 label">MSRP: </div>
+                                        <div class="col-6 val">$254,305</div>
+                                    </div>
+                                    <div class="col-12 value-group">
+                                        <div class="col-6 label">Discount: </div>
+                                        <div class="col-6 val">$46,904</div>
+                                    </div>
+                                    <div class="col-12 value-group">
+                                        <div class="col-6 label">Trade: </div>
+                                        <div class="col-6 val">$0.00</div>
+                                    </div>
+                                    <div class="col-12 value-group">
+                                        <div class="col-6 label">Net Price: </div>
+                                        <div class="col-6 val">$207,401.88</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="row">
+                                    <div class="col-12 value-group">
+                                        <div class="col-5 label">Boat Tax: </div>
+                                        <div class="col-7 val">$0.00</div>
+                                    </div>
+                                    <div class="col-12 value-group">
+                                        <div class="col-5 label">Trailer Tax: </div>
+                                        <div class="col-7 val">$0.00</div>
+                                    </div>
+                                    <div class="col-12 value-group">
+                                        <div class="col-5 label">Boat Reg: </div>
+                                        <div class="col-7 val">$0.00</div>
+                                    </div>
+                                    <div class="col-12 value-group">
+                                        <div class="col-5 label">Trailer Reg: </div>
+                                        <div class="col-7 val">$0.00</div>
+                                    </div>
+                                    <div class="col-12 value-group">
+                                        <div class="col-5 label">Doc Fees: </div>
+                                        <div class="col-7 val">$0.00</div>
+                                    </div>
+                                    <div class="col-12 value-group">
+                                        <div class="col-5 label">Trade Payoff: </div>
+                                        <div class="col-7 val">$0</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-12 value-group">
+                                <div class="col-5 label">Down Payment: </div>
+                                <div class="col-7 val">$5,000.00</div>
+                            </div>
+                            <div class="col-6">
+                                <div class="row">
+                                    <div class="col-12 value-group">
+                                        <div class="col-5 label">Due: </div>
+                                        <div class="col-7 val">$202,401.88</div>
+                                    </div>
+                                    <div class="col-12 value-group">
+                                        <div class="col-5 label">Term: </div>
+                                        <div class="col-7 val">MORE</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="row">
+                                    <div class="col-12 value-group">
+                                        <div class="col-5 label">Rate: </div>
+                                        <div class="col-7 val">$0.00</div>
+                                    </div>
+                                    <div class="col-12 value-group">
+                                        <div class="col-5 label">Payment: </div>
+                                        <div class="col-7 val">$0.00</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+
+            <div id="footer">
+                <img src="{!URLFOR($Resource.invoicefooter)}" class="stretch" alt="" />
+            </div>
+        </div>
+    </body>
+
+    </html>
+</apex:page>
