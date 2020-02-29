@@ -51,7 +51,7 @@
                 component.set("v.showPill", true);
                 component.set("v.selectedRecordId",component.get("v.WOJ.BOATBUILDING__Technician__c"));
             }
-            
+            calcualteTotalPaidWarranty
     },
     cannedJobToggle : function(component, event, helper){
        var isChecked =  component.find("cannedJobToggelBox").getElement().checked;
@@ -302,7 +302,24 @@
         helper.saveJobWithJLI(component, event, helper);
     },
     calcualteTotalPaidWarranty : function(component, event, helper){
-       helper.calculateWarrantyAmount(component, event, helper);
+        if(component.get("v.recordType") == 'Warranty Work Order'){
+        var claimPaid = isNaN(parseFloat(component.get("v.WOJ.BOATBUILDING__Claim_Labor_Paid_Amount__c"))) ? 0.00 : component.get("v.WOJ.BOATBUILDING__Claim_Labor_Paid_Amount__c") ;
+        var partPaid = isNaN(parseFloat(component.get("v.WOJ.BOATBUILDING__Parts_Paid_Amount__c"))) ? 0.00 : component.get("v.WOJ.BOATBUILDING__Parts_Paid_Amount__c");
+        var miscPaid = isNaN(parseFloat(component.get("v.WOJ.BOATBUILDING__Misc_Charge_Paid__c"))) ? 0.00 : component.get("v.WOJ.BOATBUILDING__Misc_Charge_Paid__c");
+        var shippingCharge = isNaN(parseFloat(component.get("v.WOJ.BOATBUILDING__Shipping_Charge__c"))) ? 0.00 : component.get("v.WOJ.BOATBUILDING__Shipping_Charge__c");
+        var discount = isNaN(parseFloat(component.get("v.WOJ.BOATBUILDING__Discount__c"))) ? 0.00 : component.get("v.WOJ.BOATBUILDING__Discount__c");
+
+        var totalPaid = parseFloat(claimPaid)+parseFloat(partPaid)+parseFloat(miscPaid) + parseFloat(shippingCharge);
+        
+       
+        
+        if(!isNaN(totalPaid)){
+            component.set("v.WOJ.BOATBUILDING__Total_Paid__c",totalPaid);
+           
+            
+        } 
+    }
+        helper.updatejobTotalHelper(component, event, helper);
     }
 
 })
