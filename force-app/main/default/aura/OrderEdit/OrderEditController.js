@@ -19,16 +19,99 @@
     },
      handleSuccess: function(component, event, helper) {
         var payload = event.getParams().response;
-        if(payload.id != undefined && payload.id != null) {
-            var SuccessEvent = $A.get("e.force:showToast");
+        var type = component.get("v.clickType")
+        console.log('>>>>>>: '+type);
+        if(type == 'AddIWithB') {
+            console.log("addToInventoryWithBackOrder");
+            component.set('v.showSpinner', true);
+            var objListItem = component.get("v.listlineItem");
+            objListItem.forEach(element => {
+                element.backOrderQuantity = element.quantity - element.received;
+            });
+                console.log('>>>>>:addtoinventory '+JSON.stringify(objListItem));
+                var action= component.get("c.addToInventoryWithBackOrder");
+                //send objListItem as a parameter to addToInventoryWithBackOrder method
+                action.setParams({
+                "strOrderId": component.get("v.attrRecordId"),
+                "lstlistItem" : objListItem
+            });
+            action.setCallback(this, function(response) {
+                component.set("v.clickType", "");
+                component.set('v.showSpinner', false);
+                console.log('>>>>>methodCalling '+ response.getReturnValue());
+                if(response.getReturnValue().includes("Error")) {
+                    var errorEvent = $A.get("e.force:showToast");
+                    errorEvent.setParams({
+                        "type" : "error",
+                        "title": "Error!",
+                        "message": response.getReturnValue()
+                    });
+                    errorEvent.fire();
+                } else {
+                    var urlEvent = $A.get("e.force:navigateToURL");
+                    var urlStr = "/"+component.get("v.attrRecordId");
+                    urlEvent.setParams({
+                        "url": urlStr
+                    });
+                    urlEvent.fire();
+                }
+            });
+            $A.enqueueAction(action);
+        }
+        else if(type == 'AddI') {
+            console.log("addInventory");
+            component.set('v.showSpinner', true);
+            var objListItem = component.get("v.listlineItem");
+            console.log('>>>>>:addtoinventory '+JSON.stringify(objListItem));
+            debugger;
+            var action= component.get("c.addInventory");
+            //send objListItem as a parameter to addInventory method
+            action.setParams({
+                "strOrderId": component.get("v.attrRecordId"),
+                "lstlistItem" : objListItem
+            });
+            
+            action.setCallback(this, function(response) {
+                component.set("v.clickType", "");
+                console.log('>>>>>methodCalling '+ response.getReturnValue());
+                if(response.getReturnValue().includes("Error")) {
+                    var errorEvent = $A.get("e.force:showToast");
+                    errorEvent.setParams({
+                        "type" : "error",
+                        "title": "Error!",
+                        "message": response.getReturnValue()
+                    });
+                    errorEvent.fire();
+                } else {
+                    var urlEvent = $A.get("e.force:navigateToURL");
+                    var urlStr = "/"+component.get("v.attrRecordId");
+                    urlEvent.setParams({
+                        "url": urlStr
+                    });
+                    urlEvent.fire();
+                    var errorEvent = $A.get("e.force:showToast");
+                    errorEvent.setParams({ 
+                        "type" : "success",
+                        "title": "Success!",
+                        "message": "Inventory Successfully  Added"
+                    });
+                    errorEvent.fire(); 
+                }
+            });
+            
+            
+            $A.enqueueAction(action);
+        }else {
+            if(payload.id != undefined && payload.id != null) {
+                var SuccessEvent = $A.get("e.force:showToast");
                 SuccessEvent.setParams({ 
                     "type" : "success",
                     "title": "Success!",
                     "message": "Order Status Successfully Updated"
                 });
                 SuccessEvent.fire(); 
-        }
-          else {
+            }
+            else {
                 var errorEvent = $A.get("e.force:showToast");
                 errorEvent.setParams({
                     "type" : "error",
@@ -37,83 +120,16 @@
                 });
                 errorEvent.fire();
             }
+        }
      },
     addToInventoryWithBackOrderjs : function(component,event,helper){
-        component.set('v.showSpinner', true);
-        var objListItem = component.get("v.listlineItem");
-        objListItem.forEach(element => {
-            element.backOrderQuantity = element.quantity - element.received;
-        });
-            console.log('>>>>>:addtoinventory '+JSON.stringify(objListItem));
-            var action= component.get("c.addToInventoryWithBackOrder");
-            //send objListItem as a parameter to addToInventoryWithBackOrder method
-            action.setParams({
-            "strOrderId": component.get("v.attrRecordId"),
-            "lstlistItem" : objListItem
-        });
-        action.setCallback(this, function(response) {
-            component.set('v.showSpinner', false);
-            console.log('>>>>>methodCalling '+ response.getReturnValue());
-            if(response.getReturnValue().includes("Error")) {
-                var errorEvent = $A.get("e.force:showToast");
-                errorEvent.setParams({
-                    "type" : "error",
-                    "title": "Error!",
-                    "message": response.getReturnValue()
-                });
-                errorEvent.fire();
-            } else {
-                var evt = $A.get("e.force:navigateToComponent");
-                evt.setParams({
-                    componentDef : "c:ServiceModule"
-                });
-                evt.fire();
-                            }
-        });
-        $A.enqueueAction(action);
+        component.set("v.clickType", "AddIWithB");
+        component.find("recordEditForm").submit();
     },
     //JS for Add to inventory method component.set('v.showSpinner', true);
     addToInventoryjs:function(component,event,helper){
-        component.set('v.showSpinner', true);
-        var objListItem = component.get("v.listlineItem");
-        console.log('>>>>>:addtoinventory '+JSON.stringify(objListItem));
-        debugger;
-        var action= component.get("c.addInventory");
-        //send objListItem as a parameter to addInventory method
-        action.setParams({
-            "strOrderId": component.get("v.attrRecordId"),
-            "lstlistItem" : objListItem
-        });
-        
-        action.setCallback(this, function(response) {
-            console.log('>>>>>methodCalling '+ response.getReturnValue());
-            if(response.getReturnValue().includes("Error")) {
-                var errorEvent = $A.get("e.force:showToast");
-                errorEvent.setParams({
-                    "type" : "error",
-                    "title": "Error!",
-                    "message": response.getReturnValue()
-                });
-                errorEvent.fire();
-            } else {
-                var evt = $A.get("e.force:navigateToComponent");
-                evt.setParams({
-                    componentDef : "c:ServiceModule"
-                });
-                evt.fire();
-                 var errorEvent = $A.get("e.force:showToast");
-                errorEvent.setParams({ 
-                    "type" : "success",
-                    "title": "Success!",
-                    "message": "Inventory Successfully  Added"
-                });
-                errorEvent.fire(); 
-            }
-        });
-        
-        
-        $A.enqueueAction(action);
-        
+        component.set("v.clickType", "AddI");
+        component.find("recordEditForm").submit();
     },
     
     calculate: function(component,event,helper){
@@ -206,7 +222,7 @@ onLoadCalculation: function(component,event,helper){
 
 },
     save : function(component,event,helper) {
-        component.find("recordEditForm").submit();
+        
         
         //alert('Order Status Successfully Updated');
     },
