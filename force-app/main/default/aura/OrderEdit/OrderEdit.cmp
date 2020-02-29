@@ -22,8 +22,9 @@
     <!--Part Distribute Att-->
     <aura:attribute name="locationCount" type="Integer" default="0" access="global"/>
     <aura:attribute name="locations" type="String[]" access="global"/>
+    <aura:attribute name="clickType" type="String" access="global"/>
     <aura:if isTrue="{!v.showSpinner}">
-        <lightning:spinner  variant= "brand"/>
+        <lightning:spinner  variant= "brand"/> 
     </aura:if>
     
     
@@ -198,7 +199,9 @@
                                         <th></th>
                                         <th></th>
                                         <th >Discount:</th>
-                                        <th > <lightning:inputField aura:id="discount" onchange="{!c.calculate}" fieldName="BOATBUILDING__Discount_Price__c" variant="label-hidden" /></th>
+                                        <th > 
+                                            <lightning:inputField aura:id="discount" onchange="{!c.calculate}" fieldName="BOATBUILDING__Discount_Price__c" variant="label-hidden" />
+                                        </th>
                                         <th></th>
                                         <th></th>
                                         <th></th>
@@ -228,7 +231,7 @@
         <div class = "slds-col--padded">
             <div class = "slds-form-element">
                 <div class = "slds-form-element__control">
-                    <lightning:button type="submit" variant="brand" label="Update Status " onclick="{!c.save}" class = "slds-m-top_medium"/>
+                    <lightning:button type="submit" variant="brand" label="Update Status" class = "slds-m-top_medium"/>
                 </div>
             </div>
         </div>
