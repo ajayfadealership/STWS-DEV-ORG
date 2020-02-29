@@ -3,7 +3,7 @@
     <aura:attribute name="objTWOJobs" type="Object[]" access="global"/>
     <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
     <aura:attribute name="showSpinnerP" type="Boolean" default="false"/>
-    <aura:attribute name="activeSectionName" type="List"  access="global"/>
+    <aura:attribute name="activeSectionName" type="String[]"  access="global"/>
     <aura:if isTrue="{!v.showSpinnerP}">
         <lightning:spinner alternativeText="Loading" size="large"/>
     </aura:if>

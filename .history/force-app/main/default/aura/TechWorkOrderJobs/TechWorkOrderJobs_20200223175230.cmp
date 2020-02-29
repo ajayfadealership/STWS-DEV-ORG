@@ -10,7 +10,7 @@
     <aura:if isTrue="{!v.showSpinner}">
         <lightning:spinner alternativeText="Loading" size="large"/>
     </aura:if>
-    <lightning:accordionSection name="{!v.objJob.Id}"  label="{! 'Work Order Job ( '+ v.objJob.Name + ' : ' + v.objJob.BOATBUILDING__Job_Name__c + ' ), Technician: ' + v.objJob.BOATBUILDING__Technician__r.Name }">
+    <lightning:accordionSection name="WJODetails" label="{! 'Work Order Job ( '+ v.objJob.Name + ' : ' + v.objJob.BOATBUILDING__Job_Name__c + ' ), Technician: ' + v.objJob.BOATBUILDING__Technician__r.Name }">
         <lightning:layout multipleRows="true">
             <lightning:layoutItem padding="around-small" size="4">
                 <lightning:input type="text" value="{!v.objJob.BOATBUILDING__Work_Type__c}"  label="Work Type" disabled="true"/>
@@ -60,7 +60,7 @@
                     <b>Efficiency :</b>&nbsp; {!v.objJob.BOATBUILDING__Efficiency__c}%
                 </div>
            </div>
-           <div class="slds-grid slds-gutters slds-wrap slds-p-top_small slds-p-bottom_large">
+           <div class="slds-grid slds-gutters slds-wrap slds-p-top_small">
                 <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-2 slds-large-size--3-of-12 slds-p-top_small">
                     <lightning:button label="Clock-In" disabled="{!v.clckInBTNDis}" variant="brand" onclick="{!c.clockIn}"/>
                 </div>

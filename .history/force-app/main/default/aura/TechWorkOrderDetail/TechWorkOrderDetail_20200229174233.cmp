@@ -3,7 +3,7 @@
     <aura:attribute name="objTWOJobs" type="Object[]" access="global"/>
     <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
     <aura:attribute name="showSpinnerP" type="Boolean" default="false"/>
-    <aura:attribute name="activeSectionName" type="List"  access="global"/>
+    <aura:attribute name="activeSectionName" type="String[]"  access="global"/>
     <aura:if isTrue="{!v.showSpinnerP}">
         <lightning:spinner alternativeText="Loading" size="large"/>
     </aura:if>
@@ -13,11 +13,11 @@
         </lightning:accordionSection>
         <lightning:accordionSection name="WOJDetails" label="{!'Work Order Jobs ( '+ v.objTWOJobs.length + ' )'}">
             <aura:if isTrue="{!v.objTWOJobs.length > 0}">
-                    
+                    <lightning:accordion aura:id="WOJId" activeSectionName="{!v.activeSectionName}" allowMultipleSectionsOpen="true">
                         <aura:iteration items="{!v.objTWOJobs}" var="objJob">
                             <c:TechWorkOrderJobs objJob="{!objJob}"/>
                         </aura:iteration>
-                   
+                    </lightning:accordion>
                 <aura:set attribute="else">
                     There is no related job.
                 </aura:set>

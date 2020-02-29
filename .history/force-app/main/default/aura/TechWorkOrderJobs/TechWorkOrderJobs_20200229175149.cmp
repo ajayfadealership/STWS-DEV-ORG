@@ -60,7 +60,7 @@
                     <b>Efficiency :</b>&nbsp; {!v.objJob.BOATBUILDING__Efficiency__c}%
                 </div>
            </div>
-           <div class="slds-grid slds-gutters slds-wrap slds-p-top_small slds-p-bottom_large">
+           <div class="slds-grid slds-gutters slds-wrap slds-p-top_small">
                 <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-2 slds-large-size--3-of-12 slds-p-top_small">
                     <lightning:button label="Clock-In" disabled="{!v.clckInBTNDis}" variant="brand" onclick="{!c.clockIn}"/>
                 </div>

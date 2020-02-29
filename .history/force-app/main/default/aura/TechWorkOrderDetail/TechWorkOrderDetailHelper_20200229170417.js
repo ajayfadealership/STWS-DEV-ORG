@@ -12,7 +12,6 @@
             for(var i = 0; i < jobs.length; i++){
                 actSec.push(jobs[i].Id);
             }
-            actSec.push('WOJDetails');
             component.set("v.activeSectionName", actSec);
             console.log('Response: ', response.getReturnValue());
             component.set("v.objTWO", response.getReturnValue()[0]);
