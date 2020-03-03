@@ -6,8 +6,13 @@
     <description>for printing invoices</description>
     <label>PrintButtonPageInvoice</label>
     <packageVersions>
+        <majorNumber>2</majorNumber>
+        <minorNumber>7</minorNumber>
+        <namespace>leadcap</namespace>
+    </packageVersions>
+    <packageVersions>
         <majorNumber>1</majorNumber>
-        <minorNumber>16</minorNumber>
+        <minorNumber>19</minorNumber>
         <namespace>sf_chttr_apps</namespace>
     </packageVersions>
     <packageVersions>

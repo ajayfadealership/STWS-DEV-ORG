@@ -5,7 +5,7 @@
     <description>Trade in Boat Model</description>
     <externalId>false</externalId>
     <label>Trade Model</label>
-    <length>20</length>
+    <length>255</length>
     <required>false</required>
     <trackFeedHistory>false</trackFeedHistory>
     <type>Text</type>

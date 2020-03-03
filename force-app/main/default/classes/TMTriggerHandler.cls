@@ -413,10 +413,14 @@ public with sharing class TMTriggerHandler {
             mapIdName.put(objCon.Id, objCon.Name); 
         }
         
-        for(Work_Order__c objWO: [Select Id, Name, Contact__c, Contact__r.Name, Boat__r.Name From Work_Order__c Where Id IN: setWOId]) {
-            if(objWO.Contact__c != null) {
-                mapIdName.put(objWO.Id, objWO.Name + ' - ' + objWO.Contact__r.Name + objWO.Boat__r.Name); 
-            } else {
+        for(Work_Order__c objWO: [Select Id, Name, Contact__c, Contact__r.Name, Boat__r.Name, Boat__c From Work_Order__c Where Id IN: setWOId]) {
+        	if(objWO.Boat__c != null && objWO.Contact__c != null) {
+        		mapIdName.put(objWO.Id, objWO.Name + ' - ' + objWO.Contact__r.Name + objWO.Boat__r.Name);
+        	}
+            else if(objWO.Contact__c != null) {
+                mapIdName.put(objWO.Id, objWO.Name + ' - ' + objWO.Contact__r.Name); 
+            } 
+            else {
                 mapIdName.put(objWO.Id, objWO.Name);    
             }
         }
@@ -432,7 +436,7 @@ public with sharing class TMTriggerHandler {
         for(Work_Order_Job__c objWOJ: [Select Id, Name, Work_Order_Warranty_Work_Order__c, Work_Order_Warranty_Work_Order__r.Contact__c, Work_Order_Warranty_Work_Order__r.Contact__r.Name From Work_Order_Job__c Where Id IN: setJobId]) {
             if(objWOJ.Work_Order_Warranty_Work_Order__c != null && objWOJ.Work_Order_Warranty_Work_Order__r.Contact__c != null) {
                 mapIdName.put(objWOJ.Id, objWOJ.Name + ' - ' + objWOJ.Work_Order_Warranty_Work_Order__r.Contact__r.Name);    
-            } else {
+            } else { 
                 mapIdName.put(objWOJ.Id, objWOJ.Name);
             }
             

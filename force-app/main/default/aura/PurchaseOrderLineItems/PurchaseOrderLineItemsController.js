@@ -8,7 +8,7 @@
         }
     },
     handlonfocus : function(component, event, helper) { 
-        helper.searchPartsforRecent(component, event, helper);
+        helper.searchPartsforRecent(component, event, helper); 
     },
     selectValue : function(component, event, helper) { 
         var prtList = component.get("v.searchResults"); 

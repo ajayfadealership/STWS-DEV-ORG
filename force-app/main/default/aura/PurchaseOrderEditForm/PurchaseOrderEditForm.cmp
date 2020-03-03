@@ -9,13 +9,14 @@
     <aura:attribute name="lineItemPopTotal" type="Double" default="0.00" access="global"/>
     <aura:attribute name="lineItemTotal" type="Double" default="0.00" access="global"/>
     <aura:attribute name="poRecordTypeId" type="String" access="global"/> 
+    <aura:attribute name="vendorVal" type="String" access="global"/> 
     <aura:handler name="change" value="{!v.lineItemTotal}" action="{!c.calculateTotal}"/>
     <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
-    <div> 
+    <div>
         <aura:if isTrue="{!or(v.objRecId == '', v.objRecId == null)}">
             <button style="float: right;" title="Back to List" class="slds-button slds-button_neutral" onclick="{!c.showPOList}">Back to List</button> 
         </aura:if>
-    </div> 
+    </div>  
     <lightning:recordEditForm aura:id="refPurchaseOrder" onload="{!c.handleLoad}"
                                                         recordTypeId="{!v.poRecordTypeId}"
                                                         onsubmit="{!c.handleSubmit}"
@@ -28,7 +29,7 @@
                 <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-2 slds-col--padded">
                     <div class="slds-form-element">
                         <div class="slds-form-element__control">
-                            <lightning:inputField fieldName="BOATBUILDING__Vendor_Name__c" aura:id="opVendorName" onchange="{!c.fetchManuDetails}"/> 
+                            <lightning:inputField fieldName="BOATBUILDING__Vendor_Name__c" value="{!v.vendorVal}" aura:id="opVendorName" onchange="{!c.fetchManuDetails}"/> 
                         </div> 
                     </div>
                 </div>
@@ -128,7 +129,7 @@
                             </div> 
                         </div>
                         <aura:iteration items="{!v.lineItems}" var="objPOLI" indexVar="i">
-                            <c:PurchaseOrderLineItems objPOLI="{!objPOLI}" showPill="{!objPOLI.showPill}" lineItemTotal="{!v.lineItemTotal}"/>
+                            <c:PurchaseOrderLineItems vendorVal="{!v.vendorVal}" objPOLI="{!objPOLI}" showPill="{!objPOLI.showPill}" lineItemTotal="{!v.lineItemTotal}"/>
                             <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-6 slds-col--padded"> 
                                 <div class="slds-form-element"> 
                                     <label class="slds-form-element__label">&nbsp;</label>

@@ -41,7 +41,7 @@ public class InvoicePaymentController {
             }
         }
         lstObj.add(baseUrl);
-        BOATBUILDING__Work_Order__c objWO = [SELECT Id, BOATBUILDING__Deducted_Total_Due_Amount__c From BOATBUILDING__Work_Order__c Where Id =: strInvId];
+        BOATBUILDING__Work_Order__c objWO = [SELECT Id, BOATBUILDING__Balance__c, BOATBUILDING__Deducted_Total_Due_Amount__c From BOATBUILDING__Work_Order__c Where Id =: strInvId];
         lstObj.add(objWO);
         System.debug('>>>>: '+ lstObj); 
         //1. URL, 2. WO

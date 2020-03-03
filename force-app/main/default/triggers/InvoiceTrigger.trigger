@@ -2,6 +2,7 @@ trigger InvoiceTrigger on Invoice__c (before insert, after insert, after update,
     
     if(Trigger.isBefore && Trigger.isInsert){
         InvoiceHandlerClass.onBeforeInsert(Trigger.new);
+        
     }
     
     if(trigger.isAfter) {
@@ -95,38 +96,6 @@ trigger InvoiceTrigger on Invoice__c (before insert, after insert, after update,
             }
         } 
         
-        
-        
-        if(trigger.isBefore && trigger.isInsert) {
-            InvoiceHandlerClass.onBeforeInsert(Trigger.new); //code added
-            List<BOATBUILDING__Invoice__c> lstInvoice = [Select Id, BOATBUILDING__Invoice_Number__c,BOATBUILDING__Invoice_Number_Formula__c From BOATBUILDING__Invoice__c Order By BOATBUILDING__Invoice_Number_Formula__c DESC LIMIT 1];
-            Integer count = 0;
-            if(lstInvoice.size() > 0) {
-                if(lstInvoice[0].BOATBUILDING__Invoice_Number_Formula__c  != null) {
-                    count = Integer.valueOf(lstInvoice[0].BOATBUILDING__Invoice_Number_Formula__c);
-                } 
-                else { 
-                    count = 1;
-                }
-            }
-            else {
-                count  = 1;
-            }
-            List<BOATBUILDING__Invoice__c > lstInv = new List<BOATBUILDING__Invoice__c >();
-            Set<String> setInvNum = new Set<String>();
-            for(BOATBUILDING__Invoice__c objInvoice: Trigger.new) {
-            	setInvNum.add(objInvoice.BOATBUILDING__Invoice_Number__c);
-            }
-            for(BOATBUILDING__Invoice__c objInvoice: Trigger.new) {
-            	count++;
-            	if(!setInvNum.contains('000'+count)) {
-                	objInvoice.BOATBUILDING__Invoice_Number__c = '000'+count;
-            	} else {
-            		count++;
-            		objInvoice.BOATBUILDING__Invoice_Number__c = '000'+count; 
-            	}
-            }
-        }
         //Code added
         if(trigger.isAfter && trigger.isInsert) {
             InvoiceHandlerClass.onAfterInsert(Trigger.new); 

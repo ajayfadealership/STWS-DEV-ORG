@@ -68,7 +68,7 @@ public with sharing class OrderEditController {
             for(BOATBUILDING__Inventory__c objInv :lstInventory){
                 mapInv.put(objInv.BOATBUILDING__Part_Number__c,objInv);
             }
-            
+            Decimal amntOnOrder = 0.00;
             for(OrderEditWrapper obj:lstlistItem){
                 if(obj.received > 0){
                     if(mapPart.containsKey(obj.partNo)) {
@@ -90,7 +90,7 @@ public with sharing class OrderEditController {
                         objInventory.Description__c = mapPart.get(obj.partNo).Name;
                         objInventory.Cost__c = mapPart.get(obj.partNo).BOATBUILDING__Part_Cost__c;
                         objInventory.Category__c = mapPart.get(obj.partNo).BOATBUILDING__Category1__c;
-                        objInventory.Bin__c = mapPart.get(obj.partNo).Bin__c    ;
+                        objInventory.Bin__c = mapPart.get(obj.partNo).Bin__c;
                         objInventory.Color__c = mapPart.get(obj.partNo).BOATBUILDING__Part_Color__c;
                         objInventory.Part_Location__c = mapPart.get(obj.partNo).BOATBUILDING__Location__c; 
                         objInventory.Map_Price__c = mapPart.get(obj.partNo).BOATBUILDING__Map_Price__c;
@@ -157,14 +157,24 @@ public with sharing class OrderEditController {
                             objPAIN.BOATBUILDING__Quantity__c = objOrderEditWrapper.received;
                             lstPA.add(objPAIN);
                         }
+                        if(obj.Cost__c != null){
+                        amntOnOrder += Integer.valueOf(objOrderEditWrapper.received) * obj.Cost__c;
+                            }
                     }
                 } 
             }
             if(!lstPA.isEmpty()) 
                 upsert lstPA;
-            BOATBUILDING__Order__c objOrder = [Select Id, RecordTypeId, Vendor_Name__c, PO_Date__c From Order__c Where Id =: strOrderId];
+            BOATBUILDING__Order__c objOrder = [Select Id, RecordTypeId, Vendor_Name__c, PO_Date__c, BOATBUILDING__Shipping_Charges__c, BOATBUILDING__Discount_Price__c From Order__c Where Id =: strOrderId];
             objOrder.RecordTypeId = Schema.SObjectType.BOATBUILDING__Order__c.getRecordTypeInfosByName().get('Purchase Order Approved').getRecordTypeId(); 
             objOrder.Is_Approved__c = true;
+            objOrder.Amount_On_Order__c = amntOnOrder;
+            if(objOrder.BOATBUILDING__Shipping_Charges__c != null) {
+                //objOrder.Amount_On_Order__c += objOrder.BOATBUILDING__Shipping_Charges__c;
+            }
+            if(objOrder.BOATBUILDING__Discount_Price__c != null) {
+                //objOrder.Amount_On_Order__c -= objOrder.BOATBUILDING__Discount_Price__c;
+            }
             update objOrder;
             return 'SUCCESS';
         } catch(Exception ex) {
@@ -197,7 +207,7 @@ public with sharing class OrderEditController {
                                                             Part_Number__c 
                                                     IN
                                                             :setPartNumbers]; 
-                    BOATBUILDING__Order__c objOrder = [Select Id, RecordTypeId, Vendor_Name__c, PO_Date__c From Order__c Where Id =: strOrderId];
+                    BOATBUILDING__Order__c objOrder = [Select Id, RecordTypeId, Vendor_Name__c, PO_Date__c, BOATBUILDING__Shipping_Charges__c, BOATBUILDING__Discount_Price__c From Order__c Where Id =: strOrderId];
                     BOATBUILDING__Order__c objBackPurchaseOrder = new BOATBUILDING__Order__c();
                     objBackPurchaseOrder.RecordTypeId = Schema.SObjectType.BOATBUILDING__Order__c.getRecordTypeInfosByName().get('Purchase Order').getRecordTypeId(); 
                     objBackPurchaseOrder.Vendor_Name__c = objOrder.Vendor_Name__c;
@@ -239,6 +249,12 @@ public with sharing class OrderEditController {
                     }
                     insert lstPOLI;
                     objBackPurchaseOrder.Amount_On_Order__c = amntOnOrder;
+                    if(objOrder.BOATBUILDING__Shipping_Charges__c != null) {
+                       //objBackPurchaseOrder.Amount_On_Order__c += objOrder.BOATBUILDING__Shipping_Charges__c;
+                    }
+                    if(objOrder.BOATBUILDING__Discount_Price__c != null) {
+                       //objBackPurchaseOrder.Amount_On_Order__c -= objOrder.BOATBUILDING__Discount_Price__c;
+                    }
                     update objBackPurchaseOrder;            
                 }
                 return 'SUCCESS';

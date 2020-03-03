@@ -5,7 +5,7 @@
     <description>Lake State</description>
     <externalId>false</externalId>
     <label>Lake State</label>
-    <length>50</length>
+    <length>255</length>
     <required>false</required>
     <trackFeedHistory>false</trackFeedHistory>
     <type>Text</type>

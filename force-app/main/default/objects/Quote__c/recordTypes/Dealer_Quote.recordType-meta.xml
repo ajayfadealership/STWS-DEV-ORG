@@ -130,9 +130,5 @@
             <fullName>Other</fullName>
             <default>false</default>
         </values>
-        <values>
-            <fullName>Store 1</fullName>
-            <default>false</default>
-        </values>
     </picklistValues>
 </RecordType>

@@ -5,7 +5,7 @@
     <description>City for the Prospect type Account record</description>
     <externalId>false</externalId>
     <label>City</label>
-    <length>50</length>
+    <length>255</length>
     <required>false</required>
     <trackFeedHistory>false</trackFeedHistory>
     <type>Text</type>

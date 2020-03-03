@@ -213,10 +213,6 @@
             <fullName>Other</fullName>
             <default>true</default>
         </values>
-        <values>
-            <fullName>Store 1</fullName>
-            <default>false</default>
-        </values>
     </picklistValues>
     <picklistValues>
         <picklist>Used_For__c</picklist>

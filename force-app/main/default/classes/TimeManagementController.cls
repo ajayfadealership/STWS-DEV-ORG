@@ -6,6 +6,7 @@ public class TimeManagementController {
         if(recordlist.size() > 0){
             return recordlist[0];
         }else{
+            
             BOATBUILDING__Time_Management__c objTM = new BOATBUILDING__Time_Management__c();
             objTM.RecordTypeId = recId;
             objTM.Logged_In_User__c = UserInfo.getUserId();

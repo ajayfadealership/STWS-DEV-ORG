@@ -572,6 +572,9 @@
     <a id="refereshBtnSCH" class="slds-button slds-button_icon" style="position: fixed; z-index: 99; left: 96.25%; top: 14%; background-color: #29abe2;" title= "Referesh">
         <apex:image id="refereshBtnSCH" value="{!URLFOR($Resource.RefreshIcon)}" width="40" height="40" />
     </a>
+    <a id="fullScreen" onclick="window.top.location = '/apex/BOATBUILDING__ScheduleTab';" class="slds-button slds-button_icon" style="position: fixed; z-index: 99; left: 96.25%; top: 21%; background-color: #29abe2;" title= "Referesh">
+        <apex:image id="fullScreenimg" value="{!URLFOR($Resource.FullScreen)}" width="40" height="40" />
+    </a>
     <script>
     $("#refereshBtnSCH").click(function() {
         fetchEvents();

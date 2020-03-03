@@ -37,7 +37,7 @@ public class PurchaseOrderLightningController {
         return lstPOLIW;
     }
     @AuraEnabled
-    public static String searchPartsfromInventoryAndParts(String searchStr){
+    public static String searchPartsfromInventoryAndParts(String searchStr) {
         List<PartSearchResult> lstPartSearchResult = new List<PartSearchResult>();
         String strName = searchStr;
         if(searchStr == 'recentlyViewed') {
@@ -46,8 +46,10 @@ public class PurchaseOrderLightningController {
             for(RecentlyViewed rv : lstrv){
                  strName = strName+'(\"' + String.escapeSingleQuotes(rv.Name) + '\")';
                  strName =  strName + ' OR ';
-            }
-            strName  = strName+'(\"' + 'test' + '\")';
+            
+                }
+                strName  = '(\"' + 'test' + '\")';
+            //strName  = '(\"' + vendorId + '\")';
         } 
         String searchQuery = 'FIND \'' + strName + '\' IN ALL FIELDS RETURNING  BOATBUILDING__Part__c(Id,Name,BOATBUILDING__Quantity__c,BOATBUILDING__Part_Cost__c,BOATBUILDING__Part_Number__c,BOATBUILDING__Vendor_Name__r.Name,BOATBUILDING__Discount__c ORDER BY CreatedDate)';
         List<List <sObject>> searchList = search.query(searchQuery);

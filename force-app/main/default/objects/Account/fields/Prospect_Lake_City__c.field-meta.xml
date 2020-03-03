@@ -5,7 +5,7 @@
     <description>Lake City</description>
     <externalId>false</externalId>
     <label>Lake City</label>
-    <length>50</length>
+    <length>255</length>
     <required>false</required>
     <trackFeedHistory>false</trackFeedHistory>
     <type>Text</type>

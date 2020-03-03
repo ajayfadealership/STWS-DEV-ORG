@@ -28,8 +28,8 @@
             <option value="Order For Boats">Order For Boats</option>
         </lightning:select>
     </div>
-    <div class="slds-col slds-size_1-of-3"></div>
-    <div class="slds-col slds-size_1-of-1 slds-top-p_medium">
+    <div class="slds-col slds-size_1-of-1 slds-m-top_medium"></div>
+        <div class="slds-col slds-size_1-of-1 slds-m-top_medium">
             <aura:if isTrue="{!or(v.recordTypeName == 'Part Request',v.recordTypeName == 'Purchase Order')}">
                <aura:if isTrue="{!v.recordTypeName == 'Part Request'}">
                     <c:PartRequestLightningComp />

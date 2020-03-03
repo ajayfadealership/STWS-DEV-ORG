@@ -2061,8 +2061,9 @@
                                     if(lstContact[0].MailingPostalCode != undefined) {
                                         document.getElementById("WoZipId").value = lstContact[0].MailingPostalCode;
                                     }
-                                    if(lstContact[0].BOATBUILDING__Customer_Type__c != undefined) {
-                                        document.getElementById("custType").value = lstContact[0].BOATBUILDING__Customer_Type__c;
+                                    //BOATBUILDING__Account_Customer_Type__c
+                                    if(lstContact[0].AccountId != undefined && lstContact[0].Account.BOATBUILDING__Account_Customer_Type__c != undefined) {
+                                        document.getElementById("custType").value = lstContact[0].Account.BOATBUILDING__Account_Customer_Type__c;
                                     }
 //                                     console.log(lstContact[0].Account.BOATBUILDING__Customer_Balance__c);  
                                     if(lstContact[0].AccountId != undefined && lstContact[0].Account.BOATBUILDING__Customer_Balance__c != undefined && lstContact[0].Account.BOATBUILDING__Customer_Balance__c > 0) {

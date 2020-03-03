@@ -81,10 +81,12 @@ public class InvoiceLightningControllerTest {
         InvoiceLightningController.updateInvoicewithLineItems(objInvoice.Id,strLineItem);
         InvoiceLightningController.getSalesTaxCustomSetting();
         InvoiceLightningController.deleteInvoiceLineItem(objInvLineItem.Id);
+        InvoiceLightningController.searchPartsfromInventoryAndParts('test');
 
     } 
     private static testmethod void MyTest2(){
         InvoiceLightningController.InvRecordTypeId();
+        InvoiceLightningController.searchPartsfromInventoryAndParts('recentlyViewed');
         
     }
 

@@ -34,7 +34,7 @@
     },
     proceedToGateWay : function(component, event, helper) {
         var urlEvent = $A.get("e.force:navigateToURL");
-        var urlStr = component.get("v.strURL")+'?invId='+component.get("v.recordId");
+        var urlStr = component.get("v.strURL")+'?invId='+component.get("v.recordId")+'&amount='+component.get("v.amount");;
         urlEvent.setParams({
             "url": urlStr
         });

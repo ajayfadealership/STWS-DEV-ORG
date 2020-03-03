@@ -5,7 +5,7 @@
     <aura:attribute name="searchResults" type="Object[]" access="global"/>
     <aura:attribute name="showPill" type="boolean" default="false" access="global"/>
     <aura:attribute name="lineItemTotal" type="double" access="global"/> 
-     
+    <aura:attribute name="vendorVal" type="String" access="global"/> 
     <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-6 slds-col--padded">
         <div class="slds-form-element"> 
             <aura:if isTrue="{!!v.showPill}">

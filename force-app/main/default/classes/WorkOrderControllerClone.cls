@@ -135,7 +135,7 @@ public with sharing class WorkOrderControllerClone {
     @RemoteAction
     public static List<Object> getContact(String Conid, String sLocation){
         List<Object> contactlist = new List<Object>();
-        List <Contact> conlist= [Select MailingState, Account.BOATBUILDING__Customer_Balance__c,BOATBUILDING__Customer_Type__c,MailingStreet,Email,MailingPostalCode,MailingCity,Phone From Contact where Id =: Conid];
+        List <Contact> conlist= [Select MailingState, Account.BOATBUILDING__Account_Customer_Type__c, Account.BOATBUILDING__Customer_Balance__c,BOATBUILDING__Customer_Type__c,MailingStreet,Email,MailingPostalCode,MailingCity,Phone From Contact where Id =: Conid];
         if(conlist.size() > 0){
             contactlist.add(conlist);
             Decimal RegularSalestax = 0.00;

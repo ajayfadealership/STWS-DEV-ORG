@@ -5,7 +5,7 @@
     <description>Zip Code for the Prospect Account Type.</description>
     <externalId>false</externalId>
     <label>Zip Code</label>
-    <length>20</length>
+    <length>255</length>
     <required>false</required>
     <trackFeedHistory>false</trackFeedHistory>
     <type>Text</type>
