@@ -275,7 +275,8 @@ global class NegotiationController{
                 for(String objQliId : strTemp){
                     setQliId.add(objQliId);
                 } 
-                for(BOATBUILDING__Quote_Line_Item__c objQLI : [Select Id, Name__c, Total_Price__c,Option_Category__c, Quote__c, Product__c, Product_Code__c, Name, Date__c, Dealer_Price__c From BOATBUILDING__Quote_Line_Item__c WHERE Quote__c =: objmap.get('Id')]){
+                for(BOATBUILDING__Quote_Line_Item__c objQLI : [Select Id, Name__c, Quantity__c, Total_Price__c,Option_Category__c, Quote__c, 
+                        Product__c, Product_Code__c, Name, Date__c, Dealer_Price__c From BOATBUILDING__Quote_Line_Item__c WHERE Quote__c =: objmap.get('Id')]){
                     for(String str : setQliId){
                         if(str.containsIgnoreCase(objQLI.Id) || string.valueOf(objQLI.Id).containsIgnoreCase(str)){
                             BOATBUILDING__Quote_Line_Item__c qli = new BOATBUILDING__Quote_Line_Item__c();
@@ -284,6 +285,7 @@ global class NegotiationController{
                             qli.Dealer_Price__c = objQli.Dealer_Price__c;
                             qli.Date__c = Date.today();
                             qli.Product__c = objQLI.Product__c;
+                            qli.Quantity__c = objQLI.Quantity__c;
                             qli.Option_Category__c = objQLI.Option_Category__c;
                             qli.Product_Code__c = objQLI.Product_Code__c;
                             qli.Quote__c = objQuote2.id;

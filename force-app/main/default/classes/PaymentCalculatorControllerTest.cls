@@ -14,7 +14,7 @@ public class PaymentCalculatorControllerTest {
         
         BOATBUILDING__ProductPrice__c  ObjP= new BOATBUILDING__ProductPrice__c ();
         ObjP.BOATBUILDING__Product_Code__c='1234';
-        ObjP.BOATBUILDING__Cost__c=100;
+        //ObjP.BOATBUILDING__Cost__c=100;
         ObjP.BOATBUILDING__Dealer_Price__c=100;
         ObjP.BOATBUILDING__Model_Variant__c='test';
         ObjP.BOATBUILDING__Option_Category__c='ahsgga';

@@ -9,7 +9,7 @@ public with sharing class WorkOrderTriggerHandler {
     public static void onAfterUpdate(List<Work_Order__c> newLstWorkOrder, Map<Id, Work_Order__c> oldMapWorkOrder){
         
         List<Work_Order__c> listWOToProcess = new List<Work_Order__c>();
-        notifyAppOnWorkOrderUpdate(newLstWorkOrder);
+        notifyAppOnWorkOrderUpdate(newLstWorkOrder, oldMapWorkOrder);
         for(Work_Order__c wo: newLstWorkOrder){
             //Work order getting closed
             if(wo.BOATBUILDING__Status__c == 'Closed' && oldMapWorkOrder.get(wo.Id).BOATBUILDING__Status__c != 'Closed'){
@@ -27,13 +27,27 @@ public with sharing class WorkOrderTriggerHandler {
     
     public static void onAfterInsert(List<Work_Order__c> newLstWorkOrder){
         createWONotification(newLstWorkOrder);
-        notifyAppOnWorkOrderUpdate(newLstWorkOrder);
+        for(Work_Order__c objWO : newLstWorkOrder){
+            sendAppCallout(objWO.Id, objWO.BOATBUILDING__Boat__c);
+            
+        }        
+    }
+    public static void onAfterDelete(List<Work_Order__c> newLstWorkOrder){
+        //createWONotification(newLstWorkOrder);
+        for(Work_Order__c objWO : newLstWorkOrder){
+            sendAppCalloutDelete(objWO.Id, objWO.BOATBUILDING__Boat__c);
+        }        
     }
     
-    /****Code addedby Pradeep on 9thSept 2017 ***/
-    public static void onBeforeUpdate(List<Work_Order__c> newLstWorkOrder){
+    
+    public static void onBeforeUpdate(List<Work_Order__c> newLstWorkOrder, Map<Id, Work_Order__c> mapOldWO){
         //updateAccountOnWorkOrder(newLstWorkOrder);
-        
+        // for(Work_Order__c objWO : newLstWorkOrder) {
+        // 	if(objWO.Status__c != null && objWO.Status__c != mapOldWO.get(objWO.Id).Status__c && objWO.Status__c == 'Closed'
+        // 		&& objWO.Balance__c > 0) { 
+        // 		objWO.addError('The work order can\'t be closed due to the remaining balance.')	;
+        // 	}
+        // }
     } 
     /*****Code ended*****/
     
@@ -222,14 +236,21 @@ sendEmailwithWOPdf(toAddress, ccAddress, htmlBody, subject, wo.Id);
         SendEmailUtility.sendEmailwithAttachment(toAddress,ccAddress,htmlBody,subject,fileAttachments);
     }
     
-    public static void notifyAppOnWorkOrderUpdate(List<Work_Order__c> newLstWorkOrder){
-        
+    public static void notifyAppOnWorkOrderUpdate(List<Work_Order__c> newLstWorkOrder, Map<Id, Work_Order__c> oldMapWorkOrder){
+        System.debug('in notifyAppOnWorkOrderUpdate call--');
+        Id wrRID = Schema.SObjectType.BOATBUILDING__Work_Order__c.getRecordTypeInfosByName().get('Work Request').getRecordTypeId();
         for(Work_Order__c objWO : newLstWorkOrder){
-            if(objWO.LastModifiedDate < DateTime.now().addMinutes(-2)){
-                sendAppCallout(objWO.Id, objWO.BOATBUILDING__Boat__c);
-            }
+            if(oldMapWorkOrder.containsKey(objWO.Id)){
+                if(oldMapWorkOrder.get(objWO.Id).BOATBUILDING__Status__c != objWO.BOATBUILDING__Status__c
+                   || oldMapWorkOrder.get(objWO.Id).BOATBUILDING__Part_description__c != objWO.BOATBUILDING__Part_description__c
+                   || oldMapWorkOrder.get(objWO.Id).Name != objWO.Name
+                   || oldMapWorkOrder.get(objWO.Id).RecordTypeId != objWO.RecordTypeId || objWO.RecordTypeId == wrRID){
+                       System.debug('in future call--');
+                       sendAppCallout(objWO.Id, objWO.BOATBUILDING__Boat__c); 
+                   } 
+            }            
         }
-    }
+    }  
     
     @future(callout = true)
     public static void sendAppCallout(Id newWorkOrderId, Id boatId){
@@ -243,9 +264,34 @@ sendEmailwithWOPdf(toAddress, ccAddress, htmlBody, subject, wo.Id);
         HttpRequest req = new HttpRequest();
         req.setHeader('Accept', 'application/json');
         req.setHeader('Content-Type', 'application/json');
-        req.setHeader('Authorization', 'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0aSI6IjY2NGNmY2JlMGUyZWYyZTQxMTJlMjgzYjdmZjkzZmU2NmVhNjg0ZDA4MmNiOTVkNGMxNWZkYThmMWZlMWQzM2M5ZjVlMmFkMjk5YmVlMTVkIn0.eyJhdWQiOiIxIiwianRpIjoiNjY0Y2ZjYmUwZTJlZjJlNDExMmUyODNiN2ZmOTNmZTY2ZWE2ODRkMDgyY2I5NWQ0YzE1ZmRhOGYxZmUxZDMzYzlmNWUyYWQyOTliZWUxNWQiLCJpYXQiOjE1Njg3MzkyODMsIm5iZiI6MTU2ODczOTI4MywiZXhwIjoxNjAwMzYxNjgzLCJzdWIiOiIxIiwic2NvcGVzIjpbXX0.JHS6FrIzQ9WnTu7q5L88cMs9nAWegs3-a1wWP7YFqIRAyPMPv8BS6Ms05gQLSOrcg_bOpVkc4Qht8ZEtHBxDHO-Puf-XbDm6-IQ3oTiYwYl5pL4eGKYEDAaXD5xncukV7kh0DzaQIcTL7uZ0zeahMGO-SldjGlJ81wEuFK2zas6q0uEotaF8LqasBw7a-N35Zq6Fk78A39PLmIFjpBq4RatZrP8UJB8EZMxjjWzbjG7MFDIazuAlVB8ehBtVaZk3J6B6JoWURldO_ESvkw2ZdNKZ-rPf4obvsTe9FbhoKOoLCiWBIwVu2QYAzw8anH-wWKGDN4_04DFqUFui0h15wJMUpr2gPaY-K5EO3gjxOntdCuaW5BZJG6NTZEFcS-bgcg01OkfHxO2-MqHIbETeNJ4xlh2oRt9E6bMYGUSI3jKEJRStqHyHbW_lvqcLfX82nEGvlj-N6s76FteRtOzcvKZAQFladwepPB3HJjt2LZLeaF_s_ehJ4Q71zJ5TjTBRPFzXVwpOG62ZFjh3SFxOtxYU36nuKTAwjzaaARGb9wN3FQWDpjTzG3Frn_A4fZUIWSCknBqJrsGmB4qlzvINLzIWsIjsK5QdZ9nw432K4B0-GlXgkVkykSckwlwLsemPel6dAcUI_9wMlbBKgZY0yUR43SK6P9pypNZtsIeoXi8');
-        req.setEndpoint(objConfig.BOATBUILDING__AppEndpoint__c+'/api/workOrder/update');
+        req.setHeader('Authorization', 'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0aSI6IjhhYWE5MjQxZjA4NzJhNDA3NmUyMDU0MDI2NWEwMjlhZGI2NDY2NmEzOWVkMmIxNzY3ZmFjZjJhZDg4NTc3YzA2N2MwM2FmYzNiOTYyYjMyIn0.eyJhdWQiOiIxIiwianRpIjoiOGFhYTkyNDFmMDg3MmE0MDc2ZTIwNTQwMjY1YTAyOWFkYjY0NjY2YTM5ZWQyYjE3NjdmYWNmMmFkODg1NzdjMDY3YzAzYWZjM2I5NjJiMzIiLCJpYXQiOjE2MDAzNjU2NjQsIm5iZiI6MTYwMDM2NTY2NCwiZXhwIjoxNjMxOTAxNjY0LCJzdWIiOiIxIiwic2NvcGVzIjpbXX0.Q1Rx7o1ffBsCpnOCSnV6nlkresBvEG_n_h3lFdcNw-5BmgN9QBQs5JrhG-ZkirrI6CUiluwuapzTgz6yglShMkQYXvh8rXsM7RCopmM791p-CF32P6GZkgU93-W_cKhVsgk4QQI7SGfjE-3_9_swnRz3Qt0M8G_QkXi-Yy_-0jHF0gVQcYPvMUYq5rRO5xl0pT739AO0tOHh8HFLEukd-TSvjGjl4jKuZWwwOGNnrWbmr3vhuXiuv1OUB70vhQrC33snsidlYEo2P9GNVD6pbBV5o351CoojvaiWcxqxUqKmfOeZaZJYkCEsSgYLrVGfqoHKPFqDWszbV4G94E-dh0hUWXRmJcDlRz_PuLIiYWlDOZQ5pzb6Lr9270kg45dsHf9nm6BVNwP1GqvdDAJrL44DSrUhLWkdTV-IsH29XYGNLb17_2Al5tZ1iRwLoI1a8McaWRRifSWbJ6DIq4aZIlfiLzuv7XxirTo-0RF2IdS980MSrBAYoRsbAWKW2mUYwiLkvUSmGzEq-Dzi2kms377hXbH2q56W7-KTRxMNsczPH0C0OjbAkAmDSV2IHttJnXpybhhf6aMIPYYCn3irfdJVjUZFGS1UlmecB7Opci09aH10zX0e5AthuYZ6c-oBWMN1c9OvUr49WpTdRTKqYwsNJdILUTVSQsQCarWiijQ');
+        req.setEndpoint(objConfig.BOATBUILDING__AppEndpoint__c+'/api/workOrder/update'); 
         req.setMethod('POST');
+        String body = JSON.serialize(mapRequestBody);
+        req.setBody(body);
+        System.debug('APP req---'+req);
+        System.debug('APP body---'+body);
+        Http http = new Http();
+        if(!Test.isRunningTest()){
+            HttpResponse res = http.send(req);
+            System.debug('APP res---'+res);
+        }
+    }
+    @future(callout = true)
+    public static void sendAppCalloutDelete(Id newWorkOrderId, Id boatId){
+        
+        BOATBUILDING__FADAppConfig__c objConfig = BOATBUILDING__FADAppConfig__c.getOrgDefaults();
+        System.debug('------------WOID FM--------'+newWorkOrderId+'------@'+boatId);
+        Map<String, String> mapRequestBody = new Map<String, String>();
+        mapRequestBody.put('salesforce_org_id', objConfig.BOATBUILDING__AppOrgId__c);
+        mapRequestBody.put('workorder_id', newWorkOrderId);
+        mapRequestBody.put('boat_id', boatId);
+        HttpRequest req = new HttpRequest();
+        req.setHeader('Accept', 'application/json');
+        req.setHeader('Content-Type', 'application/json');
+        req.setHeader('Authorization', 'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0aSI6IjhhYWE5MjQxZjA4NzJhNDA3NmUyMDU0MDI2NWEwMjlhZGI2NDY2NmEzOWVkMmIxNzY3ZmFjZjJhZDg4NTc3YzA2N2MwM2FmYzNiOTYyYjMyIn0.eyJhdWQiOiIxIiwianRpIjoiOGFhYTkyNDFmMDg3MmE0MDc2ZTIwNTQwMjY1YTAyOWFkYjY0NjY2YTM5ZWQyYjE3NjdmYWNmMmFkODg1NzdjMDY3YzAzYWZjM2I5NjJiMzIiLCJpYXQiOjE2MDAzNjU2NjQsIm5iZiI6MTYwMDM2NTY2NCwiZXhwIjoxNjMxOTAxNjY0LCJzdWIiOiIxIiwic2NvcGVzIjpbXX0.Q1Rx7o1ffBsCpnOCSnV6nlkresBvEG_n_h3lFdcNw-5BmgN9QBQs5JrhG-ZkirrI6CUiluwuapzTgz6yglShMkQYXvh8rXsM7RCopmM791p-CF32P6GZkgU93-W_cKhVsgk4QQI7SGfjE-3_9_swnRz3Qt0M8G_QkXi-Yy_-0jHF0gVQcYPvMUYq5rRO5xl0pT739AO0tOHh8HFLEukd-TSvjGjl4jKuZWwwOGNnrWbmr3vhuXiuv1OUB70vhQrC33snsidlYEo2P9GNVD6pbBV5o351CoojvaiWcxqxUqKmfOeZaZJYkCEsSgYLrVGfqoHKPFqDWszbV4G94E-dh0hUWXRmJcDlRz_PuLIiYWlDOZQ5pzb6Lr9270kg45dsHf9nm6BVNwP1GqvdDAJrL44DSrUhLWkdTV-IsH29XYGNLb17_2Al5tZ1iRwLoI1a8McaWRRifSWbJ6DIq4aZIlfiLzuv7XxirTo-0RF2IdS980MSrBAYoRsbAWKW2mUYwiLkvUSmGzEq-Dzi2kms377hXbH2q56W7-KTRxMNsczPH0C0OjbAkAmDSV2IHttJnXpybhhf6aMIPYYCn3irfdJVjUZFGS1UlmecB7Opci09aH10zX0e5AthuYZ6c-oBWMN1c9OvUr49WpTdRTKqYwsNJdILUTVSQsQCarWiijQ');
+        req.setEndpoint(objConfig.BOATBUILDING__AppEndpoint__c+'/api/workOrder/delete');
+        req.setMethod('DELETE');
         String body = JSON.serialize(mapRequestBody);
         req.setBody(body);
         System.debug('APP req---'+req);
@@ -264,6 +310,146 @@ sendEmailwithWOPdf(toAddress, ccAddress, htmlBody, subject, wo.Id);
             return true;
         }else{
             return run;
+        }
+    }
+
+    public static void onBeforeDelete(Map<Id, Work_Order__c> oldMap) {
+        deleteWOJLineItem(oldMap.keySet());
+    }
+
+    public static void deleteWOJLineItem(Set<Id> woId) {
+        try {
+            System.debug('deleteWOJLineItem: '); 
+            List<Work_Order_Job_Line_Item__c> lstWOJLI =  [SELECT Id FROM BOATBUILDING__Work_Order_Job_Line_Item__c 
+                                                            WHERE BOATBUILDING__Related_to_Job__r.BOATBUILDING__Work_Order_Warranty_Work_Order__c IN :woId 
+                                                                AND BOATBUILDING__Related_to_Job__r.BOATBUILDING__Work_Order_Warranty_Work_Order__r.BOATBUILDING__Status__c != 'Quote'];
+            if( !lstWOJLI.isEmpty() ) {
+                System.debug('deleteWOJLineItem: '+lstWOJLI); 
+                delete lstWOJLI;
+            }
+        } catch(Exception ex) {
+            System.debug('onBeforeDelete: ' + ex.getMessage() + ' : ' + ex.getLineNumber()+'\n--\n'+ex.getStackTraceString()); 
+            System_Configure__c objSC = System_Configure__c.getOrgDefaults();
+            if(objSC != null && objSC.Enable_Debug_Mails__c)  {
+                BOATBUILDING__Custom_Log__c objCL = new BOATBUILDING__Custom_Log__c();
+                objCL.Name = 'Inv Management From Work Order';
+                String customLog = 'onBeforeDelete : \n\n' + ex.getMessage() + ' \n\n ' + ex.getLineNumber()+'\n\n'+ex.getStackTraceString(); 
+                if(customLog.length() >= 131000) {
+                    objCL.BOATBUILDING__Summary__c = customLog.substring(0,131000); 
+                } else {
+                    objCL.BOATBUILDING__Summary__c = customLog; 
+                } 
+                insert objCL;
+            }
+        }
+    }
+
+    public static void updateInventoryQuantity(List<Work_Order__c > lstWorkorder , map<Id,Work_Order__c> oldMapWorkOrder) {
+        try {
+            System.debug('updateInventoryQuantity :');
+            Map<String, Boolean> mapDeduct = new Map<String, Boolean>();
+            Map<Id, String> mapNewStoreLocation = new Map<Id, String>();
+            Map<Id, String> mapOldStoreLocation = new Map<Id, String>();
+            for(Work_Order__c objWO : lstWorkorder) {
+                if(objWO.BOATBUILDING__Status__c != null && objWO.BOATBUILDING__Status__c != 'Quote' &&
+                    (oldMapWorkOrder.get(objWO.Id).BOATBUILDING__Status__c == null || oldMapWorkOrder.get(objWO.Id).BOATBUILDING__Status__c != null 
+                        && oldMapWorkOrder.get(objWO.Id).BOATBUILDING__Status__c == 'Quote') ) {
+                        mapDeduct.put(objWO.Id, true);
+                } else if(objWO.BOATBUILDING__Status__c != null && objWO.BOATBUILDING__Status__c == 'Quote' &&
+                    (oldMapWorkOrder.get(objWO.Id).BOATBUILDING__Status__c == null || 
+                        oldMapWorkOrder.get(objWO.Id).BOATBUILDING__Status__c != null && oldMapWorkOrder.get(objWO.Id).BOATBUILDING__Status__c != 'Quote' )) {
+                        mapDeduct.put(objWO.Id, false);
+                }
+                if(objWO.BOATBUILDING__Status__c != 'Quote' && objWO.BOATBUILDING__Store_Location__c != oldMapWorkOrder.get(objWO.Id).BOATBUILDING__Store_Location__c) {
+                    mapNewStoreLocation.put(objWO.Id, objWO.BOATBUILDING__Store_Location__c);
+                    mapOldStoreLocation.put(objWO.Id, oldMapWorkOrder.get(objWO.Id).BOATBUILDING__Store_Location__c);
+                }
+            }
+            System.debug('mapNewStoreLocation :'+mapNewStoreLocation);
+            System.debug('mapOldStoreLocation :'+mapOldStoreLocation);
+            if(!mapDeduct.isEmpty()) {
+                List<BOATBUILDING__Work_Order_Job_Line_Item__c> lstJobLineItem = [SELECT Id, BOATBUILDING__Part_Number__c, BOATBUILDING__Quantity__c, BOATBUILDING__Store_Location__c, BOATBUILDING__Related_to_Job__r.BOATBUILDING__Work_Order_Warranty_Work_Order__c 
+                                                                            FROM BOATBUILDING__Work_Order_Job_Line_Item__c WHERE BOATBUILDING__Related_to_Job__r.BOATBUILDING__Work_Order_Warranty_Work_Order__c IN :mapDeduct.keySet()];
+                Map<String, Decimal> mapJLIQuantity = new Map<String, Decimal>();
+                Map<String, String> mapStoreLocation = new Map<String, String>();
+                for(BOATBUILDING__Work_Order_Job_Line_Item__c objJLI : lstJobLineItem) {
+                    Decimal decQuantity = mapJLIQuantity.get(objJLI.BOATBUILDING__Part_Number__c);
+                    if(decQuantity == null) {
+                        decQuantity = 0;
+                    }
+                    if(mapDeduct.get(objJLI.BOATBUILDING__Related_to_Job__r.BOATBUILDING__Work_Order_Warranty_Work_Order__c)) {
+                        decQuantity += objJLI.BOATBUILDING__Quantity__c;
+                    } else {
+                        decQuantity += 0 - objJLI.BOATBUILDING__Quantity__c;
+                    }
+                    System.debug('objJLI.BOATBUILDING__Quantity__c :'+objJLI.BOATBUILDING__Quantity__c);
+                    mapJLIQuantity.put(objJLI.BOATBUILDING__Part_Number__c, decQuantity);
+                    if(!mapStoreLocation.containsKey(objJLI.BOATBUILDING__Part_Number__c)) {
+                            mapStoreLocation.put(objJLI.BOATBUILDING__Part_Number__c, objJLI.BOATBUILDING__Store_Location__c);
+                    }
+                }
+                System.debug('mapJLIQuantity :'+mapJLIQuantity);
+                List<BOATBUILDING__Inventory__c> listInvToQuery = [SELECT Id, BOATBUILDING__Part__c, BOATBUILDING__Part_Number__c 
+                                                                FROM BOATBUILDING__Inventory__c 
+                                                                WHERE BOATBUILDING__Part_Number__c IN: mapJLIQuantity.keySet()];
+                List<PartInventoryManagerController.PartInventoryWrapper> listWrapToProcess = new List<PartInventoryManagerController.PartInventoryWrapper>();
+                for(BOATBUILDING__Inventory__c objInv : listInvToQuery) {
+                    PartInventoryManagerController.PartInventoryWrapper objPW = new PartInventoryManagerController.PartInventoryWrapper();
+                    objPW.inventoryId = objInv.Id;
+                    objPW.quantity = mapJLIQuantity.get(objInv.BOATBUILDING__Part_Number__c);
+                    objPW.storeLocation = mapStoreLocation.get(objInv.BOATBUILDING__Part_Number__c);
+                    listWrapToProcess.add(objPW);
+                }
+                PartInventoryManagerController.updateInventoryQuantity(listWrapToProcess);
+            }
+            if(!mapNewStoreLocation.isEmpty()) {
+                List<BOATBUILDING__Work_Order_Job_Line_Item__c> lstJobLineItem = [SELECT Id, BOATBUILDING__Part_Number__c, BOATBUILDING__Quantity__c, BOATBUILDING__Store_Location__c, BOATBUILDING__Related_to_Job__r.BOATBUILDING__Work_Order_Warranty_Work_Order__c 
+                                                                            FROM BOATBUILDING__Work_Order_Job_Line_Item__c WHERE BOATBUILDING__Related_to_Job__r.BOATBUILDING__Work_Order_Warranty_Work_Order__c IN :mapNewStoreLocation.keySet()];
+                Map<String, Decimal> mapJLIQuantity = new Map<String, Decimal>();
+                Map<String, String> mapILINewStoreLocation = new Map<String, String>();
+                Map<String, String> mapILIOldStoreLocation = new Map<String, String>();
+                for(BOATBUILDING__Work_Order_Job_Line_Item__c objJLI : lstJobLineItem) {
+                    mapJLIQuantity.put(objJLI.BOATBUILDING__Part_Number__c, objJLI.BOATBUILDING__Quantity__c);
+                    mapILINewStoreLocation.put(objJLI.BOATBUILDING__Part_Number__c, mapNewStoreLocation.get(objJLI.BOATBUILDING__Related_to_Job__r.BOATBUILDING__Work_Order_Warranty_Work_Order__c));
+                    mapILIOldStoreLocation.put(objJLI.BOATBUILDING__Part_Number__c, mapOldStoreLocation.get(objJLI.BOATBUILDING__Related_to_Job__r.BOATBUILDING__Work_Order_Warranty_Work_Order__c));
+                }
+                System.debug('mapILINewStoreLocation :'+mapILINewStoreLocation);
+                System.debug('mapILIOldStoreLocation :'+mapILIOldStoreLocation);
+                List<BOATBUILDING__Inventory__c> listInvToQuery = [SELECT Id, BOATBUILDING__Part__c, BOATBUILDING__Part_Number__c 
+                                                                    FROM BOATBUILDING__Inventory__c 
+                                                                    WHERE BOATBUILDING__Part_Number__c IN: mapJLIQuantity.keySet()];
+
+                List<PartInventoryManagerController.PartInventoryWrapper> listWrapToProcess = new List<PartInventoryManagerController.PartInventoryWrapper>();
+                for(BOATBUILDING__Inventory__c objInv : listInvToQuery) {
+                    PartInventoryManagerController.PartInventoryWrapper objPWNew = new PartInventoryManagerController.PartInventoryWrapper();
+                    objPWNew.inventoryId = objInv.Id;
+                    objPWNew.quantity = mapJLIQuantity.get(objInv.BOATBUILDING__Part_Number__c);
+                    objPWNew.storeLocation = mapILINewStoreLocation.get(objInv.BOATBUILDING__Part_Number__c);
+                    listWrapToProcess.add(objPWNew);
+    
+                    PartInventoryManagerController.PartInventoryWrapper objPWOld = new PartInventoryManagerController.PartInventoryWrapper();
+                    objPWOld.inventoryId = objInv.Id;
+                    objPWOld.quantity = 0 - mapJLIQuantity.get(objInv.BOATBUILDING__Part_Number__c);
+                    objPWOld.storeLocation = mapILIOldStoreLocation.get(objInv.BOATBUILDING__Part_Number__c);
+                    listWrapToProcess.add(objPWOld);
+                }
+                PartInventoryManagerController.updateInventoryQuantity(listWrapToProcess);
+            }
+            
+        } catch(Exception ex) {
+            System.debug('onAfterUpdate: ' + ex.getMessage() + ' : ' + ex.getLineNumber()+'\n--\n'+ex.getStackTraceString()); 
+            System_Configure__c objSC = System_Configure__c.getOrgDefaults();
+            if(objSC != null && objSC.Enable_Debug_Mails__c)  {
+                BOATBUILDING__Custom_Log__c objCL = new BOATBUILDING__Custom_Log__c();
+                objCL.Name = 'Inv Management From Work Order';
+                String customLog = 'onAfterUpdate : \n\n' + ex.getMessage() + ' \n\n ' + ex.getLineNumber()+'\n\n'+ex.getStackTraceString(); 
+                if(customLog.length() >= 131000) {
+                    objCL.BOATBUILDING__Summary__c = customLog.substring(0,131000); 
+                } else {
+                    objCL.BOATBUILDING__Summary__c = customLog; 
+                } 
+                insert objCL;
+            }
         }
     }
 }

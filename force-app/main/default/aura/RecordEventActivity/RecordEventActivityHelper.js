@@ -24,7 +24,7 @@
         });
         action.setCallback(this, function(response){
             this.hideSpinner(component, event, helper);
-            console.log('allevent',response.getReturnValue());
+            //console.log('allevent',response.getReturnValue());
             component.set("v.allEvents",response.getReturnValue());
         });
         $A.enqueueAction(action);

@@ -21,17 +21,33 @@
                     var toastEvent = $A.get("e.force:showToast");
                     
                     toastEvent.setParams({
-                        title: "Success!",
-                        message: "Product has been pushed to shopify successfuly!",
+                        title: "Please Wait...",
+                        message: "We have initiated the process.",
                         type: "success"
                         
                     });
                     
-                    toastEvent.fire();
+                    toastEvent.fire(); 
                 } else { 
-                    alert(res.getReturnValue());
+                    var urlEvent = $A.get("e.force:navigateToURL");
+                    var urlStr = "/"+PartId;
+                    urlEvent.setParams({
+                        "url": urlStr
+                    });
+                    urlEvent.fire();
+                    $A.get("e.force:closeQuickAction").fire();
+                    var toastEvent = $A.get("e.force:showToast");
+                     
+                    toastEvent.setParams({
+                        title: "Please Wait...",
+                        message: res.getReturnValue(),
+                        type: "error" 
+                        
+                    });
+                    
+                    toastEvent.fire();
                 }
-            }  
+            } 
         })
         $A.enqueueAction(action);
 	}

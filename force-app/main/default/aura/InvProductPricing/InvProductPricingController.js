@@ -1,5 +1,13 @@
 ({
-	handleClick : function(component, event, helper) {
+    doInit : function(component, event, helper) {
+        var action = component.get("c.isMSPEditable");
+        action.setCallback(this, function( response ) {
+            console.log('>>>>>getMSPEditable, response: ', response.getReturnValue());
+            component.set("v.isMSPEditable", response.getReturnValue());
+        });
+        $A.enqueueAction(action);
+    },
+    handleClick : function(component, event, helper) {
         
         var objInv = component.get("v.objInvPP");
         var cmpEvent = $A.get("e.c:InventoryChildToParent");
@@ -87,10 +95,10 @@
             
             var costLine = (100 - objInvEx.BOATBUILDING__Costline__c)/100;
             
-            objInvEx.BOATBUILDING__Minimum_Sell_Price__c = parseFloat(dc / costLine).toFixed(2);
-            console.log(objInvEx.BOATBUILDING__Minimum_Sell_Price__c);
+            objInvEx.BOATBUILDING__Minimum_Sales_Price_Manual__c = parseFloat(dc / costLine).toFixed(2);
+            console.log(objInvEx.BOATBUILDING__Minimum_Sales_Price_Manual__c);
             
-            objInvEx.BOATBUILDING__Costline_Dollar__c = parseFloat(objInvEx.BOATBUILDING__Minimum_Sell_Price__c - dc).toFixed(2);
+            objInvEx.BOATBUILDING__Costline_Dollar__c = parseFloat(objInvEx.BOATBUILDING__Minimum_Sales_Price_Manual__c - dc).toFixed(2);
             console.log(objInvEx.BOATBUILDING__Costline_Dollar__c);
             component.set("v.objInvPP", objInvEx); 
         }
@@ -111,10 +119,10 @@
             
             var costLine = (100 - cstlne)/100;
             
-            objInvEx.BOATBUILDING__Minimum_Sell_Price__c = parseFloat(dc / costLine).toFixed(2);
-            console.log(objInvEx.BOATBUILDING__Minimum_Sell_Price__c);
+            objInvEx.BOATBUILDING__Minimum_Sales_Price_Manual__c = parseFloat(dc / costLine).toFixed(2);
+            console.log(objInvEx.BOATBUILDING__Minimum_Sales_Price_Manual__c);
             
-            objInvEx.BOATBUILDING__Costline_Dollar__c = parseFloat(objInvEx.BOATBUILDING__Minimum_Sell_Price__c - dc).toFixed(2);
+            objInvEx.BOATBUILDING__Costline_Dollar__c = parseFloat(objInvEx.BOATBUILDING__Minimum_Sales_Price_Manual__c - dc).toFixed(2);
             console.log(objInvEx.BOATBUILDING__Costline_Dollar__c);
             component.set("v.objInvPP", objInvEx); 
         }
@@ -129,18 +137,35 @@
         }
         if(objInvEx.BOATBUILDING__Costline_Dollar__c != undefined ) {
 
-            objInvEx.BOATBUILDING__Minimum_Sell_Price__c = parseFloat(dc + objInvEx.BOATBUILDING__Costline_Dollar__c).toFixed(2);
-            console.log("objInvEx.BOATBUILDING__Minimum_Sell_Price__c: "+objInvEx.BOATBUILDING__Minimum_Sell_Price__c)
+            objInvEx.BOATBUILDING__Minimum_Sales_Price_Manual__c = parseFloat(dc + objInvEx.BOATBUILDING__Costline_Dollar__c).toFixed(2);
+            console.log("objInvEx.BOATBUILDING__Minimum_Sales_Price_Manual__c: "+objInvEx.BOATBUILDING__Minimum_Sales_Price_Manual__c)
             var costLine =  0.00;
-            
-            //objInvEx.BOATBUILDING__Minimum_Sell_Price__c = dc / costLine;
-            console.log('>>objInvEx.BOATBUILDING__Minimum_Sell_Price__c: '+objInvEx.BOATBUILDING__Minimum_Sell_Price__c);
-            costLine = dc/objInvEx.BOATBUILDING__Minimum_Sell_Price__c;
+            console.log('>>objInvEx.BOATBUILDING__Minimum_Sales_Price_Manual__c: '+objInvEx.BOATBUILDING__Minimum_Sales_Price_Manual__c);
+            costLine = dc/objInvEx.BOATBUILDING__Minimum_Sales_Price_Manual__c;
             console.log('>>costLine: '+costLine);
             objInvEx.BOATBUILDING__Costline__c = parseFloat(100 - (costLine *100)).toFixed(2);
             
             component.set("v.objInvPP", objInvEx); 
         }
         
+    },
+    calMarPerP : function(component, event, helper) {
+        var objInvEx = component.get("v.objInvPP");
+        var dlrCost = document.getElementById("hddnDlrPrc").value;
+        var dc = 0.00
+        if(dlrCost != null && dlrCost != undefined && !isNaN(parseFloat(dlrCost))) { 
+            dc = parseFloat(dlrCost);
+        }
+        if(objInvEx.BOATBUILDING__Minimum_Sales_Price_Manual__c != undefined ) {
+            objInvEx.BOATBUILDING__Costline_Dollar__c = parseFloat(objInvEx.BOATBUILDING__Minimum_Sales_Price_Manual__c - dc).toFixed(2);
+
+            var costLine =  0.00;
+            console.log('>>objInvEx.BOATBUILDING__Minimum_Sales_Price_Manual__c: '+objInvEx.BOATBUILDING__Minimum_Sales_Price_Manual__c);
+            costLine = dc/objInvEx.BOATBUILDING__Minimum_Sales_Price_Manual__c;
+            console.log('>>costLine: '+costLine);
+            objInvEx.BOATBUILDING__Costline__c = parseFloat(100 - (costLine *100)).toFixed(2);
+            
+            component.set("v.objInvPP", objInvEx); 
+        }
     }
 })

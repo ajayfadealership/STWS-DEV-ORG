@@ -4,7 +4,7 @@
     <active>true</active>
     <description>Manufacturer Id must be specified.</description>
     <errorConditionFormula>AND(
- RecordType.Name ==&#39;Boat Manufacturer&#39;,
+ RecordType.Name ==&apos;Boat Manufacturer&apos;,
 ISBLANK( Manufacturer_name__c ) 
 )</errorConditionFormula>
     <errorDisplayField>Manufacturer_name__c</errorDisplayField>

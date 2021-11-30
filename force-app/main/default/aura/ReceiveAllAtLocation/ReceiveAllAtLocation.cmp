@@ -1,0 +1,44 @@
+<aura:component controller="ReceiveAllAtLocation" implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction" access="global" >
+    <aura:handler name="init" value="{!this}" action="{!c.ReceiveAllAtLocation}"/>
+    <aura:attribute name ="ReceiveAllAtLocation" type="boolean" default="false" access="global"/>    
+    <aura:attribute name ="lstPA" type="Object[]"  access="global"/>    
+    <aura:attribute name="lstLI" type="Object[]" access="global"/>
+     <aura:attribute name="recordId" type="String" access="global"/>
+    <aura:if isTrue="{!v.ReceiveAllAtLocation}"> 
+        <div class="slds-m-around_xx-large">
+            <section role="dialog" tabindex="-1" style="background: #0000008c;" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+                <div class="slds-modal__container">
+                    <lightning:buttonIcon iconName="utility:Close" 
+                                      onclick="{!c.closeModel}"
+                                      alternativeText="close" 
+                                      variant="brand"
+                                      class="slds-modal__close"/>
+                    
+                    
+                    <div class="slds-modal__content slds-p-around_medium" style="min-height:200px;border-radius:3px;" id="modal-content-id-1">
+                        <lightning:recordEditForm aura:id="PAREF"  objectApiName="BOATBUILDING__Parts_Availability__c">
+                            <lightning:layout multipleRows="true">
+                                <lightning:layoutItem padding="around-small" size="8">
+                                    <lightning:inputField fieldName="BOATBUILDING__Store_Location__c" aura:id="topLocations" />
+                                </lightning:layoutItem>
+                            </lightning:layout>
+                            <br/>
+                        </lightning:recordEditForm>
+                        
+                    </div>
+                    <footer class="slds-modal__footer">
+                        <lightning:button variant="neutral" 
+                                          label="Ok"
+                                          title="Ok"
+                                          onclick="{!c.addPA}"/>
+                        <lightning:button variant="neutral" 
+                                          label="Cancel"
+                                          title="Cancel"
+                                          onclick="{!c.closeModel}"/>
+                    </footer>
+                </div>
+            </section>
+        </div>	
+    </aura:if>
+    
+</aura:component>

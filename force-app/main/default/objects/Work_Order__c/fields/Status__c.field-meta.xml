@@ -117,6 +117,16 @@
                 <default>false</default>
                 <label>Warranty Review</label>
             </value>
+            <value>
+                <fullName>WO Created</fullName>
+                <default>false</default>
+                <label>WO Created</label>
+            </value>
+            <value>
+                <fullName>Completed Pending Review</fullName>
+                <default>false</default>
+                <label>Completed Pending Review</label>
+            </value>
         </valueSetDefinition>
     </valueSet>
 </CustomField>

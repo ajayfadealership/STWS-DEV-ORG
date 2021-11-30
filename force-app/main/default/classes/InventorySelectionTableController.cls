@@ -21,12 +21,14 @@ public with sharing class InventorySelectionTableController {
 		
 		Set<String> selectedOptionsforInventory = new Set<String>();
 		Set<String> setProductCode = new Set<String>();
+		Map<String, Decimal> mapCodeQT = new Map<String, Decimal>();
         if(lstILI.size() > 0){
             for(BOATBUILDING__Inventory_Line_Item__c objInventoryLineItem : lstILI)
             {
                 selectedOptionsforInventory.add(objInventoryLineItem.Name__c);
                 if(objInventoryLineItem.Product_Code__c != null){
-                    setProductCode.add(objInventoryLineItem.Product_Code__c);
+					setProductCode.add(objInventoryLineItem.Product_Code__c);
+					mapCodeQT.put(objInventoryLineItem.Product_Code__c, objInventoryLineItem.Quantity__c != null ? objInventoryLineItem.Quantity__c: 1);
                 }
             }
             
@@ -119,7 +121,9 @@ public with sharing class InventorySelectionTableController {
 	                           			&& objInventory.Model__c == objProductPriceForSelectedCategory.Product_Model__c
 	                           				&& objInventory.Model_Variant__c == objProductPriceForSelectedCategory.Model_Variant__c
 	                           					&& setProductCode.contains(String.ValueOf(objProductPriceForSelectedCategory.Product_Code__c))) {
-	                           						
+
+									objProductPriceForSelectedCategory.Quantity__c = mapCodeQT.containsKey(objProductPriceForSelectedCategory.Product_Code__c) ? 
+																									mapCodeQT.get(objProductPriceForSelectedCategory.Product_Code__c) : 1;
 	                               lstCheckBoxWraper.add(new CheckBoxWraper(true, lstCheckBoxWraper.size()+1, objProductPriceForSelectedCategory));
 	                           }else{
 	                               lstCheckBoxWraper.add(new CheckBoxWraper(false, lstCheckBoxWraper.size()+1, objProductPriceForSelectedCategory));
@@ -130,6 +134,8 @@ public with sharing class InventorySelectionTableController {
                                && String.valueOf(objInventory.Year__c).containsIgnoreCase(objProductPriceForSelectedCategory.Year__c)
                                && String.valueOf(objInventory.Model__c).containsIgnoreCase(objProductPriceForSelectedCategory.Product_Model__c)
                                && setProductCode.contains(String.ValueOf(objProductPriceForSelectedCategory.Product_Code__c))){
+									objProductPriceForSelectedCategory.Quantity__c = mapCodeQT.containsKey(objProductPriceForSelectedCategory.Product_Code__c) ? 
+																						mapCodeQT.get(objProductPriceForSelectedCategory.Product_Code__c) : 1;
                                    lstCheckBoxWraper.add(new CheckBoxWraper(true, lstCheckBoxWraper.size()+1, objProductPriceForSelectedCategory));
                                }else{ 
                                    lstCheckBoxWraper.add(new CheckBoxWraper(false, lstCheckBoxWraper.size()+1, objProductPriceForSelectedCategory));
@@ -147,6 +153,7 @@ public with sharing class InventorySelectionTableController {
 		        }
 			}
 		} 
+	
         return lstPriceAndProductOptionWraperClass;
 	}
 	
@@ -167,7 +174,7 @@ public with sharing class InventorySelectionTableController {
 									                                 Price__c, 
 									                                 Product_Code__c, 
 									                                 Quantity__c,
-									                                 Non_Taxable__c  
+																	 Non_Taxable__c
 									                                 From   
 									                                 BOATBUILDING__Inventory_Line_Item__c Where BOATBUILDING__Related_to_Inventory__c =: invId];
 									                                 
@@ -182,15 +189,7 @@ public with sharing class InventorySelectionTableController {
 		
 		List<DealerOptionWraper> lstDealerOptionWraper = new List<DealerOptionWraper>();
 		
-		List<BOATBUILDING__Dealer_Option__c> lstDealerOption = [SELECT 
-						                                                  Id,
-						                                                  Name,
-						                                                  Part_Number__c,
-						                                                  Retail_Price__c,
-						                                                  Cost__c,
-						                                                  Non_Taxable__c
-				                                                  FROM
-					                                                  BOATBUILDING__Dealer_Option__c];
+		List<BOATBUILDING__Dealer_Option__c> lstDealerOption = BOATBUILDING__Dealer_Option__c.getAll().values();
         
         String UserId = UserInfo.getUserId();
         Set<String> ProductCodeForNonExist = new Set<String>();
@@ -198,12 +197,10 @@ public with sharing class InventorySelectionTableController {
         		
             for(BOATBUILDING__Dealer_Option__c objDealerOption : lstDealerOption){
             		ProductCodeForNonExist.add(objDealerOption.Part_Number__c); 
-	            //	if((objDealerOption.BOATBUILDING__Temp_User_Id__c != null && objDealerOption.BOATBUILDING__Temp_User_Id__c == UserId) && objDealerOption.BOATBUILDING__Is_Temp__c == true) {
-	            		//lstDealerOptionWraper.add(new DealerOptionWraper(true, objDealerOption, true));
-	            	//}else if(objDealerOption.BOATBUILDING__Is_Temp__c == false) {
 	            		
-	            		if(mapILI.keySet().contains(objDealerOption.Part_Number__c)) {
-	            			objDealerOption.Non_Taxable__c = mapILI.get(objDealerOption.Part_Number__c).Non_Taxable__c;
+					if(mapILI.keySet().contains(objDealerOption.Part_Number__c)) {
+						objDealerOption.Non_Taxable__c = mapILI.get(objDealerOption.Part_Number__c).Non_Taxable__c;
+						objDealerOption.Quantity__c = mapILI.get(objDealerOption.Part_Number__c).Quantity__c;
                         lstDealerOptionWraper.add(new DealerOptionWraper(true, objDealerOption, false)); 
                     }else{
                         lstDealerOptionWraper.add(new DealerOptionWraper(false, objDealerOption, false));
@@ -221,7 +218,8 @@ public with sharing class InventorySelectionTableController {
 	                    objDO.Name = objInventoryLineItem.Name__c;
 	                    objDO.Part_Number__c = objInventoryLineItem.Product_Code__c;
 	                    objDO.Retail_Price__c = objInventoryLineItem.Price__c;
-	                    objDO.Cost__c = objInventoryLineItem.Dealer_Price__c;
+						objDO.Cost__c = objInventoryLineItem.Dealer_Price__c;
+						objDO.Quantity__c = objInventoryLineItem.Quantity__c;
 	                    objDO.Non_Taxable__c = objInventoryLineItem.Non_Taxable__c;
 	                    lstDealerOptionWraper.add(new DealerOptionWraper(true, objDO, true));
 	                }
@@ -235,7 +233,8 @@ public with sharing class InventorySelectionTableController {
 	                    objDO.Name = objInventoryLineItem.Name__c;
 	                    objDO.Part_Number__c = objInventoryLineItem.Product_Code__c;
 	                    objDO.Retail_Price__c = objInventoryLineItem.Price__c;
-	                    objDO.Cost__c = objInventoryLineItem.Dealer_Price__c;
+						objDO.Cost__c = objInventoryLineItem.Dealer_Price__c;
+						objDO.Quantity__c = objInventoryLineItem.Quantity__c;
 	                    objDO.Non_Taxable__c = objInventoryLineItem.Non_Taxable__c; 
 	                    lstDealerOptionWraper.add(new DealerOptionWraper(true, objDO, true));
 	                }
@@ -253,15 +252,7 @@ public with sharing class InventorySelectionTableController {
 		
 		List<DealerOptionWraper> lstDealerOptionWraper = new List<DealerOptionWraper>();
 		 
-		List<BOATBUILDING__Dealer_Option__c> lstDealerOption = [SELECT 
-					                                                  Id,
-					                                                  Name,
-					                                                  Part_Number__c,
-					                                                  Retail_Price__c,
-					                                                  Cost__c,
-					                                                  Non_Taxable__c
-					                                                  FROM
-					                                                  BOATBUILDING__Dealer_Option__c];
+		List<BOATBUILDING__Dealer_Option__c> lstDealerOption = BOATBUILDING__Dealer_Option__c.getAll().values();
         
         String UserId = UserInfo.getUserId();
         if(lstDealerOption.size() > 0){
@@ -287,7 +278,9 @@ public with sharing class InventorySelectionTableController {
                          			From 
                              				BOATBUILDING__Inventory__c i 
                              		where 
-                             				Id=: invId];
+											 Id=: invId];
+		System.debug('>>>>objInventory.RN: '+objInventory.RecordType.Name);
+		System.debug('>>>>objInventory.Manufacturer__c: '+objInventory.Manufacturer__c);
 		List<Manufacturer__c> lstManu = [Select Id,Name, Model_Variant__c from BOATBUILDING__Manufacturer__c where Name =: objInventory.Manufacturer__c limit 1];
 		
 		if(!lstManu.isEmpty()) {
@@ -296,8 +289,8 @@ public with sharing class InventorySelectionTableController {
 				MVStatus = '1';
 			}
 			
-			Map<String , List<BOATBUILDING__ProductPrice__c>> mapSelectedCategory = new Map<String , List<BOATBUILDING__ProductPrice__c>>();
-			Map<String , List<CheckBoxWraper>> mapCheckBoxWraper = new Map<String , List<CheckBoxWraper>>();
+			//Map<String , List<BOATBUILDING__ProductPrice__c>> mapSelectedCategory = new Map<String , List<BOATBUILDING__ProductPrice__c>>();
+			//Map<String , List<CheckBoxWraper>> mapCheckBoxWraper = new Map<String , List<CheckBoxWraper>>();
 		
 			System.debug('>>: '+SelectedType);
 			  
@@ -330,10 +323,18 @@ public with sharing class InventorySelectionTableController {
 			
 			System.debug('>>:lstPro: '+lstPro);
 			if(!lstPro.isEmpty()) {
-				objProduct = lstPro[0];
-				
+				objProduct = lstPro[0];	
+			} else {
+				objProduct.M_Boat_MSRP_PRICE__c = objInventory.Suggested_List_Price__c != null ? objInventory.Suggested_List_Price__c : 0.00; 
+				objProduct.Cost_Price__c = objInventory.Cost__c != null ? objInventory.Cost__c : 0.00; 
+			}
+		}else {
+			if(objInventory.RecordType.Name == 'Used Boats') {
+				objProduct.M_Boat_MSRP_PRICE__c = objInventory.Suggested_List_Price__c != null ? objInventory.Suggested_List_Price__c : 0.00; 
+				objProduct.Cost_Price__c = objInventory.Cost__c != null ? objInventory.Cost__c : 0.00; 
 			}
 		} 
+		System.debug('>>:objProduct: '+objProduct);
         return objProduct;
 	}   
 }

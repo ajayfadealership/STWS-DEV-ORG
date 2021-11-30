@@ -1,11 +1,12 @@
 <aura:component controller="PurchaseOrderLightningController">
     <aura:attribute name="objPOLI" type="Object" access="global"/>
-    
+    <aura:attribute name="SortingSequence" type="String" access="global"/>
     <aura:attribute name="selectedRecord" type="Object" access="global"/>
     <aura:attribute name="searchResults" type="Object[]" access="global"/>
     <aura:attribute name="showPill" type="boolean" default="false" access="global"/>
     <aura:attribute name="lineItemTotal" type="double" access="global"/> 
-     
+    <aura:handler name="init" value="{!this}" action="{!c.Init}"/>
+    <aura:attribute name="vendorVal" type="String" access="global"/> 
     <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-6 slds-col--padded">
         <div class="slds-form-element"> 
             <aura:if isTrue="{!!v.showPill}">

@@ -18,7 +18,7 @@ public class NewDealerOptionControllerTest {
         ObjD.BOATBUILDING__Retail_Price__c = 12;
         listDOId.add(objD.Id);
         insert ObjD;
-        NewDealerOptionController.updateDealerOptionApex('test','1234','12','testt','1');
+        NewDealerOptionController.updateDealerOptionApex('test','1234','12','testt','1', '1');
        
             
             }

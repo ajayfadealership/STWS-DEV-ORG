@@ -2,9 +2,11 @@ public class GoogleAnalyticsChartsController {
     
     public List<Data> Data {get; set;}
     public BOATBUILDING__Inventory__c objInventory;
+    List<BOATBUILDING__Custom_Log__c> listCustomLog;
     
     public GoogleAnalyticsChartsController(ApexPages.StandardController controller) {
         this.objInventory = (BOATBUILDING__Inventory__c)controller.getRecord();
+        listCustomLog = new List<BOATBUILDING__Custom_Log__c>();
     }
     
     public void storeAnalyticsData(){
@@ -12,6 +14,7 @@ public class GoogleAnalyticsChartsController {
             
             BOATBUILDING__Google_Analytics__c objGAToInsert = new BOATBUILDING__Google_Analytics__c();
             BOATBUILDING__GooglAnalyticsConfig__c objConfig = BOATBUILDING__GooglAnalyticsConfig__c.getOrgDefaults(); 
+            
             
             String accessToken = String.isNotBlank(objConfig.BOATBUILDING__Access_Token__c) ? objConfig.BOATBUILDING__Access_Token__c: '';
             BOATBUILDING__Inventory__c objInv = [SELECT Id, BOATBUILDING__Web_Page_Name__c, BOATBUILDING__Website_Page_Name__c,
@@ -22,17 +25,24 @@ public class GoogleAnalyticsChartsController {
             if(objInv != null){
                 String webPageName = objInv.BOATBUILDING__Web_Page_Name__c;
                 String storeLocation = '';
-                List<BOATBUILDING__Store_Location_Config__mdt> lstStoreLocConfig = [SELECT Id, BOATBUILDING__Website_Store_location__c FROM BOATBUILDING__Store_Location_Config__mdt WHERE label =: objInv.BOATBUILDING__Store_Location__c];
+                List<BOATBUILDING__Store_Location_Config__mdt> lstStoreLocConfig = [SELECT Id, BOATBUILDING__Website_Store_location__c 
+                                                                                    FROM BOATBUILDING__Store_Location_Config__mdt 
+                                                                                    WHERE label =: objInv.BOATBUILDING__Store_Location__c];
                 if(!lstStoreLocConfig.isEmpty()){
                     storeLocation = lstStoreLocConfig.get(0).BOATBUILDING__Website_Store_location__c;
                 }
+
+
                 BOATBUILDING.GoogleAnalyticsIntegration objGAI = new BOATBUILDING.GoogleAnalyticsIntegration();
                 List<List<String>> listRows = new List<List<String>>();
-                
+                listCustomLog.addAll(CustomLogUtil.createLog('webPageName-- line 36---'+webPageName, 'GoogleAnalyticsChartsController'));
+                listCustomLog.addAll(CustomLogUtil.createLog('accessToken-- line 37---'+accessToken, 'GoogleAnalyticsChartsController'));
+                listCustomLog.addAll(CustomLogUtil.createLog('storeLocation-- line 38---'+storeLocation, 'GoogleAnalyticsChartsController'));
                 listRows = objGAI.createRequest(webPageName, accessToken, storeLocation);
                 
                 if(!listRows.isEmpty()){
                     data = new List<Data>();
+                    listCustomLog.addAll(CustomLogUtil.createLog('listRows-- line 43---'+listRows, 'GoogleAnalyticsChartsController'));
                     system.debug('listRows---'+listRows.size());
                     for(List<String> listR : listRows){
                         String pageName  = '';
@@ -79,9 +89,17 @@ public class GoogleAnalyticsChartsController {
                     }
                 } 
             }
+
+            if(!listCustomLog.isEmpty()){
+                insert listCustomLog;
+            }
         } catch(Exception e){
             System.debug('===GoogleAnalyticsChartsController ===='+e.getTypeName()+'Message: \n' + e.getMessage()+'Line number: \n' + e.getLineNumber()+'Stack trace: \n' + e.getStackTraceString());
             //SendEmailUtility.sendQuickEmail('===GoogleAnalyticsChartsController ===='+e.getTypeName()+'Message: \n' + e.getMessage()+'Line number: \n' + e.getLineNumber()+'Stack trace: \n' + e.getStackTraceString());
+            listCustomLog.addAll(CustomLogUtil.createLog(e.getTypeName()+'Message: \n' + e.getMessage()+'Line number: \n' + e.getLineNumber()+'Stack trace: \n' + e.getStackTraceString(), 'GoogleAnalyticsChartsController'));
+            if(!listCustomLog.isEmpty()){
+                insert listCustomLog;
+            }
             ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.INFO,'Currently no analytics data available.'));
         }
     }

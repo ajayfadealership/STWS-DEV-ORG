@@ -1,6 +1,17 @@
 ({
     partDistribution:function(component,event,helper){
-        component.set("v.partDistribution", true);
+        var objLI = component.get("v.objLI");
+        if(objLI.received > 0) {
+            component.set("v.partDistribution", true);
+        } else {
+            var errorEvent = $A.get("e.force:showToast");
+            errorEvent.setParams({
+                "type" : "error", 
+                "title": "Error!",
+                "message": "Please enter quantity in 'Received'."
+            }); 
+            errorEvent.fire();
+        }
     },
     closeModel: function(component, event, helper) {
         component.set("v.partDistribution", false)

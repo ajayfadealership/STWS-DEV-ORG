@@ -1,0 +1,148 @@
+<apex:page showHeader="false" sidebar="false" standardStylesheets="false" applyBodyTag="false" applyHtmlTag="false" renderAs="pdf">
+
+<html>
+
+    <head>
+        <link media="all" type="text/css" rel="stylesheet" href="{!URLFOR($Resource.galeys_style)}" />
+    </head>
+
+    <body class="galeys">
+        <div id="page1">
+
+            <div class="container">
+
+                <!-- Header Block -->
+                <div class="row" id="header-block">
+                    <!-- Logo Block -->
+                    <div class="col-5 center">
+                        <img src="{!URLFOR($Resource.galeys_logo)}" height="120px;" />
+                    </div>
+
+                    <div class="col-3">
+                        <!-- Address Block-->
+                        <div class="row left">
+                            <div class="col-12">
+                                <p class="address-line-bold">Galey's Marine</p>
+                                <p class="address-line">2720 Auto Mall Dr</p>
+                                <p class="address-line">Bakersfield, California 93313</p>
+                                <p class="address-line">(661) 327-5711</p>
+                                <p class="address-line">Fax: (661) 831-4077</p>
+                                <p class="address-line">https://www.galeysmarine.com</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-4 b-opt right">
+                        <p class="col-5 b-opt-v bold">Invoice: </p>
+                        <p class="col-7 b-opt-v bold">IN030572</p>
+                        <p class="col-5 b-opt-v">Date: </p>
+                        <p class="col-7 b-opt-v">19-Jun-2020</p>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-4">
+                        <p class="address-line-bold">Sold To: </p>
+                        <p class="address-line-bold">Mr. Ryan Maloche</p>
+                        <p class="address-line"></p>
+                        <p class="address-line">1542 JOHNSON RD</p>
+                        <p class="address-line"></p>
+                        <p class="address-line">BAKERSFIELD, CA 93314</p>
+                        <p class="address-line"></p>
+                        <p class="address-line">rymeloc@gmail.com</p>
+                    </div>
+
+                    <div class="col-8">
+                        <p class="address-line-bold">Mobile: (662) 978-7991</p>
+                    </div>
+                </div>
+
+                <!-- BL Items -->
+                <div class="row">
+
+                    <div class="col-12">
+                        <p class="address-line-bold right">Sales Person: Stepi</p>
+                        <p class="val-input"></p>
+                    </div>
+
+                    <div class="row b-opt">
+                        <div class="col-1 b-opt-h">Qty</div>
+                        <div class="col-3 b-opt-h">Part No.</div>
+                        <div class="col-4 b-opt-h">Description</div>
+                        <div class="col-2 b-opt-h right">Each</div>
+                        <div class="col-2 b-opt-h right">Extend</div>
+                    </div>
+
+                    <div class="row b-opt">
+
+                        <div class="col-1 b-opt-v">1</div>
+                        <div class="col-3 b-opt-v">96000122</div>
+                        <div class="col-4 b-opt-v">HO Universal Nylon Vest Yellow Large / X-Large</div>
+                        <div class="col-2 b-opt-v right">$29.99</div>
+                        <div class="col-2 b-opt-v right">$29.99</div>
+
+
+                        <div class="col-1 b-opt-v">1</div>
+                        <div class="col-3 b-opt-v">20600171</div>
+                        <div class="col-4 b-opt-v">HO Universal Nylon Vest Yellow Small / Medium</div>
+                        <div class="col-2 b-opt-v right">$29.99</div>
+                        <div class="col-2 b-opt-v right">$29.99</div>
+
+
+                        <div class="col-1 b-opt-v">1</div>
+                        <div class="col-3 b-opt-v">96000122</div>
+                        <div class="col-4 b-opt-v">HO Universal Nylon Vest Yellow Large / X-Large</div>
+                        <div class="col-2 b-opt-v right">$29.99</div>
+                        <div class="col-2 b-opt-v right">$29.99</div>
+
+                        <div class="col-1 b-opt-v">1</div>
+                        <div class="col-3 b-opt-v">96000122</div>
+                        <div class="col-4 b-opt-v">HO Universal Nylon Vest Yellow Large / X-Large</div>
+                        <div class="col-2 b-opt-v right">$29.99</div>
+                        <div class="col-2 b-opt-v right">$29.99</div>
+
+
+                        <div class="col-1 b-opt-v">1</div>
+                        <div class="col-3 b-opt-v">20600171</div>
+                        <div class="col-4 b-opt-v">HO Universal Nylon Vest Yellow Small / Medium</div>
+                        <div class="col-2 b-opt-v right">$29.99</div>
+                        <div class="col-2 b-opt-v right">$29.99</div>
+
+
+                        <div class="col-1 b-opt-v">1</div>
+                        <div class="col-3 b-opt-v">96000122</div>
+                        <div class="col-4 b-opt-v">HO Universal Nylon Vest Yellow Large / X-Large</div>
+                        <div class="col-2 b-opt-v right">$29.99</div>
+                        <div class="col-2 b-opt-v right">$29.99</div>
+
+                    </div>
+
+                    <div class="row b-opt">
+                        <div class="col-9 b-opt-h right">Invoice Sub Total</div>
+                        <div class="col-3 b-opt-h right">$3,231.33</div>
+
+                        <div class="col-9 b-opt-h right">Invoice Sub Total</div>
+                        <div class="col-3 b-opt-h right">$3,231.33</div>
+
+                        <div class="col-9 b-opt-h right">Sub Total</div>
+                        <div class="col-3 b-opt-h right">$2,981.33</div>
+                    </div>
+
+                    <div class="row b-opt">
+                        <div class="col-9 b-opt-h right">Visa ending in: 1423 Auth: 181669 Payment Received by StevP on 19-Jun-2020 at 11:16</div>
+                        <div class="col-3 b-opt-h right">$-3,231.33</div>
+
+                        <div class="col-9 b-opt-h right">Balance Due</div>
+                        <div class="col-3 b-opt-h right">$0.00</div>
+                    </div>
+                    
+                </div>
+                <!-- Boat Options - End -->
+
+            </div>
+
+        </div>
+    </body>
+
+    </html>
+</apex:page>

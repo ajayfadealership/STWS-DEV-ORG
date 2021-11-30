@@ -21,19 +21,21 @@
         component.set("v.DealerOptionIdListCCCC", DealerOptionIdListCCCC);
         
         component.set("v.newPLstDealerOptionWraperDLT", lstDOBlank);
-        
-        cmpEvent.setParams({ 
-            "objDOId": objDO.BOATBUILDING__Part_Number__c,
-            "PPStatus": checkStatus,
-            "DOList" : DealerOptionIdListCCCC,
-            "DealerOptionWraper" : lstDOBlank
-        });
-        cmpEvent.fire(); 
-        
-        var cmpEvent2 = $A.get("e.c:DealerOptionEvent");
-        cmpEvent2.setParams({
-            "newPLstDealerOptionWraper": lstDOBlank 
-        });
-        cmpEvent2.fire();  
+        if(cmpEvent != undefined) {
+            cmpEvent.setParams({ 
+                "objDOId": objDO.BOATBUILDING__Part_Number__c,
+                "PPStatus": checkStatus,
+                "DOList" : DealerOptionIdListCCCC,
+                "DealerOptionWraper" : lstDOBlank
+            });
+            cmpEvent.fire(); 
+        }
+        if($A.get("e.c:DealerOptionEvent") != undefined) {
+            var cmpEvent2 = $A.get("e.c:DealerOptionEvent");
+            cmpEvent2.setParams({
+                "newPLstDealerOptionWraper": lstDOBlank 
+            });
+            cmpEvent2.fire();  
+        }
     }
 })

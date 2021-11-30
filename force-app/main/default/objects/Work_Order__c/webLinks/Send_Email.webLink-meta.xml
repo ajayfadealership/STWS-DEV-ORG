@@ -16,5 +16,5 @@
     <protected>false</protected>
     <showsLocation>false</showsLocation>
     <showsStatus>false</showsStatus>
-    <url>/apex/SendWODetailPage?id={!Work_Order__c.Id}</url>
+    <url>/apex/BOATBUILDING__SendWODetailPage?id={!Work_Order__c.Id}</url>
 </WebLink>

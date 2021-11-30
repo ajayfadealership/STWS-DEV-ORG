@@ -13,9 +13,12 @@ public class GoogleAnalyticsIntegration {
     String aToken = '';
     String refreshTokenUrl = '';
     String userId = '';
+
+    List<BOATBUILDING__Custom_Log__c> listCustomLog;
+    
     
     public GoogleAnalyticsIntegration(){
-        
+        listCustomLog = new List<BOATBUILDING__Custom_Log__c>();
     }
     
     //Get Access Token with the help of Auth code
@@ -83,9 +86,9 @@ public class GoogleAnalyticsIntegration {
     public List<List<String>> createRequest(String filterCriteria, String accessToken, String storeLocation) {
         
         List<String> dimensions = new List<String>{'ga:pagePathLevel1','ga:pagePath','ga:year','ga:month','ga:day'};
-            List<String> metrics = new List<String>{'ga:pageviews'};
+        List<String> metrics = new List<String>{'ga:pageviews'};
                 
-                String endPointCustomSetting = storeLocation+'-GoogleAnalyticsEndPoint';
+        String endPointCustomSetting = storeLocation+'-GoogleAnalyticsEndPoint';
         BOATBUILDING__EndPointURL__c objCS = BOATBUILDING__EndPointURL__c.getValues(endPointCustomSetting);
         String filter = 'ga:pagePath=='+filterCriteria;
         
@@ -120,12 +123,15 @@ public class GoogleAnalyticsIntegration {
         req.setHeader('Content-Type', 'application/json');
         System.debug('Request: ' + req);
         
+        listCustomLog.addAll(CustomLogUtil.createLog('request- line 126--'+req, 'GoogleAnalyticsChartsController'));
+        
         Http h = new Http();
         String resp;
         HttpResponse res = h.send(req);
         resp = res.getBody();
         
-        //SendEmailUtility.sendQuickEmail('===GoogleAnalyticsIntegration===Empty rows at line 104========= '+filter+'======Empty rows at line 126========= '+resp);
+        listCustomLog.addAll(CustomLogUtil.createLog('resp- line 132--'+resp, 'GoogleAnalyticsChartsController'));
+       
         if(String.isNOTBlank(resp)){
             resp = resp.replaceAll('start-date', 'startdate');
             resp = resp.replaceAll('end-date', 'enddate');
@@ -135,15 +141,20 @@ public class GoogleAnalyticsIntegration {
             resp = resp.replaceAll('ga:pageValue', 'gapageValue');
             
             System.debug('resp---'+resp);
+            listCustomLog.addAll(CustomLogUtil.createLog('resp- line 142--'+resp, 'GoogleAnalyticsChartsController'));
+
             
             List<List<String>> rows = parseRequest(resp);
-            //SendEmailUtility.sendQuickEmail('===GoogleAnalyticsIntegration===Empty rows at line 139========= '+rows);
+            listCustomLog.addAll(CustomLogUtil.createLog('rows- line 146--'+rows, 'GoogleAnalyticsChartsController'));
             
             if(!rows.isEmpty()){
                 return rows;
             }
         }
         
+        if(!listCustomLog.isEmpty()){
+            insert listCustomLog;
+        }
         return null;
     }
     

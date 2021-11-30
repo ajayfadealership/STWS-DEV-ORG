@@ -22,9 +22,9 @@
                 <label>Customer is waiting</label>
             </value>
             <value>
-                <fullName>Customer doesn&#39;t have down payment</fullName>
+                <fullName>Customer doesn&apos;t have down payment</fullName>
                 <default>false</default>
-                <label>Customer doesn&#39;t have down payment</label>
+                <label>Customer doesn&apos;t have down payment</label>
             </value>
             <value>
                 <fullName>Customer likes another brand better</fullName>

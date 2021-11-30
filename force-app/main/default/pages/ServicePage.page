@@ -1308,8 +1308,12 @@
                 
                 <div id="schedule" class="tabcontent">
                     <apex:outputPanel rendered="{!schedule}" id="sclOPP">
-                        <c:Schedule id="schdlCompCall" />
-                        
+                        <apex:outputPanel rendered="{!partRequest}">
+                            <c:Schedule id="schdlCompCall" />
+                        </apex:outputPanel>
+                        <apex:outputPanel rendered="{!NOT(partRequest)}">
+                            It is an old system, kindly use the new module.
+                        </apex:outputPanel>
                     </apex:outputPanel>
                     <apex:outputPanel rendered="{!if(schedule == false, true, false)}">
                         <label><b style="position: relative; left: 30%;font-size:20px">Sorry! You don't have right to access this module.<br/>Please contact to your administrator. </b></label>

@@ -154,7 +154,7 @@
     <enableSharing>true</enableSharing>
     <enableStreamingApi>true</enableStreamingApi>
     <externalSharingModel>ReadWrite</externalSharingModel>
-    <label>All Payment</label>
+    <label>All Payment(Deprecated)</label>
     <nameField>
         <displayFormat>PN-{000000}</displayFormat>
         <label>Payment Number</label>
@@ -163,7 +163,7 @@
     </nameField>
     <pluralLabel>Payment</pluralLabel>
     <recordTypeTrackHistory>false</recordTypeTrackHistory>
-    <searchLayouts/>
+    <searchLayouts></searchLayouts>
     <sharingModel>ReadWrite</sharingModel>
     <visibility>Public</visibility>
 </CustomObject>

@@ -3,15 +3,19 @@
     <aura:attribute name="fromBBNav" type="Boolean" default="false"/> 
     <aura:attribute name="customSettingSobjRegFeeP" type="System_Configure__c" access="global"/> 
     <aura:attribute name="selectedLookUpRecordACVP" type="sObject" default="{}"/>
-    
+    <aura:attribute name="IventoryId" type="String" default="0"/>
     <aura:attribute name="InvId" type="String" default="0"/> 
     <aura:attribute name="ProId" type="String" default="0"/>
     <aura:attribute name="ProductPriceIdList" type="String[]"/>
+    <aura:attribute name="ProductPriceIdListQT" type="String[]"/>
     <aura:attribute name="DealerOptionIdList" type="String[]"/>
+    <aura:attribute name="DealerOptionIdListQT" type="String[]"/>
     
     <aura:attribute name="ObjQuote" type="Quote__c" default="{'sobjectType ': 'BOATBUILDING__Quote__c'}"/>
     <aura:attribute name="ObjQuoteRR" type="Quote__c" default="{'sobjectType ': 'BOATBUILDING__Quote__c'}"/>
     <aura:registerEvent name="QuoteEVT" type="c:QuoteEvent"/> 
+    <aura:registerEvent name="invEvent" type="c:InvRedirection"/> 
+    
     <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
     <aura:attribute name="NoSalesmanWithoutCost" type="boolean" default="false"/>
     
@@ -21,7 +25,8 @@
         <img src="{!$Resource.Process}" style="position: fixed; left: 48%; top: 48%;" width="50" height="50"/>
     </div>
     
-    <article class="slds-card">
+    <article class="slds-card slds-p-around_x-small">
+        <!--{!v.IventoryId}--> 
         <div class="slds-path"> 
             <div class="slds-grid slds-path__track">
                 <div class="slds-grid slds-path__scroller-container">
@@ -73,16 +78,34 @@
                                     </a>
                                 </li>
                             </ul>
-                            <div id="tab-default-1" class="slds-tabs_default__content slds-show" role="tabpanel" aria-labelledby="tab-default-1__item" style="height: 600px;">
+                            
+                            <div id="tab-default-1" class="slds-tabs_default__content slds-show" role="tabpanel" aria-labelledby="tab-default-1__item" style="height: auto;">
                                 <c:AccountComponent selectedLookUpRecord="{!v.selectedLookUpRecordvalueAcc}" fromBBNav1="{!v.fromBBNav}"/>
                                 
                                 <!-- <lightning:button variant="brand" label="Previous" iconName="utility:chevronleft" iconPosition="left" onclick="{! c.handleClick }" /> -->
-                                <div onclick="{!c.handleClick}" data-value="1" style="height:0px;max-width:auto;">
-                                    <lightning:button variant="brand" label="Next" iconName="utility:chevronright" iconPosition="right" class="rightElement" value="1" />
-                                </div>
+                                
+                                <table>
+                                    <tr>
+                                        <td> 
+                                            <aura:if isTrue="{!v.IventoryId != '0'}">
+                                                <div>
+                                                    <lightning:button variant="brand" iconPosition="left" iconName="utility:chevronleft" label="Back to Inventory List" 
+                                                                            onclick="{! c.backToInvList }" class="leftElement"/>/>
+                                                </div>
+                                            </aura:if>
+                                        </td>
+                                        <td>
+                                            <div onclick="{!c.handleClick}" data-value="1" style="height:0px;max-width:auto;">
+                                                <lightning:button variant="brand" label="Next" iconName="utility:chevronright" iconPosition="right" class="rightElement" value="1" />
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </table>
                             </div>
                             <div id="tab-default-2" class="slds-tabs_default__content slds-hide" role="tabpanel" aria-labelledby="tab-default-2__item">
-                                <c:InventorySelection lstDealerOptionWraperC="{!v.lstDealerOptionWraper}" NoSalesmanWithoutCostC="{!v.NoSalesmanWithoutCost}" InvIdC="{!v.InvId}" ProIdC="{!v.ProId}" ProductPriceIdListC="{!v.ProductPriceIdList}" DealerOptionIdListC="{!v.DealerOptionIdList}"/> 
+                                <c:InventorySelection lstDealerOptionWraperC="{!v.lstDealerOptionWraper}" NoSalesmanWithoutCostC="{!v.NoSalesmanWithoutCost}" 
+                                        InvIdC="{!v.InvId}" ProIdC="{!v.ProId}" ProductPriceIdListC="{!v.ProductPriceIdList}" ProductPriceIdListQTC="{!v.ProductPriceIdListQT}" 
+                                            DealerOptionIdListC="{!v.DealerOptionIdList}" DealerOptionIdListQTC="{!v.DealerOptionIdListQT}" InvlistId="{!v.IventoryId}"/> 
                                 <br/> 
                                 <br/>
                                 <table>

@@ -1,7 +1,9 @@
 <aura:component >
     <aura:attribute name="strId" type="String"/> 
     <aura:attribute name="ProductPriceIdListCCCC" type="String[]"/>
+    <aura:attribute name="ProductPriceIdListQTCCCC" type="String[]"/>
     <aura:attribute name="ProductPriceIdListCCCCBlank" type="String[]" default="{}"/>
+    <aura:attribute name="Quantity" type="Decimal" default="1"/>
     <aura:attribute name="objDOCheck" type="BOOLEAN" />
     
 	<aura:registerEvent name="PPIdEvent" type="c:PPIdEvent"/>

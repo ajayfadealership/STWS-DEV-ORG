@@ -1,0 +1,290 @@
+<aura:component Controller="NewWorkOrderController"
+                implements="flexipage:availableForRecordHome,flexipage:availableForAllPageTypes,lightning:actionOverride,force:hasRecordId,lightning:hasPageReference" access="global">
+    
+    <aura:attribute name="recTyp" type="List" default="[
+                                                       {'label': 'Warranty Work Order', 'value': 'Warranty_Work_Order'},
+                                                       {'label': 'Work Order', 'value': 'Work_Order'},
+                                                       {'label': 'Work Request', 'value': 'Work_Request'}
+                                                       ]"/>  
+    <aura:attribute name="Value" type="String" />
+    <aura:attribute name="selectedRecordId" type="Id" />
+
+    <aura:attribute name="SelectedRecordType" type="List" />
+    <aura:attribute name="layoutSections" type="List" />
+    <aura:attribute name="options" type="List" />
+    <aura:attribute name="Itemoptions" type="List" />
+    <aura:attribute name="ItemDetail" type="List" />
+    <aura:attribute name="UserStoreLoc" type="String" />
+    <aura:attribute name="contactValue" type="String" />
+    <aura:attribute name="recordType" type="String" access="global"/>
+    <aura:attribute name="Assignedto" type="String" access="global"/>
+    <aura:attribute name="ShowRadiobtn" default="false" type="Boolean" access="global"/>
+    <aura:attribute name="AccountId" type="String" access="global"/> 
+    <aura:attribute name="selectedAccountId" type="String" access="global"/> 
+    <aura:attribute name="ItemId" type="String" access="global"/> 
+    <aura:attribute name="disableSelectItem" type="Boolean" access="global"   default="true"/> 
+    <aura:attribute name="showspinner" type="Boolean" access="global"   /> 
+    <aura:attribute name="ItemIdForWWO" type="String" access="global"/> 
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    <aura:handler name="change" value="{!v.ItemId}" action="{!c.onItemchange}"/>
+    <aura:handler name="change" value="{!v.selectedRecordId}" action="{!c.onRecordTypeselect}"/>
+    <aura:attribute name="selectedVlu" type="String" access="global" default="None"/>
+    <aura:attribute name="selectedValue" type="String" access="global" default="None"/>
+    <aura:attribute name="showItemPickLst" type="Boolean" access="global" default="false" />
+    <lightning:navigation aura:id="navService" />
+   <aura:if isTrue="{!v.showspinner}">
+            <div class="spinnerClass">
+                <lightning:spinner alternativeText="Loading" size="medium"  style="position: fixed;top: 0px;bottom: 0px;left: 0px;right: 0px;" />
+            </div>   
+        </aura:if>
+    <div>
+        
+    <div style="background-color:#fff;padding: 3% 2% 2% 2%;border-radius: 3px;">
+        <center>
+         <!--  <aura:if isTrue="{!!v.ShowRadiobtn}">
+                Select Record Type
+                <lightning:radioGroup name="myColors" 
+                                      
+                                      options="{!v.recTyp}"
+                                      value="{!v.Value }"
+                                      type="button"
+                                      onchange="{!c.onRecordTypeselect}"
+                                      />
+            </aura:if> --> 
+        </center>
+        <aura:if isTrue="{!v.SelectedRecordType[0].Name == 'Work Order'}">
+        <p style="font-size:30px">Work Order</p>
+        </aura:if>
+        <aura:if isTrue="{!v.SelectedRecordType[0].Name == 'Warranty Work Order'}">
+            <p style="font-size:30px">Warranty Work Order</p>
+            </aura:if>
+
+            <aura:if isTrue="{!v.SelectedRecordType[0].Name == 'Work Request'}">
+                <p style="font-size:30px">Work Request</p>
+            </aura:if>
+        <hr class="solid"> </hr>
+       
+        
+        <lightning:recordEditForm aura:id="workorder"  recordTypeId="{!v.SelectedRecordType[0].Id}" onsuccess="{!c.handleSuccess}" 
+                                  density="comfy" objectApiName="BOATBUILDING__Work_Order__c">
+            
+            <!-- the messages component is for error messages -->
+            <aura:if isTrue="{!v.SelectedRecordType[0].Name == 'Work Order' || v.SelectedRecordType[0].Name == 'Warranty Work Order'}">
+                <lightning:messages />
+                <div class="slds-box">
+                    <aura:iteration items="{!v.layoutSections}" var="section">
+                        <div class="slds-section slds-is-open"> 
+                           
+                            <h3 class="slds-section__title">
+                                <aura:if isTrue="{!section.label != 'System Information'}">
+                                    <aura:if isTrue="{!section.label != 'Custom Links'}">
+                                         
+                                        <p style="font-size: 20px; color: #0d8ab7;"> {!section.label}</p>
+                                    </aura:if>
+                                </aura:if>
+                            </h3>
+                            <div class="slds-section__content">
+                                
+                               
+                                <div class="slds-grid slds-wrap">
+                                    <aura:iteration items="{!section.lstFields}" var="field">
+                                        
+                                        
+                                        <aura:if isTrue="{!(!field.isReadOnly)}">
+                                            <aura:if isTrue="{!field.fieldName != 'BOATBUILDING__Account__c'}">
+                                                <aura:if isTrue="{!field.fieldName != 'BOATBUILDING__Boat__c'}">
+                                                    
+                                                    <div class="slds-col slds-size_1-of-2">
+                                                        <lightning:inputField aura:id="{!field.fieldName}" fieldName="{!field.fieldName}" />	
+                                                    </div>
+                                                    
+                                                </aura:if>
+                                                <aura:set attribute="else">
+                                                    
+                                                    <div class="slds-col slds-size_1-of-2">
+                                                        <lightning:inputField aura:id="AccId" fieldName="BOATBUILDING__Account__c" value="{!v.selectedAccountId}" onchange="{!c.onworkOrderAccountSelect}" />
+                                                    </div>
+                                                     <aura:if isTrue="{!v.Itemoptions.length != 1}">
+                                                    <div class="slds-col slds-size_1-of-2 slds-form_horizontal">
+                                                        
+                                                        <lightning:select disabled="{!v.disableSelectItem}"  name="mySelect2" label=" Select Item" aura:id="mySelect2" onchange="{!c.handleSelect2}" value="{!v.selectedValue}">
+                                                            <option value="">-- None --</option>
+                                                            <aura:iteration items="{!v.Itemoptions}" var="item">
+                                                                <option  text="{!item.Name}" value="{!item.Id}"  />
+                                                            </aura:iteration>
+                                                        </lightning:select>
+                                                    </div>
+                                                    </aura:if>
+                                                    <div class="slds-col slds-size_1-of-2">
+                                                        <lightning:inputField aura:id="ItId" fieldName="BOATBUILDING__Boat__c" value="{!v.ItemIdForWWO}"  disabled="true"/>
+                                                    </div>
+                                                    
+                                                    
+                                                </aura:set>
+                                            </aura:if>
+                                            
+                                        </aura:if>
+                                        
+                                        
+                                        
+                                    </aura:iteration>
+                                </div>
+                                
+                            </div>
+                        </div>
+                    </aura:iteration> 
+                    
+                    <div class="slds-align_absolute-center">
+                        <lightning:button variant="brand"   onclick="{!c.handleWorkorderSubmit}" name="update" label="Save" />
+                    </div>
+                </div>
+            </aura:if>
+        </lightning:recordEditForm>
+    </div>
+    
+    <aura:if isTrue="{!v.SelectedRecordType[0].Name == 'Work Request'}">  
+        <div style="background-color:#fff;padding: 0% 2% 5% 2%;border-radius: 3px;">
+            <lightning:recordEditForm aura:id="workrequest"  onsuccess="{!c.handleSuccess}" recordTypeId="{!v.SelectedRecordType[0].Id}" objectApiName="BOATBUILDING__Work_Order__c" >      
+                <div class = "slds-col slds-size--1-of-1">
+                    <div class = "slds-grid slds-wrap" >
+                        
+                        <div class = "slds-col slds-size--1-of-1 slds-medium-size--2-of-6 slds-col--padded">
+                            <div class = "slds-form-element">
+                                <div class = "slds-form-element__control">
+                                     <lightning:inputField fieldName="BOATBUILDING__Contact__c" variant="label-stacked" value="{!v.contactValue}"  onchange="{!c.onChangeOfContact}"  />
+                                   
+                                </div>
+                            </div>
+                        </div>
+                         <aura:if isTrue="{!v.options.length != 1}">
+                        <div class = "slds-col slds-size--1-of-1 slds-medium-size--2-of-6 slds-col--padded">
+                            <div class = "slds-form-element">
+                                <div class = "slds-form-element__control">
+                                    <lightning:select disabled="{!v.disableSelectItem}" name="mySelect1" label=" Select Item" aura:id="mySelect1" onchange="{!c.handleSelect}" value="{!v.selectedVlu}">
+                                        <option value="">-- None --</option>
+                                        <aura:iteration items="{!v.options}" var="item">
+                                            <option text="{!item.Name}" value="{!item.Id}"   />
+                                        </aura:iteration>
+                                    </lightning:select>
+                                </div>
+                            </div>
+                        </div>   
+                        </aura:if>
+                        <div class = "slds-col slds-size--1-of-1 slds-medium-size--2-of-6 slds-col--padded">
+                            <div class = "slds-form-element"> 
+                                <div class = "slds-form-element__control">
+                                    <lightning:inputField  fieldName="BOATBUILDING__Account__c" value="{!v.AccountId}" variant="label-stacked" onchange="{!c.onAccountSelect}"/>
+                                </div>
+                            </div>
+                        </div>
+                        <div class = "slds-col slds-size--1-of-1 slds-medium-size--2-of-6 slds-col--padded">
+                            <div class = "slds-form-element">
+                                <div class = "slds-form-element__control">
+                                    <lightning:inputField fieldName="BOATBUILDING__Boat__c" aura:id="item"  variant="label-stacked" value="{!v.ItemId}" disabled="true" onchange="{!c.onItemchange}"/>
+                                </div>
+                            </div>  
+                        </div>
+                        <div class = "slds-col slds-size--1-of-1 slds-medium-size--2-of-6 slds-col--padded">
+                            <div class = "slds-form-element">
+                                <div class = "slds-form-element__control"> 
+                                    <lightning:inputField fieldName="BOATBUILDING__Boat_Make__c"  variant="label-stacked" value="{!v.ItemDetail[0].BOATBUILDING__Boat_Manufacturer__r.Name}" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class = "slds-col slds-size--1-of-1 slds-medium-size--2-of-6 slds-col--padded">
+                            <div class = "slds-form-element">
+                                <div class = "slds-form-element__control">
+                                    <lightning:inputField fieldName="BOATBUILDING__Boat_Model__c"  variant="label-stacked" value="{!v.ItemDetail[0].BOATBUILDING__Boat_Model__c}"/>
+                                </div>
+                            </div>
+                        </div>
+                       <div class = "slds-col slds-size--1-of-1 slds-medium-size--2-of-6 slds-col--padded">
+                            <div class = "slds-form-element">
+                                <div class = "slds-form-element__control">
+                                    <lightning:inputField fieldName="BOATBUILDING__Boat_Year__c"  variant="label-stacked" value="{!v.ItemDetail[0].BOATBUILDING__M_Boat_Year__c}"/>
+                                </div>
+                            </div>
+                        </div>
+                        <div class = "slds-col slds-size--1-of-1 slds-medium-size--2-of-6 slds-col--padded">
+                            <div class = "slds-form-element">
+                                <div class = "slds-form-element__control">
+                                    <lightning:inputField fieldName="BOATBUILDING__Engine_Make__c" variant="label-stacked"  value="{!v.ItemDetail[0].BOATBUILDING__Engine_Manufacturer__r.Name}"/>
+                                </div>
+                            </div>
+                        </div>
+                        <div class = "slds-col slds-size--1-of-1 slds-medium-size--2-of-6 slds-col--padded">
+                            <div class = "slds-form-element">
+                                <div class = "slds-form-element__control">
+                                    <lightning:inputField fieldName="BOATBUILDING__Engine_Model__c" variant="label-stacked" value="{!v.ItemDetail[0].BOATBUILDING__Engine_Model__c}"/>
+                                </div>
+                            </div>
+                        </div>
+                        <div class = "slds-col slds-size--1-of-1 slds-medium-size--2-of-6 slds-col--padded">
+                            <div class = "slds-form-element">
+                                <div class = "slds-form-element__control">
+                                    <lightning:inputField fieldName="BOATBUILDING__Engine_Year__c" variant="label-stacked" value="{!v.ItemDetail[0].BOATBUILDING__Engine_Year__c}"/>
+                                </div>
+                            </div>
+                        </div>
+                        <div class = "slds-col slds-size--1-of-1 slds-medium-size--2-of-6 slds-col--padded">
+                            <div class = "slds-form-element">
+                                <div class = "slds-form-element__control">
+                                    <lightning:inputField fieldName="BOATBUILDING__Assigned_to__c" variant="label-stacked" value="{!v.Assignedto}" onchange="{!c.onChangeOfAssignedto}"/>
+                                </div>
+                            </div>
+                        </div>
+                        <div class = "slds-col slds-size--1-of-1 slds-medium-size--2-of-6 slds-col--padded">
+                            <div class = "slds-form-element">
+                                <div class = "slds-form-element__control">
+                                    <lightning:inputField aura:id="storeLocId" fieldName="BOATBUILDING__Store_Location__c" variant="label-stacked" value="{!v.UserStoreLoc}"/>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class = "slds-col slds-size--1-of-1 slds-medium-size--2-of-6 slds-col--padded">
+                            <div class = "slds-form-element">
+                                <div class = "slds-form-element__control">
+                                    <lightning:inputField  fieldName="BOATBUILDING__Source__c" variant="label-stacked"/>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class = "slds-col slds-size--1-of-1 slds-medium-size--2-of-6 slds-col--padded">
+                            <div class = "slds-form-element">
+                                <div class = "slds-form-element__control">
+                                    <lightning:inputField fieldName="BOATBUILDING__Status__c" variant="label-stacked"/>
+                                </div>
+                            </div>
+                        </div>
+                        <div class = "slds-col slds-size--1-of-1 slds-medium-size--2-of-6 slds-col--padded">
+                            <div class = "slds-form-element">
+                                <div class = "slds-form-element__control">
+                                    <lightning:inputField fieldName="BOATBUILDING__HIN_Number__c"  value="{!v.ItemDetail[0].BOATBUILDING__Boat_HIN_No__c}"  variant="label-stacked"/>
+                                </div>
+                            </div>
+                        </div>
+                        <div class = "slds-col slds-size--1-of-1 slds-medium-size--2-of-6 slds-col--padded">
+                            <div class = "slds-form-element">
+                                <div class = "slds-form-element__control">
+                                    <lightning:inputField aura:id="WrkReqDesId" fieldName="BOATBUILDING__Part_description__c" variant="label-stacked"/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="slds-grid slds-grid--vertical-align-center slds-grid--align-center">
+                    <div class = "slds-col--padded">
+                        <div class = "slds-form-element">
+                            <div class = "slds-form-element__control">
+                                <lightning:button class="slds-m-top_small" variant="brand" onclick="{!c.handleSubmit}" name="update" label="Save" />
+                            </div>
+                        </div>
+                    </div>
+              </div>
+                
+            </lightning:recordEditForm>  
+        </div>
+    </aura:if>
+    
+    </div>
+</aura:component>

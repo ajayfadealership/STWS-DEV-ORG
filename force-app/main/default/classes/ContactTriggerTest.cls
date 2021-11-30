@@ -1,7 +1,8 @@
 @isTest
 public class ContactTriggerTest {
-    private static testmethod void contactTriggerTest(){
+    public static testmethod void contactTriggerTest(){
         BOATBUILDING__TriggerSetting__c objSetting = new BOATBUILDING__TriggerSetting__c();
+       objSetting.SetupOwnerId=Userinfo.getUserId();
         objSetting.BOATBUILDING__ContactTriggerCheckbox__c = true;
         insert objSetting;
         

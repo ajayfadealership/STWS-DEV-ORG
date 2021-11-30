@@ -1,159 +1,156 @@
 public class JLITriggerHandler {
 
     public Static void onBeforeInsert(List<Work_Order_Job_Line_Item__c> lstNewJobLnItem){
+        updatePartLookup(lstNewJobLnItem);
     }
     
-    public Static void onBeforeUpdate(List<Work_Order_Job_Line_Item__c> lstNewJobLnItem, Map<Id, Work_Order_Job_Line_Item__c> mapOldJobLineItem){
+    public Static void onBeforeUpdate(List<Work_Order_Job_Line_Item__c> lstNewJobLnItem, Map<Id, Work_Order_Job_Line_Item__c> mapOldJobLineItem){ }
+    
+    public Static void onBeforeDelete(List<Work_Order_Job_Line_Item__c> lstOldJobLnItem){ }
+    
+    public Static void onAfterInsert(Map<Id, Work_Order_Job_Line_Item__c> mapNewJobLnItem){
+        try {
+            updateInventoryQuantity( getJLIToManageInventory( mapNewJobLnItem, new Map<Id, Work_Order_Job_Line_Item__c>() ), null);
+        } catch(Exception ex) {
+            System.debug('onAfterInsert: ' + ex.getMessage() + ' : ' + ex.getLineNumber()+'\n--\n'+ex.getStackTraceString()); 
+            System_Configure__c objSC = System_Configure__c.getOrgDefaults();
+            if(objSC != null && objSC.Enable_Debug_Mails__c)  {
+                BOATBUILDING__Custom_Log__c objCL = new BOATBUILDING__Custom_Log__c();
+                objCL.Name = 'Inv Management From Job Line Item';
+                String customLog = 'onAfterInsert : \n\n' + ex.getMessage() + ' \n\n ' + ex.getLineNumber()+'\n\n'+ex.getStackTraceString(); 
+                if(customLog.length() >= 131000) {
+                    objCL.BOATBUILDING__Summary__c = customLog.substring(0,131000); 
+                } else {
+                    objCL.BOATBUILDING__Summary__c = customLog; 
+                } 
+                insert objCL;
+            }
+        }
     }
     
-    public Static void onBeforeDelete(List<Work_Order_Job_Line_Item__c> lstOldJobLnItem){
-    }
-    
-    public Static void onAfterInsert(List<Work_Order_Job_Line_Item__c> lstNewJobLnItem){
-        updateInventoryQuantity(lstNewJobLnItem, null);
-    }
-    
-    public Static void onAfterUpdate(List<Work_Order_Job_Line_Item__c> lstNewJobLnItem, Map<Id, Work_Order_Job_Line_Item__c> mapOldJobLineItem){
-        updateInventoryQuantity(lstNewJobLnItem, mapOldJobLineItem);
+    public Static void onAfterUpdate(Map<Id, Work_Order_Job_Line_Item__c> mapNewJobLnItem, Map<Id, Work_Order_Job_Line_Item__c> mapOldJobLineItem){
+        try {
+            updateInventoryQuantity( getJLIToManageInventory( mapNewJobLnItem, mapOldJobLineItem ), mapOldJobLineItem);
+        } catch(Exception ex) {
+            System.debug('onAfterUpdate: ' + ex.getMessage() + ' : ' + ex.getLineNumber()+'\n--\n'+ex.getStackTraceString()); 
+            System_Configure__c objSC = System_Configure__c.getOrgDefaults();
+            if(objSC != null && objSC.Enable_Debug_Mails__c)  {
+                BOATBUILDING__Custom_Log__c objCL = new BOATBUILDING__Custom_Log__c();
+                objCL.Name = 'Inv Management From Job Line Item';
+                String customLog = 'onAfterUpdate : \n\n' + ex.getMessage() + ' \n\n ' + ex.getLineNumber()+'\n\n'+ex.getStackTraceString(); 
+                if(customLog.length() >= 131000) {
+                    objCL.BOATBUILDING__Summary__c = customLog.substring(0,131000); 
+                } else {
+                    objCL.BOATBUILDING__Summary__c = customLog; 
+                } 
+                insert objCL;
+            }
+        }
     }
     
     public Static void onAfterDelete(List<Work_Order_Job_Line_Item__c> lstOldJobLnItem){
-        updateInventoryQuantity(lstOldJobLnItem, null);
+        try {
+            updateInventoryQuantity(lstOldJobLnItem, null);
+        } catch(Exception ex) {
+            System.debug('onAfterUpdate: ' + ex.getMessage() + ' : ' + ex.getLineNumber()+'\n--\n'+ex.getStackTraceString()); 
+            System_Configure__c objSC = System_Configure__c.getOrgDefaults();
+            if(objSC != null && objSC.Enable_Debug_Mails__c)  {
+                BOATBUILDING__Custom_Log__c objCL = new BOATBUILDING__Custom_Log__c();
+                objCL.Name = 'Inv Management From Job Line Item';
+                String customLog = 'onAfterUpdate : \n\n' + ex.getMessage() + ' \n\n ' + ex.getLineNumber()+'\n\n'+ex.getStackTraceString(); 
+                if(customLog.length() >= 131000) {
+                    objCL.BOATBUILDING__Summary__c = customLog.substring(0,131000); 
+                } else {
+                    objCL.BOATBUILDING__Summary__c = customLog; 
+                } 
+                insert objCL;
+            }
+        }
     }
 
-    public static void onBeforeInsertAndUpdate(List<BOATBUILDING__Work_Order_Job_Line_Item__c> lstJLI) {
-        
-        set<String>setPrtNum = new Set<String>();
-        Map<String, Decimal> mapPartDetail = new Map<String, Decimal>();
-        Map<String, String> mapPartId = new Map<String, String>();
-        
-        for(BOATBUILDING__Work_Order_Job_Line_Item__c objJLI: lstJLI) {
-            if(objJLI.BOATBUILDING__Part_Number__c != null) {
-                setPrtNum.add(objJLI.BOATBUILDING__Part_Number__c);
+    private static List<Work_Order_Job_Line_Item__c> getJLIToManageInventory(Map<Id, Work_Order_Job_Line_Item__c> mapNewJobLnItem, Map<Id, Work_Order_Job_Line_Item__c> mapOldJobLineItem) {
+        System.debug('getJLIToManageInventory : ');
+        List<Work_Order_Job_Line_Item__c> lstJLI = new List<Work_Order_Job_Line_Item__c>();
+        List<Work_Order_Job_Line_Item__c> lstJLIQuoteCheck = [  SELECT  Id, BOATBUILDING__Quantity__c, BOATBUILDING__Store_Location__c, BOATBUILDING__Related_to_Job__c,
+                                                                        BOATBUILDING__Related_to_Job__r.BOATBUILDING__Work_Order_Warranty_Work_Order__r.BOATBUILDING__Status__c,
+                                                                        BOATBUILDING__Related_to_Job__r.BOATBUILDING__Work_Order_Warranty_Work_Order__c, BOATBUILDING__Select_Part__c
+                                                                FROM    BOATBUILDING__Work_Order_Job_Line_Item__c WHERE Id IN :mapNewJobLnItem.keySet()];
+        for(Work_Order_Job_Line_Item__c objJLI : lstJLIQuoteCheck) {
+            System.debug('Status: '+objJLI.BOATBUILDING__Related_to_Job__r.BOATBUILDING__Work_Order_Warranty_Work_Order__r.BOATBUILDING__Status__c);
+            System.debug('Status: '+objJLI.BOATBUILDING__Related_to_Job__r.BOATBUILDING__Work_Order_Warranty_Work_Order__c);
+            System.debug('Status: '+objJLI.BOATBUILDING__Related_to_Job__c);
+            if(objJLI.BOATBUILDING__Related_to_Job__c != null && objJLI.BOATBUILDING__Related_to_Job__r.BOATBUILDING__Work_Order_Warranty_Work_Order__c != null
+                && objJLI.BOATBUILDING__Related_to_Job__r.BOATBUILDING__Work_Order_Warranty_Work_Order__r.BOATBUILDING__Status__c != 'Quote' &&
+                    (mapOldJobLineItem.isEmpty() || mapOldJobLineItem.get(objJLI.Id).BOATBUILDING__Quantity__c != objJLI.BOATBUILDING__Quantity__c) ) {
+                        System.debug('objJLI.BOATBUILDING__Quantity__c : '+objJLI.BOATBUILDING__Quantity__c);
+                        lstJLI.add(objJLI);
             }
         }
-        List<BOATBUILDING__Part__c> lstPrt = [SELECT Id, Part_Cost__c, Part_Number__c FROM BOATBUILDING__Part__c WHERE Part_Number__c IN: setPrtNum];
-        for(BOATBUILDING__Part__c objPrt: lstPrt) {
-            if(objPrt.Part_Number__c != null) {
-                mapPartDetail.put(objPrt.Part_Number__c, objPrt.Part_Cost__c);   
-                mapPartId.put(objPrt.Part_Number__c, objPrt.Id);  
+        return lstJLI;
+    }
+
+    public static void updatePartLookup(List<BOATBUILDING__Work_Order_Job_Line_Item__c> lstJLI) {
+        try {
+            set<String>setPrtNum = new Set<String>();
+            Map<String, BOATBUILDING__Part__c> mapPart = new Map<String, BOATBUILDING__Part__c>();
+            Set<Id> setWOJId = new Set<Id>();
+            for(BOATBUILDING__Work_Order_Job_Line_Item__c objJLI: lstJLI) {
+                if(objJLI.BOATBUILDING__Part_Number__c != null) {
+                    setPrtNum.add(objJLI.BOATBUILDING__Part_Number__c);
+                }
+                setWOJId.add(objJLI.BOATBUILDING__Related_to_Job__c);
             }
-        }
-        for(BOATBUILDING__Work_Order_Job_Line_Item__c objJLI: lstJLI) {
-            if(objJLI.BOATBUILDING__Part_Number__c != null) {
-                objJLI.Dealer_Price__c = mapPartDetail.get(objJLI.BOATBUILDING__Part_Number__c);
-                objJLI.Part__c = mapPartId.get(objJLI.BOATBUILDING__Part_Number__c);
+            List<BOATBUILDING__Part__c> lstPrt = [SELECT Id, Part_Cost__c, Part_Number__c FROM BOATBUILDING__Part__c WHERE Part_Number__c IN: setPrtNum];
+            for(BOATBUILDING__Part__c objPrt: lstPrt) {
+                if(objPrt.Part_Number__c != null) {
+                    mapPart.put(objPrt.Part_Number__c, objPrt);  
+                }
+            }
+            for(BOATBUILDING__Work_Order_Job_Line_Item__c objJLI: lstJLI) {
+                if(objJLI.BOATBUILDING__Part_Number__c != null && mapPart.containsKey(objJLI.BOATBUILDING__Part_Number__c)) {
+                    objJLI.Part__c = mapPart.get(objJLI.BOATBUILDING__Part_Number__c).Id;
+                }
+            }
+            Map<Id, BOATBUILDING__Work_Order_Job__c> mapWOJ = new Map<Id, BOATBUILDING__Work_Order_Job__c>([SELECT Id, Store_Location__c FROM BOATBUILDING__Work_Order_Job__c WHERE Id IN :setWOJId]);
+            List<BOATBUILDING__Inventory__c> listInvToQuery = [SELECT Id, BOATBUILDING__Part_Number__c  FROM BOATBUILDING__Inventory__c WHERE BOATBUILDING__Part_Number__c IN: setPrtNum];
+            Map<String, BOATBUILDING__Inventory__c> mapInv = new Map<String, BOATBUILDING__Inventory__c>();
+            for(BOATBUILDING__Inventory__c objInv: listInvToQuery) {
+                mapInv.put(objInv.BOATBUILDING__Part_Number__c, objInv);
+            }
+            Map<String, String> mapPartNumberStoreLocation = new Map<String, String>();
+            for(BOATBUILDING__Work_Order_Job_Line_Item__c objJLI: lstJLI) {
+                if(objJLI.BOATBUILDING__Part_Number__c != null) {
+                    if(!mapInv.containsKey(objJLI.BOATBUILDING__Part_Number__c)) {
+                        mapPartNumberStoreLocation.put(objJLI.BOATBUILDING__Part_Number__c, mapWOJ.get(objJLI.BOATBUILDING__Related_to_Job__c).Store_Location__c);
+                    }
+                    else {
+                        objJLI.BOATBUILDING__Select_Part__c = mapInv.get(objJLI.BOATBUILDING__Part_Number__c).Id;
+                    }
+                }
+            }
+            Map<String, Id> mapPartNumberInvId = PartInventoryManagerController.generateInventory(mapPartNumberStoreLocation);
+            for(BOATBUILDING__Work_Order_Job_Line_Item__c objJLI: lstJLI) {
+                if(mapPartNumberInvId.containsKey(objJLI.BOATBUILDING__Part_Number__c)) {
+                    objJLI.BOATBUILDING__Select_Part__c = mapPartNumberInvId.get(objJLI.BOATBUILDING__Part_Number__c);
+                }
+            }
+        } catch(Exception ex) {
+            System.debug('on Before: ' + ex.getMessage() + ' : ' + ex.getLineNumber()+'\n--\n'+ex.getStackTraceString()); 
+            System_Configure__c objSC = System_Configure__c.getOrgDefaults();
+            if(objSC != null && objSC.Enable_Debug_Mails__c)  {
+                BOATBUILDING__Custom_Log__c objCL = new BOATBUILDING__Custom_Log__c();
+                objCL.Name = 'JLI From updatePartLookup Method';
+                String customLog = 'updatePartLookup : \n\n' + ex.getMessage() + ' \n\n ' + ex.getLineNumber()+'\n\n'+ex.getStackTraceString(); 
+                if(customLog.length() >= 131000) {
+                    objCL.BOATBUILDING__Summary__c = customLog.substring(0,131000); 
+                } else {
+                    objCL.BOATBUILDING__Summary__c = customLog; 
+                } 
+                insert objCL;
             }
         }
     }   
     
-    public static void onJLIQuantityChange(Map<Id, Work_Order_Job_Line_Item__c> newMapJLI, Map<Id, Work_Order_Job_Line_Item__c> oldMapJLI) {
-        try {
-            Map<String, Work_Order_Job_Line_Item__c> newMapJLI2 = new Map<String, Work_Order_Job_Line_Item__c>();
-            Map<String, Work_Order_Job_Line_Item__c> oldMapJLI2 = new Map<String, Work_Order_Job_Line_Item__c>();
-            
-            for(Id objJILId: newMapJLI.keySet()) {
-                if(String.isNotBlank(newMapJLI.get(objJILId).Part_Number__c) && newMapJLI.get(objJILId).Quantity__c != null) {
-                    if(newMapJLI.get(objJILId).Quantity__c != oldMapJLI.get(objJILId).Quantity__c) {
-                        newMapJLI2.put(newMapJLI.get(objJILId).Part_Number__c, newMapJLI.get(objJILId));
-                        oldMapJLI2.put(oldMapJLI.get(objJILId).Part_Number__c, oldMapJLI.get(objJILId));
-                    }  
-                }
-            }
-            List<Inventory__c> lstInv = new List<Inventory__c>();
-            
-            
-            for(Inventory__c objInv:        [Select 
-                                                    Id, Part_Number__c, Quantity__c
-                                            From
-                                                    Inventory__c 
-                                            Where
-                                                    Part_Number__c IN: newMapJLI2.keySet()]) {
-                                                        
-                if(newMapJLI2.get(objInv.Part_Number__c).Quantity__c > oldMapJLI2.get(objInv.Part_Number__c).Quantity__c) {
-                    Decimal Q = newMapJLI2.get(objInv.Part_Number__c).Quantity__c - oldMapJLI2.get(objInv.Part_Number__c).Quantity__c;
-                    if(objInv.Quantity__c != null) {
-                        objInv.Quantity__c -= Q;
-                    } else {
-                        objInv.Quantity__c = (0- Q);
-                    }
-                } else {
-                    Decimal Q = oldMapJLI2.get(objInv.Part_Number__c).Quantity__c - newMapJLI2.get(objInv.Part_Number__c).Quantity__c;
-                    if(objInv.Quantity__c != null) {
-                        objInv.Quantity__c += Q;
-                    } else {
-                        objInv.Quantity__c = Q;
-                    }
-                }
-                 
-                lstInv.add(objInv);
-            }
-            if(!lstInv.isEmpty()) {
-                update lstInv;
-            }
-        } catch(Exception ex) { 
-            System.debug('Debug Log For Exception: '+ex);
-        }
-    }
-    
-    /*public static void onBeforeDelete(List<Work_Order_Job_Line_Item__c> oldLstJLI) {
-        /*Map<String, Work_Order_Job_Line_Item__c> oldMapJLI = new Map<String, Work_Order_Job_Line_Item__c>();  
-        for(Work_Order_Job_Line_Item__c objJlI: oldLstJLI) {
-            if(String.isNotBlank(objJlI.Part_Number__c) && objJlI.Quantity__c != null) {
-                oldMapJLI.put(objJlI.Part_Number__c, objJlI);
-            }
-        }
-        List<Inventory__c> lstInv = new List<Inventory__c>();
-        Set<String> setInvPrtNum = new Set<String>();    
-            
-        for(Inventory__c objInv:        [Select 
-                                                    Id, Part_Number__c, Quantity__c
-                                            From
-                                                    Inventory__c 
-                                            Where
-                                                    Part_Number__c IN: oldMapJLI.keySet()]) {
-        
-            if(objInv.Quantity__c != null) {
-                objInv.Quantity__c += oldMapJLI.get(objInv.Part_Number__c).Quantity__c;
-            } else {
-                objInv.Quantity__c = oldMapJLI.get(objInv.Part_Number__c).Quantity__c;
-            }
-            lstInv.add(objInv);
-            setInvPrtNum.add(objInv.Part_Number__c);
-        }
-        Id invRId = Schema.SObjectType.BOATBUILDING__Inventory__c.getRecordTypeInfosByName().get('Inventory for Parts').getRecordTypeId();
-        
-        
-        for(Part__c objPrt : [Select 
-                                        Id, Name, Part_Number__c, Retail_Price__c, Map_Price__c, Weight__c, Part_Size__c, Part_Color__c, Part_Cost__c, Minimum_Amount__c, Location__c, Vendor_Name__c
-                                From
-                                        Part__c
-                                Where
-                                        Part_Number__c IN: oldMapJLI.keySet() 
-                                AND 
-                                        Part_Number__c NOT IN: setInvPrtNum]) { 
-            
-                Inventory__c objInv = new Inventory__c();
-                objInv.RecordTypeId = invRId;
-                objInv.Part_Name__c = oldMapJLI.get(objPrt.Part_Number__c).Part_Name__c;
-                objInv.Part_Number__c = objPrt.Part_Number__c;
-                objInv.Part_MSRP_Price__c = objPrt.Retail_Price__c;
-                objInv.Map_Price__c = objPrt.Map_Price__c;
-                objInv.Weight__c = objPrt.Weight__c;
-                objInv.Size__c = objPrt.Part_Size__c;
-                objInv.Color__c = objPrt.Part_Color__c;
-                objInv.Cost__c = objPrt.Part_Cost__c;
-                objInv.Minimum_Amount__c = objPrt.Minimum_Amount__c;
-                objInv.Location__c = objPrt.Location__c; 
-                objInv.Vendor__c = objPrt.Vendor_Name__c;
-                objInv.Quantity__c = oldMapJLI.get(objPrt.Part_Number__c).Quantity__c;
-                lstInv.add(objInv);    
-        }
-        
-        if(!lstInv.isEmpty()) {
-            upsert lstInv; 
-        }
-    } */
 
     public Static void updateInventoryQuantity(List<Work_Order_Job_Line_Item__c> lstNewJobLnItem, Map<Id, Work_Order_Job_Line_Item__c> mapOldJobLineItem){
         
@@ -178,6 +175,7 @@ public class JLITriggerHandler {
                 listWrapToProcess.add(objWrap);
             }
         }
+        System.debug('listWrapToProcess : '+listWrapToProcess);
         PartInventoryManagerController.updateInventoryQuantity(listWrapToProcess);
     }
 }

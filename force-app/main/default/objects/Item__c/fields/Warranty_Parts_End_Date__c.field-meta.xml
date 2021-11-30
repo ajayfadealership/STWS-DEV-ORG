@@ -3,7 +3,7 @@
     <fullName>Warranty_Parts_End_Date__c</fullName>
     <deprecated>false</deprecated>
     <externalId>false</externalId>
-    <formula>Related_to_Inventory__r.Warranty_Parts_End_Date__c</formula>
+    <formula>DATE( YEAR( Warranty_Start_Date_F__c ) + Warranty_Parts_Term_F__c , MONTH( Warranty_Start_Date_F__c ), DAY( Warranty_Start_Date_F__c ) )</formula>
     <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
     <label>Warranty Parts End Date</label>
     <required>false</required>

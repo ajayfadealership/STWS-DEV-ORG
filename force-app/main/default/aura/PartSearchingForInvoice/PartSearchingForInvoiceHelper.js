@@ -10,6 +10,12 @@
             component.set("v.isSearchLoading", false);
                 console.log('searchResult',JSON.parse(response.getReturnValue()));
                 component.set("v.searchResults", JSON.parse(response.getReturnValue()));
+                var results = response.getReturnValue();
+                if(typeof results == "undefined"){
+                    component.set("v.searchResults", []);
+                }
+                
+                
         });
 
         $A.enqueueAction(searchAction);

@@ -1,0 +1,25 @@
+<aura:component implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction" access="global" controller="InventoryPictureUplaoderCtrl">
+    
+    <aura:attribute name="recordId" type="String" access="global"/>
+    <aura:attribute type='Boolean' name="isFileExist" default="false" access="global" />
+    <aura:attribute type='String' name="fileName" default="" access="global" />
+    <aura:attribute type='String' name="fileLabel" default="" access="global" />
+    <aura:attribute name="filetype" type="List" default="['.png', '.jpg', '.jpeg']" />
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    <aura:attribute name="fileId" type="String" default="" access="global"/>
+    <aura:if isTrue="{!v.isFileExist}">
+       <B> {!v.fileLabel}  </B>
+        <lightning:fileCard fileId="{!v.fileId}" description="{!v.fileLabel}"/>
+       
+        <aura:set attribute="else">
+            <lightning:fileUpload  name="name"
+                label="{!v.fileLabel}"
+                multiple="false"
+                accept="{!v.filetype}" 
+                recordId="{!v.recordId}"
+                onuploadfinished="{! c.FileUploaded}"/>
+        </aura:set>
+
+    </aura:if>
+ 
+</aura:component>

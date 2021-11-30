@@ -3,7 +3,7 @@
     <fullName>Friends_City__c</fullName>
     <deprecated>false</deprecated>
     <externalId>false</externalId>
-    <label>Friend&#39;s City</label>
+    <label>Friend&apos;s City</label>
     <length>255</length>
     <required>false</required>
     <trackFeedHistory>false</trackFeedHistory>

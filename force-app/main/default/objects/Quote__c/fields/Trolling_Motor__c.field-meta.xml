@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Trolling_Motor__c</fullName>
+    <deleteConstraint>SetNull</deleteConstraint>
+    <deprecated>false</deprecated>
+    <externalId>false</externalId>
+    <label>Trolling Motor</label>
+    <lookupFilter>
+        <active>true</active>
+        <filterItems>
+            <field>Inventory__c.RecordTypeId</field>
+            <operation>equals</operation>
+            <value>Trolling Motor</value>
+        </filterItems>
+        <isOptional>false</isOptional>
+    </lookupFilter>
+    <referenceTo>Inventory__c</referenceTo>
+    <relationshipLabel>Quote (Trolling Motor)</relationshipLabel>
+    <relationshipName>Trolling_Motor</relationshipName>
+    <required>false</required>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Lookup</type>
+</CustomField>

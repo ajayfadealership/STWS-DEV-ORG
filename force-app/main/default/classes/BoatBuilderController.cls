@@ -3,8 +3,14 @@
 * Organization:        CloudCodiots LLP.
 * Created Date:        21/10/2016
 * Last Modified Date:  22/03/2018
+* To be modified
 */
 public class BoatBuilderController {
+    public Boolean isSideContent { get; set; }
+    public Boolean isBowContent { get; set; }
+    public Boolean isCanadian { get; set; }
+    public Boolean isCanadianCurrency {get; set;}
+    private String emailDebugBody = '';
     public List<SelectOption> setModelVariant { get; set; }
     
     public String selectedModelVariant { get; set; }
@@ -93,6 +99,10 @@ public class BoatBuilderController {
     public String smVrnt { get; set; }
     public Decimal dealerOptionTotal { get; set; }
     public Decimal dealerOptionCostTotal { get; set; }
+
+    public Decimal cwoRetailTotal { get; set; }
+    public Decimal cwoDealerTotal { get; set; }
+
     Decimal tempFreight = 0.00;
     Decimal tempPrep = 0.00;
     Decimal tempCustom = 0.00;
@@ -122,6 +132,7 @@ public class BoatBuilderController {
     public String delDO { get; set; }
     public String pnDO { get; set; } 
     public String tcDo { get; set; }
+    public String qtDo { get; set; }
     
     public String selectedType { get; set; }
     public List<SelectOption> lstType { get; set; }
@@ -139,9 +150,19 @@ public class BoatBuilderController {
     
     public Product__c objNewProduct { get; set; }
     public String ST { get; set; }
+
+    public List<WritinCustomOption> lstWritinCustomOption { get; set; }
+
+
+    Set<String> setcodeId = new Set<String>();
+    Map<String, Decimal> mapCodeQuantity = new Map<String, Decimal>();
     public PageReference checkAccess() {
-        String strAccessKey = AccessControllCheck.ckeckAccess();
-        
+        String strAccessKey = '';
+        if(!Test.isRunningTest()) {
+            strAccessKey = AccessControllCheck.ckeckAccess();
+        } else {
+            strAccessKey = 'Sales';
+        }
         if(!strAccessKey.containsIgnoreCase('Sales')) {
             return new PageReference('/apex/ContactToYourAdministrator');
         }
@@ -157,6 +178,19 @@ public class BoatBuilderController {
         
         
         try {
+            if(UserInfo.isMultiCurrencyOrganization()){
+                isCanadianCurrency = true;
+            }else{
+                isCanadianCurrency = false;
+            }
+            //isCanadianCurrency = true;
+            //isCanadianCurrency = true; // for testing
+            isSideContent = false;
+            isBowContent = false;
+            isCanadian = false;
+            cwoRetailTotal = 0.00;
+            cwoDealerTotal = 0.00; 
+            lstWritinCustomOption = new List<WritinCustomOption>();
             objNewProduct = new Product__c();
             QuoteDisclaimer = '';
             BOATBUILDING__System_Configure__c objSCC = BOATBUILDING__System_Configure__c.getOrgDefaults();
@@ -182,6 +216,7 @@ public class BoatBuilderController {
             delDO = '0.00';
             pnDO = '';
             tcDo = '';
+            qtDo = '1';
             InvUpdateStatus = false;
             ST = '0';
             showPopup = false;
@@ -262,6 +297,7 @@ public class BoatBuilderController {
             
             
             if(ApexPages.currentPage().getParameters().get('Id') != null){
+                
                 generateQuoteFromPrint();
             }
             
@@ -272,72 +308,60 @@ public class BoatBuilderController {
                 buttonRenderForCustomerDetail =true;
                 buttonRenderForSaveAndReCal = true;
                 buttonRenderForPlaceOrder = false;
-                objInventory2 = [Select 
-                                 i.Transmission_Gearbox_SN__c,
-                                 i.Year__c, 
-                                 i.Trailer_VIN__c,
-                                 i.Boat_Length_in_feets__c, 
-                                 i.SystemModstamp, 
-                                 i.Stage__c, 
-                                 i.Part_Number__c, 
-                                 i.Total_Dealer_Price__c,
-                                 i.OwnerId, 
-                                 i.Hull_ID__c,
-                                 i.Name, 
-                                 i.Model__c, 
-                                 i.Model_Variant__c, 
-                                 i.Manufacturer__c, 
-                                 i.Location__c, 
-                                 i.LastViewedDate, 
-                                 i.RecordTypeId,
-                                 i.LastReferencedDate, 
-                                 i.LastModifiedDate, 
-                                 i.LastModifiedById, 
-                                 i.LastActivityDate, 
-                                 i.IsDeleted, 
-                                 i.Interest_Start_Date__c,
-                                 i.Id, 
-                                 i.HIN_Number__c, 
-                                 i.Engine_SN__c,
-                                 i.Dealer__c, 
-                                 i.Dealer_Stock__c, 
-                                 i.Dealer_Status__c,  
-                                 i.Cost__c,
-                                 i.Dealer_Flat_Discount__c, 
-                                 i.Dealer_Discount__c, 
-                                 i.Dealer_Comments__c, 
-                                 i.Dealer_COD_Discount__c, 
-                                 i.Dealer_Base_Price__c,
-                                 i.Days_on_Lot__c, 
-                                 i.Date_First_on_Sales_Lot__c, 
-                                 i.Curtailment_Start_Date__c, 
-                                 i.CreatedDate, 
-                                 i.CreatedById, 
-                                 i.Suggested_List_Price__c, 
-                                 i.RecordType.Name,
-                                 (
-                                     Select 
-                                     Id, 
-                                     IsDeleted, 
-                                     Name, 
-                                     Name__c,
-                                     Related_to_Inventory__c, 
-                                     Item_Description__c, 
-                                     Discount__c,
-                                     Dealer_Price__c, 
-                                     Option_Category__c,
-                                     Price__c, 
-                                     Product_Code__c, 
-                                     Quantity__c,
-                                     Non_Taxable__c 
-                                     
-                                     From   
-                                     BOATBUILDING__Inventory_Line_Items__r
-                                 )
-                                 From 
-                                 BOATBUILDING__Inventory__c i 
-                                 where 
-                                 Id=: ApexPages.currentPage().getParameters().get('invId')];
+                objInventory2 = [Select     i.Transmission_Gearbox_SN__c, i.Year__c,  i.Trailer_VIN__c, i.Boat_Length_in_feets__c,  i.SystemModstamp,  i.Stage__c,  i.Part_Number__c,  i.Total_Dealer_Price__c, i.OwnerId, 
+                                            i.Hull_ID__c, i.Name,  i.Model__c,  i.Model_Variant__c,  i.Manufacturer__c,  i.Location__c,  i.LastViewedDate,  i.RecordTypeId, i.LastReferencedDate,  i.LastModifiedDate, 
+                                            i.LastModifiedById,  i.LastActivityDate,  i.IsDeleted,  i.Interest_Start_Date__c, i.Id,  i.HIN_Number__c,  i.Engine_SN__c, i.Dealer__c,  i.Dealer_Stock__c,  i.Dealer_Status__c,  
+                                            i.Cost__c, i.Dealer_Flat_Discount__c,  i.Dealer_Discount__c,  i.Dealer_Comments__c,  i.Dealer_COD_Discount__c,  i.Dealer_Base_Price__c, i.Days_on_Lot__c,  i.Date_First_on_Sales_Lot__c, 
+                                            i.Curtailment_Start_Date__c,  i.CreatedDate,  i.CreatedById,  i.Suggested_List_Price__c,  i.RecordType.Name, i.BOATBUILDING__Engine_1_SN__c, i.BOATBUILDING__Engine_2_SN__c,
+                                            i.BOATBUILDING__Engine_3_SN__c, i.BOATBUILDING__Engine_4_SN__c, 
+                                            (
+                                                 Select  Id,  IsDeleted,  Name,  Name__c, Related_to_Inventory__c,  Item_Description__c,  Discount__c, Dealer_Price__c,  Option_Category__c, Price__c,  Product_Code__c, 
+                                                        Quantity__c, Non_Taxable__c, BOATBUILDING__Total_Retail_Price__c, BOATBUILDING__Total_Dealer_Price__c  From    BOATBUILDING__Inventory_Line_Items__r
+                                            )
+                                From  BOATBUILDING__Inventory__c i  where  Id=: ApexPages.currentPage().getParameters().get('invId')];
+
+                
+                if(objInventory2.BOATBUILDING__Inventory_Line_Items__r.size() > 0){
+                    for(BOATBUILDING__Inventory_Line_Item__c objInventoryLineItem : objInventory2.BOATBUILDING__Inventory_Line_Items__r) {
+                        mapCodeQuantity.put(objInventoryLineItem.Product_Code__c, objInventoryLineItem.Quantity__c);
+                        setcodeId.add(objInventoryLineItem.Product_Code__c);
+                        lstInventoryLineItem.add(objInventoryLineItem);
+                        if(objInventoryLineItem.BOATBUILDING__Option_Category__c == 'CWO') {
+                            lstWritinCustomOption.add(new WritinCustomOption(true, 
+                                                                                    objInventoryLineItem.BOATBUILDING__Name__c, 
+                                                                                    objInventoryLineItem.BOATBUILDING__Quantity__c, 
+                                                                                    objInventoryLineItem.BOATBUILDING__Price__c, 
+                                                                                    objInventoryLineItem.BOATBUILDING__Dealer_Price__c, 
+                                                                                    objInventoryLineItem.BOATBUILDING__Product_Code__c, 
+                                                                                    objInventoryLineItem.BOATBUILDING__Non_Taxable__c));
+                            cwoRetailTotal += objInventoryLineItem.BOATBUILDING__Total_Retail_Price__c;
+                            cwoDealerTotal += objInventoryLineItem.BOATBUILDING__Total_Dealer_Price__c;
+
+                            BOATBUILDING__Quote_Line_Item__c objQLI = new BOATBUILDING__Quote_Line_Item__c();
+                            objQLI.Option_Category__c = 'CWO';
+                            objQLI.Name = 'QLI'; 
+                            if(objInventoryLineItem.BOATBUILDING__Name__c != null){
+                                objQLI.Name__c = objInventoryLineItem.BOATBUILDING__Name__c;
+                            }
+                            if(objInventoryLineItem.BOATBUILDING__Price__c != null){
+                                objQLI.Total_Price__c = objInventoryLineItem.BOATBUILDING__Price__c;
+                            }
+                            if(objInventoryLineItem.BOATBUILDING__Dealer_Price__c != null){
+                                objQLI.Dealer_Price__c = objInventoryLineItem.BOATBUILDING__Dealer_Price__c;
+                            }
+                            objQLI.Date__c =  Date.today(); 
+                            if(objInventoryLineItem.BOATBUILDING__Product_Code__c != null){
+                                objQLI.Product_Code__c = objInventoryLineItem.BOATBUILDING__Product_Code__c;
+                            }
+                            if(objInventoryLineItem.BOATBUILDING__Quantity__c != null){
+                                objQLI.Quantity__c = objInventoryLineItem.BOATBUILDING__Quantity__c;
+                            }
+                            objQLI.Non_Taxable__c = objInventoryLineItem.BOATBUILDING__Non_Taxable__c;
+                            lstQuoteLineItem.add(objQLI);
+                        }   
+                    }
+                }
+                System.debug('Debug Log For mapCodeQuantity 1: '+mapCodeQuantity);
                 if(objInventory2.RecordType.Name != null && objInventory2.RecordType.Name == 'New Boats') {
                     selectedType = 'New Boat'; 
                 } else if(objInventory2.RecordType.Name != null && objInventory2.RecordType.Name == 'Used Boats') {
@@ -345,8 +369,6 @@ public class BoatBuilderController {
                 } else {
                     selectedType = objInventory2.RecordType.Name; 
                 }
-                
-                
                 
                 if(objInventory2.Stage__c != null && objInventory2.Stage__c.equalsignoreCase('Ordered')) {
                     InvUpdateStatus = true; 
@@ -408,7 +430,12 @@ public class BoatBuilderController {
                 //MfgOptTota = calculateOptionsPrice;
                 if(objInventory2.Manufacturer__c != null){
                     strSupraName = objInventory2.Manufacturer__c;
-                    String ManufacturerCheck = [Select Id,Name from BOATBUILDING__Manufacturer__c where Name =: objInventory2.Manufacturer__c limit 1].Id;
+                    List<BOATBUILDING__Manufacturer__c> lstManu = [Select Id,Name from BOATBUILDING__Manufacturer__c 
+                                                                    where Name =: objInventory2.Manufacturer__c AND RecordType.DeveloperName = 'Boat_Manufacturer' limit 1];
+                    String ManufacturerCheck = '';
+                    if(!lstManu.isEmpty()) {                                                
+                        ManufacturerCheck = lstManu[0].Id;
+                    }
                     if(ManufacturerCheck != null && ManufacturerCheck != '') {
                         selectedManufacture = ManufacturerCheck;
                     }
@@ -439,89 +466,27 @@ public class BoatBuilderController {
                 if(objInventory2.Year__c != null && (!modelVarientFlag) && !strRecordTypeName.equalsIgnoreCase('Used Boats')){
                     if(selectedModel != null){
                         
-                        
-                        objProduct = [Select 
-                                      Sale_Price__c, 
-                                      Boat_Length_in_feets__c,
-                                      Transmission_Gearbox_SN__c, 
-                                      State__c,
-                                      M_Manufacturer1__c,
-                                      Product_Short_Description__c, 
-                                      Product_Manufacturer__c, 
-                                      Product_Long_Description__c, 
-                                      Part_Number__c, 
-                                      M_Dealer_Base_Price__c,
-                                      Name, 
-                                      M_Year__c,
-                                      Trailer_VIN__c,  
-                                      Trailer_Trade_Over_Allowance_Calculated__c, 
-                                      M_Trailer_Trade_Allowance__c, 
-                                      M_Trailer_Sales_Tax__c,
-                                      Engine_SN__c, 
-                                      M_Model_Variant__c,
-                                      M_Dealer_Discount__c,
-                                      M_Dealer_COD_Discount__c,
-                                      M_Dealer_Flat_Discount__c,
-                                      M_Trailer_Reg_Fee__c, 
-                                      M_Trailer_MSRP_PRICE__c, 
-                                      M_Trailer_Actual_Cost_Value_ACV__c, 
-                                      M_Trade_PayOFF__c, 
-                                      M_Total_Price_Calculated__c, 
-                                      M_Hidden_Box__c, 
-                                      M_Total_Over_Allowance_Calculated__c, 
-                                      M_Deal_Margin__c,
-                                      M_Total_MSRP__c, 
-                                      M_Total_Due__c, 
-                                      M_Total_Amount_Financed_Calculated__c, 
-                                      M_Finance_Term__c,
-                                      M_Rfinance_Rate__c, 
-                                      M_Retail_Price__c, 
-                                      M_Quantity__c, 
-                                      Freight__c,  
-                                      M_Product_Family__c,  
-                                      M_Payment__c, 
-                                      MModel2__c,  
-                                      M_Manufacture_Status__c,  
-                                      M_Down_Payment__c,
-                                      M_Doc_Fee__c, 
-                                      M_Discount__c, 
-                                      M_Description__c,  
-                                      M_Dealer_Stock__c,
-                                      M_Dealer_Status__c, 
-                                      Prep__c,   
-                                      M_Dealer_Comments__c,  
-                                      M_Boat_Trade_Over_Allowance_Calculated__c, 
-                                      M_Boat_Trade_Allowance__c, 
-                                      M_Boat_Sales_Tax_Calculated__c, 
-                                      M_Boat_Reg_Fee__c, 
-                                      M_Boat_MSRP_PRICE__c, 
-                                      M_Boat_Actual_Cost_Value_ACV__c, 
-                                      M_Net_Selling_Price_Calculated__c, 
-                                      LastViewedDate, 
-                                      LastReferencedDate, 
-                                      LastModifiedDate, 
-                                      LastModifiedById, 
-                                      LastActivityDate, Id, 
-                                      Hull_Id__c, 
-                                      Dealer__c, 
-                                      Cost_Price__c, 
-                                      M_Your_Price_Calculated__c, 
-                                      M_Product_Salesperson_new__c 
-                                      From 
-                                      
-                                      BOATBUILDING__Product__c p 
-                                      where 
-                                      BOATBUILDING__Product_Manufacturer__c =: objManufacurer.Id 
-                                      AND
-                                      MModel2__c=: selectedModel 
-                                      AND 
-                                      M_Year__c =: objInventory2.Year__c AND Product_Type__c =: selectedType
-                                      limit 1];
+                        emailDebugBody += 'objManufacurer.Id: '+objManufacurer.Id + '\n';
+                        emailDebugBody += 'selectedModel: '+selectedModel + '\n';
+                        emailDebugBody += 'objInventory2.Year__c: '+objInventory2.Year__c + '\n';
+                        emailDebugBody += 'selectedType: '+selectedType + '\n';
+                        objProduct = [Select  
+                                                Sale_Price__c,  Boat_Length_in_feets__c, Transmission_Gearbox_SN__c,  State__c, M_Manufacturer1__c, Product_Short_Description__c,  Product_Manufacturer__c,  Product_Long_Description__c, 
+                                                Part_Number__c,  M_Dealer_Base_Price__c, Name,  M_Year__c, Trailer_VIN__c,   Trailer_Trade_Over_Allowance_Calculated__c,  M_Trailer_Trade_Allowance__c,  M_Trailer_Sales_Tax__c,
+                                                Engine_SN__c,  M_Model_Variant__c, M_Dealer_Discount__c, M_Dealer_COD_Discount__c, M_Dealer_Flat_Discount__c, M_Trailer_Reg_Fee__c,  M_Trailer_MSRP_PRICE__c,  M_Trailer_Actual_Cost_Value_ACV__c, 
+                                                M_Trade_PayOFF__c,  M_Total_Price_Calculated__c,  M_Hidden_Box__c,  M_Total_Over_Allowance_Calculated__c,  M_Deal_Margin__c, M_Total_MSRP__c,  M_Total_Due__c,  M_Total_Amount_Financed_Calculated__c, 
+                                                M_Finance_Term__c, M_Rfinance_Rate__c,  M_Retail_Price__c,  M_Quantity__c,  Freight__c,   M_Product_Family__c,   M_Payment__c,  MModel2__c,   M_Manufacture_Status__c,   M_Down_Payment__c,
+                                                M_Doc_Fee__c,  M_Discount__c,  M_Description__c,   M_Dealer_Stock__c, M_Dealer_Status__c,  Prep__c,    M_Dealer_Comments__c,   M_Boat_Trade_Over_Allowance_Calculated__c,  M_Boat_Trade_Allowance__c, 
+                                                M_Boat_Sales_Tax_Calculated__c,  M_Boat_Reg_Fee__c,  M_Boat_MSRP_PRICE__c,  M_Boat_Actual_Cost_Value_ACV__c,  M_Net_Selling_Price_Calculated__c,  Id,  Hull_Id__c,  Dealer__c, 
+                                                Cost_Price__c,  M_Your_Price_Calculated__c,  M_Product_Salesperson_new__c 
+                                    From 
+                                                BOATBUILDING__Product__c p 
+                                    where  BOATBUILDING__Product_Manufacturer__c =: objManufacurer.Id  AND MModel2__c=: selectedModel  AND  M_Year__c =: objInventory2.Year__c AND Product_Type__c =: selectedType limit 1];
                     }
                     
                     //SendEmailUtility.sendQuickEmail('Email For Product: '+objProduct);
                 }else if(objInventory2.Year__c != null && modelVarientFlag  && !strRecordTypeName.equalsIgnoreCase('Used Boats')){
-                    if(selectedModelVariant != null){ 
+                    if(selectedModelVariant != null) { 
                         objProduct = [Select SystemModstamp, Sale_Price__c,Boat_Length_in_feets__c, M_Manufacturer1__c,Transmission_Gearbox_SN__c, Product_Short_Description__c,State__c, Product_Manufacturer__c, Product_Long_Description__c,
                                       Part_Number__c, Name,M_Model_Variant__c ,Trailer_VIN__c, M_Year__c,  Trailer_Trade_Over_Allowance_Calculated__c, M_Trailer_Trade_Allowance__c, 
                                       M_Trailer_Sales_Tax__c,Engine_SN__c, M_Trailer_Reg_Fee__c,M_Dealer_Discount__c,M_Dealer_COD_Discount__c,M_Dealer_Flat_Discount__c,
@@ -545,6 +510,10 @@ public class BoatBuilderController {
                         lstCheckBoxWraper = new List<CheckBoxWraper>();
                         for(BOATBUILDING__ProductPrice__c objProductPriceForSelectedCategory : mapSelectedCategory.get(strMapValues)){
                             if(selectedOptionsforInventory.contains(String.valueOf(objProductPriceForSelectedCategory.ProductSelected_Category__c))){
+                                //mapCodeQuantity
+                                if(mapCodeQuantity.containsKey(objProductPriceForSelectedCategory.Product_Code__c)) {
+                                    objProductPriceForSelectedCategory.Quantity__c = mapCodeQuantity.get(objProductPriceForSelectedCategory.Product_Code__c);
+                                }
                                 lstCheckBoxWraper.add(new CheckBoxWraper(true, lstCheckBoxWraper.size()+1, objProductPriceForSelectedCategory));
                                 
                                 BOATBUILDING__Quote_Line_Item__c objQLI = new BOATBUILDING__Quote_Line_Item__c();
@@ -554,8 +523,9 @@ public class BoatBuilderController {
                                 objQLI.Total_Price__c = objProductPriceForSelectedCategory.ProductRetail_Price__c;
                                 objQLI.Product_Code__c = objProductPriceForSelectedCategory.Product_Code__c;
                                 objQLI.Dealer_Price__c = objProductPriceForSelectedCategory.Dealer_Price__c;
+                                objQLI.Quantity__c = mapCodeQuantity.containsKey(objProductPriceForSelectedCategory.Product_Code__c) ? mapCodeQuantity.get(objProductPriceForSelectedCategory.Product_Code__c) : 1;
                                 objQLI.Date__c =  Date.today();
-                                MfgOptTota = MfgOptTota + objProductPriceForSelectedCategory.ProductRetail_Price__c;
+                                MfgOptTota = MfgOptTota + (objProductPriceForSelectedCategory.ProductRetail_Price__c * objQLI.Quantity__c);
                                 lstQuoteLineItem.add(objQLI);
                             } else {  
                                 
@@ -573,6 +543,8 @@ public class BoatBuilderController {
                     System.debug('U objInventory2.totalPrice: '+totalPrice);
                     System.debug('U objInventory2.Suggested_List_Price__c: '+objInventory2.Suggested_List_Price__c);
                     
+                    
+
                     for(String strUtil : mapSelectedCategory.keySet()){
                         System.debug('Debug log for strUtil'+strUtil); 
                         lstPriceAndProductOptionWraperClass.add(new PriceAndProductOptionWraperClass(strUtil, mapCheckBoxWraper.get(strUtil)));
@@ -580,32 +552,36 @@ public class BoatBuilderController {
                     
                     
                     
-                    List<BOATBUILDING__Dealer_Option__c> lstDealerOption = [SELECT 
-                                                                            Id,
-                                                                            Name,
-                                                                            Part_Number__c,
-                                                                            Retail_Price__c,
-                                                                            Cost__c,
-                                                                            Non_Taxable__c
-                                                                            FROM
-                                                                            BOATBUILDING__Dealer_Option__c];
+                    List<BOATBUILDING__Dealer_Option__c> lstDealerOption = BOATBUILDING__Dealer_Option__c.getAll().values();
+                    // [SELECT 
+                    //                                                         Id,
+                    //                                                         Name,
+                    //                                                         Part_Number__c,
+                    //                                                         Retail_Price__c,
+                    //                                                         Cost__c,
+                    //                                                         Non_Taxable__c
+                    //                                                         FROM
+                    //                                                         BOATBUILDING__Dealer_Option__c];
                     Map<String, BOATBUILDING__Inventory_Line_Item__c> mapILI= new Map<String, BOATBUILDING__Inventory_Line_Item__c>();
                     if(objInventory2.BOATBUILDING__Inventory_Line_Items__r.size() > 0){
                         for(BOATBUILDING__Inventory_Line_Item__c objInventoryLineItem : objInventory2.BOATBUILDING__Inventory_Line_Items__r) {
                             if(objInventoryLineItem.Product_Code__c != null){
                                 mapILI.put(objInventoryLineItem.Product_Code__c, objInventoryLineItem);     
+                                System.debug('objInventoryLineItem load loop>>: '+objInventoryLineItem);
                             }
                         }
                     }
+
                     Set<String> ProductCodeForNonExist = new Set<String>();
                     
                     for(BOATBUILDING__Dealer_Option__c objDP : lstDealerOption){
                         ProductCodeForNonExist.add(objDP.Part_Number__c);  
                         if(mapILI.keySet().contains(objDP.Part_Number__c)){
                             objDP.Non_Taxable__c = mapILI.get(objDP.Part_Number__c).Non_Taxable__c;
+                            objDP.Quantity__c = mapILI.get(objDP.Part_Number__c).Quantity__c;
                             lstDealerOptionWraper.add(new DealerOptionWraper(true, objDP, false));
-                            dealerOptionTotal += objDP.Retail_Price__c;
-                            dealerOptionCostTotal += objDP.Cost__c;
+                            dealerOptionTotal += objDP.Retail_Price__c * objDP.Quantity__c;
+                            dealerOptionCostTotal += objDP.Cost__c * objDP.Quantity__c;
                             
                             BOATBUILDING__Quote_Line_Item__c objQLI = new BOATBUILDING__Quote_Line_Item__c();
                             objQLI.Name = 'QLI';
@@ -615,6 +591,7 @@ public class BoatBuilderController {
                             objQLI.Total_Price__c = objDP.Retail_Price__c;
                             objQLI.Date__c =  Date.today();
                             objQLI.Dealer_Price__c = objDP.Cost__c;
+                            objQLI.Quantity__c =  objDP.Quantity__c;
                             objQLI.Product_Code__c = objDP.Part_Number__c ;
                             objQLI.Non_Taxable__c = mapILI.get(objDP.Part_Number__c).Non_Taxable__c;
                             lstQuoteLineItem.add(objQLI);
@@ -628,13 +605,14 @@ public class BoatBuilderController {
                         for(BOATBUILDING__Inventory_Line_Item__c objInventoryLineItem : objInventory2.BOATBUILDING__Inventory_Line_Items__r) {
                             if(objInventoryLineItem.BOATBUILDING__Option_Category__c.equalsIgnoreCase('Dealer Options')) {
                                 if(!ProductCodeForNonExist.contains(objInventoryLineItem.BOATBUILDING__Product_Code__c)) {
-                                    dealerOptionTotal += objInventoryLineItem.BOATBUILDING__Price__c;
-                                    dealerOptionCostTotal += objInventoryLineItem.BOATBUILDING__Dealer_Price__c;
+                                    dealerOptionTotal += objInventoryLineItem.BOATBUILDING__Price__c * objInventoryLineItem.Quantity__c;
+                                    dealerOptionCostTotal += objInventoryLineItem.BOATBUILDING__Dealer_Price__c * objInventoryLineItem.Quantity__c;
                                     BOATBUILDING__Dealer_Option__c objDOO = new BOATBUILDING__Dealer_Option__c();
                                     objDOO.Name = objInventoryLineItem.BOATBUILDING__Name__c;
                                     objDOO.BOATBUILDING__Retail_Price__c = objInventoryLineItem.BOATBUILDING__Price__c;
                                     objDOO.BOATBUILDING__Cost__c = objInventoryLineItem.BOATBUILDING__Dealer_Price__c;
                                     objDOO.BOATBUILDING__Part_Number__c = objInventoryLineItem.BOATBUILDING__Product_Code__c;
+                                    objDOO.Quantity__c = objInventoryLineItem.Quantity__c;
                                     objDOO.Non_Taxable__c = objInventoryLineItem.Non_Taxable__c;
                                     lstDealerOptionWraper.add(new DealerOptionWraper(true, objDOO, false));
                                     
@@ -646,6 +624,7 @@ public class BoatBuilderController {
                                     objQLI.Total_Price__c = objDOO.Retail_Price__c;
                                     objQLI.Date__c =  Date.today();
                                     objQLI.Dealer_Price__c = objDOO.Cost__c;
+                                    objQLI.Quantity__c = objDOO.Quantity__c;
                                     objQLI.Product_Code__c = objDOO.Part_Number__c ;
                                     objQLI.Non_Taxable__c = objInventoryLineItem.Non_Taxable__c; 
                                     lstQuoteLineItem.add(objQLI);
@@ -655,13 +634,18 @@ public class BoatBuilderController {
                     }
                     totalPrice += dealerOptionTotal;
                 } 
-                
+                if(objProduct.Cost_Price__c != null){
+                    yourPriceThirdPageForProductPriceDealer = objProduct.Cost_Price__c;
+                }else{
+                    yourPriceThirdPageForProductPriceDealer = 0.00;
+                }
                 System.debug('Debug Log For strRecordTypeName: '+strRecordTypeName);
                 if(objProduct.Id != null) {
                     if(objProduct.M_Boat_MSRP_PRICE__c!= null)
                     {
                         totalprice =  MfgOptTota + objProduct.M_Boat_MSRP_PRICE__c;
-                    }else{
+                    }
+                    else{
                         totalprice =  MfgOptTota;
                     }
                     //selectedModelSecondPage = String.valueOf(objProduct.MModel2__c);
@@ -712,8 +696,14 @@ public class BoatBuilderController {
                                    && String.valueOf(objInventory2.Manufacturer__c).containsIgnoreCase(objProductPriceForSelectedCategory.ProductManufacturer__c)
                                    && String.valueOf(objInventory2.Year__c).containsIgnoreCase(objProductPriceForSelectedCategory.Year__c)
                                    && String.valueOf(objInventory2.Model__c).containsIgnoreCase(objProductPriceForSelectedCategory.Product_Model__c)
-                                   && setProductCode.contains(String.ValueOf(objProductPriceForSelectedCategory.Product_Code__c))){
-                                       lstCheckBoxWraper.add(new CheckBoxWraper(true, lstCheckBoxWraper.size()+1, objProductPriceForSelectedCategory));
+                                   && setProductCode.contains(String.ValueOf(objProductPriceForSelectedCategory.Product_Code__c)))
+                                   {
+                                        //mapCodeQuantity
+                                        if(mapCodeQuantity.containsKey(objProductPriceForSelectedCategory.Product_Code__c)) {
+                                            objProductPriceForSelectedCategory.Quantity__c = mapCodeQuantity.get(objProductPriceForSelectedCategory.Product_Code__c);
+                                        }   
+                                        
+                                        lstCheckBoxWraper.add(new CheckBoxWraper(true, lstCheckBoxWraper.size()+1, objProductPriceForSelectedCategory));
                                        
                                        BOATBUILDING__Quote_Line_Item__c objQLI = new BOATBUILDING__Quote_Line_Item__c();
                                        objQLI.Name__c = objProductPriceForSelectedCategory.ProductSelected_Category__c;
@@ -722,8 +712,9 @@ public class BoatBuilderController {
                                        objQLI.Product__c = objProduct.Id;
                                        objQLI.Total_Price__c = objProductPriceForSelectedCategory.ProductRetail_Price__c;
                                        objQLI.Date__c =  Date.today();
+                                       objQLI.Quantity__c =  mapCodeQuantity.containsKey(objProductPriceForSelectedCategory.Product_Code__c) ? mapCodeQuantity.get(objProductPriceForSelectedCategory.Product_Code__c) : 1;
                                        objQLI.Product_Code__c = objProductPriceForSelectedCategory.Product_Code__c ;
-                                       objQLI.Dealer_Price__c = objProductPriceForSelectedCategory.Dealer_Price__c;
+                                       objQLI.Dealer_Price__c = objProductPriceForSelectedCategory.Dealer_Price__c; 
                                        //objQLI.Product_Type__c = objProductPriceForSelectedCategory.RecordType.Name;
                                        if(objProductPriceForSelectedCategory.RecordType.Name == 'New Boats') {
                                            objQLI.Product_Type__c = 'New Boat';
@@ -733,8 +724,10 @@ public class BoatBuilderController {
                                        lstQuoteLineItem.add(objQLI);
                                        System.debug('Debug Log For moomba objProductPriceForSelectedCategory True: '+objProductPriceForSelectedCategory);
                                        
-                                       MfgOptTota = MfgOptTota + objProductPriceForSelectedCategory.ProductRetail_Price__c;
-                                   }else{ 
+                                       MfgOptTota = MfgOptTota + (objProductPriceForSelectedCategory.ProductRetail_Price__c * objQLI.Quantity__c);
+                                   }
+                                   else
+                                   { 
                                        System.debug('Debug Log For moomba objProductPriceForSelectedCategory False : '+objProductPriceForSelectedCategory);
                                        lstCheckBoxWraper.add(new CheckBoxWraper(false, lstCheckBoxWraper.size()+1, objProductPriceForSelectedCategory));
                                    }
@@ -744,21 +737,23 @@ public class BoatBuilderController {
                                    && objInventory2.Year__c == objProductPriceForSelectedCategory.Year__c
                                    && objInventory2.Model__c == objProductPriceForSelectedCategory.Product_Model__c
                                    && objInventory2.Model_Variant__c == objProductPriceForSelectedCategory.Model_Variant__c
-                                   && setProductCode.contains(String.ValueOf(objProductPriceForSelectedCategory.Product_Code__c))){
+                                   && setProductCode.contains(String.ValueOf(objProductPriceForSelectedCategory.Product_Code__c)))
+                                   {
+                                       //mapCodeQuantity
+                                       if(mapCodeQuantity.containsKey(objProductPriceForSelectedCategory.Product_Code__c)) {
+                                            objProductPriceForSelectedCategory.Quantity__c = mapCodeQuantity.get(objProductPriceForSelectedCategory.Product_Code__c);
+                                        }   
                                        lstCheckBoxWraper.add(new CheckBoxWraper(true, lstCheckBoxWraper.size()+1, objProductPriceForSelectedCategory));
-                                       System.debug('>>>>>>>>>>>>>>>>>>>>>>>>lstCheckBoxWraper'+lstCheckBoxWraper);
-                                       MfgOptTota = MfgOptTota + objProductPriceForSelectedCategory.ProductRetail_Price__c;
-                                       System.debug('Debug Log For supra objProductPriceForSelectedCategory: '+objProductPriceForSelectedCategory);
                                        BOATBUILDING__Quote_Line_Item__c objQLI = new BOATBUILDING__Quote_Line_Item__c();
                                        objQLI.Option_Category__c = objProductPriceForSelectedCategory.Option_Category__c;
                                        objQLI.Name__c = objProductPriceForSelectedCategory.ProductSelected_Category__c;
                                        objQLI.Name = 'QLI'; 
                                        objQLI.Product__c = objProduct.Id;
                                        objQLI.Total_Price__c = objProductPriceForSelectedCategory.ProductRetail_Price__c;
+                                       objQLI.Quantity__c =  mapCodeQuantity.containsKey(objProductPriceForSelectedCategory.Product_Code__c) ? mapCodeQuantity.get(objProductPriceForSelectedCategory.Product_Code__c) : 1;
                                        objQLI.Date__c =  Date.today();
                                        objQLI.Dealer_Price__c = objProductPriceForSelectedCategory.Dealer_Price__c;
                                        objQLI.Product_Code__c = objProductPriceForSelectedCategory.Product_Code__c ;
-                                       //objQLI.Product_Type__c = objProductPriceForSelectedCategory.RecordType.Name;
                                        
                                        if(objProductPriceForSelectedCategory.RecordType.Name == 'New Boats') {
                                            objQLI.Product_Type__c = 'New Boat';
@@ -767,11 +762,11 @@ public class BoatBuilderController {
                                        }
                                        
                                        lstQuoteLineItem.add(objQLI);
-                                       System.debug('______________objProductPriceForSelectedCategory.ProductSelected_Category__ctrue: '+objProductPriceForSelectedCategory.ProductSelected_Category__c);
-                                   }else{ 
-                                       System.debug('______________objProductPriceForSelectedCategory.ProductSelected_Category__cfalse: '+objProductPriceForSelectedCategory.ProductSelected_Category__c);
-                                       lstCheckBoxWraper.add(new CheckBoxWraper(false, lstCheckBoxWraper.size()+1, objProductPriceForSelectedCategory));
-                                       
+                                       MfgOptTota = MfgOptTota + (objProductPriceForSelectedCategory.ProductRetail_Price__c * objQLI.Quantity__c);
+                                   }
+                                   else
+                                   { 
+                                       lstCheckBoxWraper.add(new CheckBoxWraper(false, lstCheckBoxWraper.size()+1, objProductPriceForSelectedCategory));    
                                    }
                             }
                         }
@@ -794,15 +789,17 @@ public class BoatBuilderController {
                     
                     totalPrice = MfgOptTota + yourPriceThirdPageForProductPrice;
                     
-                    List<BOATBUILDING__Dealer_Option__c> lstDealerOption = [SELECT 
-                                                                            Id,
-                                                                            Name,
-                                                                            Part_Number__c,
-                                                                            Retail_Price__c,
-                                                                            Cost__c,
-                                                                            Non_Taxable__c
-                                                                            FROM
-                                                                            BOATBUILDING__Dealer_Option__c];
+                    List<BOATBUILDING__Dealer_Option__c> lstDealerOption = BOATBUILDING__Dealer_Option__c.getAll().values();
+                                                                            // [SELECT 
+                                                                            // Id,
+                                                                            // Name,
+                                                                            // Part_Number__c,
+                                                                            // Retail_Price__c,
+                                                                            // Cost__c,
+                                                                            // Non_Taxable__c,
+
+                                                                            // FROM
+                                                                            // BOATBUILDING__Dealer_Option__c];
                     Map<String, BOATBUILDING__Inventory_Line_Item__c> mapILI= new Map<String, BOATBUILDING__Inventory_Line_Item__c>();
                     if(objInventory2.BOATBUILDING__Inventory_Line_Items__r.size() > 0){
                         for(BOATBUILDING__Inventory_Line_Item__c objInventoryLineItem : objInventory2.BOATBUILDING__Inventory_Line_Items__r) {
@@ -817,9 +814,10 @@ public class BoatBuilderController {
                         ProductCodeForNonExist.add(objDP.Part_Number__c);  
                         if(mapILI.keySet().contains(objDP.Part_Number__c)){
                             objDP.Non_Taxable__c = mapILI.get(objDP.Part_Number__c).Non_Taxable__c;
+                            objDP.Quantity__c = mapILI.get(objDP.Part_Number__c).Quantity__c;
                             lstDealerOptionWraper.add(new DealerOptionWraper(true, objDP, false));
-                            dealerOptionTotal += objDP.Retail_Price__c;
-                            dealerOptionCostTotal += objDP.Cost__c;
+                            dealerOptionTotal += objDP.Retail_Price__c * objDP.Quantity__c;
+                            dealerOptionCostTotal += objDP.Cost__c * objDP.Quantity__c;
                             BOATBUILDING__Quote_Line_Item__c objQLI = new BOATBUILDING__Quote_Line_Item__c();
                             objQLI.Name = 'QLI';
                             objQLI.Name__c = objDP.Name; 
@@ -828,6 +826,7 @@ public class BoatBuilderController {
                             objQLI.Total_Price__c = objDP.Retail_Price__c;
                             objQLI.Date__c =  Date.today();
                             objQLI.Dealer_Price__c = objDP.Cost__c;
+                            objQLI.Quantity__c = objDP.Quantity__c;
                             objQLI.Product_Code__c = objDP.Part_Number__c ;
                             objQLI.Non_Taxable__c = mapILI.get(objDP.Part_Number__c).Non_Taxable__c;
                             lstQuoteLineItem.add(objQLI);
@@ -841,14 +840,15 @@ public class BoatBuilderController {
                         for(BOATBUILDING__Inventory_Line_Item__c objInventoryLineItem : objInventory2.BOATBUILDING__Inventory_Line_Items__r) {
                             if(objInventoryLineItem.BOATBUILDING__Option_Category__c.equalsIgnoreCase('Dealer Options')) {
                                 if(!ProductCodeForNonExist.contains(objInventoryLineItem.BOATBUILDING__Product_Code__c)) {
-                                    dealerOptionTotal += objInventoryLineItem.BOATBUILDING__Price__c;
-                                    dealerOptionCostTotal += objInventoryLineItem.BOATBUILDING__Dealer_Price__c;
+                                    dealerOptionTotal += (objInventoryLineItem.BOATBUILDING__Price__c * objInventoryLineItem.Quantity__c) ;
+                                    dealerOptionCostTotal += (objInventoryLineItem.BOATBUILDING__Dealer_Price__c * objInventoryLineItem.Quantity__c);
                                     System.debug('>>>>>>objInventoryLineItem.BOATBUILDING__Dealer_Price__c: '+objInventoryLineItem.BOATBUILDING__Dealer_Price__c);
                                     BOATBUILDING__Dealer_Option__c objDOO = new BOATBUILDING__Dealer_Option__c();
                                     objDOO.Name = objInventoryLineItem.BOATBUILDING__Name__c;
                                     objDOO.BOATBUILDING__Retail_Price__c = objInventoryLineItem.BOATBUILDING__Price__c;
                                     objDOO.BOATBUILDING__Cost__c = objInventoryLineItem.BOATBUILDING__Dealer_Price__c;
                                     objDOO.BOATBUILDING__Part_Number__c = objInventoryLineItem.BOATBUILDING__Product_Code__c;
+                                    objDOO.Quantity__c = objInventoryLineItem.Quantity__c;
                                     objDOO.Non_Taxable__c = objInventoryLineItem.Non_Taxable__c;
                                     lstDealerOptionWraper.add(new DealerOptionWraper(true, objDOO, false));
                                     
@@ -859,6 +859,7 @@ public class BoatBuilderController {
                                     objQLI.Option_Category__c = 'Dealer Options';
                                     objQLI.Total_Price__c = objDOO.Retail_Price__c;
                                     objQLI.Date__c =  Date.today();
+                                    objQLI.Quantity__c = objDOO.Quantity__c;
                                     objQLI.Dealer_Price__c = objDOO.Cost__c;
                                     objQLI.Product_Code__c = objDOO.Part_Number__c ;
                                     objQLI.Non_Taxable__c = objInventoryLineItem.Non_Taxable__c; 
@@ -871,168 +872,72 @@ public class BoatBuilderController {
                     System.debug('lstQuoteLineItem: '+lstQuoteLineItem);
                     totalPrice += dealerOptionTotal; 
                     System.debug('>>>>>>totalPriceDealer Last: '+totalPriceDealer); 
+                    System.debug('Debug for cwoRetailTotal:  '+cwoRetailTotal);
+                    totalPrice += cwoRetailTotal;
+                    System.debug('Debug for totalPrice:  '+totalPrice);
+                    totalPriceDealer += cwoDealerTotal;
                 }
             }
             //--------------------------------------Quote to Boat Builder---------------------------------------//
             /** 
-* Author : Akshay Kumar 
-* Created Date : 06/01/2017
-*/
+            * Author : Akshay Kumar 
+            * Created Date : 06/01/2017
+            */
             if(ApexPages.currentPage().getParameters().get('quoteId') != null) {
-                
-                //objQuote.Test_2__c = ApexPages.currentPage().getParameters().get('invId');
-                
                 buttonRenderForCustomerDetail =true;
                 buttonRenderForSaveAndReCal = true;
                 buttonRenderForPlaceOrder = false;
-                objQuote3 = [SELECT 
-                             q.Transmission_Gearbox_SN__c,
-                             q.Total_Price_Quote__c, 
-                             q.Test_2__c, 
-                             q.Tax__c,
-                             q.Syncing__c, 
-                             q.Status__c, 
-                             q.State__c, 
-                             q.Shipping_And_Handling__c, 
-                             q.Ship_To__c, 
-                             q.Ship_To_Name__c, 
-                             q.Related_to_Product__c, 
-                             q.Related_to_Order__c,
-                             q.RecordTypeId, 
-                             q.Quote_Your_Price_Negotiation__c,
-                             q.Quote_Your_Price_Formula__c, 
-                             q.Quote_Trailer_Sales_Tax__c, 
-                             q.Quote_Trailer_Sales_Tax_Negotiation__c,
-                             q.Quote_Trailer_Reg_Fee__c, 
-                             q.Quote_Trailer_Reg_Fee_Negotiation__c, 
-                             q.Quote_Trailer_Allowance__c, 
-                             q.Quote_Trailer_Allowance_Negotiation__c, 
-                             q.Quote_Trailer_Allowance_Calculated__c, 
-                             q.Quote_Trailer_ACV__c, 
-                             q.Quote_Trailer_ACV_Negotiation__c, 
-                             q.Quote_Trade_Payoff__c, 
-                             q.Quote_Trade_Allowance__c, 
-                             q.Quote_Trade_Allowance_Negotiation__c, 
-                             q.Quote_Trade_ACV__c, 
-                             q.Quote_Trade_ACV_Negotiation__c, 
-                             q.Quote_Total_Price_Calculated__c, 
-                             q.Quote_Total_Over_Allowance_Calculated__c, 
-                             q.Quote_Total_MSRP__c, 
-                             q.Quote_Total_Amount_Financed_Calculated__c, 
-                             q.Quote_To_Name__c, 
-                             q.Quote_To_Address__c, 
-                             q.Quote_Term__c, 
-                             q.Quote_Sale_Price__c, 
-                             q.Quote_Rate__c, 
-                             q.Quote_Payment__c, 
-                             q.Quote_Payment_Negotiation__c, 
-                             q.Quote_Number__c, 
-                             q.Quote_Net_Selling_Price_Calculated__c, 
-                             q.Quote_MSRP_Trailer_Price__c, 
-                             q.Quote_MSRP_Trailer_Price_Negotiation__c, 
-                             q.Quote_MSRP_Boat_Price__c, 
-                             q.Quote_Down_Payment__c, 
-                             q.Quote_Doc_Fee__c, 
-                             q.Quote_Deal_Margin__c, 
-                             q.Quote_Cost_Clone__c, 
-                             q.Quote_Boat_Trade_Over_Allowance_Calculat__c, 
-                             q.Quote_Boat_Sales_Tax_Negotiation__c, 
-                             q.Quote_Boat_Sales_Tax_Calculated__c, 
-                             q.Quote_Boat_Reg_Fee__c, 
-                             q.QuoteHiddenBox__c, 
-                             q.Phone__c,
-                             q.NetSalesTax__c, 
-                             q.Negotiation_Trailer_ACV__c, 
-                             q.Negotiation_Trade_Payoff__c, 
-                             q.Negotiation_MSRP_Boat_Price__c, 
-                             q.Name, 
-                             q.Mapped_Trailer_VIN__c, 
-                             q.Mapped_HIN__c, 
-                             q.Mapped_Engine_SN__c, 
-                             q.Mapped_Boat_Length__c, 
-                             q.MSRP_Boat_Price_Negotiation__c, 
-                             q.Lock_Record__c,
-                             q.Id, 
-                             q.Grand_Total__c, 
-                             q.Fax__c, 
-                             q.Expiration_Date__c, 
-                             q.Email__c, 
-                             q.Discount__c, 
-                             q.Discount_On_Quote__c, 
-                             q.Description__c,  
-                             q.Contact_Name__c, 
-                             q.Commission__c, 
-                             q.Booked_Sale_Price__c, 
-                             q.Booked_ACV__c, 
-                             q.Boat_Sales_Tax2__c, 
-                             q.Boat_Costline__c, 
-                             q.Bill_To__c, 
-                             q.Bill_To_Name__c, 
-                             q.Additional_To__c, 
-                             q.Additional_To_Name__c, 
-                             q.Account_Name__c, 
-                             q.APPROVED_ACV__c, 
-                             q.ACV_FORM__c,
-                             q.Related_to_Product__r.Product_Manufacturer__r.Name,
-                             q.Related_to_Product__r.Product_Manufacturer__r.Model_Variant__c,
-                             q.Related_to_Product__r.M_Year__c,
-                             q.Related_to_Product__r.MModel2__c,
-                             q.Related_to_Product__r.M_Model_Variant__c,
-                             q.Related_to_Product__r.M_Boat_MSRP_PRICE__c,
-                             q.Related_to_Product__r.M_Manufacture_Status__c,
-                             q.Related_to_Product__r.M_Dealer_Status__c,
-                             q.Related_to_Product__r.Product_Type__c,
-                             q.Test_2__r.RecordTypeId,
-                             q.Test_2__r.RecordType.Name,
-                             q.Test_2__r.Suggested_List_Price__c,
-                             q.No_Trailer__c,
-                             q.Engine__c,
-                             q.Trailer__c,
-                             q.Engine__r.Total_MSRP_Price__c,
-                             q.Engine__r.Manufacturer__c,
-                             q.Engine__r.Model__c,
-                             q.Engine__r.Year__c,
-                             q.Trailer__r.Total_MSRP_Price__c,
-                             q.Trailer__r.Manufacturer__c,
-                             q.Trailer__r.Model__c,
-                             q.Trailer__r.Year__c,
-                             (SELECT 
-                              Id, 
-                              IsDeleted, 
-                              Name,
-                              Date__c, 
-                              Discount__c, 
-                              Line_Item_Description__c, 
-                              List_Price__c, 
-                              Product__c, 
-                              Product_Code__c, 
-                              Quantity__c, 
-                              Quote__c, 
-                              Sales_Price__c, 
-                              Sub_Total__c, 
-                              Total_Price__c, 
-                              Dealer_Price__c,
-                              Option_Category__c,
-                              Name__c,
-                              Non_Taxable__c
-                              FROM 
-                              BOATBUILDING__Quote_Line_Item__r
-                             ) 
-                             FROM 
-                             BOATBUILDING__Quote__c q
-                             WHERE 
-                             Id=: ApexPages.currentPage().getParameters().get('quoteId')];
+                objQuote3 = [SELECT  
+                                    q.Transmission_Gearbox_SN__c, q.Total_Price_Quote__c,  q.Test_2__c,  q.Tax__c, q.Syncing__c,  q.Status__c,  q.State__c,  q.Shipping_And_Handling__c,  q.Ship_To__c,  q.Ship_To_Name__c, 
+                                    q.Related_to_Product__c,  q.Related_to_Order__c, q.RecordTypeId,  q.Quote_Your_Price_Negotiation__c, q.Quote_Your_Price_Formula__c,  q.Quote_Trailer_Sales_Tax__c,  q.Quote_Trailer_Sales_Tax_Negotiation__c,
+                                    q.Quote_Trailer_Reg_Fee__c,  q.Quote_Trailer_Reg_Fee_Negotiation__c,  q.Quote_Trailer_Allowance__c,  q.Quote_Trailer_Allowance_Negotiation__c,  q.Quote_Trailer_Allowance_Calculated__c, 
+                                    q.Quote_Trailer_ACV__c,  q.Quote_Trailer_ACV_Negotiation__c,  q.Quote_Trade_Payoff__c,  q.Quote_Trade_Allowance__c,  q.Quote_Trade_Allowance_Negotiation__c,  q.Quote_Trade_ACV__c, 
+                                    q.Quote_Trade_ACV_Negotiation__c,  q.Quote_Total_Price_Calculated__c,  q.Quote_Total_Over_Allowance_Calculated__c,  q.Quote_Total_MSRP__c,  q.Quote_Total_Amount_Financed_Calculated__c, 
+                                    q.Quote_To_Name__c,  q.Quote_To_Address__c,  q.Quote_Term__c,  q.Quote_Sale_Price__c,  q.Quote_Rate__c,  q.Quote_Payment__c,  q.Quote_Payment_Negotiation__c,  q.Quote_Number__c,  q.Quote_Net_Selling_Price_Calculated__c, 
+                                    q.Quote_MSRP_Trailer_Price__c,  q.Quote_MSRP_Trailer_Price_Negotiation__c,  q.Quote_MSRP_Boat_Price__c,  q.Quote_Down_Payment__c,  q.Quote_Doc_Fee__c,  q.Quote_Deal_Margin__c,  q.Quote_Cost_Clone__c, 
+                                    q.Quote_Boat_Trade_Over_Allowance_Calculat__c,  q.Quote_Boat_Sales_Tax_Negotiation__c,  q.Quote_Boat_Sales_Tax_Calculated__c,  q.Quote_Boat_Reg_Fee__c,  q.QuoteHiddenBox__c,  q.Phone__c,
+                                    q.NetSalesTax__c,  q.Negotiation_Trailer_ACV__c,  q.Negotiation_Trade_Payoff__c,  q.Negotiation_MSRP_Boat_Price__c,  q.Name,  q.Mapped_Trailer_VIN__c,  q.Mapped_HIN__c,  q.Mapped_Engine_SN__c, 
+                                    q.Mapped_Boat_Length__c,  q.MSRP_Boat_Price_Negotiation__c,  q.Lock_Record__c, q.Id,  q.Grand_Total__c,  q.Fax__c,  q.Expiration_Date__c,  q.Email__c,  q.Discount__c,  q.Discount_On_Quote__c, 
+                                    q.Description__c,   q.Contact_Name__c,  q.Commission__c,  q.Booked_Sale_Price__c,  q.Booked_ACV__c,  q.Boat_Sales_Tax2__c,  q.Boat_Costline__c,  q.Bill_To__c,  q.Bill_To_Name__c,  q.Additional_To__c, 
+                                    q.Additional_To_Name__c,  q.Account_Name__c,  q.APPROVED_ACV__c,  q.ACV_FORM__c, q.Related_to_Product__r.Product_Manufacturer__r.Name, q.Related_to_Product__r.Product_Manufacturer__r.Model_Variant__c,
+                                    q.Related_to_Product__r.M_Year__c, q.Related_to_Product__r.MModel2__c, q.Related_to_Product__r.M_Model_Variant__c, q.Related_to_Product__r.M_Boat_MSRP_PRICE__c, q.Related_to_Product__r.M_Manufacture_Status__c,
+                                    q.Related_to_Product__r.M_Dealer_Status__c, Related_to_Product__r.Product_Type__c, q.Test_2__r.RecordTypeId, q.Test_2__r.RecordType.Name, q.Test_2__r.Suggested_List_Price__c, q.No_Trailer__c, q.Engine__c,
+                                    q.Trailer__c, q.Engine__r.Total_MSRP_Price__c, q.Engine__r.Manufacturer__c, q.Engine__r.Model__c, q.Engine__r.Year__c, q.Trailer__r.Total_MSRP_Price__c, q.Trailer__r.Manufacturer__c, q.Trailer__r.Model__c, q.Trailer__r.Year__c,
+                                    (
+                                        SELECT  Id,  IsDeleted,  Name, Date__c,  Discount__c,  Line_Item_Description__c,  BOATBUILDING__Product_Type__c, List_Price__c,  Product__c,  Product_Code__c,  Quantity__c,  Quote__c,  Sales_Price__c,  Sub_Total__c,  Total_Price__c,  Dealer_Price__c, Option_Category__c,
+                                                Name__c, Non_Taxable__c, BOATBUILDING__Total_Dealer_Price__c, BOATBUILDING__Total_Retail_Price__c FROM  BOATBUILDING__Quote_Line_Item__r 
+                                    ) 
+                                    FROM  BOATBUILDING__Quote__c q WHERE  Id=: ApexPages.currentPage().getParameters().get('quoteId')];
                 
                 
-                
-                
+                if(objQuote3.BOATBUILDING__Quote_Line_Item__r.size() > 0){
+                    for(BOATBUILDING__Quote_Line_Item__c objQLI : objQuote3.BOATBUILDING__Quote_Line_Item__r) {
+                        mapCodeQuantity.put(objQLI.Product_Code__c, objQLI.Quantity__c);
+                        setcodeId.add(objQLI.Product_Code__c);
+                        lstQuoteLineItem.add(objQLI);
+                        if(objQLI.BOATBUILDING__Option_Category__c == 'CWO') {
+                            lstWritinCustomOption.add(new WritinCustomOption(true, 
+                                                                                    objQLI.BOATBUILDING__Name__c, 
+                                                                                    objQLI.BOATBUILDING__Quantity__c, 
+                                                                                    objQLI.BOATBUILDING__Total_Price__c, 
+                                                                                    objQLI.BOATBUILDING__Dealer_Price__c, 
+                                                                                    objQLI.BOATBUILDING__Product_Code__c, 
+                                                                                    objQLI.BOATBUILDING__Non_Taxable__c));
+                            cwoRetailTotal += objQLI.BOATBUILDING__Total_Retail_Price__c;
+                            cwoDealerTotal += objQLI.BOATBUILDING__Total_Dealer_Price__c;
+                        }
+                    }
+                }
+                System.debug('log for setcodeId: '+setcodeId);
+                System.debug('log for lstQuoteLineItem: '+lstQuoteLineItem);
+                System.debug('log for lstQuoteLineItem size: '+lstQuoteLineItem.size());
                 modelVarientFlag = objQuote3.Related_to_Product__r.Product_Manufacturer__r.Model_Variant__c;
                 
                 //noTrailer = objQuote3.No_Trailer__c;
                 System.debug('Debug Log For objQuote3.Test_2__r.RecordType.Name: '+objQuote3.Test_2__r.RecordType.Name);
                 if(objQuote3.Test_2__c != null && objQuote3.Test_2__r.RecordType.Name == 'Used Boats') {
                     if(objQuote3.Test_2__r.Suggested_List_Price__c != null) {
-                    	
+                        
                         yourPriceThirdPageForProductPrice = objQuote3.Test_2__r.Suggested_List_Price__c;
                         System.debug('Debug Log For yourPriceThirdPageForProductPrice1: '+yourPriceThirdPageForProductPrice);
                     } else {
@@ -1100,8 +1005,11 @@ public class BoatBuilderController {
                         lstCheckBoxWraper = new List<CheckBoxWraper>();
                         for(BOATBUILDING__ProductPrice__c objProductPriceForSelectedCategory : mapSelectedCategory.get(strMapValues)){
                             if(selectedOptionsforInventory.contains(String.valueOf(objProductPriceForSelectedCategory.ProductSelected_Category__c))){
+                                if(mapCodeQuantity.containsKey(objProductPriceForSelectedCategory.Product_Code__c)) {
+                                    objProductPriceForSelectedCategory.Quantity__c = mapCodeQuantity.get(objProductPriceForSelectedCategory.Product_Code__c);
+                                }
                                 lstCheckBoxWraper.add(new CheckBoxWraper(true, lstCheckBoxWraper.size()+1, objProductPriceForSelectedCategory));
-                                MfgOptTota = MfgOptTota + objProductPriceForSelectedCategory.ProductRetail_Price__c;
+                                
                                 BOATBUILDING__Quote_Line_Item__c objQLI = new BOATBUILDING__Quote_Line_Item__c();
                                 objQLI.Name__c = objProductPriceForSelectedCategory.ProductSelected_Category__c;
                                 objQLI.Name = 'QLI';
@@ -1109,8 +1017,11 @@ public class BoatBuilderController {
                                 objQLI.Total_Price__c = objProductPriceForSelectedCategory.ProductRetail_Price__c;
                                 objQLI.Product_Code__c = objProductPriceForSelectedCategory.Product_Code__c;
                                 objQLI.Dealer_Price__c = objProductPriceForSelectedCategory.Dealer_Price__c;
+                                objQLI.Quantity__c = mapCodeQuantity.containsKey(objProductPriceForSelectedCategory.Product_Code__c) ? mapCodeQuantity.get(objProductPriceForSelectedCategory.Product_Code__c) : 1;
                                 objQLI.Date__c =  Date.today();
                                 lstQuoteLineItem.add(objQLI);
+                                MfgOptTota = (MfgOptTota + (objProductPriceForSelectedCategory.ProductRetail_Price__c * objQLI.Quantity__c)).setScale(2);
+                                
                             } else {  
                                 
                                 lstCheckBoxWraper.add(new CheckBoxWraper(false, lstCheckBoxWraper.size()+1, objProductPriceForSelectedCategory));
@@ -1127,15 +1038,16 @@ public class BoatBuilderController {
                     }
                     
                     
-                    List<BOATBUILDING__Dealer_Option__c> lstDealerOption = [SELECT 
-                                                                            Id,
-                                                                            Name,
-                                                                            Part_Number__c,
-                                                                            Retail_Price__c,
-                                                                            Cost__c,
-                                                                            Non_Taxable__c
-                                                                            FROM
-                                                                            BOATBUILDING__Dealer_Option__c];
+                    List<BOATBUILDING__Dealer_Option__c> lstDealerOption = BOATBUILDING__Dealer_Option__c.getAll().values();
+                    // [SELECT 
+                    //                                                         Id,
+                    //                                                         Name,
+                    //                                                         Part_Number__c,
+                    //                                                         Retail_Price__c,
+                    //                                                         Cost__c,
+                    //                                                         Non_Taxable__c
+                    //                                                         FROM
+                    //                                                         BOATBUILDING__Dealer_Option__c];
                     Map<String, BOATBUILDING__Quote_Line_Item__c> mapILI= new Map<String, BOATBUILDING__Quote_Line_Item__c>();
                     if(objQuote3.BOATBUILDING__Quote_Line_Item__r.size() > 0){
                         for(BOATBUILDING__Quote_Line_Item__c objQLI : objQuote3.BOATBUILDING__Quote_Line_Item__r) {
@@ -1150,20 +1062,21 @@ public class BoatBuilderController {
                         ProductCodeForNonExist.add(objDP.Part_Number__c);  
                         if(mapILI.keySet().contains(objDP.Part_Number__c)){
                             objDP.Non_Taxable__c = mapILI.get(objDP.Part_Number__c).Non_Taxable__c;
+                            objDP.Quantity__c = mapILI.get(objDP.Part_Number__c).Quantity__c;
                             lstDealerOptionWraper.add(new DealerOptionWraper(true, objDP, false));
-                            dealerOptionTotal += objDP.Retail_Price__c;
-                            dealerOptionCostTotal += objDP.Cost__c;
-                            BOATBUILDING__Quote_Line_Item__c objQLI = new BOATBUILDING__Quote_Line_Item__c();
-                            objQLI.Name = 'QLI';
-                            objQLI.Name__c = objDP.Name; 
-                            objQLI.Product__c = objProduct.Id;
-                            objQLI.Option_Category__c = 'Dealer Options';
-                            objQLI.Total_Price__c = objDP.Retail_Price__c;
-                            objQLI.Date__c =  Date.today();
-                            objQLI.Dealer_Price__c = objDP.Cost__c;
-                            objQLI.Product_Code__c = objDP.Part_Number__c ;
-                            objQLI.Non_Taxable__c = mapILI.get(objDP.Part_Number__c).Non_Taxable__c;
-                            lstQuoteLineItem.add(objQLI);
+                            dealerOptionTotal += (objDP.Retail_Price__c * objDP.Quantity__c);
+                            dealerOptionCostTotal += (objDP.Cost__c * objDP.Quantity__c);
+                            // BOATBUILDING__Quote_Line_Item__c objQLI = new BOATBUILDING__Quote_Line_Item__c();
+                            // objQLI.Name = 'QLI';
+                            // objQLI.Name__c = objDP.Name; 
+                            // objQLI.Product__c = objProduct.Id;
+                            // objQLI.Option_Category__c = 'Dealer Options';
+                            // objQLI.Total_Price__c = objDP.Retail_Price__c;
+                            // objQLI.Date__c =  Date.today();
+                            // objQLI.Dealer_Price__c = objDP.Cost__c;
+                            // objQLI.Product_Code__c = objDP.Part_Number__c ;
+                            // objQLI.Non_Taxable__c = mapILI.get(objDP.Part_Number__c).Non_Taxable__c;
+                            // lstQuoteLineItem.add(objQLI);
                             
                         }else{
                             lstDealerOptionWraper.add(new DealerOptionWraper(false, objDP, false));
@@ -1175,8 +1088,8 @@ public class BoatBuilderController {
                             if(objQLI.BOATBUILDING__Option_Category__c.equalsIgnoreCase('Dealer Options')) {
                                 if(!ProductCodeForNonExist.contains(objQLI.BOATBUILDING__Product_Code__c)) {
                                     
-                                    dealerOptionTotal += objQLI.BOATBUILDING__Total_Price__c;
-                                    dealerOptionCostTotal += objQLI.BOATBUILDING__Dealer_Price__c;
+                                    dealerOptionTotal += (objQLI.BOATBUILDING__Total_Price__c * objQLI.Quantity__c) ;
+                                    dealerOptionCostTotal += (objQLI.BOATBUILDING__Dealer_Price__c * objQLI.Quantity__c);
                                     
                                     BOATBUILDING__Dealer_Option__c objDOO = new BOATBUILDING__Dealer_Option__c();
                                     objDOO.Name = objQLI.BOATBUILDING__Name__c;
@@ -1184,19 +1097,20 @@ public class BoatBuilderController {
                                     objDOO.BOATBUILDING__Cost__c = objQLI.BOATBUILDING__Dealer_Price__c; 
                                     objDOO.BOATBUILDING__Part_Number__c = objQLI.BOATBUILDING__Product_Code__c;
                                     objDOO.Non_Taxable__c = objQLI.Non_Taxable__c;
+                                    objDOO.Quantity__c = objQLI.Quantity__c;
                                     lstDealerOptionWraper.add(new DealerOptionWraper(true, objDOO, false));
                                     
-                                    BOATBUILDING__Quote_Line_Item__c objQLI1 = new BOATBUILDING__Quote_Line_Item__c();
-                                    objQLI1.Name = 'QLI';
-                                    objQLI1.Name__c = objDOO.Name;
-                                    objQLI1.Product__c = objProduct.Id;
-                                    objQLI1.Option_Category__c = 'Dealer Options';
-                                    objQLI1.Total_Price__c = objDOO.Retail_Price__c;
-                                    objQLI1.Date__c =  Date.today();
-                                    objQLI1.Dealer_Price__c = objDOO.Cost__c;
-                                    objQLI1.Product_Code__c = objDOO.Part_Number__c ;
-                                    objQLI1.Non_Taxable__c = objDOO.Non_Taxable__c; 
-                                    lstQuoteLineItem.add(objQLI1);
+                                    // BOATBUILDING__Quote_Line_Item__c objQLI1 = new BOATBUILDING__Quote_Line_Item__c();
+                                    // objQLI1.Name = 'QLI';
+                                    // objQLI1.Name__c = objDOO.Name;
+                                    // objQLI1.Product__c = objProduct.Id;
+                                    // objQLI1.Option_Category__c = 'Dealer Options';
+                                    // objQLI1.Total_Price__c = objDOO.Retail_Price__c;
+                                    // objQLI1.Date__c =  Date.today();
+                                    // objQLI1.Dealer_Price__c = objDOO.Cost__c;
+                                    // objQLI1.Product_Code__c = objDOO.Part_Number__c ;
+                                    // objQLI1.Non_Taxable__c = objDOO.Non_Taxable__c; 
+                                    // lstQuoteLineItem.add(objQLI1);
                                 }
                             }
                         }
@@ -1282,28 +1196,12 @@ public class BoatBuilderController {
                                    && String.valueOf(objQuote3.Related_to_Product__r.M_Year__c).containsIgnoreCase(objProductPriceForSelectedCategory.Year__c)
                                    && String.valueOf(objQuote3.Related_to_Product__r.MModel2__c).containsIgnoreCase(objProductPriceForSelectedCategory.Product_Model__c)
                                    && setProductCode.contains(String.valueOf(objProductPriceForSelectedCategory.Product_Code__c))){
-                                       lstCheckBoxWraper.add(new CheckBoxWraper(true, lstCheckBoxWraper.size()+1, objProductPriceForSelectedCategory));
-                                       BOATBUILDING__Quote_Line_Item__c objQLI = new BOATBUILDING__Quote_Line_Item__c();
-                                       
-                                       //objQLI.Quote__c = objQuote3.Id;
-                                       objQLI.Name__c = objProductPriceForSelectedCategory.ProductSelected_Category__c;
-                                       objQLI.Name = 'QLI';
-                                       objQLI.Option_Category__c = objProductPriceForSelectedCategory.Option_Category__c;
-                                       objQLI.Product__c = objProduct.Id;
-                                       objQLI.Total_Price__c = objProductPriceForSelectedCategory.ProductRetail_Price__c;
-                                       objQLI.Date__c =  Date.today();
-                                       objQLI.Product_Code__c = objProductPriceForSelectedCategory.Product_Code__c ;
-                                       objQLI.Dealer_Price__c = objProductPriceForSelectedCategory.Dealer_Price__c;
-                                       //objQLI.Product_Type__c = objProductPriceForSelectedCategory.RecordType.Name;
-                                       if(objProductPriceForSelectedCategory.RecordType.Name == 'New Boats') {
-                                           objQLI.Product_Type__c = 'New Boat';
-                                       } else {
-                                           objQLI.Product_Type__c = objProductPriceForSelectedCategory.RecordType.Name;
-                                       }
-                                       lstQuoteLineItem.add(objQLI);
-                                       System.debug('Debug Log For moomba objProductPriceForSelectedCategory True: '+objProductPriceForSelectedCategory);                                 
-                                       MfgOptTota = MfgOptTota + objProductPriceForSelectedCategory.ProductRetail_Price__c;
-                                   }
+                                        if(mapCodeQuantity.containsKey(objProductPriceForSelectedCategory.Product_Code__c)) {
+                                            objProductPriceForSelectedCategory.Quantity__c = mapCodeQuantity.get(objProductPriceForSelectedCategory.Product_Code__c);
+                                        }   
+                                        lstCheckBoxWraper.add(new CheckBoxWraper(true, lstCheckBoxWraper.size()+1, objProductPriceForSelectedCategory));
+                                        MfgOptTota = (MfgOptTota + (objProductPriceForSelectedCategory.ProductRetail_Price__c * objProductPriceForSelectedCategory.Quantity__c)).setScale(2);
+                                   } 
                                 
                                 else{ 
                                     System.debug('Debug Log For moomba objProductPriceForSelectedCategory False : '+objProductPriceForSelectedCategory);
@@ -1317,30 +1215,11 @@ public class BoatBuilderController {
                                    && objQuote3.Related_to_Product__r.MModel2__c == objProductPriceForSelectedCategory.Product_Model__c
                                    && objQuote3.Related_to_Product__r.M_Model_Variant__c == objProductPriceForSelectedCategory.Model_Variant__c
                                    && setProductCode.contains(String.ValueOf(objProductPriceForSelectedCategory.Product_Code__c))){
+                                        if(mapCodeQuantity.containsKey(objProductPriceForSelectedCategory.Product_Code__c)) {
+                                            objProductPriceForSelectedCategory.Quantity__c = mapCodeQuantity.get(objProductPriceForSelectedCategory.Product_Code__c);
+                                        }   
                                        lstCheckBoxWraper.add(new CheckBoxWraper(true, lstCheckBoxWraper.size()+1, objProductPriceForSelectedCategory));
-                                       BOATBUILDING__Quote_Line_Item__c objQLI = new BOATBUILDING__Quote_Line_Item__c();
-                                       
-                                       //objQLI.Quote__c = objQuote3.Id;
-                                       objQLI.Name__c = objProductPriceForSelectedCategory.ProductSelected_Category__c;
-                                       objQLI.Name = 'QLI';
-                                       objQLI.Option_Category__c = objProductPriceForSelectedCategory.Option_Category__c;
-                                       objQLI.Product__c = objProduct.Id;
-                                       objQLI.Total_Price__c = objProductPriceForSelectedCategory.ProductRetail_Price__c;
-                                       objQLI.Date__c =  Date.today();
-                                       objQLI.Product_Code__c = objProductPriceForSelectedCategory.Product_Code__c ;
-                                       objQLI.Dealer_Price__c = objProductPriceForSelectedCategory.Dealer_Price__c;
-                                       //objQLI.Product_Type__c = objProductPriceForSelectedCategory.RecordType.Name;
-                                       if(objProductPriceForSelectedCategory.RecordType.Name == 'New Boats') {
-                                           objQLI.Product_Type__c = 'New Boat';
-                                       } else {
-                                           objQLI.Product_Type__c = objProductPriceForSelectedCategory.RecordType.Name;
-                                       }
-                                       lstQuoteLineItem.add(objQLI);
-                                       System.debug('>>>>>>>>>>>>>>>>>>>>>>>>lstCheckBoxWraper'+lstCheckBoxWraper);
-                                       MfgOptTota = MfgOptTota + objProductPriceForSelectedCategory.ProductRetail_Price__c;
-                                       System.debug('Debug Log For supra objProductPriceForSelectedCategory: '+objProductPriceForSelectedCategory);
-                                       
-                                       System.debug('______________objProductPriceForSelectedCategory.ProductSelected_Category__ctrue: '+objProductPriceForSelectedCategory.ProductSelected_Category__c);
+                                       MfgOptTota = (MfgOptTota + (objProductPriceForSelectedCategory.ProductRetail_Price__c * objProductPriceForSelectedCategory.Quantity__c)).setScale(2);
                                    }else{
                                        System.debug('______________objProductPriceForSelectedCategory.ProductSelected_Category__cfalse: '+objProductPriceForSelectedCategory.ProductSelected_Category__c);
                                        lstCheckBoxWraper.add(new CheckBoxWraper(false, lstCheckBoxWraper.size()+1, objProductPriceForSelectedCategory));
@@ -1359,16 +1238,10 @@ public class BoatBuilderController {
                             lstCheckBoxWraper1 = new List<CheckBoxWraper>();
                             for(BOATBUILDING__ProductPrice__c objProductPriceForSelectedCategory : mapSelectedCategory.get(strMapValues)){
                                 if(selectedOptionsforQuote.contains(String.valueOf(objProductPriceForSelectedCategory.ProductSelected_Category__c))){
+                                    if(mapCodeQuantity.containsKey(objProductPriceForSelectedCategory.Product_Code__c)) {
+                                        objProductPriceForSelectedCategory.Quantity__c = mapCodeQuantity.get(objProductPriceForSelectedCategory.Product_Code__c);
+                                    }   
                                     lstCheckBoxWraper1.add(new CheckBoxWraper(true, lstCheckBoxWraper.size()+1, objProductPriceForSelectedCategory));
-                                    
-                                    BOATBUILDING__Quote_Line_Item__c objQLI = new BOATBUILDING__Quote_Line_Item__c();
-                                    
-                                    objQLI.Name__c = objProductPriceForSelectedCategory.ProductSelected_Category__c;
-                                    objQLI.Name = 'QLI';
-                                    //objQLI.Quote__c = objQuote3.Id;
-                                    objQLI.Date__c =  Date.today();
-                                    objQLI.Option_Category__c = objProductPriceForSelectedCategory.Option_Category__c;
-                                    lstQuoteLineItem.add(objQLI);
                                 }else{ 
                                     
                                     lstCheckBoxWraper1.add(new CheckBoxWraper(false, lstCheckBoxWraper.size()+1, objProductPriceForSelectedCategory));
@@ -1393,15 +1266,8 @@ public class BoatBuilderController {
                     
                     totalPrice = MfgOptTota + yourPriceThirdPageForProductPrice;
                     
-                    List<BOATBUILDING__Dealer_Option__c> lstDealerOption = [SELECT 
-                                                                            Id,
-                                                                            Name,
-                                                                            Part_Number__c,
-                                                                            Retail_Price__c,
-                                                                            Cost__c,
-                                                                            Non_Taxable__c
-                                                                            FROM
-                                                                            BOATBUILDING__Dealer_Option__c];
+                    List<BOATBUILDING__Dealer_Option__c> lstDealerOption = BOATBUILDING__Dealer_Option__c.getAll().values();
+
                     Map<String, BOATBUILDING__Quote_Line_Item__c> mapILI= new Map<String, BOATBUILDING__Quote_Line_Item__c>();
                     if(objQuote3.BOATBUILDING__Quote_Line_Item__r.size() > 0){
                         for(BOATBUILDING__Quote_Line_Item__c objQuoteLineItem : objQuote3.BOATBUILDING__Quote_Line_Item__r) {
@@ -1417,21 +1283,22 @@ public class BoatBuilderController {
                         ProductCodeForNonExistQuote.add(objDP.Part_Number__c);
                         if(mapILI.keySet().contains(objDP.Part_Number__c)){
                             
-                            BOATBUILDING__Quote_Line_Item__c objQLI = new BOATBUILDING__Quote_Line_Item__c();
+                            // BOATBUILDING__Quote_Line_Item__c objQLI = new BOATBUILDING__Quote_Line_Item__c();
                             
-                            objQLI.Name = 'QLI';
-                            objQLI.Name__c = objDP.Name;
-                            objQLI.Product__c = objProduct.Id;
-                            objQLI.Option_Category__c = 'Dealer Options';
-                            objQLI.Total_Price__c = objDP.Retail_Price__c;
-                            objQLI.Date__c =  Date.today();
-                            objQLI.Dealer_Price__c = objDP.Cost__c;
-                            objQLI.Product_Code__c = objDP.Part_Number__c;
-                            objQLI.Non_Taxable__c = mapILI.get(objDP.Part_Number__c).Non_Taxable__c;
-                            lstQuoteLineItem.add(objQLI);
+                            // objQLI.Name = 'QLI';
+                            // objQLI.Name__c = objDP.Name;
+                            // objQLI.Product__c = objProduct.Id;
+                            // objQLI.Option_Category__c = 'Dealer Options';
+                            // objQLI.Total_Price__c = objDP.Retail_Price__c;
+                            // objQLI.Date__c =  Date.today();
+                            // objQLI.Dealer_Price__c = objDP.Cost__c;
+                            // objQLI.Product_Code__c = objDP.Part_Number__c;
+                            // objQLI.Non_Taxable__c = mapILI.get(objDP.Part_Number__c).Non_Taxable__c;
+                            // lstQuoteLineItem.add(objQLI);
                             objDP.Non_Taxable__c = mapILI.get(objDP.Part_Number__c).Non_Taxable__c;
+                            objDP.Quantity__c = mapILI.get(objDP.Part_Number__c).Quantity__c;
                             lstDealerOptionWraper.add(new DealerOptionWraper(true, objDP, false));
-                            dealerOptionTotal += objDP.Retail_Price__c;
+                            dealerOptionTotal += (objDP.Retail_Price__c * objDP.Quantity__c);
                             
                         } else {
                             lstDealerOptionWraper.add(new DealerOptionWraper(false, objDP, false));
@@ -1443,27 +1310,28 @@ public class BoatBuilderController {
                             if(objQuoteLineItem.Product_Code__c != null){
                                 if(objQuoteLineItem.BOATBUILDING__Option_Category__c.equalsIgnoreCase('Dealer Options')) {
                                     if(!ProductCodeForNonExistQuote.contains(objQuoteLineItem.Product_Code__c)) {
-                                        dealerOptionTotal += objQuoteLineItem.Total_Price__c;
+                                        dealerOptionTotal += (objQuoteLineItem.Total_Price__c * objQuoteLineItem.Quantity__c);
                                         BOATBUILDING__Dealer_Option__c objDOO = new BOATBUILDING__Dealer_Option__c();
                                         objDOO.Name = objQuoteLineItem.BOATBUILDING__Name__c;
                                         objDOO.BOATBUILDING__Retail_Price__c = objQuoteLineItem.Total_Price__c;
+                                        objDOO.Quantity__c = objQuoteLineItem.Quantity__c;
                                         objDOO.BOATBUILDING__Cost__c = objQuoteLineItem.BOATBUILDING__Dealer_Price__c;
                                         objDOO.BOATBUILDING__Part_Number__c = objQuoteLineItem.BOATBUILDING__Product_Code__c;
                                         objDOO.Non_Taxable__c = objQuoteLineItem.Non_Taxable__c;
                                         lstDealerOptionWraper.add(new DealerOptionWraper(true, objDOO, false));
                                         
-                                        BOATBUILDING__Quote_Line_Item__c objQLI = new BOATBUILDING__Quote_Line_Item__c();
-                                        objQLI.Name = 'QLI';
-                                        objQLI.Name__c = objDOO.Name; 
-                                        objQLI.Product__c = objProduct.Id;
-                                        objQLI.Option_Category__c = 'Dealer Options';
-                                        objQLI.Total_Price__c = objDOO.Retail_Price__c;
-                                        objQLI.Date__c =  Date.today();
-                                        objQLI.Dealer_Price__c = objDOO.Cost__c;
-                                        objQLI.Product_Code__c = objDOO.Part_Number__c;
-                                        objQLI.Non_Taxable__c = objQuoteLineItem.Non_Taxable__c;
+                                        // BOATBUILDING__Quote_Line_Item__c objQLI = new BOATBUILDING__Quote_Line_Item__c();
+                                        // objQLI.Name = 'QLI';
+                                        // objQLI.Name__c = objDOO.Name; 
+                                        // objQLI.Product__c = objProduct.Id;
+                                        // objQLI.Option_Category__c = 'Dealer Options';
+                                        // objQLI.Total_Price__c = objDOO.Retail_Price__c;
+                                        // objQLI.Date__c =  Date.today();
+                                        // objQLI.Dealer_Price__c = objDOO.Cost__c;
+                                        // objQLI.Product_Code__c = objDOO.Part_Number__c;
+                                        // objQLI.Non_Taxable__c = objQuoteLineItem.Non_Taxable__c;
                                         
-                                        lstQuoteLineItem.add(objQLI);
+                                        // lstQuoteLineItem.add(objQLI);
                                         
                                     }
                                 }
@@ -1490,10 +1358,15 @@ public class BoatBuilderController {
                 totalPrice += QuoteTrailerPrice;
                 TrailerInfo = true;
             }
-            
+            System.debug('Debug for cwoRetailTotal:  '+cwoRetailTotal);
+            totalPrice += cwoRetailTotal;
+            System.debug('Debug for totalPrice:  '+totalPrice);
+            totalPriceDealer += cwoDealerTotal;
             //--------------------------------------Quote to Boat Builder---------------------------------------//
         } catch(Exception ex) {
-            SendEmailUtility.sendQuickEmail(ex.getMessage() +'  :  '+ex.getLineNumber());
+            SendEmailUtility.sendQuickEmail('BoatBuilderController : '+ex.getMessage() +'  :  '+ex.getLineNumber() + ' : '+ex.getStackTraceString() + ' : '+ex.getTypeName()+'---'+emailDebugBody);
+            System.debug(ex.getMessage() +'  :  '+ex.getLineNumber());
+
         }
         
         
@@ -1510,7 +1383,7 @@ public class BoatBuilderController {
         lstManufacturepop.add(new SelectOption('', '--None--'));
         
         if(lstRecT.size() > 0) {                                        
-            for(BOATBUILDING__Manufacturer__c objManufacturer : [Select Id, Name from BOATBUILDING__Manufacturer__c Where RecordTypeId =: lstRecT[0].Id ]){
+            for(BOATBUILDING__Manufacturer__c objManufacturer : [Select Id, Name from BOATBUILDING__Manufacturer__c Where RecordTypeId =: lstRecT[0].Id LIMIT 990]){
                 lstManufacturepop.add(new SelectOption(objManufacturer.id, objManufacturer.Name ));
             }
         }
@@ -1611,11 +1484,11 @@ public class BoatBuilderController {
                                         LIMIT 
                                         1];
             if(lstRecT.size() > 0) {                                        
-                for(BOATBUILDING__Manufacturer__c objManufacturer : [Select Id, Name from BOATBUILDING__Manufacturer__c Where RecordTypeId =: lstRecT[0].Id AND BOATBUILDING__Boat_Builder__c = true]){
+                for(BOATBUILDING__Manufacturer__c objManufacturer : [Select Id, Name from BOATBUILDING__Manufacturer__c Where RecordTypeId =: lstRecT[0].Id AND BOATBUILDING__Boat_Builder__c = true LIMIT 990]){
                     lstManufacture.add(new SelectOption(objManufacturer.id, objManufacturer.Name ));
                 }
             }
-        }
+        } 
         
         if(ApexPages.currentPage().getParameters().get('SelectedType') != null && ApexPages.currentPage().getParameters().get('manuId') != null) {
             //selectedType = ApexPages.currentPage().getParameters().get('SelectedType');
@@ -1655,6 +1528,11 @@ public class BoatBuilderController {
             update objInventory2;
             if(!invLineIdDlt.isEmpty()) {
                 delete [Select Id From BOATBUILDING__Inventory_Line_Item__c Where Id IN: invLineIdDlt];
+                for(Integer i = 0; i < lstInventoryLineItem.size(); i++) {
+                    if(lstInventoryLineItem[i].Id != null && invLineIdDlt.contains(lstInventoryLineItem[i].Id)) {
+                        lstInventoryLineItem.remove(i);
+                    }
+                }
             }
             if(!objInventory2.BOATBUILDING__Inventory_Line_Items__r.isEmpty()) {
                 List<BOATBUILDING__Inventory_Line_Item__c> lstILII = new List<BOATBUILDING__Inventory_Line_Item__c>(); 
@@ -1662,7 +1540,7 @@ public class BoatBuilderController {
                     System.debug('objDP: '+objDP);
                     for(BOATBUILDING__Inventory_Line_Item__c objILIU: objInventory2.BOATBUILDING__Inventory_Line_Items__r) {
                         System.debug('objILIU: '+objILIU);
-                        if(objDP.objDealerOption.Part_Number__c == objILIU.BOATBUILDING__Product_Code__c) {
+                        if(objDP.objDealerOption.Part_Number__c == objILIU.BOATBUILDING__Product_Code__c && !invLineIdDlt.contains(objILIU.Id)) {
                             objILIU.Non_Taxable__c = objDP.Non_Taxable;
                             lstILII.add(objILIU);
                         }
@@ -1672,7 +1550,10 @@ public class BoatBuilderController {
             }
             if(!lstInventoryLineItem.isEmpty()) {
                 for(BOATBUILDING__Inventory_Line_Item__c objILIU: lstInventoryLineItem) {
-                    objILIU.BOATBUILDING__Related_to_Inventory__c = objInventory2.Id;
+                    if(objILIU.BOATBUILDING__Related_to_Inventory__c == null) 
+                    {
+                        objILIU.BOATBUILDING__Related_to_Inventory__c = objInventory2.Id;
+                    }
                 }
                 System.debug('lstDealerOptionWraper: '+lstDealerOptionWraper);
                 for(DealerOptionWraper objDP :lstDealerOptionWraper) {
@@ -1685,7 +1566,9 @@ public class BoatBuilderController {
                     }
                 }
                 
-                insert lstInventoryLineItem;
+                
+
+                upsert lstInventoryLineItem;
             }
         } catch(Exception ex) {
             System.debug('Debug Log For Exception: '+ex);
@@ -1714,7 +1597,7 @@ public class BoatBuilderController {
             
             BOATBUILDING__System_Configure__c objSCC = BOATBUILDING__System_Configure__c.getOrgDefaults();
             if(objSCC != null && objSCC.BOATBUILDING__Quote_Pdf_Width__c != null) {
-            	width = String.valueOf(objSCC.BOATBUILDING__Quote_Pdf_Width__c);
+                width = String.valueOf(objSCC.BOATBUILDING__Quote_Pdf_Width__c);
             }
             objSLC1 = new BOATBUILDING__Store_Location_Config__mdt();
             objSLC2 = new BOATBUILDING__Store_Location_Config__mdt();
@@ -1769,7 +1652,10 @@ public class BoatBuilderController {
                 }
                 objQuote2 = [Select 
                              q.Engine__c,
-        
+                             q.GST__c,
+                             q.PST__c,
+                             q.GST_D__c,
+                             q.PST_D__c,
                              q.Trailer__c,
                              q.Engine__r.Total_MSRP_Price__c,
                              q.Engine__r.Manufacturer__c,
@@ -1800,10 +1686,11 @@ public class BoatBuilderController {
                              q.LastActivityDate, q.IsDeleted, q.Id, q.Grand_Total__c,  q.Fax__c, q.Expiration_Date__c, q.Email__c, q.No_Trailer__c, 
                              q.Discount__c, q.Description__c,q.CreatedDate, q.CreatedById, q.Contact_Name__c, q.Bill_To__c, q.Bill_To_Name__c, q.Additional_To__c, Store_Location__c, 
                              q.Additional_To_Name__c, q.Account_Name__c,(Select Id, IsDeleted, Name, CreatedDate, CreatedById, LastModifiedDate, LastModifiedById,
-                                                                         SystemModstamp, LastActivityDate, Date__c, Discount__c, Line_Item_Description__c, List_Price__c, Product__c, Product_Code__c, Quantity__c,
-                                                                         Quote__c, Sales_Price__c, Sub_Total__c, Total_Price__c, Option_Category__c, Name__c From BOATBUILDING__Quote_Line_Item__r) From BOATBUILDING__Quote__c q where q.Id =: ApexPages.currentPage().getParameters().get('Id') limit 1];
+                                                                         SystemModstamp, LastActivityDate, Date__c, Discount__c, Line_Item_Description__c, List_Price__c, Product__c, Product_Code__c, Quantity__c, BOATBUILDING__Product_Type__c,
+                                                                         Quote__c, Sales_Price__c, Sub_Total__c, Total_Price__c, Option_Category__c, Name__c, BOATBUILDING__Total_Dealer_Price__c, BOATBUILDING__Total_Retail_Price__c From BOATBUILDING__Quote_Line_Item__r) From BOATBUILDING__Quote__c q where q.Id =: ApexPages.currentPage().getParameters().get('Id') limit 1];
+
                 
-                
+                system.debug('>>>>>>>###'+objQuote2.ACV_FORM__r.Boat_HIN__c);
                 if(objQuote2.Trailer__c != null) {
                     TrailerInfoQuote = true;
                 }
@@ -1812,11 +1699,19 @@ public class BoatBuilderController {
                     EngineInfoQuote = true;
                 }
                 
+                if(objQuote2.BOATBUILDING__State__c != null) {
+                    BoatBuilderUtil objBoatBuilderUtil = new BoatBuilderUtil(objQuote2.BOATBUILDING__State__c); 
+                    isCanadian = objBoatBuilderUtil.isCanadianTax();
+                }
+
                 BoatDis = '';  
                 System.debug('Debug Log for Disclaimer: '+objQuote2.BOATBUILDING__Dealer_Disclaimer__c);
                 if(String.isNotBlank(objQuote2.BOATBUILDING__Dealer_Disclaimer__c)){
-                    BOATBUILDING__System_Configure__c objBoatSymCon = BOATBUILDING__System_Configure__c.getOrgDefaults();
-                    if(objBoatSymCon != null) {
+                    //BOATBUILDING__System_Configure__c objBoatSymCon = BOATBUILDING__System_Configure__c.getOrgDefaults();
+
+                    List<BOATBUILDING__Store_Location_Config__mdt> lstSLCDis = [Select Id, MasterLabel, BOATBUILDING__New_Boat_Disclaimer__c, BOATBUILDING__Used_Boat_Disclaimer__c From BOATBUILDING__Store_Location_Config__mdt ORDER BY BOATBUILDING__Priority__c ASC];
+
+                    /*if(objBoatSymCon != null) {
                         if(objQuote2.BOATBUILDING__Dealer_Disclaimer__c.equalsIgnoreCase('New Boat Disclaimer'))
                         {
                             BoatDis = objBoatSymCon.BOATBUILDING__New_Boat_Disclaimer__c;
@@ -1825,6 +1720,74 @@ public class BoatBuilderController {
                         {
                             BoatDis = objBoatSymCon.BOATBUILDING__Used_Boat_Disclaimer__c;
                         }
+                    }*/
+                     
+                    if(!lstSLCDis.isEmpty()) {
+                        if(String.isNotBlank(objQuote2.BOATBUILDING__Store_Location__c)) {
+                            if(objQuote2.BOATBUILDING__Dealer_Disclaimer__c.equalsIgnoreCase('New Boat Disclaimer'))
+                            {
+                                for(BOATBUILDING__Store_Location_Config__mdt objSLC: lstSLCDis) {
+                                    if(objSLC.MasterLabel == objQuote2.BOATBUILDING__Store_Location__c && String.isNotBlank(objSLC.BOATBUILDING__New_Boat_Disclaimer__c)) {
+                                        BoatDis = objSLC.BOATBUILDING__New_Boat_Disclaimer__c;
+                                        break;
+                                    }
+                                }
+                            }
+                            else if(objQuote2.BOATBUILDING__Dealer_Disclaimer__c.equalsIgnoreCase('Used Boat Disclaimer'))
+                            {
+                                //BoatDis = objBoatSymCon.BOATBUILDING__Used_Boat_Disclaimer__c;
+                                for(BOATBUILDING__Store_Location_Config__mdt objSLC: lstSLCDis) {
+                                    if(objSLC.MasterLabel == objQuote2.BOATBUILDING__Store_Location__c && String.isNotBlank(objSLC.BOATBUILDING__Used_Boat_Disclaimer__c)) {
+                                        BoatDis = objSLC.BOATBUILDING__Used_Boat_Disclaimer__c;
+                                        break;
+                                    }
+                                }
+                            }
+                            
+                        }
+                        
+                        if(String.isBlank(BoatDis)) {
+                            String defaultVal = ''; 
+                            Schema.DescribeFieldResult F = BOATBUILDING__Quote__c.BOATBUILDING__Store_Location__c.getDescribe(); 
+                            List <Schema.PicklistEntry> pickVals = F.getPicklistValues();         
+                            for (Schema.PicklistEntry pv: pickVals) {     
+                                if (pv.isDefaultValue()) {         
+                                    defaultVal = pv.getValue();     
+                                }     
+                            }
+                            if(String.isNotBlank(defaultVal)) {
+                                if(objQuote2.BOATBUILDING__Dealer_Disclaimer__c.equalsIgnoreCase('New Boat Disclaimer'))
+                                {
+                                    for(BOATBUILDING__Store_Location_Config__mdt objSLC: lstSLCDis) {
+                                        if(objSLC.MasterLabel == defaultVal && String.isNotBlank(objSLC.BOATBUILDING__New_Boat_Disclaimer__c)) {
+                                            BoatDis = objSLC.BOATBUILDING__New_Boat_Disclaimer__c;
+                                            break;
+                                        } 
+                                    }
+                                }
+                                else if(objQuote2.BOATBUILDING__Dealer_Disclaimer__c.equalsIgnoreCase('Used Boat Disclaimer'))
+                                {
+                                    //BoatDis = objBoatSymCon.BOATBUILDING__Used_Boat_Disclaimer__c;
+                                    for(BOATBUILDING__Store_Location_Config__mdt objSLC: lstSLCDis) {
+                                        if(objSLC.MasterLabel == defaultVal && String.isNotBlank(objSLC.BOATBUILDING__Used_Boat_Disclaimer__c)) {
+                                            BoatDis = objSLC.BOATBUILDING__Used_Boat_Disclaimer__c;
+                                            break; 
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        if(String.isBlank(BoatDis)) {
+                            if(objQuote2.BOATBUILDING__Dealer_Disclaimer__c.equalsIgnoreCase('New Boat Disclaimer') && String.isNotBlank(lstSLCDis[0].BOATBUILDING__New_Boat_Disclaimer__c)) 
+                            {
+                                BoatDis = lstSLCDis[0].BOATBUILDING__New_Boat_Disclaimer__c; 
+                            } 
+                            else if(objQuote2.BOATBUILDING__Dealer_Disclaimer__c.equalsIgnoreCase('Used Boat Disclaimer') && String.isNotBlank(lstSLCDis[0].BOATBUILDING__Used_Boat_Disclaimer__c)) 
+                            {
+                                BoatDis = lstSLCDis[0].BOATBUILDING__Used_Boat_Disclaimer__c;
+                            }
+                        }
+
                     }
                 }
                 
@@ -1865,15 +1828,40 @@ public class BoatBuilderController {
                 
                 
                 if(objQuote2.Test_2__c != null){
+                    // isSideContent = false;
+                    // isBowContent = false;
+        
+                    List<ContentDocumentLink> lstContentDocLink = [SELECT ContentDocumentId, LinkedEntityId FROM ContentDocumentLink WHERE LinkedEntityId =: objQuote2.Test_2__c];
+                    Map<String, String> mapCDID_LEID = new Map<String, String>(); 
+                    for(ContentDocumentLink cdl: lstContentDocLink){
+                        System.debug('Debug Log For lstContentDocLink cdl : '+cdl.ContentDocumentId);
+                        mapCDID_LEID.put(cdl.ContentDocumentId, cdl.LinkedEntityId);
+                    }
+        
+                    List<ContentVersion> lstContentVersion = [select id,FileType, Title,FileExtension, Versiondata, ContentDocumentId from ContentVersion where islatest = true AND ContentDocumentId IN : mapCDID_LEID.keySet()];
+                    for(ContentVersion objAtt: lstContentVersion) {
+                        System.debug('Debug Log For lstContentVersion objAtt : '+objAtt.Id);
+        
+                        if(objAtt.Title.containsIgnoreCase('side__c')) {
+                            isSideContent = true;
+                            quoteImg1 = objAtt.Id;
+                        }
+                        if(objAtt.Title.containsIgnoreCase('bow__c')) {
+                            isBowContent = true;
+                            quoteImg2 = objAtt.Id;
+                        } 
+        
+                    }
+        
                     List<Attachment> att = [Select Id, Name From Attachment Where ParentId =: objQuote2.Test_2__c];
-                    if(att.size() > 0) {
+                    if(att.size() > 0 && ( !isSideContent || !isBowContent )) {
                         for(Attachment objAttt: att) {
                             if(objAttt.Name.containsIgnoreCase('side__c')) {
                                 quoteImg1 = objAttt.Id;
                             }
                             if(objAttt.Name.containsIgnoreCase('bow__c')) {
                                 quoteImg2 = objAttt.Id;
-                            }
+                            } 
                         }
                     }
                 }
@@ -1888,7 +1876,7 @@ public class BoatBuilderController {
                 }
                 else if(objQuote2.Test_2__c != null) {
                     if(objInventory2.Id == null || objInventory2.Id == '') {
-                        objInventory2 = [SELECT Manufacturer__c, Year__c, Model__c, Model_Variant__c FROM BOATBUILDING__Inventory__c WHERE Id =: objQuote2.Test_2__c LIMIT 1];
+                        objInventory2 = [SELECT Manufacturer__c, BOATBUILDING__Engine_1_SN__c, BOATBUILDING__Engine_2_SN__c, BOATBUILDING__Engine_3_SN__c, BOATBUILDING__Engine_4_SN__c,Year__c, Model__c, Model_Variant__c FROM BOATBUILDING__Inventory__c WHERE Id =: objQuote2.Test_2__c LIMIT 1];
                     }
                     if(objInventory2.Id != null) {
                         if(objInventory2.Manufacturer__c != null) getManufacturerName =  objInventory2.Manufacturer__c;
@@ -1911,7 +1899,7 @@ public class BoatBuilderController {
                 
                 Map<String, List<Quote_Line_Item__c>> mapQuoteLineItem = new Map<String, List<Quote_Line_Item__c>>();
                 Map<String, List<Quote_Line_Item__c>> mapQuoteLineItem1 = new Map<String, List<Quote_Line_Item__c>>();
-                
+                List<String> lstQLITSort = new  List<String>();
                 if(objQuote2.BOATBUILDING__Quote_Line_Item__r != null && objQuote2.BOATBUILDING__Quote_Line_Item__r.size() > 0) {
                     for(BOATBUILDING__Quote_Line_Item__c objQLI2 :  objQuote2.BOATBUILDING__Quote_Line_Item__r) {
                         if(!mapQuoteLineItem.containsKey(objQLI2.Option_Category__c)){
@@ -1921,7 +1909,12 @@ public class BoatBuilderController {
                             mapQuoteLineItem.get(objQLI2.Option_Category__c).add(objQLI2);
                         }
                     } 
+                   /* lstQLITSort.addAll(mapQuoteLineItem.keySet());
+                    system.debug('<><><><><><>B'+lstQLITSort);
+                    lstQLITSort.sort();
+                    system.debug('<><><><><><>A'+lstQLITSort); */
                     for(String srtQuoteMapKeys : mapQuoteLineItem.keySet()) {
+                       // for(String srtQuoteMapKeys : lstQLITSort) {
                         lstQuoteOptionCatagoryWrapper.add(new QuoteOptionCatagoryWrapper(srtQuoteMapKeys, mapQuoteLineItem.get(srtQuoteMapKeys) ));
                     }
                     
@@ -1937,6 +1930,7 @@ public class BoatBuilderController {
                     Integer ModVal = Math.mod(mapQuoteLineItem1.keySet().size(), 2);
                     Integer MidVal = Integer.valueOf(mapQuoteLineItem1.keySet().size()/2);
                     
+                    
                     if(mapQuoteLineItem1.keySet().size() == 1) {
                         for(String srtQuoteMapKeys : mapQuoteLineItem1.keySet()) {
                             lstQLIDis1.add(new QuoteOptionCatagoryWrapper(srtQuoteMapKeys, mapQuoteLineItem1.get(srtQuoteMapKeys) ));
@@ -1946,7 +1940,7 @@ public class BoatBuilderController {
                         for(String srtQuoteMapKeys : mapQuoteLineItem1.keySet()) {
                             lstString.add(srtQuoteMapKeys);
                         }
-                        
+                       
                         if(ModVal == 1) {
                             for(Integer i = 0; i <= MidVal; i++) {
                                 lstQLIDis1.add(new QuoteOptionCatagoryWrapper(lstString[i], mapQuoteLineItem1.get(lstString[i]) ));
@@ -1973,7 +1967,8 @@ public class BoatBuilderController {
                 return null;
             }  
         } catch(Exception ex) {
-            SendEmailUtility.sendQuickEmail(ex.getStackTraceString()+'--'+ex.getMessage()+'---'+ex.getLineNumber() + ' : '+objQuote2);
+            //SendEmailUtility.sendQuickEmail(ex.getStackTraceString()+'--'+ex.getMessage()+'---'+ex.getLineNumber() + ' : '+objQuote2);
+            System.debug(ex.getStackTraceString()+'--'+ex.getMessage()+'---'+ex.getLineNumber() + ' : '+objQuote2);
             return null;
         }
     }
@@ -2211,23 +2206,6 @@ setModel.add(new SelectOption('', '--None--'));
                 }            
             }
         }
-        //}
-        /* else if(selectedType == 'Trailer') {
-if(selectedModel != null){
-System.debug('>>>>>>>>>>>>>selectedModel'+selectedModel);
-objProduct = [Select SystemModstamp,Trailer_VIN__c, Boat_Length_in_feets__c,Transmission_Gearbox_SN__c,Sale_Price__c,  State__c,M_Manufacturer1__c,Product_Short_Description__c, Product_Manufacturer__c, Product_Long_Description__c,
-Part_Number__c, Name, M_Year__c,  Engine_SN__c,Trailer_Trade_Over_Allowance_Calculated__c, M_Trailer_Trade_Allowance__c, 
-M_Trailer_Sales_Tax__c, M_Model_Variant__c,M_Dealer_Discount__c,M_Dealer_COD_Discount__c,M_Dealer_Flat_Discount__c,
-M_Trailer_Reg_Fee__c, M_Trailer_MSRP_PRICE__c, M_Trailer_Actual_Cost_Value_ACV__c, M_Trade_PayOFF__c, 
-M_Total_Price_Calculated__c, M_Total_Over_Allowance_Calculated__c, M_Deal_Margin__c,M_Total_MSRP__c, M_Total_Due__c, M_Total_Amount_Financed_Calculated__c,
-M_Finance_Term__c,M_Rfinance_Rate__c, M_Retail_Price__c, M_Quantity__c, Freight__c,  
-M_Product_Family__c,  M_Payment__c, M_Dealer_Base_Price__c, 
-MModel2__c,  M_Manufacture_Status__c, M_Hidden_Box__c,  M_Down_Payment__c,M_Doc_Fee__c, M_Discount__c, M_Description__c,  M_Dealer_Stock__c,
-M_Dealer_Status__c, Prep__c,  M_Dealer_Comments__c,  M_Boat_Trade_Over_Allowance_Calculated__c, 
-M_Boat_Trade_Allowance__c, M_Boat_Sales_Tax_Calculated__c, M_Boat_Reg_Fee__c, M_Boat_MSRP_PRICE__c, M_Boat_Actual_Cost_Value_ACV__c, M_Net_Selling_Price_Calculated__c, LastViewedDate, LastReferencedDate, LastModifiedDate, LastModifiedById, LastActivityDate, Id, 
-Hull_Id__c, Dealer__c, Cost_Price__c, M_Your_Price_Calculated__c, M_Product_Salesperson_new__c From BOATBUILDING__Product__c p where id =: selectedYear limit 1];
-} 
-}*/
         if(objProduct.Id != null){
             selectedModelSecondPage = String.valueOf(objProduct.MModel2__c);
             manufacturerStatus = String.valueOf(objProduct.M_Manufacture_Status__c);
@@ -2250,7 +2228,6 @@ Hull_Id__c, Dealer__c, Cost_Price__c, M_Your_Price_Calculated__c, M_Product_Sale
                     mapSelectedCategory = OptionAndSelectedCatagoryUtil.getInstance(selectedModelVariant, selectedManufacture, selectedYear, 'New Boats').getSelectedCatagory();
                 } 
             } else if(selectedType == 'Trailer' ||  selectedType == 'Engine') {
-                //mapSelectedCategory = OptionAndSelectedCatagoryUtil.getInstance(selectedYear, selectedManufacture, '', 'Trailer').getSelectedCatagory();
                 if(!modelVarientFlag) {  
                     mapSelectedCategory = OptionAndSelectedCatagoryUtil.getInstance(selectedModel, selectedManufacture, selectedYear, selectedType).getSelectedCatagory();
                 }else if(modelVarientFlag) {
@@ -2268,6 +2245,10 @@ Hull_Id__c, Dealer__c, Cost_Price__c, M_Your_Price_Calculated__c, M_Product_Sale
                 mapCheckBoxWraper.put(strMapValues, lstCheckBoxWraper);
             }
             
+            for(String strMapValues : mapCheckBoxWraper.keySet()){
+                System.debug('>>>>>>>>>> mapCheckBoxWraperstrMapValues: '+strMapValues);
+            }
+
             System.debug('Debug Log for mapCheckBoxWraper:' +mapCheckBoxWraper.size());
             System.debug('Debug Log for mapSelectedCategory:' +mapSelectedCategory.size());   
             for(String strUtil : mapSelectedCategory.keySet()){
@@ -2301,15 +2282,16 @@ Hull_Id__c, Dealer__c, Cost_Price__c, M_Your_Price_Calculated__c, M_Product_Sale
             //lstPriceAndProductOptionWraperClass.sort();
         }
         
-        List<BOATBUILDING__Dealer_Option__c> lstDealerOption = [SELECT 
-                                                                Id,
-                                                                Name,
-                                                                Part_Number__c,
-                                                                Retail_Price__c,
-                                                                Cost__c,
-                                                                Non_Taxable__c
-                                                                FROM
-                                                                BOATBUILDING__Dealer_Option__c];
+        List<BOATBUILDING__Dealer_Option__c> lstDealerOption = BOATBUILDING__Dealer_Option__c.getAll().values();
+        // [SELECT 
+        //                                                         Id,
+        //                                                         Name,
+        //                                                         Part_Number__c,
+        //                                                         Retail_Price__c,
+        //                                                         Cost__c,
+        //                                                         Non_Taxable__c
+        //                                                         FROM
+        //                                                         BOATBUILDING__Dealer_Option__c];
         
         if(lstDealerOption.size() > 0){
             for(BOATBUILDING__Dealer_Option__c objDealerOption : lstDealerOption){
@@ -2425,8 +2407,8 @@ Hull_Id__c, Dealer__c, Cost_Price__c, M_Your_Price_Calculated__c, M_Product_Sale
                 }
                 upsert objAccount;
             }catch(Exception ex){
-                isError = true;
-                SendEmailUtility.sendQuickEmail(ex.getStackTraceString()+'--'+ex.getMessage()+'---'+ex.getLineNumber());
+                isError = true; 
+                //SendEmailUtility.sendQuickEmail(ex.getStackTraceString()+'--'+ex.getMessage()+'---'+ex.getLineNumber());
                 Apexpages.addMessage(new Apexpages.Message(Apexpages.Severity.FATAL,ex.getStackTraceString()));
             }
         }
@@ -2456,7 +2438,7 @@ Hull_Id__c, Dealer__c, Cost_Price__c, M_Your_Price_Calculated__c, M_Product_Sale
             List<Contact> lstConForDel = [SELECT Id From Contact WHERE Id <>: objContact.Id AND Email =: objContact.Email AND AccountId =: objContact.AccountId LIMIT 1];
             if(lstConForDel.size() > 0) {
                 try {
-                    delete lstConForDel[0];
+                    //delete lstConForDel[0];
                 }
                 catch(Exception ex) {
                     System.debug('Debug Log For Exception : '+ex);
@@ -2523,103 +2505,240 @@ Hull_Id__c, Dealer__c, Cost_Price__c, M_Your_Price_Calculated__c, M_Product_Sale
         return new PageReference('/'+objItem.Id);
     }
     
+    
+    
     public void getMFGPrice() {
         try {
             Integer index = Integer.valueOf(rowNumber);
+            Boolean executeFlag = false;
+            String recId = '';
+            System.debug('Debug Log for buttonRenderForPlaceOrder: '+buttonRenderForPlaceOrder);
+            Boolean tempbuttonRenderForPlaceOrder = buttonRenderForPlaceOrder; 
+            System.debug('Debug Log for selectedOptionString: '+selectedOptionString);
+            System.debug('Debug Log for mapCheckBoxWraper: '+mapCheckBoxWraper);
+            System.debug('Debug Log for index: '+index);
+            System.debug('Debug Log for mapCheckBoxWraper.get(selectedOptionString): '+mapCheckBoxWraper.get(selectedOptionString));
+            for(String strMapValues : mapCheckBoxWraper.keySet()){
+                System.debug('>>>>>>>>>> mapCheckBoxWraperstrMapValues: '+strMapValues);
+            }
             if(mapCheckBoxWraper.get(selectedOptionString)[index-1] != null) {
                 selectedOptionCategory = mapCheckBoxWraper.get(selectedOptionString)[index-1].objProductPriceForSelectedCategory.ProductSelected_Category__c;
-            }
-            
-            Decimal tempInt;
-            Decimal tempIntDealer;
-            if(mapCheckBoxWraper.get(selectedOptionString)[index-1].objProductPriceForSelectedCategory.ProductRetail_Price__c != null){
-                tempInt = mapCheckBoxWraper.get(selectedOptionString)[index-1].objProductPriceForSelectedCategory.ProductRetail_Price__c;
-            }else{
-                tempInt = 0.00;
-            }
-            if(mapCheckBoxWraper.get(selectedOptionString)[index-1].objProductPriceForSelectedCategory.Dealer_Price__c != null){
-                tempIntDealer = mapCheckBoxWraper.get(selectedOptionString)[index-1].objProductPriceForSelectedCategory.Dealer_Price__c;
-            }else{
-                tempIntDealer = 0.00;
-            }
-            
-            String typeAssign = mapCheckBoxWraper.get(selectedOptionString)[index-1].objProductPriceForSelectedCategory.RecordType.Name;
-            if(typeAssign.containsIgnoreCase('new boat')) {
-                typeAssign = 'New Boat';
-            }
-            
-            totalPrice = totalPrice + tempInt;
-            MfgOptTota = MfgOptTota + tempInt;
-            
-            MfgOptDealerTota = MfgOptDealerTota + tempIntDealer;
-            totalPriceDealer = totalPriceDealer + tempIntDealer;
-            
-            if(buttonRenderForSaveAndReCal){
+                executeFlag = mapCheckBoxWraper.get(selectedOptionString)[index-1].checkBox;
+                System.debug('Debug Log for Quantity: '+mapCheckBoxWraper.get(selectedOptionString)[index-1].objProductPriceForSelectedCategory.Quantity__c);
+                System.debug('Debug Log for checkBox: '+mapCheckBoxWraper.get(selectedOptionString)[index-1].checkBox);
+                Decimal qt = mapCheckBoxWraper.get(selectedOptionString)[index-1].objProductPriceForSelectedCategory.Quantity__c != null ? mapCheckBoxWraper.get(selectedOptionString)[index-1].objProductPriceForSelectedCategory.Quantity__c : 0.00;
+                renderPPList(mapCheckBoxWraper.get(selectedOptionString)[index-1].objProductPriceForSelectedCategory.Id, qt);
                 
-                
-                BOATBUILDING__Quote_Line_Item__c objQLI = new BOATBUILDING__Quote_Line_Item__c();
-                if(String.isNotBlank(selectedOptionString)) {
-                    objQLI.Option_Category__c = selectedOptionString;
+            }
+            buttonRenderForPlaceOrder = tempbuttonRenderForPlaceOrder;
+
+            if(executeFlag) {
+                Decimal tempInt;
+                Decimal tempIntDealer;
+                Decimal tempQuantity = mapCheckBoxWraper.get(selectedOptionString)[index-1].objProductPriceForSelectedCategory.Quantity__c != null ? mapCheckBoxWraper.get(selectedOptionString)[index-1].objProductPriceForSelectedCategory.Quantity__c : 0.00;
+                String strPartNumberP = String.valueOf(mapCheckBoxWraper.get(selectedOptionString)[index-1].objProductPriceForSelectedCategory.Product_Code__c);
+                if(mapCheckBoxWraper.get(selectedOptionString)[index-1].objProductPriceForSelectedCategory.ProductRetail_Price__c != null){
+                    tempInt = mapCheckBoxWraper.get(selectedOptionString)[index-1].objProductPriceForSelectedCategory.ProductRetail_Price__c;
+                }else{
+                    tempInt = 0.00;
                 }
-                if(selectedOptionCategory != null && selectedOptionCategory != ''){
-                    objQLI.Name = 'QLI';
-                    objQLI.Name__c = selectedOptionCategory;
+                if(mapCheckBoxWraper.get(selectedOptionString)[index-1].objProductPriceForSelectedCategory.Dealer_Price__c != null){
+                    tempIntDealer = mapCheckBoxWraper.get(selectedOptionString)[index-1].objProductPriceForSelectedCategory.Dealer_Price__c;
+                }else{
+                    tempIntDealer = 0.00;
+                }
+
+                String typeAssign = mapCheckBoxWraper.get(selectedOptionString)[index-1].objProductPriceForSelectedCategory.RecordType.Name;
+                if(typeAssign.containsIgnoreCase('new boat')) {
+                    typeAssign = 'New Boat';
+                }
+                if(buttonRenderForSaveAndReCal){
+                    BOATBUILDING__Quote_Line_Item__c objQLI = new BOATBUILDING__Quote_Line_Item__c();
+                    if(String.isNotBlank(selectedOptionString)) {
+                        objQLI.Option_Category__c = selectedOptionString;
+                    }
+                    if(selectedOptionCategory != null && selectedOptionCategory != ''){
+                        objQLI.Name = 'QLI';
+                        objQLI.Name__c = selectedOptionCategory;
+                    }
+                    if(objProduct.Id != null){
+                        objQLI.Product__c = objProduct.Id;
+                    }
+                    if(tempInt != null){
+                        objQLI.Total_Price__c = tempInt;
+                    }
+                    if(tempIntDealer != null){
+                        objQLI.Dealer_Price__c = tempIntDealer;
+                    
+                    }
+                    objQLI.Quantity__c =  tempQuantity;
+                    objQLI.Date__c =  Date.today();
+                    objQLI.Product_Type__c =  typeAssign;
+                    objQLI.Non_Taxable__c = false;
+                    if(mapCheckBoxWraper.get(selectedOptionString)[index-1].objProductPriceForSelectedCategory.Product_Code__c != null){
+                        String strPartNumber = String.valueOf(mapCheckBoxWraper.get(selectedOptionString)[index-1].objProductPriceForSelectedCategory.Product_Code__c);
+                        objQLI.Product_Code__c = strPartNumber ;
+                    }
+                    if(!setcodeId.contains(objQLI.Product_Code__c)) {
+                        lstQuoteLineItem.add(objQLI);
+                    } else {
+                        if(lstQuoteLineItem.size() > 0){
+                            for(Integer i=0 ; i<lstQuoteLineItem.size() ; i++){
+                                if(lstQuoteLineItem[i].Product_Code__c == strPartNumberP) {
+                                    lstQuoteLineItem[i].Quantity__c =  tempQuantity;
+                                    lstQuoteLineItem[i].Total_Price__c = tempInt;
+                                    lstQuoteLineItem[i].Dealer_Price__c = tempIntDealer;
+                                }
+                            }
+                        }
+                    }
+                }
+                
+                if(buttonRenderForPlaceOrder || ApexPages.currentPage().getParameters().get('invId') != null) {
+                    
+                    
+                    BOATBUILDING__Inventory_Line_Item__c objILI = new BOATBUILDING__Inventory_Line_Item__c();
+                    if(String.isNotBlank(selectedOptionString)) {
+                        objILI.Option_Category__c = selectedOptionString;
+                    }
+                    if(selectedOptionCategory != null && selectedOptionCategory != ''){
+                        objILI.Name = 'ILI'; //Dummy value
+                        objILI.Name__c = selectedOptionCategory;
+                    }
+                    if(tempInt != null){
+                        objILI.Price__c = tempInt;
+                    }
+                    if(tempIntDealer != null){
+                        objILI.Dealer_Price__c = tempIntDealer;
+                    }
+                    if(mapCheckBoxWraper.get(selectedOptionString)[index-1].objProductPriceForSelectedCategory.Product_Code__c != null){
+                        String strPartNumber = String.valueOf(mapCheckBoxWraper.get(selectedOptionString)[index-1].objProductPriceForSelectedCategory.Product_Code__c);
+                        objILI.Product_Code__c = strPartNumber ;
+                        
+                    }
+                    objILI.Quantity__c =  tempQuantity;
+                    objILI.Non_Taxable__c = false;
+                    objILI.Product_Type__c =  typeAssign;
+                    if(!setcodeId.contains(objILI.Product_Code__c)) {
+                        lstInventoryLineItem.add(objILI);
+                    } else {
+                        if(lstInventoryLineItem.size() > 0){
+                            for(Integer i=0 ; i<lstInventoryLineItem.size() ; i++){
+                                if(lstInventoryLineItem[i].Product_Code__c == strPartNumberP) {
+                                    lstInventoryLineItem[i].Quantity__c =  tempQuantity;
+                                    lstInventoryLineItem[i].Price__c = tempInt;
+                                    lstInventoryLineItem[i].Dealer_Price__c = tempIntDealer;
+                                }
+                            } 
+                        }
+                    }
+                }
+                if(mapCheckBoxWraper.get(selectedOptionString)[index-1].objProductPriceForSelectedCategory.Product_Code__c != null){
+                    String strPartNumber = String.valueOf(mapCheckBoxWraper.get(selectedOptionString)[index-1].objProductPriceForSelectedCategory.Product_Code__c);
+                    setcodeId.add(strPartNumber);
+                }
+            }
+            
+            System.debug('Debug Log for lstQuoteLineItem : '+lstQuoteLineItem);
+            System.debug('Debug Log for lstQuoteLineItem : '+lstQuoteLineItem.size());
+            System.debug('Debug Log for lstInventoryLineItem : '+lstInventoryLineItem);
+            
+        } catch(Exception ex) {
+            Apexpages.addMessage(new Apexpages.Message(Apexpages.Severity.FATAL,ex.getStackTraceString() + ' : ' +ex.getLineNumber()));
+            System.debug('Debug log For Exception: '+ex.getMessage()+ ' : ' +ex.getStackTraceString() + ' : ' +ex.getLineNumber());
+        }
+        //System.debug('Debug log For lstQuoteLineItem: '+lstQuoteLineItem);
+    }
+    public void getDealerOptionPrice(){
+        System.debug('Debug Log For dealerPartNumber: '+dealerPartNumber);  
+        
+        for(DealerOptionWraper objDD :lstDealerOptionWraper){
+            renderDOList(objDD.objDealerOption.Id);
+            if(objDD.objDealerOption.Part_Number__c == dealerPartNumber && objDD.isSelect){
+                System.debug('Debug Log For objDD.objDealerOption.Quantity__c: '+objDD.objDealerOption.Quantity__c);
+                BOATBUILDING__Quote_Line_Item__c objQLI = new BOATBUILDING__Quote_Line_Item__c();
+                objQLI.Option_Category__c = 'Dealer Options';
+                if(objDD.objDealerOption.Name != null){
+                    objQLI.Name = 'QLI'; 
+                    objQLI.Name__c = objDD.objDealerOption.Name;
                 }
                 if(objProduct.Id != null){
                     objQLI.Product__c = objProduct.Id;
                 }
-                if(tempInt != null){
-                    objQLI.Total_Price__c = tempInt;
+                if(objDD.objDealerOption.Retail_Price__c != null){
+                    objQLI.Total_Price__c = objDD.objDealerOption.Retail_Price__c;
                 }
-                if(tempIntDealer != null){
-                    objQLI.Dealer_Price__c = tempIntDealer;
+                if(objDD.objDealerOption.Cost__c != null){
+                    objQLI.Dealer_Price__c = objDD.objDealerOption.Cost__c;
                 }
                 objQLI.Date__c =  Date.today();
-                objQLI.Product_Type__c =  typeAssign;
-                objQLI.Non_Taxable__c = false;
-                if(mapCheckBoxWraper.get(selectedOptionString)[index-1].objProductPriceForSelectedCategory.Product_Code__c != null){
-                    String strPartNumber = String.valueOf(mapCheckBoxWraper.get(selectedOptionString)[index-1].objProductPriceForSelectedCategory.Product_Code__c);
-                    objQLI.Product_Code__c = strPartNumber ;
+                if(objDD.objDealerOption.Part_Number__c != null){
+                    objQLI.Product_Code__c = objDD.objDealerOption.Part_Number__c ;
                 }
-                lstQuoteLineItem.add(objQLI);
-            }
-            
-            if(buttonRenderForPlaceOrder || ApexPages.currentPage().getParameters().get('invId') != null) {
-                
+                if(objDD.objDealerOption.Quantity__c != null){
+                    objQLI.Quantity__c = objDD.objDealerOption.Quantity__c ;
+                }
+                objQLI.Non_Taxable__c = objDD.Non_Taxable;
+                if(!setcodeId.contains(objDD.objDealerOption.Part_Number__c)) {
+                    lstQuoteLineItem.add(objQLI);
+                } else {
+                    if(lstQuoteLineItem.size() > 0){
+                        for(Integer i=0 ; i<lstQuoteLineItem.size() ; i++){
+                            if(lstQuoteLineItem[i].Product_Code__c == objDD.objDealerOption.Part_Number__c) {
+                                lstQuoteLineItem[i].Quantity__c =  objDD.objDealerOption.Quantity__c;
+                                lstQuoteLineItem[i].Total_Price__c = objDD.objDealerOption.Retail_Price__c;
+                                lstQuoteLineItem[i].Dealer_Price__c = objDD.objDealerOption.Cost__c;
+                                System.debug('>>>>lstQuoteLineItem[i].Quantity__c: '+lstQuoteLineItem[i].Quantity__c);
+                            }
+                        } 
+                    }
+                }
                 
                 BOATBUILDING__Inventory_Line_Item__c objILI = new BOATBUILDING__Inventory_Line_Item__c();
-                if(String.isNotBlank(selectedOptionString)) {
-                    objILI.Option_Category__c = selectedOptionString;
+                objILI.Option_Category__c = 'Dealer Options';
+                if(objDD.objDealerOption.Name != null){
+                    objILI.Name = 'ILI'; //Dummy Value
+                    objILI.Name__c = objDD.objDealerOption.Name;
                 }
-                if(selectedOptionCategory != null && selectedOptionCategory != ''){
-                    objILI.Name = 'ILI'; //Dummy value
-                    objILI.Name__c = selectedOptionCategory;
+                if(objDD.objDealerOption.Retail_Price__c != null){
+                    objILI.Price__c = objDD.objDealerOption.Retail_Price__c;
                 }
-                if(tempInt != null){
-                    objILI.Price__c = tempInt;
+                if(objDD.objDealerOption.Cost__c != null){
+                    objILI.Dealer_Price__c = objDD.objDealerOption.Cost__c;
                 }
-                if(tempIntDealer != null){
-                    objILI.Dealer_Price__c = tempIntDealer;
+                if(objDD.objDealerOption.Part_Number__c != null){
+                    objILI.Product_Code__c = objDD.objDealerOption.Part_Number__c ;
                 }
-                if(mapCheckBoxWraper.get(selectedOptionString)[index-1].objProductPriceForSelectedCategory.Product_Code__c != null){
-                    String strPartNumber = String.valueOf(mapCheckBoxWraper.get(selectedOptionString)[index-1].objProductPriceForSelectedCategory.Product_Code__c);
-                    objILI.Product_Code__c = strPartNumber ;
+                if(objDD.objDealerOption.Quantity__c != null){
+                    objILI.Quantity__c = objDD.objDealerOption.Quantity__c ;
                 }
-                objILI.Non_Taxable__c = false;
-                objILI.Product_Type__c =  typeAssign;
-                lstInventoryLineItem.add(objILI);
+                objILI.Non_Taxable__c = objDD.Non_Taxable;
+                if(!setcodeId.contains(objDD.objDealerOption.Part_Number__c)) {
+                    lstInventoryLineItem.add(objILI);
+                } else {
+                    if(lstInventoryLineItem.size() > 0){
+                        for(Integer i=0 ; i<lstInventoryLineItem.size() ; i++){
+                            if(lstInventoryLineItem[i].Product_Code__c == objDD.objDealerOption.Part_Number__c) {
+                                lstInventoryLineItem[i].Quantity__c =  objDD.objDealerOption.Quantity__c;
+                                lstInventoryLineItem[i].Price__c = objDD.objDealerOption.Retail_Price__c;
+                                lstInventoryLineItem[i].Dealer_Price__c = objDD.objDealerOption.Cost__c;
+                                System.debug('>>>>lstInventoryLineItem[i].Quantity__c: '+lstInventoryLineItem[i].Quantity__c);
+                            }
+                        } 
+                    }
+                }
+                setcodeId.add(objDD.objDealerOption.Part_Number__c);
             }
-        } catch(Exception ex) {
-            Apexpages.addMessage(new Apexpages.Message(Apexpages.Severity.FATAL,ex.getStackTraceString() + ' : ' +ex.getLineNumber()));
-            System.debug('Debug log For ex.getStackTraceString() +  :  + ex.getLineNumber(): '+ex.getStackTraceString() + ' : ' +ex.getLineNumber());
         }
-        //System.debug('Debug log For lstQuoteLineItem: '+lstQuoteLineItem);
+        System.debug('setcodeId: '+setcodeId);
     }
-    
     public void getMFGPriceSubtrct(){
         Integer index = Integer.valueOf(rowNumber);
         selectedOptionCategory = mapCheckBoxWraper.get(selectedOptionString)[index-1].objProductPriceForSelectedCategory.ProductSelected_Category__c;
         String productCodee = mapCheckBoxWraper.get(selectedOptionString)[index-1].objProductPriceForSelectedCategory.BOATBUILDING__Product_Code__c;
+
+        Decimal tempQuantity = mapCheckBoxWraper.get(selectedOptionString)[index-1].objProductPriceForSelectedCategory.Quantity__c != null ? mapCheckBoxWraper.get(selectedOptionString)[index-1].objProductPriceForSelectedCategory.Quantity__c : 0.00;
+
         Decimal tempInt;
         Decimal tempIntDealer;
         if(mapCheckBoxWraper.get(selectedOptionString)[index-1].objProductPriceForSelectedCategory.ProductRetail_Price__c != null){
@@ -2627,11 +2746,13 @@ Hull_Id__c, Dealer__c, Cost_Price__c, M_Your_Price_Calculated__c, M_Product_Sale
         }else{
             tempInt = 0.00;
         }
+        tempInt = tempInt * tempQuantity;
         if(mapCheckBoxWraper.get(selectedOptionString)[index-1].objProductPriceForSelectedCategory.Dealer_Price__c != null){
             tempIntDealer = mapCheckBoxWraper.get(selectedOptionString)[index-1].objProductPriceForSelectedCategory.Dealer_Price__c;
         }else{
             tempIntDealer = 0.00;
         }
+        tempIntDealer = tempIntDealer * tempQuantity;
         System.debug('Debug Log index: '+index);
         System.debug('Debug Log tempInt: '+tempInt);
         if(MfgOptTota > 0){
@@ -2642,10 +2763,12 @@ Hull_Id__c, Dealer__c, Cost_Price__c, M_Your_Price_Calculated__c, M_Product_Sale
             MfgOptDealerTota -= tempIntDealer;
             totalPriceDealer -= tempIntDealer;
         }
-        //System.debug('Debug log For selectedOptionCategory: '+selectedOptionCategory);
         if(lstQuoteLineItem.size() > 0){
             for(Integer i=0 ; i<lstQuoteLineItem.size() ; i++){
                 if(lstQuoteLineItem[i].Name__c == selectedOptionCategory) {
+                    if(lstQuoteLineItem[i].Id != null) {
+                        invLineIdDlt.add(lstQuoteLineItem[i].Id);
+                    }
                     lstQuoteLineItem.remove(i); 
                 }
             }
@@ -2655,22 +2778,76 @@ Hull_Id__c, Dealer__c, Cost_Price__c, M_Your_Price_Calculated__c, M_Product_Sale
             for(Integer i=0 ; i<lstInventoryLineItem.size() ; i++){
                 if(lstInventoryLineItem[i].Name == selectedOptionCategory){
                     lstInventoryLineItem.remove(i);
-                    //invLineIdDlt.add(lstInventoryLineItem[i].Id);
                 }
             }
         }
         
-        
+        if(setcodeId.size() > 0 && setcodeId.contains(productCodee)){
+            setcodeId.remove(productCodee);
+        }
+         
         if(objInventory2 != null && !objInventory2.BOATBUILDING__Inventory_Line_Items__r.isEmpty()) {
             for(Integer i = 0 ; i < objInventory2.BOATBUILDING__Inventory_Line_Items__r.size() ; i++){
                 if(objInventory2.BOATBUILDING__Inventory_Line_Items__r[i].Product_Code__c == productCodee) { 
                     invLineIdDlt.add(objInventory2.BOATBUILDING__Inventory_Line_Items__r[i].Id);    
                 } 
             }   
-        } 
-        
+        }
     }
     
+    public void getDealerOptionPriceSub() {
+        System.debug('Debug Log For dealerPartNumber: '+dealerPartNumber);
+        if(setcodeId.size() > 0 && setcodeId.contains(dealerPartNumber)){
+            setcodeId.remove(dealerPartNumber);
+        }
+        if(lstQuoteLineItem.size() > 0){
+            for(Integer i = 0 ; i < lstQuoteLineItem.size() ; i++) {
+                if(lstQuoteLineItem[i].Product_Code__c == dealerPartNumber){
+                    //if(lstQuoteLineItem[i].Total_Price__c != null && dealerOptionTotal > 0){
+                    if(lstQuoteLineItem[i].Total_Price__c != null){
+                        dealerOptionTotal -= (lstQuoteLineItem[i].Total_Price__c * lstQuoteLineItem[i].Quantity__c);
+                    }
+                    if(lstQuoteLineItem[i].Total_Price__c != null && totalPrice > 0){
+                        totalPrice -= (lstQuoteLineItem[i].Total_Price__c * lstQuoteLineItem[i].Quantity__c);
+                    }
+                    if(lstQuoteLineItem[i].Id != null) {
+                        invLineIdDlt.add(lstQuoteLineItem[i].Id);
+                    }
+                    lstQuoteLineItem.remove(i);
+                }
+            }
+        }
+        if(lstInventoryLineItem.size() > 0){
+            for(Integer i = 0 ; i < lstInventoryLineItem.size() ; i++){
+                if(lstInventoryLineItem[i].Product_Code__c == dealerPartNumber){
+                    if(lstInventoryLineItem[i].Dealer_Price__c != null ){
+                        dealerOptionCostTotal -= (lstInventoryLineItem[i].Dealer_Price__c * lstInventoryLineItem[i].Quantity__c);
+                    }
+                    if(lstInventoryLineItem[i].Dealer_Price__c != null){
+                        totalPriceDealer -= (lstInventoryLineItem[i].Dealer_Price__c * lstInventoryLineItem[i].Quantity__c);
+                    }
+                    lstInventoryLineItem.remove(i);
+                }
+            }
+        }
+        if(!objInventory2.BOATBUILDING__Inventory_Line_Items__r.isEmpty()) {
+            for(Integer i = 0 ; i < objInventory2.BOATBUILDING__Inventory_Line_Items__r.size() ; i++){
+                if(objInventory2.BOATBUILDING__Inventory_Line_Items__r[i].Product_Code__c == dealerPartNumber){
+                    
+                    if(objInventory2.BOATBUILDING__Inventory_Line_Items__r[i].Dealer_Price__c != null ){
+                        dealerOptionCostTotal -= (objInventory2.BOATBUILDING__Inventory_Line_Items__r[i].Dealer_Price__c * objInventory2.BOATBUILDING__Inventory_Line_Items__r[i].Quantity__c);
+                    }
+                    
+                    if(objInventory2.BOATBUILDING__Inventory_Line_Items__r[i].Dealer_Price__c != null){
+                        totalPriceDealer -= (objInventory2.BOATBUILDING__Inventory_Line_Items__r[i].Dealer_Price__c * objInventory2.BOATBUILDING__Inventory_Line_Items__r[i].Quantity__c);
+                    }
+                    
+                    invLineIdDlt.add(objInventory2.BOATBUILDING__Inventory_Line_Items__r[i].Id);    
+                } 
+            }   
+        }
+    }
+
     public void saveAndRecaculate(){
         System.debug('Debug Log For Check');
         
@@ -2816,7 +2993,10 @@ Hull_Id__c, Dealer__c, Cost_Price__c, M_Your_Price_Calculated__c, M_Product_Sale
         
         if(objInventory.Id != null && lstInventoryLineItem.size() > 0){
             for(BOATBUILDING__Inventory_Line_Item__c objILI1 : lstInventoryLineItem){
-                objILI1.Related_to_Inventory__c = objInventory.Id;
+                if(objILI1.Related_to_Inventory__c == null) 
+                {
+                    objILI1.Related_to_Inventory__c = objInventory.Id;
+                }
             }
             for(DealerOptionWraper objDP :lstDealerOptionWraper) {
                 System.debug('objDP: '+objDP);
@@ -2827,8 +3007,20 @@ Hull_Id__c, Dealer__c, Cost_Price__c, M_Your_Price_Calculated__c, M_Product_Sale
                     }
                 }
             }
+
+            for(WritinCustomOption objDP : lstWritinCustomOption) {
+                System.debug('objDP: '+objDP);
+                for(BOATBUILDING__Inventory_Line_Item__c objILIU: lstInventoryLineItem) {
+                    System.debug('objILIU: '+objILIU);
+                    if(objDP.ProductCode == objILIU.BOATBUILDING__Product_Code__c) {
+                        objILIU.Non_Taxable__c = objDP.Non_Taxable;
+                        objILIU.Quantity__c = objDP.Quantity; 
+                    }
+                }
+            }
+
             try{
-                insert lstInventoryLineItem;
+                upsert lstInventoryLineItem;
             }catch(Exception ex){
                 isError = true;
                 Apexpages.addMessage(new Apexpages.Message(Apexpages.Severity.FATAL,ex.getMessage()));
@@ -2849,28 +3041,43 @@ Hull_Id__c, Dealer__c, Cost_Price__c, M_Your_Price_Calculated__c, M_Product_Sale
             
             if(ApexPages.currentPage().getParameters().get('quoteId') != null) {
                 System.debug('Debug Log for lstQuoteLineItem'+lstQuoteLineItem);
-                if(objQuote3.BOATBUILDING__Quote_Line_Item__r.size() > 0) {
-                    
-                    delete objQuote3.BOATBUILDING__Quote_Line_Item__r ;
-                    
+                System.debug('Debug Log for lstQuoteLineItemsize: '+lstQuoteLineItem.size());
+                if(!invLineIdDlt.isEmpty()) {
+                    delete [Select Id From Quote_Line_Item__c Where Id IN: invLineIdDlt];
+                    for(Integer i = 0; i < lstQuoteLineItem.size(); i++) {
+                        if(lstQuoteLineItem[0].Id != null && invLineIdDlt.contains(lstQuoteLineItem[0].Id)) {
+                            lstQuoteLineItem.remove(i); 
+                        }
+                    }
                 }
                 noTrailer = true;
                 for(BOATBUILDING__Quote_Line_Item__c objQLI : lstQuoteLineItem){
                     if(objQLI.Product_Type__c == 'Trailer' && noTrailer) {
                         noTrailer = false;
                     }
-                    objQLI.Quote__c = objQuote3.Id;
+                    if(objQLI.Quote__c == null) {
+                        objQLI.Quote__c = objQuote3.Id;
+                    }
                     for(DealerOptionWraper objDP :lstDealerOptionWraper) {
                         if(objDP.objDealerOption.Part_Number__c == objQLI.BOATBUILDING__Product_Code__c) {
                             objQLI.Non_Taxable__c = objDP.Non_Taxable;
                         }
                     }
+
+                    for(WritinCustomOption objDP :lstWritinCustomOption) {
+                        if(objDP.ProductCode == objQLI.BOATBUILDING__Product_Code__c) {
+                            objQLI.Non_Taxable__c = objDP.Non_Taxable;
+                            objQLI.Quantity__c = objDP.Quantity;
+                        } 
+                    }
                 }
-                
+             
                 
                 upsert lstQuoteLineItem ;
                 
-                
+                if(totalPrice == null) {
+                    totalPrice = 0;
+                }
                 If(totalPrice != null) {
                     System.debug('Debug Log For objQuote3.Discount_On_Quote__c: '+objQuote3.Discount_On_Quote__c);
                     if(objQuote3.Discount_On_Quote__c != null) {
@@ -2919,6 +3126,18 @@ Hull_Id__c, Dealer__c, Cost_Price__c, M_Your_Price_Calculated__c, M_Product_Sale
                 if(objInventory2.Transmission_Gearbox_SN__c != null){             
                     objQuote.Transmission_Gearbox_SN__c = objInventory2.Transmission_Gearbox_SN__c;
                 }
+                if(objInventory2.BOATBUILDING__Engine_1_SN__c != null){             
+                    objQuote.BOATBUILDING__Engine_1_SN__c = objInventory2.BOATBUILDING__Engine_1_SN__c;
+                }
+                if(objInventory2.BOATBUILDING__Engine_2_SN__c != null){             
+                    objQuote.BOATBUILDING__Engine_2_SN__c = objInventory2.BOATBUILDING__Engine_2_SN__c;
+                }   
+                if(objInventory2.BOATBUILDING__Engine_3_SN__c != null){             
+                    objQuote.BOATBUILDING__Engine_3_SN__c = objInventory2.BOATBUILDING__Engine_3_SN__c;
+                }
+                if(objInventory2.BOATBUILDING__Engine_4_SN__c != null){             
+                    objQuote.BOATBUILDING__Engine_4_SN__c = objInventory2.BOATBUILDING__Engine_4_SN__c;
+                }
                 /*if(totalPriceDealer != null){
 objQuote.Quote_Cost__c = totalPriceDealer;
 }else{
@@ -2958,9 +3177,13 @@ objQuote.Quote_Cost__c = 0.00;
                     String[] strConName = String.valueOf(objAccount.Name).split(' ');
                     objContact.FirstName = strConName[0];
                     objContact.LastName = strConName[1];
+                    if(String.isBlank(objContact.LastName)) {
+                        objContact.LastName = strConName[0];
+                    }
                 }else{
                     objContact.LastName = String.valueOf(objAccount.Name);
                 }
+                
                 objContact.AccountId = objAccount.Id;
                 
                 objContact.MailingStreet = objAccount.BillingStreet;
@@ -2969,16 +3192,16 @@ objQuote.Quote_Cost__c = 0.00;
                 objContact.Phone = objAccount.Phone;
                 objContact.Email = objAccount.Email__c;
                 
-                
-                upsert objContact;
-                
+                if(String.isNotBlank(objContact.LastName)) {
+                    upsert objContact;
+                } 
                 
             }
             if(objContact.Id != null && objContact.Email != null && objContact.AccountId != null) {
                 List<Contact> lstConForDel = [SELECT Id From Contact WHERE Id <>: objContact.Id AND Email =: objContact.Email AND AccountId =: objContact.AccountId LIMIT 1];
                 if(lstConForDel.size() > 0) {
                     
-                    delete lstConForDel[0];
+                    //delete lstConForDel[0];
                     
                 }
             }
@@ -3121,7 +3344,7 @@ objQuote.Quote_Cost__c = 0.00;
             if(objProduct.M_Finance_Term__c != null && objProduct.M_Finance_Term__c != 'None'){
                 objQuote.Quote_Term__c = objProduct.M_Finance_Term__c;
             }else{
-                objQuote.Quote_Term__c ='More';
+               // objQuote.Quote_Term__c ='More';
             }
             
             if(objProduct.M_Payment__c != null ){
@@ -3223,8 +3446,8 @@ objQuote.Quote_Cost__c = 0.00;
                              q.LastActivityDate, q.IsDeleted, q.Id, q.Grand_Total__c,  q.Fax__c, q.Expiration_Date__c, q.Email__c,
                              q.Discount__c, q.Description__c,q.CreatedDate, q.CreatedById, q.Contact_Name__c, q.Bill_To__c, q.Bill_To_Name__c, q.Additional_To__c, 
                              q.Additional_To_Name__c, q.Account_Name__c,(Select Id, IsDeleted, Name, CreatedDate, CreatedById, LastModifiedDate, LastModifiedById,
-                                                                         SystemModstamp, LastActivityDate, Date__c, Discount__c, Line_Item_Description__c, List_Price__c, Product__c, Product_Code__c, Quantity__c,
-                                                                         Quote__c, Sales_Price__c, Sub_Total__c, Total_Price__c, Name__c From BOATBUILDING__Quote_Line_Item__r) From BOATBUILDING__Quote__c q where q.Id =: objQuote.Id limit 1];
+                                                                         SystemModstamp, LastActivityDate, Date__c, Discount__c, Line_Item_Description__c, List_Price__c, Product__c, Product_Code__c, Quantity__c, BOATBUILDING__Product_Type__c,
+                                                                         Quote__c, Sales_Price__c, Sub_Total__c, Total_Price__c, Name__c, BOATBUILDING__Total_Dealer_Price__c, BOATBUILDING__Total_Retail_Price__c From BOATBUILDING__Quote_Line_Item__r) From BOATBUILDING__Quote__c q where q.Id =: objQuote.Id limit 1];
                 if(objQuote2.CO_Buyer_Name__c == null) {
                     checkBoxExist = false; 
                 }
@@ -3239,14 +3462,10 @@ objQuote.Quote_Cost__c = 0.00;
                 return null;
             }
         } catch(Exception ex) {
-            Apexpages.addMessage(new Apexpages.Message(Apexpages.Severity.FATAL,ex.getStackTraceString() + ' : ' +ex.getLineNumber()));
-            System_Configure__c objSC = System_Configure__c.getOrgDefaults();
-            if(objSC != null && objSC.Enable_Debug_Mails__c)  {
-            	if(!Test.isRunningTest()) 
-            		SendEmailUtility.sendQuickEmail(ex.getStackTraceString() + ' : ' +ex.getLineNumber());
-            } 
+            Apexpages.addMessage(new Apexpages.Message(Apexpages.Severity.FATAL,ex.getMessage() + ' : ' +ex.getStackTraceString() + ' : ' +ex.getLineNumber()));
+            System.debug(ex.getMessage() + ' : ' +ex.getStackTraceString() + ' : ' +ex.getLineNumber());
             return null;
-        }
+        } 
     }
     
     public PageReference showpopup1() {
@@ -3267,20 +3486,6 @@ objQuote.Quote_Cost__c = 0.00;
                 }
                 objQuote2.No_Trailer__c = noTrailer;
                 update objQuote2;  
-                /*objQuote2 = [Select q.State__c, q.Tax__c, q.SystemModstamp, q.Syncing__c,q.Related_to_Product__c,
-q.Status__c,q.Quote_Total_Price_Calculated__c , q.Shipping_And_Handling__c, q.Ship_To__c, q.Ship_To_Name__c, q.Related_to_Order__c,q.Discount_On_Quote__c,
-q.Quote_Trailer_Sales_Tax__c, q.Quote_Trailer_Reg_Fee__c,q.Mapped_Boat_Length__c , q.Mapped_Engine_SN__c, q.Mapped_HIN__c, q.Mapped_Trailer_VIN__c, q.Transmission_Gearbox_SN__c,
-q.Quote_Trailer_Allowance__c,q.Quote_Your_Price_Formula__c ,q.Quote_Total_Over_Allowance_Calculated__c ,q.Quote_Net_Selling_Price_Calculated__c ,q.Boat_Sales_Tax2__c ,q.Quote_Trailer_ACV__c, q.Quote_Trade_Payoff__c, q.Quote_Trade_Allowance__c,q.Quote_Trade_ACV__c,
-q.Quote_Total_Amount_Financed_Calculated__c , q.Quote_To_Name__c, q.Quote_To_Address__c,CO_Buyer_Name__r.Name,CO_Buyer_Name__c,
-q.Quote_Term__c, q.Quote_Rate__c, q.Quote_Payment__c,q.Total_Price_Quote__c, q.Quote_Number__c, q.Quote_MSRP_Trailer_Price__c,
-q.Quote_MSRP_Boat_Price__c, q.Quote_Down_Payment__c, q.Quote_Doc_Fee__c, q.Quote_Deal_Margin__c, q.Quote_Cost_Clone__c, 
-q.Quote_Total_MSRP__c , q.Quote_Boat_Reg_Fee__c, Contact_Name__r.Name,
-q.Phone__c, q.OwnerId,q.Quote_Sale_Price__c, q.Name, q.LastViewedDate, q.LastReferencedDate, q.LastModifiedDate, q.LastModifiedById,
-q.LastActivityDate, q.IsDeleted, q.Id, q.Grand_Total__c,  q.Fax__c, q.Expiration_Date__c, q.Email__c,
-q.Discount__c, q.Description__c,q.CreatedDate, q.CreatedById, q.Contact_Name__c, q.Bill_To__c, q.Bill_To_Name__c, q.Additional_To__c, 
-q.Additional_To_Name__c, q.Account_Name__c,(Select Id, IsDeleted, Name, CreatedDate, CreatedById, LastModifiedDate, LastModifiedById,
-SystemModstamp, LastActivityDate, Date__c, Discount__c, Line_Item_Description__c, List_Price__c, Product__c, Product_Code__c, Quantity__c,
-Quote__c, Sales_Price__c, Sub_Total__c, Total_Price__c From BOATBUILDING__Quote_Line_Item__r) From BOATBUILDING__Quote__c q where q.Id =: ApexPages.currentPage().getParameters().get('id') limit 1];*/ 
                 
                 objQuote2 = [Select 
                              q.Engine__c,
@@ -3312,8 +3517,8 @@ Quote__c, Sales_Price__c, Sub_Total__c, Total_Price__c From BOATBUILDING__Quote_
                              q.LastActivityDate, q.IsDeleted, q.Id, q.Grand_Total__c,  q.Fax__c, q.Expiration_Date__c, q.Email__c,
                              q.Discount__c, q.Description__c,q.CreatedDate, q.CreatedById, q.Contact_Name__c, q.Bill_To__c, q.Bill_To_Name__c, q.Additional_To__c, 
                              q.Additional_To_Name__c, q.Account_Name__c,(Select Id, IsDeleted, Name, CreatedDate, CreatedById, LastModifiedDate, LastModifiedById,
-                                                                         SystemModstamp, LastActivityDate, Date__c, Discount__c, Line_Item_Description__c, List_Price__c, Product__c, Product_Code__c, Quantity__c,
-                                                                         Quote__c, Sales_Price__c, Sub_Total__c, Total_Price__c, Option_Category__c, Name__c From BOATBUILDING__Quote_Line_Item__r) From BOATBUILDING__Quote__c q where q.Id =: ApexPages.currentPage().getParameters().get('Id') limit 1];    
+                                                                         SystemModstamp, LastActivityDate, Date__c, Discount__c, Line_Item_Description__c, List_Price__c, Product__c, Product_Code__c, Quantity__c, BOATBUILDING__Product_Type__c,
+                                                                         Quote__c, Sales_Price__c, Sub_Total__c, Total_Price__c, Option_Category__c, Name__c, BOATBUILDING__Total_Dealer_Price__c, BOATBUILDING__Total_Retail_Price__c From BOATBUILDING__Quote_Line_Item__r) From BOATBUILDING__Quote__c q where q.Id =: ApexPages.currentPage().getParameters().get('Id') limit 1];    
                 if(objQuote2.CO_Buyer_Name__c == null) { 
                     checkBoxExist = false;  
                 }
@@ -3514,114 +3719,10 @@ Quote__c, Sales_Price__c, Sub_Total__c, Total_Price__c From BOATBUILDING__Quote_
     }
     
     
-    public void getDealerOptionPrice(){
-        System.debug('Debug Log For dealerPartNumber: '+dealerPartNumber);  
-        
-        for(DealerOptionWraper objDD :lstDealerOptionWraper){
-            if(objDD.objDealerOption.Part_Number__c == dealerPartNumber ){
-                System.debug('Debug log for '+totalPrice);
-                if(objDD.objDealerOption.Retail_Price__c != null){
-                    dealerOptionTotal += objDD.objDealerOption.Retail_Price__c;
-                    totalPrice += objDD.objDealerOption.Retail_Price__c;
-                }
-                System.debug('Debug log for totalPrice: '+totalPrice);
-                if(objDD.objDealerOption.Cost__c != null){
-                    dealerOptionCostTotal += objDD.objDealerOption.Cost__c;
-                    totalPriceDealer += objDD.objDealerOption.Cost__c;
-                }
-                BOATBUILDING__Quote_Line_Item__c objQLI = new BOATBUILDING__Quote_Line_Item__c();
-                objQLI.Option_Category__c = 'Dealer Options';
-                if(objDD.objDealerOption.Name != null){
-                    objQLI.Name = 'QLI'; 
-                    objQLI.Name__c = objDD.objDealerOption.Name;
-                }
-                if(objProduct.Id != null){
-                    objQLI.Product__c = objProduct.Id;
-                }
-                if(objDD.objDealerOption.Retail_Price__c != null){
-                    objQLI.Total_Price__c = objDD.objDealerOption.Retail_Price__c;
-                }
-                if(objDD.objDealerOption.Cost__c != null){
-                    objQLI.Dealer_Price__c = objDD.objDealerOption.Cost__c;
-                }
-                objQLI.Date__c =  Date.today();
-                if(objDD.objDealerOption.Part_Number__c != null){
-                    objQLI.Product_Code__c = objDD.objDealerOption.Part_Number__c ;
-                }
-                objQLI.Non_Taxable__c = objDD.Non_Taxable;
-                lstQuoteLineItem.add(objQLI);
-                
-                BOATBUILDING__Inventory_Line_Item__c objILI = new BOATBUILDING__Inventory_Line_Item__c();
-                objILI.Option_Category__c = 'Dealer Options';
-                if(objDD.objDealerOption.Name != null){
-                    objILI.Name = 'ILI'; //Dummy Value
-                    objILI.Name__c = objDD.objDealerOption.Name;
-                }
-                if(objDD.objDealerOption.Retail_Price__c != null){
-                    objILI.Price__c = objDD.objDealerOption.Retail_Price__c;
-                }
-                if(objDD.objDealerOption.Cost__c != null){
-                    objILI.Dealer_Price__c = objDD.objDealerOption.Cost__c;
-                }
-                if(objDD.objDealerOption.Part_Number__c != null){
-                    objILI.Product_Code__c = objDD.objDealerOption.Part_Number__c ;
-                }
-                objILI.Non_Taxable__c = objDD.Non_Taxable;
-                lstInventoryLineItem.add(objILI);
-            }
-        }
-    }
     
     
-    public void getDealerOptionPriceSub() {
-        System.debug('Debug Log For dealerPartNumber: '+dealerPartNumber);
-        if(lstQuoteLineItem.size() > 0){
-            for(Integer i = 0 ; i < lstQuoteLineItem.size() ; i++) {
-                if(lstQuoteLineItem[i].Product_Code__c == dealerPartNumber){
-                    //if(lstQuoteLineItem[i].Total_Price__c != null && dealerOptionTotal > 0){
-                    if(lstQuoteLineItem[i].Total_Price__c != null){
-                        dealerOptionTotal -= lstQuoteLineItem[i].Total_Price__c;
-                    }
-                    if(lstQuoteLineItem[i].Total_Price__c != null && totalPrice > 0){
-                        totalPrice -= lstQuoteLineItem[i].Total_Price__c;
-                    }
-                    lstQuoteLineItem.remove(i);
-                }
-            }
-        }
-        if(lstInventoryLineItem.size() > 0){
-            for(Integer i = 0 ; i < lstInventoryLineItem.size() ; i++){
-                if(lstInventoryLineItem[i].Product_Code__c == dealerPartNumber){
-                    //if(lstInventoryLineItem[i].Dealer_Price__c != null && dealerOptionCostTotal > 0){
-                    if(lstInventoryLineItem[i].Dealer_Price__c != null ){
-                        dealerOptionCostTotal -= lstInventoryLineItem[i].Dealer_Price__c;
-                    }
-                    //if(lstInventoryLineItem[i].Dealer_Price__c != null && totalPriceDealer > 0){
-                    if(lstInventoryLineItem[i].Dealer_Price__c != null){
-                        totalPriceDealer -= lstInventoryLineItem[i].Dealer_Price__c;
-                    }
-                    lstInventoryLineItem.remove(i);
-                }
-            }
-        }
-        if(!objInventory2.BOATBUILDING__Inventory_Line_Items__r.isEmpty()) {
-            for(Integer i = 0 ; i < objInventory2.BOATBUILDING__Inventory_Line_Items__r.size() ; i++){
-                if(objInventory2.BOATBUILDING__Inventory_Line_Items__r[i].Product_Code__c == dealerPartNumber){
-                    
-                    if(objInventory2.BOATBUILDING__Inventory_Line_Items__r[i].Dealer_Price__c != null ){
-                        dealerOptionCostTotal -= objInventory2.BOATBUILDING__Inventory_Line_Items__r[i].Dealer_Price__c;
-                    }
-                    
-                    if(objInventory2.BOATBUILDING__Inventory_Line_Items__r[i].Dealer_Price__c != null){
-                        totalPriceDealer -= objInventory2.BOATBUILDING__Inventory_Line_Items__r[i].Dealer_Price__c;
-                    }
-                    
-                    invLineIdDlt.add(objInventory2.BOATBUILDING__Inventory_Line_Items__r[i].Id);    
-                } 
-            }   
-        }
-        
-    }
+    
+    
     
     
     public void getDeleteDealerOptionPriceSub() {
@@ -3681,7 +3782,53 @@ Quote__c, Sales_Price__c, Sub_Total__c, Total_Price__c From BOATBUILDING__Quote_
         System.debug('Debug Log For lstDealerOptionWraper2: '+lstDealerOptionWraper);
         System.debug('Debug Log For lstDealerOptionWraper.size()2: '+lstDealerOptionWraper.size());
     }
-    
+
+    public void renderDOList(String recId) {
+        Decimal totalRetail = 0.00;
+        Decimal totalDealer = 0.00;
+        for(DealerOptionWraper objDO: lstDealerOptionWraper) {
+            if(objDO.objDealerOption.Id == recId) {
+                Decimal Quantity = objDO.objDealerOption.Quantity__c != null ? objDO.objDealerOption.Quantity__c : 1;
+                objDO.totalRetailPrice = objDO.objDealerOption.BOATBUILDING__Retail_Price__c != null ? objDO.objDealerOption.BOATBUILDING__Retail_Price__c * Quantity : 0.00;
+                objDO.totalDealerPrice = objDO.objDealerOption.BOATBUILDING__Cost__c != null ? objDO.objDealerOption.BOATBUILDING__Cost__c * Quantity: 0.00;
+            }
+            if(objDO.isSelect) {
+                totalRetail += objDO.totalRetailPrice;
+                totalDealer += objDO.totalDealerPrice;
+            }
+        } 
+        dealerOptionCostTotal = totalDealer.setScale(2);
+        dealerOptionTotal = totalRetail.setScale(2);
+        totalPriceDealer = yourPriceThirdPageForProductPriceDealer + MfgOptDealerTota + dealerOptionCostTotal;
+        totalPrice = yourPriceThirdPageForProductPrice + MfgOptTota + dealerOptionTotal;
+    }
+
+    public void renderPPList(String recId, Decimal qt) {
+        Decimal totalRetail = 0.00;
+        Decimal totalDealer = 0.00;
+        for(PriceAndProductOptionWraperClass obj: lstPriceAndProductOptionWraperClass) {
+            for(CheckBoxWraper objC: obj.lstProductPriceForSelectedCategory) {
+                if(objC.objProductPriceForSelectedCategory.Id == recId) {
+                    Decimal Quantity = qt;
+                    objC.totalRetailWithQuantity = objC.objProductPriceForSelectedCategory.ProductRetail_Price__c != null ? objC.objProductPriceForSelectedCategory.ProductRetail_Price__c * Quantity : 0.00;
+                    objC.totalDealerWithQuantity = objC.objProductPriceForSelectedCategory.Dealer_Price__c != null ? objC.objProductPriceForSelectedCategory.Dealer_Price__c * Quantity: 0.00;
+                }
+                if(objC.checkBox) {
+                    totalRetail += objC.totalRetailWithQuantity;
+                    totalDealer += objC.totalDealerWithQuantity;
+                } 
+            }
+        }
+        MfgOptDealerTota = totalDealer;
+        MfgOptTota = totalRetail;
+        totalPriceDealer = yourPriceThirdPageForProductPriceDealer + MfgOptDealerTota + dealerOptionCostTotal;
+        totalPrice = yourPriceThirdPageForProductPrice + MfgOptTota + dealerOptionTotal;
+        System.debug('renderPPList>>>>>yourPriceThirdPageForProductPriceDealer: '+yourPriceThirdPageForProductPriceDealer);
+        System.debug('renderPPList>>>>>MfgOptDealerTota: '+MfgOptDealerTota);
+        System.debug('renderPPList>>>>>MfgOptTota: '+MfgOptTota);
+        System.debug('renderPPList>>>>>totalPriceDealer: '+totalPriceDealer);
+        System.debug('renderPPList>>>>>totalPrice: '+totalPrice);
+    }
     
     public class PriceAndProductOptionWraperClass{
         public Decimal retailPrice { get; set; }
@@ -3700,26 +3847,65 @@ Quote__c, Sales_Price__c, Sub_Total__c, Total_Price__c From BOATBUILDING__Quote_
     public class CheckBoxWraper{
         public Boolean checkBox { get; set; }
         public BOATBUILDING__ProductPrice__c objProductPriceForSelectedCategory { get; set; } 
+        public Double totalRetailWithQuantity { get; set; }
+        public Double totalDealerWithQuantity { get; set; } 
         public Integer rowNumber { get; set; }
         
         public CheckBoxWraper(Boolean checkBox,Integer rowNumber, BOATBUILDING__ProductPrice__c objProductPriceForSelectedCategory){
             this.checkBox = checkBox;
             this.rowNumber = rowNumber;
             this.objProductPriceForSelectedCategory = objProductPriceForSelectedCategory;
+            Decimal Quantity = objProductPriceForSelectedCategory.Quantity__c != null ? objProductPriceForSelectedCategory.Quantity__c : 0.00;
+            this.totalRetailWithQuantity = objProductPriceForSelectedCategory.ProductRetail_Price__c != null ? objProductPriceForSelectedCategory.ProductRetail_Price__c * Quantity : 0.00;
+            this.totalDealerWithQuantity = objProductPriceForSelectedCategory.Dealer_Price__c != null ? objProductPriceForSelectedCategory.Dealer_Price__c * Quantity: 0.00;
         }
     }
     
-    /*public class DealerOptionWraper {
-public Boolean isSelect { get; set; }
-public Boolean ShowRemoveIcon { get; set; }
-public BOATBUILDING__Dealer_Option__c objDealerOption { get; set; }
-public DealerOptionWraper(Boolean isSelect, BOATBUILDING__Dealer_Option__c objDealerOption, Boolean ShowRemoveIcon) {
-this.isSelect = isSelect;
-this.objDealerOption = objDealerOption;
-this.ShowRemoveIcon = ShowRemoveIcon;
-}
-}*/ 
+    public class DealerOptionWraper {
+        public Boolean isSelect { get; set; }
+        public Boolean ShowRemoveIcon { get; set; }
+        public BOATBUILDING__Dealer_Option__c objDealerOption { get; set; }
+        public Boolean Non_Taxable { get; set; }
+        public Decimal totalRetailPrice { get; set; }
+        public Decimal totalDealerPrice { get; set; } 
+        public DealerOptionWraper(Boolean isSelect, BOATBUILDING__Dealer_Option__c objDealerOption, Boolean ShowRemoveIcon) {
+            this.isSelect = isSelect;
+            this.objDealerOption = objDealerOption;
+            this.ShowRemoveIcon = ShowRemoveIcon;
+            this.Non_Taxable = objDealerOption.BOATBUILDING__Non_Taxable__c; 
+            objDealerOption.Quantity__c = objDealerOption.Quantity__c != null ? objDealerOption.Quantity__c : 1;
+            totalRetailPrice = objDealerOption.Quantity__c * objDealerOption.Retail_Price__c;
+            totalDealerPrice = objDealerOption.Quantity__c * objDealerOption.Cost__c;
+        }
+    }
     
+    public class WritinCustomOption {
+        public Boolean isSelect { get; set; }
+        public String ProductName { get; set; }
+        public Decimal Quantity { get; set; }
+        public Decimal RetailPrice { get; set; }
+        public Decimal DealerPrice { get; set; }
+        public String ProductCode { get; set; }
+
+        public Boolean Non_Taxable { get; set; }
+        public Decimal totalRetailPrice { get; set; }
+        public Decimal totalDealerPrice { get; set; } 
+
+        public WritinCustomOption(Boolean isSelect, String ProductName, Decimal Quantity, Decimal RetailPrice, Decimal DealerPrice, String ProductCode, Boolean Non_Taxable) {
+            this.isSelect = isSelect; 
+            this.ProductName = ProductName;
+            this.Quantity = Quantity;
+            this.RetailPrice = RetailPrice;
+            this.DealerPrice = DealerPrice;
+            this.ProductCode = ProductCode;
+            this.Non_Taxable = Non_Taxable;
+            this.totalRetailPrice = RetailPrice * Quantity;
+            this.totalDealerPrice = DealerPrice * Quantity;
+            this.totalRetailPrice = totalRetailPrice.setscale(2);
+            this.totalDealerPrice = totalDealerPrice.setscale(2);
+        } 
+    }
+
     public class QuoteOptionCatagoryWrapper {
         public String strOptionCategory { get; set; }
         public List<Quote_line_Item__c> lstSelectedOptionCategory { get; set; }
@@ -3744,9 +3930,10 @@ pnDO = '';
         objDOO.BOATBUILDING__Retail_Price__c = Decimal.valueOf(retDO);
         objDOO.BOATBUILDING__Cost__c = Decimal.valueOf(delDO);
         objDOO.BOATBUILDING__Part_Number__c = pnDO;
+        objDOO.Quantity__c = Double.valueOf(qtDo);
         if(tcDo == '1') {
             objDOO.Non_Taxable__c = true;
-        } else {
+        } else { 
             objDOO.Non_Taxable__c = false;
         }
         dealerPartNumber = pnDO;
@@ -3756,4 +3943,201 @@ pnDO = '';
         getDealerOptionPrice();
         return null;
     }
+
+    public PageReference updateCWROList() {
+
+        System.debug('Debug Log For retDO: '+retDO);
+        System.debug('Debug Log For delDO: '+delDO);
+        System.debug('Debug Log For pnDO: '+pnDO); 
+        System.debug('Debug Log For qtDo: '+qtDo);
+        System.debug('Debug Log For tcDo: '+tcDo);
+        Boolean taxable = false;
+        if(tcDo == '1') {
+            taxable = true;
+        } else { 
+            taxable = false;
+        }
+        WritinCustomOption objWritinCustomOption = new WritinCustomOption(true, 
+                                                                            decDO, 
+                                                                                Decimal.valueOf(qtDo), 
+                                                                                    Decimal.valueOf(retDO), 
+                                                                                        Decimal.valueOf(delDO), 
+                                                                                            pnDO, 
+                                                                                                taxable);  
+        lstWritinCustomOption.add(objWritinCustomOption);
+        dealerPartNumber = pnDO;
+        getCWOPrice();
+        return null;
+    } 
+
+    public void getCWOPrice(){
+        System.debug('Debug Log For dealerPartNumber: '+dealerPartNumber);  
+        
+        for(WritinCustomOption objDD :lstWritinCustomOption){
+            renderCWOList(objDD.ProductCode);    
+            if(objDD.ProductCode == dealerPartNumber && objDD.isSelect){
+                System.debug('Debug Log For objDD.objDealerOption.Quantity__c: '+objDD.Quantity);
+                BOATBUILDING__Quote_Line_Item__c objQLI = new BOATBUILDING__Quote_Line_Item__c();
+                objQLI.Option_Category__c = 'CWO';
+                objQLI.Name = 'QLI'; 
+                if(objDD.ProductName != null){
+                    objQLI.Name__c = objDD.ProductName;
+                }
+                if(objProduct.Id != null){
+                    objQLI.Product__c = objProduct.Id;
+                }
+                if(objDD.RetailPrice != null){
+                    objQLI.Total_Price__c = objDD.RetailPrice;
+                }
+                if(objDD.DealerPrice != null){
+                    objQLI.Dealer_Price__c = objDD.DealerPrice;
+                }
+                objQLI.Date__c =  Date.today(); 
+                if(objDD.ProductCode != null){
+                    objQLI.Product_Code__c = objDD.ProductCode;
+                }
+                if(objDD.Quantity != null){
+                    objQLI.Quantity__c = objDD.Quantity;
+                }
+                objQLI.Non_Taxable__c = objDD.Non_Taxable;
+                if(!setcodeId.contains(objDD.ProductCode)) {
+                    lstQuoteLineItem.add(objQLI);
+                } else {
+                    if(lstQuoteLineItem.size() > 0){
+                        for(Integer i=0 ; i<lstQuoteLineItem.size() ; i++){
+                            if(lstQuoteLineItem[i].Product_Code__c == objDD.ProductCode) {
+                                lstQuoteLineItem[i].Quantity__c =  objDD.Quantity;
+                                lstQuoteLineItem[i].Total_Price__c = objDD.RetailPrice;
+                                lstQuoteLineItem[i].Dealer_Price__c = objDD.DealerPrice;
+                                System.debug('>>>>lstQuoteLineItem[i].Quantity__c: '+lstQuoteLineItem[i].Quantity__c);
+                            }
+                        } 
+                    }
+                }
+                
+                BOATBUILDING__Inventory_Line_Item__c objILI = new BOATBUILDING__Inventory_Line_Item__c();
+                objILI.Option_Category__c = 'CWO';
+                objILI.Name = 'ILI';
+                if(objDD.ProductName != null){
+                    objILI.Name__c = objDD.ProductName;
+                }
+                if(objDD.RetailPrice != null){
+                    objILI.Price__c = objDD.RetailPrice;
+                }
+                if(objDD.DealerPrice != null){
+                    objILI.Dealer_Price__c = objDD.DealerPrice;
+                }
+                if(objDD.ProductCode != null){
+                    objILI.Product_Code__c = objDD.ProductCode;
+                }
+                if(objDD.Quantity != null){
+                    objILI.Quantity__c = objDD.Quantity;
+                }
+                objILI.Non_Taxable__c = objDD.Non_Taxable;
+                if(!setcodeId.contains(objDD.ProductCode)) {
+                    lstInventoryLineItem.add(objILI);
+                } else {
+                    if(lstInventoryLineItem.size() > 0){
+                        for(Integer i=0 ; i<lstInventoryLineItem.size() ; i++){
+                            if(lstInventoryLineItem[i].Product_Code__c == objDD.ProductCode) {
+                                lstInventoryLineItem[i].Quantity__c =  objDD.Quantity;
+                                lstInventoryLineItem[i].Price__c = objDD.RetailPrice;
+                                lstInventoryLineItem[i].Dealer_Price__c = objDD.DealerPrice;
+                                System.debug('>>>>lstInventoryLineItem[i].Quantity__c: '+lstInventoryLineItem[i].Quantity__c);
+                            }
+                        } 
+                    }
+                }
+                setcodeId.add(objDD.ProductCode);
+            }
+        }
+        System.debug('setcodeId: '+setcodeId);
+    }
+
+    public void getCWOPriceSub() {
+        System.debug('>>>setcodeId: '+setcodeId);
+        if(setcodeId.size() > 0 && setcodeId.contains(dealerPartNumber)){
+            setcodeId.remove(dealerPartNumber);
+        }
+        System.debug('>>>dealerPartNumber: '+dealerPartNumber);
+        System.debug('>>>cwoRetailTotal: '+cwoRetailTotal);
+        System.debug('>>>cwoDealerTotal: '+cwoDealerTotal);
+        System.debug('>>>totalPrice: '+totalPrice);
+        System.debug('>>>totalPriceDealer: '+totalPriceDealer);
+        if(lstQuoteLineItem.size() > 0){
+            System.debug('>>>lstQuoteLineItem: '+lstQuoteLineItem);
+            for(Integer i = 0 ; i < lstQuoteLineItem.size() ; i++) {
+                if(lstQuoteLineItem[i].Product_Code__c == dealerPartNumber){
+                    //if(lstQuoteLineItem[i].Total_Price__c != null && dealerOptionTotal > 0){
+                    if(lstQuoteLineItem[i].Total_Price__c != null){
+                        cwoRetailTotal -= (lstQuoteLineItem[i].Total_Price__c * lstQuoteLineItem[i].Quantity__c);
+                    }
+                    if(lstQuoteLineItem[i].Total_Price__c != null && totalPrice > 0){
+                        totalPrice -= (lstQuoteLineItem[i].Total_Price__c * lstQuoteLineItem[i].Quantity__c);
+                    }
+                    if(lstQuoteLineItem[i].Id != null) {
+                        invLineIdDlt.add(lstQuoteLineItem[i].Id);
+                    }
+                    lstQuoteLineItem.remove(i);
+                }
+            }
+        }
+        if(lstInventoryLineItem.size() > 0){
+            System.debug('>>>lstInventoryLineItem: '+lstInventoryLineItem);
+            for(Integer i = 0 ; i < lstInventoryLineItem.size() ; i++){
+                if(lstInventoryLineItem[i].Product_Code__c == dealerPartNumber){
+                    if(lstInventoryLineItem[i].Dealer_Price__c != null ){
+                        cwoDealerTotal -= (lstInventoryLineItem[i].Dealer_Price__c * lstInventoryLineItem[i].Quantity__c);
+                    }
+                    if(lstInventoryLineItem[i].Dealer_Price__c != null){
+                        totalPriceDealer -= (lstInventoryLineItem[i].Dealer_Price__c * lstInventoryLineItem[i].Quantity__c);
+                    }
+                    lstInventoryLineItem.remove(i);
+                }
+            }
+        }
+        if(!objInventory2.BOATBUILDING__Inventory_Line_Items__r.isEmpty()) {
+            for(Integer i = 0 ; i < objInventory2.BOATBUILDING__Inventory_Line_Items__r.size() ; i++){
+                if(objInventory2.BOATBUILDING__Inventory_Line_Items__r[i].Product_Code__c == dealerPartNumber){
+                    
+                    if(objInventory2.BOATBUILDING__Inventory_Line_Items__r[i].Dealer_Price__c != null ){
+                        cwoDealerTotal -= (objInventory2.BOATBUILDING__Inventory_Line_Items__r[i].Dealer_Price__c * objInventory2.BOATBUILDING__Inventory_Line_Items__r[i].Quantity__c);
+                    }
+                    
+                    if(objInventory2.BOATBUILDING__Inventory_Line_Items__r[i].Dealer_Price__c != null){
+                        totalPriceDealer -= (objInventory2.BOATBUILDING__Inventory_Line_Items__r[i].Dealer_Price__c * objInventory2.BOATBUILDING__Inventory_Line_Items__r[i].Quantity__c);
+                    }
+                    
+                    invLineIdDlt.add(objInventory2.BOATBUILDING__Inventory_Line_Items__r[i].Id);    
+                } 
+            }   
+        }
+        totalPriceDealer = totalPriceDealer.setScale(2);
+        totalPrice = totalPrice.setScale(2);
+    }
+
+    public void renderCWOList(String recId) {
+        Decimal totalRetail = 0.00;
+        Decimal totalDealer = 0.00;
+        for(WritinCustomOption objDO :lstWritinCustomOption){
+            if(objDO.ProductCode == recId) {
+                Decimal Quantity = objDO.Quantity != null ? objDO.Quantity : 1;
+                objDO.totalRetailPrice = objDO.RetailPrice != null ? objDO.RetailPrice * Quantity : 0.00;
+                objDO.totalDealerPrice = objDO.DealerPrice != null ? objDO.DealerPrice * Quantity: 0.00;
+                objDO.totalRetailPrice = objDO.totalRetailPrice.setScale(2);
+                objDO.totalDealerPrice = objDO.totalDealerPrice.setScale(2);
+            }
+            if(objDO.isSelect) { 
+                totalRetail += objDO.totalRetailPrice;
+                totalDealer += objDO.totalDealerPrice;
+            }
+        } 
+        cwoDealerTotal = totalDealer.setScale(2);
+        cwoRetailTotal = totalRetail.setScale(2);
+        totalPriceDealer = yourPriceThirdPageForProductPriceDealer + MfgOptDealerTota + cwoDealerTotal;
+        totalPrice = yourPriceThirdPageForProductPrice + MfgOptTota + cwoRetailTotal;
+        totalPriceDealer = totalPriceDealer.setScale(2);
+        totalPrice = totalPrice.setScale(2);
+    }
+
 }

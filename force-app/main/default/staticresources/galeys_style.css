@@ -1,0 +1,431 @@
+/* Layout */
+@page {
+  size: 215.9mm 279.4mm;
+  margin: 0mm;
+}
+
+html,
+body {
+  height: 100%;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  left: 0;
+  top: 0;
+  font-size: 100%;
+}
+
+/* ROOT FONT STYLES */
+
+* {
+  font-family: Helvetica, sans-serif;
+}
+
+#page1 {
+  width: 215.9mm;
+  height: 279.4mm;
+  position: relative;
+}
+#header {
+  position: absolute;
+  left: 0px;
+  top: 0px;
+  z-index: -1;
+}
+#footer {
+  position: absolute;
+  left: 0px;
+  bottom: 1px;
+  z-index: -1;
+}
+.stretch {
+  width: 100%;
+}
+.container {
+  /* width: 95%; */
+  margin-left: auto;
+  margin-right: auto;
+}
+
+#page2 {
+  width: 215.9mm;
+  height: 279.4mm;
+  position: relative;
+  page-break-before: always;
+}
+/* Formatting */
+p {
+  margin: 1px;
+}
+.left {
+  text-align: left;
+}
+.right {
+  text-align: right;
+}
+.center {
+  text-align: center;
+  margin-left: auto;
+  margin-right: auto;
+}
+.justify {
+  text-align: justify;
+}
+
+.italic {
+  font-style: italic;
+}
+
+.row {
+  position: relative;
+  overflow: auto;
+  width: 100%;
+}
+.row [class^="col"] {
+  float: left;
+  margin: 6px 2%;
+  min-height: 0.125em;
+}
+.col-1 {
+  width: 4.33%;
+}
+.col-2 {
+  width: 12.66%;
+}
+.col-3 {
+  width: 21%;
+}
+.col-4 {
+  width: 29.33%;
+}
+.col-5 {
+  width: 37.66%;
+}
+.col-6 {
+  width: 46%;
+}
+.col-7 {
+  width: 54.33%;
+}
+.col-8 {
+  width: 62.66%;
+}
+.col-9 {
+  width: 71%;
+}
+.col-10 {
+  width: 79.33%;
+}
+.col-11 {
+  width: 87.66%;
+}
+.col-12 {
+  width: 96%;
+}
+
+.title {
+  text-transform: uppercase;
+  font-size: 23px;
+  font-weight: 700;
+  margin: 0px;
+}
+
+.title2 {
+  text-transform: uppercase;
+  font-size: 18px;
+  font-weight: 500;
+}
+
+.title3 {
+  text-transform: uppercase;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.mt-0 {
+  margin-top: 0px !important;
+}
+.mb-0 {
+  margin-bottom: 0px !important;
+}
+.ml-0 {
+  margin-left: 0px !important;
+}
+.mr-0 {
+  margin-right: 0px !important;
+}
+/* Block Styling */
+#header-block {
+  padding-top: 11mm;
+}
+
+.address-line {
+  margin: 1px;
+  font-size: 12px;
+  white-space: nowrap;
+}
+
+#website-block {
+  text-transform: uppercase;
+}
+
+#customer-total-block {
+  margin-top: 5px;
+}
+
+#total-block {
+  color: #ffffff;
+}
+
+#dealer-disclaimer {
+  margin-top: 80px;
+  border: 1px solid black;
+  height: 125px;
+}
+
+#dealer-header {
+  position: absolute;
+  top: 67px;
+  left: 30px;
+  background: #ffffff;
+}
+
+#boat-optns {
+  margin-top: 30px;
+  border: 1px solid black;
+  height: 650px;
+  position: relative;
+}
+#boat-optns2 {
+  margin-top: 30px;
+  border: 1px solid black;
+  height: 650px;
+  margin-left: 1.5%;
+}
+
+#boat-optns-header {
+  position: absolute;
+  top: -12px;
+  left: 12px;
+  background: #ffffff;
+}
+
+#customer-sig {
+  margin-top: 15px !important;
+}
+
+#sales-sig {
+  margin-top: 15px !important;
+}
+
+/* Other styles */
+.cust-name {
+  margin-top: 10px;
+}
+.cust-mobile {
+  margin-top: 10px;
+}
+.total {
+  padding-left: 15px;
+}
+
+.boat-model {
+  color: #333333;
+  font-size: 40px;
+  font-weight: 600;
+}
+
+.totalprice {
+  font-size: 40px;
+  font-weight: 600;
+}
+
+.value-group {
+  margin: 0px !important;
+  border-bottom: #333333 solid 1px;
+}
+
+.label {
+  font-weight: 700;
+  white-space: nowrap;
+  margin: 5px 0px;
+  font-size: 13px;
+}
+
+.val {
+  white-space: nowrap;
+  margin: 5px 0px;
+  font-size: 13px;
+  text-align: right;
+}
+
+.val-input {
+  border-bottom: 1px solid black;
+}
+
+.option-key {
+  font-weight: 700;
+  white-space: nowrap;
+  font-size: 13px;
+}
+
+.b-opt {
+  font-size: 11px;
+  margin-top: 25px;
+}
+
+.b-opt-h {
+  font-weight: 600;
+  margin-top: 2px !important;
+  margin-bottom: 2px !important;
+}
+
+.b-opt-v {
+  font-style: italic;
+  margin-top: 2px !important;
+  margin-bottom: 2px !important;
+}
+
+/* Fancy website link */
+.fancy {
+  position: relative;
+  z-index: 1;
+  overflow: hidden;
+  text-align: center;
+}
+.fancy:before,
+.fancy:after {
+  position: absolute;
+  top: 51%;
+  overflow: hidden;
+  width: 48%;
+  height: 1px;
+  content: "\a0";
+  background-color: black;
+}
+.fancy:before {
+  margin-left: -50%;
+  text-align: right;
+}
+
+/* AWS RELATED STYLES - Start */
+body.aws-layout * {
+  font-family: "Arial Unicode MS";
+  font-weight: bold;
+  font-style: normal;
+
+  letter-spacing: 0.59px;
+}
+
+#dealer-disclaimer-aws p {
+  font-size: 9px;
+}
+
+#payment-info-aws .label {
+  /* font-family: "TT Polls Bold"; */
+  font-weight: 800;
+}
+
+#payment-info-aws .val {
+  /* font-family: "TT Polls Thin"; */
+  font-weight: 500;
+}
+
+body.aws-layout .title {
+  margin: 5px 0px;
+  /* font-family: "TT Polls Bold" !important; */
+  font-weight: 800;
+}
+
+body.aws-layout .boat-model {
+  color: white;
+  /* font-family: "TT Polls Bold" !important; */
+  font-weight: 800;
+  white-space: nowrap;
+  margin-bottom: 0px;
+}
+
+body.aws-layout .val {
+  /* font-family: "TT Polls Bold"; */
+  font-weight: 800;
+}
+
+body.aws-layout .address-line {
+  font-size: 12px;
+}
+
+body.aws-layout .row [class^="col"] {
+  float: left;
+  margin: 3px 1.5%;
+  min-height: 0.125em;
+}
+
+body.aws-layout #header-block {
+  color: white;
+  padding-top: 14mm;
+  /* height: 75px; */
+}
+
+body.aws-layout #website-block-aws {
+  text-transform: none;
+  font-size: 12px;
+  font-weight: 900;
+  padding-top: 8px;
+}
+
+body.aws-layout #customer-total-block {
+  color: white;
+  height: 238px;
+}
+
+/* AWS RELATED STYLES - End */
+
+
+/* Galey's RELATED STYLES - Start */
+
+body.galeys #header-block {
+  text-align: center;
+  padding-top: 5mm;
+}
+
+body.galeys .address-line-bold {
+  font-weight: bold;
+  font-size: 12px;
+}
+
+body.galeys .address-line {
+  font-size: 12px;
+}
+
+body.galeys .b-opt {
+  margin-top: 12px;
+}
+
+.optn-blocks {
+  margin-top: 12px;
+  border: 1px solid black;
+  position: relative;
+  float: right;
+}
+
+.optns-header {
+    position: absolute;
+    top: -10px;
+    left: 10px;
+    background: #ffffff;
+}
+
+.optns-title {
+  font-size: 15px;
+  font-weight: 600;
+  margin: 0px;
+}
+
+.signature {
+  height: 20px;
+}
+
+.bold {
+  font-weight: bold;
+}
+/* Galey's RELATED STYLES - End */

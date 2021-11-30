@@ -3,7 +3,7 @@
     <fullName>Tied_Up_Cash__c</fullName>
     <deprecated>false</deprecated>
     <externalId>false</externalId>
-    <formula>IF(RecordType.DeveloperName = &#39;Used_Boats&#39;,ACV_Floored_Difference__c + Min_ACV_Difference__c,0)</formula>
+    <formula>IF(RecordType.DeveloperName = &apos;Used_Boats&apos;,ACV_Floored_Difference__c + Min_ACV_Difference__c,0)</formula>
     <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
     <label>Tied-Up Cash</label>
     <precision>18</precision>

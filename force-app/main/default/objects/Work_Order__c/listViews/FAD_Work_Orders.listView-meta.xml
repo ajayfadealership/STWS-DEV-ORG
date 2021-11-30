@@ -6,6 +6,7 @@
     <columns>Boat__c</columns>
     <columns>Status__c</columns>
     <columns>Case_Age__c</columns>
+    <columns>CREATED_DATE</columns>
     <columns>Customer_Notification_Flag__c</columns>
     <filterScope>Everything</filterScope>
     <filters>

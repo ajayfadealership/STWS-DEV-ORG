@@ -1,0 +1,166 @@
+<apex:page showHeader="false" sidebar="false" standardStylesheets="false" applyBodyTag="false" applyHtmlTag="false" renderAs="pdf">
+
+<html>
+
+    <head>
+        <link media="all" type="text/css" rel="stylesheet" href="{!URLFOR($Resource.galeys_style)}" />
+    </head>
+
+    <body class="galeys">
+        <div id="page1">
+
+            <div class="container">
+
+                <!-- Header Block -->
+                <div class="row" id="header-block">
+                    <!-- Logo Block -->
+                    <div class="col-6 center">
+                        <img src="{!URLFOR($Resource.galeys_logo)}" height="120px" />
+                        
+                        <!-- Address Block-->
+                        <div class="row italic">
+                            <div class="col-12">
+                                <p class="address-line-bold">2720 Auto Mall Dr</p>
+                                <p class="address-line-bold">Bakersfield, California 93313</p>
+                                <p class="address-line">(661) 327-5711 Fax: (661) 831-4077</p>
+                                <p class="address-line">https://www.galeysmarine.com</p>
+                                <p class="address-line">&nbsp;</p>
+                            </div>
+
+                            <div class="col-6 left">
+                                <p class="address-line-bold">Mrs. Casey Wilkerson</p>
+                                <p class="address-line-bold">Mrs. Jason Wilkerson</p>
+                                <p class="address-line-bold">12702 Brenda Jean Ct.</p>
+                                <p class="address-line-bold">Bakersfield, California 93312</p>
+                                <p class="address-line-bold">Mobile: (661) 717-5736</p>
+                                <p class="address-line-bold">wilkersonfamily@icloud.com</p>
+                                <p class="address-line-bold">2019 22'8" Supra SA450</p>
+                            </div>
+
+                            <div class="col-6 left">
+                                <p class="address-line-bold">Mrs. Casey Wilkerson</p>
+                                <p class="address-line-bold">Mrs. Jason Wilkerson</p>
+                                <p class="address-line-bold">12702 Brenda Jean Ct.</p>
+                                <p class="address-line-bold">Bakersfield, California 93312</p>
+                                <p class="address-line-bold">Mobile: (661) 717-5736</p>
+                                <p class="address-line-bold">wilkersonfamily@icloud.com</p>
+                                <p class="address-line-bold">2019 22'8" Supra SA450</p>
+                                <p class="address-line-bold">&nbsp;</p>
+                                <p class="address-line-bold right">In: 03-Sep-2020</p>
+                                <p class="address-line-bold right">Complete: n/a</p>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="col-6">
+                        <img src="{!URLFOR($Resource.galeys_1)}" style="width: 100%; " />
+                    </div>
+                </div>
+
+                <!-- Boat Options -->
+                <div class="row">
+                    <div class="col-12">
+                        <div id="boat-info">
+    
+                            <!-- Values -->
+                            <div class="row b-opt">
+                                
+                                <div class="col-12 title3">
+                                    Job 1 - Diag And Lake Test - Speed Reduction 45 to 33MPH Still Hits 8000 RPM
+                                </div>
+
+                                <div class="col-12 b-opt-h">Engines (Must Select 1)</div>
+
+                                <div class="row">
+                                    <div class="col-1 b-opt-v"></div>
+                                    <div class="col-8 b-opt-v">XR7 Supercharged MPI 6.2L</div>
+                                    <div class="col-3 b-opt-v right">9675.00</div>
+                                </div>
+    
+                                <div class="col-12 b-opt-h">Package Options (Select 0 or more)</div>
+                                <div class="row">
+                                    <div class="col-1 b-opt-v"></div>
+                                    <div class="col-8 b-opt-v">Enhanced Courtesy Lighting Package</div>
+                                    <div class="col-3 b-opt-v right">2177.00</div>
+                                </div>
+    
+                                <div class="col-12 b-opt-h">Tower Speakers (Select 0 or 1)</div>
+                                <div class="row">
+                                    <div class="col-1 b-opt-v"></div>
+                                    <div class="col-8 b-opt-v">Tower Speakers - 1 Pair JL Audio M6 Series 880x</div>
+                                    <div class="col-3 b-opt-v right">1838.00</div>
+                                </div>
+
+                                
+                            </div>
+
+                            <div class="row b-opt">
+                                
+                                <div class="col-12 title3">
+                                    Job 2 - Basic Service
+                                </div>
+
+                                <div class="col-12 b-opt-h">Engines (Must Select 1)</div>
+
+                                <div class="row">
+                                    <div class="col-1 b-opt-v"></div>
+                                    <div class="col-8 b-opt-v">XR7 Supercharged MPI 6.2L</div>
+                                    <div class="col-3 b-opt-v right">9675.00</div>
+                                </div>
+    
+                                <div class="col-12 b-opt-h">Package Options (Select 0 or more)</div>
+                                <div class="row">
+                                    <div class="col-1 b-opt-v"></div>
+                                    <div class="col-8 b-opt-v">Enhanced Courtesy Lighting Package</div>
+                                    <div class="col-3 b-opt-v right">2177.00</div>
+                                </div>
+    
+                                <div class="col-12 b-opt-h">Tower Speakers (Select 0 or 1)</div>
+                                <div class="row">
+                                    <div class="col-1 b-opt-v"></div>
+                                    <div class="col-8 b-opt-v">Tower Speakers - 1 Pair JL Audio M6 Series 880x</div>
+                                    <div class="col-3 b-opt-v right">1838.00</div>
+                                </div>
+                                
+                            </div>
+
+                            <div class="row b-opt">
+                                
+                                <div class="col-12 title3">
+                                    Job 3 - Pressure Wash and Detail (Estimate)
+                                </div>
+                            </div>
+
+                            <div class="row b-opt">
+                                <div class="col-9 b-opt-h right">Invoice Sub Total</div>
+                                <div class="col-3 b-opt-h right">$3,231.33</div>
+        
+                                <div class="col-9 b-opt-h right">Invoice Sub Total</div>
+                                <div class="col-3 b-opt-h right">$3,231.33</div>
+        
+                                <div class="col-9 b-opt-h right">Sub Total</div>
+                                <div class="col-3 b-opt-h right">$2,981.33</div>
+                            </div>
+        
+                            <div class="row b-opt">
+                                <div class="col-9 b-opt-h right">Visa ending in: 1423 Auth: 181669 Payment Received by StevP on 19-Jun-2020 at 11:16</div>
+                                <div class="col-3 b-opt-h right">$-3,231.33</div>
+        
+                                <div class="col-9 b-opt-h right">Balance Due</div>
+                                <div class="col-3 b-opt-h right">$0.00</div>
+                            </div>
+                        </div>
+
+                    </div>
+                    
+                </div>
+                <!-- Boat Options - End -->
+
+            </div>
+
+        </div>
+    </body>
+
+    </html>
+</apex:page>

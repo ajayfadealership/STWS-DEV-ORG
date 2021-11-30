@@ -18,7 +18,7 @@ public with sharing class TMTriggerHandler {
 	                                                              AND RecordType.DeveloperName = 'Time_Management_for_Jobs'];
 	        Map<String, String> MapAccId = new Map<String, String>();
 	        Map<String, String> MapAccIdWONameNJN = new Map<String, String>();
-	        Map<String, String> MapBoatId = new Map<String, String>();                                                      
+	        Map<String, String> MapBoatId = new Map<String, String>();                                                       
 	        for(BOATBUILDING__Time_Management__c objTimeMgmt: lstTimeMgmt) { 
 	        	if(objTimeMgmt.BOATBUILDING__Related_Work_Order_Job__c != null) { 
 		        	ConnectApi.FeedItemInput feedItemInput = new ConnectApi.FeedItemInput();
@@ -337,7 +337,7 @@ public with sharing class TMTriggerHandler {
             System.debug('>>>>>completedJob: '+completedJob);
             if(objWO.Work_Order_Jobs__r.size() == completedJob)
             {
-                objWO.BOATBUILDING__Status__c = 'Waiting On Payment';	    
+                objWO.BOATBUILDING__Status__c = 'Completed Pending Review';	    
             }
             else
             {
@@ -383,7 +383,7 @@ public with sharing class TMTriggerHandler {
     	update lstWO;	
 	}
 	
-    public static void updateName(List<Time_Management__c> lstTM) {
+    public static void updateName(List<Time_Management__c> lstTM, Map<Id, Time_Management__c> oldMapTM) {
         Set<String> setWOId = new Set<String>();
         Set<String> setJobId = new Set<String>();
         Set<String> setInvId = new Set<String>();
@@ -392,19 +392,24 @@ public with sharing class TMTriggerHandler {
         Map<String, String> mapIdName = new Map<String, String>();
         
         for(Time_Management__c objTM: lstTM) {
-            if(objTM.Contact__c != null) {
+            if(objTM.Contact__c != null &&
+					(oldMapTM.isEmpty() || (!oldMapTM.isEmpty() && objTM.Contact__c != oldMapTM.get(objTM.Id).Contact__c))) {
                 setCustId.add(objTM.Contact__c);
             }
-            if(objTM.Work_Order__c != null) {
+            if(objTM.Work_Order__c != null && 
+					(oldMapTM.isEmpty() || (!oldMapTM.isEmpty() && objTM.Work_Order__c != oldMapTM.get(objTM.Id).Work_Order__c))) {
                 setWOId.add(objTM.Work_Order__c);
             }
-            if(objTM.Related_Work_Order_Job__c != null) {
+            if(objTM.Related_Work_Order_Job__c != null && 
+					(oldMapTM.isEmpty() || (!oldMapTM.isEmpty() && objTM.Related_Work_Order_Job__c != oldMapTM.get(objTM.Id).Related_Work_Order_Job__c))) {
                 setJobId.add(objTM.Related_Work_Order_Job__c);
             } 
-            if(objTM.Inventory__c != null) {
+            if(objTM.Inventory__c != null && 
+					(oldMapTM.isEmpty() || (!oldMapTM.isEmpty() && objTM.Inventory__c != oldMapTM.get(objTM.Id).Inventory__c))) {
                 setInvId.add(objTM.Inventory__c);
             } 
-            if(objTM.Quote__c != null) {
+            if(objTM.Quote__c != null && 
+					(oldMapTM.isEmpty() || (!oldMapTM.isEmpty() && objTM.Quote__c != oldMapTM.get(objTM.Id).Quote__c))) {
                 setQuoteId.add(objTM.Quote__c);
             } 
         }
@@ -413,10 +418,14 @@ public with sharing class TMTriggerHandler {
             mapIdName.put(objCon.Id, objCon.Name); 
         }
         
-        for(Work_Order__c objWO: [Select Id, Name, Contact__c, Contact__r.Name, Boat__r.Name From Work_Order__c Where Id IN: setWOId]) {
-            if(objWO.Contact__c != null) {
-                mapIdName.put(objWO.Id, objWO.Name + ' - ' + objWO.Contact__r.Name + objWO.Boat__r.Name); 
-            } else {
+        for(Work_Order__c objWO: [Select Id, Name, Contact__c, Contact__r.Name, Boat__r.Name, Boat__c From Work_Order__c Where Id IN: setWOId]) {
+        	if(objWO.Boat__c != null && objWO.Contact__c != null) {
+        		mapIdName.put(objWO.Id, objWO.Name + ' - ' + objWO.Contact__r.Name + objWO.Boat__r.Name);
+        	}
+            else if(objWO.Contact__c != null) {
+                mapIdName.put(objWO.Id, objWO.Name + ' - ' + objWO.Contact__r.Name); 
+            } 
+            else {
                 mapIdName.put(objWO.Id, objWO.Name);    
             }
         }
@@ -432,29 +441,29 @@ public with sharing class TMTriggerHandler {
         for(Work_Order_Job__c objWOJ: [Select Id, Name, Work_Order_Warranty_Work_Order__c, Work_Order_Warranty_Work_Order__r.Contact__c, Work_Order_Warranty_Work_Order__r.Contact__r.Name From Work_Order_Job__c Where Id IN: setJobId]) {
             if(objWOJ.Work_Order_Warranty_Work_Order__c != null && objWOJ.Work_Order_Warranty_Work_Order__r.Contact__c != null) {
                 mapIdName.put(objWOJ.Id, objWOJ.Name + ' - ' + objWOJ.Work_Order_Warranty_Work_Order__r.Contact__r.Name);    
-            } else {
+            } else { 
                 mapIdName.put(objWOJ.Id, objWOJ.Name);
             }
             
         }
         
         for(Time_Management__c objTM: lstTM) {
-            
-            if(objTM.Type__c == 'Test Drive' && objTM.Contact__c != null) {
-                objTM.Event_Name__c =  'Test Drive ' + mapIdName.get(objTM.Contact__c); 
-            } else if(objTM.Contact__c != null) {
-                    objTM.Event_Name__c = objTM.Type__c+ ' : ' +mapIdName.get(objTM.Contact__c);
-            }  
-            
+            if(mapIdName.containskey(objTM.Contact__c)) {
+				if(objTM.Type__c != null && objTM.Type__c == 'Test Drive' && objTM.Contact__c != null) {
+					objTM.Event_Name__c =  'Test Drive ' + mapIdName.get(objTM.Contact__c); 
+				} else if(objTM.Contact__c != null) {
+						objTM.Event_Name__c = objTM.Type__c+ ' : ' +mapIdName.get(objTM.Contact__c);
+				}  
+			}
             if(objTM.Work_Order__c != null && mapIdName.containsKey(objTM.Work_Order__c)) {
                 objTM.Event_Name__c = mapIdName.get(objTM.Work_Order__c);
             }
-            else if(objTM.Related_Work_Order_Job__c != null) {
+            else if(objTM.Related_Work_Order_Job__c != null && mapIdName.containskey(objTM.Related_Work_Order_Job__c)) {
                 objTM.Event_Name__c = mapIdName.get(objTM.Related_Work_Order_Job__c);
             } 
             else if(objTM.Quote__c != null) {
                     String str= '';
-                    if(objTM.Contact__c != null) {
+                    if(objTM.Contact__c != null && mapIdName.containskey(objTM.Contact__c)) {
                         str = mapIdName.get(objTM.Contact__c)+' ('+objTM.Type__c+')';
                     } 
                     else{
@@ -471,7 +480,7 @@ public with sharing class TMTriggerHandler {
             }
             else if(objTM.Inventory__c != null) {  
                     String str= '';
-                    if(objTM.Contact__c != null) {
+                    if(objTM.Contact__c != null && mapIdName.containskey(objTM.Contact__c)) {
                         str = mapIdName.get(objTM.Contact__c)+' ('+objTM.Type__c+')';
                     }
                     else
@@ -490,6 +499,53 @@ public with sharing class TMTriggerHandler {
             if(objTM.Inventory__c == null && objTM.Quote__c == null &&  objTM.Related_Work_Order_Job__c == null && objTM.Contact__c == null && objTM.Work_Order__c == null){
                 objTM.Event_Name__c = objTM.Type__c+' Event';
             }
+            if(objTM.Event_Name__c.containsIgnoreCase('null')) {
+	        	objTM.Event_Name__c = objTM.Event_Name__c.replaceAll('null', '');
+	        }
         }
-    }
+        
+	}
+	
+	public static void updateScheduleDateTime(List<BOATBUILDING__Time_Management__c> lstTM, Map<Id,BOATBUILDING__Time_Management__c> newMapTM, Map<Id,BOATBUILDING__Time_Management__c> oldMapTM, Boolean isInsert, Boolean isUpdate) {
+		Set<String> setTM = new Set<String>();
+		for(BOATBUILDING__Time_Management__c objTM: lstTM) {
+			if(( isInsert && objTM.BOATBUILDING__Schedule_Date_Time__c != null ) 
+				||  ( isUpdate && objTM.BOATBUILDING__Schedule_Date_Time__c != null && objTM.BOATBUILDING__Schedule_Date_Time__c != oldMapTM.get(objTM.Id).BOATBUILDING__Schedule_Date_Time__c) ) {
+					setTM.add(objTM.Id);
+			}
+		}
+		List<BOATBUILDING__Time_Management__c> lstNewTM = [SELECT 
+                                                                Id, Name, BOATBUILDING__Work_Order__c, BOATBUILDING__Technician__c, BOATBUILDING__Related_Work_Order_Job__c, 
+                                                                BOATBUILDING__Related_Work_Order_Job__r.BOATBUILDING__Schedule_Date__c, BOATBUILDING__Schedule_Date_Time__c
+                                                    FROM 
+                                                                BOATBUILDING__Time_Management__c Where Id IN: setTM AND RecordType.DeveloperName = 'Schedule'];
+            
+			List<BOATBUILDING__Work_Order_Job__c> lstjbUpdate = new List<BOATBUILDING__Work_Order_Job__c>();
+			Set<String> setWOId = new Set<String>();
+			for(BOATBUILDING__Time_Management__c objTM: lstNewTM) {
+				if(objTM.BOATBUILDING__Related_Work_Order_Job__c != null) {
+					BOATBUILDING__Work_Order_Job__c objWOJ = new BOATBUILDING__Work_Order_Job__c();
+					objWOJ.Id = objTM.BOATBUILDING__Related_Work_Order_Job__c;
+					objWOJ.BOATBUILDING__Schedule_Date__c = objTM.BOATBUILDING__Schedule_Date_Time__c != null ? objTM.BOATBUILDING__Schedule_Date_Time__c : DateTime.now();
+					lstjbUpdate.add(objWOJ);
+				} else if(objTM.BOATBUILDING__Work_Order__c != null) { 
+					setWOId.add(objTM.BOATBUILDING__Work_Order__c);
+				}
+			}
+			List<BOATBUILDING__Work_Order_Job__c> lstJB = [SELECT Id, BOATBUILDING__Schedule_Date__c,BOATBUILDING__Work_Order_Warranty_Work_Order__c,
+																(Select Id From Time_Management__r)	
+																FROM BOATBUILDING__Work_Order_Job__c WHERE BOATBUILDING__Completed__c = false AND BOATBUILDING__Work_Order_Warranty_Work_Order__c IN: setWOId];  
+			for(BOATBUILDING__Time_Management__c objTM: lstNewTM) {
+				for(BOATBUILDING__Work_Order_Job__c objJB: lstJB) {
+					if(objTM.BOATBUILDING__Work_Order__c != null && objTM.BOATBUILDING__Work_Order__c == objJB.BOATBUILDING__Work_Order_Warranty_Work_Order__c) {
+                        if(objJB.Time_Management__r.isEmpty()) {
+                            objJB.BOATBUILDING__Schedule_Date__c = objTM.BOATBUILDING__Schedule_Date_Time__c != null ? objTM.BOATBUILDING__Schedule_Date_Time__c : DateTime.now(); 
+                        }
+                        lstjbUpdate.add(objJB);
+					}
+				}
+			}
+            if(!lstjbUpdate.isEmpty()) update lstjbUpdate;
+	}
+
 }

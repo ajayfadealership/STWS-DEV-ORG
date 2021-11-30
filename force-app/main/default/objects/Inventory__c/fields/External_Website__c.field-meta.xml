@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>External_Website__c</fullName>
+    <deprecated>false</deprecated>
+    <externalId>false</externalId>
+    <label>External Website</label>
+    <required>false</required>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>MultiselectPicklist</type>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Only Inboards</fullName>
+                <default>false</default>
+                <label>Only Inboards</label>
+            </value>
+            <value>
+                <fullName>Boat Trader</fullName>
+                <default>false</default>
+                <label>Boat Trader</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+    <visibleLines>4</visibleLines>
+</CustomField>

@@ -103,7 +103,10 @@ private class InventoryTriggerHandlerTest {
         InventoryTriggerHandler.shootMailForInvUpateAU(MapId,MapId);
         InventoryTriggerHandler.sendBoatRiggingNotification(listIN,MapId);
         InventoryTriggerHandler.createCustomerBoatValidation(listIN,MapId);
-        InventoryTriggerHandler.updateInventoryQuantityFromParts(listIN);
+        Map<Id, Inventory__c> omap = new Map<Id, Inventory__c>();
+        objInventory1.Quantity__c = 5;
+        omap.put(objInventory1.Id,objInventory1);
+        InventoryTriggerHandler.updateInventoryQuantityFromParts(listIN, omap);
         InventoryTriggerHandler.isBeforeUpdate(listIN,MapId);
     }
     

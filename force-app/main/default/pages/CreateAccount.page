@@ -2,6 +2,7 @@
     <apex:stylesheet value="{!URLFOR($Resource.BoatBuilderSR, 'assets/styles/salesforce-lightning-design-system.min.css')}" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"/>
     <apex:includeScript value="{!URLFOR($Resource.Signature, 'jquery.min.js')}"/>
+    <apex:slds />
     <html>   
         <title>Create Account</title> 
     </html> 
@@ -69,365 +70,411 @@
                     </h2>
                 </div>
             </div>
-            <div class="isa_error" id="errorDiv" style="display: none;">
+            <div class="isa_error" id="errorDiv" style="display: none; position: fixed; width: 100%; z-index: 9999; top: 0%;">
                 <i class="fa fa-times-circle"></i>
                 <span id="errSnap"></span> 
             </div>
+            <script>
+            function updateCustFolder(obj) {
+                document.getElementById("existing").style.display = "none";
+                document.getElementById("custForm").style.display = "none";
+                if(obj.checked) {
+                    document.getElementById("existing").style.display = "block";
+                } else {
+                    document.getElementById("custForm").style.display = "block";
+                }
+            }
+            </script>
             <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-1 slds-col--padded" style="padding: 1%; margin-top: 2%; border-bottom: solid 1px #ccc!important; border-top: solid 1px #ccc!important;">
                 <div class="slds-grid slds-wrap">
                     <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-1 slds-col--padded">
-                        <div class="slds-grid slds-wrap">
-                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
-                                <div class="slds-form-element">
-                                    <label class="slds-form-element__label">Customer Name</label>
-                                    <div class="slds-form-element__control">
-                                        <!--                                             <input type="text" class="slds-input" id="accName"/> -->
-                                        <apex:inputField value="{!objItm.Contact__c}" onchange="fetchDetails();" styleClass="slds-input" id="accName" style="width: 87%;"/> 
-                                    </div>
-                                </div> 
-                            </div>
-                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
-                                <div class="slds-form-element">
-                                    <label class="slds-form-element__label">First Name</label>
-                                    <div class="slds-form-element__control">
-                                        <input type="text" class="slds-input" id="frstName"/>
-                                    </div>
-                                </div> 
-                            </div>
-                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
-                                <div class="slds-form-element">
-                                    <label class="slds-form-element__label">Last Name<span style="color: red;">*</span></label>
-                                    <div class="slds-form-element__control">
-                                        <input type="text" class="slds-input" id="lstName"/>
-                                    </div>
-                                </div> 
-                            </div>
-                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
-                                <div class="slds-form-element">
-                                    <label class="slds-form-element__label">Email<span style="color: red;">*</span></label>
-                                    <div class="slds-form-element__control">
-                                        <input type="text" class="slds-input" id="email"/>
-                                    </div>
-                                </div> 
-                            </div>
+                        
+                        <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-4 slds-col--padded">
+                            <div class="slds-form-element">
+                                <label class="slds-checkbox_toggle slds-grid">
+                                    <span class="slds-form-element__label slds-m-bottom_none">Select Existing Customer</span>
+                                    <input type="checkbox" name="checkbox-toggle-15" onclick="updateCustFolder(this);" value="checkbox-toggle-15" aria-describedby="checkbox-toggle-15" />
+                                    <span id="checkbox-toggle-15" class="slds-checkbox_faux_container" aria-live="assertive">
+                                        <span class="slds-checkbox_faux"></span>
+                                        <span class="slds-checkbox_on">True</span>
+                                        <span class="slds-checkbox_off">False</span>
+                                    </span>
+                                </label>
+                            </div> 
                         </div>
-                        <div class="slds-grid slds-wrap" style="margin-top: 1%;">
-                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
-                                <div class="slds-form-element">
-                                    <label class="slds-form-element__label">Phone Number</label>
-                                    <div class="slds-form-element__control">
-                                        <input type="text" class="slds-input" id="phone"/>
-                                    </div>
-                                </div> 
-                            </div>
-                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
-                                <div class="slds-form-element">
-                                    <label class="slds-form-element__label">Lead Source</label>
-                                    <div class="slds-form-element__control">
-                                        <!--  <input type="text" class="slds-input" id="ldSrc"/> -->
-                                        <apex:inputField value="{!objAccount.Lead_Source__c}" styleClass="slds-select" id="ldSrc"/>
-                                    </div>
-                                </div> 
-                            </div>
-                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
-                                <div class="slds-form-element">
-                                    <label class="slds-form-element__label">Account Customer Type</label>
-                                    <div class="slds-form-element__control">
-                                        <apex:inputField value="{!objAccount.Account_Customer_Type__c}" styleClass="slds-select" id="custType"/>
-                                    </div>
-                                </div> 
-                            </div>
-                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
-                                <div class="slds-form-element">
-                                    <label class="slds-form-element__label">Store Location</label>
-                                    <div class="slds-form-element__control">
-                                        <apex:inputField value="{!objAccount.Store_Location__c}" styleClass="slds-select" id="storelocation"/>
-                                    </div>
-                                </div> 
-                            </div>
+                        <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-4 slds-col--padded">
                         </div>
-                        <hr/>
-                        <div class="slds-grid slds-wrap">
-                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
-                                <div class="slds-form-element">
-                                    <label class="slds-form-element__label">Billing Address</label>
-                                    <div class="slds-form-element__control">
-                                        <input type="text" class="slds-input" id="blngAddrs"/>
-                                    </div>
-                                </div> 
-                            </div>
-                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
-                                <div class="slds-form-element">
-                                    <label class="slds-form-element__label">Billing Zip</label>
-                                    <div class="slds-form-element__control">
-                                        <input type="text" class="slds-input" id="blngZip"/>
-                                    </div>
-                                </div> 
-                            </div>
-                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
-                                <div class="slds-form-element">
-                                    <label class="slds-form-element__label">Billing City</label>
-                                    <div class="slds-form-element__control">
-                                        <input type="text" class="slds-input" id="blngCity"/>
-                                    </div>
-                                </div> 
-                            </div>
-                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
-                                <div class="slds-form-element">
-                                    <label class="slds-form-element__label">Billing State</label>
-                                    <div class="slds-form-element__control">
-                                        <input type="text" class="slds-input" id="blngState"/>
-                                    </div>
-                                </div> 
-                            </div>
-                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
-                                <div class="slds-form-element">
-                                    <label class="slds-form-element__label"></label>
-                                    <div class="slds-form-element__control">
-                                    </div>
-                                </div> 
-                            </div>
+                        <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-4 slds-col--padded">
                         </div>
-                        <hr/>
-                        <div class="slds-grid slds-wrap">
-                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
-                                <div class="slds-form-element">
-                                    <label class="slds-form-element__label">Shipping Address</label>
-                                    <div class="slds-form-element__control">
-                                        <input type="text" class="slds-input" id="shpngAddrs"/>
-                                    </div>
-                                </div> 
-                            </div>
-                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
-                                <div class="slds-form-element">
-                                    <label class="slds-form-element__label">Shipping Zip</label>
-                                    <div class="slds-form-element__control">
-                                        <input type="text" class="slds-input" id="shpngZip"/>
-                                    </div>
-                                </div> 
-                            </div>
-                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
-                                <div class="slds-form-element">
-                                    <label class="slds-form-element__label">Shipping City</label>
-                                    <div class="slds-form-element__control">
-                                        <input type="text" class="slds-input" id="shpngCity"/>
-                                    </div>
-                                </div> 
-                            </div>
-                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
-                                <div class="slds-form-element">
-                                    <label class="slds-form-element__label">Shipping State</label>
-                                    <div class="slds-form-element__control">
-                                        <input type="text" class="slds-input" id="shpngState"/>
-                                    </div>
-                                </div> 
-                            </div>
-                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
-                                <div class="slds-form-element">
-                                    <label class="slds-form-element__label"></label>
-                                    <div class="slds-form-element__control">
-                                    </div>
-                                </div> 
-                            </div>
-                        </div>
-                        <hr/>
-                        <div class="slds-grid slds-wrap">
-                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
-                                <div class="slds-form-element">
-                                    <label class="slds-form-element__label">Create Custom Boat</label>
-                                    <div class="slds-form-element__control">
-                                        <label class="slds-checkbox--toggle slds-grid slds-grid--vertical-align-center">
-                                            <input name="checkbox" type="checkbox" id="checkCreateCustomBoat" />
-                                            <span class="slds-checkbox--faux" data-check-on="Yes" data-check-off="No"></span>
-                                        </label>
-                                    </div>
-                                </div> 
-                            </div>
-                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
-                                <div class="slds-form-element">
-                                    <label class="slds-form-element__label"> Create Custom Engine</label>
-                                    <div class="slds-form-element__control">
-                                        <label class="slds-checkbox--toggle slds-grid slds-grid--vertical-align-center">
-                                            <input name="checkbox" type="checkbox" id="customEngineId" />
-                                            <span class="slds-checkbox--faux" data-check-on="Yes" data-check-off="No"></span>
-                                        </label>
-                                        
-                                    </div>
-                                </div> 
-                            </div>
-                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
-                                <div class="slds-form-element">
-                                    <label class="slds-form-element__label"></label>
-                                    <div class="slds-form-element__control">
-                                    </div>
-                                </div> 
-                            </div>
-                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
-                                <div class="slds-form-element">
-                                    <label class="slds-form-element__label"></label>
-                                    <div class="slds-form-element__control">
-                                    </div>
-                                </div> 
-                            </div>
-                        </div>
-                        <div id="customBoatForm" style="margin-top: 1%; padding: 1%; width: 100%; border: solid 1px #d8dde6!important; border-radius: .25rem; display: none;">
-                            <div class="slds-grid slds-wrap"> 
-                                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
-                                    <div class="slds-form-element">
-                                        <label class="slds-form-element__label">Boat Name<span style="color: red;">*</span></label>
-                                        <div class="slds-form-element__control">
-                                            <input type="text" class="slds-input" id="btName"/>
-                                        </div>
-                                    </div> 
-                                </div>
-                                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
-                                    <div class="slds-form-element">
-                                        <label class="slds-form-element__label">Boat HIN<span style="color: red;">*</span></label>
-                                        <div class="slds-form-element__control">
-                                            <input type="text" class="slds-input" id="btHIN"/>
-                                        </div>
-                                    </div> 
-                                </div>
-                                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
-                                    <div class="slds-form-element">
-                                        <label class="slds-form-element__label">Engine SN</label>
-                                        <div class="slds-form-element__control">
-                                            <input type="text" class="slds-input" id="engnSN"/>
-                                        </div>
-                                    </div> 
-                                </div>
-                                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
-                                    <div class="slds-form-element">
-                                        <label class="slds-form-element__label">Trailer VIN</label>
-                                        <div class="slds-form-element__control">
-                                            <input type="text" class="slds-input" id="trlrVIN"/>
-                                        </div>
-                                    </div> 
-                                </div>
-                            </div>
-                            <div class="slds-grid slds-wrap" style="margin-top: .5%;"> 
-                                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
-                                    <div class="slds-form-element">
-                                        <label class="slds-form-element__label">Boat Make<span style="color: red;">*</span></label>
-                                        <div class="slds-form-element__control">
-                                            <!--                                                 <input type="text" class="slds-input" id="btMake"/> -->
-                                            <apex:inputField value="{!objItm.Boat_Manufacturer__c}" style="width: 87%;" styleClass="slds-input" id="btMake"/>
-                                        </div>
-                                    </div> 
-                                </div>
-                                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
-                                    <div class="slds-form-element">
-                                        <label class="slds-form-element__label"><span style="color: red;"></span></label>
-                                        <div class="slds-form-element__control">
-                                            <a class="slds-button slds-button--brand" style="width: 55%;" id="createManufac" onClick = "createManufacturer()" >Create Manufacturer</a>
-                                        </div>
-                                    </div> 
-                                </div>
-                                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
-                                    <div class="slds-form-element">
-                                        <label class="slds-form-element__label">Boat Model<span style="color: red;">*</span></label>
-                                        <div class="slds-form-element__control">
-                                            <input type="text" class="slds-input" id="btMdl"/>
-                                        </div>
-                                    </div> 
-                                </div>
-                                
-                                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
-                                    <div class="slds-form-element">
-                                        <label class="slds-form-element__label">Boat Year<span style="color: red;">*</span></label>
-                                        <div class="slds-form-element__control">
-                                            <input type="text" class="slds-input" id="btYear"/>
-                                        </div>
-                                    </div> 
-                                </div>
-                                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
-                                    <div class="slds-form-element">
-                                        <label class="slds-form-element__label">Boat Registration Number</label>
-                                        <div class="slds-form-element__control">
-                                            <input type="text" class="slds-input" id="btRegNumber"/>
-                                        </div>
-                                    </div> 
-                                </div>     
-                                <div class="slds-col slds-size--1-of-1 slds-medium-size--3-of-4 slds-small-size--1-of-2 slds-col--padded"> 
-                                </div>   
-                            </div>     
+                        <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-4 slds-col--padded">
                         </div>
                         
-                        
-                        
-                        <div id="customEngineForm" style="margin-top: 1%; padding: 1%; width: 100%; border: solid 1px #d8dde6!important; border-radius: .25rem; display: none;">
-                            <div class="slds-grid slds-wrap"> 
+                    </div>
+                </div>    
+                <div class="slds-grid slds-wrap">
+                    <section style="padding: 2%;">
+                        <div  style="display: none;" id="existing">
+                            
+                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-1 slds-col--padded">
+                                
+                                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-1 slds-small-size--1-of-1 slds-col--padded">
+                                    <div class="slds-form-element">
+                                        <label class="slds-form-element__label">Customer Name</label>
+                                        <div class="slds-form-element__control">
+                                            <!--<input type="text" class="slds-input" id="accName"/> -->
+                                            <apex:inputField value="{!objItm.Contact__c}" onchange="fetchDetails();" styleClass="slds-input" id="accName" style="width: 100%; "/> 
+                                        </div>
+                                    </div> 
+                                </div>
+                                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-4 slds-col--padded">
+                                </div>
+                                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-4 slds-col--padded">
+                                </div>
+                                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-4 slds-col--padded">
+                                </div>
+                            </div>
+                            
+                        </div>
+                    </section>
+                    <section style="padding: 2%;">
+                        <div class="slds-col slds-size--1-of-1" id="custForm">
+                            <div class="slds-grid slds-wrap">
+                                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-col--padded">
+                                    <div class="slds-form-element">
+                                        <label class="slds-form-element__label">First Name</label>
+                                        <div class="slds-form-element__control">
+                                            <input type="text" class="slds-input" id="frstName"/>
+                                        </div>
+                                    </div> 
+                                </div>
+                                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-col--padded">
+                                    <div class="slds-form-element">
+                                        <label class="slds-form-element__label">Last Name<span style="color: red;">*</span></label>
+                                        <div class="slds-form-element__control">
+                                            <input type="text" class="slds-input" id="lstName"/>
+                                        </div>
+                                    </div> 
+                                </div>
+                                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-4 slds-col--padded">
+                                    <div class="slds-form-element">
+                                        <label class="slds-form-element__label">Email<span style="color: red;">*</span></label>
+                                        <div class="slds-form-element__control">
+                                            <input type="text" class="slds-input" id="email"/>
+                                        </div>
+                                    </div> 
+                                </div>
+                                
+                                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-4 slds-col--padded">
+                                    <div class="slds-form-element">
+                                        <label class="slds-form-element__label">Phone Number</label>
+                                        <div class="slds-form-element__control">
+                                            <input type="text" class="slds-input" id="phone"/>
+                                        </div>
+                                    </div> 
+                                </div>
+                                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-4 slds-col--padded">
+                                    <div class="slds-form-element">
+                                        <label class="slds-form-element__label">Lead Source</label>
+                                        <div class="slds-form-element__control">
+                                            <!--  <input type="text" class="slds-input" id="ldSrc"/> -->
+                                            <apex:inputField value="{!objAccount.Lead_Source__c}" styleClass="slds-select" id="ldSrc"/>
+                                        </div>
+                                    </div> 
+                                </div>
+                                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-4 slds-col--padded">
+                                    <div class="slds-form-element">
+                                        <label class="slds-form-element__label">Account Customer Type</label>
+                                        <div class="slds-form-element__control">
+                                            <apex:inputField value="{!objAccount.Account_Customer_Type__c}" styleClass="slds-select" id="custType"/>
+                                        </div>
+                                    </div> 
+                                </div>
+                                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-4 slds-col--padded">
+                                    <div class="slds-form-element">
+                                        <label class="slds-form-element__label">Store Location</label>
+                                        <div class="slds-form-element__control">
+                                            <apex:inputField value="{!objAccount.Store_Location__c}" styleClass="slds-select" id="storelocation"/>
+                                        </div>
+                                    </div> 
+                                </div>
+                                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-4 slds-col--padded">
+                                    <div class="slds-form-element">
+                                        <label class="slds-form-element__label">Billing Address</label>
+                                        <div class="slds-form-element__control">
+                                            <input type="text" class="slds-input" id="blngAddrs"/>
+                                        </div>
+                                    </div> 
+                                </div>
                                 <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
                                     <div class="slds-form-element">
-                                        <label class="slds-form-element__label">Engine Name<span style="color: red;">*</span></label>
+                                        <label class="slds-form-element__label">Billing Zip</label>
                                         <div class="slds-form-element__control">
-                                            <input type="text" class="slds-input" id="engName"/>
+                                            <input type="text" class="slds-input" id="blngZip"/>
                                         </div>
                                     </div> 
                                 </div>
-                                   <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
                                     <div class="slds-form-element">
-                                        <label class="slds-form-element__label">Engine Modle</label>
+                                        <label class="slds-form-element__label">Billing City</label>
                                         <div class="slds-form-element__control">
-                                            <input type="text" class="slds-input" id="engModle"/>
+                                            <input type="text" class="slds-input" id="blngCity"/>
                                         </div>
                                     </div> 
                                 </div>
-                                 <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
                                     <div class="slds-form-element">
-                                        <label class="slds-form-element__label">Engine Year</label>
+                                        <label class="slds-form-element__label">Billing State</label>
                                         <div class="slds-form-element__control">
-                                            <input type="text" class="slds-input" id="engYear"/>
+                                            <input type="text" class="slds-input" id="blngState"/>
                                         </div>
                                     </div> 
                                 </div>
-                              
-                                 <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
-                                    <div class="slds-form-element">
-                                        <label class="slds-form-element__label">Engine Manufacture Date</label>
-                                        <div class="slds-form-element__control">
-                                            <input type="text" class="slds-input" id="engManufDate"/>
-                                        </div>
-                                    </div> 
-                                </div>
-                                
-                                
                                 
                                 <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
                                     <div class="slds-form-element">
-                                        <label class="slds-form-element__label">Engine SN</label>
+                                        <label class="slds-form-element__label">Shipping Address</label>
                                         <div class="slds-form-element__control">
-                                            <input type="text" class="slds-input" id="engSN1"/>
+                                            <input type="text" class="slds-input" id="shpngAddrs"/>
                                         </div>
                                     </div> 
                                 </div>
-                                
+                                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                                    <div class="slds-form-element">
+                                        <label class="slds-form-element__label">Shipping Zip</label>
+                                        <div class="slds-form-element__control">
+                                            <input type="text" class="slds-input" id="shpngZip"/>
+                                        </div>
+                                    </div> 
+                                </div>
+                                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                                    <div class="slds-form-element">
+                                        <label class="slds-form-element__label">Shipping City</label>
+                                        <div class="slds-form-element__control">
+                                            <input type="text" class="slds-input" id="shpngCity"/>
+                                        </div>
+                                    </div> 
+                                </div>
+                                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                                    <div class="slds-form-element">
+                                        <label class="slds-form-element__label">Shipping State</label>
+                                        <div class="slds-form-element__control">
+                                            <input type="text" class="slds-input" id="shpngState"/>
+                                        </div>
+                                    </div> 
+                                </div>
+                                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                                    <div class="slds-form-element">
+                                        <label class="slds-form-element__label"></label>
+                                        <div class="slds-form-element__control">
+                                        </div>
+                                    </div> 
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                    <hr/>
+                    
+                    <section style="padding: 2%;">
+                        <div class="slds-col slds-size--1-of-1">
+                            <div class="slds-grid slds-wrap">
+                                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-2 slds-small-size--1-of-2 slds-col--padded">
+                                    <div class="slds-form-element">
+                                        <label class="slds-form-element__label">Create Custom Boat</label>
+                                        <div class="slds-form-element__control">
+                                            <label class="slds-checkbox--toggle slds-grid slds-grid--vertical-align-center">
+                                                <input name="checkbox" type="checkbox" id="checkCreateCustomBoat" />
+                                                <span class="slds-checkbox--faux" data-check-on="Yes" data-check-off="No"></span>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-2 slds-small-size--1-of-2 slds-col--padded">
+                                    <div class="slds-form-element">
+                                        <label class="slds-form-element__label"> Create Custom Engine</label>
+                                        <div class="slds-form-element__control">
+                                            <label class="slds-checkbox--toggle slds-grid slds-grid--vertical-align-center">
+                                                <input name="checkbox" type="checkbox" id="customEngineId" />
+                                                <span class="slds-checkbox--faux" data-check-on="Yes" data-check-off="No"></span>
+                                            </label>
+                                            
+                                        </div>
+                                    </div> 
+                                </div>
+                                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-2 slds-small-size--1-of-2 slds-col--padded">
+                                    <div class="slds-form-element">
+                                        <label class="slds-form-element__label"></label>
+                                        <div class="slds-form-element__control">
+                                        </div>
+                                    </div> 
+                                </div>
+                                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-2 slds-small-size--1-of-2 slds-col--padded">
+                                    <div class="slds-form-element">
+                                        <label class="slds-form-element__label"></label>
+                                        <div class="slds-form-element__control">
+                                        </div>
+                                    </div> 
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                    
+                    <div id="customBoatForm" style="margin-top: 1%; padding: 1%; width: 100%; border: solid 1px #d8dde6!important; border-radius: .25rem; display: none;">
+                        <div class="slds-grid slds-wrap"> 
+                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                                <div class="slds-form-element">
+                                    <label class="slds-form-element__label">Boat Name<span style="color: red;">*</span></label>
+                                    <div class="slds-form-element__control">
+                                        <input type="text" class="slds-input" id="btName"/>
+                                    </div>
+                                </div> 
                             </div>
                             <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
                                 <div class="slds-form-element">
-                                    <label class="slds-form-element__label">Engine Make<span style="color: red;">*</span></label>
+                                    <label class="slds-form-element__label">Boat HIN<span style="color: red;">*</span></label>
+                                    <div class="slds-form-element__control">
+                                        <input type="text" class="slds-input" id="btHIN"/>
+                                    </div>
+                                </div> 
+                            </div>
+                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                                <div class="slds-form-element">
+                                    <label class="slds-form-element__label">Engine SN</label>
+                                    <div class="slds-form-element__control">
+                                        <input type="text" class="slds-input" id="engnSN"/>
+                                    </div>
+                                </div> 
+                            </div>
+                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                                <div class="slds-form-element">
+                                    <label class="slds-form-element__label">Trailer VIN</label>
+                                    <div class="slds-form-element__control">
+                                        <input type="text" class="slds-input" id="trlrVIN"/>
+                                    </div>
+                                </div> 
+                            </div>
+                        </div>
+                        <div class="slds-grid slds-wrap" style="margin-top: .5%;"> 
+                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                                <div class="slds-form-element">
+                                    <label class="slds-form-element__label">Boat Make<span style="color: red;">*</span></label>
                                     <div class="slds-form-element__control">
                                         <!--                                                 <input type="text" class="slds-input" id="btMake"/> -->
-                                        <apex:inputField value="{!objItm.Boat_Manufacturer__c}" style="width: 87%;" styleClass="slds-input" id="EngMake"/>
+                                        <apex:inputField value="{!objItm.Boat_Manufacturer__c}" style="width: 87%;" styleClass="slds-input" id="btMake"/>
                                     </div>
                                 </div> 
                             </div>
-                            <div class="slds-grid slds-wrap" style="margin-top: .5%;"> 
-                                
-                                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
-                                    <div class="slds-form-element">
-                                        <label class="slds-form-element__label"><span style="color: red;"></span></label>
-                                        <div class="slds-form-element__control">
-                                            <a class="slds-button slds-button--brand" style="width: 55%;" id="createManufac" onClick = "createManufacturer()" >Create Manufacturer</a>
-                                        </div>
-                                    </div> 
-                                </div>
-                                
-                                <div class="slds-col slds-size--1-of-1 slds-medium-size--3-of-4 slds-small-size--1-of-2 slds-col--padded"> 
-                                </div>   
-                            </div>     
-                        </div>
+                           
+                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                                <div class="slds-form-element">
+                                    <label class="slds-form-element__label">Boat Model<span style="color: red;">*</span></label>
+                                    <div class="slds-form-element__control">
+                                        <input type="text" class="slds-input" id="btMdl"/>
+                                    </div>
+                                </div> 
+                            </div>
+                            
+                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                                <div class="slds-form-element">
+                                    <label class="slds-form-element__label">Boat Year<span style="color: red;">*</span></label>
+                                    <div class="slds-form-element__control">
+                                        <input type="text" class="slds-input" id="btYear"/>
+                                    </div>
+                                </div> 
+                            </div>
+                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                                <div class="slds-form-element">
+                                    <label class="slds-form-element__label">Boat Registration Number</label>
+                                    <div class="slds-form-element__control">
+                                        <input type="text" class="slds-input" id="btRegNumber"/>
+                                    </div>
+                                </div> 
+                            </div>
+                             <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                                <div class="slds-form-element">
+                                    <label class="slds-form-element__label"><span style="color: red;"></span></label>
+                                    <div class="slds-form-element__control">
+                                        <a class="slds-button slds-button--brand" style="width: 55%;" id="createManufac" onClick = "createManufacturer()" >Create Manufacturer</a>
+                                    </div>
+                                </div> 
+                            </div>
+                            <div class="slds-col slds-size--1-of-1 slds-medium-size--3-of-4 slds-small-size--1-of-2 slds-col--padded"> 
+                            </div>   
+                        </div>     
                     </div>
+                    <div id="customEngineForm" style="margin-top: 1%; padding: 1%; width: 100%; border: solid 1px #d8dde6!important; border-radius: .25rem; display: none;">
+                        <div class="slds-grid slds-wrap"> 
+                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                                <div class="slds-form-element">
+                                    <label class="slds-form-element__label">Engine Name<span style="color: red;">*</span></label>
+                                    <div class="slds-form-element__control">
+                                        <input type="text" class="slds-input" id="engName"/>
+                                    </div>
+                                </div> 
+                            </div>
+                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                                <div class="slds-form-element">
+                                    <label class="slds-form-element__label">Engine Modle</label>
+                                    <div class="slds-form-element__control">
+                                        <input type="text" class="slds-input" id="engModle"/>
+                                    </div>
+                                </div> 
+                            </div>
+                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                                <div class="slds-form-element">
+                                    <label class="slds-form-element__label">Engine Year</label>
+                                    <div class="slds-form-element__control">
+                                        <input type="text" class="slds-input" id="engYear"/>
+                                    </div>
+                                </div> 
+                            </div>
+                            
+                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                                <div class="slds-form-element">
+                                    <label class="slds-form-element__label">Engine Manufacture Date</label>
+                                    <div class="slds-form-element__control">
+                                        <input type="text" class="slds-input" id="engManufDate"/>
+                                    </div>
+                                </div> 
+                            </div>
+                            
+                            
+                            
+                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                                <div class="slds-form-element">
+                                    <label class="slds-form-element__label">Engine SN</label>
+                                    <div class="slds-form-element__control">
+                                        <input type="text" class="slds-input" id="engSN1"/>
+                                    </div>
+                                </div> 
+                            </div>
+                             <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                            <div class="slds-form-element">
+                                <label class="slds-form-element__label">Engine Make<span style="color: red;">*</span></label>
+                                <div class="slds-form-element__control">
+                                    <!--                                                 <input type="text" class="slds-input" id="btMake"/> -->
+                                    <apex:inputField value="{!objItm.Boat_Manufacturer__c}" style="width:100%;" styleClass="slds-input" id="EngMake"/>
+                                </div>
+                            </div> 
+                        </div>
+                            
+                        </div>
+                       
+                        <div class="slds-grid slds-wrap" style="margin-top: .5%;"> 
+                            
+                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+                                <div class="slds-form-element">
+                                    <label class="slds-form-element__label"><span style="color: red;"></span></label>
+                                    <div class="slds-form-element__control">
+                                        <a class="slds-button slds-button--brand" style="width: 55%;" id="createManufac" onClick = "createManufacturer()" >Create Manufacturer</a>
+                                    </div>
+                                </div> 
+                            </div>
+                            
+                            <div class="slds-col slds-size--1-of-1 slds-medium-size--3-of-4 slds-small-size--1-of-2 slds-col--padded"> 
+                            </div>   
+                        </div>     
+                    </div>
+                    <!--                     </div> -->
                     <div style="padding-top: 1%; width: 100%;">
                         <a class="slds-button slds-button--brand" style="left: 45%;" id="createAccnt">Save</a>
                         <a class="slds-button slds-button--brand" style="left: 45%;" onclick="window.top.location = '/apex/ServicePage';" id="cncl">Cancel</a>
@@ -542,7 +589,13 @@
                 </div>
             </div>
         </apex:form>
+        <style>
+            .lookupInput{
+            display: inline-flex !important;
+            }
+        </style>
         <script>
+        
         var modal = document.getElementById('id03');
         window.onclick = function(event) {
             if (event.target == modal) {
@@ -737,10 +790,10 @@
         $("#checkCreateCustomBoat").change(function() {
             if(this.checked == true) {
                 $("#customBoatForm").slideDown();
-    		
-               
+                
+                
                 $('#customEngineId').prop('checked', false);
-                 $("#customEngineForm").slideUp();
+                $("#customEngineForm").slideUp();
             }
             else {
                 $("#customBoatForm").slideUp();
@@ -751,9 +804,9 @@
             if(this.checked == true) {
                 $("#customEngineForm").slideDown();
                 $('#checkCreateCustomBoat').prop('checked', false);
-                 $("#customBoatForm").slideUp();
-               
-               
+                $("#customBoatForm").slideUp();
+                
+                
             }
             else {
                 $("#customEngineForm").slideUp();
@@ -926,7 +979,7 @@
             
             //Item Status
             if(document.getElementById("customEngineId").checked == true) {
-                 if(document.getElementById("pge:frm:EngMake_lkid").value != ""
+                if(document.getElementById("pge:frm:EngMake_lkid").value != ""
                    && document.getElementById("pge:frm:EngMake_lkid").value != null
                    && document.getElementById("pge:frm:EngMake_lkid").value != "000000000000000") {
                     mapAccountFieldValues["EngMake"] = document.getElementById("pge:frm:EngMake_lkid").value; 
@@ -940,7 +993,7 @@
                 }
                 
                 if($("#engName").val().trim() != "") {
-                
+                    
                     mapAccountFieldValues["engName"] = $("#engName").val(); 
                 }
                 else {
@@ -949,26 +1002,26 @@
                     $("#errorDiv").delay(8000).slideUp();
                     return;
                 }
-                 if($("#engSN1").val().trim() != "") {
+                if($("#engSN1").val().trim() != "") {
                     mapAccountFieldValues["EngSN"] = $("#engSN1").val(); 
                 }
-                 if($("#engModle").val().trim() != "") {
+                if($("#engModle").val().trim() != "") {
                     mapAccountFieldValues["Engmodle"] = $("#engModle").val(); 
                 }
-                 if($("#engYear").val().trim() != "") {
+                if($("#engYear").val().trim() != "") {
                     mapAccountFieldValues["EngYear"] = $("#engYear").val(); 
                 }
-               
+                
                 if($("#engManufDate").val().trim() != "") {
                     mapAccountFieldValues["EngManuDate"] = $("#engManufDate").val(); 
                 }
-                  mapAccountFieldValues["ItemStatus"] = "Yes";
+                mapAccountFieldValues["ItemStatus"] = "Yes";
                 
-            	
+                
             }
             if(document.getElementById("checkCreateCustomBoat").checked == true) {
                 
-                    mapAccountFieldValues["ItemStatus"] = "YES";
+                mapAccountFieldValues["ItemStatus"] = "YES";
                 
                 
                 
@@ -1057,8 +1110,8 @@
             }
             else {
                 if(mapAccountFieldValues["ItemStatus"] != "Yes"){
-                mapAccountFieldValues["ItemStatus"] = "NO";
-                    }
+                    mapAccountFieldValues["ItemStatus"] = "NO";
+                }
             }
             $('.popup').addClass('active');
             BOATBUILDING.CreateAccountController.SaveAccount(mapAccountFieldValues, function(result, event) {
@@ -1069,9 +1122,9 @@
                     if(result != null) {
                         if(invParamAssign != '' && invParamAssign == 'PartInvoiceTab') {
                             console.log(result);
-                              window.top.location = '/apex/ServicePage?subTabName=tab-default-6&&condetails='+result;
+                            window.top.location = '/apex/ServicePage?subTabName=tab-default-6&&condetails='+result;
                         } else { 
-                             window.top.location = '/apex/ServicePage';
+                            window.top.location = '/apex/ServicePage';
                         }
                         
                     }

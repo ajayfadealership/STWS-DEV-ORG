@@ -11,6 +11,7 @@
                     "message": response.getReturnValue()
                 });
                 errorEvent.fire();
+                $A.get("e.force:closeQuickAction").fire();
             } else {
                 var urlEvent = $A.get("e.force:navigateToURL");
                 var urlStr = "/"+response.getReturnValue();

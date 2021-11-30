@@ -25,15 +25,15 @@ public class WorkOrderPaymentTriggerTest
         }
         insert objCase;
         
-        BOATBUILDING__Work_Order_Payment__c objPayment = new BOATBUILDING__Work_Order_Payment__c();
+        BOATBUILDING__Payments__c objPayment = new BOATBUILDING__Payments__c();
         objPayment.BOATBUILDING__Amount__c = 123;
-        objPayment.BOATBUILDING__Related_to_Warranty_Work_Work_Order__c = objCase.Id;
+        objPayment.BOATBUILDING__Work_Warranty_Order__c = objCase.Id;
         objPayment.BOATBUILDING__Payment_Type__c = 'Check';
         insert objPayment;
         
-        BOATBUILDING__Work_Order_Payment__c objPayment1 = new BOATBUILDING__Work_Order_Payment__c();
+        BOATBUILDING__Payments__c objPayment1 = new BOATBUILDING__Payments__c();
         objPayment1.BOATBUILDING__Amount__c = 123;
-        objPayment1.BOATBUILDING__Related_to_Warranty_Work_Work_Order__c = objCase.Id;
+        objPayment1.BOATBUILDING__Work_Warranty_Order__c = objCase.Id;
         objPayment1.BOATBUILDING__Payment_Type__c = 'Check';
         insert objPayment1;
         

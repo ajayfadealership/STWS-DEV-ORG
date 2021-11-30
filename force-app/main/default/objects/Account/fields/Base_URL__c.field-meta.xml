@@ -3,7 +3,7 @@
     <fullName>Base_URL__c</fullName>
     <deprecated>false</deprecated>
     <externalId>false</externalId>
-    <formula>LEFT($Api.Enterprise_Server_URL_410, FIND( &#39;/services&#39;, $Api.Enterprise_Server_URL_410))</formula>
+    <formula>LEFT($Api.Enterprise_Server_URL_410, FIND( &apos;/services&apos;, $Api.Enterprise_Server_URL_410))</formula>
     <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
     <label>Base URL</label>
     <required>false</required>

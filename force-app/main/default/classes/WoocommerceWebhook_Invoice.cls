@@ -157,7 +157,7 @@ public with sharing class WoocommerceWebhook_Invoice {
 		public List<Taxes> taxes {get;set;} 
 		public List<Meta_data> meta_data {get;set;} 
 		public String sku {get;set;} 
-		public Integer price {get;set;} 
+		public Decimal price {get;set;} 
 
 		public Line_items(JSONParser parser) {
 			while (parser.nextToken() != System.JSONToken.END_OBJECT) {
@@ -191,7 +191,7 @@ public with sharing class WoocommerceWebhook_Invoice {
 						} else if (text == 'sku') {
 							sku = parser.getText();
 						} else if (text == 'price') {
-							price = parser.getIntegerValue();
+							price = parser.getDecimalValue();
 						} else {
 							System.debug(LoggingLevel.WARN, 'Line_items consuming unrecognized property: '+text);
 							consumeObject(parser);

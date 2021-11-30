@@ -17,6 +17,8 @@
         component.set("v.DlrOptionRetailPrice", 0.00); 
         component.set('v.TotalMSRPDealerPrice', parseFloat(totalDealerCost).toFixed(2));
         component.set('v.TotalMSRPRetailPrice', parseFloat(totalMSRP).toFixed(2));
+        console.log('v.TotalMSRPRetailPrice>>>4: ', component.get('v.TotalMSRPRetailPrice'));
+        
         if(totalMSRP != undefined) {
             //alert(component.get("v.PrntAtt"));
             if(component.get("v.PrntAtt") == 'Inventory') {
@@ -38,78 +40,80 @@
                 cmpEvent.fire();
             }
         }
+        helper.calculateTotal(component, event);
     },
     HandelPPIdEvent : function(component, event, helper) {
-        var PPId = event.getParam("PPID");
-        var PPStatus = event.getParam("PPStatus");
-        console.log(PPId + ' : ' + PPStatus);
-        
-        if(PPId != undefined) {
-            //alert(PPId);
-            var action = component.get("c.getPPDetails");
-            action.setParams({
-                "PPid": PPId
-            });
-            //alert(PPId+'  2');
-            action.setCallback(this, function(res) {
-                var state = res.getState();
-                console.log(res.getReturnValue());  
-                if(state == 'SUCCESS') {
-                    var mfgDealerPrice = parseFloat(res.getReturnValue().BOATBUILDING__Dealer_Price__c);
-                    var mfgRetailPrice = parseFloat(res.getReturnValue().BOATBUILDING__ProductRetail_Price__c);
-                    var mfgDealerPriceEX = parseFloat(component.get("v.MfgOptionDealerPrice"));
-                    var mfgRetailPriceEX = parseFloat(component.get("v.MfgOptionRetailPrice"));
-                    var TotalMSRPDealerPriceEX = parseFloat(component.get("v.TotalMSRPDealerPrice"));
-                    var TotalMSRPRetailPriceEX = parseFloat(component.get("v.TotalMSRPRetailPrice"));
-                    console.log(mfgDealerPriceEX);
-                    console.log(mfgRetailPriceEX);
-                    console.log(TotalMSRPDealerPriceEX);
-                    console.log(TotalMSRPRetailPriceEX);
-                    if(PPStatus == '1') { 
-                        mfgDealerPriceEX += mfgDealerPrice;
-                        mfgRetailPriceEX += mfgRetailPrice;
-                        TotalMSRPDealerPriceEX += mfgDealerPrice;
-                        TotalMSRPRetailPriceEX += mfgRetailPrice;
-                    } else if(PPStatus == '0') {
-                        mfgDealerPriceEX -= mfgDealerPrice;
-                        mfgRetailPriceEX -= mfgRetailPrice;
-                        TotalMSRPDealerPriceEX -= mfgDealerPrice;
-                        TotalMSRPRetailPriceEX -= mfgRetailPrice;
-                    }
-                    console.log(mfgDealerPriceEX);
-                    console.log(mfgRetailPriceEX);
-                    console.log(TotalMSRPDealerPriceEX);
-                    console.log(TotalMSRPRetailPriceEX);
-                    component.set("v.MfgOptionDealerPrice", parseFloat(mfgDealerPriceEX).toFixed(2));
-                    component.set("v.MfgOptionRetailPrice", parseFloat(mfgRetailPriceEX).toFixed(2));
-                    component.set('v.TotalMSRPDealerPrice', parseFloat(TotalMSRPDealerPriceEX).toFixed(2));
-                    component.set('v.TotalMSRPRetailPrice', parseFloat(TotalMSRPRetailPriceEX).toFixed(2));
-                    //alert(PPId+'  3');
-                    if(TotalMSRPRetailPriceEX != undefined) {
-                        console.log("TotalMSRPRetailPriceEX: "+TotalMSRPRetailPriceEX);
-                        //alert(component.get("v.PrntAtt"));
-                        if(component.get("v.PrntAtt") == 'Inventory') {
-                            var cmpEvent = $A.get("e.c:InvMSRPEvent");
-                            cmpEvent.setParams({ 
-                                "msrp": TotalMSRPRetailPriceEX
-                            }); 
-                            cmpEvent.fire();
-                        }
-                    }
-                    if(TotalMSRPDealerPriceEX != undefined) {
-                        //alert(component.get("v.PrntAtt"));
-                        if(component.get("v.PrntAtt") == 'Inventory') {
-                            var cmpEvent = $A.get("e.c:InvDealerPriceEvent");
-                            cmpEvent.setParams({ 
-                                "msrp": TotalMSRPDealerPriceEX
-                            });
-                            cmpEvent.fire();
-                        }
-                    }
-                }  
-            }); 
-            $A.enqueueAction(action);
-        }
+        helper.calculateTotal(component, event);
+        // var PPId = event.getParam("PPID") != undefined ? event.getParam("PPID") : '';
+        //console.log(PPId + ' : ' + PPStatus + ' : '+ppQuantity);
+        // var PPStatus = event.getParam("PPStatus") != undefined ? event.getParam("PPStatus") : '1';
+        // var ppQuantity = event.getParam("PPQT") != undefined ? parseFloat(event.getParam("PPQT")) : 1;
+        // if(PPId != undefined) {
+        //     //alert(PPId);
+        //     var action = component.get("c.getPPDetails");
+        //     action.setParams({
+        //         "PPid": PPId
+        //     });
+        //     //alert(PPId+'  2');
+        //     action.setCallback(this, function(res) {
+        //         var state = res.getState();
+        //         console.log(res.getReturnValue());  
+        //         if(state == 'SUCCESS') {
+        //             var mfgDealerPrice = parseFloat(res.getReturnValue().BOATBUILDING__Dealer_Price__c * ppQuantity);
+        //             var mfgRetailPrice = parseFloat(res.getReturnValue().BOATBUILDING__ProductRetail_Price__c * ppQuantity);
+        //             var mfgDealerPriceEX = parseFloat(component.get("v.MfgOptionDealerPrice"));
+        //             var mfgRetailPriceEX = parseFloat(component.get("v.MfgOptionRetailPrice"));
+        //             var TotalMSRPDealerPriceEX = parseFloat(component.get("v.TotalMSRPDealerPrice"));
+        //             var TotalMSRPRetailPriceEX = parseFloat(component.get("v.TotalMSRPRetailPrice"));
+        //             console.log(mfgDealerPriceEX);
+        //             console.log(mfgRetailPriceEX);
+        //             console.log(TotalMSRPDealerPriceEX);
+        //             console.log(TotalMSRPRetailPriceEX);
+        //             if(PPStatus == '1') { 
+        //                 mfgDealerPriceEX += mfgDealerPrice;
+        //                 mfgRetailPriceEX += mfgRetailPrice;
+        //                 TotalMSRPDealerPriceEX += mfgDealerPrice;
+        //                 TotalMSRPRetailPriceEX += mfgRetailPrice;
+        //             } else if(PPStatus == '0') {
+        //                 mfgDealerPriceEX -= mfgDealerPrice;
+        //                 mfgRetailPriceEX -= mfgRetailPrice;
+        //                 TotalMSRPDealerPriceEX -= mfgDealerPrice;
+        //                 TotalMSRPRetailPriceEX -= mfgRetailPrice;
+        //             }
+        //             console.log(mfgDealerPriceEX);
+        //             console.log(mfgRetailPriceEX);
+        //             console.log(TotalMSRPDealerPriceEX);
+        //             console.log(TotalMSRPRetailPriceEX);
+        //             component.set("v.MfgOptionDealerPrice", parseFloat(mfgDealerPriceEX).toFixed(2));
+        //             component.set("v.MfgOptionRetailPrice", parseFloat(mfgRetailPriceEX).toFixed(2));
+        //             component.set('v.TotalMSRPDealerPrice', parseFloat(TotalMSRPDealerPriceEX).toFixed(2));
+        //             component.set('v.TotalMSRPRetailPrice', parseFloat(TotalMSRPRetailPriceEX).toFixed(2));
+        //             //alert(PPId+'  3');
+        //             if(TotalMSRPRetailPriceEX != undefined) {
+        //                 console.log("TotalMSRPRetailPriceEX: "+TotalMSRPRetailPriceEX);
+        //                 //alert(component.get("v.PrntAtt"));
+        //                 if(component.get("v.PrntAtt") == 'Inventory') {
+        //                     var cmpEvent = $A.get("e.c:InvMSRPEvent");
+        //                     cmpEvent.setParams({ 
+        //                         "msrp": TotalMSRPRetailPriceEX
+        //                     }); 
+        //                     cmpEvent.fire();
+        //                 }
+        //             }
+        //             if(TotalMSRPDealerPriceEX != undefined) {
+        //                 //alert(component.get("v.PrntAtt"));
+        //                 if(component.get("v.PrntAtt") == 'Inventory') {
+        //                     var cmpEvent = $A.get("e.c:InvDealerPriceEvent");
+        //                     cmpEvent.setParams({ 
+        //                         "msrp": TotalMSRPDealerPriceEX
+        //                     });
+        //                     cmpEvent.fire();
+        //                 }
+        //             }
+        //         }  
+        //     }); 
+        //     $A.enqueueAction(action);
+        // }
     },
     HandelPPDOIdEvent: function(component, event, helper) {
         var objDO = event.getParam("objDOId");
@@ -137,8 +141,8 @@
                     console.log(DOListAll[i]);
                     var objj = DOListAll[i].objDealerOption;
                     console.log(objj);  
-                    var dp = parseFloat(objj.BOATBUILDING__Cost__c);
-                    var rp = parseFloat(objj.BOATBUILDING__Retail_Price__c);        
+                    var dp = parseFloat(objj.BOATBUILDING__Cost__c * objj.BOATBUILDING__Quantity__c);
+                    var rp = parseFloat(objj.BOATBUILDING__Retail_Price__c * objj.BOATBUILDING__Quantity__c);        
                     console.log('>>:');
                     console.log(dp);
                     console.log(rp);
@@ -155,6 +159,7 @@
         component.set("v.DlrOptionRetailPrice", parseFloat(mfgRetailPrice).toFixed(2));
         component.set('v.TotalMSRPDealerPrice', parseFloat(TotalMSRPDealerPriceEX).toFixed(2));
         component.set('v.TotalMSRPRetailPrice', parseFloat(TotalMSRPRetailPriceEX).toFixed(2));
+        console.log('v.TotalMSRPRetailPrice>>>2: ', component.get('v.TotalMSRPRetailPrice'));
         if(TotalMSRPRetailPriceEX != undefined) {
             if(component.get("v.PrntAtt") == 'Inventory') {
                 var cmpEvent = $A.get("e.c:InvMSRPEvent");
@@ -188,5 +193,6 @@
         component.set("v.DlrOptionRetailPrice", 0.00);
         component.set('v.TotalMSRPDealerPrice', 0.00);
         component.set('v.TotalMSRPRetailPrice', 0.00);
+        console.log('v.TotalMSRPRetailPrice>>>3: ', component.get('v.TotalMSRPRetailPrice'));
     }
 })

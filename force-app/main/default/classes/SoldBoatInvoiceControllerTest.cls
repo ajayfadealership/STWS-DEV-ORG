@@ -84,7 +84,7 @@ public with sharing class SoldBoatInvoiceControllerTest{
             objQuote1.BOATBUILDING__Boat_Sold_By__c = UserInfo.getName();
             //objQuote1.BOATBUILDING__Payment__r =0 ;
             insert objQuote1;
-            BOATBUILDING__All_Payment__c objpay1 = new BOATBUILDING__All_Payment__c();
+            BOATBUILDING__Payments__c objpay1 = new BOATBUILDING__Payments__c();
           
             objpay1.Amount__c= 120.12;
            // objpay1.Check_Number__c= 'test';

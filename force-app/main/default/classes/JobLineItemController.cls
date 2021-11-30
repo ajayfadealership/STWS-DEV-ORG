@@ -23,7 +23,7 @@ public class JobLineItemController {
        String searchQuery = 'FIND \'' + strName + '\' IN ALL FIELDS RETURNING  BOATBUILDING__Inventory__c(Id,Name,BOATBUILDING__Vendor__c,BOATBUILDING__Part_Number__c,BOATBUILDING__Part_Name__c,BOATBUILDING__Cost__c,BOATBUILDING__Description__c,BOATBUILDING__Category__c,BOATBUILDING__Map_Price__c,BOATBUILDING__Discount__c,BOATBUILDING__Family__c,BOATBUILDING__Size__c,BOATBUILDING__Color__c,BOATBUILDING__Quantity__c,BOATBUILDING__Minimum_Amount__c,BOATBUILDING__Part_Location__c,BOATBUILDING__Part_MSRP_Price__c,BOATBUILDING__Weight__c where RecordType.Name = \'Inventory for Parts\' AND BOATBUILDING__Part_MSRP_Price__c != null),BOATBUILDING__Part__c(Id,Name,BOATBUILDING__Part_Cost__c,BOATBUILDING__Quantity__c,BOATBUILDING__Retail_Price__c,BOATBUILDING__Part_Number__c,BOATBUILDING__Vendor_Name__r.Name,BOATBUILDING__Discount__c where BOATBUILDING__Retail_Price__c != null )';
        
        List<List <sObject>> searchList = search.query(searchQuery);
-       System.debug(searchList);
+       System.debug('###'+searchList);
        Set<String> setPartNumber = new Set<String>();
        for(Object o : searchList[0]){
            BOATBUILDING__Inventory__c objInv = (BOATBUILDING__Inventory__c)o;
@@ -56,7 +56,7 @@ public class JobLineItemController {
                 PartSearchResult objPSR = new PartSearchResult();
                 objPSR.partId = objInv.Id;
                 objPSR.partName =   objInv.Name;
-                objPSR.partNumber = objInv.BOATBUILDING__Part_Number__c;
+                objPSR.partNumber = objInv.BOATBUILDING__Part_Number__c;  
                 objPSR.isInventoryPart = false;
                 objPSR.partMSRP = objInv.BOATBUILDING__Retail_Price__c;
                 objPSR.partCost = objInv.BOATBUILDING__Part_Cost__c;

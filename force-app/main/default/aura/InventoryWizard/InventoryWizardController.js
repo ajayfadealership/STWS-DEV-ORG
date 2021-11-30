@@ -16,11 +16,12 @@
         document.getElementById("invSpinnerWiz").style.display= "block";
         var strProId = component.get("v.strProId");
         var ProductPriceIdList = component.get("v.ProductPriceIdList");
+        var ProductPriceIdListQT = component.get("v.ProductPriceIdListQT");
         var DealerOptionIdList = component.get("v.DealerOptionIdList");
         var DealerOptionList = component.get("v.lstDealerOptionWraper");
         var objInvEx = component.get("v.objInv");
         
-        console.log(strProId);
+        console.log(strProId); 
         console.log(ProductPriceIdList);
         console.log(DealerOptionIdList);
         console.log(objInvEx);
@@ -29,6 +30,7 @@
         action.setParams({
             "ProId": strProId,
             "lstProductPrice": ProductPriceIdList,
+            "lstProductPriceQT": ProductPriceIdListQT,
             "lstDealerOption": DealerOptionIdList,
             "objInventory": objInvEx,
             "lstDO": JSON.stringify(DealerOptionList)
@@ -106,7 +108,7 @@
             objInvEx.BOATBUILDING__Trailer_Axles__c = objInventory.BOATBUILDING__Trailer_Axles__c;
             objInvEx.BOATBUILDING__Dealer_Boat_Stock__c = objInventory.BOATBUILDING__Dealer_Boat_Stock__c;
             objInvEx.BOATBUILDING__Dealer_Engine_Stock__c = objInventory.BOATBUILDING__Dealer_Engine_Stock__c;
-            objInvEx.BOATBUILDING__Dealer_Trailer_Stock__c = objInventory.BOATBUILDING__Dealer_Trailer_Stock__c;
+            objInvEx.BOATBUILDING__Dealer_Trailer_Stock__c = objInventory.BOATBUILDING__Boat_EST_Arrival_Date__c;
             console.log('objInventory.Dealer_Boat_Stock__c: '+objInventory.BOATBUILDING__Dealer_Boat_Stock__c);
             console.log('objInventory.Dealer_Engine_Stock__c: '+objInventory.BOATBUILDING__Dealer_Engine_Stock__c);
             console.log('objInventory.Dealer_Trailer_Stock__c: '+objInventory.BOATBUILDING__Dealer_Trailer_Stock__c);

@@ -1,11 +1,13 @@
 <aura:component controller="WODetailPageController">
     <aura:attribute name="WOJ" type="Object" access="global" />
     <aura:attribute name="jobLI" type="Object" access="global" />
-    <aura:attribute name="mapWTP" type="Map" access="global" />
+    <aura:attribute name="workOrderId" type="String" access="global" />
+    <aura:attribute name="mapWTP" type="Map" access="global" /> 
     <aura:attribute name="wojWithJLI" type="Object" access="global" />
     <aura:attribute name="mapWTPNew" type="Map" access="global" />
     <aura:attribute name="mapCannedJob" type="Map" access="global" />
     <aura:attribute name="mapCannedJobId" type="Map" access="global" />
+   
     <aura:attribute name="isCannedJob" type="Boolean" access="global" default="false"/>
     <aura:attribute name="cannedJob" type="String" access="global"/>
     <aura:attribute name="cannedJobSelected" type="Boolean" access="global" default="false"/>
@@ -13,9 +15,10 @@
     <aura:attribute name="displayMisc3" type="Boolean" access="global" default="false"/>
     <aura:attribute name="laborPriceMultiplier" type="Decimal" access="global" default="0.00"/>
     <aura:attribute name="laborAndSSTotal" type="Decimal" access="global" default="0.00" />
+    <aura:attribute name="laborTotalWarranty" type="Decimal" access="global" default="0.00" />
     <aura:attribute name="storeLocation" type="String" access="global" />
     <aura:attribute name="recordType" type="String" access="global" />
-
+    <aura:attribute name="activeSectionsJobs" type="List" default="['laborSection']" />
     <aura:attribute name="totalMiscCharges" type="Decimal" access="global" default="0.00" />
     <aura:attribute name="partsTotal" type="Decimal" access="global" default="0.00" />
     <aura:attribute name="shopSuppliePercent" type="Decimal" access="global" default="0.00" />
@@ -36,6 +39,7 @@
     <aura:handler event="c:JobLineItemUpdated" action="{!c.joblineItemTotal}"/>
     <aura:handler event="c:CalculateTaxOnWOJObs" action="{!c.calculateTaxOnJOb}"/>
     <aura:handler event="c:SaveWorkOrderJobs" action="{!c.saveJob}"/>
+    <aura:attribute name="activeSecName" type="List" default="" access="global" />
   
     <aura:handler name="change" value="{!v.WOJ.BOATBUILDING__Shipping_Charge__c}" action=  "{!c.calcualteTotalPaidWarranty}" />
     <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
@@ -63,15 +67,17 @@
 
         </div>
         <div class="slds-col slds-size_1-of-1  slds-medium-size_3-of-4 slds-large-size_3-of-4">
+            
             <lightning:accordionSection name="" label="{!if(or(v.WOJ.BOATBUILDING__Taxable__c == false,v.recordType == 'Warranty Work Order'),'Job Total : $'+v.jobTotal , 'Job Total : $'+v.jobTotalwTax)}" class="addMiscCharges">
         
             <dl class="slds-list_horizontal slds-wrap slds-p-left_xx-large">
                 <aura:if isTrue="{!and(!empty(v.laborPriceMultiplier * v.WOJ.BOATBUILDING__No_of_Labors__c),v.laborPriceMultiplier * v.WOJ.BOATBUILDING__No_of_Labors__c > 0)}">
                     <dt class="slds-size_12-of-12 slds-medium-size_3-of-12 slds-large-size_1-of-4" title="Total Labor"> Labor Total:</dt>
                     <dd class="slds-item_detail" title="Labor total"> <ui:outputCurrency value="{!v.laborPriceMultiplier * v.WOJ.BOATBUILDING__No_of_Labors__c}"/></dd>
+                   
                 </aura:if>
                 <aura:if isTrue="{!and(!empty(v.partsTotal),v.partsTotal > 0)}">
-                    <dt class="slds-size_12-of-12 slds-medium-size_3-of-12 slds-large-size_1-of-4" title="Total Parts">Parts Total:</dt>
+                    <dt class="slds-size_12-of-12 slds-medium-size_3-of-12 slds-large-size_1-of-4" title="Total Part Amount">Parts Total:</dt>
                     <dd class="slds-item_detail" title="Total of all the job line items(parts)"><ui:outputCurrency value="{!v.partsTotal}"/></dd>
                 </aura:if>
                 <aura:if isTrue="{!and(!empty(v.WOJ.BOATBUILDING__Shop_Supplies_Total__c),v.WOJ.BOATBUILDING__Shop_Supplies_Total__c > 0)}">
@@ -100,6 +106,11 @@
                     <dd class="slds-item_detail" title="This total contains the tax calcualted on all the taxable items on job"> <ui:outputCurrency value="{!v.taxOnJob}"/></dd>
                     <dt class="slds-size_12-of-12 slds-medium-size_3-of-12 slds-large-size_1-of-4" title="Job Total including tax"> Grand Total:</dt>
                     <dd class="slds-item_detail" title="Description for second label"> <ui:outputCurrency value="{!v.jobTotalwTax}"/></dd>
+                    <aura:set attribute="else">
+                        <dt class="slds-size_12-of-12 slds-medium-size_3-of-12 slds-large-size_1-of-4" title="Job Total"> Grand Total:</dt>
+                        <dd class="slds-item_detail" title="Description for second label"> <ui:outputCurrency value="{!v.jobTotal}"/></dd>
+
+                    </aura:set>
                 </aura:if> 
             </dl>
            <!--<div class="slds-col">
@@ -126,7 +137,7 @@
         <aura:if isTrue="{!(!v.isCannedJob)}">
            
         <lightning:input name="input1" label="Enter Job Name" value="{!v.WOJ.BOATBUILDING__Job_Name__c}" />
-        <lightning:select name="workTypePicklist2" aura:id="wtpList" label="WorkType" required="true" value="{!v.WOJ.BOATBUILDING__Work_Type__c}" onchange="{!c.workTypeChanged}">
+        <lightning:select name="workTypePicklist" aura:id="wtpList" label="WorkType" required="true" value="{!v.WOJ.BOATBUILDING__Work_Type__c}" onchange="{!c.workTypeChanged}">
                     <option value="">--None--</option>
                     <aura:iteration items="{!v.mapWTPNew}" var="wtp" indexVar="key">
                         
@@ -151,7 +162,7 @@
                 </div>
                 <div class="slds-col slds-size_2-of-4">
                     
-                    <lightning:select name="workTypePicklist" aura:id="wtpList2" label="WorkType" required="true" disabled="true" value="{!v.WOJ.BOATBUILDING__Work_Type__c}">
+                    <lightning:select name="workTypePicklist" aura:id="wtpList" label="WorkType" required="true" onchange="{!c.workTypeChanged}" value="{!v.WOJ.BOATBUILDING__Work_Type__c}">
                         <option value="">--None--</option>
                         <aura:iteration items="{!v.mapWTPNew}" var="wtp" indexVar="key">
                             
@@ -168,7 +179,7 @@
                 <aura:if isTrue="{!!v.showPill}">
                     <div class="slds-grid slds-gutters slds-wrap">
                     
-                    <div class="sslds-col slds-size_1-of-1  slds-medium-size_1-of-1 slds-large-size_1-of-1">
+                    <div class="slds-col slds-size_1-of-1  slds-medium-size_1-of-1 slds-large-size_1-of-1">
 
                     <lightning:input
                                 aura:id="enter-search-user"
@@ -203,7 +214,7 @@
                                 </div>
                             </div> 
                     </aura:if>       
-                
+                  
             
                     <aura:if isTrue="{!v.showPill}">
                         <div class="slds-grid slds-gutters slds-wrap slds-p-top_small">
@@ -230,9 +241,8 @@
             
       </aura:if>
       <br/>
-      
        
-        <lightning:accordionSection name="laborSection" label="{!if(v.recordType == 'Warranty Work Order','Labor :$'+if(or(empty(v.WOJ.BOATBUILDING__No_of_Labors__c,v.laborPriceMultiplier)),0.00,v.WOJ.BOATBUILDING__No_of_Labors__c * v.laborPriceMultiplier),('Labor &amp; Shop Supplies : $'+v.laborAndSSTotal))}" class="addMiscCharges">
+        <lightning:accordionSection name="laborSection" label="{!if(v.recordType == 'Warranty Work Order','Labor :$'+if(or(empty(v.WOJ.BOATBUILDING__No_of_Labors__c,v.z)),0.00,v.laborTotalWarranty),('Labor &amp; Shop Supplies : $'+v.laborAndSSTotal))}" class="addMiscCharges">
         <div class="slds-grid slds-gutters slds-wrap">
             <div class="slds-col slds-size_1-of-1  slds-medium-size_1-of-1 slds-large-size_1-of-4">
                 
@@ -311,7 +321,7 @@
                 <label class="slds-form-element__label" for="form-element-01"></label>
                 <label class="slds-form-element__label" for="form-element-01"></label>
                 <div class="slds-form-element__control">
-                    <lightning:badge label="Total Parts"/>                        
+                    <lightning:badge label="Total Part Amount"/>                        
                 </div>
               </div> 
         </div>
@@ -573,5 +583,7 @@
     
 </div>
 </lightning:accordionSection> 
+
+
  
 </aura:component>

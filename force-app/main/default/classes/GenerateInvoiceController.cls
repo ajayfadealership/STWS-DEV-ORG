@@ -6,26 +6,34 @@ public with sharing class GenerateInvoiceController {
      private Boolean isError;
      List<Invoice__c> lstInvoice;
      public Decimal totalUnitPrice { get; set; }
-      
+
+     public Boolean isCanadian { get; set; } 
      
     public GenerateInvoiceController(){
     		System.debug('>>>>>>>>>>>> Cycle check Constructor');
+        isCanadian = false;
         myAttchId = '';
         isError = false;
         totalUnitPrice = 0.00;
+       
         if(ApexPages.currentPage().getParameters().get('id') != null) {
         	
-           objInvoice = [SELECT BOATBUILDING__Promo_Code__r.Promo_Code_Name__c, BOATBUILDING__Discount_With_Promocode__c, BOATBUILDING__Total_Due_After_Promo__c,BOATBUILDING__Shipping_Charge__c,Comments_Notes__c, 
+           objInvoice = [SELECT BOATBUILDING__Discount_on_Invoice__c, RecordType.DeveloperName, BOATBUILDING__Promo_Code__r.Promo_Code_Name__c, BOATBUILDING__Discount_With_Promocode__c, BOATBUILDING__Total_Due_After_Promo__c,BOATBUILDING__Shipping_Charge__c,Comments_Notes__c, 
            					Invoice_Number__c, BOATBUILDING__Discount_Price_ILI__c, BOATBUILDING__Grand_Total_ILI__c, BOATBUILDING__Total_Parts_MSRP_ILI__c, BOATBUILDING__Total_Price_ILI__c, 
            					BOATBUILDING__Total_Quantity_ILI__c, Name, Store_Location__c, City__c,Customer_Address__c,Customer_Name__c, BOATBUILDING__Total_Payment_Formula__c ,Email__c,Id,
-           					Phone_Number__c,State__c,Zip_Code__c,Sales_Tax_Percent__c,Sum_Price_Line_Items__c, BOATBUILDING__Sales_TaxPer__c ,Total_Parts_del1__c,
+           					Phone_Number__c,State__c,Zip_Code__c,Sales_Tax_Percent__c,Sum_Price_Line_Items__c, BOATBUILDING__Sales_TaxPer__c ,Total_Parts_del1__c,GST__c, PST__c, GST_D__c, PST_D__c,
            					Sum_Discount_Availed_on_Line_Items__c,Payment__c,Billing_State_Province__c,Sales_Tax_Formula__c,Total_Amount_on_Invoice__c,Total_Payment__c,Balance__c,
            					Created_Date__c, (SELECT Description__c,Id,Name,Part_Cost__c,Part_Number__c,Part_Vendor__r.Name,Discount_Price__c,Grand_Total__c,Quantity__c,Total_Price__c FROM Invoice_Line_Items__r) FROM Invoice__c Where Id =: ApexPages.currentPage().getParameters().get('id') LIMIT 1];
            if(objInvoice.BOATBUILDING__Shipping_Charge__c == null) {
            		objInvoice.BOATBUILDING__Shipping_Charge__c = 0.00;
+           }  
+           System.debug('log for invoice' +objInvoice.GST_D__c); 
+           System.debug('log for invoice' +objInvoice.PST_D__c);
+
+           if(objInvoice.BOATBUILDING__Billing_State_Province__c != null) {
+                BoatBuilderUtil objBoatBuilderUtil = new BoatBuilderUtil(objInvoice.BOATBUILDING__Billing_State_Province__c, objInvoice.RecordTypeId);
+                isCanadian = objBoatBuilderUtil.isCanadianTax();
            }
-           System.debug('log for invoice' +objInvoice); 
-           
            	String DocName = 'Standard_Invoice_Banner';
            	if(objInvoice.Store_Location__c != null) {
            		DocName += '_'+objInvoice.Store_Location__c.replaceAll(' ','');

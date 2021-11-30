@@ -3,7 +3,7 @@
     <fullName>Friends_Phone__c</fullName>
     <deprecated>false</deprecated>
     <externalId>false</externalId>
-    <label>Friend&#39;s Phone</label>
+    <label>Friend&apos;s Phone</label>
     <length>255</length>
     <required>false</required>
     <trackFeedHistory>false</trackFeedHistory>

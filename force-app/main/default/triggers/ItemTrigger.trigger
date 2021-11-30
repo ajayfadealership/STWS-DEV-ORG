@@ -3,7 +3,11 @@ trigger ItemTrigger on BOATBUILDING__Item__c (before insert, before update) {
     if(isOn) {
         if(trigger.isBefore) {
             if(trigger.isUpdate || trigger.isInsert){
-                System.debug('Hi i am in Item trigger');
+
+
+                ItemTriggerHandler.UpdateItemRecordFromInventory(trigger.new,trigger.oldMap);
+                ItemTriggerHandler.ShowDuplicateHinNoError(trigger.new);
+             /*   System.debug('Hi i am in Item trigger');
                 Set<String> setItemBoatHin = new Set<String>();
                 List<BOATBUILDING__Inventory__c> lstInven = new  List<BOATBUILDING__Inventory__c>();
                 
@@ -41,7 +45,7 @@ trigger ItemTrigger on BOATBUILDING__Item__c (before insert, before update) {
                     if(String.isNotBlank(objItm.Boat_HIN_No__c)) {
                         setBoatHin.add(objItm.Boat_HIN_No__c);
                     }
-                }
+                } 
                 
                 List<Contact> listCont = [SELECT Id, AccountId FROM Contact WHERE Id IN: setContactId];
                 
@@ -72,9 +76,12 @@ trigger ItemTrigger on BOATBUILDING__Item__c (before insert, before update) {
                             }
                         }   
                     }
-                }
+                }*/
             }
             
         } 
+        if(trigger.isAfter && trigger.isUpdate){
+            ItemTriggerHandler.syncAccountInApp(trigger.new, trigger.oldMap);
+        }
     } 
 }

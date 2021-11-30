@@ -1,5 +1,5 @@
 <apex:page standardController="Quote__c" extensions="NegotiationPageLayoutController" id="page">
-	<html xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" >
+    <html xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" >
         <head>
             <title>Negotiation</title>
             <apex:stylesheet value="{!URLFOR($Resource.BoatBuilderSR, 'assets/styles/salesforce-lightning-design-system.min.css')}"/>
@@ -8,40 +8,40 @@
             <apex:includeScript value="{!URLFOR($Resource.BoatBuilderSR, 'js/jquery.min.js')}"/>
             <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" />
             <style>
-            	.additionalFirstTD {
-            		padding-left: 0.25em !important;
-				   	max-width: 60px !important;
-				   	white-space: pre-line !important;
-				   	width: 85px !important;
-				   
-            	}
-            	.additionalSecondTD {
-            		width: 149px !important;
-    				max-width: 60px !important;
-				   
-            	}
-            	.additionalThirdTD {
-            		padding-left: 0.25em !important;
-            		width: 85px !important;
-				    max-width: 60px !important;
-				    white-space: pre-line !important;
-            	}
-            	.slds-input {
-            		width: 118px !important;
-           		    max-width: 66% !important;
-            	} 
-            	.slds-select {
-            		    width: 119px !important;
-            	}
-            	.slds-table--cell-buffer tr>td:last-child, .slds-table--cell-buffer tr>th:last-child {
-            		text-align: left !important;
-            	}
-            	
-            	.slds-table--cell-buffer tr>td:first-child, .slds-table--cell-buffer tr>th:first-child {
-           		  /* padding-left: 0.25em !important;
-				   max-width: 60px !important;
-				   white-space: pre-line;*/
-            	}
+                .additionalFirstTD {
+                    padding-left: 0.50rem !important;
+                    max-width: 85px !important;
+                    white-space: pre-line !important;
+                    width: 85px !important;
+                   
+                }
+                .additionalSecondTD {
+                    width: 100px !important;
+                //max-width: 60px !important;
+                    min-width:100px;
+                }
+                .additionalThirdTD {
+                    padding-left: 0.0em !important;
+                    width: 85px !important;
+                    max-width: 85px !important;
+                    white-space: pre-line !important;
+                }
+                .slds-input {
+                    width: 118px !important;
+                    max-width: 66% !important;
+                } 
+                .slds-select {
+                        width: 119px !important;
+                }
+                .slds-table--cell-buffer tr>td:last-child, .slds-table--cell-buffer tr>th:last-child {
+                    text-align: left !important;
+                }
+                
+                .slds-table--cell-buffer tr>td:first-child, .slds-table--cell-buffer tr>th:first-child {
+                  /* padding-left: 0.25em !important;
+                   max-width: 60px !important;
+                   white-space: pre-line;*/
+                }
                 body {
                 padding-top: 5rem;
                 }pe
@@ -112,7 +112,7 @@
                         background-color: #f7f9fb;
                         position: fixed;
                         left: 69%;
-    					top: 15.3%;
+                        top: 15.3%;
                         border-radius: .25rem;
                 }
                 
@@ -128,49 +128,49 @@
             <apex:form id="frm" >
                 
                 <script>
-	                
-	                $(document).ready(function() {
-	                		console.log('{!disStatus}');
-	                		
-	                		if('{!disStatus}' == '1') {
-	                			document.getElementById("hideCheck").disabled = true;
-	                			
-	                			hideDetails(this);
-	                		} else {
-	                			 
-	                			hideDetails(this);
-	                		}
-	                		//calculateDisval(this);
-	                });
-	                
-	                function callFunction1(){      
-	                    saveNegotiatedPrices();
-	                }
-	                function cancelCall(){
-	                    window.top.location = '/'+'{!objQuote.Id}';
-	                }
-	                
-	                
-	                function hideDetails(obj) {
-	                		//hideDetailsOpp
-	                
-	                		obj1 = document.getElementById("hideCheck");
-	                		var doc = document.getElementsByClassName("hideDetails");
-	                		
-	                		if(obj1.checked) {
-	                			for(var i = 0; i < doc.length; i++) {
-	                				doc[i].style.display = "none"; 
-	                			} 
-	                			
-	                		} else {
-	                			for(var i = 0; i < doc.length; i++) {
-	                				doc[i].style.display = "block";
-	                			}
-	                			$("#showMarsec").show();
-	                		}
-	                		
-	                		
-	                }
+                    
+                    $(document).ready(function() {
+                            console.log('{!disStatus}');
+                            
+                            if('{!disStatus}' == '1') {
+                                document.getElementById("hideCheck").disabled = true;
+                                
+                                hideDetails(this);
+                            } else {
+                                 
+                                hideDetails(this);
+                            }
+                            //calculateDisval(this);
+                    });
+                    
+                    function callFunction1(){      
+                        saveNegotiatedPrices();
+                    }
+                    function cancelCall(){
+                        window.top.location = '/'+'{!objQuote.Id}';
+                    }
+                    
+                    
+                    function hideDetails(obj) {
+                            //hideDetailsOpp
+                    
+                            obj1 = document.getElementById("hideCheck");
+                            var doc = document.getElementsByClassName("hideDetails");
+                            
+                            if(obj1.checked) {
+                                for(var i = 0; i < doc.length; i++) {
+                                    doc[i].style.display = "none"; 
+                                } 
+                                
+                            } else {
+                                for(var i = 0; i < doc.length; i++) {
+                                    doc[i].style.display = "block";
+                                }
+                                $("#showMarsec").show();
+                            }
+                            
+                            
+                    }
                 </script>
                 <div class="slds-page-header" role="banner">
                     <div class="slds-grid">
@@ -189,14 +189,14 @@
                         </div>
                         <div class="slds-col slds-no-flex slds-grid slds-align-bottom">
                             <div class="slds-button-group" role="group">
-                            		<span style="position: relative; top: 17%;">
-                            			<label class="slds-checkbox">
-                            				<input type="checkbox" id="hideCheck" onchange="hideDetails(this);" checked="checked"/>
-                            				
-                            				<span class="slds-checkbox--faux"></span> 
-                            					<span class="slds-form-element__label">Toggle Details  </span> 
-                            			</label>
-                            		</span>  
+                                    <span style="position: relative; top: 17%;">
+                                        <label class="slds-checkbox">
+                                            <input type="checkbox" id="hideCheck" onchange="hideDetails(this);" checked="checked"/>
+                                            
+                                            <span class="slds-checkbox--faux"></span> 
+                                                <span class="slds-form-element__label">Toggle Details  </span> 
+                                        </label>
+                                    </span>  
                                 <a class="slds-button slds-button--neutral" onclick="recordUpdate();">Save</a>
 <!--                                 <a class="slds-button slds-button--neutral" onclick="cancelCall();">Cancel</a> -->
                                 
@@ -275,8 +275,8 @@
                                     </td>
                                     <td>
                                         <span >
-	                                        <i class="fa fa-usd" style="top: 38.5%;" aria-hidden="true"></i>
-	                                        &nbsp;<apex:inputText styleClass="slds-input input_spc2" value="{!objQuote.Costline_Sell_Price__c}"  disabled="true"/>
+                                            <i class="fa fa-usd" style="top: 38.5%;" aria-hidden="true"></i>
+                                            &nbsp;<apex:inputText styleClass="slds-input input_spc2" value="{!objQuote.Costline_Sell_Price__c}"  disabled="true"/>
                                         </span>
                                     </td>
                                 </tr>
@@ -311,7 +311,7 @@
                                     <td class="additionalSecondTD">
                                         <!-- <input class="slds-input" type="text" value="${!objQuote.Quote_MSRP_Boat_Price__c}" /> -->
                                       <i class="fa fa-usd" aria-hidden="true"></i> 
-                                       <apex:inputText styleClass="slds-input input_spc"  value="{!objQuote.Total_Price_Quote__c}" id="it1" disabled="true"/> 
+                                       <apex:inputText styleClass="slds-input input_spc"  style="min-width:100px;" value="{!objQuote.Total_Price_Quote__c}" id="it1" disabled="true"/> 
                                     </td>
                                     <td class="additionalThirdTD">MSRP Trailer Price</td>
                                     <td>
@@ -321,15 +321,15 @@
                                     </td>
                                 </tr>
                                 <tr>
-                                	<td class="additionalFirstTD" colspan="2">
-                                		<select id="disMarginSelect" class="slds-select" style="width: 100% !important; margin-top: -17px;">
-                                			<option value="Discount in Dollar Amount">Discount in Dollar Amount</option>
-                                			<option value="Discount In Percentage">Discount In Percentage</option>
-                                			<option value="Margin">Margin</option>
-                                		</select>
-                                	</td>
-                                    <td class="additionalSecondTD" colspan="2"> 
-                                    	&nbsp;
+                                    <td class="additionalFirstTD" colspan="2">
+                                        <select id="disMarginSelect" class="slds-select" style="width: 90% !important; margin-top: -17px;">
+                                            <option value="Discount in Dollar Amount">Discount in Dollar Amount</option>
+                                            <option value="Discount In Percentage">Discount In Percentage</option>
+                                            <option value="Margin">Margin</option>
+                                        </select>
+                                    </td>
+                                   <td class="additionalSecondTD" colspan="2"> 
+                                        &nbsp;
                                     </td>
                                 </tr>
                                 <tr>
@@ -337,16 +337,16 @@
                                     <td class="additionalSecondTD">
                                         <!--<input class="slds-input" type="text" value="{!objQuote.Discount_On_Quote__c}" onclick="ABC()" />-->
                                          
-                                        <apex:inputText value="{!objQuote.Discount_On_Quote__c}" styleClass="slds-input input_spc"  onchange="calculatePrice(); NetSellValue();calculatePayment();"   id="discount"/>
+                                        <apex:inputText value="{!objQuote.Discount_On_Quote__c}" styleClass="slds-input input_spc" style="min-width:100px;"  onchange="calculatePrice(); NetSellValue();calculatePayment();"   id="discount"/>
                                         <br/>
                                         <br/>
                                         
-                                        <input type="text"  disabled="disabled" class="slds-input input_spc" id="discountPer" onchange="calculateDisvalINPER();"/>
+                                        <input type="text"  disabled="disabled" style="min-width:100px;" class="slds-input input_spc" id="discountPer" value="0.00" onchange="calculateDisvalINPER();"/>
                                         <br/>
                                         <br/>
                                         <span style="display: none;" id="showMarsec">
-	                                        
-	                                        <input type="text"  disabled="disabled" class="slds-input input_spc" id="dealMarginEdit" onchange="calculateDisval(this);"/>
+                                            
+                                            <input type="text"  disabled="disabled" style="min-width:100px;" class="slds-input input_spc" id="dealMarginEdit" onchange="calculateDisval(this);"/>
                                         </span>
 <!--                                         value="{!objQuote.Quote_Deal_Margin__c}" -->
                                     </td>
@@ -355,7 +355,7 @@
                                         
                                         <apex:inputHidden value="{!objQuote.Quote_Sale_Price__c}" id="navQuoteSalePrice"/>
                                          
-                                        <apex:inputText styleClass="slds-input input_spc" value="{!objQuote.Quote_Your_Price_Formula__c}"  id="yourprice" disabled="true">
+                                        <apex:inputText styleClass="slds-input input_spc" style="min-width:100px;" value="{!objQuote.Quote_Your_Price_Formula__c}"  id="yourprice" disabled="true">
                                            
                                         </apex:inputText>
                                     </td>
@@ -364,13 +364,13 @@
                                     <td class="additionalFirstTD">Trade Allowance</td>
                                     <td class="additionalSecondTD">
                                         <i class="fa fa-usd" aria-hidden="true"></i> 
-                                        <apex:inputText value="{!objQuote.Quote_Trade_Allowance__c}"  styleClass="slds-input input_spc"  onchange="NetSellValue();"  id="tradeAllowance">    
+                                        <apex:inputText value="{!objQuote.Quote_Trade_Allowance__c}"  style="min-width:100px;" styleClass="slds-input input_spc"  onchange="NetSellValue();"  id="tradeAllowance">    
                                         </apex:inputText>
                                     </td>
                                     <td class="additionalThirdTD">Trailer Allowance</td>
                                     <td>
                                         <i class="fa fa-usd" style="left: 82px !important;" aria-hidden="true"></i> 
-                                        <apex:inputText value="{!objQuote.Quote_Trailer_Allowance__c}" onchange="NetSellValue();"  styleClass="slds-input input_spc"  id="trailerAllowance">
+                                        <apex:inputText value="{!objQuote.Quote_Trailer_Allowance__c}"  style="min-width:100px;" onchange="NetSellValue();"  styleClass="slds-input input_spc"  id="trailerAllowance">
                                         </apex:inputText>
                                     </td>
                                 </tr>
@@ -378,26 +378,26 @@
                                     <td class="additionalFirstTD">Net Selling Price</td>
                                     <td class="additionalSecondTD">
                                         <i class="fa fa-usd" aria-hidden="true"></i> 
-                                        <apex:inputText styleClass="slds-input input_spc" value="{!objQuote.Quote_Net_Selling_Price_Calculated__c}"  id="netSellingPrice"   disabled="true">
+                                        <apex:inputText styleClass="slds-input input_spc" style="min-width:100px;" value="{!objQuote.Quote_Net_Selling_Price_Calculated__c}"  id="netSellingPrice"   disabled="true">
                                             
                                         </apex:inputText>           
                                     </td>
                                     <td class="additionalThirdTD">Trade ACV</td>
                                     <td>
                                        <i class="fa fa-usd" style="left: 82px !important;" aria-hidden="true"></i> 
-                                       <apex:inputText styleClass="slds-input input_spc" value="{!objQuote.Quote_Trade_ACV__c}"  id="tradeAcv" onchange="NetSellValue();" disabled="true"/ >
+                                       <apex:inputText styleClass="slds-input input_spc" style="min-width:100px;" value="{!objQuote.Quote_Trade_ACV__c}"  id="tradeAcv" onchange="NetSellValue();" disabled="true"/ >
                                     </td>
                                 </tr>
                                 <tr>
                                     <td class="additionalFirstTD">Trailer ACV</td>
                                     <td class="additionalSecondTD">
                                        <i class="fa fa-usd" aria-hidden="true"></i> 
-                                        <apex:inputText styleClass="slds-input input_spc" value="{!objQuote.Quote_Trailer_ACV__c}"  id="Trailer" onchange="NetSellValue();"/>
+                                        <apex:inputText styleClass="slds-input input_spc" style="min-width:100px;" value="{!objQuote.Quote_Trailer_ACV__c}"  id="Trailer" onchange="NetSellValue();"/>
                                     </td>
                                     <td class="additionalThirdTD">Boat Sales Tax</td>
                                     <td>
                                         <i class="fa fa-usd" style="left: 82px !important;" aria-hidden="true"></i> 
-                                        <apex:inputText styleClass="slds-input input_spc" value="{!objQuote.Boat_Sales_Tax2__c}"  id="BoatSalesTax"  onchange="totalPrice();" disabled="true" >
+                                        <apex:inputText styleClass="slds-input input_spc" style="min-width:100px;" value="{!objQuote.Boat_Sales_Tax2__c}"  id="BoatSalesTax"  onchange="totalPrice();" disabled="true" >
                                             
                                         </apex:inputText>  
                                     </td>
@@ -406,13 +406,13 @@
                                     <td class="additionalFirstTD">Trailer Sales Tax</td>
                                     <td class="additionalSecondTD">
                                         <i class="fa fa-usd" aria-hidden="true"></i> 
-                                        <apex:inputText value="{!objQuote.Quote_Trailer_Sales_Tax__c}" styleClass="slds-input input_spc" id="it16"  disabled="true">
+                                        <apex:inputText value="{!objQuote.Quote_Trailer_Sales_Tax__c}" style="min-width:100px;" styleClass="slds-input input_spc" id="it16"  disabled="true">
                                         </apex:inputText>
                                     </td>
                                     <td class="additionalThirdTD">Boat Reg Fee</td>
                                     <td>
                                         <i class="fa fa-usd" style="left: 82px !important;" aria-hidden="true"></i> 
-                                        <apex:inputText value="{!objQuote.Quote_Boat_Reg_Fee__c}"  styleClass="slds-input input_spc" id="it20" disabled="true" >
+                                        <apex:inputText value="{!objQuote.Quote_Boat_Reg_Fee__c}" style="min-width:100px;" styleClass="slds-input input_spc" id="it20" disabled="true" >
                                         </apex:inputText>
                                     </td>
                                 </tr>
@@ -420,13 +420,13 @@
                                     <td class="additionalFirstTD">Trailer Reg Fee</td>
                                     <td class="additionalSecondTD">
                                         <i class="fa fa-usd" aria-hidden="true"></i> 
-                                        <apex:inputText value="{!objQuote.Quote_Trailer_Reg_Fee__c}" styleClass="slds-input input_spc" id="it17" disabled="true">
+                                        <apex:inputText value="{!objQuote.Quote_Trailer_Reg_Fee__c}" style="min-width:100px;" styleClass="slds-input input_spc" id="it17" disabled="true">
                                         </apex:inputText> 
                                     </td>
                                     <td class="additionalThirdTD">Doc Fee</td>
                                     <td>
                                         <i class="fa fa-usd" style="left: 82px !important;" aria-hidden="true"></i> 
-                                        <apex:inputText value="{!objQuote.Quote_Doc_Fee__c}"  styleClass="slds-input input_spc" id="it19" disabled="true">
+                                        <apex:inputText value="{!objQuote.Quote_Doc_Fee__c}" style="min-width:100px;"  styleClass="slds-input input_spc" id="it19" disabled="true">
                                         </apex:inputText> 
                                     </td>
                                 </tr>
@@ -434,13 +434,13 @@
                                     <td class="additionalFirstTD">Trade Payoff </td>
                                     <td class="additionalSecondTD">
                                         <i class="fa fa-usd" aria-hidden="true"></i> 
-                                        <apex:inputText value="{!objQuote.Quote_Trade_Payoff__c}"  styleClass="slds-input input_spc" id="it21" onchange="NetSellValue(); "  >
+                                        <apex:inputText value="{!objQuote.Quote_Trade_Payoff__c}" style="min-width:100px;"  styleClass="slds-input input_spc" id="it21" onchange="NetSellValue(); "  >
                                         </apex:inputText>
                                     </td>
                                     <td class="additionalThirdTD">Total Price</td>
                                     <td><!--<input class="slds-input" type="text" value="${!objQuote.Quote_Total_Price_Calculated__c}" />-->
                                         <i class="fa fa-usd" style="left: 82px !important;" aria-hidden="true"></i> 
-                                        <apex:inputText styleClass="slds-input input_spc" value="{!objQuote.Quote_Total_Price_Calculated__c}"  id="it23" disabled="true"    >
+                                        <apex:inputText styleClass="slds-input input_spc" style="min-width:100px;" value="{!objQuote.Quote_Total_Price_Calculated__c}"  id="it23" disabled="true"    >
                                             
                                         </apex:inputText>
                                     </td>
@@ -449,13 +449,13 @@
                                     <td class="additionalFirstTD">Down Payment</td>
                                     <td class="additionalSecondTD">
                                          <i class="fa fa-usd" aria-hidden="true"></i> 
-                                        <apex:inputText styleClass="slds-input input_spc" value="{!objQuote.Quote_Down_Payment__c}"  id="it26" onchange=" NetSellValue();calculatePayment();">
+                                        <apex:inputText styleClass="slds-input input_spc" style="min-width:100px;" value="{!objQuote.Quote_Down_Payment__c}"  id="it26" onchange=" NetSellValue();calculatePayment();">
                                         </apex:inputText>
                                     </td>
                                     <td class="additionalThirdTD">Total Amount Financed</td>
                                     <td>
                                          <i class="fa fa-usd" style="left: 82px !important;" aria-hidden="true"></i> 
-                                        <apex:inputText styleClass="slds-input input_spc" value="{!objQuote.Quote_Total_Amount_Financed_Calculated__c}"  id="it27" disabled="true" onchange="calculatePayment();">
+                                        <apex:inputText styleClass="slds-input input_spc" style="min-width:100px;" value="{!objQuote.Quote_Total_Amount_Financed_Calculated__c}"  id="it27" disabled="true" onchange="calculatePayment();">
                                             
                                         </apex:inputText>
                                     </td>
@@ -463,12 +463,12 @@
                                 <tr>
                                     <td class="additionalFirstTD">Rate (%)</td>
                                     <td class="additionalSecondTD">
-                                    	<apex:inputField styleClass="slds-input input_spc2"  value="{!objQuote.Quote_Rate__c}" id="it9" onchange="calculatePayment() "/ ><i class="fa fa-percent" aria-hidden="true"></i>
-                                   	</td>
+                                        <apex:inputField styleClass="slds-input input_spc2" style="min-width:100px;"  value="{!objQuote.Quote_Rate__c}" id="it9" onchange="calculatePayment() "/ ><i class="fa fa-percent" aria-hidden="true"></i>
+                                    </td>
                                     <td class="additionalThirdTD">Term</td>
                                     <td>
-                                        <div class="slds-select_container">
-                                            <apex:inputField styleClass="slds-select " value="{!objQuote.Quote_Term__c}" id="it29" onchange="calculatePayment();"/>
+                                        <div class="slds-select_container"  style="max-width:100px;padding:0px;">
+                                            <apex:inputField styleClass="slds-select " style="max-width:100px;padding-right:0px;" value="{!objQuote.Quote_Term__c}" id="it29" onchange="calculatePayment();"/>
                                         </div>
                                     </td>
                                 </tr>
@@ -476,14 +476,14 @@
                                     <td class="additionalFirstTD">Payment</td>
                                     <td class="additionalSecondTD">
                                          <i class="fa fa-usd" aria-hidden="true"></i> 
-                                        <apex:inputText styleClass="slds-input input_spc"  disabled="true" value="{!objQuote.Quote_Payment__c}"  id="it28">
+                                        <apex:inputText styleClass="slds-input input_spc" style="min-width:100px;"  disabled="true" value="{!objQuote.Quote_Payment__c}"  id="it28">
                                             
                                         </apex:inputText>
                                     </td>
                                     <td class="additionalThirdTD">Boat Trade Over Allowance</td>
                                     <td>
                                          <i class="fa fa-usd" style="left: 82px !important;" aria-hidden="true"></i> 
-                                        <apex:inputText styleClass="slds-input input_spc" value="{!objQuote.Quote_Boat_Trade_Over_Allowance_Calculat__c}"  id="it39" onchange="NetSellValue();" disabled="true">
+                                        <apex:inputText styleClass="slds-input input_spc" style="min-width:100px;" value="{!objQuote.Quote_Boat_Trade_Over_Allowance_Calculat__c}"  id="it39" onchange="NetSellValue();" disabled="true">
                                             
                                         </apex:inputText>
                                     </td>
@@ -492,14 +492,14 @@
                                     <td class="additionalFirstTD">Trailer Trade over Allowance</td>
                                     <td class="additionalSecondTD">
                                          <i class="fa fa-usd" aria-hidden="true"></i> 
-                                        <apex:inputText styleClass="slds-input input_spc" value="{!objQuote.Quote_Trailer_Allowance_Calculated__c}"  id="it30" onchange="NetSellValue();" disabled="true">
+                                        <apex:inputText styleClass="slds-input input_spc" style="min-width:100px;" value="{!objQuote.Quote_Trailer_Allowance_Calculated__c}"  id="it30" onchange="NetSellValue();" disabled="true">
                                             
                                         </apex:inputText>
                                     </td>
                                     <td class="additionalThirdTD">Total Over Allowance</td>
                                     <td>
                                          <i class="fa fa-usd" style="left: 82px !important;" aria-hidden="true"></i> 
-                                        <apex:inputText styleClass="slds-input input_spc" value="{!objQuote.Quote_Total_Over_Allowance_Calculated__c}"  id="it31" disabled="true">
+                                        <apex:inputText styleClass="slds-input input_spc" style="min-width:100px;" value="{!objQuote.Quote_Total_Over_Allowance_Calculated__c}"  id="it31" disabled="true">
                                             
                                         </apex:inputText>
                                     </td>
@@ -507,17 +507,17 @@
                                 <tr >
                                     <td class="additionalFirstTD"><span class="hideDetails">Deal Margin (%)</span></td>
                                     <td class="additionalSecondTD"><span class="hideDetails">
-                                    		<!--<input class="slds-input" type="text" value="${!objQuote.Quote_Deal_Margin__c}" />-->
-                                        <apex:inputText styleClass="slds-input input_spc2" value="{!objQuote.Quote_Deal_Margin__c}"  id="it32" disabled="true">
+                                            <!--<input class="slds-input" type="text" value="${!objQuote.Quote_Deal_Margin__c}" />-->
+                                        <apex:inputText styleClass="slds-input input_spc2" style="min-width:100px;" value="{!objQuote.Quote_Deal_Margin__c}"  id="it32" disabled="true">
                                             <i class="fa fa-percent" aria-hidden="true"></i>
                                         </apex:inputText>
                                         </span>
                                     </td>
                                     <td class="additionalThirdTD"><span class="hideDetails">Cost</span></td>
                                     <td>
-                                    		<span class="hideDetails"><!--<input class="slds-input" type="text" value="${!objQuote.Quote_Cost__c}" />-->
+                                            <span class="hideDetails"><!--<input class="slds-input" type="text" value="${!objQuote.Quote_Cost__c}" />-->
                                         <i class="fa fa-usd" style="left: 82px !important;" aria-hidden="true"></i> 
-                                        <apex:inputText styleClass="slds-input input_spc" value="{!objQuote.Quote_Cost_Clone__c}"  id="it33"  disabled="true">
+                                        <apex:inputText styleClass="slds-input input_spc" style="min-width:100px;" value="{!objQuote.Quote_Cost_Clone__c}"  id="it33"  disabled="true">
                                             
                                         </apex:inputText>
                                         </span>
@@ -527,16 +527,16 @@
                                 <tr >
                                     <td class="additionalFirstTD"><span class="hideDetails">Hidden Box</span></td>
                                     <td class="additionalSecondTD"> 
-                                    		<span class="hideDetails"><!--<input class="slds-input" type="text" value="TBD" />-->
+                                            <span class="hideDetails"><!--<input class="slds-input" type="text" value="TBD" />-->
                                         <i class="fa fa-usd" aria-hidden="true"></i> 
-                                        <apex:inputText styleClass="slds-input input_spc" value="{!objQuote.QuoteHiddenBox__c}"  id="hiddenbox" onchange=" NetSellValue();" disabled="true"/>
-                                    		</span>
+                                        <apex:inputText styleClass="slds-input input_spc" style="min-width:100px;" value="{!objQuote.QuoteHiddenBox__c}"  id="hiddenbox" onchange=" NetSellValue();" disabled="true"/>
+                                            </span>
                                     </td>
                                     <td class="additionalThirdTD"><span class="hideDetails">Commission </span></td>
                                     <td>
-                                    		<span class="hideDetails"><!--<input class="slds-input" type="text" value="TBD" />-->
+                                            <span class="hideDetails"><!--<input class="slds-input" type="text" value="TBD" />-->
                                         <i class="fa fa-usd" style="left: 82px !important;" aria-hidden="true"></i> 
-                                        <apex:inputText styleClass="slds-input input_spc" value="{!objQuote.Commission__c}"  id="commission" disabled="true"/>
+                                        <apex:inputText styleClass="slds-input input_spc" style="min-width:100px;" value="{!objQuote.Commission__c}"  id="commission" disabled="true"/>
                                         </span>
                                     </td>
                                 </tr>
@@ -581,7 +581,7 @@
             }else{
                 inputtxt2.value = '';
                 tradePayOff2 = 0.00;
-                alert('Only numbers allowed');
+                //alert('Only numbers allowed');
             }    
             //----------------------------------------------------
             
@@ -610,7 +610,7 @@
                 }else{
                     inputtxtDwnPymmt.value = '';
                     downPayment = 0.00;
-                    alert('Only numbers allowed');
+                    //alert('Only numbers allowed');
                 }    
                 //----------------------------------------------------
                 
@@ -736,117 +736,118 @@
     var  yourPriceComm = 0.00;
     
     $("#disMarginSelect").change(function() {
-    	var picVal = $("#disMarginSelect").val();
-    	if(picVal == 'Discount in Dollar Amount') 
-    	{
-    		document.getElementById("page:frm:discount").disabled = false;
-    		document.getElementById("discountPer").disabled = true;
-    		document.getElementById("dealMarginEdit").disabled = true;
-    	} else if(picVal == "Discount In Percentage")
-    	{
-    		document.getElementById("discountPer").disabled = false;
-    		document.getElementById("page:frm:discount").disabled = true;
-    		document.getElementById("dealMarginEdit").disabled = true; 
-    	} else 
-    	{
-    		document.getElementById("discountPer").disabled = true;		
-    		document.getElementById("page:frm:discount").disabled = true;
-    		document.getElementById("dealMarginEdit").disabled = false;
-    		$("#showMarsec").show();
-    	}
-    	 
+        var picVal = $("#disMarginSelect").val();
+        if(picVal == 'Discount in Dollar Amount') 
+        {
+            document.getElementById("page:frm:discount").disabled = false;
+            document.getElementById("discountPer").disabled = true;
+            document.getElementById("dealMarginEdit").disabled = true;
+        } else if(picVal == "Discount In Percentage")
+        {
+            document.getElementById("discountPer").disabled = false;
+            document.getElementById("page:frm:discount").disabled = true;
+            document.getElementById("dealMarginEdit").disabled = true; 
+        } else 
+        {
+            document.getElementById("discountPer").disabled = true;     
+            document.getElementById("page:frm:discount").disabled = true;
+            document.getElementById("dealMarginEdit").disabled = false;
+            $("#showMarsec").show();
+        }
+         
     });
     function calculateDisvalINPER() {
-    	//var dis = parseFloat(document.getElementById('discountPer').value);
-    	var MSRPBoatPrice = parseFloat('{!objQuote.Total_Price_Quote__c}');
+        //var dis = parseFloat(document.getElementById('discountPer').value);
+        var MSRPBoatPrice = parseFloat('{!objQuote.Total_Price_Quote__c}');
         if(MSRPBoatPrice == null || MSRPBoatPrice < 0  )
         {
             
             MSRPBoatPrice =0.00;
         }
-    	var disPer = 0.00;
-    	if(document.getElementById('discountPer').value != '') {
-    		disPer =  parseFloat(document.getElementById('discountPer').value);
-    	}
-    	var disVal = 0.00;
-    	disVal = parseFloat(parseFloat(MSRPBoatPrice * disPer)/100).toFixed(2);
-    	document.getElementById('page:frm:discount').value = parseFloat(disVal).toFixed(2);
-    	calculatePrice(); 
-    	NetSellValue(); 
-    	calculatePayment();
+        var disPer = 0.00;
+        if(document.getElementById('discountPer').value != '') {
+            disPer =  parseFloat(document.getElementById('discountPer').value);
+        }
+        var disVal = 0.00;
+        disVal = parseFloat(parseFloat(MSRPBoatPrice * disPer)/100).toFixed(2);
+        document.getElementById('page:frm:discount').value = parseFloat(disVal).toFixed(2);
+        calculatePrice(); 
+        NetSellValue(); 
+        calculatePayment();
     }
     function calculateDisval(obj) {
-    	console.log('Check '+this.value);
-    	if(document.getElementById('dealMarginEdit').value != '') {
-	    	console.log('Check2');
-	    	var yourprice1 = 0.00
-    	
-    		var MSRPBoatPrice = parseFloat('{!objQuote.Total_Price_Quote__c}');
-	        if(MSRPBoatPrice == null || MSRPBoatPrice < 0  )
-	        {
-	            
-	            MSRPBoatPrice =0.00;
-	        }
-	        
-	        
-	        
-	        var MSRPTrailerPrice = parseFloat('{!objQuote.Quote_MSRP_Trailer_Price__c}');
-	        if(MSRPTrailerPrice == null || MSRPTrailerPrice < 0){
-	            
-	            MSRPTrailerPrice =0.00;
-	        }
-	        // **Devimal Or Number Validation
-	        
-	                
-    		var dealMarginCom = parseFloat(document.getElementById('dealMarginEdit').value);
-    			dealMarginCom = parseFloat(dealMarginCom/100);
-	    	var totaloverAllowance1 = parseFloat(document.getElementById('page:frm:it31').value);
-	        
-	        
-	        var hiddenbox1 = parseFloat(document.getElementById('page:frm:hiddenbox').value);
-	        //var cost ='{!objQuote.Quote_Cost__c}';
-	        
-	        
-	        
-	        var cost = document.getElementById("page:frm:it33").value;
-	        if(cost==="" ||cost==="undefined"){
-	            cost = 0.00; 
-	        }
-	        cost1 = parseFloat(cost);
-	        cost2 = cost1.toFixed(2);
-	        
-			var finalMSRP = parseFloat(MSRPBoatPrice + MSRPTrailerPrice);
-			console.log('>>>>finalMSRP: '+finalMSRP);  
-	        var finalMSRP_Cal =  parseFloat(finalMSRP);
-	        console.log('>>>>cost: '+cost); 
-	        console.log('>>>>dealMarginCom: '+dealMarginCom);
-	        
-	        //Cost / (1- (Margin/100))
-	        var up = parseFloat(cost);
-	        var down = parseFloat(1-(dealMarginCom));
-	        console.log('>>>>up: '+up);
-	        console.log('>>>>down: '+down);
-	        var BSP = parseFloat(up/down);
-	        
-	        console.log('>>>>BSP: '+BSP);
-	        var dis = finalMSRP - BSP;
-	        console.log('>>>>finalMSRP: '+finalMSRP); 
-	        console.log('>>>>dis: '+dis); 
-	    	document.getElementById('page:frm:discount').value = dis.toFixed(2);
-	    	
-	    	var disINPer = 0.00;
+        console.log('Check '+this.value);
+        if(document.getElementById('dealMarginEdit').value != '') {
+            console.log('Check2');
+            var yourprice1 = 0.00
         
-	       	disINPer = parseFloat(parseFloat(dis * 100)/MSRPBoatPrice).toFixed(2);
-	       	console.log('>>>MSRPBoatPrice: '+MSRPBoatPrice);
-	        console.log('>>>disINPer: '+disINPer);
-	       	document.getElementById('discountPer').value =  parseFloat(disINPer).toFixed(2);
-	    	 
-	        NetSellValue2();    
-	        calculatePrice(); 
+            var MSRPBoatPrice = parseFloat('{!objQuote.Total_Price_Quote__c}');
+            if(MSRPBoatPrice == null || MSRPBoatPrice < 0  )
+            {
+                
+                MSRPBoatPrice =0.00;
+            }
+            
+            
+            
+            var MSRPTrailerPrice = parseFloat('{!objQuote.Quote_MSRP_Trailer_Price__c}');
+            if(MSRPTrailerPrice == null || MSRPTrailerPrice < 0){
+                
+                MSRPTrailerPrice =0.00;
+            }
+            // **Devimal Or Number Validation
+            
+                    
+            var dealMarginCom = parseFloat(document.getElementById('dealMarginEdit').value);
+                dealMarginCom = parseFloat(dealMarginCom/100);
+            var totaloverAllowance1 = parseFloat(document.getElementById('page:frm:it31').value);
+            
+            
+            var hiddenbox1 = parseFloat(document.getElementById('page:frm:hiddenbox').value);
+            //var cost ='{!objQuote.Quote_Cost__c}';
+            
+            
+            
+            var cost = document.getElementById("page:frm:it33").value;
+            if(cost==="" ||cost==="undefined"){
+                cost = 0.00; 
+            }
+            cost1 = parseFloat(cost);
+            cost2 = cost1.toFixed(2);
+            
+            var finalMSRP = parseFloat(MSRPBoatPrice + MSRPTrailerPrice);
+            console.log('>>>>finalMSRP: '+finalMSRP);  
+            var finalMSRP_Cal =  parseFloat(finalMSRP);
+            console.log('>>>>cost: '+cost); 
+            console.log('>>>>dealMarginCom: '+dealMarginCom);
+            
+            //Cost / (1- (Margin/100))
+            var up = parseFloat(cost);
+            var down = parseFloat(1-(dealMarginCom));
+            console.log('>>>>up: '+up);
+            console.log('>>>>down: '+down);
+            var BSP = parseFloat(up/down);
+            
+            console.log('>>>>BSP: '+BSP);
+            var dis = finalMSRP - BSP;
+            console.log('>>>>finalMSRP: '+finalMSRP); 
+            console.log('>>>>dis: '+dis); 
+            document.getElementById('page:frm:discount').value = dis.toFixed(2);
+            
+            var disINPer = 0.00;
+        
+            disINPer = parseFloat(parseFloat(dis * 100)/MSRPBoatPrice).toFixed(2);
+            console.log('>>>MSRPBoatPrice: '+MSRPBoatPrice);
+            console.log('>>>disINPer: '+disINPer);
+            document.getElementById('discountPer').value =  parseFloat(disINPer).toFixed(2);
+             
+            NetSellValue2();    
+            calculatePrice(); 
         }
     }
     
     function calculatePrice(){
+        console.log('***************** calculatePrice Start *****************\n\n\n');
         var MSRPBoatPrice = parseFloat('{!objQuote.Total_Price_Quote__c}');
         if(MSRPBoatPrice == null || MSRPBoatPrice < 0  )
         {
@@ -869,7 +870,7 @@
         
         
         
-        var discountvalue ;
+        var discountvalue = 0.00;
         
         if(inputtxt.value.match(numbers) || inputtxt.value.match(decimals)){
             discountvalue =  parseFloat(inputtxt.value);
@@ -878,16 +879,16 @@
         }else{
             inputtxt.value = '';
             discountvalue = 0.00;
-            alert('Only numbers allowed');
+            //alert('Only numbers allowed');
         } 
         
         var disINPer = 0.00;
         
-       	disINPer = parseFloat(parseFloat(discountvalue * 100)/MSRPBoatPrice).toFixed(2);
-       	console.log('>>>MSRPBoatPrice: '+MSRPBoatPrice);
+        disINPer = parseFloat(parseFloat(discountvalue * 100)/MSRPBoatPrice).toFixed(2);
+        console.log('>>>MSRPBoatPrice: '+MSRPBoatPrice);
         console.log('>>>discountvalue: '+discountvalue);
         console.log('>>>disINPer: '+disINPer);
-       	document.getElementById('discountPer').value =  parseFloat(disINPer).toFixed(2);
+        document.getElementById('discountPer').value =  parseFloat(disINPer).toFixed(2);
         
         
         //-------------------------------------
@@ -915,8 +916,9 @@
             document.getElementById('page:frm:yourprice').value = parseFloat(MSRPBoatPrice + MSRPTrailerPrice).toFixed(2);
             yourPriceComm = parseFloat(MSRPBoatPrice + MSRPTrailerPrice - discountvalue1).toFixed(2) ;
         }
-        
-        var dealMarginCom = parseFloat('{!objQuote.Quote_Deal_Margin__c}');
+        console.log('{!objQuote.Quote_Deal_Margin__c} >>: '+'{!objQuote.Quote_Deal_Margin__c}' );
+
+        var dealMarginCom = '{!objQuote.Quote_Deal_Margin__c}' != '' && '{!objQuote.Quote_Deal_Margin__c}' != null ? parseFloat('{!objQuote.Quote_Deal_Margin__c}'): 0.00;
         var boatCostLine = parseFloat('{!objQuote.Boat_Costline__c}');
         var AboveCostline = parseFloat('{!AboveCostline}');
         var UnderCostline = parseFloat('{!UnderCostline}');
@@ -930,31 +932,31 @@
         console.log('>>>>>dealMarginCom: '+dealMarginCom);
         var bkslP = 0.00;
         if(document.getElementById("page:frm:bspNav").value != '' && document.getElementById("page:frm:bspNav").value != null) {
-        	bkslP = parseFloat(document.getElementById("page:frm:bspNav").value);
+            bkslP = parseFloat(document.getElementById("page:frm:bspNav").value);
         } 
         console.log('>>>>>>bkslP: '+bkslP);
         if(parseFloat(boatCostLine) < parseFloat(dealMarginCom)) {
-        	var comFinal = parseFloat((bkslP * AboveCostline)/100).toFixed(2);
-        	console.log('>>>>comFinal930: '+comFinal); 
-        	comFinal = parseFloat(comFinal)+parseFloat(stip);  
+            var comFinal = parseFloat((bkslP * AboveCostline)/100).toFixed(2);
+            console.log('>>>>comFinal930: '+comFinal); 
+            comFinal = parseFloat(comFinal)+parseFloat(stip);  
             document.getElementById("page:frm:commission").value = comFinal
             document.getElementById("page:frm:sidcommission").value = comFinal;
             //document.getElementById("dealMarginEdit").value = comFinal;
              
         }
         else {
-        	var comFinal = parseFloat((bkslP * UnderCostline)/100).toFixed(2);
-        	console.log('>>>>comFinal939: '+comFinal); 
-        	comFinal = parseFloat(comFinal) + parseFloat(stip);
+            var comFinal = parseFloat((bkslP * UnderCostline)/100).toFixed(2);
+            console.log('>>>>comFinal939: '+comFinal); 
+            comFinal = parseFloat(comFinal) + parseFloat(stip);
             document.getElementById("page:frm:commission").value = comFinal;
             document.getElementById("page:frm:sidcommission").value = comFinal;
             //document.getElementById("dealMarginEdit").value = comFinal; 
         }
-        
+        console.log('***************** calculatePrice End *****************\n\n\n');
     }
      
     function NetSellValue(){
-        
+        console.log('***************** NetSellValue Start *****************\n\n\n');
         //Decimal And Number Validation
         var numbers = /^[0-9]+$/;
         var decimals = /^\d+\.\d{0,2}$/;
@@ -967,7 +969,7 @@
          }else{
             inputtxt.value = '';
             TradeAllowance = 0.00;
-            alert('Only numbers allowed');
+            //alert('Only numbers allowed');
         }    
         //----------------------------------------------------
         
@@ -990,7 +992,7 @@
          }else{
             inputtxt2.value = '';
             TrailerAllowance = 0.00;
-            alert('Only numbers allowed.');
+            //alert('Only numbers allowed');
         }    
         //----------------------------------------------------
         
@@ -1026,22 +1028,22 @@
         var NetSellValue = parseFloat(document.getElementById('page:frm:netSellingPrice').value);
         if(NetSellValue!=null && NetSellValue != "undefined" && NetSellValue > 0)
         {
-        		console.log("RegularSalestax: {!RegularSalestax}");
-        		console.log("VehicleSalestax: {!VehicleSalestax}");
-        		console.log("CappingAmountForVehicleSalesTax: {!CappingAmountForVehicleSalesTax}");    
-         	var vehicleTax = parseFloat("{!VehicleSalestax}");
-         	var capAmount = parseFloat("{!CappingAmountForVehicleSalesTax}");
-         	var SalesTaxCal = (NetSellValue * vehicleTax)/100;
-         	console.log("SalesTaxCal: "+SalesTaxCal);
-         	if(capAmount > 0) {
-	         	if(SalesTaxCal <= capAmount) {
-	         		document.getElementById('page:frm:BoatSalesTax').value = parseFloat(SalesTaxCal).toFixed(2) ;
-	         	} else {
-	         		document.getElementById('page:frm:BoatSalesTax').value = parseFloat(capAmount).toFixed(2) ;
-	         	}
-         	} else {
-         		document.getElementById('page:frm:BoatSalesTax').value = parseFloat(SalesTaxCal).toFixed(2) ;
-         	}
+                console.log("RegularSalestax: {!RegularSalestax}");
+                console.log("VehicleSalestax: {!VehicleSalestax}");
+                console.log("CappingAmountForVehicleSalesTax: {!CappingAmountForVehicleSalesTax}");    
+            var vehicleTax = parseFloat("{!VehicleSalestax}");
+            var capAmount = parseFloat("{!CappingAmountForVehicleSalesTax}");
+            var SalesTaxCal = (NetSellValue * vehicleTax)/100;
+            console.log("SalesTaxCal: "+SalesTaxCal);
+            if(capAmount > 0) {
+                if(SalesTaxCal <= capAmount) {
+                    document.getElementById('page:frm:BoatSalesTax').value = parseFloat(SalesTaxCal).toFixed(2) ;
+                } else {
+                    document.getElementById('page:frm:BoatSalesTax').value = parseFloat(capAmount).toFixed(2) ;
+                }
+            } else {
+                document.getElementById('page:frm:BoatSalesTax').value = parseFloat(SalesTaxCal).toFixed(2) ;
+            }
         }
         
         //var tradeAllowance =    parseFloat(inputtxt.value);
@@ -1062,7 +1064,7 @@
          }else{
             inputtxtACV.value = '';
             tradeAcv = 0.00;
-            alert('Only numbers allowed');
+            //alert('Only numbers allowed');
         }    
         //----------------------------------------------------
         //   var tradeAcv =  parseFloat(document.getElementById('page:frm:tradeAcv').value); 
@@ -1085,7 +1087,7 @@
             alert('Trade Acv Should not more than Trade Allowance');
             
         } else {
-        	document.getElementById('page:frm:it39').value = 0.00;
+            document.getElementById('page:frm:it39').value = 0.00;
         }
         
         
@@ -1107,7 +1109,7 @@
          }else{
             inputtxtTrailerACV.value = '';
             trailAcv = 0.00;
-            alert('Only numbers allowed');
+            //alert('Only numbers allowed');
         }    
         //----------------------------------------------------
         
@@ -1125,7 +1127,7 @@
             document.getElementById('page:frm:it30').value =0;
             alert('Trailer ACV should not more than trailer Allowance');
         } else {
-        	document.getElementById('page:frm:it30').value = 0.00;
+            document.getElementById('page:frm:it30').value = 0.00;
         }
         var totaloverAllowance = parseFloat(document.getElementById('page:frm:it31').value); 
         var trailAllowance2 = document.getElementById('page:frm:it39').value;
@@ -1140,7 +1142,6 @@
         }
         var value3 = parseFloat(trailAllowance2) +  parseFloat(tradeAllowance2);
         console.log(value3);
-        debugger;
         if(value3 <= yourprice){
             document.getElementById('page:frm:it31').value= parseFloat(value3).toFixed(2) ;
         }
@@ -1194,7 +1195,7 @@
          }else{
             inputtxtPayOff.value = '';
             tradePayOff2 = 0.00;
-            alert('Only numbers allowed');
+            //alert('Only numbers allowed');
         }    
         //----------------------------------------------------
         
@@ -1232,7 +1233,7 @@
              }else{
                 inputtxtDwnPymnt.value = '';
                 downPayment = 0.00;
-                alert('Only numbers allowed');
+                //alert('Only numbers allowed');
             }    
             //----------------------------------------------------
             
@@ -1272,11 +1273,11 @@
         var ttr1 = ttr.toFixed(2);
         var quoteSalesPrice = 0.00;
         if(document.getElementById('page:frm:navQuoteSalePrice').value != null && document.getElementById('page:frm:navQuoteSalePrice').value != '') {
-        		quoteSalesPrice = parseFloat(document.getElementById('page:frm:navQuoteSalePrice').value);
+                quoteSalesPrice = parseFloat(document.getElementById('page:frm:navQuoteSalePrice').value);
         }
         var disssss = 0.00;
         if(document.getElementById("page:frm:discount").value != '' && document.getElementById("page:frm:discount").value != undefined) {
-        		disssss = parseFloat(document.getElementById("page:frm:discount").value);
+                disssss = parseFloat(document.getElementById("page:frm:discount").value);
         } 
         var bsp = quoteSalesPrice - totaloverAllowance1;
         bsp = bsp - disssss;
@@ -1298,15 +1299,17 @@
         cost1 = parseFloat(cost);
         cost2 = cost1.toFixed(2);
         
-        
+        console.log('>>>>cost2: ',cost2);
+        console.log('>>>>hiddenbox1: ',hiddenbox1);
         
         var cal =((hiddenbox1 - cost2)/ hiddenbox1) * 100;
+        console.log('>>>>cal: ',cal);
         var cal1= cal.toFixed(2);
         // alert (cal); 
         var dealMarginCom = 0.00;
         console.log(cal1);
-        debugger;
-        if(hiddenbox1 !=null && hiddenbox1 !=" "  && cost2>=0 ){ //&& hiddenbox1 >= cost2
+        
+        if(hiddenbox1 !=null && hiddenbox1 != " "  && cost2>=0 ){ //&& hiddenbox1 >= cost2
             document.getElementById('page:frm:it32').value = parseFloat(cal1).toFixed(2);
             document.getElementById('page:frm:sidit32').value = parseFloat(cal1).toFixed(2);
             
@@ -1335,28 +1338,28 @@
         console.log('>>>>>dealMarginCom: '+dealMarginCom);
         var bkslP = 0.00;
         if(document.getElementById("page:frm:bspNav").value != '' && document.getElementById("page:frm:bspNav").value != null) {
-        	bkslP = parseFloat(document.getElementById("page:frm:bspNav").value);
+            bkslP = parseFloat(document.getElementById("page:frm:bspNav").value);
         }
         console.log('>>>>>>bkslP: '+bkslP);
         if(parseFloat(boatCostLine) < parseFloat(dealMarginCom)) {
-        	var comFinal = parseFloat((bkslP * AboveCostline)/100).toFixed(2);
-        	console.log('>>>>comFinal1329: '+comFinal);
-        	comFinal = parseFloat(comFinal)+parseFloat(stip); 
+            var comFinal = parseFloat((bkslP * AboveCostline)/100).toFixed(2);
+            console.log('>>>>comFinal1329: '+comFinal);
+            comFinal = parseFloat(comFinal)+parseFloat(stip); 
             document.getElementById("page:frm:commission").value = comFinal;
             document.getElementById("page:frm:sidcommission").value = comFinal;
         }
         else {
-        	var comFinal = parseFloat((bkslP * UnderCostline)/100).toFixed(2);
-        	console.log('>>>>comFinal1336: '+comFinal);
-        	comFinal = parseFloat(comFinal) + parseFloat(stip);
+            var comFinal = parseFloat((bkslP * UnderCostline)/100).toFixed(2);
+            console.log('>>>>comFinal1336: '+comFinal);
+            comFinal = parseFloat(comFinal) + parseFloat(stip);
             document.getElementById("page:frm:commission").value = comFinal;
             document.getElementById("page:frm:sidcommission").value = comFinal;
         } 
         
-        
+        console.log('***************** NetSellValue End *****************\n\n\n');
     }
     function NetSellValue2(){
-        
+        console.log('***************** NetSellValue2 Start *****************\n\n\n');
         //Decimal And Number Validation
         var numbers = /^[0-9]+$/;
         var decimals = /^\d+\.\d{0,2}$/;
@@ -1369,7 +1372,7 @@
          }else{
             inputtxt.value = '';
             TradeAllowance = 0.00;
-            alert('Only numbers allowed');
+            //alert('Only numbers allowed');
         }    
         //----------------------------------------------------
         
@@ -1392,7 +1395,7 @@
          }else{
             inputtxt2.value = '';
             TrailerAllowance = 0.00;
-            alert('Only numbers allowed.');
+            //alert('Only numbers allowed');
         }    
         //----------------------------------------------------
         
@@ -1428,22 +1431,22 @@
         var NetSellValue = parseFloat(document.getElementById('page:frm:netSellingPrice').value);
         if(NetSellValue!=null && NetSellValue != "undefined" && NetSellValue > 0)
         {
-        		console.log("RegularSalestax: {!RegularSalestax}");
-        		console.log("VehicleSalestax: {!VehicleSalestax}");
-        		console.log("CappingAmountForVehicleSalesTax: {!CappingAmountForVehicleSalesTax}");    
-         	var vehicleTax = parseFloat("{!VehicleSalestax}");
-         	var capAmount = parseFloat("{!CappingAmountForVehicleSalesTax}");
-         	var SalesTaxCal = (NetSellValue * vehicleTax)/100;
-         	console.log("SalesTaxCal: "+SalesTaxCal);
-         	if(capAmount > 0) {
-	         	if(SalesTaxCal <= capAmount) {
-	         		document.getElementById('page:frm:BoatSalesTax').value = parseFloat(SalesTaxCal).toFixed(2) ;
-	         	} else {
-	         		document.getElementById('page:frm:BoatSalesTax').value = parseFloat(capAmount).toFixed(2) ;
-	         	}
-         	} else {
-         		document.getElementById('page:frm:BoatSalesTax').value = parseFloat(SalesTaxCal).toFixed(2) ;
-         	}
+                console.log("RegularSalestax: {!RegularSalestax}");
+                console.log("VehicleSalestax: {!VehicleSalestax}");
+                console.log("CappingAmountForVehicleSalesTax: {!CappingAmountForVehicleSalesTax}");    
+            var vehicleTax = parseFloat("{!VehicleSalestax}");
+            var capAmount = parseFloat("{!CappingAmountForVehicleSalesTax}");
+            var SalesTaxCal = (NetSellValue * vehicleTax)/100;
+            console.log("SalesTaxCal: "+SalesTaxCal);
+            if(capAmount > 0) {
+                if(SalesTaxCal <= capAmount) {
+                    document.getElementById('page:frm:BoatSalesTax').value = parseFloat(SalesTaxCal).toFixed(2) ;
+                } else {
+                    document.getElementById('page:frm:BoatSalesTax').value = parseFloat(capAmount).toFixed(2) ;
+                }
+            } else {
+                document.getElementById('page:frm:BoatSalesTax').value = parseFloat(SalesTaxCal).toFixed(2) ;
+            }
         }
         
         var tradeAllowance =    parseFloat(inputtxt.value); 
@@ -1463,7 +1466,7 @@
          }else{
             inputtxtACV.value = '';
             tradeAcv = 0.00;
-            alert('Only numbers allowed');
+            //alert('Only numbers allowed');
         }    
         //----------------------------------------------------
         //   var tradeAcv =  parseFloat(document.getElementById('page:frm:tradeAcv').value); 
@@ -1486,7 +1489,7 @@
             alert('Trade Acv Should not more than Trade Allowance');
             
         } else {
-        	document.getElementById('page:frm:it39').value =0.00;
+            document.getElementById('page:frm:it39').value =0.00;
         }
         
         
@@ -1508,7 +1511,7 @@
          }else{
             inputtxtTrailerACV.value = '';
             trailAcv = 0.00;
-            alert('Only numbers allowed');
+            //alert('Only numbers allowed');
         }    
         //----------------------------------------------------
         
@@ -1526,7 +1529,7 @@
             document.getElementById('page:frm:it30').value =0;
             alert('Trailer ACV should not more than trailer Allowance');
         } else {
-        	document.getElementById('page:frm:it30').value =0.00;
+            document.getElementById('page:frm:it30').value =0.00;
         }
         var totaloverAllowance = parseFloat(document.getElementById('page:frm:it31').value); 
         var trailAllowance2 = document.getElementById('page:frm:it39').value;
@@ -1541,7 +1544,7 @@
         }
         var value3 = parseFloat(trailAllowance2) +  parseFloat(tradeAllowance2);
         console.log('value3:::: '+value3);
-        //debugger;
+        //
         if(value3 <= yourprice){
             document.getElementById('page:frm:it31').value= parseFloat(value3).toFixed(2) ;
         }
@@ -1595,7 +1598,7 @@
          }else{
             inputtxtPayOff.value = '';
             tradePayOff2 = 0.00;
-            alert('Only numbers allowed');
+            //alert('Only numbers allowed');
         }    
         //----------------------------------------------------
         
@@ -1633,7 +1636,7 @@
              }else{
                 inputtxtDwnPymnt.value = '';
                 downPayment = 0.00;
-                alert('Only numbers allowed');
+                //alert('Only numbers allowed');
             }    
             //----------------------------------------------------
             
@@ -1673,11 +1676,11 @@
         var ttr1 = ttr.toFixed(2);
         var quoteSalesPrice = 0.00;
         if(document.getElementById('page:frm:navQuoteSalePrice').value != null && document.getElementById('page:frm:navQuoteSalePrice').value != '') {
-        		quoteSalesPrice = parseFloat(document.getElementById('page:frm:navQuoteSalePrice').value);
+                quoteSalesPrice = parseFloat(document.getElementById('page:frm:navQuoteSalePrice').value);
         }
         var disssss = 0.00;
         if(document.getElementById("page:frm:discount").value != '' && document.getElementById("page:frm:discount").value != undefined) {
-        		disssss = parseFloat(document.getElementById("page:frm:discount").value);
+                disssss = parseFloat(document.getElementById("page:frm:discount").value);
         } 
         var bsp = quoteSalesPrice - totaloverAllowance1;
         bsp = bsp - disssss;
@@ -1705,10 +1708,10 @@
         var cal1= cal.toFixed(2);
         // alert (cal); 
         console.log(cal1);
-        debugger;
+        
         var dynamicVal = 0.00; 
         if(document.getElementById("dealMarginEdit").value != '') {
-        	dynamicVal = parseFloat(document.getElementById("dealMarginEdit").value);
+            dynamicVal = parseFloat(document.getElementById("dealMarginEdit").value);
         } 
         var dealMarginCom = 0.00;
         if(hiddenbox1 !=null && hiddenbox1 !=" "  && cost2>=0 ){ //&& hiddenbox1 >= cost2
@@ -1738,34 +1741,36 @@
         console.log('>>>>>dealMarginCom: '+dealMarginCom); 
         var bkslP = 0.00;
         if(document.getElementById("page:frm:bspNav").value != '' && document.getElementById("page:frm:bspNav").value != null) {
-        	bkslP = parseFloat(document.getElementById("page:frm:bspNav").value);
+            bkslP = parseFloat(document.getElementById("page:frm:bspNav").value);
         }
         console.log('>>>>>>bkslP: '+bkslP);
         if(boatCostLine < dealMarginCom) {
-        	var comFinal = parseFloat((bkslP * AboveCostline)/100).toFixed(2);
-        	console.log('>>>>comFinal1725: '+comFinal);
-        	comFinal = parseFloat(comFinal)+parseFloat(stip);
+            var comFinal = parseFloat((bkslP * AboveCostline)/100).toFixed(2);
+            console.log('>>>>comFinal1725: '+comFinal);
+            comFinal = parseFloat(comFinal)+parseFloat(stip);
             //document.getElementById("page:frm:commission").value = comFinal;
             //document.getElementById("page:frm:sidcommission").value = comFinal;
         }
         else { 
-        	var comFinal = parseFloat((bkslP * UnderCostline)/100).toFixed(2);
-        	console.log('>>>>comFinal1732: '+comFinal);
-        	comFinal = parseFloat(comFinal) + parseFloat(stip);
+            var comFinal = parseFloat((bkslP * UnderCostline)/100).toFixed(2);
+            console.log('>>>>comFinal1732: '+comFinal);
+            comFinal = parseFloat(comFinal) + parseFloat(stip);
             //document.getElementById("page:frm:commission").value = comFinal;
             //document.getElementById("page:frm:sidcommission").value = comFinal;
         } 
-        
+        console.log('***************** NetSellValue2 End *****************\n\n\n');
         
     }
     onload = function(){
+
+        console.log('***************** onload Start *****************\n\n\n');
         var tradePayOff21 = parseFloat(document.getElementById('page:frm:it21').value);  
         if(!(tradePayOff21 > 0)){
             document.getElementById('page:frm:it21').value =null;
         }
         var discount21 = parseFloat(document.getElementById('page:frm:discount').value); 
         if(!(discount21 > 0)){
-            document.getElementById('page:frm:discount').value =null;
+            document.getElementById('page:frm:discount').value = 0.00;
         }
         
         var yourprice21 = parseFloat(document.getElementById('page:frm:yourprice').value); 
@@ -1858,9 +1863,11 @@
         if(!(doc21> 0)){
             document.getElementById('page:frm:it19').value =null;
         }
-        var hidden21= parseFloat(document.getElementById('page:frm:hiddenbox').value); 
-        if(!(hidden21> 0)){
-            document.getElementById('page:frm:hiddenbox').value =null;
+        var hidden21= document.getElementById('page:frm:hiddenbox').value != '' ? parseFloat(document.getElementById('page:frm:hiddenbox').value) : 0.00; 
+        console.log('hidden21::: '+hidden21);
+        if( hidden21 == null || hidden21 < 0 || hidden21 == '' ){
+            console.log('hidden21::: '+hidden21);
+            document.getElementById('page:frm:hiddenbox').value = 0.00;
         }
         var boatprice21= parseFloat(document.getElementById('page:frm:it1').value); 
         if(!(boatprice21> 0)){
@@ -1870,9 +1877,11 @@
         if(!(trailerprice21 > 0)){
             document.getElementById('page:frm:it2').value =null;
         }
-        
+        calculatePrice(); NetSellValue();calculatePayment();
+        console.log('***************** onload End *****************\n\n\n');
     }
     function calculatePayment(){
+        console.log('***************** calculatePayment Start *****************\n\n\n');
         var term = document.getElementById('page:frm:it29').value;
         document.getElementById("sideTrm").value = term;
         var term1 = term.substring(0,2).trim();
@@ -1891,7 +1900,7 @@
         }else{
             inputtxtRt.value = '';
             interestRate = 0.00;
-            alert('Only numbers allowed');
+            //alert('Only numbers allowed');
         }    
         //----------------------------------------------------
         
@@ -1922,6 +1931,8 @@
             document.getElementById('page:frm:it28').value = 0.00;
             document.getElementById('page:frm:sidit28').value = 0.00;
         }
+
+        console.log('***************** calculatePayment End *****************\n\n\n');
     }
     
     

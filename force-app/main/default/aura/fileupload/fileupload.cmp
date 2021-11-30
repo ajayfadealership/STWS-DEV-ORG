@@ -1,0 +1,14 @@
+<aura:component Controller="BOATBUILDING.FileUploadController" 
+                implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction" access="global" >
+    <aura:attribute name="recordId" type="String" access="global"/>
+    
+    <div>
+        <lightning:fileUpload label="Upload Image For Item" 
+                              name="fileUploader"
+                              multiple="true" 
+                              accept=".pdf, .png, .jpeg, .jpg"
+                              recordId="{!v.recordId}" 
+                              onuploadfinished="{!c.handleUploadFinished}" />
+    </div>
+    
+</aura:component>

@@ -1,7 +1,7 @@
 ({
     doInit : function(component, event, helper) {
-        console.log('woj', JSON.stringify(component.get("v.WOJ")));
-        console.log('jli', component.get("v.jobLI"));
+        //console.log('woj', JSON.stringify(component.get("v.WOJ")));
+        //console.log('jli', component.get("v.jobLI"));
         if(component.get("v.recordType") == 'Warranty Work Order'){
             component.set("v.WOJ.BOATBUILDING__Taxable__c", false);
         }
@@ -9,22 +9,22 @@
         
         var wtMap = [];
                 var result = component.get("v.mapWTP");
-                console.log('v.mapWTP', result);
+                //console.log('v.mapWTP', result);
                 for(var key in result){
                     wtMap.push({key: key, value: result[key]});
                 }
                 component.set("v.mapWTPNew", wtMap);
-                console.log(component.get("v.mapWTPNew"));
+                //console.log(component.get("v.mapWTPNew"));
 
 
                 var cjMap = [];
                 var resultCannedJob = component.get("v.mapCannedJob");
-                console.log('v.mapCannedJob', JSON.stringify(resultCannedJob));
+                //console.log('v.mapCannedJob', JSON.stringify(resultCannedJob));
                 for(var key in resultCannedJob){
                     cjMap.push({key: resultCannedJob[key].BOATBUILDING__Job_Name__c, value: key});
                 }
                 component.set("v.mapCannedJobId", cjMap);
-                console.log(component.get("v.mapCannedJobId"));
+                //console.log(component.get("v.mapCannedJobId"));
 
                 var seelctedWT = component.get("v.WOJ.BOATBUILDING__Work_Type__c");
                 var multiplier = component.get("v.mapWTP")[component.get("v.WOJ.BOATBUILDING__Work_Type__c")];
@@ -34,7 +34,12 @@
             var partsTotal = 0.00;
             if(wojli != '' && wojli != undefined && wojli != 'undefined'){
                 for(var i = 0; i < wojli.length; i++){
-                    partsTotal = partsTotal + wojli[i].BOATBUILDING__Price__c * wojli[i].BOATBUILDING__Quantity__c;
+                    if(component.get("v.recordType") != 'Warranty Work Order'){
+                        partsTotal = partsTotal + wojli[i].BOATBUILDING__Price__c * wojli[i].BOATBUILDING__Quantity__c;
+                    }else{
+                        partsTotal = partsTotal + wojli[i].BOATBUILDING__Dealer_Price__c * wojli[i].BOATBUILDING__Quantity__c;
+
+                    }
                 }
 
                 component.set("v.partsTotal",partsTotal);
@@ -51,7 +56,9 @@
                 component.set("v.showPill", true);
                 component.set("v.selectedRecordId",component.get("v.WOJ.BOATBUILDING__Technician__c"));
             }
-            
+            component.set("v.activeSecName", {});
+            var section = ['laborSection'];
+            component.set("v.activeSecName", section);
     },
     cannedJobToggle : function(component, event, helper){
        var isChecked =  component.find("cannedJobToggelBox").getElement().checked;
@@ -60,14 +67,69 @@
     cannedJobSelected : function(component, event, helper){
        var cannedJobName = component.find("cannedJobList").get("v.value");
        if(cannedJobName != '' && cannedJobName != undefined){
+          
            component.set("v.cannedJobSelected", true);
+           let jobId =  component.get("v.WOJ.Id");
+           let jobName =  component.get("v.WOJ.Name");
+
            
            var JobObject = component.get("v.mapCannedJob")[cannedJobName];
-           console.log('JobObject',JSON.stringify(component.get("v.mapCannedJob")));
+           
+           if(typeof jobId != "undefined" && jobId != null && jobId != ''){
+                JobObject.Id = jobId;
+                JobObject.Name = jobName;
+              
+                var action = component.get("c.deleteJobLineItemsfromJob");
+                action.setParams({
+                 "jobId": jobId
+                });
+                action.setCallback(this, function(response){
+                   
+                    // deleting the  jobs  li silently 
+                });
+
+                $A.enqueueAction(action);
+                
+           }else{
+                JobObject.Id = 'CJ';
+           }
+           if(typeof JobObject.BOATBUILDING__Work_Order_Job_Line_Items__r != "undefined" && JobObject.BOATBUILDING__Work_Order_Job_Line_Items__r.length > 0){
+                for(let i = 0; i < JobObject.BOATBUILDING__Work_Order_Job_Line_Items__r.length; i++){
+                     var currentli =  JobObject.BOATBUILDING__Work_Order_Job_Line_Items__r[i];
+                     
+                    if(typeof currentli.BOATBUILDING__Select_Part__r != "undefined" && currentli.BOATBUILDING__Select_Part__r.BOATBUILDING__Part_MSRP_Price__c != '' && currentli.BOATBUILDING__Select_Part__r.BOATBUILDING__Part_MSRP_Price__c != null){
+                        JobObject.BOATBUILDING__Work_Order_Job_Line_Items__r[i].BOATBUILDING__Price__c = currentli.BOATBUILDING__Select_Part__r.BOATBUILDING__Part_MSRP_Price__c;
+                    }
+                    else if(typeof currentli.BOATBUILDING__Part__r != "undefined" && currentli.BOATBUILDING__Part__r.BOATBUILDING__Retail_Price__c != '' && currentli.BOATBUILDING__Part__r.BOATBUILDING__Retail_Price__c != null){
+                        JobObject.BOATBUILDING__Work_Order_Job_Line_Items__r[i].BOATBUILDING__Price__c = currentli.BOATBUILDING__Part__r.BOATBUILDING__Retail_Price__c;
+                    } 
+                    
+                    if(typeof currentli.BOATBUILDING__Select_Part__r != "undefined" && currentli.BOATBUILDING__Select_Part__r.BOATBUILDING__Cost__c != '' && currentli.BOATBUILDING__Select_Part__r.BOATBUILDING__Cost__c != null){
+                        console.log('this is inside part');
+                        JobObject.BOATBUILDING__Work_Order_Job_Line_Items__r[i].BOATBUILDING__Dealer_Price__c = currentli.BOATBUILDING__Select_Part__r.BOATBUILDING__Cost__c;
+                    }
+                    else if(typeof currentli.BOATBUILDING__Part__r != "undefined" && currentli.BOATBUILDING__Part__r.BOATBUILDING__Part_Cost__c != '' && currentli.BOATBUILDING__Part__r.BOATBUILDING__Part_Cost__c != null){
+                        JobObject.BOATBUILDING__Work_Order_Job_Line_Items__r[i].BOATBUILDING__Dealer_Price__c = currentli.BOATBUILDING__Part__r.BOATBUILDING__Part_Cost__c;
+                    }  
+                    
+                    
+                }
+           }
+           
+           console.log('--------', JSON.stringify(JobObject));
+           JobObject.BOATBUILDING__Work_Order_Warranty_Work_Order__c = component.get("v.workOrderId");
+           //console.log('JobObject',JSON.stringify(component.get("v.mapCannedJob")));
+           //console.log('JobObject',component.get("v.recordId")+'==='+component.get("v.workOrderId"));
+
            component.set("v.WOJ",JobObject);
+
            component.set("v.WOJ.BOATBUILDING__Work_Type__c",JobObject.BOATBUILDING__Work_Type__c)
            var multiplier = component.get("v.mapWTP")[component.get("v.WOJ.BOATBUILDING__Work_Type__c")];
-           console.log('multiplier',component.get("v.mapWTPNew"));
+           component.set("v.laborPriceMultiplier",multiplier);
+           component.set("v.WOJ.laborPriceMultiplier",multiplier);
+           helper.updatejobTotalHelper(component, event, helper);
+           var multiplier = component.get("v.mapWTP")[component.get("v.WOJ.BOATBUILDING__Work_Type__c")];
+           //console.log('multiplier',component.get("v.mapWTPNew"));
            component.set("v.laborPriceMultiplier",multiplier);
        }
        else{
@@ -152,7 +214,7 @@
     
             var index = event.target.dataset.index;
             var value = event.target.dataset.value;
-            console.log(index +'----'+value);
+            //console.log(index +'----'+value);
             helper.removeJobLineItem(component, index);
             if(typeof value != "undefined"){
                 var deleteAction =  component.get("c.deleteJobLineItem ");
@@ -184,9 +246,17 @@
                 var recordType = component.get("v.recordType");
                 if(typeof recordType != "undefined"){
                     if(recordType == 'Work Order'){
+                        if(typeof wojli[i].BOATBUILDING__Price__c == "undefined" || wojli[i].BOATBUILDING__Price__c == null || isNaN(wojli[i].BOATBUILDING__Price__c)){
+                            wojli[i].BOATBUILDING__Price__c = 0.00;
+                        }
+                        
                         partsTotal = partsTotal + wojli[i].BOATBUILDING__Price__c * wojli[i].BOATBUILDING__Quantity__c;
                     }
                     else{
+                        if(typeof wojli[i].BOATBUILDING__Dealer_Price__c == "undefined" || wojli[i].BOATBUILDING__Dealer_Price__c == null || isNaN(wojli[i].BOATBUILDING__Dealer_Price__c)){
+                            wojli[i].BOATBUILDING__Dealer_Price__c = 0.00;
+                        }
+                        
                         partsTotal = partsTotal + wojli[i].BOATBUILDING__Dealer_Price__c * wojli[i].BOATBUILDING__Quantity__c;
 
                     }
@@ -195,11 +265,12 @@
                 
             }
             if(component.isValid()){
+                partsTotal = partsTotal.toFixed(2);
                 component.set("v.partsTotal",partsTotal);
                 if(typeof component.get("v.WOJ") != "undefined"){
                     component.set("v.WOJ.partsTotal",partsTotal);
                 }
-                console.log('calling JOb Total if');
+                //console.log('calling JOb Total if');
                 helper.updatejobTotalHelper(component, event, helper);
             }
            
@@ -210,7 +281,7 @@
                 if(typeof component.get("v.WOJ") != "undefined"){
                     component.set("v.WOJ.partsTotal",0.00);
                 }
-                console.log('calling JOb Total');
+                //console.log('calling JOb Total');
                helper.updatejobTotalHelper(component, event, helper);
             }
         }
@@ -245,7 +316,7 @@
         var searchAction = component.get("c.loadSrviceUsers");
        
         searchAction.setCallback(this, function(response){
-                console.log('searchResult',response.getReturnValue());
+                //console.log('searchResult',response.getReturnValue());
                 component.set("v.searchResults", response.getReturnValue());
         });
 
@@ -254,7 +325,7 @@
         
     }, 
     itemSelected : function(component, event, helper){
-        console.log('liselected',JSON.stringify(event.target.dataset));
+        //console.log('liselected',JSON.stringify(event.target.dataset));
         var label = event.currentTarget.dataset.label;
         var value = event.currentTarget.dataset.value;
         //alert(label+'---'+value);
@@ -263,12 +334,12 @@
        component.set("v.selectedRecordId",value);
        
        var searchResultArray = component.get("v.searchResults");
-       console.log('searchResultArray',searchResultArray);
-       console.log('searchResultArrayValue',value);
+       //console.log('searchResultArray',searchResultArray);
+       //console.log('searchResultArrayValue',value);
        for(var i = 0; i < searchResultArray.length; i++){
-        console.log('selectedpartsbefore',searchResultArray[i]);
+        //console.log('selectedpartsbefore',searchResultArray[i]);
             if(searchResultArray[i].Id == value){
-                console.log('selectedparts',searchResultArray[i]);
+                //console.log('selectedparts',searchResultArray[i]);
                 component.set("v.WOJ.BOATBUILDING__Technician__c",searchResultArray[i].Id);
                 break;
             }
@@ -287,8 +358,8 @@
     calculateTaxOnJOb : function(component, event, helper){
         if(component.get("v.recordType") != 'Warranty Work Order'){
             var storeLocationVal = event.getParams();
-            console.log('epObject',JSON.stringify(storeLocationVal));
-                console.log('ep',storeLocationVal.storeLocation);
+            //console.log('epObject',JSON.stringify(storeLocationVal));
+                //console.log('ep',storeLocationVal.storeLocation);
             //helper.updatejobTotalHelper(component, event, helper);
             helper.jobTaxCalcualtion(component, event, helper, storeLocationVal.storeLocation);
         }

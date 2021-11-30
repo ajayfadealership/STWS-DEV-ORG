@@ -8,5 +8,5 @@
     <masterLabel>Boat Builder</masterLabel>
     <openType>onClickJavaScript</openType>
     <protected>false</protected>
-    <url>window.open(&#39;/apex/BOATBUILDING__ProductOrder?invId={!Inventory__c.Id}&#39;);</url>
+    <url>window.open(&apos;/apex/BOATBUILDING__ProductOrder?invId={!Inventory__c.Id}&apos;);</url>
 </WebLink>

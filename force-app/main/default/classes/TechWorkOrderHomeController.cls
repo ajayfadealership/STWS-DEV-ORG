@@ -5,12 +5,15 @@ public class TechWorkOrderHomeController {
         Set<String> setWOId = new Set<String>();
         List<BOATBUILDING__Time_Management__c> lstTimeMgmt = new List<BOATBUILDING__Time_Management__c>();
         Date dateRange1 = Date.Today().addDays(-dateRange) ;
+       // Integer intDateRange = Integer.valueOf(dateRange);
         lstTimeMgmt = [SELECT Id, BOATBUILDING__Schedule_Date_Time__c, BOATBUILDING__Technician__c, 
                        BOATBUILDING__Related_Work_Order_Job__c,BOATBUILDING__Related_Work_Order_Job__r.BOATBUILDING__Work_Order_Warranty_Work_Order__c,
                        BOATBUILDING__Work_Order__c,BOATBUILDING__Work_Order__r.Name,BOATBUILDING__Work_Order__r.BOATBUILDING__Contact__r.Name,
                        BOATBUILDING__Work_Order__r.BOATBUILDING__BOAT__r.BOATBUILDING__Boat_HIN_No__c FROM BOATBUILDING__Time_Management__c 
                        WHERE BOATBUILDING__Technician__c =:technician 
-                       AND BOATBUILDING__Schedule_Date_Time__c <= TODAY AND BOATBUILDING__Schedule_Date_Time__c >= :dateRange1];   
+                       AND 
+                       //BOATBUILDING__Schedule_Date_Time__c =: LAST_N_DAYS: intDateRange ];
+                       BOATBUILDING__Schedule_Date_Time__c <= TODAY AND BOATBUILDING__Schedule_Date_Time__c >= :dateRange1];   
         System.debug('>>>>>lstTimeMgmt'+ lstTimeMgmt);
         
         List<WorkOrderWrapper> lstWOWrap = new  List<WorkOrderWrapper>();
@@ -45,12 +48,13 @@ public class TechWorkOrderHomeController {
     }
     @AuraEnabled
     public static List<Object> getTodaysWO() {
-        List<WorkOrderWrapper> lstWorkOrderWrapper = new List<WorkOrderWrapper>();
+       
         List<BOATBUILDING__Time_Management__c> lstTM = [SELECT Id, BOATBUILDING__Work_Order__c, BOATBUILDING__Related_Work_Order_Job__c 
                                                         FROM BOATBUILDING__Time_Management__c 
                                                         WHERE RecordType.DeveloperName = 'Schedule' AND BOATBUILDING__Schedule_Date_Time__c <= TODAY 
                                                         AND BOATBUILDING__End_Schedule_Date_Time__c >= TODAY];
-        System.debug('>>>: '+lstTM);
+        System.debug('>>> lstTM :'+lstTM);
+         List<WorkOrderWrapper> lstWorkOrderWrapper = new List<WorkOrderWrapper>();
         if(!lstTM.isEmpty()) {
             Set<String> setWOId = new Set<String>();
             Set<String> setWOJId = new Set<String>();

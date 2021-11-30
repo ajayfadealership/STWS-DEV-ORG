@@ -1,0 +1,103 @@
+<aura:component implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction" access="global">
+    
+    <div class="slds-grid slds-wrap">
+        <div class="slds-col slds-size_1-of-3">
+            <c:InventoryPictureUploader recordId="{!v.recordId}" fileName="Side__c" fileLabel="Side" />
+        </div>
+        <div class="slds-col slds-size_1-of-3">
+            <c:InventoryPictureUploader recordId="{!v.recordId}" fileName="B_Roll__c" fileLabel="B Roll" />
+        </div>
+        <div class="slds-col slds-size_1-of-3">
+            <c:InventoryPictureUploader recordId="{!v.recordId}" fileName="Trailer_wheels__c" fileLabel="Trailer wheels" />
+        </div>
+        <div class="slds-col slds-size_1-of-3">
+            <c:InventoryPictureUploader recordId="{!v.recordId}" fileName="Bow__c" fileLabel="Bow" />
+
+        </div>
+        <div class="slds-col slds-size_1-of-3">
+            <c:InventoryPictureUploader recordId="{!v.recordId}" fileName="Cabin__c" fileLabel="Cabin" />
+
+        </div>
+        <div class="slds-col slds-size_1-of-3">
+            <c:InventoryPictureUploader recordId="{!v.recordId}" fileName="Cooler__c" fileLabel="Cooler" />
+
+        </div>
+        <div class="slds-col slds-size_1-of-3">
+            <c:InventoryPictureUploader recordId="{!v.recordId}" fileName="Dash_cluster__c" fileLabel="Dash cluster" />
+
+        </div>
+        <div class="slds-col slds-size_1-of-3">
+            <c:InventoryPictureUploader recordId="{!v.recordId}" fileName="Board_racks__c" fileLabel="Board racks" />
+
+        </div>
+        <div class="slds-col slds-size_1-of-3">
+            <c:InventoryPictureUploader recordId="{!v.recordId}" fileName="Dash_Screen__c" fileLabel="Dash Screen" />
+
+        </div>
+        <div class="slds-col slds-size_1-of-3">
+            <c:InventoryPictureUploader recordId="{!v.recordId}" fileName="Interior_Design_Bow__c" fileLabel="Interior Design Bow" />
+
+        </div>
+        <div class="slds-col slds-size_1-of-3">
+            <c:InventoryPictureUploader recordId="{!v.recordId}" fileName="Phone_holder__c" fileLabel="Phone holder" />
+        </div>
+        <div class="slds-col slds-size_1-of-3">
+            <c:InventoryPictureUploader recordId="{!v.recordId}" fileName="Phone_holder__c" fileLabel="Phone holder" />
+
+        </div>
+        <div class="slds-col sl ds-size_1-of-3">
+            <c:InventoryPictureUploader recordId="{!v.recordId}" fileName="Running_gear__c" fileLabel="Running gear" />
+
+        </div>
+        <div class="slds-col slds-size_1-of-3">
+            <c:InventoryPictureUploader recordId="{!v.recordId}" fileName="Surf_system__c" fileLabel="Surf system" />
+
+        </div>
+
+        <div class="slds-col slds-size_1-of-3">
+            <c:InventoryPictureUploader recordId="{!v.recordId}" fileName="Tower_speakers__c" fileLabel="Tower speakers" />
+
+        </div>
+
+        <div class="slds-col slds-size_1-of-3">
+            <c:InventoryPictureUploader recordId="{!v.recordId}" fileName="Backup_camera__c" fileLabel="Backup camera" />
+
+        </div>
+        <div class="slds-col slds-size_1-of-3">
+            <c:InventoryPictureUploader recordId="{!v.recordId}" fileName="Engine_Compartment__c" fileLabel="Engine Compartment" />
+
+        </div>
+        <div class="slds-col slds-size_1-of-3">
+            <c:InventoryPictureUploader recordId="{!v.recordId}" fileName="Transom_remote__c" fileLabel="Transom remote" />
+
+        </div>
+        <div class="slds-col slds-size_1-of-3">
+            <c:InventoryPictureUploader recordId="{!v.recordId}" fileName="Transom__c" fileLabel="Transom" />
+
+        </div>
+        <div class="slds-col slds-size_1-of-3">
+            <c:InventoryPictureUploader recordId="{!v.recordId}" fileName="Speed_Wakeplate_levers__c" fileLabel="Speed Wakeplate levers" />
+
+        </div>
+        <div class="slds-col slds-size_1-of-3">
+            <c:InventoryPictureUploader recordId="{!v.recordId}" fileName="Walkthrough__c" fileLabel="Walkthrough" />
+
+        </div>
+        <div class="slds-col slds-size_1-of-3">
+            <c:InventoryPictureUploader recordId="{!v.recordId}" fileName="Underwater_Lights__c" fileLabel="Underwater Lights" />
+
+        </div>
+        <div class="slds-col slds-size_1-of-3">
+            <c:InventoryPictureUploader recordId="{!v.recordId}" fileName="Convertible_Seating__c" fileLabel="Convertible Seating" />
+
+        </div>
+        <div class="slds-col slds-size_1-of-3">
+            <c:InventoryPictureUploader recordId="{!v.recordId}" fileName="Steering_wakeplate_controls__c" fileLabel="Steering wakeplate controls" />
+
+        </div>
+
+    </div>
+    
+  
+
+</aura:component>

@@ -159,11 +159,11 @@
     <label>Manufacturer</label>
     <nameField>
         <label>Manufacturer Name</label>
-        <trackHistory>false</trackHistory>
+        <trackHistory>true</trackHistory>
         <type>Text</type>
     </nameField>
     <pluralLabel>Manufacturers/Vendor</pluralLabel>
-    <recordTypeTrackHistory>false</recordTypeTrackHistory>
+    <recordTypeTrackHistory>true</recordTypeTrackHistory>
     <searchLayouts>
         <customTabListAdditionalFields>Manufacturer_name__c</customTabListAdditionalFields>
         <lookupDialogsAdditionalFields>Manufacturer_name__c</lookupDialogsAdditionalFields>

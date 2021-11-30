@@ -3,9 +3,8 @@
     <fullName>Trailer_Model__c</fullName>
     <deprecated>false</deprecated>
     <externalId>false</externalId>
-    <formula>Contact_Name__r.Account.Trade_Boat_Trailer_Model__c</formula>
-    <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
-    <label>Trailer Model</label>
+    <formula>TrailerModel__c</formula>
+    <label>Trailer Model Formula</label>
     <required>false</required>
     <trackHistory>false</trackHistory>
     <trackTrending>false</trackTrending>

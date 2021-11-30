@@ -3,7 +3,7 @@
     <fullName>Specify_Credit_Card_Rule</fullName>
     <active>false</active>
     <description>Credit Card Type must be specified if the payment is made through Credit Card.</description>
-    <errorConditionFormula>ISPICKVAL(Payment_Type__c , &#39;Credit_Card&#39;) &amp;&amp;  ISBLANK(Text( Credit_Card_Type__c ))</errorConditionFormula>
+    <errorConditionFormula>ISPICKVAL(Payment_Type__c , &apos;Credit_Card&apos;) &amp;&amp;  ISBLANK(Text( Credit_Card_Type__c ))</errorConditionFormula>
     <errorDisplayField>Credit_Card_Type__c</errorDisplayField>
     <errorMessage>Credit Card Type must be specified if the payment is made through Credit Card.</errorMessage>
 </ValidationRule>

@@ -1,10 +1,13 @@
 public class AccountDetailExtensionController {
-    public Account acct {get; set;}
+    public BOATBUILDING__Customer_Inquiry__c objCI {get; set;}
+    //public Account acct {get; set;}
     //String myAttchId;
     private Boolean isError;
+    public String blankSet { get; set; }
     public AccountDetailExtensionController(ApexPages.StandardController stdController) {
-        this.acct = (Account)stdController.getRecord();
-        acct = [SELECT Id, Lead_Account_History__r.Name,Email__c, BOATBUILDING__Source_URL__c, Lead_Account_History__r.Contact_Phone__c,BOATBUILDING__Lead_Account_History__r.BOATBUILDING__Work_Phone__c FROM Account WHERE Id =: acct.Id];
+        this.objCI = (BOATBUILDING__Customer_Inquiry__c)stdController.getRecord();
+        //acct = [SELECT Id, Lead_Account_History__r.Name,Email__c, BOATBUILDING__Source_URL__c, Lead_Account_History__r.Contact_Phone__c,BOATBUILDING__Lead_Account_History__r.BOATBUILDING__Work_Phone__c FROM Account limit 1]; // WHERE Id =: acct.Id
+    	blankSet = '';
     }
     public pagereference printaccount()
     {
@@ -24,7 +27,7 @@ isError = true;
 // Apexpages.addMessage(new Apexpages.Message(Apexpages.Severity.FATAL,ex.getMessage()));
 }
 }*/
-        return new PageReference('/apex/accountpdf?id='+acct.Id);
+        return new PageReference('/apex/Accountpdf?id='+objCI.Id);
         
     }
 }

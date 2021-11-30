@@ -18,7 +18,7 @@
     <br/>
     <div class="slds-grid slds-gutters" style="border-radius: 0.5em; padding: 2%; border: 1px solid #cccccc;">
         <div class="slds-col">
-            State<br/>
+            State<span style="color: red;">*</span><br/>
             <select class="slds-select" id="regStateST" onchange="{!c.updateState}">
                 <option value="">--None--</option>
                 <aura:iteration items="{!v.StateSelect}" var="item">

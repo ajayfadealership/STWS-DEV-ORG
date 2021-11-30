@@ -27,6 +27,16 @@
                 <default>false</default>
                 <label>Kids</label>
             </value>
+            <value>
+                <fullName>male</fullName>
+                <default>false</default>
+                <label>male</label>
+            </value>
+            <value>
+                <fullName>female</fullName>
+                <default>false</default>
+                <label>female</label>
+            </value>
         </valueSetDefinition>
     </valueSet>
 </CustomField>

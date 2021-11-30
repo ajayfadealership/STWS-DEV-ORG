@@ -236,28 +236,77 @@
                     <td style="" class="no-border">&nbsp;</td>
                     <td style="padding: 6px; border-collapse: collapse; padding: 6px; border: 1px solid #666;" colspan="2" rowspan="5"><apex:outputField value="{!objInvoice.Comments_Notes__c}"/></td>
                     <td style="" class="no-border">&nbsp;</td>
-                    <td style="" class="no-border">&nbsp;</td>
-                    <td style="font-size: 13px;" class="no-border">Promo Code Discount</td>
+                    <!-- <td style="" class="no-border">&nbsp;</td> -->
+                    <td colspan="2" style="font-size: 13px;"  class="no-border">Promo Code Discount</td>
                     <td style="font-size: 13px; border-collapse: collapse; padding: 6px; border: 1px solid #666;" >$<apex:outputText value="{!objInvoice.Discount_With_Promocode__c}"/></td>
                 </tr>
                 
                 <tr>
                     <td style="" class="no-border">&nbsp;</td>
                     <td style="" class="no-border">&nbsp;</td>
-                    <td style="" class="no-border">&nbsp;</td>
-                    <td style="font-size: 13px;" class="no-border">Total Due </td>
+                    <!-- <td style="" class="no-border">&nbsp;</td> -->
+                    <td colspan="2" style="font-size: 13px;" class="no-border">Total Due </td>
                     <td style="font-size: 13px; border-collapse: collapse; padding: 6px; border: 1px solid #666;" >$<apex:outputText value="{!objInvoice.Total_Due_After_Promo__c}"/></td>
                 </tr>
-                
                 <tr>
                     <td style="" class="no-border">&nbsp;</td>
                     <td style="" class="no-border">&nbsp;</td>
-                    <td style="" class="no-border">&nbsp;</td>
-                    <td style="font-size: 13px;" class="no-border">SALES TAX @ <apex:outputField value="{!objInvoice.Sales_TaxPer__c}"/></td>
-                    <td style="font-size: 13px; border-collapse: collapse; padding: 6px; border: 1px solid #666;" >$<apex:outputText value="{!objInvoice.Sales_Tax_Formula__c}"/></td>
+                    <!-- <td style="" class="no-border">&nbsp;</td> -->
+                    <td colspan="2" style="font-size: 13px;" class="no-border">Discount</td>
+                    <td style="font-size: 13px; border-collapse: collapse; padding: 6px; border: 1px solid #666;" >$<apex:outputText value="{!objInvoice.Discount_on_Invoice__c}"/></td>
                 </tr>
                 
                 <tr>
+                    <td style="" class="no-border">&nbsp;</td>
+                    <td style="" class="no-border">&nbsp;</td>
+                    <!-- <td style="" class="no-border">&nbsp;</td> -->
+                    <td colspan="2" style="font-size: 13px;" class="no-border">
+                        <apex:outputPanel rendered="{!!isCanadian}">
+                            SALES TAX (<apex:outputText value="{!objInvoice.Billing_State_Province__c}"></apex:outputText>)
+                            <!--<apex:outputPanel rendered="{!objInvoice.RecordType.DeveloperName != 'Web_Invoices'}"> 
+                                @ <apex:outputField value="{!objInvoice.Sales_TaxPer__c}"/>
+                            </apex:outputPanel>-->
+                        </apex:outputPanel>
+                    </td>
+                    <td style="font-size: 13px; border-collapse: collapse; padding: 6px; border: 1px solid #666;" >
+                        <apex:outputPanel rendered="{!!isCanadian}">
+                            $<apex:outputText value="{!objInvoice.Sales_Tax_Formula__c}"/>
+                        </apex:outputPanel>    
+                    </td>
+                </tr>
+                <tr>
+                    <td style="" class="no-border">&nbsp;</td>
+                    <td style="" class="no-border">&nbsp;</td>
+                    <!-- <td style="" class="no-border">&nbsp;</td> -->
+                    <td colspan="2" style="font-size: 13px;" class="no-border">
+                        <apex:outputPanel rendered="{!isCanadian}">
+                            GST(<apex:outputField value="{!objInvoice.GST__c}"/>)
+                        </apex:outputPanel>
+                    </td>
+                    <td style="font-size: 13px; border-collapse: collapse; padding: 6px; border: 1px solid #666;" >
+                        <apex:outputPanel rendered="{!isCanadian}">
+                            <apex:outputField value="{!objInvoice.GST_D__c}"/>
+                        </apex:outputPanel>    
+                    </td>
+                </tr>
+                <tr>
+                    <td style="" class="no-border">&nbsp;</td>
+                    <td style="" class="no-border">&nbsp;</td>
+                    <!-- <td style="" class="no-border">&nbsp;</td> -->
+                    <td colspan="2" style="font-size: 13px;" class="no-border">
+                        <apex:outputPanel rendered="{!isCanadian}">
+                            PST(<apex:outputField value="{!objInvoice.PST__c}"/>)
+                        </apex:outputPanel>
+                    </td>
+                    <td style="font-size: 13px; border-collapse: collapse; padding: 6px; border: 1px solid #666;" >
+                        <apex:outputPanel rendered="{!isCanadian}">
+                            <apex:outputField value="{!objInvoice.PST_D__c}"/>
+                        </apex:outputPanel>    
+                    </td>
+                </tr>
+                
+                <tr>
+                    <td style="" class="no-border">&nbsp;</td>
                     <td style="" class="no-border">&nbsp;</td>
                     <td style="" class="no-border" >&nbsp;</td>
                     <td style="" class="no-border">&nbsp;</td>
@@ -268,6 +317,7 @@
                 
                 <tr>
                     <td style="" class="no-border">&nbsp;</td>
+                    <td style="" class="no-border">&nbsp;</td>
                     <td style="" class="no-border" >&nbsp;</td>
                     <td style="" class="no-border">&nbsp;</td>
                     <td style="font-size: 13px;" class="no-border" >TOTAL</td>
@@ -276,12 +326,14 @@
                 </tr>
                 <tr>
                     <td style="" class="no-border">&nbsp;</td>
+                    <td style="" class="no-border">&nbsp;</td>
                     <td style="" class="no-border" >&nbsp;</td>
                     <td style="" class="no-border">&nbsp;</td>
                     <td style="font-size: 13px;" class="no-border">PAID</td>
-                    <td style="font-size: 13px; border-collapse: collapse; padding: 6px; border: 1px solid #666;">$<apex:outputText value="{!objInvoice.Total_Payment_Formula__c}"/></td>
+                    <td style="font-size: 13px; border-collapse: collapse; padding: 6px; border: 1px solid #666;">$<apex:outputText value="{!objInvoice.Total_Payment__c}"/></td>
                 </tr>
                 <tr>
+                    <td style="" class="no-border">&nbsp;</td>
                     <td style="" class="no-border">&nbsp;</td>
                     <td style="" class="no-border" >&nbsp;</td>
                     <td style="" class="no-border">&nbsp;</td>

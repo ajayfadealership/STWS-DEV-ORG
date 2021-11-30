@@ -12,7 +12,10 @@
             component.set("v.poRecordTypeId", response.getReturnValue());
         }); 
         $A.enqueueAction(action);
-        helper.fetchManuHelper(component, event, '', component.get("v.objRecId"));
+        if(component.get("v.objRecId") != '' && component.get("v.objRecId") != null){
+            helper.fetchManuHelper(component, event, '', component.get("v.objRecId"));
+        }
+      
     },
     
     handleLoad : function(component, event, helper) { }
@@ -22,8 +25,10 @@
     handleSuccess : function(component, event, helper) {
         var payload = event.getParams().response;
         console.log(payload.id);
+       
         if(payload.id != undefined && payload.id != null) {
             var poLineItems = component.get("v.lineItems");
+             console.log('>>>>>>%%%'+JSON.stringify(poLineItems));
             var action = component.get("c.updatePOwithLineItems");
             action.setParams({
                 "strPOId" : payload.id,
@@ -84,7 +89,12 @@
     },
     fetchManuDetails : function(component, event, helper) {
         var manuId = component.find("opVendorName").get("v.value");
+      
+        console.log('manuId',manuId[0]);
+        if(typeof manuId != "undefined" && manuId.length > 0)
+        manuId = manuId[0];
         if(manuId != null && manuId != undefined && manuId != '') {
+            
             helper.fetchManuHelper(component, event, manuId, '');
         } else {
             component.set("v.objManu", {'sobjectType': 'BOATBUILDING__Manufacturer__c'});
@@ -99,7 +109,8 @@
             POLI.PartNumber = ''; 
             POLI.PartName = ''; 
             POLI.Quantity = 0; 
-            POLI.Cost = 0.00;  
+            POLI.Cost = 0.00; 
+            POLI.SortingOrder = '';
             lstLineItem.push(POLI);
             component.set("v.lineItems", lstLineItem);
         } else if(lstLineItem.length > 0) {
@@ -117,6 +128,7 @@
             POLI.PartName = ''; 
             POLI.Quantity = 0; 
             POLI.Cost = 0.00;  
+            POLI.SortingOrder = '';
             lstLineItem.push(POLI);
             component.set("v.lineItems", lstLineItem);
         }

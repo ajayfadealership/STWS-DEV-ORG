@@ -6,7 +6,7 @@
     <externalId>false</externalId>
     <label>WO For</label>
     <referenceTo>Work_Order__c</referenceTo>
-    <relationshipLabel>Orders</relationshipLabel>
+    <relationshipLabel>Parts Requests</relationshipLabel>
     <relationshipName>Orders</relationshipName>
     <required>false</required>
     <trackFeedHistory>false</trackFeedHistory>

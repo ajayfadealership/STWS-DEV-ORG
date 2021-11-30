@@ -33,5 +33,9 @@ public class DeploymentHelperTest{
         dd.method28();
         dd.method29();
         dd.method30();
+        dd.method31();
+        dd.method32();
+        dd.method33();
+        dd.method34();
     }
 }

@@ -10,7 +10,7 @@
     <url>{!REQUIRESCRIPT(&quot;/soap/ajax/30.0/connection.js&quot;)}
 {!REQUIRESCRIPT(&quot;/soap/ajax/30.0/apex.js&quot;)}
 
-alert(&#39;We have initiated the process.&#39;);
+alert(&apos;We have initiated the process.&apos;);
 var res = sforce.apex.execute(&quot;BOATBUILDING.WooCommerce_Connect&quot;,&quot;savePartsToWooCommerce&quot;,{strPartId:&quot;{!Part__c.Id}&quot;});
 console.log(res);</url>
 </WebLink>

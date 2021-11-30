@@ -1,9 +1,16 @@
 <apex:page sidebar="false" showHeader="false" lightningStylesheets="true">
     <apex:slds />
-    <a href="https://fadsite.secure.force.com/SupportCaseList?username={!$User.Username}&userid={!$User.Id}" class="slds-button slds-button_success" >Help and Support</a>
+    <!--  <a href="https://fadsite.secure.force.com/SupportCaseList?username={!$User.Username}&userid={!$User.Id}" class="slds-button slds-button_success" >Help and Support</a> -->
+    <h1 style="font-size:16px" title="Help And Support"><b> Help And Support</b></h1> 
+    <ul class="slds-list_dotted">
+        <li style="font-size:15px"><a href="https://fadsite.secure.force.com/SupportCaseList?username={!$User.Username}&userid={!$User.Id}">My cases</a></li>
+       <span> <li style="font-size:15px"><a href="javascript:void(0)">Knowledge Base</a><p style="font-size:13px">
+            (coming soon)
+            </p></li> </span> 
+    </ul>
     <br/>
-    <br/>
+    
     <span>
-	    <b>Contact Us: <a href="tel:+17044123049">(704)-412-3049</a></b>
+        <b>Contact Us: <a href="tel:+17044123049">(704)-412-3049</a></b>
     </span> 
 </apex:page>

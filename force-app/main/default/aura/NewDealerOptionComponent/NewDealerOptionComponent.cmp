@@ -1,6 +1,8 @@
-<aura:component controller="NewDealerOptionController">
+<aura:component controller="NewDealerOptionController" access="global">
     <aura:attribute name="newPLstDealerOptionWraperND" type="DealerOptionWraper[]"/>
     <aura:attribute name="DealerOptionIdListCCCC" type="String[]"/>
+    <aura:attribute name="DealerOptionIdListQTCCCC" type="String[]"/>
+    <aura:attribute name="doBool" type="boolean" default="false"/>
     <div style="border: 5px solid #d9dee6; padding: 2%; position: fixed; top: 20%; left: 30%; z-index: 999; background: #fff; border-radius: 14px; height: auto; width: 500px;">
         <div>
             <a onclick="{!c.hideDOPopup}"><lightning:icon iconName="action:close" size="x-small" style="position: absolute; bottom: 85%; right: 3%;" class="checkClass"/></a>
@@ -23,6 +25,19 @@
                     </td>
                     <td>
                         <input class="slds-input" id="decIdBB" type="text"/>
+                    </td> 
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        &nbsp;
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        Quantity
+                    </td>
+                    <td>
+                        <input class="slds-input" id="qtIdBB" type="number" value="1"/>
                     </td> 
                 </tr>
                 <tr>

@@ -5,7 +5,7 @@
     <externalId>false</externalId>
     <formula>ACV_Form__r.Approved_ACV__c</formula>
     <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
-    <inlineHelpText>Comes From ACV Form object&#39;s Approved ACV field.</inlineHelpText>
+    <inlineHelpText>Comes From ACV Form object&apos;s Approved ACV field.</inlineHelpText>
     <label>Trade ACV</label>
     <precision>18</precision>
     <required>false</required>

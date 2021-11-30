@@ -3,7 +3,7 @@
     <fullName>Comments__c</fullName>
     <deprecated>false</deprecated>
     <externalId>false</externalId>
-    <label>Technician&#39;s Comments</label>
+    <label>Technician&apos;s Comments</label>
     <length>32768</length>
     <trackHistory>false</trackHistory>
     <trackTrending>false</trackTrending>

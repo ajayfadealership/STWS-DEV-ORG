@@ -1,6 +1,11 @@
 public with sharing class InventoryWizardController {
     @AuraEnabled
-    public static String generateInventory(String ProId, List<String> lstProductPrice, List<String> lstDealerOption, Inventory__c objInventory, String lstDO) {
+    public static Boolean isMSPEditable(){
+        return BOATBUILDING__System_Configure__c.getOrgDefaults().BOATBUILDING__Minimum_Sales_Price_Editable__c;
+    }
+
+    @AuraEnabled
+    public static String generateInventory(String ProId, List<String> lstProductPrice, List<String> lstProductPriceQT, List<String> lstDealerOption, Inventory__c objInventory, String lstDO) {
         try {
             System.debug('>>>>>>>>>: '+ProId);
             System.debug('>>>>>>>>>: '+lstProductPrice);
@@ -21,6 +26,11 @@ public with sharing class InventoryWizardController {
             }            
             
             if(lstProductPrice != null && !lstProductPrice.isEmpty()) {
+                Map<String, Double> mapIdQT = new Map<String, Double>();
+                for(String strQT: lstProductPriceQT) {
+                    String []st = strQT.split(':');
+                    mapIdQT.put(st[0], Double.valueOf(st[1]));
+                }
                 List<BOATBUILDING__ProductPrice__c> lstPP =  [SELECT 
                                                                       Id, 
                                                                       Option_Category__c, 
@@ -46,6 +56,7 @@ public with sharing class InventoryWizardController {
                     objILI.Name = 'ILI';
                     objILI.Option_Category__c = objProductPriceForSelectedCategory.Option_Category__c;
                     objILI.Price__c = objProductPriceForSelectedCategory.ProductRetail_Price__c;
+                    objILI.Quantity__C = mapIdQT.get(objProductPriceForSelectedCategory.Id);
                     objILI.Product_Code__c = objProductPriceForSelectedCategory.Product_Code__c ;
                     objILI.Dealer_Price__c = objProductPriceForSelectedCategory.Dealer_Price__c;
                     if(objProductPriceForSelectedCategory.RecordType.Name == 'New Boats') {
@@ -54,8 +65,8 @@ public with sharing class InventoryWizardController {
 	                		objILI.Product_Type__c = objProductPriceForSelectedCategory.RecordType.Name;
 	                } 
                     lstILI.add(objILI);
-                    totalPrice += objProductPriceForSelectedCategory.ProductRetail_Price__c;
-                    totalPriceDealer += objProductPriceForSelectedCategory.Dealer_Price__c;
+                    totalPrice += (objProductPriceForSelectedCategory.ProductRetail_Price__c * objILI.Quantity__C);
+                    totalPriceDealer += (objProductPriceForSelectedCategory.Dealer_Price__c * objILI.Quantity__C);
                 }
                 //totalPrice += MfgOptTota;
                 System.debug('Debug Log For totalPrice: '+totalPrice);
@@ -70,17 +81,19 @@ public with sharing class InventoryWizardController {
 	            		}
 	            }   			
                 //List<DealerOptionWraper> lstDO2 = (List<DealerOptionWraper>)lstDO;
-                List<DealerOptionWraper> lstDO2 = (List<DealerOptionWraper>)JSON.deserialize(lstDO,List<DealerOptionWraper>.class);               
+                List<DealerOptionWraper> lstDO2 = (List<DealerOptionWraper>)JSON.deserialize(lstDO,List<DealerOptionWraper>.class); 
+                System.debug('Debug Log For str:lstDO2'+lstDO2);            
                 for(DealerOptionWraper objDP: lstDO2) {	
                 		System.debug('Debug Log For str: '+objDP);
             			if(setPrtNum.contains(objDP.objDealerOption.Part_Number__c)) {
-	                    Inventory_Line_Item__c objILI = new Inventory_Line_Item__c();
+	                    Inventory_Line_Item__c objILI = new Inventory_Line_Item__c(); 
 	                    objILI.Name = 'ILI';
 	                    objILI.Name__c = objDP.objDealerOption.Name;
 	                    objILI.Option_Category__c = 'Dealer Options';
 	                    objILI.Price__c = objDP.objDealerOption.Retail_Price__c;
 	                    objILI.Dealer_Price__c = objDP.objDealerOption.Cost__c;
-	                    objILI.Product_Code__c = objDP.objDealerOption.Part_Number__c ;
+                        objILI.Product_Code__c = objDP.objDealerOption.Part_Number__c ;   
+                        objILI.BOATBUILDING__Quantity__c = objDP.objDealerOption.BOATBUILDING__Quantity__c;
 	                    objILI.Non_Taxable__c = objDP.objDealerOption.Non_Taxable__c ;
 	                    lstILI.add(objILI);
 	                    totalPrice += objDP.objDealerOption.Retail_Price__c;

@@ -34,13 +34,14 @@ public with sharing class WarrantyWorkOrderControllerClone {
         lstJobs.add(new SelectOption('', '--None--'));
         Id wwojId = Schema.SObjectType.BOATBUILDING__Work_Order_Job__c.getRecordTypeInfosByName().get('Canned Job').getRecordTypeId();
         for(BOATBUILDING__Work_Order_Job__c objJob : [Select Id, Job_Name__c, Name from BOATBUILDING__Work_Order_Job__c Where RecordTypeId =: wwojId limit 999]){
-            lstJobs.add(new SelectOption(objJob.id, objJob.Job_Name__c ));
+            if(String.isNotBlank(objJob.Job_Name__c))
+                lstJobs.add(new SelectOption(objJob.id, objJob.Job_Name__c ));
         }
         List<User> u = [Select Id, Name From User Where UserRole.Name =: 'Service Tech' AND IsActive = true];
         selectedTech = '0'; 
         techList.add(new SelectOption('0', '--None--'));
         for(User objU: u) {
-        	techList.add(new SelectOption(objU.Id, objU.Name));
+            techList.add(new SelectOption(objU.Id, objU.Name));
         }
         Schema.DescribeFieldResult F = BOATBUILDING__Work_Order__c.BOATBUILDING__Store_Location__c.getDescribe();
         List <Schema.PicklistEntry> pickVals = F.getPicklistValues();        
@@ -944,7 +945,7 @@ delete objCase.BOATBUILDING__Work_Order_Jobs__r;
             for(BOATBUILDING__Work_Order_Job__c objWOJ: lstJob) {
                 mapWOJ.put(objWOJ.Id, objWOJ);
             }
-            List<BOATBUILDING__Work_Order_Payment__c> lstWOP = [Select
+            List<BOATBUILDING__Payments__c> lstWOP = [Select
                                                                 Id, Name, BOATBUILDING__Work_Order_Job__c, BOATBUILDING__Claim_Labor_Paid_Amount__c, BOATBUILDING__Misc_Charge_Paid__c, 
                                                                 BOATBUILDING__Parts_Paid_Amount__c, BOATBUILDING__Work_Order_Job__r.BOATBUILDING__Work_Order_Warranty_Work_Order__c,
                                                                 BOATBUILDING__Work_Order_Job__r.BOATBUILDING__Claim_Approval_Date__c, BOATBUILDING__Work_Order_Job__r.BOATBUILDING__Claim_Date__c, 
@@ -953,34 +954,36 @@ delete objCase.BOATBUILDING__Work_Order_Jobs__r;
                                                                 BOATBUILDING__Work_Order_Job__r.BOATBUILDING__Claim_Status_New__c, BOATBUILDING__Work_Order_Job__r.BOATBUILDING__Misc_Charge_Paid__c, 
                                                                 BOATBUILDING__Work_Order_Job__r.BOATBUILDING__Parts_Paid_Amount__c, BOATBUILDING__Work_Order_Job__r.BOATBUILDING__Return_Parts_Amount__c
                                                                 From 
-                                                                BOATBUILDING__Work_Order_Payment__c Where BOATBUILDING__Work_Order_Job__c IN: mapWOJ.keySet()];
-            Map<String, BOATBUILDING__Work_Order_Payment__c> mapWOJP = new Map<String, BOATBUILDING__Work_Order_Payment__c>();
-            for(BOATBUILDING__Work_Order_Payment__c objWOP: lstWOP) {
+                                                                BOATBUILDING__Payments__c Where BOATBUILDING__Work_Order_Job__c IN: mapWOJ.keySet()];
+            Map<String, BOATBUILDING__Payments__c> mapWOJP = new Map<String, BOATBUILDING__Payments__c>();
+            for(BOATBUILDING__Payments__c objWOP: lstWOP) {
                 mapWOJP.put(objWOP.BOATBUILDING__Work_Order_Job__c, objWOP);
-            }		
-            List<BOATBUILDING__Work_Order_Payment__c> lstWOPupsrt = new List<BOATBUILDING__Work_Order_Payment__c>();
+            }       
+            List<BOATBUILDING__Payments__c> lstWOPupsrt = new List<BOATBUILDING__Payments__c>();
             for(BOATBUILDING__Work_Order_Job__c objWOJ: lstJob) { 
                 if(mapWOJP.containsKey(objWOJ.Id)) { 
-                    BOATBUILDING__Work_Order_Payment__c objWOP = mapWOJP.get(objWOJ.Id);
-                    objWOP.BOATBUILDING__Related_to_Warranty_Work_Work_Order__c = objWOJ.BOATBUILDING__Work_Order_Warranty_Work_Order__c;
+                    BOATBUILDING__Payments__c objWOP = mapWOJP.get(objWOJ.Id);
+                    objWOP.BOATBUILDING__Work_Warranty_Order__c = objWOJ.BOATBUILDING__Work_Order_Warranty_Work_Order__c;
                     objWOP.BOATBUILDING__Misc_Charge_Paid__c = objWOJ.BOATBUILDING__Misc_Charge_Paid__c;
                     objWOP.BOATBUILDING__Parts_Paid_Amount__c = objWOJ.BOATBUILDING__Parts_Paid_Amount__c;
                     objWOP.BOATBUILDING__Claim_Labor_Paid_Amount__c = objWOJ.BOATBUILDING__Claim_Labor_Paid_Amount__c;
+                    objWOP.RecordTypeId = Schema.SObjectType.BOATBUILDING__Payments__c.getRecordTypeInfosByName().get('Warranty Work Order').getRecordTypeId();
                     lstWOPupsrt.add(objWOP); 
                 } else {
                     if(objWOJ.BOATBUILDING__Claim_Labor_Paid_Amount__c != null ||
                        objWOJ.BOATBUILDING__Misc_Charge_Paid__c != null || 
                        objWOJ.BOATBUILDING__Parts_Paid_Amount__c != null) {
-                           BOATBUILDING__Work_Order_Payment__c objWOPIns = new BOATBUILDING__Work_Order_Payment__c();
+                           BOATBUILDING__Payments__c objWOPIns = new BOATBUILDING__Payments__c();
                            objWOPIns.BOATBUILDING__Work_Order_Job__c = objWOJ.Id;
-                           objWOPIns.BOATBUILDING__Related_to_Warranty_Work_Work_Order__c = objWOJ.BOATBUILDING__Work_Order_Warranty_Work_Order__c;
+                           objWOPIns.BOATBUILDING__Work_Warranty_Order__c = objWOJ.BOATBUILDING__Work_Order_Warranty_Work_Order__c;
                            objWOPIns.BOATBUILDING__Misc_Charge_Paid__c = objWOJ.BOATBUILDING__Misc_Charge_Paid__c;
                            objWOPIns.BOATBUILDING__Parts_Paid_Amount__c = objWOJ.BOATBUILDING__Parts_Paid_Amount__c;
                            objWOPIns.BOATBUILDING__Claim_Labor_Paid_Amount__c = objWOJ.BOATBUILDING__Claim_Labor_Paid_Amount__c;
+                           objWOPIns.RecordTypeId = Schema.SObjectType.BOATBUILDING__Payments__c.getRecordTypeInfosByName().get('Warranty Work Order').getRecordTypeId();
                            
                            lstWOPupsrt.add(objWOPIns);
                        }
-                }  			
+                }           
             }
             upsert lstWOPupsrt;
         }

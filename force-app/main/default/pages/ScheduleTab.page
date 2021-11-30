@@ -1,8 +1,31 @@
-<apex:page id="pge" lightningStylesheets="True" standardStylesheets="false">
-    <apex:slds />
-    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" />
-    <apex:includeScript value="{!URLFOR($Resource.FC, 'fullcalendar-3.4.0/FC/lib/jquery.min.js')}"/>
-    <apex:form id="frm">
-        <c:ScheduleLightning id="schdlCompCall"/>
-    </apex:form>
+<apex:page id="pge" lightningStylesheets="True" sidebar="false" showHeader="false"  standardStylesheets="false" docType="html-5.0">
+    <!--lightningStylesheets="True" standardStylesheets="false"-->
+    <!--<apex:slds />-->
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.12/css/jquery.dataTables.min.css"/>
+    
+    <script type="text/javascript" src="/js/functions.js"></script>
+    <script src="/soap/ajax/11.1/connection.js"></script>
+    <script src="/soap/ajax/10.0/apex.js"></script>
+    
+    
+    <apex:includeScript value="{!URLFOR($Resource.Signature, 'jquery.min.js')}"/>
+    <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.0/jquery.min.js"/>-->
+    <script src="https://cdn.datatables.net/1.10.12/js/jquery.dataTables.min.js"/>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <apex:stylesheet value="{!URLFOR($Resource.BoatBuilderSR, 'assets/styles/salesforce-lightning-design-system.min.css')}" />
+     
+    <apex:includeScript value="{!URLFOR($Resource.Signature, 'jquery.jqscribble.js')}"/> 
+    <apex:includeScript value="{!URLFOR($Resource.Signature, 'jqscribble.extrabrushes.js')}"/>
+    <script>
+    Visualforce.remoting.timeout = 120000;
+    </script>
+    <html xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" >
+        <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" />
+        
+        <script src="https://cdn.rawgit.com/harvesthq/chosen/gh-pages/chosen.jquery.min.js"></script> 
+        <link href="https://cdn.rawgit.com/harvesthq/chosen/gh-pages/chosen.min.css" rel="stylesheet"/>
+        <apex:form id="frm">
+            <c:ScheduleLightning id="schdlCompCall"/>
+        </apex:form>
+    </html> 
 </apex:page>

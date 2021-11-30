@@ -3,7 +3,7 @@
     <fullName>ACV_Floored_Difference__c</fullName>
     <deprecated>false</deprecated>
     <externalId>false</externalId>
-    <formula>IF(RecordType.DeveloperName = &#39;Used_Boats&#39;,ACV__c - Amount_Boat_Is_Floored__c,0)</formula>
+    <formula>IF(RecordType.DeveloperName = &apos;Used_Boats&apos;,ACV__c - Amount_Boat_Is_Floored__c,0)</formula>
     <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
     <label>ACV Floored Difference</label>
     <precision>18</precision>

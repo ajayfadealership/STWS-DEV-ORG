@@ -11,12 +11,12 @@
             console.log(res);
             if(state == 'SUCCESS') {
                 if(res.getReturnValue() == 'SUCCESS') {
-                	var urlEvent = $A.get("e.force:navigateToURL");
-                    var urlStr = "/"+PartId;
-                    urlEvent.setParams({
-                        "url": urlStr
-                    });
-                    urlEvent.fire();
+                	// var urlEvent = $A.get("e.force:navigateToURL");
+                    // var urlStr = "/"+PartId;
+                    // urlEvent.setParams({
+                    //     "url": urlStr
+                    // });
+                    // urlEvent.fire();
                     $A.get("e.force:closeQuickAction").fire();
                     var toastEvent = $A.get("e.force:showToast");
                     
@@ -29,17 +29,17 @@
                     
                     toastEvent.fire();
                 } else { 
-                    var urlEvent = $A.get("e.force:navigateToURL");
-                    var urlStr = "/"+PartId;
-                    urlEvent.setParams({
-                        "url": urlStr
-                    });
-                    urlEvent.fire();
+                    // var urlEvent = $A.get("e.force:navigateToURL");
+                    // var urlStr = "/"+PartId;
+                    // urlEvent.setParams({
+                    //     "url": urlStr
+                    // });
+                    // urlEvent.fire();
                     $A.get("e.force:closeQuickAction").fire();
                     var toastEvent = $A.get("e.force:showToast");
                      
                     toastEvent.setParams({
-                        title: "Please Wait...",
+                        title: "Error:",
                         message: res.getReturnValue(),
                         type: "error"
                         

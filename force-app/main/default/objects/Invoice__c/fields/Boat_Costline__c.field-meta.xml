@@ -4,7 +4,7 @@
     <deprecated>false</deprecated>
     <externalId>false</externalId>
     <formula>Inventory__r.Boat_Costline__c</formula>
-    <inlineHelpText>Formula :Comes From Inventory&#39;s Boat Costline field.</inlineHelpText>
+    <inlineHelpText>Formula :Comes From Inventory&apos;s Boat Costline field.</inlineHelpText>
     <label>Boat Costline</label>
     <precision>18</precision>
     <required>false</required>

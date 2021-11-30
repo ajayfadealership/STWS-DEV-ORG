@@ -3,20 +3,21 @@
     <aura:attribute name="strProId" type="String"/> 
     <!--Second Tab-->
     <aura:attribute name="ProductPriceIdList" type="String[]"/>
+    <aura:attribute name="ProductPriceIdListQT" type="String[]"/>
     <aura:attribute name="DealerOptionIdList" type="String[]"/> 
-    
+    <aura:attribute name="INVID" type="Id"/>
     <aura:attribute name="lstDealerOptionWraper" type="DealerOptionWraper[]"/>
     
     <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
-    <aura:attribute name="objInv" type="Inventory__c" default="{'sobjectType': 'Inventory__c'}"/>
+    <aura:attribute name="objInv" type="Inventory__c" default="{  'sobjectType' : 'Inventory__c' }"/>
     <aura:handler  event="c:InventoryChildToParent" action="{!c.HandelInvEvent}"/> 
     <aura:attribute name="NoSalesmanWithoutCost" type="boolean" default="false"/>
     <div id="invSpinnerWiz" style="display:none; position: fixed; z-index: 999; left: 0; right: 0; top: 0; bottom: 0; background: #0000004f;">
         <img src="{!$Resource.Process}" style="position: fixed; left: 48%; top: 48%;" width="50" height="50"/>
     </div>
+     
     
-    
-    <article class="slds-card">
+    <article class="slds-card"  style="padding: 1%;">
         <div class="slds-path"> 
             <div class="slds-grid slds-path__track">
                 <div class="slds-grid slds-path__scroller-container">
@@ -82,7 +83,9 @@
                                 
                             </div>
                             <div id="intab-default-2" class="slds-tabs_default__content slds-hide" role="tabpanel" aria-labelledby="tab-default-2__item">
-                                <c:InvProductOption lstDealerOptionWraperC="{!v.lstDealerOptionWraper}" NoSalesmanWithoutCostC="{!v.NoSalesmanWithoutCost}" ProductPriceIdListC="{!v.ProductPriceIdList}" DealerOptionIdListC="{!v.DealerOptionIdList}"/>
+                                <c:InvProductOption lstDealerOptionWraperC="{!v.lstDealerOptionWraper}" NoSalesmanWithoutCostC="{!v.NoSalesmanWithoutCost}" 
+                                                        ProductPriceIdListC="{!v.ProductPriceIdList}"  ProductPriceIdListQTC="{!v.ProductPriceIdListQT}" 
+                                                            DealerOptionIdListC="{!v.DealerOptionIdList}"/>
                             </div> 
                             <div id="intab-default-3" class="slds-tabs_default__content slds-hide" role="tabpanel" aria-labelledby="tab-default-3__item">
                                 <c:InvProductDetails/>
@@ -90,16 +93,18 @@
                             <div id="intab-default-4" class="slds-tabs_default__content slds-hide" role="tabpanel" aria-labelledby="tab-default-4__item">
                                 <c:InvProductPricing/>
                             </div>
-                            <div id="intab-default-5" style="padding: 2%;" class="slds-tabs_default__content slds-hide" role="tabpanel" aria-labelledby="tab-default-5__item">
+                            <div id="intab-default-5" style="padding: 1%;" class="slds-tabs_default__content slds-hide" role="tabpanel" aria-labelledby="tab-default-5__item">
                                 <div class="slds-grid slds-wrap slds-col--padded">
-                                    <h1><b>Dates</b></h1>
+                                    <h1 style="margin-left: .7%;"><b>Dates</b></h1>
                                     <div class="slds-col slds-size--1-of-1">
                                         <div class="slds-grid slds-wrap" >
                                             <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-3 slds-col--padded">
                                                 <div class="slds-form-element">
                                                     <label class="slds-form-element__label">Boat EST Arrival Date:</label>
                                                     <div class="slds-form-element__control">
-                                                        <force:inputField value="{!v.objInv.BOATBUILDING__Boat_EST_Arrival_Date__c}" class="slds-input"/>
+                                                       <!-- <force:inputField value="{!v.objInv.BOATBUILDING__Boat_EST_Arrival_Date__c}" class="slds-input"/>
+                                                        <lightning:inputField value="{!v.objInv.BOATBUILDING__Boat_EST_Arrival_Date__c}" class="slds-input"/>\-->
+                                                         <ui:inputDate value="{!v.objInv.BOATBUILDING__Boat_EST_Arrival_Date__c}" class="slds-input" displayDatePicker="true" />
                                                     </div> 
                                                 </div>
                                             </div>
@@ -107,7 +112,10 @@
                                                 <div class="slds-form-element">
                                                     <label class="slds-form-element__label">Date Arrived:</label>
                                                     <div class="slds-form-element__control">
-                                                        <force:inputField value="{!v.objInv.BOATBUILDING__Date_Arrived__c}" class="slds-input"/>
+                                                        <!-- <force:inputField value="{!v.objInv.BOATBUILDING__Date_Arrived__c}" class="slds-input"/> -->
+                                                         
+                                                          <ui:inputDate value="{!v.objInv.BOATBUILDING__Date_Arrived__c}"  class="slds-input" displayDatePicker="true" />
+                                                        
                                                     </div>
                                                 </div>
                                             </div>
@@ -115,7 +123,11 @@
                                                 <div class="slds-form-element">
                                                     <label class="slds-form-element__label">Curtailment Start Date:</label>
                                                     <div class="slds-form-element__control">
-                                                        <force:inputField value="{!v.objInv.BOATBUILDING__Curtailment_Start_Date__c }" class="slds-input"/>
+                                                         <!-- <force:inputField value="{!v.objInv.BOATBUILDING__Date_Arrived__c}" class="slds-input"/> 
+                                                         <lightning:inputField value="{!v.objInv.BOATBUILDING__Date_Arrived__c}" class="slds-input"/>-->
+                                                         
+                                                        <ui:inputDate value="{!v.objInv.BOATBUILDING__Curtailment_Start_Date__c }" class="slds-input" displayDatePicker="true" />
+                                                       
                                                     </div>
                                                 </div>
                                             </div>
@@ -123,17 +135,20 @@
                                                 <div class="slds-form-element">
                                                     <label class="slds-form-element__label">Interest Start Date:</label>
                                                     <div class="slds-form-element__control">
-                                                        <force:inputField value="{!v.objInv.BOATBUILDING__Interest_Start_Date__c}" class="slds-input"/>
+                                                         <!-- <force:inputField value="{!v.objInv.BOATBUILDING__Interest_Start_Date__c}" class="slds-input"/>
+                                                          <lightning:inputField value="{!v.objInv.BOATBUILDING__Interest_Start_Date__c}" class="slds-input"/>-->
+                                                         <ui:inputDate value="{!v.objInv.BOATBUILDING__Interest_Start_Date__c}"  class="slds-input" displayDatePicker="true" />
                                                     </div>
                                                 </div>
                                             </div>
                                             <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-3 slds-col--padded">
                                                 <div class="slds-form-element">
-                                                    <label class="slds-form-element__label">Floor Plan Bank:</label>
+                                                    <label class="slds-form-element__label">Date on Floor Plan:</label>
                                                     <div class="slds-form-element__control">
-                                                        <force:inputField value="{!v.objInv.BOATBUILDING__Floor_Plan_Bank__c}" class="slds-input"/>
+                                                      <!--  <lightning:inputField value="{!v.objInv.BOATBUILDING__Floor_Plan_Bank__c}"  class="slds-input"/>-->
+                                                         <ui:inputDate value="{!v.objInv.BOATBUILDING__Floor_Plan_Bank__c}"  class="slds-input" displayDatePicker="true" />
                                                     </div>
-                                                </div>
+                                                </div> 
                                             </div>
                                         </div>
                                     </div>

@@ -1,5 +1,7 @@
 public class QuotePDFLayoutController {
     public Quote__c objQuote2 { get; set; }
+    public Boolean isCanadian { get; set; }
+    public Boolean isCanadianCurrency {get; set;}
     public String width { get; set; }
     public BOATBUILDING__Store_Location_Config__mdt objSLC1 { get; set; }   
     public BOATBUILDING__Store_Location_Config__mdt objSLC2 { get; set; }
@@ -18,11 +20,29 @@ public class QuotePDFLayoutController {
     public Boolean checkBoxExist { get; set; }
     public Account objAccount { get; set; } 
     public List<QuoteOptionCatagoryWrapper> lstQuoteOptionCatagoryWrapper { get; set; }
-    
+    public Map<String , List<BOATBUILDING__ProductPrice__c>> mapSelectedCategory;
     public List<QuoteOptionCatagoryWrapper> lstQLIDis1 { get; set; }
     public List<QuoteOptionCatagoryWrapper> lstQLIDis2 { get; set; }
-     
+    public String strDocId { get; set; }
+    public Boolean isSideContent { get; set; }
+    public Boolean isBowContent { get; set; }    
+    public Boolean listOne { get; set; }
+    public Boolean listTwo { get; set; }
+
     public QuotePDFLayoutController(ApexPages.StandardController stdController) {
+        listOne = false;
+        listTwo = false;
+        if(UserInfo.isMultiCurrencyOrganization()){
+            isCanadianCurrency = true;
+        }else{
+            isCanadianCurrency = false;
+        }
+     // isCanadianCurrency = true;
+        isCanadian = false;
+        isSideContent = false;
+        isBowContent = false;
+        strDocId = '';
+
         lstQLIDis1 = new List<QuoteOptionCatagoryWrapper>();
         lstQLIDis2 = new List<QuoteOptionCatagoryWrapper>();
         lstQuoteOptionCatagoryWrapper = new List<QuoteOptionCatagoryWrapper>();
@@ -31,10 +51,12 @@ public class QuotePDFLayoutController {
             width = String.valueOf(objSCC.BOATBUILDING__Quote_Pdf_Width__c);
         }
         
+        
         objSLC1 = new BOATBUILDING__Store_Location_Config__mdt();
         objSLC2 = new BOATBUILDING__Store_Location_Config__mdt();
         website = '';
         CompanyBanner = '';
+
         List<Document> lstDocBanner = [SELECT Id FROM Document WHERE DeveloperName = 'VFTemplateLogoBlack'];
         if(!lstDocBanner.isEmpty()) {
             CompanyBanner = lstDocBanner[0].Id;
@@ -43,45 +65,62 @@ public class QuotePDFLayoutController {
         if(mpTWBFS != null && mpTWBFS.keySet().size() > 0) {
             website = mpTWBFS.values()[0].BOATBUILDING__Company_Website__c;
         }
-        objQuote2 = [SELECT 
-                     q.Engine__c, q.Trailer__c, q.Engine__r.Total_MSRP_Price__c, q.Engine__r.Manufacturer__c, ACV_FORM__r.BOATBUILDING__Account__r.BOATBUILDING__Trade_Lien_Bank__c,
-                     ACV_FORM__r.BOATBUILDING__Account__r.BOATBUILDING__Trade_Pay_Off__c, 
-                     q.Engine__r.Model__c, q.Engine__r.Year__c, q.Engine__r.Engine_SN__c, q.Engine__r.Serial_Number_2__c,
-                     q.Engine__r.Transmission_Gearbox_SN__c, q.Trailer__r.Total_MSRP_Price__c, q.Trailer__r.Manufacturer__c,
-                     q.Trailer__r.Model__c, q.Trailer__r.Year__c, q.Trailer__r.Trailer_Axles__c, q.Trailer__r.Trailer_VIN__c,
-                     q.Tyre_Tax__c, Account_Name__r.BOATBUILDING__Trade_Lien_Bank__c, Account_Name__r.BOATBUILDING__Trade_Pay_Off__c, 
-                     q.Show_MSRP_Option_Pricing__c, q.State__c, q.Tax__c, q.Syncing__c, q.Account_Name__r.Name, 
-                     Contact_Name__r.Name, q.Test_2__r.Name,q.Test_2__r.Engine_Make__c, q.Test_2__r.Engine_Year__c, 
-                     q.Test_2__r.Engine_Model__c, q.Test_2__r.Serial_Number_2__c , Q.Test_2__r.BOATBUILDING__Engine_SN__c,
-                     q.Status__c,q.Quote_Total_Price_Calculated__c , q.Shipping_And_Handling__c, q.Ship_To__c, 
-                     q.Ship_To_Name__c, q.Related_to_Order__c,q.Discount_On_Quote__c, q.Related_to_Product__c, 
-                     q.Test_2__r.Trailer_Make__c,q.Test_2__r.Trailer_Model__c,q.Test_2__r.Trailer_VIN__c,
-                     q.Test_2__r.Trailer_Year__c, q.Quote_Trailer_Sales_Tax__c, q.Quote_Trailer_Reg_Fee__c,
-                     q.Mapped_Boat_Length__c, q.Mapped_Engine_SN__c, q.Mapped_HIN__c, q.Mapped_Trailer_VIN__c, 
-                     q.Transmission_Gearbox_SN__c,q.Dealer_Comments_and_Notes__c, q.Test_2__r.Trailer_Axles__c, 
-                     q.Test_2__r.Transmission_Gearbox_SN__c, q.Quote_Trailer_Allowance__c,q.Quote_Your_Price_Formula__c, 
-                     q.Quote_Total_Over_Allowance_Calculated__c, q.Quote_Net_Selling_Price_Calculated__c ,
-                     q.Boat_Sales_Tax2__c ,q.Quote_Trailer_ACV__c, q.Quote_Trade_Payoff__c, q.Quote_Trade_Allowance__c,
-                     q.Quote_Total_Amount_Financed_Calculated__c, q.Quote_To_Name__c, q.Quote_To_Address__c, 
-                     q.Quote_Trade_ACV__c,CO_Buyer_Name__r.Name, CO_Buyer_Name__c,  CO_Buyer_Name__r.MailingCity,
-                     q.Quote_Term__c, q.Quote_Rate__c, q.Quote_Payment__c,q.Total_Price_Quote__c, q.Quote_Number__c,
-                     q.Quote_MSRP_Trailer_Price__c, q.Quote_MSRP_Boat_Price__c, q.Quote_Down_Payment__c, q.Quote_Doc_Fee__c,
-                     q.Quote_Deal_Margin__c, q.Quote_Cost_Clone__c, q.Test_2__c, q.Quote_Total_MSRP__c , 
-                     q.Quote_Boat_Reg_Fee__c,q.Dealer_Disclaimer__c, q.ACV_FORM__r.Boat_Make__c, q.ACV_FORM__r.Boat_Model__c,
-                     q.ACV_FORM__r.Boat_Year__c, q.ACV_FORM__r.Boat_HIN__c, q.ACV_FORM__r.Engine_SN__c, 
-                     q.ACV_FORM__r.BOATBUILDING__Trailer_Axles__c, q.ACV_FORM__r.BOATBUILDING__Trailer_Make__c, 
-                     q.ACV_FORM__r.BOATBUILDING__Trailer_Model__c, q.Phone__c, q.OwnerId,q.Quote_Sale_Price__c, 
-                     q.Name,q.ACV_FORM__r.BOATBUILDING__Trailer_Vin__c, q.ACV_FORM__r.BOATBUILDING__Engine_Model__c,
-                     q.LastActivityDate, q.IsDeleted, q.Id, q.Grand_Total__c,  q.Fax__c, q.Expiration_Date__c, 
-                     q.Email__c, q.No_Trailer__c, q.Discount__c, q.Description__c,q.CreatedDate, q.CreatedById, 
-                     q.Contact_Name__c, q.Bill_To__c, q.Bill_To_Name__c, q.Additional_To__c, Store_Location__c, 
-                     q.Additional_To_Name__c, q.Account_Name__c,
-                     (SELECT Id, Name, CreatedDate, CreatedById, Date__c, Discount__c, Line_Item_Description__c, 
-                      List_Price__c, Product__c, Product_Code__c, Quantity__c,
-                      Quote__c, Sales_Price__c, Sub_Total__c, Total_Price__c, Option_Category__c, Name__c 
-                      FROM BOATBUILDING__Quote_Line_Item__r) FROM BOATBUILDING__Quote__c q WHERE
-                     q.Id =:ApexPages.currentPage().getParameters().get('Id')];
+        objQuote2 = [Select 
+                             q.Engine__c,
+                             q.GST__c,
+                             q.PST__c,
+                             q.GST_D__c,
+                             q.PST_D__c,
+                             q.Trailer__c,
+                             q.Engine__r.Total_MSRP_Price__c,
+                             q.Engine__r.Manufacturer__c,
+                             q.Engine__r.Model__c,
+                             q.Engine__r.Year__c,
+                             q.Engine__r.Engine_SN__c,
+                             q.Engine__r.Serial_Number_2__c,
+                             q.Engine__r.Transmission_Gearbox_SN__c,
+                             q.Trailer__r.Total_MSRP_Price__c,
+                             q.Trailer__r.Manufacturer__c,
+                             q.Trailer__r.Model__c,
+                             q.Trailer__r.Year__c, 
+                             q.Trailer__r.Trailer_Axles__c, 
+                             q.Trailer__r.Trailer_VIN__c, Tyre_Tax__c,
+                             Account_Name__r.BOATBUILDING__Trade_Lien_Bank__c, Account_Name__r.BOATBUILDING__Trade_Pay_Off__c, 
+                             q.Show_MSRP_Option_Pricing__c,
+                             q.BOATBUILDING__Dealer_Discount__c,
+                             q.State__c, q.Tax__c, q.SystemModstamp, q.Syncing__c, q.Account_Name__r.Name, Contact_Name__r.Name, q.Test_2__r.Name,q.Test_2__r.Engine_Make__c, q.Test_2__r.Engine_Year__c, q.Test_2__r.Engine_Model__c, q.Test_2__r.Serial_Number_2__c , Q.Test_2__r.BOATBUILDING__Engine_SN__c,
+                             q.Status__c,q.Quote_Total_Price_Calculated__c , q.Shipping_And_Handling__c, q.Ship_To__c, q.Ship_To_Name__c, q.Related_to_Order__c,q.Discount_On_Quote__c, q.Related_to_Product__c,q.Test_2__r.Trailer_Make__c,q.Test_2__r.Trailer_Model__c,q.Test_2__r.Trailer_VIN__c,q.Test_2__r.Trailer_Year__c,
+                             q.Quote_Trailer_Sales_Tax__c, q.Quote_Trailer_Reg_Fee__c,q.Mapped_Boat_Length__c , q.Mapped_Engine_SN__c, q.Mapped_HIN__c, q.Mapped_Trailer_VIN__c, q.Transmission_Gearbox_SN__c,q.Dealer_Comments_and_Notes__c, q.Test_2__r.Trailer_Axles__c, Q.Test_2__r.Transmission_Gearbox_SN__c, 
+                             q.Quote_Trailer_Allowance__c,q.Quote_Your_Price_Formula__c ,q.Quote_Total_Over_Allowance_Calculated__c ,q.Quote_Net_Selling_Price_Calculated__c ,q.Boat_Sales_Tax2__c ,q.Quote_Trailer_ACV__c, q.Quote_Trade_Payoff__c, q.Quote_Trade_Allowance__c,
+                             q.Quote_Total_Amount_Financed_Calculated__c , q.Quote_To_Name__c, q.Quote_To_Address__c, q.Quote_Trade_ACV__c,CO_Buyer_Name__r.Name, CO_Buyer_Name__c,  CO_Buyer_Name__r.MailingCity,
+                             q.Quote_Term__c, q.Quote_Rate__c, q.Quote_Payment__c,q.Total_Price_Quote__c, q.Quote_Number__c, q.Quote_MSRP_Trailer_Price__c, 
+                             q.Quote_MSRP_Boat_Price__c, q.Quote_Down_Payment__c, q.Quote_Doc_Fee__c, q.Quote_Deal_Margin__c, q.Quote_Cost_Clone__c, q.Test_2__c,
+                             q.Quote_Total_MSRP__c , q.Quote_Boat_Reg_Fee__c,q.Dealer_Disclaimer__c, q.ACV_FORM__r.Account__r.BOATBUILDING__Trade_Lien_Bank__c,q.ACV_FORM__r.Account__r.Trade_Pay_Off__c,
+                             q.ACV_FORM__r.Boat_Make__c, q.ACV_FORM__r.Boat_Model__c, q.ACV_FORM__r.Boat_Year__c, q.ACV_FORM__r.Boat_HIN__c, q.ACV_FORM__r.Engine_SN__c,  q.ACV_FORM__r.BOATBUILDING__Trailer_Axles__c,  q.ACV_FORM__r.BOATBUILDING__Trailer_Make__c, q.ACV_FORM__r.BOATBUILDING__Trailer_Model__c,
+                             q.Phone__c, q.OwnerId,q.Quote_Sale_Price__c, q.Name, q.LastViewedDate, q.LastReferencedDate, q.LastModifiedDate, q.LastModifiedById,q.ACV_FORM__r.BOATBUILDING__Trailer_Vin__c, q.ACV_FORM__r.BOATBUILDING__Engine_Model__c,
+                             q.LastActivityDate, q.IsDeleted, q.Id, q.Grand_Total__c,  q.Fax__c, q.Expiration_Date__c, q.Email__c, q.No_Trailer__c, 
+                             q.Discount__c, q.Description__c,q.CreatedDate, q.CreatedById, q.Contact_Name__c, q.Bill_To__c, q.Bill_To_Name__c, q.Additional_To__c, Store_Location__c, 
+                             q.Additional_To_Name__c, q.Account_Name__c,(Select Id, IsDeleted, Name, CreatedDate, CreatedById, LastModifiedDate, LastModifiedById,
+                                                                         SystemModstamp, LastActivityDate, Date__c, Discount__c, Line_Item_Description__c, List_Price__c, Product__c, Product_Code__c, Quantity__c, BOATBUILDING__Product_Type__c,
+                                                                         Quote__c, Sales_Price__c, Sub_Total__c, Total_Price__c, Option_Category__c, Name__c, BOATBUILDING__Total_Dealer_Price__c, BOATBUILDING__Total_Retail_Price__c From BOATBUILDING__Quote_Line_Item__r) From BOATBUILDING__Quote__c q where q.Id =: ApexPages.currentPage().getParameters().get('Id') limit 1];
         
+        String DocName = 'Company_Logo';
+        if(objQuote2.Store_Location__c != null) {
+                DocName = DocName + '_' + objQuote2.Store_Location__c.replaceAll(' ','');
+        }
+        List<Document> lstDoc = [SELECT Id FROM Document Where DeveloperName =: DocName LIMIT 1];
+        if(lstDoc.size() > 0) {
+            strDocId = String.valueOf(lstDoc[0].Id);
+        } else {
+            List<Document> lstDoc2 = [SELECT Id FROM Document Where DeveloperName = 'Company_Logo' LIMIT 1];
+            if(lstDoc2.size() > 0) {
+                strDocId = String.valueOf(lstDoc2[0].Id);
+            }
+        }
+        if(objQuote2.BOATBUILDING__State__c != null) {
+            BoatBuilderUtil objBoatBuilderUtil = new BoatBuilderUtil(objQuote2.BOATBUILDING__State__c); 
+            isCanadian = objBoatBuilderUtil.isCanadianTax();
+        }
         if(objQuote2.Trailer__c != null) {
             TrailerInfoQuote = true;
         }
@@ -111,18 +150,43 @@ public class QuotePDFLayoutController {
             }
         } 
         if(objQuote2.Test_2__c != null){
-	        List<Attachment> att = [Select Id, Name From Attachment Where ParentId =: objQuote2.Test_2__c];
-	        if(att.size() > 0) {
-	            for(Attachment objAttt: att) {
-	                if(objAttt.Name.containsIgnoreCase('side__c')) {
-	                    quoteImg1 = objAttt.Id;
-	                }
-	                if(objAttt.Name.containsIgnoreCase('bow__c')) {
-	                    quoteImg2 = objAttt.Id;
-	                } 
-	            }
-	        }
-	    }
+            // isSideContent = false;
+            // isBowContent = false;
+
+            List<ContentDocumentLink> lstContentDocLink = [SELECT ContentDocumentId, LinkedEntityId FROM ContentDocumentLink WHERE LinkedEntityId =: objQuote2.Test_2__c];
+            Map<String, String> mapCDID_LEID = new Map<String, String>(); 
+            for(ContentDocumentLink cdl: lstContentDocLink){
+                System.debug('Debug Log For lstContentDocLink cdl : '+cdl.ContentDocumentId);
+                mapCDID_LEID.put(cdl.ContentDocumentId, cdl.LinkedEntityId);
+            }
+
+            List<ContentVersion> lstContentVersion = [select id,FileType, Title,FileExtension, Versiondata, ContentDocumentId from ContentVersion where islatest = true AND ContentDocumentId IN : mapCDID_LEID.keySet()];
+            for(ContentVersion objAtt: lstContentVersion) {
+                System.debug('Debug Log For lstContentVersion objAtt : '+objAtt.Id);
+
+                if(objAtt.Title.containsIgnoreCase('side__c')) {
+                    isSideContent = true;
+                    quoteImg1 = objAtt.Id;
+                }
+                if(objAtt.Title.containsIgnoreCase('bow__c')) {
+                    isBowContent = true;
+                    quoteImg2 = objAtt.Id;
+                } 
+
+            }
+
+            List<Attachment> att = [Select Id, Name From Attachment Where ParentId =: objQuote2.Test_2__c];
+            if(att.size() > 0 && ( !isSideContent || !isBowContent )) {
+                for(Attachment objAttt: att) {
+                    if(objAttt.Name.containsIgnoreCase('side__c')) {
+                        quoteImg1 = objAttt.Id;
+                    }
+                    if(objAttt.Name.containsIgnoreCase('bow__c')) {
+                        quoteImg2 = objAttt.Id;
+                    } 
+                }
+            }
+        }
         if(objQuote2.Account_Name__c != null){
             objAccount = [Select a.Year__c, a.Work_Phone__c,a.Do_they_have_a_trade__c ,a.Desire_Price_low__c ,a.Desire_price_high__c ,a.Prospect_Desired_Boat_Length__c ,a.Desire_boat_model__c , a.Website, a.URI__c, a.Type, a.Telephone__c,a.Desired_Boat_Manufacturer__c , 
                           a.ShippingPostalCode, a.ShippingLongitude, a.ShippingLatitude, a.ShippingGeocodeAccuracy, a.ShippingCountry, a.ShippingCity, 
@@ -161,11 +225,17 @@ public class QuotePDFLayoutController {
                 }
             }
         }
-        Map<String, List<Quote_Line_Item__c>> mapQuoteLineItem = new Map<String, List<Quote_Line_Item__c>>();
-        Map<String, List<Quote_Line_Item__c>> mapQuoteLineItem1 = new Map<String, List<Quote_Line_Item__c>>();
+            Map<String, List<Quote_Line_Item__c>> mapQuoteLineItem = new Map<String, List<Quote_Line_Item__c>>();
+            Map<String, List<Quote_Line_Item__c>> mapQuoteLineItem1 = new Map<String, List<Quote_Line_Item__c>>();
+           
+          
+
         
+
+          
         if(objQuote2.BOATBUILDING__Quote_Line_Item__r != null && objQuote2.BOATBUILDING__Quote_Line_Item__r.size() > 0) {
             for(BOATBUILDING__Quote_Line_Item__c objQLI2 :  objQuote2.BOATBUILDING__Quote_Line_Item__r) {
+              
                 if(!mapQuoteLineItem.containsKey(objQLI2.Option_Category__c)){
                     mapQuoteLineItem.put(objQLI2.Option_Category__c, new List<Quote_Line_Item__c>());
                 }
@@ -173,6 +243,8 @@ public class QuotePDFLayoutController {
                     mapQuoteLineItem.get(objQLI2.Option_Category__c).add(objQLI2);
                 }
             } 
+    
+            
             for(String srtQuoteMapKeys : mapQuoteLineItem.keySet()) {
                 lstQuoteOptionCatagoryWrapper.add(new QuoteOptionCatagoryWrapper(srtQuoteMapKeys, mapQuoteLineItem.get(srtQuoteMapKeys) ));
             }
@@ -213,14 +285,15 @@ public class QuotePDFLayoutController {
                         lstQLIDis1.add(new QuoteOptionCatagoryWrapper(lstString[i], mapQuoteLineItem1.get(lstString[i]) ));
                     }
                     for(Integer i = MidVal; i < lstString.size(); i++) {
-                    	lstQLIDis2.add(new QuoteOptionCatagoryWrapper(lstString[i], mapQuoteLineItem1.get(lstString[i]) ));
+                        lstQLIDis2.add(new QuoteOptionCatagoryWrapper(lstString[i], mapQuoteLineItem1.get(lstString[i]) ));
                     }
                 }
                 
             }
             
         }
-        
+        listOne = lstQLIDis1.size() > 0 ? true : false;
+        listTwo = lstQLIDis2.size() > 0 ? true : false;
     }
     public class QuoteOptionCatagoryWrapper {
         public String strOptionCategory { get; set; }

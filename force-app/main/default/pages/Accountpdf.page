@@ -1,8 +1,8 @@
-<apex:page standardController="Account" extensions="AccountDetailExtensionController" renderAs="pdf" showHeader="false">
+<apex:page standardController="Customer_Inquiry__c" extensions="AccountDetailExtensionController" renderAs="pdf" showHeader="false">
     
-    <h1 style="text-align: center; font-family: arial; font-size: 14px;">CREDIT APPLICATION</h1>
+    <h1 style="text-align: center; font-family: arial; font-size: 14px;">CREDIT APPLICATION</h1> 
     <!-- h1 -->
-    <table style="border-spacing:0;  border-collapse:collapse; font-family: arial; border: 1p solid #000; width: 100%;">
+    <table style="border-spacing:0;  border-collapse:collapse; font-family: arial; border: 1p solid #000; width: 100%;"> 
         <tr>
             <td valign="top" style="padding:0px; border-color: #000;border-style: solid; border-width: 1px 0px 1px 1px;">
                 <table  style="border-spacing:0; border-collapse:collapse; border:0px; font-size:8px; width: 100%;">
@@ -10,50 +10,50 @@
                         <th colspan="3" valign="top" style="padding:8px 0px; border-color: #000;border-style: solid; border-width: 0px 0px 1px 0px; text-align: center; font-size: 16px;">(A) APPLICANT INFORMATION</th>
                     </tr>
                     <tr>
-                        <td colspan="3" style="border-color: #000;border-style: solid; border-width: 0px 0px 1px 0px; padding:8px 3px;font-size: 13px;">FULL NAME: &nbsp; {!acct.Lead_Account_History__r.Name} </td>
+                        <td colspan="3" style="border-color: #000;border-style: solid; border-width: 0px 0px 1px 0px; padding:8px 3px;font-size: 13px;">FULL NAME: &nbsp; <apex:outputField value="{!Customer_Inquiry__c.First_Name__c}"/> &nbsp; <apex:outputField value="{!Customer_Inquiry__c.Last_Name__c}"/> </td>
+                    </tr>
+                    <tr> 
+                        <td style="border-color: #000;border-style: solid; border-width: 0px 1px 1px 0px; padding:8px 3px;font-size: 13px;">DOB: &nbsp; <apex:outputField value="{!Customer_Inquiry__c.Date_of_Birth__c}"/></td>
+                        <td style="border-color: #000;border-style: solid; border-width: 0px 1px 1px 0px; padding:8px 3px;font-size: 13px;">SSN: &nbsp; <apex:outputField value="{!Customer_Inquiry__c.Social_Security_Number__c}"/></td>
+                        <td style="border-color: #000;border-style: solid; border-width: 0px 1px 1px 0px; padding:8px 3px;font-size: 13px;">DLN: &nbsp; <apex:outputField value="{!Customer_Inquiry__c.Drivers_License_Number__c}"/></td>
                     </tr>
                     <tr>
-                        <td style="border-color: #000;border-style: solid; border-width: 0px 1px 1px 0px; padding:8px 3px;font-size: 13px;">DOB: &nbsp; {!Account.BOATBUILDING__SFA_Date_of_Birth__c}</td>
-                        <td style="border-color: #000;border-style: solid; border-width: 0px 1px 1px 0px; padding:8px 3px;font-size: 13px;">SSN: &nbsp; {!Account.BOATBUILDING__SFA_Social_Security_Number__c}</td>
-                        <td style="border-color: #000;border-style: solid; border-width: 0px 1px 1px 0px; padding:8px 3px;font-size: 13px;">DLN: &nbsp; {!Account.BOATBUILDING__SFA_Drivers_License__c}</td>
+                        <td colspan="3" style="border-color: #000;border-style: solid; border-width: 0px 0px 1px 0px; padding:8px 3px;font-size: 13px;font-size: 13px;">STREET ADDRESS: &nbsp; <apex:outputField value="{!Customer_Inquiry__c.Street__c}"/></td>
+                    </tr> 
+                    <tr>
+                        <td style="border-color: #000;border-style: solid; border-width: 0px 0px 1px 0px; padding:8px 3px;font-size: 13px;">CITY :&nbsp; <apex:outputField value="{!Customer_Inquiry__c.City__c}"/></td>
+                        <td style="border-color: #000;border-style: solid; border-width: 0px 1px 1px 0px; padding:8px 3px;font-size: 13px;">STATE : &nbsp; <apex:outputField value="{!Customer_Inquiry__c.State__c}"/></td>
+                        <td style="border-color: #000;border-style: solid; border-width: 0px 0px 1px 0px; padding:8px 3px;font-size: 13px;">ZIP: &nbsp; <apex:outputField value="{!Customer_Inquiry__c.Zip_Code__c}"/></td>
+                    </tr>   
+                    <tr>
+                        <td style="border-color: #000;border-style: solid; border-width: 0px 1px 1px 0px; padding:8px 3px;font-size: 13px;">PHONE: &nbsp; <apex:outputField value="{!Customer_Inquiry__c.Phone__c}"/></td>
+                        <td colspan="2" style="border-color: #000;border-style: solid; border-width: 0px 1px 1px 0px; padding:8px 3px;font-size: 13px;">Email:&nbsp; <apex:outputField value="{!Customer_Inquiry__c.Email__c}"/></td>
                     </tr>
                     <tr>
-                        <td colspan="3" style="border-color: #000;border-style: solid; border-width: 0px 0px 1px 0px; padding:8px 3px;font-size: 13px;font-size: 13px;">STREET ADDRESS: &nbsp; {!Account.BillingStreet}</td>
+                        <td style="border-color: #000;border-style: solid; border-width: 0px 1px 1px 0px; padding:8px 3px;font-size: 13px;">LANDLORD/MORTGAGE HOLDER: &nbsp; <apex:outputField value="{!Customer_Inquiry__c.Mortgage_LenderLandlord_Name__c}"/></td>
+                        <td colspan="2" style="border-color: #000;border-style: solid; border-width: 0px 1px 1px 0px; padding:8px 3px;font-size: 13px;">MONTHELY RENT/MORTGAGE PMT: &nbsp; &nbsp;</td><!-- <apex:outputField value="{!Customer_Inquiry__c.Date_of_Birth__c}"/>.BOATBUILDING__SFA_Monthly_Rent_Mortgage__c}--> 
                     </tr>
                     <tr>
-                        <td style="border-color: #000;border-style: solid; border-width: 0px 0px 1px 0px; padding:8px 3px;font-size: 13px;">CITY :&nbsp; {!Account.BillingCity} </td>
-                        <td style="border-color: #000;border-style: solid; border-width: 0px 1px 1px 0px; padding:8px 3px;font-size: 13px;">STATE : &nbsp; {!Account.BillingState}</td>
-                        <td style="border-color: #000;border-style: solid; border-width: 0px 0px 1px 0px; padding:8px 3px;font-size: 13px;">ZIP: &nbsp; {!Account.BillingPostalCode}</td>
-                    </tr>
-                    <tr>
-                        <td style="border-color: #000;border-style: solid; border-width: 0px 1px 1px 0px; padding:8px 3px;font-size: 13px;">PHONE: &nbsp; {!acct.Lead_Account_History__r.Contact_Phone__c} </td>
-                        <td colspan="2" style="border-color: #000;border-style: solid; border-width: 0px 1px 1px 0px; padding:8px 3px;font-size: 13px;">Email:&nbsp; {!acct.Email__c}</td>
-                    </tr>
-                    <tr>
-                        <td style="border-color: #000;border-style: solid; border-width: 0px 1px 1px 0px; padding:8px 3px;font-size: 13px;">LANDLORD/MORTGAGE HOLDER: &nbsp; {!Account.SFA_Landlord_Mortgage_Holder__c}</td>
-                        <td colspan="2" style="border-color: #000;border-style: solid; border-width: 0px 1px 1px 0px; padding:8px 3px;font-size: 13px;">MONTHELY RENT/MORTGAGE PMT: &nbsp; {!Account.BOATBUILDING__SFA_Monthly_Rent_Mortgage__c}</td>
-                    </tr>
-                    <tr>
-                        <td  style="border-color: #000;border-style: solid; border-width: 0px 1px 1px 0px; padding:8px 3px;font-size: 13px;">OWN/RENT: &nbsp; {!Account.BOATBUILDING__SFA_Property_Owner__c}</td>
-                        <td  style="border-color: #000;border-style: solid; border-width: 0px 1px 1px 0px; padding:8px 3px;font-size: 13px;">YEARS AT ADDRESS: &nbsp; {!Account.BOATBUILDING__SFA_Years_at_current_address__c}</td>
-                        <td  style="border-color: #000;border-style: solid; border-width: 0px 1px 1px 0px; padding:8px 3px;font-size: 13px;">MONTHS AT ADDRESS: &nbsp; {!Account.BOATBUILDING__SFA_Months_at_current_address__c}</td>
+                        <td  style="border-color: #000;border-style: solid; border-width: 0px 1px 1px 0px; padding:8px 3px;font-size: 13px;">OWN/RENT: &nbsp; <apex:outputField value="{!Customer_Inquiry__c.Property_Ownership__c}"/></td>
+                        <td  style="border-color: #000;border-style: solid; border-width: 0px 1px 1px 0px; padding:8px 3px;font-size: 13px;">YEARS AT ADDRESS: &nbsp; <apex:outputField value="{!Customer_Inquiry__c.Years_at_Address__c}"/></td>
+                        <td  style="border-color: #000;border-style: solid; border-width: 0px 1px 1px 0px; padding:8px 3px;font-size: 13px;">MONTHS AT ADDRESS: &nbsp; <apex:outputField value="{!Customer_Inquiry__c.Months_at_Address__c}"/></td>
                         
                     </tr>
                     
                     <tr>
-                        <td colspan="3" style="border-color: #000;border-style: solid; border-width: 0px 0px 1px 0px; padding:8px 3px;font-size: 13px;">CURRENT EMPLOYER's NAME: &nbsp; {!Account.BOATBUILDING__SFA_Employer_Name__c}</td>
+                        <td colspan="3" style="border-color: #000;border-style: solid; border-width: 0px 0px 1px 0px; padding:8px 3px;font-size: 13px;">CURRENT EMPLOYER's NAME: &nbsp; <apex:outputField value="{!Customer_Inquiry__c.Current_Employer_Name__c}"/></td>
                     </tr>
                     
                     <tr>
-                        <td style="border-color: #000;border-style: solid; border-width: 0px 1px 1px 0px; padding:8px 3px;font-size: 13px;">GROSS ANNUALLY SALARY: &nbsp; {!Account.BOATBUILDING__SFA_Salary_Annually_Gross__c} </td>
-                        <td colspan="2" style="border-color: #000;border-style: solid; border-width: 0px 0px 1px 0px; padding:8px 3px;font-size: 13px;">EMPLOYER PHONE: &nbsp; {!Account.BOATBUILDING__SFA_Employer_Phone__c} </td> 
+                        <td style="border-color: #000;border-style: solid; border-width: 0px 1px 1px 0px; padding:8px 3px;font-size: 13px;">MONTHLY SALARY: &nbsp; <apex:outputField value="{!Customer_Inquiry__c.Current_Monthly_Salary__c}"/> </td>
+                        <td colspan="2" style="border-color: #000;border-style: solid; border-width: 0px 0px 1px 0px; padding:8px 3px;font-size: 13px;">EMPLOYER PHONE: &nbsp; <apex:outputField value="{!Customer_Inquiry__c.Current_Employer_Phone__c}"/> </td> 
                     </tr>
                     <tr>
-                        <td colspan="3" style="border-color: #000;border-style: solid; border-width: 0px 0px 1px 0px; padding:8px 3px;font-size: 13px;">OCCUPATION/JOB TITLE: &nbsp; {!Account.BOATBUILDING__SFA_Occupation__c}</td>
+                        <td colspan="3" style="border-color: #000;border-style: solid; border-width: 0px 0px 1px 0px; padding:8px 3px;font-size: 13px;">OCCUPATION/JOB TITLE: &nbsp; <apex:outputField value="{!Customer_Inquiry__c.Current_Occupation__c}"/></td>
                     </tr>
                     <tr>
-                        <td style="border-color: #000;border-style: solid; border-width: 0px 0px 0px 0px; padding:8px 3px;font-size: 13px;">YEARS WITH CURRENT EMPLOYER &nbsp; {!Account.BOATBUILDING__SFA_Years_at_employer__c}</td>
-                        <td colspan="2" style="border-color: #000;border-style: solid; border-width: 0px 0px 0px 0px; padding:7px 3px;font-size: 13px;">MONTHS WITH CURRENT EMPLOYER &nbsp; {!Account.BOATBUILDING__SFA_Months_at_employer__c}</td>
+                        <td style="border-color: #000;border-style: solid; border-width: 0px 0px 0px 0px; padding:8px 3px;font-size: 13px;">YEARS WITH CURRENT EMPLOYER &nbsp; <apex:outputField value="{!Customer_Inquiry__c.Years_with_Current_Employer__c}"/></td>
+                        <td colspan="2" style="border-color: #000;border-style: solid; border-width: 0px 0px 0px 0px; padding:7px 3px;font-size: 13px;">MONTHS WITH CURRENT EMPLOYER &nbsp; <apex:outputField value="{!Customer_Inquiry__c.Months_with_Current_Employer__c}"/></td>
                     </tr>
                 </table>
             </td>
@@ -63,52 +63,52 @@
                         <th colspan="3"  border="1px solid #ddd" valign="top" style="padding:8px 0px; border-color: #000;border-style: solid; border-width: 0px 1px 1px 0px; text-align: center; font-size: 16px;">(B)JOINT  APPLICANT INFORMATION</th>
                     </tr>
                     <tr>
-                        <td style="border-color: #000;border-style: solid; border-width: 0px 1px 1px 0px; padding:8px 3px;font-size: 13px;"> FULL NAME: &nbsp;  {!Account.BOATBUILDING__Joint_Applicant_First_Name__c}&nbsp; {!Account.BOATBUILDING__Joint_Applicant_Last_Name__c}</td>
-                        <td colspan="2" style="border-color: #000;border-style: solid; border-width: 0px 1px 1px 0px; padding:8px 3px;font-size: 13px;">RELATIONSHIP TO APPLICANT: &nbsp;  {!Account.BOATBUILDING__Relationship_to_Applicant__c}</td>
+                        <td style="border-color: #000;border-style: solid; border-width: 0px 1px 1px 0px; padding:8px 3px;font-size: 13px;"> FULL NAME: &nbsp;  <apex:outputField value="{!Customer_Inquiry__c.CoApp_First_Name__c}"/>&nbsp; <apex:outputField value="{!Customer_Inquiry__c.CoApp_Last_Name__c}"/></td>
+                        <td colspan="2" style="border-color: #000;border-style: solid; border-width: 0px 1px 1px 0px; padding:8px 3px;font-size: 13px;">RELATIONSHIP TO APPLICANT: &nbsp;  <apex:outputField value="{!Customer_Inquiry__c.CoApp_Relationship_to_Applicant__c}"/></td>
                         
                     </tr>
                     <tr>
-                        <td style="border-color: #000;border-style: solid; border-width: 0px 1px 1px 0px; padding:8px 3px;font-size: 13px;">DOB: &nbsp; {!Account.BOATBUILDING__Joint_Applicant_Date_of_Birth__c}</td>
-                        <td style="border-color: #000;border-style: solid; border-width: 0px 1px 1px 0px; padding:8px 3px;font-size: 13px;">SSN: &nbsp; {!Account.BOATBUILDING__Joint_Applicant_Social_Security_Number__c}</td>
-                        <td style="border-color: #000;border-style: solid; border-width: 0px 1px 1px 0px; padding:8px 3px;font-size: 13px;">DLN: &nbsp; {!Account.BOATBUILDING__Joint_Applicant_Drivers_License__c}</td>
+                        <td style="border-color: #000;border-style: solid; border-width: 0px 1px 1px 0px; padding:8px 3px;font-size: 13px;">DOB: &nbsp; <apex:outputField value="{!Customer_Inquiry__c.CoApp_Date_of_Birth__c}"/></td>
+                        <td style="border-color: #000;border-style: solid; border-width: 0px 1px 1px 0px; padding:8px 3px;font-size: 13px;">SSN: &nbsp; <apex:outputField value="{!Customer_Inquiry__c.CoApp_Social_Security_Number__c}"/></td>
+                        <td style="border-color: #000;border-style: solid; border-width: 0px 1px 1px 0px; padding:8px 3px;font-size: 13px;">DLN: &nbsp; <apex:outputField value="{!Customer_Inquiry__c.CoApp_Drivers_License_Number__c}"/></td>
                         
                     </tr>
                     <tr>
-                        <td colspan="3" style="border-color: #000;border-style: solid; border-width: 0px 1px 1px 0px; padding:8px 3px;font-size: 13px;font-size: 13px;">STREET ADDRESS: &nbsp; {!Account.BOATBUILDING__Joint_Applicant_Street_Address__c}</td>
-                       <!-- <td colspan="2" style="border-color: #000;border-style: solid; border-width: 0px 1px 1px 0px; padding:8px 3px;font-size: 13px;">COUNTRY: &nbsp; {!Account.BOATBUILDING__Joint_Applicant_County__c}</td>-->
+                        <td colspan="3" style="border-color: #000;border-style: solid; border-width: 0px 1px 1px 0px; padding:8px 3px;font-size: 13px;font-size: 13px;">STREET ADDRESS: &nbsp; <apex:outputField value="{!Customer_Inquiry__c.CoApp_Street__c}"/></td>
+                       <!-- <td colspan="2" style="border-color: #000;border-style: solid; border-width: 0px 1px 1px 0px; padding:8px 3px;font-size: 13px;">COUNTRY: &nbsp; <apex:outputField value="{!BOATBUILDING__Customer_Inquiry__c.BOATBUILDING__Joint_Applicant_County__c}"/></td>-->
                     </tr>
                     <tr>
-                        <td style="border-color: #000;border-style: solid; border-width: 0px 1px 1px 0px; padding:8px 3px;font-size: 13px;">CITY: &nbsp; {!Account.BOATBUILDING__Joint_Applicant_City__c}</td>
-                        <td style="border-color: #000;border-style: solid; border-width: 0px 1px 1px 0px; padding:8px 3px;font-size: 13px;">STATE: &nbsp; {!Account.BOATBUILDING__Joint_Applicant_State__c }</td>
-                        <td style="border-color: #000;border-style: solid; border-width: 0px 1px 1px 0px; padding:8px 3px;font-size: 13px;">ZIP: &nbsp; {!Account.BOATBUILDING__Joint_Applicant_Zip_Postal_Code__c}</td>
+                        <td style="border-color: #000;border-style: solid; border-width: 0px 1px 1px 0px; padding:8px 3px;font-size: 13px;">CITY: &nbsp; <apex:outputField value="{!Customer_Inquiry__c.CoApp_City__c}"/></td>
+                        <td style="border-color: #000;border-style: solid; border-width: 0px 1px 1px 0px; padding:8px 3px;font-size: 13px;">STATE: &nbsp; <apex:outputField value="{!Customer_Inquiry__c.CoApp_Street__c}"/>. }</td>
+                        <td style="border-color: #000;border-style: solid; border-width: 0px 1px 1px 0px; padding:8px 3px;font-size: 13px;">ZIP: &nbsp; <apex:outputField value="{!Customer_Inquiry__c.CoApp_Zip_Code__c}"/></td>
                     </tr>
                     <tr>
-                        <td style="border-color: #000;border-style: solid; border-width: 0px 1px 1px 0px; padding:8px 3px;font-size: 13px;"> PHONE: &nbsp; {!Account.BOATBUILDING__Joint_Applicant_Phone__c}</td>
-                        <td colspan="2" style="border-color: #000;border-style: solid; border-width: 0px 1px 1px 0px; padding:8px 3px;font-size: 13px;">EMAIL:  &nbsp; {!Account.BOATBUILDING__Joint_Applicant_Email__c}</td>
+                        <td style="border-color: #000;border-style: solid; border-width: 0px 1px 1px 0px; padding:8px 3px;font-size: 13px;"> PHONE: &nbsp; <apex:outputField value="{!Customer_Inquiry__c.CoApp_Phone__c}"/></td>
+                        <td colspan="2" style="border-color: #000;border-style: solid; border-width: 0px 1px 1px 0px; padding:8px 3px;font-size: 13px;">EMAIL:  &nbsp; <apex:outputField value="{!Customer_Inquiry__c.CoApp_Email__c}"/></td>
                     </tr>
                     <tr>
-                        <td style="border-color: #000;border-style: solid; border-width: 0px 1px 1px 0px; padding:8px 3px;font-size: 13px;">LANDLORD/MORTGAGE HOLDER: &nbsp; {!Account.BOATBUILDING__Joint_Applicant_Landlord_Mortgage_Holder__c}</td>
-                        <td colspan="2" style="border-color: #000;border-style: solid; border-width: 0px 1px 1px 0px; padding:8px 3px;font-size: 13px;">MONTHELY RENT/MORTGAGE PMT: &nbsp; {!Account.BOATBUILDING__Joint_Applicant_Monthly_Rent_Mortgage__c}</td>
+                        <td style="border-color: #000;border-style: solid; border-width: 0px 1px 1px 0px; padding:8px 3px;font-size: 13px;">LANDLORD/MORTGAGE HOLDER: &nbsp; <apex:outputField value="{!Customer_Inquiry__c.CoApp_Mortgage_LenderLandlord_Name__c}"/></td>
+                        <td colspan="2" style="border-color: #000;border-style: solid; border-width: 0px 1px 1px 0px; padding:8px 3px;font-size: 13px;">MONTHELY RENT/MORTGAGE PMT: &nbsp; &nbsp;</td>
                         
                     </tr> 
                     <tr>
-                        <td  style="border-color: #000;border-style: solid; border-width: 0px 1px 1px 0px; padding:8px 3px;font-size: 13px;">OWN/RENT: &nbsp; {!Account.BOATBUILDING__Joint_Applicant_Property_Owner__c}</td>
-                        <td  style="border-color: #000;border-style: solid; border-width: 0px 1px 1px 0px; padding:8px 3px;font-size: 13px;">YEARS AT ADDRESS: &nbsp; {!Account.BOATBUILDING__Joint_Applicant_Years_at_current_address__c}</td>
-                        <td  style="border-color: #000;border-style: solid; border-width: 0px 1px 1px 0px; padding:8px 3px;font-size: 13px;">MONTHS AT ADDRESS: &nbsp; {!Account.BOATBUILDING__Joint_Applicant_Months_Current_Address__c}</td>
+                        <td  style="border-color: #000;border-style: solid; border-width: 0px 1px 1px 0px; padding:8px 3px;font-size: 13px;">OWN/RENT: &nbsp; <apex:outputField value="{!Customer_Inquiry__c.CoApp_Property_Ownership__c}"/></td>
+                        <td  style="border-color: #000;border-style: solid; border-width: 0px 1px 1px 0px; padding:8px 3px;font-size: 13px;">YEARS AT ADDRESS: &nbsp; <apex:outputField value="{!Customer_Inquiry__c.CoApp_Years_at_Address__c}"/></td>
+                        <td  style="border-color: #000;border-style: solid; border-width: 0px 1px 1px 0px; padding:8px 3px;font-size: 13px;">MONTHS AT ADDRESS: &nbsp; <apex:outputField value="{!Customer_Inquiry__c.CoApp_Months_at_Address__c}"/></td>
                     </tr>
                     <tr>
-                        <td colspan="3" style="border-color: #000;border-style: solid; border-width: 0px 1px 1px 0px; padding:8px 3px;font-size: 13px;">CURRENT EMPLOYER's NAME: &nbsp; {!Account.BOATBUILDING__Joint_Applicant_Employer_Name__c}</td>
+                        <td colspan="3" style="border-color: #000;border-style: solid; border-width: 0px 1px 1px 0px; padding:8px 3px;font-size: 13px;">CURRENT EMPLOYER's NAME: &nbsp; <apex:outputField value="{!Customer_Inquiry__c.CoApp_Current_Employer_Name__c}"/></td>
                     </tr>
                     <tr>
-                        <td style="border-color: #000;border-style: solid; border-width: 0px 1px 1px 0px; padding:8px 3px;font-size: 13px;">GROSS ANNUALLY SALARY: &nbsp; {!Account.BOATBUILDING__Joint_Applicant_Salary_Annually_Gross__c} </td>
-                        <td colspan="2" style="border-color: #000;border-style: solid; border-width: 0px 1px 1px 0px; padding:8px 3px;font-size: 13px;">CURRENT EMPLOYER PHONE: &nbsp; {!Account.BOATBUILDING__Joint_Applicant_Employer_Phone__c} </td>
+                        <td style="border-color: #000;border-style: solid; border-width: 0px 1px 1px 0px; padding:8px 3px;font-size: 13px;">MONTHLY SALARY: &nbsp; <apex:outputField value="{!Customer_Inquiry__c.CoApp_Current_Monthly_Salary__c}"/> </td>
+                        <td colspan="2" style="border-color: #000;border-style: solid; border-width: 0px 1px 1px 0px; padding:8px 3px;font-size: 13px;">CURRENT EMPLOYER PHONE: &nbsp; <apex:outputField value="{!Customer_Inquiry__c.CoApp_Current_Employer_Phone__c}"/> </td>
                     </tr>
                     <tr>
-                        <td colspan="3" style="border-color: #000;border-style: solid; border-width: 0px 1px 1px 0px; padding:8px 3px;font-size: 13px;">OCCUPATION/JOB TITLE: &nbsp; {!Account.BOATBUILDING__Joint_Applicant_Occupation__c}</td>
+                        <td colspan="3" style="border-color: #000;border-style: solid; border-width: 0px 1px 1px 0px; padding:8px 3px;font-size: 13px;">OCCUPATION/JOB TITLE: &nbsp; <apex:outputField value="{!Customer_Inquiry__c.CoApp_Current_Occupation__c}"/></td>
                     </tr>
                     <tr>
-                        <td style="border-color: #000;border-style: solid; border-width: 0px 1px 0px 0px; padding:8px 3px;font-size: 13px;">YEARS WITH CURRENT EMPLOYER:&nbsp;{!Account.BOATBUILDING__Joint_Applicant_Years_at_Employer__c}</td>
-                        <td colspan="2" style="border-color: #000;border-style: solid; border-width: 0px 1px 0px 0px; padding:7px 3px;font-size: 13px;">MONTHS WITH CURRENT EMPLOYER:&nbsp;{!Account.BOATBUILDING__Joint_Applicant_Months_at_Employer__c}</td>
+                        <td style="border-color: #000;border-style: solid; border-width: 0px 1px 0px 0px; padding:8px 3px;font-size: 13px;">YEARS WITH CURRENT EMPLOYER:&nbsp;<apex:outputField value="{!Customer_Inquiry__c.CoApp_Years_with_Current_Employer__c}"/></td>
+                        <td colspan="2" style="border-color: #000;border-style: solid; border-width: 0px 1px 0px 0px; padding:7px 3px;font-size: 13px;">MONTHS WITH CURRENT EMPLOYER:&nbsp;<apex:outputField value="{!Customer_Inquiry__c.CoApp_Months_with_Current_Employer__c}"/></td>
                     </tr>
                     <table style="border-spacing:0;  border-collapse:collapse; font-family: arial; border: 1p solid #000; width: 100%;"/>
                 </table >
@@ -140,6 +140,6 @@
         </div>
     </div>
     <div>
-        Source : {!acct.BOATBUILDING__Source_URL__c}
+<!--         Source : {!acct.BOATBUILDING__Source_URL__c} -->
     </div>
 </apex:page>

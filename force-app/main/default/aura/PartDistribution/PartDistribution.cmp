@@ -3,11 +3,12 @@
     <aura:attribute name ="lstPA" type="Object[]"  access="global"/>    
     <aura:attribute name="locationCount" type="Integer" default="0"/>
     <aura:attribute name="locations" type="String[]" access="global"/>
+    <aura:attribute name="objLI" type="Object" access="global"/>
     <aura:if isTrue="{!v.partDistribution}"> 
         <div class="slds-m-around_xx-large">
             <section role="dialog" tabindex="-1" style="background: #0000008c;" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
                 <div class="slds-modal__container">
-                    <lightning:buttonIcon iconName="utility:close"
+                    <lightning:buttonIcon iconName="utility:close" 
                                           onclick="{!c.closeModel}"
                                           alternativeText="close" 
                                           variant="bare-inverse"

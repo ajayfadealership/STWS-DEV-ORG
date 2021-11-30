@@ -54,7 +54,7 @@ public class PurchaseOrderLightningControllerTest {
         fixedSearchResults[0] = objPart.Id;
         Test.setFixedSearchResults(fixedSearchResults);
         
-        PurchaseOrderLightningController.searchPartsfromInventoryAndParts(fixedSearchResults[0]);
+        PurchaseOrderLightningController.searchPartsfromInventoryAndParts(fixedSearchResults[0], '');
         PurchaseOrderLightningController.getPORecordTypeId();
         PurchaseOrderLightningController.generateOrderApex(objOrder.Id);
         String str = PurchaseOrderLightningController.updatePOwithLineItems(objOrder.Id,strLineItem);
@@ -125,7 +125,7 @@ public class PurchaseOrderLightningControllerTest {
         fixedSearchResults[0] = objPart.Id;
         Test.setFixedSearchResults(fixedSearchResults);
         
-        PurchaseOrderLightningController.searchPartsfromInventoryAndParts(fixedSearchResults[0]);
+        PurchaseOrderLightningController.searchPartsfromInventoryAndParts(fixedSearchResults[0], '');
         PurchaseOrderLightningController.getPORecordTypeId();
         PurchaseOrderLightningController.generateOrderApex(objOrder.Id);
         String str = PurchaseOrderLightningController.updatePOwithLineItems(objOrder.Id,strLineItem);

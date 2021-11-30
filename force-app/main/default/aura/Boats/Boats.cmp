@@ -1,0 +1,257 @@
+<aura:component implements="force:appHostable,forceCommunity:availableForAllPageTypes" controller="BoatController" access="global" >
+    <aura:attribute name="Boat" type="object[]" access="global"/>
+    <aura:attribute name="BoatCopy" type="object[]" access="global"/>
+    <aura:attribute name = "Detail" type ="object" access="global" />
+    <aura:attribute name ="isloaded" type ="boolean" default = "false" access="global"/>
+    <aura:attribute name ="NameClicked" type ="boolean" default = "false" access="global" />
+    <aura:attribute name="searchSTR" type="String" default="" access="global"/>
+    <aura:attribute name="mycolumns" type="List" access="global"/>
+    <aura:attribute name="currentInventoryId" type="String" default="" access="global"/>
+    <aura:handler event="force:navigateToSObject" action="{!c.navigateToRecord}"/>
+    <aura:attribute name="isOpen" type="boolean" default="false" access="global"/>
+    <aura:attribute name="sortBy" type="String" default="ModelYear" access="global"/>
+    <aura:attribute name="sortDirection" type="String" default="asc" access="global"/>
+    <!--<aura:attribute name="defaultSortDirection" type="String" default="asc" access="global"/> -->
+    
+    <aura:handler name = "init" value ="{!this}" action ="{!c.doInit}"/>
+    <aura:if isTrue="{! v.isloaded }">
+        <lightning:spinner alternativeText="Loading" />
+    </aura:if>
+    
+    <!--*********popup*********-->
+    <div class="slds-m-around_xx-large">
+        <aura:if isTrue="{!v.isOpen}">
+            <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+                <div class="slds-modal__container">
+                    <header class="slds-modal__header">
+                        <lightning:buttonIcon iconName="utility:close"
+                                              onclick="{! c.closeModel }"
+                                              alternativeText="close"
+                                              variant="bare-inverse"
+                                              class="slds-modal__close"/>
+                        <h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate">Boat added to Inventory</h2>
+                    </header>
+                    <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                        <p><b>Note:</b> Please update the pricing for the imported item to be able to quote.
+                            
+                        </p>
+                        
+                    </div>
+                    <footer class="slds-modal__footer">
+                        
+                        <lightning:button variant="neutral" 
+                                          label="Cancel"
+                                          title="Cancel"
+                                          onclick="{! c.closeModel }"/>
+                        <lightning:button variant="brand" 
+                                          label="View"
+                                          title="View"
+                                          onclick="{! c.viewInventory }"/>
+                    </footer>
+                </div>
+            </section>
+            <div class="slds-backdrop slds-backdrop_open"></div>
+        </aura:if>
+    </div>
+    
+    <div class="slds-grid slds-box  slds-theme_shade "> 
+        <div class="slds-col  slds-size_1-of-24">
+            <lightning:icon iconName="custom:custom88" title="custom88" /> 
+        </div>
+        <div style="font-size:25px;" class="slds-size_1-of-12 slds-col--padded slds-col slds-text-heading-small  logo"> 
+            <b> Boats.com</b>
+        </div>
+        
+        <div class="slds-col slds-col--padded slds-size_1-of-6"></div>
+        <div class="slds-col slds-col--padded slds-size_1-of-6"></div>
+        <div class="slds-col slds-col--padded slds-size_1-of-6"></div>
+        <div class="slds-col slds-col--padded slds-size_1-of-6"></div>
+        <div class="slds-col slds-col--padded slds-size_1-of-5">
+            <aura:if isTrue="{!!v.NameClicked}">
+                <div onkeyup="{!c.searchData}">
+                    <lightning:layoutItem   size=""> 
+                        <lightning:input style="display:flex;" aura:id="enter-search"
+                                         value ="{!v.searchSTR}"
+                                         name="enter-search"
+                                         type="Search"/>
+                    </lightning:layoutItem>
+                </div>
+            </aura:if>
+            <aura:if isTrue="{!v.NameClicked}">
+                <div class="slds-float_right">
+                    <lightning:button variant="brand" label="Back" title="Go Back to List" onclick="{!c.doInit}"/>
+                </div>
+            </aura:if>
+            
+        </div>
+        
+        
+    </div> 
+    
+    <aura:if isTrue="{!!v.NameClicked}">
+        <br></br>
+        <!-- <ui:inputText value="{!v.searchSTR}" class="slds-input inputClass" updateOn="keyup" keyup="{!c.searchData}" placeholder="Type to search" />-->
+        <div class ="slds-theme_default slds-p-around_small">  <lightning:datatable data = "{! v.Boat }"   
+                                                                                    columns = "{! v.mycolumns }"   
+                                                                                    keyField = "id"  
+                                                                                    hideCheckboxColumn = "true" 
+                                                                                    defaultSortDirection="{!v.defaultSortDirection}"
+                                                                                    sortedBy="{!v.sortBy}"
+                                                                                    sortedDirection="{!v.sortDirection}"
+                                                                                    onsort="{!c.handleSort}"
+                                                                                    onrowaction="{!c.handleClick}"/></div>
+        <footer>
+            <br></br>
+            <br> </br>
+            <br> </br>
+            <br> </br>
+            
+        </footer>
+    </aura:if>
+    
+    <aura:if isTrue="{!v.NameClicked}">
+        <br> </br>
+        <aura:iteration items="{!v.Detail}" var="product">
+            <div class ="slds-theme_default slds-p-around_small"> 
+                <div class="slds-grid ">
+                    <div class=" slds-wrap slds-col border1  slds-size_1-of-3">
+                        <span><b>Boat Name:</b></span>
+                    </div>
+                    <div class=" slds-wrap slds-gutter border1  slds-col slds-size_2-of-3">
+                        <span>{!product.BoatName}</span>
+                    </div>
+                </div>
+                
+                <div class="slds-grid  ">
+                    <div class=" slds-wrap slds-col border1  slds-size_1-of-3">
+                        <span><b>Model:</b></span>
+                    </div>
+                    <div class=" slds-wrap slds-col border1  slds-size_2-of-3">
+                        <span>{!product.Model}</span>
+                    </div>
+                </div>
+                
+                <div class="slds-grid   ">
+                    <div class=" slds-wrap slds-col border1  slds-size_1-of-3">
+                        <span><b>BoatCategoryCode:</b></span>
+                    </div>
+                    <div class=" slds-wrap slds-col border1  slds-size_2-of-3">
+                        <span>{!product.BoatCategoryCode}</span>
+                    </div>
+                </div>
+                
+                <div class="slds-grid  ">
+                    <div class=" slds-wrap slds-col border1  slds-size_1-of-3">
+                        <span><b>BoatCityNameNoCaseAlnumOnly:</b></span>
+                    </div>
+                    <div class=" slds-wrap slds-col border1  slds-size_2-of-3">
+                        <span>{!product.BoatCityNameNoCaseAlnumOnly}</span>
+                    </div>
+                </div>
+                
+                <div class="slds-grid  ">
+                    <div class=" slds-wrap border1 slds-col slds-size_1-of-3">
+                        <span><b>Manufacture:</b></span>
+                    </div>
+                    <div class=" slds-wrap border1  slds-col slds-size_2-of-3">
+                        <span>{!product.MakeString}</span>
+                    </div>
+                </div>
+                
+                <div class="slds-grid   ">
+                    <div class=" slds-wrap border1  slds-col slds-size_1-of-3">
+                        <span><b>ModelYear:</b></span>
+                    </div>
+                    <div class=" slds-wrap border1  slds-col slds-size_2-of-3">
+                        <span>{!product.ModelYear}</span>
+                    </div>
+                </div>
+                
+                <div class="slds-grid ">
+                    <div class=" slds-wrap border1  slds-col slds-size_1-of-3">
+                        <span><b>BtolID:</b></span>
+                    </div>
+                    <div class=" slds-wrap border1  slds-col slds-size_2-of-3">
+                        <span>{!product.BtolID}</span>
+                    </div>
+                </div>
+                
+                <div class="slds-grid  ">
+                    <div class=" slds-wrap border1  slds-col slds-size_1-of-3">
+                        <span><b>FuelTankCapacityMeasure:</b></span>
+                    </div>
+                    <div class=" slds-wrap border1  slds-col slds-size_2-of-3">
+                        <span>{!product.FuelTankCapacityMeasure}</span>
+                    </div>
+                </div>
+                
+                <div class="slds-grid   ">
+                    <div class=" slds-wrap border1  slds-col slds-size_1-of-3">
+                        <span><b>DryWeightMeasure:</b></span>
+                    </div>
+                    <div class=" slds-wrap border1  slds-col slds-size_2-of-3">
+                        <span>{!product.DryWeightMeasure}</span>
+                    </div>
+                </div>
+                
+                <div class="slds-grid ">
+                    <div class=" slds-wrap slds-col border1  slds-size_1-of-3">
+                        <span><b>YachtWorldID:</b></span>
+                    </div>
+                    <div class=" slds-wrap slds-col border1   slds-size_2-of-3">
+                        <span>{!product.YachtWorldID}</span>
+                    </div>
+                </div> 
+                
+                <div class="slds-grid  ">
+                    <div class=" slds-wrap  border1  slds-col slds-size_1-of-3">
+                        <span><b>GeneralBoatDescription:</b></span>
+                    </div>
+                    <div class=" slds-wrap border1  slds-col slds-size_2-of-3">
+                        <span> <lightning:formattedRichText value="{!product.GeneralBoatDescription[0]}" />  </span>
+                        
+                    </div>
+                </div> 
+                
+                <div class="slds-grid  ">
+                    <div class=" slds-wrap  border1  slds-col slds-size_1-of-3">
+                        <span><b>AdditionalDetailDescription:</b></span>
+                    </div>
+                    <div class=" slds-wrap border1  slds-col slds-size_2-of-3">
+                        <span> <lightning:formattedRichText value="{!product.AdditionalDetailDescription[0]}" />  </span>
+                        
+                    </div>
+                </div>
+                
+                <div class="slds-grid  ">
+                    <div class=" slds-wrap slds-col  border1  slds-size_1-of-3">
+                        <span><b>BoatClassCode :</b></span>
+                    </div>
+                    <div class=" slds-wrap slds-col border1  slds-size_2-of-3">
+                        <div>{!product.BoatClassCode[0]} <br/>
+                            {!product.BoatClassCode[1]} <br/>
+                            {!product.BoatClassCode[2]}</div>
+                    </div>
+                </div>     
+                
+                <div class="slds-grid   ">
+                    <div class=" slds-wrap border1 slds-col slds-size_1-of-3">
+                        <span><b>SaleClassCode:</b></span>
+                    </div>
+                    <div class=" slds-wrap border1 slds-col slds-size_2-of-3">
+                        <span>{!product.SaleClassCode}</span>
+                    </div>
+                </div>
+            </div> 
+            
+        </aura:iteration>
+        <br> </br>
+        <footer>
+            <br> </br>
+            <br> </br>
+        </footer>
+        <br> </br>
+        <br> </br>
+        
+    </aura:if>
+</aura:component>

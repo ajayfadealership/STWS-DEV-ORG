@@ -114,11 +114,7 @@
             <div class="header-top">
                 <!-- container -->
                 <div class="container">
-                    <div class="social w3-agileitsicons"> 
-                        <ul>
-                            <li><a onclick="redirectToHome();"><img style="vertical-align: middle; height: 72px;width: 82px; top: -1%; position: absolute;" src="https://maxcdn.icons8.com/Share/icon/ios7/Logos//salesforce1600.png"/></a></li>
-                        </ul>  
-                    </div>
+                   
                     <div class="clearfix"> </div>
                 </div>
                 <script>
@@ -233,6 +229,7 @@
                     //searchType
                     var searchType = document.getElementById("searchType").value;
                     var inputVal = document.getElementById("inputVal").value;
+                   if(inputVal.length >=3 && inputVal.length<=5){
                     if(searchType != "0") {
                         if(searchType == "All") {  
                             BOATBUILDING.BoatMatchController.searchAccount(searchType, inputVal, function(result, event) {
@@ -270,7 +267,8 @@
                                 }
                                  
                             });
-                        } else if(searchType != null && searchType != "") {
+                        } 
+                        else if(searchType != null && searchType != "") {
                             if(inputVal != null && inputVal != "") {
                                 BOATBUILDING.BoatMatchController.searchAccount(searchType, inputVal, function(result, event) {
                                     if(event.status) {
@@ -404,6 +402,9 @@
                         $("#detailSection").html("<h1 style='color: {!fontColot};'>Please select \"Search Type\".</h1>");
                         $("#detailSection").css("background", ""); 
                         //$("#detailSection").css("opacity", "1");
+                    }
+                    }else{
+                     $("#detailSection").html("<h1 style='color: {!fontColot};'>Search keyword must not be less 3 or more than 5.</h1>");
                     }
                 }
             </script>

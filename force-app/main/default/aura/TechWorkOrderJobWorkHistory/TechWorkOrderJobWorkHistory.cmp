@@ -1,0 +1,18 @@
+<aura:component access="global" controller="TechWorkOrderDetailController">
+    <aura:attribute access="global" name="jobId" type="String"/>
+    <aura:attribute access="global" name="lstTMWH" type="Object[]"/>
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    <aura:iteration items="{!v.lstTMWH}" var="objTM">
+        {!objTM.Id}
+        <lightning:recordViewForm recordId="{!objTM.Id}" objectApiName="BOATBUILDING__Time_Management__c">
+            <div class = "slds-grid slds-wrap" >
+                <div class = "slds-col slds-size--1-of-1 slds-medium-size--3-of-6 slds-col--padded">
+                    <lightning:outputField fieldName="BOATBUILDING__Clock_In__c" />
+                </div>
+                <div class = "slds-col slds-size--1-of-1 slds-medium-size--3-of-6 slds-col--padded">
+                    <lightning:outputField fieldName="BOATBUILDING__Clock_Out__c" />
+                </div>
+            </div>
+        </lightning:recordViewForm>
+    </aura:iteration>
+</aura:component>

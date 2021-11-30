@@ -75,6 +75,7 @@ public with sharing class OptionAndSelectedCatagoryUtil{
                                                                 Sorting_Order__c, 
                                                                 Product_Model__c, 
                                                                 Model_Variant__c,
+                                                                BOATBUILDING__Quantity__c,
                                                                 RecordType.Name   
                                                         FROM 
                                                                 BOATBUILDING__ProductPrice__c
@@ -120,7 +121,8 @@ public with sharing class OptionAndSelectedCatagoryUtil{
                                                                 Product_Model__c, 
                                                                 Model_Variant__c,
                                                                 Sorting_Order__c,
-                                                                RecordType.Name 
+                                                                RecordType.Name,
+                                                                BOATBUILDING__Quantity__c 
                                                          FROM 
                                                                 BOATBUILDING__ProductPrice__c 
                                                          WHERE 
@@ -151,6 +153,7 @@ public with sharing class OptionAndSelectedCatagoryUtil{
                                                             Year__c, 
                                                             Product_Model__c, 
                                                             Model_Variant__c,
+                                                            Quantity__c,
                                                             RecordType.Name 
                                                               
                                                     FROM 

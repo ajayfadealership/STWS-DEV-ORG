@@ -64,7 +64,7 @@
 
             
             
-            <lightning:input type="Number" messageWhenRangeUnderflow="Quantity should be more than 0" name="input2" fieldLevelHelp="The default quantity dispalyed here is what's curruntly available. Please fill in required quantity." min="1" label="Quantity" value="{!v.JLI.BOATBUILDING__Quantity__c}"/>
+            <lightning:input type="Number" messageWhenRangeUnderflow="Quantity should be more than 0" name="input2" fieldLevelHelp="The default quantity dispalyed here is what's curruntly available. Please fill in required quantity." step="0.01" label="Quantity" value="{!v.JLI.BOATBUILDING__Quantity__c}"/>
         </div>
         <div class="slds-col slds-size_1-of-1  slds-medium-size_1-of-1 slds-large-size_1-of-4 "> 
             <aura:if isTrue="{!v.recordType != 'Warranty Work Order'}">
@@ -77,8 +77,10 @@
         </div>
         <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-1 slds-large-size_1-of-4 ">
             <aura:if isTrue="{!v.recordType != 'Warranty Work Order'}">
+            
                 <lightning:input type="number" name="Total" label="Total" formatter="currency" step="0.01" value="{!v.JLI.BOATBUILDING__Price__c * v.JLI.BOATBUILDING__Quantity__c}" disabled="true"/>
                 <aura:set attribute="else">
+                 
                     <lightning:input type="number" name="Total" label="Total" formatter="currency" step="0.01" value="{!v.JLI.BOATBUILDING__Dealer_Price__c * v.JLI.BOATBUILDING__Quantity__c}" disabled="true"/>
 
                 </aura:set>

@@ -22,11 +22,19 @@
             <default>false</default>
         </values>
         <values>
+            <fullName>Men</fullName>
+            <default>false</default>
+        </values>
+        <values>
             <fullName>Snowboards</fullName>
             <default>false</default>
         </values>
         <values>
-            <fullName>Wakeboards</fullName>
+            <fullName>Wake</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Wakeboard</fullName>
             <default>false</default>
         </values>
         <values>
@@ -65,6 +73,10 @@
             <default>false</default>
         </values>
         <values>
+            <fullName>Clothing</fullName>
+            <default>false</default>
+        </values>
+        <values>
             <fullName>Dash</fullName>
             <default>false</default>
         </values>
@@ -74,6 +86,10 @@
         </values>
         <values>
             <fullName>Engine</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Exhaust Parts</fullName>
             <default>false</default>
         </values>
         <values>
@@ -94,6 +110,10 @@
         </values>
         <values>
             <fullName>Hoodies</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Kid%27s Wakeboard Equipment</fullName>
             <default>false</default>
         </values>
         <values>
@@ -196,6 +216,10 @@
             <fullName>Walk Shorts</fullName>
             <default>false</default>
         </values>
+        <values>
+            <fullName>Wetsuits</fullName>
+            <default>false</default>
+        </values>
     </picklistValues>
     <picklistValues>
         <picklist>Part_Gender__c</picklist>
@@ -209,6 +233,14 @@
         </values>
         <values>
             <fullName>Women</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>female</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>male</fullName>
             <default>false</default>
         </values>
     </picklistValues>
@@ -230,11 +262,23 @@
             <fullName>2020</fullName>
             <default>false</default>
         </values>
+        <values>
+            <fullName>2021</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>2022</fullName>
+            <default>false</default>
+        </values>
     </picklistValues>
     <picklistValues>
         <picklist>Store_Location__c</picklist>
         <values>
             <fullName>Other</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>STWS</fullName>
             <default>false</default>
         </values>
     </picklistValues>
@@ -257,11 +301,27 @@
             <default>false</default>
         </values>
         <values>
+            <fullName>Exhaust Hoses</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Hoodies %26 Sweatshirts</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Packages</fullName>
+            <default>false</default>
+        </values>
+        <values>
             <fullName>Pants</fullName>
             <default>false</default>
         </values>
         <values>
             <fullName>Ropes %26 Handles</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>T-Shirts</fullName>
             <default>false</default>
         </values>
         <values>

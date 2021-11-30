@@ -3,9 +3,8 @@
     <fullName>Boat_Pay_Off__c</fullName>
     <deprecated>false</deprecated>
     <externalId>false</externalId>
-    <formula>Contact_Name__r.Trade_Payoff__c</formula>
-    <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
-    <label>Boat Pay-Off</label>
+    <formula>BoatPayOff__c</formula>
+    <label>Boat Pay-Off Formula</label>
     <precision>18</precision>
     <required>false</required>
     <scale>2</scale>

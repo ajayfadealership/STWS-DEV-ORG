@@ -118,7 +118,7 @@
                                 </div>
                                 <div class="slds-form-element tab_mid">
                                     <a class="slds-button slds-button--brand" id="sndWO" onclick="sendWOJS(this);">Send Work Order</a>
-                                    <a class="slds-button slds-button--brand" id="cancel" onclick="window.top.location= '/apex/ServicePage'">Cancel</a>
+                                    <a class="slds-button slds-button--brand" id="cancel" onclick="window.top.location= '/{!objWO.Id}'">Cancel</a>
                                 </div>
                             </div>
                         </div>

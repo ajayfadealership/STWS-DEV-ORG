@@ -1,4 +1,5 @@
 <aura:event type="APPLICATION" description="PPId AND Status" access="public">
     <aura:attribute name="PPID" type="String" />
     <aura:attribute name="PPStatus" type="String" />
+    <aura:attribute name="PPQT" type="Decimal" default="1"/>
 </aura:event>

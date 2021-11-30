@@ -4,7 +4,14 @@
     <deprecated>false</deprecated>
     <description>Formula Field</description>
     <externalId>false</externalId>
-    <formula>IF(( Total_Price_Quote__c +  Quote_MSRP_Trailer_Price__c)&gt; Discount_On_Quote__c,(Total_Price_Quote__c +  Quote_MSRP_Trailer_Price__c)  -  Discount_On_Quote__c,(Total_Price_Quote__c +  Quote_MSRP_Trailer_Price__c))</formula>
+    <formula>IF(Instant_Quote__c,
+   Our_Instant_Quote_Price__c,
+   IF(
+	(Total_Price_Quote__c + Quote_MSRP_Trailer_Price__c) &gt; Discount_On_Quote__c,
+	(Total_Price_Quote__c + Quote_MSRP_Trailer_Price__c) -  Discount_On_Quote__c,
+	(Total_Price_Quote__c + Quote_MSRP_Trailer_Price__c)
+   )
+)</formula>
     <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
     <label>Quote Your Price Formula</label>
     <precision>18</precision>

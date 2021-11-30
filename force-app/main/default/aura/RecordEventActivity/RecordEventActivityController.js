@@ -5,6 +5,8 @@
     saveCustomerComment : function(component, event, helper){
         helper.showSpinner(component, event, helper);
         var action = component.get("c.addCustomerComment");
+        console.log('typeeeeeeeee',component.get("v.Type"));
+        console.log('component.get("v.commentSectionName")',component.get("v.commentSectionName"));
         action.setParams({
             "subject" : component.get("v.commentSubject"),
             "customerComment" : component.get("v.customerComment"),
@@ -14,7 +16,7 @@
             "sectionName" : component.get("v.commentSectionName"),
             "Type" : component.get("v.Type")
         });
-        console.log('component.get("v.whatId")',component.get("v.whatId"));
+        //console.log('component.get("v.whatId")',component.get("v.whatId"));
         action.setCallback(this, function(response){
             var state = response.getState();
             helper.hideSpinner(component, event, helper);

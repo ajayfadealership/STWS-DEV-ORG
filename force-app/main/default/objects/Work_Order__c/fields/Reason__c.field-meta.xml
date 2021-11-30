@@ -14,9 +14,9 @@
         <valueSetDefinition>
             <sorted>false</sorted>
             <value>
-                <fullName>User didn&#39;t attend training</fullName>
+                <fullName>User didn&apos;t attend training</fullName>
                 <default>false</default>
-                <label>User didn&#39;t attend training</label>
+                <label>User didn&apos;t attend training</label>
             </value>
             <value>
                 <fullName>Complex functionality</fullName>

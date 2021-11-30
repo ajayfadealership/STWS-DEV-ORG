@@ -1,17 +1,24 @@
 <aura:component controller="InventorySelectionController">
     
     
-    <aura:attribute name="InvIdC" type="sObject" default=""/>
-    <aura:attribute name="ProIdC" type="sObject" default=""/>
+    <aura:attribute name="InvIdC" type="String" default="0"/>
+    <aura:attribute name="ProIdC" type="String" default="0"/>
+    <aura:attribute name="InvlistId" type="sObject" default=""/>
+    
     
     <aura:attribute name="InvLstAfterSearch" type="InventoryListWrapper[]" />
     <aura:attribute name="ProductPriceIdListC" type="String[]"/>
+    <aura:attribute name="ProductPriceIdListQTC" type="String[]"/>
     <aura:attribute name="DealerOptionIdListC" type="String[]"/>
+    <aura:attribute name="DealerOptionIdListQTC" type="String[]"/>
 	<aura:attribute name="NoSalesmanWithoutCostC" type="boolean" />
 
     <aura:attribute name="lstDealerOptionWraperC" type="DealerOptionWraper[]"/>
-
-    <div style="padding: 0%;">
+    <aura:registerEvent name="invEventII" type="c:InvRedirectionII"/> 
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    <aura:handler  event="c:InvRedirection" action="{!c.handelRedirection}"/> 
+    
+    <div style="padding: 0%;"> 
         <div class="slds-card" style="padding: 1%; border: 1px solid rgb(221, 219, 218); box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.10);">
             <div class="slds-p-around_medium" id="toglSectionForNewORExProduct">  
                 <div class="slds-grid slds-wrap slds-col--padded">
@@ -66,9 +73,11 @@
             <div class="slds-p-around_medium" id="newInvCreate">
                 <c:NewProduct ProIdCC="{!v.ProIdC}"/>
             </div>
-            <hr/>
-            <div class="slds-p-around_medium" id="ProductPriceSectionDiv" >
-                <c:ProdcutPriceSection lstDealerOptionWraperCC="{!v.lstDealerOptionWraperC}" PrntAttP="Quote" NoSalesmanWithoutCostCC="{!v.NoSalesmanWithoutCostC}" ProductPriceIdListCC="{!v.ProductPriceIdListC}" DealerOptionIdListCC="{!v.DealerOptionIdListC}"/>
+            <div  id="ProductPriceSectionDiv" >
+                <c:ProdcutPriceSection lstDealerOptionWraperCC="{!v.lstDealerOptionWraperC}" 
+                        PrntAttP="Quote" NoSalesmanWithoutCostCC="{!v.NoSalesmanWithoutCostC}"  
+                            ProductPriceIdListCC="{!v.ProductPriceIdListC}" ProductPriceIdListQTCC="{!v.ProductPriceIdListQTC}"
+                            DealerOptionIdListCC="{!v.DealerOptionIdListC}" DealerOptionIdListQTCC="{!v.DealerOptionIdListQTC}"/>
             </div>
         </div>
     </div>

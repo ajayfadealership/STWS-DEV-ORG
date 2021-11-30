@@ -31,6 +31,17 @@ public class InvoicePaymentController {
         return 'NONE';
     }
     @AuraEnabled
+    public static String getRecTypeId(String strType, String recId) {
+        if(strType == 'INVOICE') {
+            String recName = [Select Id, RecordType.Name From Invoice__c Where Id =: recId].RecordType.Name;
+            return Schema.SObjectType.BOATBUILDING__Payments__c.getRecordTypeInfosByName().get(recName).getRecordTypeId();
+        } else if(strType == 'WORKORDER') {
+            String recName = [Select Id, RecordType.Name From BOATBUILDING__Work_Order__c Where Id =: recId].RecordType.Name; 
+            return Schema.SObjectType.BOATBUILDING__Payments__c.getRecordTypeInfosByName().get(recName).getRecordTypeId();
+        }
+        return '';
+    } 
+    @AuraEnabled
     public static List<Object> getPaymentURLInfoWO(String strInvId) {
         List<Object> lstObj = new List<Object>();
         String baseUrl = ''; 
@@ -41,7 +52,7 @@ public class InvoicePaymentController {
             }
         }
         lstObj.add(baseUrl);
-        BOATBUILDING__Work_Order__c objWO = [SELECT Id, BOATBUILDING__Deducted_Total_Due_Amount__c From BOATBUILDING__Work_Order__c Where Id =: strInvId];
+        BOATBUILDING__Work_Order__c objWO = [SELECT Id, BOATBUILDING__Balance__c, BOATBUILDING__Deducted_Total_Due_Amount__c From BOATBUILDING__Work_Order__c Where Id =: strInvId];
         lstObj.add(objWO);
         System.debug('>>>>: '+ lstObj); 
         //1. URL, 2. WO

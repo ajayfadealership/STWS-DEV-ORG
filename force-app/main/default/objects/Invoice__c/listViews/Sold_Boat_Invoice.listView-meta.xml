@@ -13,7 +13,7 @@
     <filters>
         <field>RECORDTYPE</field>
         <operation>equals</operation>
-        <value>Invoice__c.Standard_Invoice</value>
+        <value>Invoice__c.Sold_Boat_Invoice</value>
     </filters>
     <label>Sold Boat Invoice</label>
 </ListView>

@@ -3,7 +3,7 @@
     <fullName>Case_Age__c</fullName>
     <deprecated>false</deprecated>
     <externalId>false</externalId>
-    <formula>IF( ISPICKVAL(Status__c, &#39;Closed&#39;), ROUND(ClosedDate__c -  CreatedDate , 0), ROUND((NOW() -  CreatedDate ), 0))</formula>
+    <formula>IF( ISPICKVAL(Status__c, &apos;Closed&apos;), ROUND(ClosedDate__c -  CreatedDate , 0), ROUND((NOW() -  CreatedDate ), 0))</formula>
     <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
     <label>Case Age</label>
     <precision>18</precision>

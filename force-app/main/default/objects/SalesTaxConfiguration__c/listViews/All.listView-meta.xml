@@ -6,10 +6,14 @@
     <columns>Vehicle_Sales_Tax__c</columns>
     <columns>Tax_Capping_Amount__c</columns>
     <columns>Labor_Tax__c</columns>
-    <columns>Part_Tax__c</columns>
-    <columns>Shop_Supplies_Tax__c</columns>
-    <columns>Misc_Tax__c</columns>
     <columns>Website_Endpoint_URL__c</columns>
+    <columns>SETUP_TYPE</columns>
+    <columns>Reg_Fee_Taxable__c</columns>
+    <columns>Quote_Trade_Allowance_Taxable__c</columns>
+    <columns>Web_Invoice_Taxable__c</columns>
+    <columns>Canadian_Tax__c</columns>
+    <columns>GST__c</columns>
+    <columns>PST__c</columns>
     <filterScope>Everything</filterScope>
     <label>All</label>
 </ListView>

@@ -1,12 +1,16 @@
 <aura:component >
     <aura:attribute name="ProductPriceIdListC" type="String[]"/>
+    <aura:attribute name="ProductPriceIdListQTC" type="String[]"/>
     <aura:attribute name="DealerOptionIdListC" type="String[]"/>
     <aura:attribute name="NoSalesmanWithoutCostC" type="boolean" />
     
     <aura:attribute name="lstDealerOptionWraperC" type="DealerOptionWraper[]"/>
+
+    
     <aura:registerEvent name="cl_evnt" type="c:InvCostLineEvent"/>
     
-    <c:ProdcutPriceSection lstDealerOptionWraperCC="{!v.lstDealerOptionWraperC}" NoSalesmanWithoutCostCC="{!v.NoSalesmanWithoutCostC}" PrntAttP="Inventory" ProductPriceIdListCC="{!v.ProductPriceIdListC}" DealerOptionIdListCC="{!v.DealerOptionIdListC}"/>
+    <c:ProdcutPriceSection lstDealerOptionWraperCC="{!v.lstDealerOptionWraperC}" NoSalesmanWithoutCostCC="{!v.NoSalesmanWithoutCostC}" PrntAttP="Inventory" 
+                                ProductPriceIdListCC="{!v.ProductPriceIdListC}" DealerOptionIdListCC="{!v.DealerOptionIdListC}" ProductPriceIdListQTCC="{!v.ProductPriceIdListQTC}"/>
     <hr/>
 	<table>
         <tr>

@@ -1,0 +1,55 @@
+<template>
+    
+    <lightning-card title="" >
+        <div class="slds-wrap slds-grid slds-theme_default">
+            <div class = "slds-col slds-size_1-of-4 slds-p-horizontal_small">
+            
+            <lightning-combobox
+                    name="progress"
+                    label="Select"
+                    value={selectedOption}
+                    placeholder="Select Progress"
+                    options={options}
+                    onchange={handleChange} ></lightning-combobox>
+                
+            </div>
+            <div class = "slds-col slds-size_1-of-4 slds-p-horizontal_small">
+            <lightning-input type="Search" name="search" label="Search" value={searchPart} onchange={handlePartSearch} ></lightning-input>
+                </div>
+                <div class="buttonPosition">
+                <div class = "slds-col slds-size_1-of-4 slds-p-horizontal_small">
+                <lightning-button variant="brand" label="Search" title="Primary action" onclick={handleClick} class="slds-m-left_x-small"></lightning-button>
+            </div>
+        </div>
+    
+                <template if:true={searchResultorder} >
+                    <lightning-datatable 
+                                    data={searchResult}
+                                    columns={columnsOrder}
+                                    hide-checkbox-column="true"
+                                    hide-row-number-column="true"
+                                    key-field="id" >
+                    </lightning-datatable>
+                </template>
+                <template if:true={searchResultinvoice} >
+                    <lightning-datatable 
+                                    data={searchResult}
+                                    columns={columnsInvoice}
+                                    hide-checkbox-column="true"
+                                    hide-row-number-column="true"
+                                    key-field="id" >
+                    </lightning-datatable>
+                </template>
+                <template if:true={searchResultWO} >
+                    <lightning-datatable 
+                                    data={searchResult}
+                                    columns={columnsWO}
+                                    hide-checkbox-column="true"
+                                    hide-row-number-column="true"
+                                    key-field="id" >
+                    </lightning-datatable>
+                </template>
+            </div> 
+    </lightning-card>  
+    
+</template>

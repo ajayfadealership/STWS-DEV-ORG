@@ -1,0 +1,142 @@
+<apex:page standardController="Work_Order__c" renderAs="advanced_pdf"
+           docType="html-5.0" standardStylesheets="false" applyBodyTag="false" applyHtmlTag="false" showHeader="false">
+    <apex:stylesheet value="{!$Resource.qrsheet}"/>
+    <html>
+        <head>
+            <style>
+                @page {
+                size: 8.5in 11in;
+                margin: 16mm;
+                
+                }
+                
+                body {
+                font-family: Arial Unicode MS;
+                }
+            </style>
+        </head>
+        <center>
+            
+            <div class="">
+                
+                <span class="" style="position: absolute ; top: 10px; left: 52px;">
+                    <apex:outputText escape="false" value="{!Work_Order__c.QR_Code__c}" style="{!if($CurrentPage.parameters.qr1 =='true','visibility:visible;', 'visibility:hidden;')}" />
+                </span>
+                <span class=" " style="position: absolute ; top: 10px; left: 220px;">
+                    <apex:outputText escape="false" value="{!Work_Order__c.QR_Code__c}" style="{!if($CurrentPage.parameters.qr2 =='true','visibility:visible;', 'visibility:hidden;')}"  />
+                </span>
+                <span class="" style="position: absolute ; top: 10px; left: 400px;">
+                    <apex:outputText escape="false" value="{!Work_Order__c.QR_Code__c}"  style="{!if($CurrentPage.parameters.qr3 =='true','visibility:visible;', 'visibility:hidden;')}" />
+                </span>
+                 <span class="" style=" position: absolute ; top: 10px; left: 580px;">
+                <apex:outputText escape="false" value="{!Work_Order__c.QR_Code__c}"  style="{!if($CurrentPage.parameters.qr4 =='true','visibility:visible;', 'visibility:hidden;')}" /> 
+                </span>
+            </div><br/>
+           <div class="">
+                
+                <span class="" style="position: absolute ; top: 130px; left: 52px;">
+                    <apex:outputText escape="false" value="{!Work_Order__c.QR_Code__c}" style="{!if($CurrentPage.parameters.qr5 =='true','visibility:visible;', 'visibility:hidden;')}" />
+                </span>
+                <span class=" " style="position: absolute ; top: 130px; left: 220px;">
+                    <apex:outputText escape="false" value="{!Work_Order__c.QR_Code__c}" style="{!if($CurrentPage.parameters.qr6 =='true','visibility:visible;', 'visibility:hidden;')}"  />
+                </span>
+                <span class="" style="position: absolute ; top: 130px; left: 400px; ">
+                    <apex:outputText escape="false" value="{!Work_Order__c.QR_Code__c}"  style="{!if($CurrentPage.parameters.qr7 =='true','visibility:visible;', 'visibility:hidden;')}" />
+                </span>
+                 <span class="" style="position: absolute ; top: 130px; left: 580px;">
+                <apex:outputText escape="false" value="{!Work_Order__c.QR_Code__c}"  style="{!if($CurrentPage.parameters.qr8 =='true','visibility:visible;', 'visibility:hidden;')}" /> 
+                </span>
+            </div><br/>
+            <div class="">
+                
+                <span class="" style="position: absolute ; top: 250px; left: 52px;">
+                    <apex:outputText escape="false" value="{!Work_Order__c.QR_Code__c}" style="{!if($CurrentPage.parameters.qr9 =='true','visibility:visible;', 'visibility:hidden;')}" />
+                </span>
+                <span class=" " style="position: absolute ; top: 250px; left: 220px; ">
+                    <apex:outputText escape="false" value="{!Work_Order__c.QR_Code__c}" style="{!if($CurrentPage.parameters.qr10 =='true','visibility:visible;', 'visibility:hidden;')}"  />
+                </span>
+                <span class="" style="position: absolute ; top: 250px; left: 400px; ">
+                    <apex:outputText escape="false" value="{!Work_Order__c.QR_Code__c}"  style="{!if($CurrentPage.parameters.qr11 =='true','visibility:visible;', 'visibility:hidden;')}" />
+                </span>
+                 <span class="" style="position: absolute ; top: 250px; left: 580px;">
+                <apex:outputText escape="false" value="{!Work_Order__c.QR_Code__c}"  style="{!if($CurrentPage.parameters.qr12 =='true','visibility:visible;', 'visibility:hidden;')}" /> 
+                </span>
+            </div><br/>
+            <div class="">
+                
+                <span class="" style="position: absolute ; top: 373px; left: 52px; ">
+                    <apex:outputText escape="false" value="{!Work_Order__c.QR_Code__c}" style="{!if($CurrentPage.parameters.qr13 =='true','visibility:visible;', 'visibility:hidden;')}" />
+                </span>
+                <span class=" " style="position: absolute ; top: 373px; left: 220px; ">
+                    <apex:outputText escape="false" value="{!Work_Order__c.QR_Code__c}" style="{!if($CurrentPage.parameters.qr14 =='true','visibility:visible;', 'visibility:hidden;')}"  />
+                </span>
+                <span class="" style="position: absolute ; top: 373px; left: 400px; ">
+                    <apex:outputText escape="false" value="{!Work_Order__c.QR_Code__c}"  style="{!if($CurrentPage.parameters.qr15 =='true','visibility:visible;', 'visibility:hidden;')}" />
+                </span>
+                 <span class="" style="position: absolute ; top: 373px; left: 580px;">
+                <apex:outputText escape="false" value="{!Work_Order__c.QR_Code__c}"  style="{!if($CurrentPage.parameters.qr16 =='true','visibility:visible;', 'visibility:hidden;')}" /> 
+                </span>
+            </div><br/>
+            <div class="">
+                
+                <span class="" style="position: absolute ; top: 490px; left: 52px;">
+                    <apex:outputText escape="false" value="{!Work_Order__c.QR_Code__c}" style="{!if($CurrentPage.parameters.qr17 =='true','visibility:visible;', 'visibility:hidden;')}" />
+                </span>
+                <span class=" " style="position: absolute ; top: 490px; left: 220px;">
+                    <apex:outputText escape="false" value="{!Work_Order__c.QR_Code__c}" style="{!if($CurrentPage.parameters.qr18 =='true','visibility:visible;', 'visibility:hidden;')}"  />
+                </span>
+                <span class="" style="position: absolute ; top: 490px; left: 400px;">
+                    <apex:outputText escape="false" value="{!Work_Order__c.QR_Code__c}"  style="{!if($CurrentPage.parameters.qr19 =='true','visibility:visible;', 'visibility:hidden;')}" />
+                </span>
+                 <span class="" style="position: absolute ; top: 490px; left: 580px;">
+                <apex:outputText escape="false" value="{!Work_Order__c.QR_Code__c}"  style="{!if($CurrentPage.parameters.qr20 =='true','visibility:visible;', 'visibility:hidden;')}" /> 
+                </span>
+            </div><br/>
+            <div class="">
+                
+                <span class="" style="position: absolute ; top: 610px; left: 52px;">
+                    <apex:outputText escape="false" value="{!Work_Order__c.QR_Code__c}" style="{!if($CurrentPage.parameters.qr21 =='true','visibility:visible;', 'visibility:hidden;')}" />
+                </span>
+                <span class=" " style="position: absolute ; top: 610px; left: 220px;">
+                    <apex:outputText escape="false" value="{!Work_Order__c.QR_Code__c}" style="{!if($CurrentPage.parameters.qr22 =='true','visibility:visible;', 'visibility:hidden;')}"  />
+                </span>
+                <span class="" style="position: absolute ; top: 610px; left: 400px;">
+                    <apex:outputText escape="false" value="{!Work_Order__c.QR_Code__c}"  style="{!if($CurrentPage.parameters.qr23 =='true','visibility:visible;', 'visibility:hidden;')}" />
+                </span>
+                 <span class="" style="position: absolute ; top: 610px; left: 580px;">
+                <apex:outputText escape="false" value="{!Work_Order__c.QR_Code__c}"  style="{!if($CurrentPage.parameters.qr24 =='true','visibility:visible;', 'visibility:hidden;')}" /> 
+                </span>
+            </div><br/>
+            <div class="">
+                
+                <span class="" style="position: absolute ; top: 730px; left: 52px;">
+                    <apex:outputText escape="false" value="{!Work_Order__c.QR_Code__c}" style="{!if($CurrentPage.parameters.qr25 =='true','visibility:visible;', 'visibility:hidden;')}" />
+                </span>
+                <span class=" " style="position: absolute ; top: 730px; left: 220px;">
+                    <apex:outputText escape="false" value="{!Work_Order__c.QR_Code__c}" style="{!if($CurrentPage.parameters.qr26 =='true','visibility:visible;', 'visibility:hidden;')}"  />
+                </span>
+                <span class="" style="position: absolute ; top: 730px; left: 400px;">
+                    <apex:outputText escape="false" value="{!Work_Order__c.QR_Code__c}"  style="{!if($CurrentPage.parameters.qr27 =='true','visibility:visible;', 'visibility:hidden;')}" />
+                </span>
+                 <span class="" style="position: absolute ; top: 730px; left: 580px;">
+                <apex:outputText escape="false" value="{!Work_Order__c.QR_Code__c}"  style="{!if($CurrentPage.parameters.qr28 =='true','visibility:visible;', 'visibility:hidden;')}" /> 
+                </span>
+            </div><br/>
+            <div class="">
+                
+                <span class="" style="position: absolute ; top: 848px; left: 52px;">
+                    <apex:outputText escape="false" value="{!Work_Order__c.QR_Code__c}" style="{!if($CurrentPage.parameters.qr29 =='true','visibility:visible;', 'visibility:hidden;')}" />
+                </span>
+                <span class=" " style="position: absolute ; top: 848px; left: 220px;">
+                    <apex:outputText escape="false" value="{!Work_Order__c.QR_Code__c}" style="{!if($CurrentPage.parameters.qr30 =='true','visibility:visible;', 'visibility:hidden;')}"  />
+                </span>
+                <span class="" style="position: absolute ; top: 848px; left: 400px;">
+                    <apex:outputText escape="false" value="{!Work_Order__c.QR_Code__c}"  style="{!if($CurrentPage.parameters.qr31 =='true','visibility:visible;', 'visibility:hidden;')}" />
+                </span>
+                 <span class="" style="position: absolute ; top: 848px; left: 580px;">
+                <apex:outputText escape="false" value="{!Work_Order__c.QR_Code__c}"  style="{!if($CurrentPage.parameters.qr32 =='true','visibility:visible;', 'visibility:hidden;')}" /> 
+                </span>
+            </div><br/>
+        </center>
+    </html>
+</apex:page>

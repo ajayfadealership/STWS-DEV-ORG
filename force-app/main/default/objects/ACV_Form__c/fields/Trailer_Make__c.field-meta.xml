@@ -3,9 +3,8 @@
     <fullName>Trailer_Make__c</fullName>
     <deprecated>false</deprecated>
     <externalId>false</externalId>
-    <formula>Contact_Name__r.Account.Trade_Boat_Trailer_Make__c</formula>
-    <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
-    <label>Trailer Make</label>
+    <formula>TrailerMake__c</formula>
+    <label>Trailer Make Formula</label>
     <required>false</required>
     <trackHistory>false</trackHistory>
     <trackTrending>false</trackTrending>

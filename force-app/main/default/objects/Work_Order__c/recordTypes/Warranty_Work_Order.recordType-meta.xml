@@ -134,6 +134,21 @@
         </values>
     </picklistValues>
     <picklistValues>
+        <picklist>Source__c</picklist>
+        <values>
+            <fullName>App</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>In Store</fullName>
+            <default>true</default>
+        </values>
+        <values>
+            <fullName>Online</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
         <picklist>State__c</picklist>
         <values>
             <fullName>North Carolina</fullName>
@@ -152,6 +167,10 @@
         </values>
         <values>
             <fullName>Closed Internal</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Completed Pending Review</fullName>
             <default>false</default>
         </values>
         <values>
@@ -222,7 +241,7 @@
             <default>false</default>
         </values>
         <values>
-            <fullName>Store 1</fullName>
+            <fullName>STWS</fullName>
             <default>false</default>
         </values>
     </picklistValues>

@@ -74,6 +74,10 @@
             <fullName>Final</fullName>
             <default>false</default>
         </values>
+        <values>
+            <fullName>Quote</fullName>
+            <default>false</default>
+        </values>
     </picklistValues>
     <picklistValues>
         <picklist>Lending_Bank__c</picklist>
@@ -270,7 +274,11 @@
             <default>false</default>
         </values>
         <values>
-            <fullName>Store 1</fullName>
+            <fullName>Raleigh</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>STWS</fullName>
             <default>false</default>
         </values>
     </picklistValues>

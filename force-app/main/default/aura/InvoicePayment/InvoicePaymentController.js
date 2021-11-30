@@ -17,6 +17,19 @@
             } else if(response.getReturnValue() == 'WORKORDER'){
                 helper.fetchDetailsWO(component, event, recId);
             }
+
+
+            var action2 = component.get("c.getRecTypeId");
+            action2.setParams({
+                "strType" : response.getReturnValue(),
+                "recId" : recId
+            });
+            action2.setCallback(this, function(response2) {
+                console.log('res2: ',response2.getReturnValue());
+                component.set("v.RecTyId", response2.getReturnValue());
+            });
+            $A.enqueueAction(action2);
+
         });
         $A.enqueueAction(action);
     },
@@ -26,7 +39,7 @@
             var picVal = component.find("pType").get("v.value");
             console.log(picVal);
             var isBoolGate = false;
-            if(picVal == "Credit_Card") {
+            if(picVal == "Credit Card") {
                 isBoolGate = true;
             } 
             component.set("v.isGateway", isBoolGate);
@@ -34,7 +47,7 @@
     },
     proceedToGateWay : function(component, event, helper) {
         var urlEvent = $A.get("e.force:navigateToURL");
-        var urlStr = component.get("v.strURL")+'?invId='+component.get("v.recordId");
+        var urlStr = component.get("v.strURL")+'?invId='+component.get("v.recordId")+'&amount='+component.get("v.amount");;
         urlEvent.setParams({
             "url": urlStr
         });

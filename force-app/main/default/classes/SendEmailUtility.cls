@@ -50,12 +50,10 @@ public with sharing class SendEmailUtility{
             Messaging.SingleEmailMessage mail =  new Messaging.SingleEmailMessage();
             List<String> sendTo = new List<String>();
             sendTo.add('akshay@fadealership.com');
-            sendTo.add('sajal@fadealership.com');
-            sendTo.add('ajay@fadealership.com');
             mail.setToAddresses(sendTo);
-            mail.setSenderDisplayName('Exception');
+            mail.setSenderDisplayName('Exception From Boat Builder');
             List<String> ccTo = new List<String>();
-            mail.setSubject('BB Issue');
+            mail.setSubject('BB Old Module');
             String body = res;
             mail.setHtmlBody(body);
             mails.add(mail);

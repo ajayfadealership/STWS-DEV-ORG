@@ -30,7 +30,7 @@ public without sharing class InvoiceDetailController {
     public Decimal ShippingCharge { get; set; }
     public Decimal FinalAmount { get; set; }
     public String ILIdelete { get; set; }
-    public BOATBUILDING__Payment__c objPayment {get; set;}
+    public BOATBUILDING__Payments__c objPayment {get; set;}
     public String baseUrlINV { get; set; }
     public String dicType { get; set; }
     public String printStatus { get; set; }
@@ -147,9 +147,9 @@ public without sharing class InvoiceDetailController {
                       LIMIT
                       1];
         if(objInvoice.BOATBUILDING__Invoice_Status__c != null && objInvoice.BOATBUILDING__Invoice_Status__c == 'Final') {
-        	editMode = true;
+            editMode = true;
         } else {
-        	editMode = false;
+            editMode = false;
         }
         
         if(objInvoice.BOATBUILDING__Shipping_Charge__c != null) {
@@ -232,7 +232,7 @@ public without sharing class InvoiceDetailController {
     
     @RemoteAction
     public static String finalInvoiceApex(String InvoiceId) {
-    	list<BOATBUILDING__Invoice__c> lstInvoiceToUpdate = new list<BOATBUILDING__Invoice__c>();
+        list<BOATBUILDING__Invoice__c> lstInvoiceToUpdate = new list<BOATBUILDING__Invoice__c>();
         List<BOATBUILDING__Invoice__c> lstInvoice = [Select Id,BOATBUILDING__Total_Parts__c, Sold_By_Ref__c, Sold_By_Ref__r.Name, BOATBUILDING__Inventory__c,BOATBUILDING__Invoice_Status__c from BOATBUILDING__Invoice__c where id =: InvoiceId];
         for(BOATBUILDING__Invoice__c obj : lstInvoice){
             obj.BOATBUILDING__Invoice_Status__c = 'Final';
@@ -249,7 +249,7 @@ public without sharing class InvoiceDetailController {
                                                Name, 
                                                Id, 
                                                BOATBUILDING__Promo_Code__r.Promo_Code_Name__c,
-                      						   BOATBUILDING__Discount_With_Promocode__c,
+                                               BOATBUILDING__Discount_With_Promocode__c,
                                                BOATBUILDING__Account_Name__c,
                                                BOATBUILDING__ACV_Form__c,
                                                BOATBUILDING__Billing_State_Province__c,
@@ -389,13 +389,13 @@ public without sharing class InvoiceDetailController {
         if(String.isNotBlank(lineItemIdToBeUpdated)) {
             BOATBUILDING__Invoice_Line_Item__c objILI = [Select Id, Discount_Price__c, BOATBUILDING__Discount_in_Percent__c, Total_Price__c From BOATBUILDING__Invoice_Line_Item__c where Id =: lineItemIdToBeUpdated limit 1];
             if(dicType != null && dicType == 'PER') {
-            	objILI.BOATBUILDING__Discount_in_Percent__c = discountForLineItem;
-            	
-            	objILI.Discount_Price__c = (discountForLineItem * objILI.Total_Price__c)/100;
-            	System.debug(objILI.Total_Price__c + '________________' + objILI.Discount_Price__c+'---------------'+discountForLineItem);
+                objILI.BOATBUILDING__Discount_in_Percent__c = discountForLineItem;
+                
+                objILI.Discount_Price__c = (discountForLineItem * objILI.Total_Price__c)/100;
+                System.debug(objILI.Total_Price__c + '________________' + objILI.Discount_Price__c+'---------------'+discountForLineItem);
             } else {
-            	objILI.BOATBUILDING__Discount_in_Percent__c = (discountForLineItem * 100)/objILI.Total_Price__c;
-            	objILI.Discount_Price__c = discountForLineItem; //Decimal.valueOf(discountForLineItem * objILI.Total_Price__c)/100;
+                objILI.BOATBUILDING__Discount_in_Percent__c = (discountForLineItem * 100)/objILI.Total_Price__c;
+                objILI.Discount_Price__c = discountForLineItem; //Decimal.valueOf(discountForLineItem * objILI.Total_Price__c)/100;
             }
             //objILI.Discount_Price__c = discountForLineItem;
             try {
@@ -416,7 +416,7 @@ public without sharing class InvoiceDetailController {
             objILI.Quantity__c = QuantityForLineItem;
             Decimal partTotal = objILI.Quantity__c * objILI.Part_Cost__c;
             if(objILI.BOATBUILDING__Discount_in_Percent__c != null ) 
-            	objILI.Discount_Price__c = (objILI.BOATBUILDING__Discount_in_Percent__c * partTotal)/100;
+                objILI.Discount_Price__c = (objILI.BOATBUILDING__Discount_in_Percent__c * partTotal)/100;
             try {
                 update objILI;
             } catch(Exception ex) {
@@ -603,17 +603,16 @@ public without sharing class InvoiceDetailController {
     @RemoteAction
     public static string addPayment(Map<String, String> mapPaymentData, String InvoiceId){
         
-        BOATBUILDING__Payment__c objPayment = new BOATBUILDING__Payment__c();
-        objPayment.Name = 'Payment';
-        objPayment.BOATBUILDING__Related_to_Invoice__c = InvoiceId;
+        BOATBUILDING__Payments__c objPayment = new BOATBUILDING__Payments__c();
+        objPayment.BOATBUILDING__Invoice__c = InvoiceId;
         if(mapPaymentData.get('PaymentType') == 'Cash') {
-        	if(mapPaymentData.get('ChangeRTN') != null && decimal.valueOf(mapPaymentData.get('ChangeRTN')) > 0) {
-        		objPayment.BOATBUILDING__Amount__c = Decimal.valueOf(mapPaymentData.get('Amount')) - Decimal.valueOf(mapPaymentData.get('ChangeRTN'));
-        		objPayment.BOATBUILDING__Received_Cash__c = Decimal.valueOf(mapPaymentData.get('Amount'));
-        		objPayment.BOATBUILDING__Return_Change__c = Decimal.valueOf(mapPaymentData.get('ChangeRTN'));
-        	}		
+            if(mapPaymentData.get('ChangeRTN') != null && decimal.valueOf(mapPaymentData.get('ChangeRTN')) > 0) {
+                objPayment.BOATBUILDING__Amount__c = Decimal.valueOf(mapPaymentData.get('Amount')) - Decimal.valueOf(mapPaymentData.get('ChangeRTN'));
+                objPayment.BOATBUILDING__Received_Cash__c = Decimal.valueOf(mapPaymentData.get('Amount'));
+                objPayment.BOATBUILDING__Return_Change__c = Decimal.valueOf(mapPaymentData.get('ChangeRTN'));
+            }       
         } else {
-        	objPayment.BOATBUILDING__Amount__c = Decimal.valueOf(mapPaymentData.get('Amount'));
+            objPayment.BOATBUILDING__Amount__c = Decimal.valueOf(mapPaymentData.get('Amount'));
         }        
         
         objPayment.BOATBUILDING__Payment_Type__c = mapPaymentData.get('PaymentType');
@@ -622,6 +621,7 @@ public without sharing class InvoiceDetailController {
         
         try{
             System.debug('payment to be inserted');
+            objPayment.RecordTypeId = Schema.SObjectType.BOATBUILDING__Payments__c.getRecordTypeInfosByName().get('Standard Invoice').getRecordTypeId();
             insert objPayment;
             System.debug('=====objPayment======'+objPayment.id);
         }catch(Exception ex) {

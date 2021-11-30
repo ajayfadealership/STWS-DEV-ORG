@@ -1,12 +1,18 @@
-<aura:component>
-	<aura:attribute name="objInvPP" type="Inventory__c" default="{'sobjectType': 'Inventory__c'}" access="global"/>
+<aura:component controller="InventoryWizardController">
+    <aura:attribute name="objInvPP" type="Inventory__c" default="{'sobjectType': 'Inventory__c'}" access="global"/>
+    
+    <aura:attribute name="isMSPEditable" type="Boolean" default="true" access="global"/>
+
     <aura:registerEvent name="ParentToChild" type="c:InventoryChildToParent"/>
     <aura:handler  event="c:InvMSRPEvent" action="{!c.HandelMSRPEvent}"/> 
     <aura:handler  event="c:InvDealerPriceEvent" action="{!c.HandelDealerPriceEvent}"/> 
     <aura:handler  event="c:InvCostLineEvent" action="{!c.calMinSPFE}"/> 
+
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+
     <input type="hidden" value="0.00" id="hddnDlrPrc"/>
     <div class="slds-grid slds-wrap slds-col--padded">
-        <h1><b>Product Pricing</b></h1>
+        <h1 style="margin-left: .7%;"><b>Product Pricing</b></h1>
         <div class="slds-col slds-size--1-of-1">
             <div class="slds-grid slds-wrap" >
                 <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-3 slds-col--padded">
@@ -19,7 +25,7 @@
                 </div>
                 <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-3 slds-col--padded">
                     <div class="slds-form-element">
-                        <label class="slds-form-element__label">Margin:</label>
+                        <label class="slds-form-element__label">Margin(%):</label>
                         <div class="slds-form-element__control">
                             <ui:inputNumber value="{!v.objInvPP.BOATBUILDING__Costline__c}" change="{!c.calMinSP}" class="slds-input"/>
                         </div> 
@@ -33,11 +39,15 @@
                         </div>  
                     </div>
                 </div>
+                <br/>
+                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-3 slds-col--padded"></div>
+                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-3 slds-col--padded"></div>
+                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-3 slds-col--padded"></div>
                 <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-3 slds-col--padded">
                     <div class="slds-form-element">
                         <label class="slds-form-element__label">Minimum Sell Price:</label>
                         <div class="slds-form-element__control">
-                            <ui:inputText value="{!v.objInvPP.BOATBUILDING__Minimum_Sell_Price__c}" disabled="true" class="slds-input"/>
+                            <ui:inputNumber value="{!v.objInvPP.BOATBUILDING__Minimum_Sales_Price_Manual__c}" disabled="{!!v.isMSPEditable}" change="{!c.calMarPerP}"  class="slds-input"/>
                         </div>
                     </div>
                 </div>
@@ -45,11 +55,11 @@
                     <div class="slds-form-element">
                         <label class="slds-form-element__label">Suggested List Price:</label>
                         <div class="slds-form-element__control">
-                            <force:inputField value="{!v.objInvPP.BOATBUILDING__Suggested_List_Price__c}" class="slds-input"/>
+                            <ui:inputNumber value="{!v.objInvPP.BOATBUILDING__Suggested_List_Price__c}" class="slds-input"/>
                         </div>
                     </div>
                 </div>
-            </div>
+            </div> 
         </div>
     </div>
     <hr/>

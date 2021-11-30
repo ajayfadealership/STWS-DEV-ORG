@@ -6,12 +6,14 @@
     <aura:handler  event="c:DealerOptionEvent" action="{!c.HandelDOEvent}"/>
     <aura:attribute name="ProductPriceIdListCCCBlank" type="String[]" default="{}"/>
     <aura:attribute name="ProductPriceIdListCCC" type="String[]"/>
+    <aura:attribute name="ProductPriceIdListQTCCC" type="String[]"/>
     <aura:attribute name="DealerOptionIdListCCC" type="String[]"/>
+    <aura:attribute name="DealerOptionIdListQTCCC" type="String[]"/>
     <aura:attribute name="NoSalesmanWithoutCostCCC" type="boolean" />
     <aura:handler  event="c:AssignBlank" action="{!c.handelBlank}"/> 
     
     <div style="display: none; position: fixed; top: 0; bottom: 0; left: 0; right: 0; background: rgba(0,0,0,0.5); z-index: 999;" id="doId">
-        <c:NewDealerOptionComponent newPLstDealerOptionWraperND="{!v.newPLstDealerOptionWraper}" DealerOptionIdListCCCC="{!v.DealerOptionIdListCCC}"/>
+        <c:NewDealerOptionComponent newPLstDealerOptionWraperND="{!v.newPLstDealerOptionWraper}" DealerOptionIdListCCCC="{!v.DealerOptionIdListCCC}" DealerOptionIdListQTCCCC="{!v.DealerOptionIdListQTCCC}"/>
     </div>
     <article class="slds-card card-wrapper" style="background-color: #f4f6f9;border: 1px solid #d8dde6;overflow: auto;">
         <div class="slds-card__body slds-col--padded" style="background-color: #f4f6f9;">
@@ -40,7 +42,9 @@
                                         <tr class="slds-text-heading--label">
                                             <th style="padding: .5rem; white-space: nowrap; position: relative;" scope="col"><b>Description</b></th>
                                             <th style="padding: .5rem; white-space: nowrap; position: relative;" scope="col">&nbsp;</th>
-                                            
+                                            <th style="padding: .5rem; white-space: nowrap; position: relative;" scope="col">
+                                                Quantity
+                                            </th>
                                             <th style="padding: .5rem; white-space: nowrap; position: relative;" scope="col">
                                                 <aura:if isTrue="{!v.NoSalesmanWithoutCostCCC}">
                                                     <b>Dealer Price</b>
@@ -59,8 +63,10 @@
                                                     <div class="slds-form-element">
                                                         <div class="slds-form-element__control">
                                                             <label class="slds-checkbox">
-                                                                
-                                                                <c:PPRSBBWizardCheckbox objDOCheck="{!lsc.checkBox }" strId="{!lsc.objProductPriceForSelectedCategory.Id}" ProductPriceIdListCCCC="{!v.ProductPriceIdListCCC}"/>
+                                                                <c:PPRSBBWizardCheckbox Quantity="{!lsc.objProductPriceForSelectedCategory.BOATBUILDING__Quantity__c}" 
+                                                                        objDOCheck="{!lsc.checkBox}" strId="{!lsc.objProductPriceForSelectedCategory.Id}" 
+                                                                                ProductPriceIdListCCCC="{!v.ProductPriceIdListCCC}"
+                                                                                        ProductPriceIdListQTCCCC="{!v.ProductPriceIdListQTCCC}"/>
                                                                 <span class="slds-checkbox--faux"></span>
                                                                 <span class="slds-form-element__label" style="color: #54698d;"> 
                                                                     {!lsc.objProductPriceForSelectedCategory.BOATBUILDING__ProductSelected_Category__c} 
@@ -70,15 +76,19 @@
                                                     </div>
                                                 </td>
                                                 <td style="padding: .5rem; white-space: nowrap; position: relative;">&nbsp;</td>
-                                                
+                                                <td style="padding: .5rem; white-space: nowrap; position: relative;">
+                                                    <c:QuantityInputBBWizard Quantity="{!lsc.objProductPriceForSelectedCategory.BOATBUILDING__Quantity__c}" 
+                                                        isCheck="{!lsc.checkBox}" strId="{!lsc.objProductPriceForSelectedCategory.Id}" 
+                                                                ProductPriceIdListCCCC="{!v.ProductPriceIdListCCC}" ProductPriceIdListQTCCCC="{!v.ProductPriceIdListQTCCC}"/>
+                                                </td>
                                                 <td style="padding: .5rem; white-space: nowrap; position: relative;">
                                                     <aura:if isTrue="{!v.NoSalesmanWithoutCostCCC}">
-                                                        {!lsc.objProductPriceForSelectedCategory.BOATBUILDING__Dealer_Price__c}
+                                                        {!lsc.objProductPriceForSelectedCategory.BOATBUILDING__Dealer_Price__c * lsc.objProductPriceForSelectedCategory.BOATBUILDING__Quantity__c}
                                                     </aura:if>
                                                     
                                                 </td>
                                                 
-                                                <td style="padding: .5rem; white-space: nowrap; position: relative;">{!lsc.objProductPriceForSelectedCategory.BOATBUILDING__ProductRetail_Price__c}</td>
+                                                <td style="padding: .5rem; white-space: nowrap; position: relative;">{!lsc.objProductPriceForSelectedCategory.BOATBUILDING__ProductRetail_Price__c * lsc.objProductPriceForSelectedCategory.BOATBUILDING__Quantity__c}</td>
                                                 <td style="padding: .5rem; white-space: nowrap; position: relative;">{!lsc.objProductPriceForSelectedCategory.BOATBUILDING__Product_Code__c}</td> 
                                                 
                                             </tr>
@@ -126,6 +136,7 @@
                     <tr class="slds-text-heading--label">
                         <th style="padding: .5rem; white-space: nowrap; position: relative; color: #6f809c;" scope="col"><b>Description</b></th>
                         <th style="padding: .5rem; white-space: nowrap; position: relative; color: #6f809c;" scope="col">&nbsp; </th>
+                        <th style="padding: .5rem; white-space: nowrap; position: relative; color: #6f809c;" scope="col">Quantity</th>
                         <th style="padding: .5rem; white-space: nowrap; position: relative; color: #6f809c;" scope="col">
                             <aura:if isTrue="{!v.NoSalesmanWithoutCostCCC}">
                                 <b>Dealer Price</b>
@@ -142,7 +153,10 @@
                         <tr class="slds-hint-parent">   
                             <td style="padding: .5rem; white-space: nowrap; position: relative;">
                                 <label class="slds-checkbox"> 
-                                    <c:PPRSBBDOWizardCheckbox newPLstDealerOptionWraperC="{!v.newPLstDealerOptionWraper}" DealerOptionIdListCCCC="{!v.DealerOptionIdListCCC}" objDO="{!varDO}" objDOCheck="{!varDO.isSelect}"/>&nbsp;
+                                    <c:PPRSBBDOWizardCheckbox newPLstDealerOptionWraperC="{!v.newPLstDealerOptionWraper}" DealerOptionIdListCCCC="{!v.DealerOptionIdListCCC}" 
+                                                                    objDO="{!varDO}" objDOCheck="{!varDO.isSelect}" DealerOptionIdListQTCCCC="{!v.DealerOptionIdListQTCCC}"
+                                                                        Quantity="{!varDO.objDealerOption.BOATBUILDING__Quantity__c}"/>
+                                    &nbsp;
                                     <span class="slds-checkbox--faux">&nbsp;</span>
                                     <span class="slds-form-element__label" style="color: #54698d;">
                                         &nbsp;{!varDO.objDealerOption.Name} 
@@ -151,12 +165,17 @@
                             </td>
                             <td style="padding: .5rem; white-space: nowrap; position: relative;">&nbsp;</td>
                             <td style="padding: .5rem; white-space: nowrap; position: relative;">
-                                <aura:if isTrue="{!v.NoSalesmanWithoutCostCCC}">
-                                    {!varDO.objDealerOption.BOATBUILDING__Cost__c}
+                                <c:QuantityInputBBWizardDO newPLstDealerOptionWraperC="{!v.newPLstDealerOptionWraper}" DealerOptionIdListCCCC="{!v.DealerOptionIdListCCC}" 
+                                                            objDO="{!varDO}" objDOCheck="{!varDO.isSelect}" DealerOptionIdListQTCCCC="{!v.DealerOptionIdListQTCCC}" 
+                                                                    Quantity="{!varDO.objDealerOption.BOATBUILDING__Quantity__c}"/>
+                            </td>
+                            <td style="padding: .5rem; white-space: nowrap; position: relative;">
+                                <aura:if isTrue="{!v.NoSalesmanWithoutCostCCC}"> 
+                                    {!varDO.objDealerOption.BOATBUILDING__Cost__c * varDO.objDealerOption.BOATBUILDING__Quantity__c}
                                 </aura:if>
                             </td >
                             
-                            <td style="padding: .5rem; white-space: nowrap; position: relative;">{!varDO.objDealerOption.BOATBUILDING__Retail_Price__c}</td>
+                            <td style="padding: .5rem; white-space: nowrap; position: relative;">{!varDO.objDealerOption.BOATBUILDING__Retail_Price__c * varDO.objDealerOption.BOATBUILDING__Quantity__c}</td>
                             <td style="padding: .5rem; white-space: nowrap; position: relative;"> 
                                 {!varDO.objDealerOption.BOATBUILDING__Part_Number__c}
                             </td>

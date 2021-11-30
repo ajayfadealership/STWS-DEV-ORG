@@ -1,0 +1,99 @@
+<aura:component implements="force:lightningQuickAction,force:hasRecordId,force:appHostable,flexipage:availableForAllPageTypes,lightning:isUrlAddressable" access="global" controller="SupremeSoftwareXMLGenerate">
+    <aura:handler name="init" value="{!this}" action="{!c.doinit}"/>
+    <aura:attribute name="options" type="List" default="[]"/>
+    <aura:attribute name="default" type="String"/>
+    <lightning:navigation aura:id="navService"/>
+    <div>
+        <lightning:combobox name="Customer Inquiry" label="Customer Inquiries" value="{!v.default}" placeholder="Select Customer Inquiry" options="{! v.options }" onchange="{! c.handleChange }"/>
+        <lightning:recordViewForm recordId="{!v.default}" objectApiName="BOATBUILDING__Customer_Inquiry__c">
+            <div class="slds-col slds-size--1-of-1 slds-p-bottom_medium slds-p-top_x-large slds-box slds-theme_default">
+                <div class="slds-grid slds-wrap" >
+                    <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-2 slds-col--padded">
+                        <div class="slds-form-element">
+                            <div class="slds-form-element__control">
+                                <lightning:outputField fieldName="Name" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-2 slds-col--padded">
+                        <div class="slds-form-element">
+                            <div class="slds-form-element__control">
+                                <lightning:outputField fieldName="BOATBUILDING__First_Name__c" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-2 slds-col--padded">
+                        <div class="slds-form-element">
+                            <div class="slds-form-element__control">
+                                <lightning:outputField fieldName="BOATBUILDING__Last_Name__c" />
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-2 slds-col--padded">
+                        <div class="slds-form-element">
+                            <div class="slds-form-element__control">
+                                <lightning:outputField fieldName="BOATBUILDING__SSN_Present__c" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-2 slds-col--padded">
+                        <div class="slds-form-element">
+                            <div class="slds-form-element__control">
+                                <lightning:outputField fieldName="BOATBUILDING__DL_Present__c" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-2 slds-col--padded">
+                    </div>
+                    <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-2 slds-col--padded">
+                        <div class="slds-form-element">
+                            <div class="slds-form-element__control">
+                                <lightning:outputField fieldName="BOATBUILDING__CoApp_First_Name__c" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-2 slds-col--padded">
+                        <div class="slds-form-element">
+                            <div class="slds-form-element__control">
+                                <lightning:outputField fieldName="BOATBUILDING__CoApp_Last_Name__c" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-2 slds-col--padded">
+                        <div class="slds-form-element">
+                            <div class="slds-form-element__control">
+                                <lightning:outputField fieldName="BOATBUILDING__Lead_Source__c" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-2 slds-col--padded">
+                        <div class="slds-form-element">
+                            <div class="slds-form-element__control">
+                                <lightning:outputField fieldName="BOATBUILDING__CoApp_DL_Present__c" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-2 slds-col--padded">
+                        <div class="slds-form-element">
+                            <div class="slds-form-element__control">
+                                <lightning:outputField fieldName="BOATBUILDING__CoApp_SSN_Present__c" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-2 slds-col--padded">
+                    </div>
+                    <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-2 slds-col--padded">
+                    </div>
+                    <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-2 slds-col--padded">
+                        <div class="slds-form-element">
+                            <div class="slds-form-element__control">
+                                <lightning:button label="Download" onclick="{!c.handleDownload}"/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </lightning:recordViewForm>
+    </div>
+</aura:component>

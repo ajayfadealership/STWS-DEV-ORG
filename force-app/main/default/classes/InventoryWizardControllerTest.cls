@@ -41,6 +41,7 @@ public class InventoryWizardControllerTest {
         objPP.ProductRetail_Price__c = 100;
         objPP.Dealer_Price__c =50;
         objPP.Sorting_Order__c = 35;
+        objPP.Quantity__c = 35;
         insert objPP;
         listProdId.add(objPP.Id);
         
@@ -50,6 +51,7 @@ public class InventoryWizardControllerTest {
         objDO.BOATBUILDING__Cost__c = 10;
         objDO.BOATBUILDING__Part_Number__c = 'PartNo';
         objDO.BOATBUILDING__Retail_Price__c = 20;
+        objDO.Quantity__c = 1;
         insert objDO;
         listDO.add(objDO.Id);
         
@@ -74,10 +76,11 @@ public class InventoryWizardControllerTest {
         
           
 
-        
+        List<String> lstInv = new List<String>();
+        lstInv.add(objPP.Id+':1');
       
         
-        InventoryWizardController.generateInventory(objProduct1.Id, listProdId, listDO, objInventory5 , objDO.Name );
+        InventoryWizardController.generateInventory(objProduct1.Id, listProdId, lstInv, listDO, objInventory5 , objDO.Name );
         InventoryWizardController.isNoSalesmanWithoutCost();
     }
 }

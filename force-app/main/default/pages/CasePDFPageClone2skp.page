@@ -211,7 +211,7 @@
                                         <td style="padding: 6px; border: none;"></td>
                                         <td  width ="60%" style="border-collapse: collapse; padding: 6px; border: none;"></td>
                                         <td width ="10%" style="border-collapse: collapse; padding: 6px; border: none;"></td>
-                                        <td width ="10%" style="border-collapse: collapse; padding: 6px; border: none;" colspan="2"><b>Shop Supplies :</b></td>
+                                        <td width ="10%" style="border-collapse: collapse; padding: 6px; border: none;" colspan="2"><b>Shop Supplies:</b></td>
                                         <td width ="10%" style="border-collapse: collapse; padding: 6px; border: none;"><i class="fa fa-usd" aria-hidden="true"></i><apex:outputField value="{!a.Shop_Supplies_Total__c}"/></td>
                                     </tr>
                                     <tr style="font-size: 13px;">
@@ -304,21 +304,15 @@
                                     </tr>
                                     
                                     <tr style="font-size: 13px;">
-                                        <td style="padding: 6px; border: none;" ></td>
                                         <td  width ="10%" style="border-collapse: collapse; padding: 6px; border: none;">
                                                 <b>Customer Comments: </b>
                                         </td>
-                                        <td width ="30%" style="border-collapse: collapse; padding: 6px; border: none;">
-                                                <apex:outputField value="{!a.Customer_Comments__c}"/>
+                                        <td width ="30%" style="border-collapse: collapse; padding: 6px; border: none;" colspan="5">
+                                                <apex:repeat value="{!a.Events}" var="com">
+                                                    {!com.Description}<br/>
+                                                </apex:repeat>
                                         </td>
-                                        <td width ="10%" style="border-collapse: collapse; padding: 6px; border: none;" colspan="2">
-                                                
-                                        </td>
-                                        <td width ="30%" style="border-collapse: collapse; padding: 6px; border: none;">
-                                                
-                                        </td>  
                                     </tr>
-                                    
                                     <tr style="font-size: 13px;">
                                         <td style="padding: 6px; border: none;"></td>
                                         <td  width ="60%" style="border-collapse: collapse; padding: 6px; border: none;"></td>
@@ -355,14 +349,18 @@
                     <td width ="10%" style="border-collapse: collapse; padding: 6px; border: none;"><b><i class="fa fa-usd" aria-hidden="true"></i><apex:outputField value="{!objWO.Total_Amount_Due__c}"/></b></td>
                 </tr>
                 
-                 <tr style="font-size: 13px;">
-                    <td width ="10%" style="border-collapse: collapse; padding: 6px; border: none;"><b>Sales Tax</b></td>
-                    <td width ="10%" style="border-collapse: collapse; padding: 6px; border: none;"><b><i class="fa fa-usd" aria-hidden="true"></i><apex:outputField value="{!objWO.Sales_Tax__c}"/></b></td>
-                </tr>
-            <!--<tr style="font-size: 13px;">
-                                            <td width ="10%" style="border-collapse: collapse; padding: 6px; border: none;"><b>Total Shipping Charges</b></td>
-                                            <td width ="10%" style="border-collapse: collapse; padding: 6px; border: none;"><b><i class="fa fa-usd" aria-hidden="true"></i><apex:outputField value="{!objWO.Total_Shipping_Charges__c}"/></b></td>
-                </tr>-->
+            <tr style="font-size: 13px;">
+                <td width ="10%" style="border-collapse: collapse; padding: 6px; border: none;"><apex:outputPanel rendered="{!isCanadian}"><b>GST(<apex:outputField value="{!objWO.GST__c}"/><i class="fa fa-percent" aria-hidden="true"></i>)</b></apex:outputPanel></td>
+                <td width ="10%" style="border-collapse: collapse; padding: 6px; border: none;"><apex:outputPanel rendered="{!isCanadian}"><b><apex:outputField value="{!objWO.GST_D__c}"/><i class="fa fa-percent" aria-hidden="true"></i></b></apex:outputPanel></td>
+            </tr>
+            <tr style="font-size: 13px;">
+                <td width ="10%" style="border-collapse: collapse; padding: 6px; border: none;"><apex:outputPanel rendered="{!isCanadian}"><b>PST(<apex:outputField value="{!objWO.PST__c}"/><i class="fa fa-percent" aria-hidden="true"></i>)</b></apex:outputPanel></td>
+                <td width ="10%" style="border-collapse: collapse; padding: 6px; border: none;"><apex:outputPanel rendered="{!isCanadian}"><b><apex:outputField value="{!objWO.PST_D__c}"/><i class="fa fa-percent" aria-hidden="true"></i></b></apex:outputPanel></td>
+            </tr>
+            <tr style="font-size: 13px;">
+                <td width ="10%" style="border-collapse: collapse; padding: 6px; border: none;"><apex:outputPanel rendered="{!!isCanadian}"><b>Sales Tax ({!objWO.Store_Location__c})</b></apex:outputPanel></td>
+                <td width ="10%" style="border-collapse: collapse; padding: 6px; border: none;"><apex:outputPanel rendered="{!!isCanadian}"><b><i class="fa fa-usd" aria-hidden="true"></i><apex:outputField value="{!objWO.Sales_Tax__c}"/></b></apex:outputPanel></td>
+            </tr>
             <tr style="font-size: 13px;">
                                             <td width ="10%" style="border-collapse: collapse; padding: 6px; border: none;"><b>Total Amount</b></td>
                                             <td width ="10%" style="border-collapse: collapse; padding: 6px; border: none;"><b><i class="fa fa-usd" aria-hidden="true"></i><apex:outputField value="{!objWO.Deducted_Total_Due_Amount__c}"/></b></td>

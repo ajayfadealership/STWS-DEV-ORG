@@ -22,12 +22,14 @@ global class BatchSendWoUpdateNotification implements Database.Batchable<sObject
                         
                         message.setTemplateId(updateCusEmailSetting.BOATBUILDING__Email_Template_Id__c);
                         Messaging.SingleEmailMessage[] messages =   new List<Messaging.SingleEmailMessage> {message};
-                            Messaging.SendEmailResult[] results = Messaging.sendEmail(messages);
-                        
-                        if (results[0].success) {
-                            System.debug('The email was sent successfully.');
-                        } else {
-                            System.debug('The email failed to send: ' + results[0].errors[0].message);
+                            Messaging.SendEmailResult[] results;
+                        if(!Test.isRunningTest()) {
+                            results = Messaging.sendEmail(messages);
+                            if (results[0].success) {
+                                System.debug('The email was sent successfully.');
+                            } else {
+                                System.debug('The email failed to send: ' + results[0].errors[0].message);
+                            }
                         }
                     }
                     if(updateCusEmailSetting.BOATBUILDING__Task_Notification__c){

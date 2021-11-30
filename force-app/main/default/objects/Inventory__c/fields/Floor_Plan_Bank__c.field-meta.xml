@@ -21,6 +21,11 @@
                 <default>false</default>
                 <label>NorthPointe</label>
             </value>
+            <value>
+                <fullName>North Pointe Send-It</fullName>
+                <default>false</default>
+                <label>North Pointe Send-It</label>
+            </value>
         </valueSetDefinition>
     </valueSet>
 </CustomField>

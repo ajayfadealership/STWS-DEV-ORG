@@ -8,10 +8,21 @@ public with sharing class WorkRequestControllerClone {
         Id recTypeId = Schema.SObjectType.BOATBUILDING__Work_Order__c.getRecordTypeInfosByName().get('Work Request').getRecordTypeId();
         objWO = new BOATBUILDING__Work_Order__c();
         objWO.RecordTypeId = recTypeId;
-      	  
-        lstWOR = [Select Id, Name,Contact__c,Vendor__c,CreatedDate,Part_Request_Status__c,Assigned_to__c,BOATBUILDING__Request_Type__c,Status__c, BOATBUILDING__Parts_Request_Form__c, BOATBUILDING__Part_Number__c, BOATBUILDING__Boat_Make__c From BOATBUILDING__Work_Order__c Where RecordTypeId =: recTypeId AND BOATBUILDING__Request_Type__c = 'Work Request' AND Status__c != 'WO Created' order by CreatedDate desc];
-    	lstPR = [Select Id, Name,Contact__c,Vendor__c,CreatedDate,Part_Request_Status__c,Assigned_to__c,BOATBUILDING__Request_Type__c,Status__c, BOATBUILDING__Parts_Request_Form__c, BOATBUILDING__Part_Number__c, BOATBUILDING__Boat_Make__c From BOATBUILDING__Work_Order__c Where RecordTypeId =: recTypeId AND BOATBUILDING__Request_Type__c = 'Part Request' AND Part_Request_Status__c != 'PO Created' AND Part_Request_Status__c != 'Arrived Closed' order by CreatedDate desc ];
-        
+		lstWOR = new List<BOATBUILDING__Work_Order__c>();
+		lstPR = new List<BOATBUILDING__Work_Order__c>();
+        List<BOATBUILDING__Work_Order__c> listWorkPartRequest = [SELECT Id, Name,Contact__c,Vendor__c,CreatedDate,Part_Request_Status__c,Assigned_to__c,BOATBUILDING__Request_Type__c,
+                                                                Status__c, BOATBUILDING__Parts_Request_Form__c, BOATBUILDING__Part_Number__c, BOATBUILDING__Boat_Make__c 
+                                                                FROM BOATBUILDING__Work_Order__c 
+                                                                WHERE RecordTypeId =: recTypeId ORDER BY CreatedDate DESC];
+                                                                
+        for(BOATBUILDING__Work_Order__c objWO: listWorkPartRequest){
+            if(objWO.BOATBUILDING__Request_Type__c == 'Work Request' && objWO.Status__c != 'WO Created'){
+                lstWOR.add(objWO);
+            } else if(objWO.BOATBUILDING__Request_Type__c == 'Part Request' && objWO.Status__c != 'PO Created' && objWO.Part_Request_Status__c != 'Arrived Closed'){
+                lstPR.add(objWO);
+            }
+        }
+       
         List<User> lstUser = new List<User>();
         List<userRole> lstUserRole = [ SELECT Id, Name FROM userRole WHERE Name ='Parts Manager'];
         if( !lstUserRole.isEmpty()){
@@ -156,21 +167,10 @@ public with sharing class WorkRequestControllerClone {
         Boolean isError = false;
         List<BOATBUILDING__Item__c> lstItem = [SELECT Id, BOATBUILDING__Boat_HIN_No__c From BOATBUILDING__Item__c WHERE BOATBUILDING__Boat_HIN_No__c =: mapWrkReqValues.get('HIN') Limit 1];
         System.debug('Debug Log For Reuest : '+mapWrkReqValues);
-        List<RecordType> lstRecTypeWO = [SELECT
-                                         Id,
-                                         Name
-                                         FROM
-                                         RecordType
-                                         WHERE
-                                         SobjectType =: 'BOATBUILDING__Work_Order__c'
-                                         AND
-                                         DeveloperName =: 'Work_Request'
-                                         LIMIT
-                                         1];
+        
+        Id recTypeId = Schema.SObjectType.BOATBUILDING__Work_Order__c.getRecordTypeInfosByName().get('Work Request').getRecordTypeId();
         BOATBUILDING__Work_Order__c objWO = new BOATBUILDING__Work_Order__c();
-        if(lstRecTypeWO.size() > 0) {
-            objWO.RecordTypeId = lstRecTypeWO[0].Id;
-        } 
+        objWO.RecordTypeId = recTypeId;
         
 		if(mapWrkReqValues.get('Id') != null && mapWrkReqValues.get('Id') != '0') {
 			objWO.Id = mapWrkReqValues.get('Id');
@@ -198,7 +198,6 @@ public with sharing class WorkRequestControllerClone {
         }
         if(mapWrkReqValues.get('Wofors') != null) {
             objWO.BOATBUILDING__WO_for__c = mapWrkReqValues.get('Wofors');
-            
         }
         
         if(mapWrkReqValues.get('invoicefors') != null) {
@@ -230,12 +229,14 @@ public with sharing class WorkRequestControllerClone {
             objWO.BOATBUILDING__Status__c = mapWrkReqValues.get('WorkRequestStatus');
             system.debug(objWO.BOATBUILDING__Status__c);
         } 
-         if(mapWrkReqValues.get('partRequestStatus') != null) {
+        if(mapWrkReqValues.containsKey('partRequestStatus') && mapWrkReqValues.get('partRequestStatus') != null
+         && UserPermissionUtil.isUpdateable('BOATBUILDING__Work_Order__c','BOATBUILDING__Part_Request_Status__c')) {
             objWO.Part_Request_Status__c = mapWrkReqValues.get('partRequestStatus');
             
         } 
-        if(mapWrkReqValues.get('prtReq') != null) {
-	            objWO.Request_Type__c = mapWrkReqValues.get('prtReq');
+        if(mapWrkReqValues.containsKey('prtReq') && mapWrkReqValues.get('prtReq') != null
+            && UserPermissionUtil.isUpdateable('BOATBUILDING__Work_Order__c','BOATBUILDING__Request_Type__c')) {
+            objWO.Request_Type__c = mapWrkReqValues.get('prtReq');
         }
         
         try {

@@ -4,6 +4,7 @@ public class PurchaseOrderLineItemWrapper {
     @AuraEnabled public String PartNumber { get; set; }
     @AuraEnabled public String PartName { get; set; }
     @AuraEnabled public Integer Quantity { get; set; }
+    @AuraEnabled public Decimal QuantityDec { get; set; }
     @AuraEnabled public Decimal Cost { get; set; } 
     @AuraEnabled public Boolean showPill { get; set; } 
     @AuraEnabled public Decimal discount { get; set; }  
@@ -11,6 +12,5 @@ public class PurchaseOrderLineItemWrapper {
     @AuraEnabled public Decimal discountPer { get; set; } 
     @AuraEnabled public Decimal Total { get; set; } 
     @AuraEnabled public Decimal TotalWithoutDisc { get; set; } 
-
-
+    @AuraEnabled public Boolean isDisabled{get; set;}
 }

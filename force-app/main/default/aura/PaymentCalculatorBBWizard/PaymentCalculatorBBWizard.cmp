@@ -14,7 +14,8 @@
     <aura:handler  event="c:PPIdEvent" action="{!c.HandelPPIdEvent}"/> 
      <aura:handler  event="c:PPDOIdEvent" action="{!c.HandelPPDOIdEvent}"/> 
     <aura:handler  event="c:AssignBlank" action="{!c.handelBlank}"/> 
-    
+    <aura:attribute name="newPLstPriceAndProductOptionWraperClass" type="PriceAndProductOptionWraperClass[]"/>
+    <aura:attribute name="ProductPriceIdListCCC" type="String[]"/>
 	<div class="slds-col--padded slds-size--2-of-5">
             <article class="slds-card card-wrapper Sidebar" style="background-color: #f4f6f9;border: 1px solid #d8dde6;">
                 <header class="slds-card__header slds-grid">
@@ -81,7 +82,9 @@
                                         <b>$&nbsp;{!v.TotalMSRPDealerPrice}</b>
                                     </aura:if>
                                 </th>
-                                <th style="background-color: rgb(250, 250, 249); padding: .5rem; white-space: nowrap; position: relative;"><b>$&nbsp;{!v.TotalMSRPRetailPrice}</b></th>
+                                <th style="background-color: rgb(250, 250, 249); padding: .5rem; white-space: nowrap; position: relative;">
+                                    <b>$&nbsp;{!v.TotalMSRPRetailPrice}</b>
+                                </th>
                             </tr>
                         </tbody>
                     </table>

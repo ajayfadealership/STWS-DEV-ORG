@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Minimum_Sales_Price_Editable__c</fullName>
+    <defaultValue>false</defaultValue>
+    <deprecated>false</deprecated>
+    <description>This checkbox is used to control if the Minimum Sales Price on Inventory Wizard should be editable or Not.</description>
+    <externalId>false</externalId>
+    <inlineHelpText>This checkbox is used to control if the Minimum Sales Price on Inventory Wizard should be editable or Not. If the Checkbox is true, that means the Field is Editable.</inlineHelpText>
+    <label>Minimum Sales Price Editable</label>
+    <trackTrending>false</trackTrending>
+    <type>Checkbox</type>
+</CustomField>

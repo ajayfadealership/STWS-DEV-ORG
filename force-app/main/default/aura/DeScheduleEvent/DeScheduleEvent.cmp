@@ -1,0 +1,31 @@
+<aura:component controller="ServiceScheduleController"
+    implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction,lightning:isUrlAddressable,lightning:availableForFlowScreens,lightning:isUrlAddressable"
+    access="global">
+
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    <aura:attribute name="UserRoleName" type="String" default="" />
+    <aura:attribute name="eventOptions" type="List" />
+    <aura:attribute name="eventValue" type="String" />
+    <aura:attribute name="showForm" type="Boolean" default="false" />
+    <aura:attribute name="showSpinner" type="boolean" default="false" access="global" />
+
+    <aura:attribute name="startDate" type="String" />
+    <aura:attribute name="endDate" type="String" />
+
+    <aura:if isTrue="{!v.showSpinner}">
+        <lightning:spinner variant="brand" />
+    </aura:if>
+    <lightning:combobox name="Events" label="Events" value="{! v.eventValue }" placeholder="Select Event"
+        options="{! v.eventOptions }" onchange="{! c.handleChange }" />
+
+    <aura:if isTrue="{!v.showForm}">
+        <div class="slds-m-top_medium">
+            <lightning:recordEditForm objectApiName="BOATBUILDING__Time_Management__c" aura:id="scheduleChangeForm"
+                recordId="{!v.eventValue}" onerror="{!c.handleError}" onsuccess="{!c.handleSuccessChnage}">
+                <lightning:inputField fieldName="BOATBUILDING__Canned_Response_to_the_Customer__c" required="true" />
+                <lightning:button label="De-Schedule" variant="brand" class="slds-float_right"
+                    onclick="{!c.deselectEvent}" />&nbsp;
+            </lightning:recordEditForm>
+        </div>
+    </aura:if>
+</aura:component>

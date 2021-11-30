@@ -418,9 +418,15 @@
                                                     <td>
                                                         &rarr; <apex:outputText value="{!objSOC.Name__c}" style="margin-left: 50px"/>
                                                     </td>
+                                                    <td>
+                                                        <apex:outputText value="{0, number, 0}">
+                                                            <apex:param value="{!objSOC.Quantity__c}" />
+                                                        </apex:outputText> 
+                                                    </td>
+                                                    <td>&nbsp;</td>
                                                     <td style="text-align: right;">
                                                         <apex:outputPanel rendered="{!objQuote2.Show_MSRP_Option_Pricing__c}">
-                                                            <apex:outputText value="{!objSOC.Total_Price__c}"/>
+                                                            <apex:outputText value="{!objSOC.Total_Retail_Price__c}"/>
                                                         </apex:outputPanel>
                                                     </td>
                                                     
@@ -433,6 +439,7 @@
                             </tr>
                         </table>
                     </td>
+                    
                     <td colspan="3" >
                         <table >
                             <tr class="alt-row" >
@@ -445,9 +452,15 @@
                                                     <td>
                                                         &rarr; <apex:outputText value="{!objSOC.Name__c}" style="margin-left: 50px"/>
                                                     </td>
+                                                    <td>
+                                                        <apex:outputText value="{0, number, 0}">
+                                                            <apex:param value="{!objSOC.Quantity__c}" />
+                                                        </apex:outputText> 
+                                                    </td>
+                                                    <td>&nbsp;</td>
                                                     <td style="text-align: right;">
                                                         <apex:outputPanel rendered="{!objQuote2.Show_MSRP_Option_Pricing__c}">
-                                                            <apex:outputText value="{!objSOC.Total_Price__c}"/>
+                                                            <apex:outputText value="{!objSOC.Total_Retail_Price__c}"/>
                                                         </apex:outputPanel>
                                                     </td>
                                                     

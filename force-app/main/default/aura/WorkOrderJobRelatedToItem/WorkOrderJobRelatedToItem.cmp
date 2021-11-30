@@ -1,0 +1,36 @@
+<aura:component controller="WorkOrderJobRelatedToItemController"  access="global"
+                implements="flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId" >
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    <aura:attribute name="listWOJ" type="Work_Order_Job__c[]" access="global"/>
+    <aura:attribute name="columns" type="String[]" access="global"/>
+    
+    <div>    
+        <div class="previousJobs">
+            <div class="slds-page-header">
+                <div class="slds-page-header__row">
+                    <div class="slds-page-header__col-title">
+                        <div class="slds-media">
+                            <div class="slds-media__body">
+                                <div class="slds-page-header__name">
+                                    <div class="slds-page-header__name-title">
+                                        <h1>
+                                            <span class="slds-page-header__title slds-truncate" title="Previous Jobs">Previous Jobs</span>
+                                        </h1>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div  style="max-height: 250px; overflow-y: scroll;">
+            <lightning:datatable
+                                 keyField="id"
+                                 
+                                 data="{! v.listWOJ}"
+                                 columns="{! v.columns }"
+                                 hideCheckboxColumn="true"/>
+        </div>
+            </div>
+    </div>
+</aura:component>

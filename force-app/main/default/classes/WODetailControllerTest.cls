@@ -20,7 +20,7 @@ public class WODetailControllerTest {
         
         BOATBUILDING__Work_Order__c objWO = new BOATBUILDING__Work_Order__c();
         
-        objWO.BOATBUILDING__Store_Location__c='Store 1';
+        objWO.BOATBUILDING__Store_Location__c='Other';
         insert objWO;
         
         BOATBUILDING__Work_Order_Job__c objWOJob = new BOATBUILDING__Work_Order_Job__c();
@@ -119,7 +119,7 @@ objLstJobLI.cost =20.0;
         
         BOATBUILDING__Work_Order__c objWO = new BOATBUILDING__Work_Order__c();
         
-        objWO.BOATBUILDING__Store_Location__c='Store 1';
+        objWO.BOATBUILDING__Store_Location__c='Other';
         insert objWO;
         
         BOATBUILDING__Work_Order_Job__c objWOJob = new BOATBUILDING__Work_Order_Job__c();

@@ -8,5 +8,5 @@
     <masterLabel>Send Invoice</masterLabel>
     <openType>replace</openType>
     <protected>false</protected>
-    <url>/apex/SendInvoiceDetailPage?id={!Invoice__c.Id}</url>
+    <url>/apex/BOATBUILDING__SendInvoiceDetailPage?id={!Invoice__c.Id}</url>
 </WebLink>

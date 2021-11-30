@@ -8,7 +8,7 @@
         });
         searchAction.setCallback(this, function(response){
             component.set("v.isSearchLoading", false);
-                console.log('searchResult',JSON.parse(response.getReturnValue()));
+                //console.log('searchResult',JSON.parse(response.getReturnValue()));
                 component.set("v.searchResults", JSON.parse(response.getReturnValue()));
         });
 

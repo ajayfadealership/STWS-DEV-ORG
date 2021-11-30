@@ -16,6 +16,7 @@ private class UsedBoatFormControllerTest {
         objProductPriceForSelectedCategory.RecordTypeId = recIdNew1;
         objProductPriceForSelectedCategory.Option_Category__c = 'Canvas';
         objProductPriceForSelectedCategory.ProductSelected_Category__c = 'Bimini Top';
+        objProductPriceForSelectedCategory.Quantity__c = 1;
         insert objProductPriceForSelectedCategory;
         BOATBUILDING__Manufacturer__c objManufacturer = new BOATBUILDING__Manufacturer__c();
         objManufacturer.Manufacturer_name__c = '12345';
@@ -67,6 +68,7 @@ private class UsedBoatFormControllerTest {
         objILI.Name__c = 'Bimini Top';
         objILI.Option_Category__c = 'Bimini Top';
         objILI.Price__c = 10000;
+        objILI.Quantity__c = 1;
         objILI.Dealer_Price__c = 200;
         lstInventoryLineItem.add(objILI);
         objUsedBoatFormController.lstInventoryLineItem = lstInventoryLineItem;
@@ -98,6 +100,7 @@ private class UsedBoatFormControllerTest {
         }
         //objProductPriceForSelectedCategory.RecordTypeId = recIdNew1;
         objProductPriceForSelectedCategory.Option_Category__c = 'Canvas';
+        objProductPriceForSelectedCategory.Quantity__c = 1;
         objProductPriceForSelectedCategory.ProductSelected_Category__c = 'Bimini Top';
         insert objProductPriceForSelectedCategory;
         BOATBUILDING__Manufacturer__c objManufacturer = new BOATBUILDING__Manufacturer__c();
@@ -143,6 +146,7 @@ private class UsedBoatFormControllerTest {
         objILI.Name__c = 'Bimini Top';
         objILI.Option_Category__c = 'Bimini Top';
         objILI.Price__c = 10000;
+        objILI.Quantity__c = 1;
         objILI.Dealer_Price__c = 200;
         objILI.Related_to_Inventory__c = objInventory1.Id;
         insert objILI;
@@ -166,6 +170,7 @@ private class UsedBoatFormControllerTest {
         }
         //objProductPriceForSelectedCategory.RecordTypeId = recIdNew1;
         objProductPriceForSelectedCategory.Option_Category__c = 'Canvas';
+        objProductPriceForSelectedCategory.Quantity__c = 1;
         objProductPriceForSelectedCategory.ProductSelected_Category__c = 'Bimini Top';
         insert objProductPriceForSelectedCategory;
         BOATBUILDING__Manufacturer__c objManufacturer = new BOATBUILDING__Manufacturer__c();
@@ -212,6 +217,7 @@ private class UsedBoatFormControllerTest {
         objILI.Name__c = 'Bimini Top'; 
         objILI.Option_Category__c = 'Bimini Top';
         objILI.Price__c = 10000;
+        objILI.Quantity__c = 1;
         objILI.Dealer_Price__c = 200;
         lstInventoryLineItem.add(objILI);
         objUsedBoatFormController.objInventory = objInventory1;
@@ -222,6 +228,13 @@ private class UsedBoatFormControllerTest {
         objUsedBoatFormController.getDealerOptionPriceSub();
         objUsedBoatFormController.getMFGPrice();
      //   objUsedBoatFormController.checkAccess();
+     
+     Item__c objIt = new Item__c ();
+        insert objIt;
+
+     PageReference myVfPage = Page.BOATBUILDING__UsedBoatForm;
+     Test.setCurrentPage(myVfPage);
+        
     }
     
     
