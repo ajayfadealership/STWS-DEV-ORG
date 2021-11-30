@@ -43,6 +43,11 @@
                 <default>false</default>
                 <label>Jet Ski</label>
             </value>
+            <value>
+                <fullName>V-drive</fullName>
+                <default>false</default>
+                <label>V-drive</label>
+            </value>
         </valueSetDefinition>
     </valueSet>
 </CustomField>

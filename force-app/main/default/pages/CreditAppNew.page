@@ -1,8 +1,11 @@
-<apex:page standardController="Account" showHeader="false" extensions="CreditAppPageController" id="pg">
+<apex:page standardController="Customer_Inquiry__c" showHeader="false" extensions="CreditAppPageController" id="pg">
     <apex:stylesheet value="{!URLFOR($Resource.BoatBuilderSR, 'assets/styles/salesforce-lightning-design-system.min.css')}" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"/>
     <apex:includeScript value="{!URLFOR($Resource.Signature, 'jquery.min.js')}"/>
     <style> 
+	    .dateFormat {
+	    	display: none !important;
+	    }
         .isa_error {
         color: #D8000C;
         background-color: #FFBABA;
@@ -23,9 +26,25 @@
         .zen-deemphasize, .actionColumn {
         font-weight: bold !important;   
         } 
+        .errorClass {
+       	color: white;
+	    background: #c23934;
+	    display: inline-flex;
+	    align-items: center;
+	    font-weight: 300;
+	    border-radius: .25rem;
+	    margin: .5rem;
+	    padding: .75rem 3rem .75rem 1.5rem;
+	    min-width: 30rem;
+	    text-align: left;
+	    z-index: 9999;
+	    justify-content: flex-start;
+	    position: fixed;
+	    left: 1%;
+        }
     </style>
     <apex:form id="frm" >
-        <apex:messages ></apex:messages>
+        <apex:messages styleClass="errorClass"></apex:messages>
         <title>Application Form</title>
         <div class="slds-grid slds-wrap slds-col--padded">
             <div class="slds-col--padded slds-col slds-size--1-of-1 Customer-Heading">
@@ -44,7 +63,7 @@
                                 <div class="slds-form-element">
                                     <label class="slds-form-element__label">First Name<span style="color: red;">*</span></label>
                                     <div class="slds-form-element__control">
-                                        <apex:inputText value="{!Account.Prospect_First_Name__c}" id="fname" styleClass="slds-input"/>
+                                        <apex:inputText value="{!Customer_Inquiry__c.First_Name__c}" id="fname" styleClass="slds-input"/>
                                     </div>
                                 </div> 
                             </div>
@@ -53,7 +72,7 @@
                                 <div class="slds-form-element">
                                     <label class="slds-form-element__label">Last Name<span style="color: red;">*</span></label>
                                     <div class="slds-form-element__control">
-                                        <apex:inputText value="{!Account.Prospect_Last_Name__c}" id="lname" styleClass="slds-input"/>
+                                        <apex:inputText value="{!Customer_Inquiry__c.Last_Name__c}" id="lname" styleClass="slds-input"/>
                                     </div>
                                 </div> 
                             </div>
@@ -61,7 +80,7 @@
                                 <div class="slds-form-element"> 
                                     <label class="slds-form-element__label">Phone Number<span style="color: red;">*</span></label>
                                     <div class="slds-form-element__control">
-                                        <apex:inputText value="{!Account.Phone}"  id="pno" styleClass="slds-input"/>
+                                        <apex:inputText value="{!Customer_Inquiry__c.Phone__c}"  id="pno" styleClass="slds-input"/>
                                     </div>
                                 </div> 
                             </div>
@@ -70,7 +89,7 @@
                                 <div class="slds-form-element">
                                     <label class="slds-form-element__label">Email<span style="color: red;">*</span></label>
                                     <div class="slds-form-element__control">
-                                        <apex:inputText value="{!Account.Email__c}" id="eml" styleClass="slds-input"/>
+                                        <apex:inputField value="{!Customer_Inquiry__c.Email__c}" id="eml" styleClass="slds-input"/>
                                     </div>
                                 </div> 
                             </div>
@@ -87,7 +106,7 @@
                                 <div class="slds-form-element">
                                     <label class="slds-form-element__label">Social Security Number<span style="color: red;">*</span> </label>
                                     <div class="slds-form-element__control">
-                                        <apex:inputText value="{!Account.SFA_Social_Security_Number__c}" id="SSN" styleClass="slds-input"/>
+                                        <apex:inputText value="{!Customer_Inquiry__c.Social_Security_Number__c}" id="SSN" styleClass="slds-input"/>
                                     </div>
                                 </div> 
                             </div>
@@ -96,7 +115,7 @@
                                 <div class="slds-form-element">
                                     <label class="slds-form-element__label">Date of Birth(mm/dd/yyy)<span style="color: red;">*</span></label>
                                     <div class="slds-form-element__control">
-                                        <apex:inputText value="{!Account.SFA_Date_of_Birth__c}" id="dob" styleClass="slds-input"/>
+                                        <apex:inputField style="width: 100%;" value="{!Customer_Inquiry__c.Date_of_Birth__c}" id="dob" styleClass="slds-input"/>
                                     </div>
                                 </div> 
                             </div>
@@ -106,7 +125,7 @@
                                 <div class="slds-form-element">
                                     <label class="slds-form-element__label">Driver's License Number<span style="color: red;">*</span></label>
                                     <div class="slds-form-element__control">
-                                        <apex:inputText value="{!Account.SFA_Drivers_License__c}" id="dln" styleClass="slds-input"/>
+                                        <apex:inputText value="{!Customer_Inquiry__c.Drivers_License_Number__c}" id="dln" styleClass="slds-input"/>
                                     </div>
                                 </div> 
                             </div>
@@ -134,7 +153,7 @@
                                 <div class="slds-form-element">
                                     <label class="slds-form-element__label">Address<span style="color: red;">*</span></label>
                                     <div class="slds-form-element__control">
-                                        <apex:inputText value="{!Account.BillingStreet}" id="add" styleClass="slds-input"/>
+                                        <apex:inputText value="{!Customer_Inquiry__c.Street__c}" id="add" styleClass="slds-input"/>
                                     </div>
                                 </div> 
                             </div>
@@ -142,7 +161,7 @@
                                 <div class="slds-form-element">
                                     <label class="slds-form-element__label">City</label>
                                     <div class="slds-form-element__control">
-                                        <apex:inputText value="{!Account.BillingCity}" styleClass="slds-input"/>
+                                        <apex:inputText value="{!Customer_Inquiry__c.City__c}" styleClass="slds-input"/>
                                     </div>
                                 </div> 
                             </div>
@@ -150,7 +169,7 @@
                                 <div class="slds-form-element">
                                     <label class="slds-form-element__label">State / Province / Region</label>
                                     <div class="slds-form-element__control">
-                                        <apex:inputText value="{!Account.BillingState}" styleClass="slds-input"/>
+                                        <apex:inputText value="{!Customer_Inquiry__c.State__c}" styleClass="slds-input"/>
                                     </div>
                                 </div> 
                             </div>
@@ -158,7 +177,7 @@
                                 <div class="slds-form-element">
                                     <label class="slds-form-element__label">Postal / Zip Code</label>
                                     <div class="slds-form-element__control">
-                                        <apex:inputText value="{!Account.BillingPostalCode}" styleClass="slds-input"/>
+                                        <apex:inputText value="{!Customer_Inquiry__c.Zip_Code__c}" styleClass="slds-input"/>
                                     </div>
                                 </div> 
                             </div>
@@ -175,7 +194,7 @@
                                 <div class="slds-form-element">
                                     <label class="slds-form-element__label">Country</label>
                                     <div class="slds-form-element__control">
-                                        <apex:inputText value="{!Account.BillingCountry}" styleClass="slds-input"/>
+                                        <apex:inputText value="{!Customer_Inquiry__c.Country__c}" styleClass="slds-input"/>
                                     </div>
                                 </div> 
                             </div>
@@ -204,7 +223,7 @@
                                 <div class="slds-form-element">
                                     <label class="slds-form-element__label">Mortgage Lender/Landlord Name</label>
                                     <div class="slds-form-element__control">
-                                        <apex:inputText value="{!Account.SFA_Landlord_Mortgage_Holder__c}" styleClass="slds-input"/>
+                                        <apex:inputText value="{!Customer_Inquiry__c.Mortgage_LenderLandlord_Name__c}" styleClass="slds-input"/>
                                     </div>
                                 </div> 
                             </div>
@@ -212,7 +231,7 @@
                                 <div class="slds-form-element">
                                     <label class="slds-form-element__label"> Monthly Payment<span style="color: red;">*</span></label>
                                     <div class="slds-form-element__control">
-                                        <apex:inputText value="{!Account.SFA_Monthly_Rent_Mortgage__c}" id="monthp" styleClass="slds-input"/>
+                                        <apex:inputText value="{!Customer_Inquiry__c.Monthly_Payment__c}" id="monthp" styleClass="slds-input"/>
                                     </div>
                                 </div> 
                             </div>
@@ -220,7 +239,7 @@
                                 <div class="slds-form-element">
                                     <label class="slds-form-element__label">Own/Rent<span style="color: red;">*</span></label>
                                     <div class="slds-form-element__control">
-                                        <apex:inputField value="{!Account.SFA_Property_Owner__c}" id="owrent" styleClass="slds-input"/>
+                                        <apex:inputField value="{!Customer_Inquiry__c.Property_Ownership__c}" id="owrent" styleClass="slds-input"/>
                                     </div>
                                 </div> 
                             </div>
@@ -228,7 +247,7 @@
                                 <div class="slds-form-element">
                                     <label class="slds-form-element__label"> Years at Address<span style="color: red;">*</span></label>
                                     <div class="slds-form-element__control">
-                                        <apex:inputField value="{!Account.SFA_Years_at_current_address__c}" id="yadd" styleClass="slds-input"/>
+                                        <apex:inputField value="{!Customer_Inquiry__c.Years_at_Address__c}" id="yadd" styleClass="slds-input"/>
                                     </div>
                                 </div> 
                             </div>
@@ -245,7 +264,7 @@
                                 <div class="slds-form-element">
                                     <label class="slds-form-element__label">Months at Address<span style="color: red;">*</span> </label>
                                     <div class="slds-form-element__control">
-                                        <apex:inputField value="{!Account.SFA_Months_at_current_address__c}" id="madd" styleClass="slds-input"/>
+                                        <apex:inputField value="{!Customer_Inquiry__c.Months_at_Address__c}" id="madd" styleClass="slds-input"/>
                                     </div>
                                 </div> 
                             </div>
@@ -275,7 +294,7 @@
                             <div class="slds-form-element">
                                 <label class="slds-form-element__label">Current Occupation<span style="color: red;">*</span></label>
                                 <div class="slds-form-element__control">
-                                    <apex:inputText value="{!Account.SFA_Occupation__c}" id="occup" styleClass="slds-input"/>
+                                    <apex:inputText value="{!Customer_Inquiry__c.Current_Occupation__c}" id="occup" styleClass="slds-input"/>
                                 </div>
                             </div>
                         </div>  
@@ -284,7 +303,7 @@
                             <div class="slds-form-element">
                                 <label class="slds-form-element__label">Current Employer Name<span style="color: red;">*</span></label>
                                 <div class="slds-form-element__control">
-                                    <apex:inputText value="{!Account.SFA_Employer_Name__c}" id="cempname" styleClass="slds-input"/>
+                                    <apex:inputText value="{!Customer_Inquiry__c.Current_Employer_Name__c}" id="cempname" styleClass="slds-input"/>
                                 </div>
                             </div>
                         </div>
@@ -293,7 +312,7 @@
                             <div class="slds-form-element">
                                 <label class="slds-form-element__label">Current Employer Phone Number<span style="color: red;">*</span></label>
                                 <div class="slds-form-element__control">
-                                    <apex:inputText value="{!Account.SFA_Employer_Phone__c}" id="cemphone" styleClass="slds-input"/>
+                                    <apex:inputText value="{!Customer_Inquiry__c.Current_Employer_Phone__c}" id="cemphone" styleClass="slds-input"/>
                                 </div>
                             </div>
                         </div>  
@@ -301,7 +320,7 @@
                             <div class="slds-form-element">
                                 <label class="slds-form-element__label">Current Monthly Salary<span style="color: red;">*</span></label>
                                 <div class="slds-form-element__control">
-                                    <apex:inputText value="{!Account.SFA_Salary_Annually_Gross__c}" id="cempsal" styleClass="slds-input"/>
+                                    <apex:inputText value="{!Customer_Inquiry__c.Current_Monthly_Salary__c}" id="cempsal" styleClass="slds-input"/>
                                 </div>
                             </div>
                         </div>
@@ -317,7 +336,7 @@
                             <div class="slds-form-element">
                                 <label class="slds-form-element__label">Years with Current Employer<span style="color: red;">*</span></label>
                                 <div class="slds-form-element__control">
-                                    <apex:inputText value="{!Account.SFA_Years_at_employer__c}" id="ycemp" styleClass="slds-input"/>
+                                    <apex:inputText value="{!Customer_Inquiry__c.Years_with_Current_Employer__c}" id="ycemp" styleClass="slds-input"/>
                                 </div>
                             </div>
                         </div>
@@ -326,7 +345,7 @@
                             <div class="slds-form-element">
                                 <label class="slds-form-element__label">Months with Current Employer<span style="color: red;">*</span> </label>
                                 <div class="slds-form-element__control">
-                                    <apex:inputText value="{!Account.SFA_Months_at_Employer__c}" id="mcemp" styleClass="slds-input"/>
+                                    <apex:inputText value="{!Customer_Inquiry__c.Months_with_Current_Employer__c}" id="mcemp" styleClass="slds-input"/>
                                 </div>
                             </div>
                         </div>   
@@ -390,7 +409,7 @@
                                         <div class="slds-form-element">
                                             <label class="slds-form-element__label">First Name<span style="color: red;">*</span></label>
                                             <div class="slds-form-element__control">
-                                                <apex:inputText value="{!Account.Joint_Applicant_First_Name__c}" id="cfname" styleClass="slds-input"/>
+                                                <apex:inputText value="{!Customer_Inquiry__c.CoApp_First_Name__c}" id="cfname" styleClass="slds-input"/>
                                             </div>
                                         </div> 
                                     </div>
@@ -399,7 +418,7 @@
                                         <div class="slds-form-element">
                                             <label class="slds-form-element__label">Last Name<span style="color: red;">*</span></label>
                                             <div class="slds-form-element__control">
-                                                <apex:inputText value="{!Account.Joint_Applicant_Last_Name__c}" id="clname" styleClass="slds-input"/>
+                                                <apex:inputText value="{!Customer_Inquiry__c.CoApp_Last_Name__c}" id="clname" styleClass="slds-input"/>
                                             </div>
                                         </div> 
                                     </div>
@@ -407,7 +426,7 @@
                                         <div class="slds-form-element">
                                             <label class="slds-form-element__label">Date of Birth(mm/dd/yyy)<span style="color: red;">*</span></label>
                                             <div class="slds-form-element__control">
-                                                <apex:inputText value="{!Account.Joint_Applicant_Date_of_Birth__c}" id="cdob" styleClass="slds-input"/>
+                                                <apex:inputField style="width: 100%;" value="{!Customer_Inquiry__c.CoApp_Date_of_Birth__c}" id="cdob" styleClass="slds-input"/>
                                             </div>
                                         </div> 
                                     </div>
@@ -416,7 +435,7 @@
                                         <div class="slds-form-element">
                                             <label class="slds-form-element__label">Relationship to Applicant<span style="color: red;">*</span></label>
                                             <div class="slds-form-element__control">
-                                                <apex:inputText value="{!Account.Relationship_to_Applicant__c}" id="rtoapp" styleClass="slds-input"/>
+                                                <apex:inputText value="{!Customer_Inquiry__c.CoApp_Relationship_to_Applicant__c}" id="rtoapp" styleClass="slds-input"/>
                                             </div>
                                         </div> 
                                     </div>
@@ -433,7 +452,7 @@
                                         <div class="slds-form-element">
                                             <label class="slds-form-element__label">Social Security Number<span style="color: red;">*</span> </label>
                                             <div class="slds-form-element__control">
-                                                <apex:inputText value="{!Account.Joint_Applicant_Social_Security_Number__c}" id="cssn" styleClass="slds-input"/>
+                                                <apex:inputText value="{!Customer_Inquiry__c.CoApp_Social_Security_Number__c}" id="cssn" styleClass="slds-input"/>
                                             </div>
                                         </div> 
                                     </div>
@@ -442,7 +461,7 @@
                                         <div class="slds-form-element">
                                             <label class="slds-form-element__label">Driver's License Number<span style="color: red;">*</span></label>
                                             <div class="slds-form-element__control">
-                                                <apex:inputText value="{!Account.Joint_Applicant_Drivers_License__c}" id="cdlm" styleClass="slds-input"/>
+                                                <apex:inputText value="{!Customer_Inquiry__c.CoApp_Drivers_License_Number__c}" id="cdlm" styleClass="slds-input"/>
                                             </div>
                                         </div> 
                                     </div>
@@ -450,7 +469,7 @@
                                         <div class="slds-form-element"> 
                                             <label class="slds-form-element__label">Phone Number<span style="color: red;">*</span></label>
                                             <div class="slds-form-element__control">
-                                                <apex:inputText value="{!Account.Joint_Applicant_Phone__c}" id="cpno" styleClass="slds-input"/>
+                                                <apex:inputText value="{!Customer_Inquiry__c.CoApp_Phone__c}" id="cpno" styleClass="slds-input"/>
                                             </div>
                                         </div> 
                                     </div>
@@ -458,7 +477,7 @@
                                         <div class="slds-form-element">
                                             <label class="slds-form-element__label">Email<span style="color: red;">*</span></label>
                                             <div class="slds-form-element__control">
-                                                <apex:inputText value="{!Account.Joint_Applicant_Email__c}" id="emll" styleClass="slds-input"/>
+                                                <apex:inputField value="{!Customer_Inquiry__c.CoApp_Email__c}" id="emll" styleClass="slds-input"/>
                                             </div>
                                         </div> 
                                     </div>
@@ -478,7 +497,7 @@
                                         <div class="slds-form-element">
                                             <label class="slds-form-element__label">Address<span style="color: red;">*</span></label>
                                             <div class="slds-form-element__control">
-                                                <apex:inputText value="{!Account.Joint_Applicant_Street_Address__c}" id="cadd" styleClass="slds-input"/>
+                                                <apex:inputText value="{!Customer_Inquiry__c.CoApp_Street__c}" id="cadd" styleClass="slds-input"/>
                                             </div>
                                         </div> 
                                     </div>
@@ -486,7 +505,7 @@
                                         <div class="slds-form-element">
                                             <label class="slds-form-element__label">City</label>
                                             <div class="slds-form-element__control">
-                                                <apex:inputText value="{!Account.Joint_Applicant_City__c}" styleClass="slds-input"/>
+                                                <apex:inputText value="{!Customer_Inquiry__c.CoApp_City__c}" styleClass="slds-input"/>
                                             </div>
                                         </div> 
                                     </div>
@@ -494,7 +513,7 @@
                                         <div class="slds-form-element">
                                             <label class="slds-form-element__label">State / Province / Region</label>
                                             <div class="slds-form-element__control">
-                                                <apex:inputText value="{!Account.Joint_Applicant_State__c}" styleClass="slds-input"/>
+                                                <apex:inputText value="{!Customer_Inquiry__c.CoApp_State__c}" styleClass="slds-input"/>
                                             </div>
                                         </div> 
                                     </div>
@@ -502,7 +521,7 @@
                                         <div class="slds-form-element">
                                             <label class="slds-form-element__label">Postal / Zip Code</label>
                                             <div class="slds-form-element__control">
-                                                <apex:inputText value="{!Account.Joint_Applicant_Zip_Postal_Code__c}" styleClass="slds-input"/>
+                                                <apex:inputText value="{!Customer_Inquiry__c.CoApp_Zip_Code__c}" styleClass="slds-input"/>
                                             </div>
                                         </div> 
                                     </div>
@@ -520,9 +539,9 @@
                                         <div class="slds-form-element">
                                             <label class="slds-form-element__label">Country</label>
                                             <div class="slds-form-element__control">
-                                                <apex:inputText value="{!Account.Joint_Applicant_County__c}" styleClass="slds-input"/>
+                                                <apex:inputText value="{!Customer_Inquiry__c.CoApp_Country__c}" styleClass="slds-input"/>
                                             </div>
-                                        </div>
+                                        </div> 
                                     </div>
                                     <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
                                         
@@ -542,39 +561,41 @@
                 <!--Co-Applicant Mortgage Info -->
                 <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-1 slds-col--padded" style="padding: 1%; border-bottom: solid 1px #ccc!important;"> 
                     <apex:outputPanel rendered="true">
-                        <div class="slds-grid slds-wrap">
-                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
-                                <div class="slds-form-element">
-                                    <label class="slds-form-element__label">Mortgage Lender/Landlord Name</label>
-                                    <div class="slds-form-element__control">
-                                        <apex:inputText value="{!Account.Joint_Applicant_Landlord_Mortgage_Holder__c}" styleClass="slds-input"/>
-                                    </div>
-                                </div> 
-                            </div>
-                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
-                                <div class="slds-form-element">
-                                    <label class="slds-form-element__label"> Monthly Payment<span style="color: red;">*</span></label>
-                                    <div class="slds-form-element__control">
-                                        <apex:inputText value="{!Account.Joint_Applicant_Monthly_Rent_Mortgage__c}" id="cmp" styleClass="slds-input"/>
-                                    </div>
-                                </div> 
-                            </div>
-                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
-                                <div class="slds-form-element">
-                                    <label class="slds-form-element__label">Own/Rent<span style="color: red;">*</span></label>
-                                    <div class="slds-form-element__control">
-                                        <apex:inputField value="{!Account.Joint_Applicant_Property_Owner__c}" id="cownrent" styleClass="slds-input"/>
-                                    </div>
-                                </div> 
-                            </div> 
-                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
-                                <div class="slds-form-element">
-                                    <label class="slds-form-element__label"> Years at Address<span style="color: red;">*</span></label>
-                                    <div class="slds-form-element__control">
-                                        <apex:inputField value="{!Account.Joint_Applicant_Years_at_current_address__c}" id="cyadd" styleClass="slds-input"/>
-                                    </div>
-                                </div> 
-                            </div>
+	                    <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-1 slds-col--padded">
+	                        <div class="slds-grid slds-wrap">
+	                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+	                                <div class="slds-form-element">
+	                                    <label class="slds-form-element__label">Mortgage Lender/Landlord Name</label>
+	                                    <div class="slds-form-element__control">
+	                                        <apex:inputText value="{!Customer_Inquiry__c.CoApp_Mortgage_LenderLandlord_Name__c}" styleClass="slds-input"/>
+	                                    </div>
+	                                </div> 
+	                            </div>
+	                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+	                                <div class="slds-form-element">
+	                                    <label class="slds-form-element__label"> Monthly Payment<span style="color: red;">*</span></label>
+	                                    <div class="slds-form-element__control">
+	                                        <apex:inputText value="{!Customer_Inquiry__c.CoApp_Monthly_Payment__c}" id="cmp" styleClass="slds-input"/>
+	                                    </div>
+	                                </div> 
+	                            </div>
+	                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+	                                <div class="slds-form-element">
+	                                    <label class="slds-form-element__label">Own/Rent<span style="color: red;">*</span></label>
+	                                    <div class="slds-form-element__control">
+	                                        <apex:inputField value="{!Customer_Inquiry__c.CoApp_Property_Ownership__c}" id="cownrent" styleClass="slds-input"/>
+	                                    </div>
+	                                </div> 
+	                            </div> 
+	                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
+	                                <div class="slds-form-element">
+	                                    <label class="slds-form-element__label"> Years at Address<span style="color: red;">*</span></label>
+	                                    <div class="slds-form-element__control">
+	                                        <apex:inputField value="{!Customer_Inquiry__c.CoApp_Years_at_Address__c}" id="cyadd" styleClass="slds-input"/>
+	                                    </div>
+	                                </div> 
+	                            </div>
+	                        </div> 
                         </div>
                     </apex:outputPanel>
         
@@ -586,7 +607,7 @@
                                         <div class="slds-form-element">
                                             <label class="slds-form-element__label">Months at Address<span style="color: red;">*</span> </label>
                                             <div class="slds-form-element__control">
-                                                <apex:inputField value="{!Account.Joint_Applicant_Months_Current_Address__c}" id="cmadd" styleClass="slds-input"/>
+                                                <apex:inputField value="{!Customer_Inquiry__c.CoApp_Months_at_Address__c}" id="cmadd" styleClass="slds-input"/>
                                             </div>
                                         </div> 
                                     </div>
@@ -614,7 +635,7 @@
                                     <div class="slds-form-element">
                                         <label class="slds-form-element__label">Current Occupation</label>
                                         <div class="slds-form-element__control">
-                                            <apex:inputText value="{!Account.Joint_Applicant_Occupation__c}" id="joccup" styleClass="slds-input"/>
+                                            <apex:inputText value="{!Customer_Inquiry__c.CoApp_Current_Occupation__c}" id="joccup" styleClass="slds-input"/>
                                         </div>
                                     </div>
                                 </div>  
@@ -623,7 +644,7 @@
                                     <div class="slds-form-element">
                                         <label class="slds-form-element__label">Current Employer Name<span style="color: red;">*</span></label>
                                         <div class="slds-form-element__control">
-                                            <apex:inputText value="{!Account.Joint_Applicant_Employer_Name__c}" id="jcempname" styleClass="slds-input"/>
+                                            <apex:inputText value="{!Customer_Inquiry__c.CoApp_Current_Employer_Name__c}" id="jcempname" styleClass="slds-input"/>
                                         </div>
                                     </div>
                                 </div>
@@ -632,7 +653,7 @@
                                     <div class="slds-form-element">
                                         <label class="slds-form-element__label">Current Employer Phone Number<span style="color: red;">*</span></label>
                                         <div class="slds-form-element__control">
-                                            <apex:inputText value="{!Account.Joint_Applicant_Employer_Phone__c}" id="jcempno" styleClass="slds-input"/>
+                                            <apex:inputText value="{!Customer_Inquiry__c.CoApp_Current_Employer_Phone__c}" id="jcempno" styleClass="slds-input"/>
                                         </div>
                                     </div>
                                 </div> 
@@ -641,7 +662,7 @@
                                     <div class="slds-form-element">
                                         <label class="slds-form-element__label">Current Monthly Salary<span style="color: red;">*</span></label>
                                         <div class="slds-form-element__control">
-                                            <apex:inputText value="{!Account.Joint_Applicant_Salary_Annually_Gross__c}" id="coempsal" styleClass="slds-input"/>
+                                            <apex:inputText value="{!Customer_Inquiry__c.CoApp_Current_Monthly_Salary__c}" id="coempsal" styleClass="slds-input"/>
                                         </div>
                                     </div>
                                 </div>
@@ -657,7 +678,7 @@
                                     <div class="slds-form-element">
                                         <label class="slds-form-element__label">Years with Current Employer<span style="color: red;">*</span></label>
                                         <div class="slds-form-element__control">
-                                            <apex:inputText value="{!Account.Joint_Applicant_Years_at_Employer__c}" id="cycemp" styleClass="slds-input"/>
+                                            <apex:inputText value="{!Customer_Inquiry__c.CoApp_Years_with_Current_Employer__c}" id="cycemp" styleClass="slds-input"/>
                                         </div>
                                     </div>
                                 </div>
@@ -666,7 +687,7 @@
                                     <div class="slds-form-element">
                                         <label class="slds-form-element__label">Months with Current Employer<span style="color: red;">*</span> </label>
                                         <div class="slds-form-element__control">
-                                            <apex:inputText value="{!Account.Joint_Applicant_Months_at_Employer__c}" id="jcmcemp" styleClass="slds-input"/>
+                                            <apex:inputText value="{!Customer_Inquiry__c.CoApp_Months_with_Current_Employer__c}" id="jcmcemp" styleClass="slds-input"/>
                                         </div>
                                     </div>
                                 </div>   
@@ -685,13 +706,13 @@
             <!--Signature Area -->
             <div class="slds-grid slds-wrap">
                 <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-1 slds-col--padded">
-                    <div class="slds-grid slds-wrap" style="margin-top: 1%;"> 
+                    <div class="slds-grid slds-wrap" style="margin-top: 1%; padding-left: 1%;"> 
                         <div class="slds-grid slds-wrap" style="margin-top: 1%;">
                             <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
                                 <div class="slds-form-element">
                                     <label class="slds-form-element__label">Signature</label>
                                     <div class="slds-form-element__control">
-                                        <apex:inputText styleClass="slds-input"/>
+                                        <apex:inputText styleClass="slds-input" style="width: 180%;"/>
                                     </div>
                                 </div>
                             </div>                                  

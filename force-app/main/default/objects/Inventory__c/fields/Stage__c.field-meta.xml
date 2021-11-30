@@ -77,6 +77,11 @@
                 <default>false</default>
                 <label>Pre Sold</label>
             </value>
+            <value>
+                <fullName>No Longer For Sale</fullName>
+                <default>false</default>
+                <label>No Longer For Sale</label>
+            </value>
         </valueSetDefinition>
     </valueSet>
 </CustomField>

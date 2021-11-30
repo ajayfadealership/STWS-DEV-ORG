@@ -3,8 +3,9 @@
     <fullName>Woocommerce_Customer_Notes__c</fullName>
     <deprecated>false</deprecated>
     <externalId>false</externalId>
-    <label>Woocommerce Customer Notes</label>
+    <label>Customer Notes</label>
     <length>131072</length>
+    <trackFeedHistory>false</trackFeedHistory>
     <trackHistory>false</trackHistory>
     <trackTrending>false</trackTrending>
     <type>LongTextArea</type>

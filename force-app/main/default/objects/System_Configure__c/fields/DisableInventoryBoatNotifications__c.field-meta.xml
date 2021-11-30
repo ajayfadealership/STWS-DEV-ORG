@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>DisableInventoryBoatNotifications__c</fullName>
+    <defaultValue>false</defaultValue>
+    <deprecated>false</deprecated>
+    <description>This checkbox is used to disable the Custom notifications sent to Sales and Marketing managers on update on Inventory statues. Primary notifications are Rigging, In Stock and Marketing Photos. If the checkbox is checked, notifications will not be sent.</description>
+    <externalId>false</externalId>
+    <inlineHelpText>This checkbox is used to manage the Custom notifications sent to Sales and Marketing managers on update on Inventory statues. Primary notifications are Rigging, In Stock and Marketing Photos.</inlineHelpText>
+    <label>DisableInventoryBoatNotifications</label>
+    <trackTrending>false</trackTrending>
+    <type>Checkbox</type>
+</CustomField>

@@ -15,6 +15,7 @@ public with sharing class TechWorkOrderDetailController {
                                                     WHERE 
                                                             Id =: strRecId];
         lstFinalList.add(objWO);
+        //BOATBUILDING__Clock_In__c != null AND BOATBUILDING__Clock_Out__c =null AND
         List<BOATBUILDING__Work_Order_Job__c> lstJob = [SELECT Work_Type__c, BOATBUILDING__Work_Order_Warranty_Work_Order__r.BOATBUILDING__Account__c,BOATBUILDING__Work_Order_Warranty_Work_Order__r.BOATBUILDING__Contact__c, Type__c,  Name,  No_of_Labors__c,  Price_per_Labor__c,  Total_Cost_Labor__c,  Shop_Supplies_Total__c, 
                                                                 Total_Amount_Job__c,  Customer_Pay__c, Total_Hours_Job__c, Worked_Hours__c, Id, Job_Name__c, Work_Requested__c,
                                                                 BOATBUILDING__Completed__c, BOATBUILDING__TWO_Worked_Hour__c, BOATBUILDING__Work_Order_Warranty_Work_Order__r.BOATBUILDING__Description__c    ,
@@ -29,8 +30,8 @@ public with sharing class TechWorkOrderDetailController {
                                                                     SELECT 
                                                                         BOATBUILDING__Technician_Efficiency__c, Id,BOATBUILDING__Clock_In__c,BOATBUILDING__Clock_Out__c, Status__c, Service_writer_comment__c, Technician__c, Technician__r.Name   
                                                                     FROM 
-                                                                        BOATBUILDING__Time_Management__r where BOATBUILDING__Clock_In__c != null AND BOATBUILDING__Clock_Out__c =null 
-                                                                    Order BY BOATBUILDING__Clock_In__c DESC limit 1)
+                                                                        BOATBUILDING__Time_Management__r where  RecordType.DeveloperName = 'Time_Management_for_Jobs'
+                                                                    Order BY CreatedDate DESC limit 1)
                                                         FROM 
                                                                 BOATBUILDING__Work_Order_Job__c where BOATBUILDING__Work_Order_Warranty_Work_Order__c =: objWO.Id];
         
@@ -41,6 +42,7 @@ public with sharing class TechWorkOrderDetailController {
     @AuraEnabled 
     public static String updateclockout(String JobId, String tmid ) {
         try{
+            
             BOATBUILDING__Time_Management__c updateclockout = [Select Clock_In__c, 
                                                         Clock_Out__c, 
                                                         Number_of_Hours_Worked__c,
@@ -51,7 +53,8 @@ public with sharing class TechWorkOrderDetailController {
                                                         BOATBUILDING__Time_Management__c 
                                                         where 
                                                         Related_Work_Order_Job__c =: JobId and 
-                                                        Id =: tmid limit 1]; 
+                                                        Id =: tmid limit 1];
+            system.debug('######'+updateclockout);
             updateclockout.Clock_Out__c = DateTime.now();
             Decimal clockInHr = 0.0, clockInMin = 0.0, currentHr = 0.0, currentMin = 0.0 , totalTime = 0.0, DtotalTime = 0.0  ;
             clockInHr = (updateclockout.Clock_In__c).hour();
@@ -129,5 +132,10 @@ public with sharing class TechWorkOrderDetailController {
             return error;
         }
     }
-    
+    @AuraEnabled
+    public static List<Object> getTMHistory(String jobId) {
+        Id recid = Schema.SObjectType.BOATBUILDING__Time_Management__c.getRecordTypeInfosByName().get('Time Management for Jobs').getRecordTypeId();        
+        List<BOATBUILDING__Time_Management__c> lstTM = [SELECT Id, BOATBUILDING__Clock_In__c, BOATBUILDING__Clock_Out__c FROM BOATBUILDING__Time_Management__c Where BOATBUILDING__Related_Work_Order_Job__c =: jobId];
+        return lstTM; 
+    }
 }

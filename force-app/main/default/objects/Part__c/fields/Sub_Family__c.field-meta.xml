@@ -52,6 +52,26 @@
                 <default>false</default>
                 <label>Pants</label>
             </value>
+            <value>
+                <fullName>Hoodies &amp; Sweatshirts</fullName>
+                <default>false</default>
+                <label>Hoodies &amp; Sweatshirts</label>
+            </value>
+            <value>
+                <fullName>T-Shirts</fullName>
+                <default>false</default>
+                <label>T-Shirts</label>
+            </value>
+            <value>
+                <fullName>Packages</fullName>
+                <default>false</default>
+                <label>Packages</label>
+            </value>
+            <value>
+                <fullName>Exhaust Hoses</fullName>
+                <default>false</default>
+                <label>Exhaust Hoses</label>
+            </value>
         </valueSetDefinition>
         <valueSettings>
             <controllingFieldValue>Steering</controllingFieldValue>
@@ -90,7 +110,7 @@
             <controllingFieldValue>Canvas</controllingFieldValue>
             <controllingFieldValue>Dash</controllingFieldValue>
             <controllingFieldValue>Electrical</controllingFieldValue>
-            <controllingFieldValue>Men&#39;s Wakesurf Equipment</controllingFieldValue>
+            <controllingFieldValue>Men&apos;s Wakesurf Equipment</controllingFieldValue>
             <controllingFieldValue>Rub Rail</controllingFieldValue>
             <controllingFieldValue>Running Gear</controllingFieldValue>
             <valueName>B</valueName>
@@ -121,6 +141,10 @@
             <valueName>C</valueName>
         </valueSettings>
         <valueSettings>
+            <controllingFieldValue>Exhaust Parts</controllingFieldValue>
+            <valueName>Exhaust Hoses</valueName>
+        </valueSettings>
+        <valueSettings>
             <controllingFieldValue>Surf Boards</controllingFieldValue>
             <controllingFieldValue>Surf Pads</controllingFieldValue>
             <controllingFieldValue>Surf Ropes</controllingFieldValue>
@@ -137,24 +161,36 @@
             <controllingFieldValue>Walk Shorts</controllingFieldValue>
             <controllingFieldValue>Trailer</controllingFieldValue>
             <controllingFieldValue>Back Packs</controllingFieldValue>
-            <controllingFieldValue>Men&#39;s Wakesurf Equipment</controllingFieldValue>
+            <controllingFieldValue>Men&apos;s Wakesurf Equipment</controllingFieldValue>
             <valueName>A</valueName>
         </valueSettings>
         <valueSettings>
-            <controllingFieldValue>Men&#39;s Wakesurf Equipment</controllingFieldValue>
+            <controllingFieldValue>Men&apos;s Wakesurf Equipment</controllingFieldValue>
             <valueName>Wakesurf Boards</valueName>
         </valueSettings>
         <valueSettings>
-            <controllingFieldValue>Men&#39;s Wakesurf Equipment</controllingFieldValue>
+            <controllingFieldValue>Men&apos;s Wakesurf Equipment</controllingFieldValue>
             <valueName>Wakeboards</valueName>
         </valueSettings>
         <valueSettings>
-            <controllingFieldValue>Men&#39;s Wakesurf Equipment</controllingFieldValue>
+            <controllingFieldValue>Men&apos;s Wakesurf Equipment</controllingFieldValue>
             <valueName>Ropes &amp; Handles</valueName>
         </valueSettings>
         <valueSettings>
-            <controllingFieldValue>Men&#39;s Snowboard Equipment &amp; Apparel</controllingFieldValue>
+            <controllingFieldValue>Men&apos;s Snowboard Equipment &amp; Apparel</controllingFieldValue>
             <valueName>Pants</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Clothing</controllingFieldValue>
+            <valueName>Hoodies &amp; Sweatshirts</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Clothing</controllingFieldValue>
+            <valueName>T-Shirts</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Kid&apos;s Wakeboard Equipment</controllingFieldValue>
+            <valueName>Packages</valueName>
         </valueSettings>
     </valueSet>
 </CustomField>

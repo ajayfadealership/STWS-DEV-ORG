@@ -3,9 +3,8 @@
     <fullName>Boat_Hrs__c</fullName>
     <deprecated>false</deprecated>
     <externalId>false</externalId>
-    <formula>Contact_Name__r.Trade_Boat_Hrs__c</formula>
-    <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
-    <label>Boat Hrs</label>
+    <formula>BoatHrs__c</formula>
+    <label>Boat Hrs Formula</label>
     <precision>18</precision>
     <required>false</required>
     <scale>2</scale>

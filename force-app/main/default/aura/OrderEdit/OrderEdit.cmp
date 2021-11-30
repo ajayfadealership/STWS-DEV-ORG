@@ -20,13 +20,16 @@
     <aura:attribute name="showSpinner" type="boolean" default="false" access="global"/>
     
     <!--Part Distribute Att-->
+    <aura:attribute name="ShowStoreLocation" type="boolean" default="false" access="global"/>
     <aura:attribute name="locationCount" type="Integer" default="0" access="global"/>
     <aura:attribute name="locations" type="String[]" access="global"/>
     <aura:attribute name="clickType" type="String" access="global"/>
     <aura:if isTrue="{!v.showSpinner}">
         <lightning:spinner  variant= "brand"/> 
     </aura:if>
-    
+    <aura:if isTrue="{!v.ShowStoreLocation}">
+        <c:ReceiveAllAtLocation ReceiveAllAtLocation="false" lstLI="{!v.listlineItem}" recordId="{!v.attrRecordId}"/>
+    </aura:if> 
     
     <lightning:recordViewForm aura:id="recordViewForm" recordId="{!v.vendorRecordId}" objectApiName="BOATBUILDING__Manufacturer__c">
         <div class = "slds-col slds-size--1-of-1">
@@ -154,8 +157,8 @@
                                             <td class=" tooltip fontStyle"><span class="tooltiptext">${!(item.quantity- item.received)*item.cost}</span><lightning:input readonly="" formatter="currency" type="number" value="{!(item.quantity- item.received)*item.cost}" variant="label-hidden" /></td>
                                             <td class="fontStyle">
                                                 <aura:if isTrue="{!v.locationCount > 1}">
-                                                    <c:PartDistribution locations="{!v.locations}" locationCount="{!v.locationCount}" partDistribution="false" lstPA="{!item.lstPA}"/>
-                                                </aura:if>
+                                                    <c:PartDistribution locations="{!v.locations}" objLI="{!item}" locationCount="{!v.locationCount}" partDistribution="false" lstPA="{!item.lstPA}"/>
+                                                </aura:if> 
                                             </td>
                                         </tr>
                                         
@@ -163,7 +166,7 @@
                                 </aura:iteration>
                                 
                                 <tfoot>
-                                    
+                                  
                                     <tr class="slds-hint-parent">
                                         <th ></th>
                                         <th class="  fontStyle"><b>Total:</b></th>
@@ -231,10 +234,11 @@
         <div class = "slds-col--padded">
             <div class = "slds-form-element">
                 <div class = "slds-form-element__control">
-                    <lightning:button type="submit" variant="brand" label="Update Status" class = "slds-m-top_medium"/>
+                    <lightning:button variant="brand" onclick="{!c.save}" label="Update" class="slds-m-top_medium"/>
                 </div>
             </div>
         </div>
+        
         <div class = "slds-col--padded">
             <div class = "slds-form-element">
                 <div class = "slds-form-element__control">
@@ -266,6 +270,14 @@
                 </div>
             </div>
         </div>
+        <div class = "slds-col--padded">
+            <div class = "slds-form-element">
+                <div class = "slds-form-element__control">
+                    <lightning:button  variant="brand" label="Receive All" onclick="{!c.receiveAllPartAtLocation}" class = "slds-m-top_medium"/>
+                </div>
+            </div>
+        </div>
+        
     </div>
     
 </aura:component>

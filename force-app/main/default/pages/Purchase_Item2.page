@@ -308,6 +308,7 @@
                                         <apex:outputPanel id="modelPanelid">
                                             <div class="slds-form-element">
                                                 <div class="slds-form-element">
+                                                    <span style="color:red;">*</span>
                                                     <label class="slds-form-element__label" >Model:</label> 
                                                     <div class="slds-form-element__control">
                                                         <apex:selectList size="1" value="{!selectedModel}" label="Model: " disabled="{!if(selectedType != '0' && selectedType != 'Used Boat' && selectedManufacture != null && selectedYear != null , false, true)}" id="sl3" styleClass="slds-select">

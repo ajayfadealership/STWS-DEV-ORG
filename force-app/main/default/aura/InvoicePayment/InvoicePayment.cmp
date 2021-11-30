@@ -6,14 +6,14 @@
     <aura:attribute name="strObjType" type="String" access="global"/>
     <aura:attribute name="amount" type="Decimal" default="0.00" access="global"/>
     <aura:attribute name="isGateway" type="Boolean" default="false" access="global"/>
-    
+    <aura:attribute name="RecTyId" default="" type="String" access="global"/>
     <aura:if isTrue="{!v.strObjType == 'INVOICE'}">
-        <lightning:recordEditForm objectApiName="BOATBUILDING__Payment__c" aura:id="payForm"  onsuccess="{!c.onRecordSuccess}">
+        <lightning:recordEditForm objectApiName="BOATBUILDING__Payments__c" recordTypeId="{!v.RecTyId}" aura:id="payForm"  onsuccess="{!c.onRecordSuccess}">
             <div class = "slds-col slds-size--1-of-1">
                 <div class = "slds-grid slds-wrap" >
                     <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-2 slds-large-size--1-of-2 slds-p-top_small">
                         <span style="display: none;"> 
-                            <lightning:inputField fieldName="BOATBUILDING__Related_to_Invoice__c" value="{!v.recordId}"/>
+                            <lightning:inputField fieldName="BOATBUILDING__Invoice__c" value="{!v.recordId}"/>
                         </span>
                         <lightning:inputField fieldName="BOATBUILDING__Payment_Type__c" aura:id="pType" variant="label-stacked" onchange="{!c.updatePaymentButtom}"/>
                     </div>
@@ -45,17 +45,17 @@
             </div>
         </lightning:recordEditForm>
         <aura:set attribute="else">
-            <lightning:recordEditForm objectApiName="BOATBUILDING__Work_Order_Payment__c" aura:id="payFormWO"  onsuccess="{!c.onRecordSuccess}">
+            <lightning:recordEditForm objectApiName="BOATBUILDING__Payments__c" recordTypeId="{!v.RecTyId}" aura:id="payFormWO"  onsuccess="{!c.onRecordSuccess}">
                 <div class = "slds-col slds-size--1-of-1">
                     <div class = "slds-grid slds-wrap" >
                         <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-2 slds-large-size--1-of-2 slds-p-top_small">
                             <span style="display: none;"> 
-                                <lightning:inputField fieldName="BOATBUILDING__Related_to_Warranty_Work_Work_Order__c" value="{!v.recordId}"/>
+                                <lightning:inputField fieldName="BOATBUILDING__Work_Warranty_Order__c" value="{!v.recordId}"/>
                             </span>
                             <lightning:inputField fieldName="BOATBUILDING__Payment_Type__c" aura:id="WOpType" variant="label-stacked" onchange="{!c.updatePaymentButtomWO}"/>
                         </div>
                         <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-2 slds-large-size--1-of-2 slds-p-top_small">
-                            <lightning:input type="number" disabled="true" value="{!v.objWO.BOATBUILDING__Deducted_Total_Due_Amount__c}" label="Total Amount Due" variant="label-stacked"/>
+                            <lightning:input type="number" disabled="true" value="{!v.objWO.BOATBUILDING__Balance__c}" label="Total Amount Due" variant="label-stacked"/>
                         </div>
                         <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-2 slds-large-size--1-of-2 slds-p-top_small">
                             <lightning:inputField fieldName="BOATBUILDING__Check_Number__c" variant="label-stacked"/>
@@ -67,7 +67,7 @@
                             <lightning:inputField fieldName="BOATBUILDING__Credit_Card_Type__c" variant="label-stacked"/>
                         </div> 
                         <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-2 slds-large-size--1-of-2 slds-p-top_small">
-                            <lightning:input type="number" disabled="true" value="{!v.objWO.BOATBUILDING__Deducted_Total_Due_Amount__c - v.amount}" label="Balance" variant="label-stacked"/>
+                            <lightning:input type="number" disabled="true" value="{!v.objWO.BOATBUILDING__Balance__c - v.amount}" label="Balance" variant="label-stacked"/>
                         </div>
                         <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-1 slds-large-size--1-of-1 slds-p-top_small"> 
                             <aura:if isTrue="{!v.isGateway}"> 

@@ -5,7 +5,7 @@
     <description>Lake ZIP Code</description>
     <externalId>false</externalId>
     <label>Lake ZIP Code</label>
-    <length>20</length>
+    <length>255</length>
     <required>false</required>
     <trackFeedHistory>false</trackFeedHistory>
     <type>Text</type>

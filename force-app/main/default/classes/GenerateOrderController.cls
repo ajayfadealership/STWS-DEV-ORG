@@ -197,6 +197,6 @@ public with sharing class GenerateOrderController {
         if(!Test.isRunningTest()){
             Messaging.sendEmail(new Messaging.SingleEmailMessage[]{ mail });
         }
-        return new PageReference('/apex/ServicePage?subTabName=tab-default-3');
+        return new PageReference('/'+lstOrder[0].Id);
     }
 }

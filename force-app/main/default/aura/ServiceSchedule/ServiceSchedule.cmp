@@ -1,0 +1,260 @@
+<aura:component controller="ServiceScheduleController"
+    implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction,lightning:isUrlAddressable,lightning:availableForFlowScreens,lightning:isUrlAddressable"
+    access="global">
+
+    <aura:attribute name="isModalOpen" type="boolean" default="false" access="global" />
+    <aura:attribute name="useMonthlyViewSchedule" type="boolean" access="global" />
+    <aura:attribute name="lstUser" type="Object[]" access="global" />
+    <aura:attribute name="lstUserGrp" type="Object[]" access="global" />
+    <aura:attribute name="sLocation" type="Object[]" access="global" />
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    <aura:attribute name="recordTypeId" type="String" default="" />
+    <aura:attribute name="RecordId" type="String" default="" />
+    <aura:attribute name="type" type="String" default="Work Order/Jobs" />
+    <aura:attribute name="isPD" type="Boolean" default="" />
+    <aura:attribute name="showSpinner" type="boolean" default="false" access="global" />
+    <aura:attribute name="selectedUser" type="String" default="All" />
+    <aura:attribute name="typeP" type="String" default="0" />
+    <aura:attribute name="slLoca" type="String" default="All" />
+    <aura:attribute name="currentUser" type="String" default="" />
+    <aura:attribute name="reasonBool" type="Boolean" default="false" />
+    <aura:attribute name="delBool" type="Boolean" default="false" />
+    <aura:attribute name="changeRecordId" type="String" default="" />
+    <aura:attribute name="changeStartDate" type="String" default="" />
+    <aura:attribute name="changeEndDate" type="String" default="" />
+    <aura:attribute name="changeRecId" type="String" default="" />
+    <aura:attribute name="UserRoleName" type="String" default="" />
+    <aura:attribute name="lstPermission" type="String[]" default="[]" />
+    <aura:if isTrue="{!v.showSpinner}">
+        <lightning:spinner variant="brand" />
+    </aura:if>
+    <meta charset='utf-8' />
+
+    <aura:if isTrue="{!v.reasonBool}">
+        <section role="dialog" tabindex="-1" aria-label="Meaningful description of the modal content" aria-modal="true"
+            aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open" style="background: #00000082;">
+            <div class="slds-modal__container">
+                <header class="slds-modal__header slds-modal__header_empty">
+                    <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse"
+                        title="Close" onclick="{!c.closeChangePopup}">
+                        <lightning:icon iconName="utility:close" alternativeText="Close" title="Close" />
+                    </button>
+                </header>
+                <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1" style="height: 40%;overflow: hidden;">
+                    <p>
+                        <lightning:recordEditForm objectApiName="BOATBUILDING__Time_Management__c"
+                            recordTypeId="{!v.recordTypeId}" aura:id="scheduleChangeForm" recordId="{!v.changeRecordId}"
+                            onerror="{!c.handleError}" onsuccess="{!c.handleSuccessChnage}">
+                            <lightning:inputField fieldName="BOATBUILDING__Canned_Response_to_the_Customer__c" required="true"/> 
+                            <br/><br/>
+                            <lightning:button label="Save" type="submit" variant="brand"
+                                            class="slds-float_right" />&nbsp;
+                        </lightning:recordEditForm>
+                    </p>
+                </div>
+                <footer class="slds-modal__footer"> </footer>
+            </div>
+        </section>
+        <div class="slds-backdrop slds-backdrop_open"></div>
+    </aura:if>
+    <aura:if isTrue="{!v.delBool}">
+        <section role="dialog" tabindex="-1" aria-label="Meaningful description of the modal content" aria-modal="true"
+            aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open" style="background: #00000082;">
+            <div class="slds-modal__container">
+                <header class="slds-modal__header slds-modal__header_empty">
+                    <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse"
+                        title="Close" onclick="{!c.closeChangePopup}">
+                        <lightning:icon iconName="utility:close" alternativeText="Close" title="Close" />
+                    </button>
+                </header>
+                <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1" style="height: 40%;overflow: hidden;">
+                    <p>
+                        <lightning:recordEditForm objectApiName="BOATBUILDING__Time_Management__c"
+                            recordTypeId="{!v.recordTypeId}" aura:id="scheduleChangeForm" recordId="{!v.changeRecordId}"
+                            onerror="{!c.handleError}" onsuccess="{!c.handleDelSuccessChnage}">
+                            <lightning:inputField fieldName="BOATBUILDING__Canned_Response_to_the_Customer__c" required="true"/> 
+                            <br/><br/>
+                            <lightning:button label="Save" type="submit" variant="brand"
+                                            class="slds-float_right" />&nbsp;
+                        </lightning:recordEditForm>
+                    </p>
+                </div>
+                <footer class="slds-modal__footer"> </footer>
+            </div>
+        </section>
+        <div class="slds-backdrop slds-backdrop_open"></div>
+    </aura:if>
+    <article id="articleMain" class="slds-card slds-p-around_x-small">
+        <div class="slds-col slds-size--1-of-1 slds-m-bottom_large">
+            <div class="slds-grid slds-wrap">
+                <div
+                    class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-large-size--1-of-4 slds-p-right_medium">
+                    <lightning:select name="Store Location" label="Store Location" value="{!v.slLoca}"
+                        onchange="{!c.filterUserViaSL}">
+                        <option value="All">All</option>
+                        <aura:iteration items="{!v.sLocation}" var="sLocation">
+                            <option value="{!sLocation}">{!sLocation}</option>
+                        </aura:iteration>
+                    </lightning:select>
+                </div>
+                <div
+                    class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-large-size--1-of-4 slds-p-right_medium">
+                    <lightning:select name="User" label="User" value="{!v.selectedUser}"
+                        onchange="{!c.getRelatedTMDetails}">
+                        <option value="All">All</option>
+                        <aura:iteration items="{!v.lstUserGrp}" var="objUsr">
+                            <optgroup label="{!objUsr.sLocation}">
+                                <aura:iteration items="{!objUsr.lstUser}" var="objU">
+                                    <option value="{!objU.Id}" selected="{!objU.Id == v.currentUser}">{!objU.Name}
+                                    </option>
+                                    <!-- <aura:if isTrue="">
+                                        
+                                        <aura:set attribute="else">
+                                            <option value="{!objU.Id}" selected="false">{!objU.Name}</option>
+                                        </aura:set>
+                                    </aura:if> -->
+                                </aura:iteration>
+                            </optgroup>
+                        </aura:iteration>
+                    </lightning:select>
+                </div>
+                <div
+                    class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-large-size--1-of-4 slds-p-right_medium">
+                    <lightning:select name="Type" label="Type" value="{!v.typeP}" onchange="{!c.getRelatedTMDetails}">
+                        <option value="0">All</option>
+                        <option value="Drop">Drop</option>
+                        <option value="Event">Event</option>
+                        <Option value="Pickup">Pickup</Option>
+                        <option value="Sales">Sales</option>
+                        <option value="Test Drive">Test Drive</option>
+                        <option value="Work Order/Jobs">Work Order/Jobs</option>
+                    </lightning:select>
+                </div>
+            </div>
+        </div>
+        <div id='calendar'></div>
+        <aura:if isTrue="{!v.isModalOpen}">
+            <!-- Modal/Popup Box starts here-->
+
+            <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true"
+                aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+                <div class="slds-modal__container">
+                    <!-- Modal/Popup Box Header Starts here-->
+                    <header class="slds-modal__header">
+                        <lightning:buttonIcon iconName="utility:close" onclick="{! c.closeModel }"
+                            alternativeText="close" variant="bare-inverse" class="slds-modal__close" />
+                        <h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate">Event</h2>
+                    </header>
+                    <!--Modal/Popup Box Body Starts here-->
+                    <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                        <lightning:recordEditForm objectApiName="BOATBUILDING__Time_Management__c"
+                            recordTypeId="{!v.recordTypeId}" aura:id="scheduleForm" recordId="{!v.RecordId}"
+                            onsuccess="{!c.onRecordSuccess}" onerror="{!c.handleError}">
+                            <aura:if isTrue="{!v.showSpinner}">
+                                <lightning:spinner variant="brand" />
+                            </aura:if>
+                            <div class="slds-col slds-size--1-of-1">
+                                <div class="slds-grid slds-wrap">
+                                    <div
+                                        class="slds-col slds-size--1-of-1 slds-medium-size--1-of-2 slds-large-size--1-of-2 slds-p-top_small">
+                                        <span style="display: none;">
+                                            <lightning:inputField fieldName="BOATBUILDING__Type__c" value="{!v.type}"
+                                                variant="label-stacked" />
+                                        </span>
+                                        <lightning:select value="{!v.type}" label="Type" required="true" aura:id="type"
+                                            onchange="{!c.updateCustomerlookup}">
+                                            <option value="Work Order/Jobs">Work Order/Jobs</option>
+                                            <option value="Test Drive">Test Drive</option>
+                                            <option value="Sales">Sales</option>
+                                            <Option value="Pickup">Pickup</Option>
+                                            <option value="Event">Event</option>
+                                            <Option value="Drop">Drop</Option>
+                                        </lightning:select>
+                                    </div>
+                                    <div
+                                        class="slds-col slds-size--1-of-1 slds-medium-size--1-of-2 slds-large-size--1-of-2 slds-p-top_small">
+                                        <aura:if isTrue="{!v.isPD}">
+                                            <lightning:inputField fieldName="BOATBUILDING__Contact__c"
+                                                variant="label-stacked" />
+                                        </aura:if>
+                                    </div>
+                                    <div
+                                        class="slds-col slds-size--1-of-1 slds-medium-size--1-of-2 slds-large-size--1-of-2 slds-p-top_small">
+                                        <lightning:inputField fieldName="BOATBUILDING__Work_Order__c"
+                                            value="{!v.recordId}" variant="label-stacked" />
+                                    </div>
+                                    <div
+                                        class="slds-col slds-size--1-of-1 slds-medium-size--1-of-2 slds-large-size--1-of-2 slds-p-top_small">
+                                        <lightning:inputField fieldName="BOATBUILDING__Related_Work_Order_Job__c"
+                                            variant="label-stacked" />
+                                    </div>
+                                    <div
+                                        class="slds-col slds-size--1-of-1 slds-medium-size--1-of-2 slds-large-size--1-of-2 slds-p-top_small">
+                                        <lightning:inputField fieldName="BOATBUILDING__Technician__c" aura:id="techId"
+                                            variant="label-stacked" required="true" />
+                                    </div>
+                                    <div
+                                        class="slds-col slds-size--1-of-1 slds-medium-size--1-of-2 slds-large-size--1-of-2 slds-p-top_small">
+                                        &nbsp;
+                                    </div>
+                                    <div
+                                        class="slds-col slds-size--1-of-1 slds-medium-size--1-of-2 slds-large-size--1-of-2 slds-p-top_small">
+                                        <lightning:inputField fieldName="BOATBUILDING__Schedule_Date_Time__c"
+                                            variant="label-stacked" aura:id="sDate" onchange="{!c.dateTileValueChange}"
+                                            required="true" autocomplete="none" />
+                                    </div>
+                                    <div
+                                        class="slds-col slds-size--1-of-1 slds-medium-size--1-of-2 slds-large-size--1-of-2 slds-p-top_small">
+                                        <lightning:inputField fieldName="BOATBUILDING__End_Schedule_Date_Time__c"
+                                            aura:id="eDate" variant="label-stacked" required="true" />
+                                    </div>
+                                    <div
+                                        class="slds-col slds-size--1-of-1 slds-medium-size--1-of-2 slds-large-size--1-of-2 slds-p-top_small">
+                                        <lightning:inputField fieldName="BOATBUILDING__Description__c"
+                                            variant="label-stacked" />
+                                    </div>
+                                    <div
+                                        class="slds-col slds-size--1-of-1 slds-medium-size--1-of-2 slds-large-size--1-of-2 slds-p-top_small">
+                                        <lightning:inputField fieldName="BOATBUILDING__Service_Location__c"
+                                            variant="label-stacked" />
+                                    </div>
+                                    <div
+                                        class="slds-col slds-size--1-of-1 slds-medium-size--1-of-3 slds-large-size--1-of-4 slds-p-top_small">
+                                        <lightning:button label="Save" type="submit" variant="brand"
+                                            class="slds-float_right" />&nbsp;
+                                    </div>
+                                    <div
+                                        class="slds-col slds-size--1-of-1 slds-medium-size--1-of-3 slds-large-size--1-of-4 slds-p-top_small">
+                                        <lightning:button variant="brand" label="Cancel" title="Cancel"
+                                            class="slds-m-left_x-large" onclick="{! c.closeModel }" />
+                                    </div>
+                                    <div
+                                        class="slds-col slds-size--1-of-1 slds-medium-size--1-of-3 slds-large-size--1-of-4 slds-p-top_small">
+                                        <lightning:button variant="brand" label="De-Schedule" title="De-Schedule"
+                                            class="slds-m-left_x-large" onclick="{! c.deleteEventJS }" />
+                                    </div>
+                                    <div
+                                        class="slds-col slds-size--1-of-1 slds-medium-size--1-of-3 slds-large-size--1-of-4 slds-p-top_small">
+                                        &nbsp;
+                                        <lightning:button variant="brand" label="Open Work Order"
+                                            title="Open Work Order" onclick="{! c.opeWO }" />
+                                    </div>
+                                </div>
+                            </div>
+                        </lightning:recordEditForm>
+                    </div>
+                    <!--Modal/Popup Box Footer Starts here-->
+                    <footer class="slds-modal__footer">
+                    </footer>
+                </div>
+            </section>
+            <div class="slds-backdrop slds-backdrop_open"></div>
+        </aura:if>
+    </article>
+
+    <ltng:require
+        styles="/resource/BOATBUILDING__FC44/FC44/packages/core/main.css, /resource/BOATBUILDING__FC44/FC44/packages/daygrid/main.css, /resource/BOATBUILDING__FC44/FC44/packages/timegrid/main.css" />
+    <ltng:require
+        scripts="/resource/BOATBUILDING__FC44/FC44/packages/core/main.js, /resource/BOATBUILDING__FC44/FC44/packages/interaction/main.js, /resource/BOATBUILDING__FC44/FC44/packages/daygrid/main.js, /resource/BOATBUILDING__FC44/FC44/packages/timegrid/main.js, /resource/BOATBUILDING__FC44/FC44/packages-premium/resource-common/main.js, /resource/BOATBUILDING__FC44/FC44/packages-premium/resource-daygrid/main.js, /resource/BOATBUILDING__FC44/FC44/packages-premium/resource-timegrid/main.js"
+        afterScriptsLoaded="{!c.scriptsLoaded}" />
+</aura:component>

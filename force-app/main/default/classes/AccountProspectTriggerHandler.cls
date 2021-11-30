@@ -10,6 +10,14 @@ public class AccountProspectTriggerHandler {
         
         List<Account> listAccountToProcessRR = new List<Account>();
         for(Account acc: newLstAccount){
+            if(String.isBlank(acc.BOATBUILDING__Store_Location__c)){
+                acc.BOATBUILDING__Store_Location__c = getDefaultStoreLocation();
+            }
+
+            if(String.isNotBlank(acc.Contact_Email__c)){
+                acc.Email__c = acc.Contact_Email__c; //This is required for further logic.
+            }
+            
             if(acc.BOATBUILDING__IsCreatedFromWeb__c){
                 listAccountToProcessRR.add(acc);
             }
@@ -20,12 +28,12 @@ public class AccountProspectTriggerHandler {
         Id referralRecordTypeId = Schema.SObjectType.Account.getRecordTypeInfosByName().get('Referral Program').getRecordTypeId();
         List<Account> listAccountToProcess = new List<Account>();
         for(Account acc: newLstAccount){
-            if(acc.RecordTypeId == referralRecordTypeId){
-                listAccountToProcess.add(acc);
-            }
-            
             if(String.isBlank(acc.BOATBUILDING__Store_Location__c)){
                 acc.BOATBUILDING__Store_Location__c = getDefaultStoreLocation();
+            }
+
+            if(acc.RecordTypeId == referralRecordTypeId){
+                listAccountToProcess.add(acc);
             }
         }
         
@@ -33,29 +41,73 @@ public class AccountProspectTriggerHandler {
             updateReferralForm(listAccountToProcess);
         } catch(Exception ex){
             SendEmailUtility.sendQuickEmail(ex.getLineNumber()+'---'+ex.getStackTraceString()+'---'+ex.getCause());
-        }        
+        }
     }
     
     public static void onAfterInsert(List<Account> newLstAccount){
         Id creditAppRecordTypeId = Schema.SObjectType.Account.getRecordTypeInfosByName().get('Prospect Credit App').getRecordTypeId();
         Id prospectRecordTypeId = Schema.SObjectType.Account.getRecordTypeInfosByName().get('Prospect').getRecordTypeId();
         Id referralRecordTypeId = Schema.SObjectType.Account.getRecordTypeInfosByName().get('Referral Program').getRecordTypeId();
-        contactCreation(newLstAccount, prospectRecordTypeId);     
-        List<Account> listAccountToProcess = new List<Account>();
         
+        contactCreation(newLstAccount, prospectRecordTypeId);
+        List<Account> listAccountToProcess = new List<Account>();
+        List<Account> listAccountToPartRequest = new List<Account>();
         if(runOnce()){
+
             for(Account acc: newLstAccount){
-                if(acc.RecordTypeId != prospectRecordTypeId && acc.RecordTypeId != creditAppRecordTypeId && acc.RecordTypeId != referralRecordTypeId && acc.BOATBUILDING__IsCreatedFromWeb__c){
+                if(acc.Lead_Source__c != null && acc.Lead_Source__c.equalsIgnoreCase('Part Online')) {
+                    listAccountToPartRequest.add(acc);
+                } 
+                else if(acc.RecordTypeId != prospectRecordTypeId && acc.RecordTypeId != creditAppRecordTypeId 
+                   && acc.RecordTypeId != referralRecordTypeId && acc.BOATBUILDING__IsCreatedFromWeb__c){
                     listAccountToProcess.add(acc);
                 }
             }
-            filterRoundRobin(listAccountToProcess);
+            if(!listAccountToProcess.isEmpty()) {
+                filterRoundRobin(listAccountToProcess);
+            }
+            if(!listAccountToPartRequest.isEmpty()) {
+                createPartRequestFromAccount(listAccountToPartRequest);
+            }
         }
+    }
+    
+    public static void createPartRequestFromAccount(List<Account> lstAcc) {
+        Set<String> setAccId = new Set<String>();
+        for(Account objAcc: lstAcc) {
+            setAccId.add(objAcc.Id);
+        }
+        List<Contact> lstContact = [Select Id, AccountId From Contact Where Id IN: setAccId];
+        Map<String, String> mapAccConId = new Map<String, String>();
+
+        for(Contact con: lstContact) {
+            if(!mapAccConId.containsKey(con.AccountId)) {
+                mapAccConId.put(con.AccountId, con.Id);
+            }
+        }
+
+        Id orderPartRequestRecordTypeId = Schema.SObjectType.BOATBUILDING__Order__c.getRecordTypeInfosByName().get('Part Request').getRecordTypeId();
+        System.debug('>>>>>orderPartRequestRecordTypeId: '+orderPartRequestRecordTypeId);
+        List<Order__c> lastOrder = new List<Order__c>();
+        for(Account objAcc: lstAcc) {
+            Order__c objOrder = new Order__c();
+            objOrder.BOATBUILDING__AcocuntName__c  = objAcc.Id;
+            objOrder.BOATBUILDING__Part_Number__c = objAcc.BOATBUILDING__Parts_Request_Required_Part_Number__c != null ? objAcc.BOATBUILDING__Parts_Request_Required_Part_Number__c: '';
+            objOrder.BOATBUILDING__Parts_Request_Your_Boat_Engine_Hours__c = objAcc.BOATBUILDING__Parts_Request_Your_Boat_Engine_Hours__c != null ? objAcc.BOATBUILDING__Parts_Request_Your_Boat_Engine_Hours__c: '';
+            objOrder.BOATBUILDING__Boat_Make__c = objAcc.BOATBUILDING__Parts_Request_Your_Boat_Manufacturer__c != null ? objAcc.BOATBUILDING__Parts_Request_Your_Boat_Manufacturer__c: '';
+            objOrder.BOATBUILDING__Boat_Model__c = objAcc.BOATBUILDING__Parts_Request_Your_Boat_Model__c != null ? objAcc.BOATBUILDING__Parts_Request_Your_Boat_Model__c: '';
+            objOrder.BOATBUILDING__Boat_Year__c = objAcc.BOATBUILDING__Parts_Request_Your_Boat_Year__c != null ? objAcc.BOATBUILDING__Parts_Request_Your_Boat_Year__c: '';
+            objOrder.BOATBUILDING__Parts_Request_Your_HIN_Number__c = objAcc.BOATBUILDING__Parts_Request_Your_HIN_Number__c != null ? objAcc.BOATBUILDING__Parts_Request_Your_HIN_Number__c: '';
+            objOrder.BOATBUILDING__Customer_Name__c = mapAccConId.containsKey(objAcc.Id) ? mapAccConId.get(objAcc.Id) : null;
+            lastOrder.add(objOrder);
+        }
+        if(!lastOrder.isEmpty()) insert lastOrder;
     }
     
     public static void onAfterUpdate(List<Account> newLstAccount, Map<Id, Account> oldMapAccount){
         updateContactOnAccountChange(newLstAccount, oldMapAccount);
         cobuyerFirstLast(newLstAccount, oldMapAccount);
+        //updateCustomerInquiryOwner(newLstAccount, oldMapAccount);
     } 
     
     //Assign Record Type based on Lead Source
@@ -69,16 +121,13 @@ public class AccountProspectTriggerHandler {
         }
         
         for(Account objacc :listAccount){
-            if(mapAccountSourceToRecordType.get(objacc.BOATBUILDING__Lead_Source__c) != Null &&
-               mapAccountSourceToRecordType.containsKey(objacc.BOATBUILDING__Lead_Source__c)){
+            if(String.isNotBlank(objacc.BOATBUILDING__Lead_Source__c)
+               && mapAccountSourceToRecordType.containsKey(objacc.BOATBUILDING__Lead_Source__c)
+               && mapAccountSourceToRecordType.get(objacc.BOATBUILDING__Lead_Source__c) != null){
                    objacc.RecordTypeId = mapAccountSourceToRecordType.get(objacc.BOATBUILDING__Lead_Source__c);
                } else {
                    objacc.RecordTypeId = prospectRecordTypeId;
-               }
-            
-            if(String.isNotBlank(objacc.Contact_Email__c)){
-                objacc.Email__c = objacc.Contact_Email__c; //This is required for further logic.
-            }
+               } 
         }
     }
     
@@ -183,7 +232,7 @@ public class AccountProspectTriggerHandler {
         
         //Find if existing Account vs New Account
         Map<String, Account> mapAccountEmail = new Map<String, Account>();
-        Map<String, Account> MapNewAccountToProcess = new Map<String, Account>();
+        Map<String, Account> mapNewAccountToProcess = new Map<String, Account>();
         
         List<Account> listEmailAccountToProcess = new List<Account>();
         System.debug('listAccount---Before For---'+listAccount);
@@ -206,6 +255,7 @@ public class AccountProspectTriggerHandler {
                 mapAccountEmail.put(objacc.BOATBUILDING__Email__c, objacc);
             }
         }
+        
         System.debug('mapAccountEmail.keySet()----'+mapAccountEmail.keySet());
         List<Account> listParentAccount = [SELECT Id, Name, BOATBUILDING__Lead_Account_History__c, BOATBUILDING__Email__c,BOATBUILDING__Store_Location__c,
                                            OwnerId,BOATBUILDING__Owner_IsActive__c,CreatedDate,BOATBUILDING__lead_Source__c, BOATBUILDING__Contact_Phone__c
@@ -248,7 +298,7 @@ public class AccountProspectTriggerHandler {
                 System.debug('Here In else' + a);
                 System.debug('Here In else'+ objAcc);
                 listAccountToUpsert.add(a); // Parent Record for New Account
-                MapNewAccountToProcess.put(objacc.BOATBUILDING__Email__c,objAcc); // Child Record which is New Account and input for Round Robin method
+                mapNewAccountToProcess.put(objacc.BOATBUILDING__Email__c,objAcc); // Child Record which is New Account and input for Round Robin method
             }
         }
         
@@ -269,19 +319,19 @@ public class AccountProspectTriggerHandler {
         String storeLocToUserRole = '';
         List<Account> listChildAccountToRoundRobin = new List<Account>();
         for(Account acc: listAccountToUpsert){
-            System.debug('-------------225'+MapNewAccountToProcess.containsKey(acc.BOATBUILDING__Email__c));
-            if(MapNewAccountToProcess.containsKey(acc.BOATBUILDING__Email__c)){
-                System.debug('MapNewAccountToProcess.get(acc.BOATBUILDING__Email__c)--'+MapNewAccountToProcess.get(acc.BOATBUILDING__Email__c));
-                Account a = new Account(Id = MapNewAccountToProcess.get(acc.BOATBUILDING__Email__c).Id);
+            System.debug('-------------225'+mapNewAccountToProcess.containsKey(acc.BOATBUILDING__Email__c));
+            if(mapNewAccountToProcess.containsKey(acc.BOATBUILDING__Email__c)){
+                System.debug('mapNewAccountToProcess.get(acc.BOATBUILDING__Email__c)--'+mapNewAccountToProcess.get(acc.BOATBUILDING__Email__c));
+                Account a = new Account(Id = mapNewAccountToProcess.get(acc.BOATBUILDING__Email__c).Id);
                 
                 a.BOATBUILDING__Lead_Account_History__c = acc.Id;
                 a.BOATBUILDING__Store_Location__c = acc.BOATBUILDING__Store_Location__c;
-                a.BOATBUILDING__lead_Source__c = MapNewAccountToProcess.get(acc.BOATBUILDING__Email__c).BOATBUILDING__lead_Source__c;
-                //a.Name = MapNewAccountToProcess.get(acc.BOATBUILDING__Email__c).Name + '('+a.BOATBUILDING__lead_Source__c+')';
+                a.BOATBUILDING__lead_Source__c = mapNewAccountToProcess.get(acc.BOATBUILDING__Email__c).BOATBUILDING__lead_Source__c;
+                //a.Name = mapNewAccountToProcess.get(acc.BOATBUILDING__Email__c).Name + '('+a.BOATBUILDING__lead_Source__c+')';
                 a.Name = acc.Name + '('+a.BOATBUILDING__lead_Source__c+')';
                 String storeLoc = '';
-                if(String.isNOTBlank(MapNewAccountToProcess.get(acc.BOATBUILDING__Email__c).BOATBUILDING__Store_Location__c)){
-                    storeLoc = MapNewAccountToProcess.get(acc.BOATBUILDING__Email__c).BOATBUILDING__Store_Location__c;
+                if(String.isNOTBlank(mapNewAccountToProcess.get(acc.BOATBUILDING__Email__c).BOATBUILDING__Store_Location__c)){
+                    storeLoc = mapNewAccountToProcess.get(acc.BOATBUILDING__Email__c).BOATBUILDING__Store_Location__c;
                 } else {
                     storeLoc = getDefaultStoreLocation();
                 }
@@ -387,7 +437,9 @@ public class AccountProspectTriggerHandler {
             }
         }
         
-        List<Account> listAccountToProcess = [SELECT Id, Name, OwnerId, BOATBUILDING__Owner_IsActive__c , BOATBUILDING__Email__c FROM Account WHERE BOATBUILDING__Email__c IN: setAccEmail];
+        List<Account> listAccountToProcess = [SELECT Id, Name, OwnerId, BOATBUILDING__Owner_IsActive__c , 
+                                            BOATBUILDING__Email__c FROM Account 
+                                            WHERE BOATBUILDING__Email__c IN: setAccEmail];
         
         for(Account acc: listAccountToProcess){
             mapEmailToAcc.put(acc.BOATBUILDING__Email__c, acc);
@@ -420,7 +472,6 @@ public class AccountProspectTriggerHandler {
                 a.RecordTypeId = referralRecordTypeId;
                 a.OwnerId = accOwnerId;
                 a.Name = a.BOATBUILDING__Friends_First_Name__c+' '+a.BOATBUILDING__Friends_Last_Name__c;
-                System.debug('After Update'+a);
             } else {
                 Account accParent = new Account();
                 accParent.Name = a.BOATBUILDING__Prospect_First_Name__c+' '+a.BOATBUILDING__Prospect_Last_Name__c;
@@ -433,18 +484,6 @@ public class AccountProspectTriggerHandler {
                 accParent.OwnerId = salesManagerId;
                 lstAccountParent.add(accParent);
             }
-            /*} else {
-                Account accParent = new Account();
-                accParent.Name = a.BOATBUILDING__Prospect_First_Name__c+' '+a.BOATBUILDING__Prospect_Last_Name__c;
-                accParent.BOATBUILDING__Prospect_First_Name__c = a.BOATBUILDING__Prospect_First_Name__c;
-                accParent.BOATBUILDING__Prospect_Last_Name__c = a.BOATBUILDING__Prospect_Last_Name__c;
-                accParent.BOATBUILDING__Prospect_Mobile_Phone_Number__c = a.BOATBUILDING__Prospect_Mobile_Phone_Number__c;
-                accParent.BOATBUILDING__Email__c = a.BOATBUILDING__Email__c;
-                accParent.BOATBUILDING__Contact_Email__c = a.BOATBUILDING__Email__c;
-                accParent.RecordTypeId = prospectRecordTypeId;
-                accParent.OwnerId = salesManagerId;
-                lstAccountParent.add(accParent);
-            }*/
         }
         
         if(!lstAccountParent.isEmpty()){
@@ -486,8 +525,10 @@ public class AccountProspectTriggerHandler {
                 
                 Contact objContact = new Contact();
                 
-                if(oldMapAccount.get(objAccount.Id).BOATBUILDING__Contact_First_Name__c != objAccount.BOATBUILDING__Contact_First_Name__c && 
-                   oldMapAccount.get(objAccount.Id).BOATBUILDING__Contact_Last_Name__c != objAccount.BOATBUILDING__Contact_Last_Name__c&&objAccount.BOATBUILDING__Contact_First_Name__c != null && objAccount.BOATBUILDING__Contact_Last_Name__c != null){
+                if(oldMapAccount.get(objAccount.Id).BOATBUILDING__Contact_First_Name__c != objAccount.BOATBUILDING__Contact_First_Name__c 
+                    && oldMapAccount.get(objAccount.Id).BOATBUILDING__Contact_Last_Name__c != objAccount.BOATBUILDING__Contact_Last_Name__c
+                    && objAccount.BOATBUILDING__Contact_First_Name__c != null 
+                    && objAccount.BOATBUILDING__Contact_Last_Name__c != null){
                        objContact.FirstName = objAccount.BOATBUILDING__Contact_First_Name__c;
                        objContact.AccountId = objAccount.Id;
                        objContact.LastName = objAccount.BOATBUILDING__Contact_Last_Name__c;
@@ -506,7 +547,9 @@ public class AccountProspectTriggerHandler {
     public static Id fetchSalesManagerId(){
         
         Id salesManagerId = null;
-        List<User> listSalesManager = [SELECT Id, Name FROM User WHERE UserRole.DeveloperName = 'Sales_Manager' AND isActive = True LIMIT 1];
+        List<User> listSalesManager = [SELECT Id, Name FROM User 
+                                        WHERE UserRole.DeveloperName = 'Sales_Manager' 
+                                        AND isActive = True LIMIT 1];
         
         if(!listSalesManager.isEmpty()){
             salesManagerId = listSalesManager[0].Id;
@@ -528,7 +571,39 @@ public class AccountProspectTriggerHandler {
         
         return defaultVal;
     }
-    
+    /*
+    public static void updateCustomerInquiryOwner(List<Account> newLstAccount, Map<Id, Account> oldMapAccount){
+        
+        Map<Id, Account> mapAccToProcess = new Map<Id, Account>();
+        for(Account acc: newLstAccount){
+            if(oldMapAccount.containsKey(acc.Id)){
+                if(oldMapAccount.get(acc.Id).OwnerId != acc.OwnerId){
+                    mapAccToProcess.put(acc.Id, acc);
+                }
+            }
+        }
+        
+        List<BOATBUILDING__Customer_Inquiry__c> lstCIToUpdate = new List<BOATBUILDING__Customer_Inquiry__c >();
+        if(!mapAccToProcess.isEmpty()){
+            List<BOATBUILDING__Customer_Inquiry__c> lstCIToProcess = [SELECT Id, BOATBUILDING__lead_Source__c, 
+                                                                      BOATBUILDING__Account__c, OwnerId
+                                                                      FROM BOATBUILDING__Customer_Inquiry__c
+                                                                      WHERE BOATBUILDING__Account__c IN: mapAccToProcess.keySet()];
+            
+            for(BOATBUILDING__Customer_Inquiry__c objCI: lstCIToProcess)
+            {
+                if(mapAccToProcess.containsKey(objCI.BOATBUILDING__Account__c)){
+                    objCI.OwnerId = mapAccToProcess.get(objCI.BOATBUILDING__Account__c).OwnerId;
+                    lstCIToUpdate.add(objCI);
+                }
+            }
+            
+            if(!lstCIToUpdate.isEmpty()){
+                update lstCIToUpdate;
+            }
+        }
+    }
+    */
     private static boolean run = true;
     public static boolean runOnce(){
         if(run){

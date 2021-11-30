@@ -22,7 +22,7 @@ public class PurchaseOrderLightningController {
         List<BOATBUILDING__Purchase_Order_Line_Item__c> lstPOLI = [Select 
                                                                             Id, BOATBUILDING__Quantity__c, BOATBUILDING__Part_Number__c, Name, BOATBUILDING__Cost__c 
                                                                     From 
-                                                                            BOATBUILDING__Purchase_Order_Line_Item__c Where BOATBUILDING__Purchase_Order__c =: strPOId];
+                                                                            BOATBUILDING__Purchase_Order_Line_Item__c Where BOATBUILDING__Purchase_Order__c =: strPOId ORDER BY BOATBUILDING__Sorting_sequence__c ASC];
 
         for(BOATBUILDING__Purchase_Order_Line_Item__c objPOLI: lstPOLI) {
             PurchaseOrderLineItemWrapper objPOLIW = new PurchaseOrderLineItemWrapper();
@@ -37,29 +37,34 @@ public class PurchaseOrderLightningController {
         return lstPOLIW;
     }
     @AuraEnabled
-    public static String searchPartsfromInventoryAndParts(String searchStr){
+    public static String searchPartsfromInventoryAndParts(String searchStr, String vendorVal) {
         List<PartSearchResult> lstPartSearchResult = new List<PartSearchResult>();
         String strName = searchStr;
-        if(searchStr == 'recentlyViewed') {
+        if(searchStr == 'recentlyViewed') { 
             strName = '';
             List<RecentlyViewed> lstrv = [Select Id,Name from RecentlyViewed where Type = 'BOATBUILDING__Inventory__c' OR Type = 'BOATBUILDING__Part__c'];
             for(RecentlyViewed rv : lstrv){
                  strName = strName+'(\"' + String.escapeSingleQuotes(rv.Name) + '\")';
                  strName =  strName + ' OR ';
-            }
-            strName  = strName+'(\"' + 'test' + '\")';
+            
+                }
+                strName  = '(\"' + 'test' + '\")';
+            //strName  = '(\"' + vendorId + '\")';
         } 
-        String searchQuery = 'FIND \'' + strName + '\' IN ALL FIELDS RETURNING  BOATBUILDING__Part__c(Id,Name,BOATBUILDING__Quantity__c,BOATBUILDING__Part_Cost__c,BOATBUILDING__Part_Number__c,BOATBUILDING__Vendor_Name__r.Name,BOATBUILDING__Discount__c ORDER BY CreatedDate)';
+        String searchQuery = 'FIND \'' + strName + '\' IN ALL FIELDS RETURNING  BOATBUILDING__Part__c(Id,Name,BOATBUILDING__Quantity__c,BOATBUILDING__Part_Cost__c,BOATBUILDING__Part_Number__c,BOATBUILDING__Vendor_Name__c, BOATBUILDING__Vendor_Name__r.Name,BOATBUILDING__Discount__c ORDER BY CreatedDate)';
         List<List <sObject>> searchList = search.query(searchQuery);
             system.debug('%%%%%'+searchList);
         for(Object o : searchList[0]){
+
             BOATBUILDING__Part__c objPrt = (BOATBUILDING__Part__c)o;
-            PartSearchResult objPSR = new PartSearchResult();
-            objPSR.partId = objPrt.Id; 
-            objPSR.partName =   objPrt.Name;
-            objPSR.partNumber = objPrt.BOATBUILDING__Part_Number__c;
-            objPSR.partCost = objPrt.BOATBUILDING__Part_Cost__c;
-            lstPartSearchResult.add(objPSR);
+            if(vendorVal == '' || objPrt.BOATBUILDING__Vendor_Name__c == vendorVal) {
+                PartSearchResult objPSR = new PartSearchResult();
+                objPSR.partId = objPrt.Id; 
+                objPSR.partName =   objPrt.Name;
+                objPSR.partNumber = objPrt.BOATBUILDING__Part_Number__c;
+                objPSR.partCost = objPrt.BOATBUILDING__Part_Cost__c;
+                lstPartSearchResult.add(objPSR);
+            }
         }
         return JSON.serialize(lstPartSearchResult);
     }
@@ -140,6 +145,9 @@ public class PurchaseOrderLightningController {
                         objPOLI.Color__c = objPrt.Part_Color__c;
                         objPOLI.Size__c = objPrt.Part_Size__c;
                         objPOLI.Taxable__c = objPrt.Taxable__c;
+                        if(Integer.valueOf(mapObj.get('SortingOrder')) != null){
+                            objPOLI.BOATBUILDING__Sorting_sequence__c = Integer.valueOf(mapObj.get('SortingOrder'));
+                        }
                         if(objPrt.Weight__c != null && objPrt.Weight__c != ''){
                             objPOLI.Weight__c = objPrt.Weight__c; 
                         }
@@ -169,7 +177,7 @@ public class PurchaseOrderLightningController {
         try { 
             BOATBUILDING__Order__c objPurchaseOrder = [SELECT Vendor_Name__c, Total_Amount__c, PO_Date__c, Name, Id, Amount_On_Order__c, 
                                                             (SELECT Id, Vendor_Name__c, Quantity__c, Cost__c, Retail_Price__c, Dealer_Price__c, Part_Number__c,
-                                                            Purchase_Order__c, Name, Bin__c, Category__c, Color__c, Discount__c, Family__c,
+                                                            Purchase_Order__c, Name, Bin__c, Category__c, Color__c, Discount__c, Family__c,BOATBUILDING__Sorting_sequence__c,
                                                             Location__c, Map_Price__c, Minimum_Amount__c, Size__c, Taxable__c, Weight__c 
                                                             From BOATBUILDING__Purchase_Order_Line_Items__r) FROM BOATBUILDING__Order__c WHERE Id =: strRecId LIMIT 1];
             List<BOATBUILDING__Purchase_Order_Line_Item__c> lstPurchaseOrderLineItems = objPurchaseOrder.BOATBUILDING__Purchase_Order_Line_Items__r;                   
@@ -228,6 +236,7 @@ public class PurchaseOrderLightningController {
                 objLI.Map_Price__c = objPOLI.Map_Price__c;
                 objLI.Minimum_Amount__c = objPOLI.Minimum_Amount__c;
                 objLI.Size__c = objPOLI.Size__c;
+                objLI.BOATBUILDING__Sorting_sequence__c = objPOLI.BOATBUILDING__Sorting_sequence__c;
                 if(objPOLI.Vendor_Name__c != null) {
                     objLI.Vendor_Name__c = objPOLI.Vendor_Name__c;
                 }
@@ -260,6 +269,8 @@ public class PurchaseOrderLightningController {
        public String partNumber{get; set;}
        @AuraEnabled
        public Decimal partCost{get; set;}
+       @AuraEnabled
+       public String SortingOrder{get; set;}
        
     }
 }

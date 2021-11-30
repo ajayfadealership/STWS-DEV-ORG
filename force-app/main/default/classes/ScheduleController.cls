@@ -583,8 +583,11 @@ public with sharing class ScheduleController {
                     }
                     update lstJB;
                 }
-            } 
-            
+            } else if(objTM.BOATBUILDING__Related_Work_Order_Job__c != null) {
+                BOATBUILDING__Work_Order_Job__c objJB = [SELECT Id FROM BOATBUILDING__Work_Order_Job__c WHERE BOATBUILDING__Completed__c = false AND Id =: objTM.BOATBUILDING__Related_Work_Order_Job__c];  
+                objJB.BOATBUILDING__Technician__c = objTM.BOATBUILDING__Technician__c;
+                update objJB;
+            }
             return 'SUCCESS';
         } catch(Exception ex) {
             System.debug('Error: '+ex.getMessage()+' Line Number: '+ex.getLineNumber());

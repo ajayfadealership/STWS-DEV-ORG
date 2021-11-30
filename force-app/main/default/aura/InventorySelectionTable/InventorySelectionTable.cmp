@@ -3,10 +3,11 @@
     <aura:registerEvent name="inCompNewPDProduct" type="c:DealerOptionEvent"/>
     <aura:registerEvent name="inCompNewPPFPCProduct" type="c:ProductPriceForPaymentCalculator"/> 
     <aura:attribute name="InvIdCC" type="sObject" default=""/>
-
+    <aura:attribute name="InventoryListId" type="sObject" default=""/>
     <aura:attribute name="lstDealerOptionWraperCC" type="DealerOptionWraper[]"/>
      
-    <aura:attribute name="objInvW" type="InventoryListWrapper"/>
+    <aura:attribute name="objInvW" type="InventoryListWrapper"/> 
+    <aura:handler  event="c:InvRedirectionII" action="{!c.handelRedirection}"/> 
     <tr>
         <th scope="row" style="padding: .75rem; vertical-align: top; border-top: 1px solid #dee2e6;"><a onclick="{!c.getProductPriceFromInv}">{!v.objInvW.objInv.Name}</a></th>
         <td style="padding: .75rem; vertical-align: top; border-top: 1px solid #dee2e6;">

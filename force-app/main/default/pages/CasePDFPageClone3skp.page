@@ -305,7 +305,7 @@
                 </tr>
                 
                <!--  <tr style="font-size: 13px;">
-                                            <td width ="10%" style="border-collapse: collapse; padding: 6px; border: none;"><b>Sales Tax</b></td>
+                                            <td width ="10%" style="border-collapse: collapse; padding: 6px; border: none;"><b>Sales Tax ({!objWO.Store_Location__c})</b></td>
                                             <td width ="10%" style="border-collapse: collapse; padding: 6px; border: none;"><b><i class="fa fa-usd" aria-hidden="true"></i><apex:outputField value="{!objWO.Sales_Tax__c}"/></b></td>
                 </tr>
             <tr style="font-size: 13px;">

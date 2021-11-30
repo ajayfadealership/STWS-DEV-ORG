@@ -1,7 +1,8 @@
 ({  doInit : function(component, event, helper){
     //console.log(component.get("v.pageReference").state.redirect);
+    var InveId =  component.get("v.IventoryId");
     var urlHasParam = component.get("v.pageReference").state.redirect;
-    
+    console.log(InveId);
     if(urlHasParam == "frombbwiz") 
     { 
         var toastEvent = $A.get("e.force:showToast");
@@ -39,8 +40,7 @@
         }
     });  
     
-    $A.enqueueAction(action);
-    
+    $A.enqueueAction(action); 
     
 },
   handleClick : function(component, event, helper) {
@@ -48,11 +48,25 @@
       var ctarget = event.currentTarget;
       var id_str = parseInt(ctarget.dataset.value);
       console.log(id_str); 
+       var objInven = component.get("v.IventoryId");
+       console.log(objInven);
       if(id_str == 1) {
           var objAcc = component.get("v.selectedLookUpRecordvalueAcc");
           if(objAcc != null && objAcc != undefined && objAcc.Id != null && objAcc.Id != undefined) {
+              component.set("v.InvId", component.get("v.IventoryId"));
+              if(component.get("v.InvId") != '0') {
+                    console.log('......: '+component.get("v.InvId"))
+                    
+                    var cmpEvent = $A.get("e.c:InvRedirection");                
+                    cmpEvent.setParams({ 
+                    "invId": component.get("v.InvId")
+                    });
+                    cmpEvent.fire();
+                
+              }
+              console.log('>>>>>>>>: ',component.get("v.InvId"));
               helper.callNext(component, event, ctarget.dataset);        
-          } else {
+          } else { 
               var toastEvent = $A.get("e.force:showToast");
               toastEvent.setParams({
                   "title": "Error!",
@@ -130,7 +144,9 @@
                   var varselectedLookUpRecordACVP = component.get("v.selectedLookUpRecordACVP");
                   var varCustomSettingSobjRegFeeP = component.get("v.customSettingSobjRegFeeP");
                   var lstProductPriceIdList = component.get("v.ProductPriceIdList");
+                  var lstProductPriceIdListQT = component.get("v.ProductPriceIdListQT");
                   var lstDealerOptionIdList = component.get("v.DealerOptionIdList");
+                  var lstDealerOptionIdListQT = component.get("v.DealerOptionIdListQT");
                   var objQTRR = component.get("v.ObjQuoteRR");
                   var state = '';
                   var MaualTax = '0.00';
@@ -151,7 +167,7 @@
                   console.log(state); 
                   console.log(MaualTax); 
                   console.log(DealerOptionList); 
-                  
+                 
                   if(state == undefined || state == null || state == '') {
                       var toastEvent = $A.get("e.force:showToast");
                       toastEvent.setParams({
@@ -166,6 +182,17 @@
                       document.getElementById("qtSpinnerWiz").style.display = 'none';
                       return;
                   }
+                 
+                 
+                 if(varCustomSettingSobjRegFeeP.BOATBUILDING__Doc_Fee__c == null || varCustomSettingSobjRegFeeP.BOATBUILDING__Doc_Fee__c == undefined){
+                    varCustomSettingSobjRegFeeP.BOATBUILDING__Doc_Fee__c =  0.00;
+                 } 
+                 if(varCustomSettingSobjRegFeeP.BOATBUILDING__Registration_Fee__c == null || varCustomSettingSobjRegFeeP.BOATBUILDING__Doc_Fee__c == undefined ){
+                    varCustomSettingSobjRegFeeP.BOATBUILDING__Registration_Fee__c =  0.00;
+                 } 
+                 if(varCustomSettingSobjRegFeeP.BOATBUILDING__Trailer_Registration_Fee__c == null || varCustomSettingSobjRegFeeP.BOATBUILDING__Doc_Fee__c == undefined){
+                    varCustomSettingSobjRegFeeP.BOATBUILDING__Trailer_Registration_Fee__c =  0.00;
+                 } 
                   
                   var action = component.get("c.generateQuote");
                   action.setParams({
@@ -177,9 +204,11 @@
                       "docFee": String(varCustomSettingSobjRegFeeP.BOATBUILDING__Doc_Fee__c),
                       "trlRegFee": String(varCustomSettingSobjRegFeeP.BOATBUILDING__Trailer_Registration_Fee__c),
                       "lstProductPrice": lstProductPriceIdList,
+                      "lstProductPriceQT": lstProductPriceIdListQT,
                       "lstDealerOption": lstDealerOptionIdList,
                       "objQT": objQTRR,
-                      "lstDO": JSON.stringify(DealerOptionList)
+                      "lstDO": JSON.stringify(DealerOptionList),
+                      "lstDealerOptionQT" : lstDealerOptionIdListQT
                       
                   });
                   
@@ -266,5 +295,8 @@
       $A.util.addClass(prevLIel, "slds-is-active");
       $A.util.addClass(prevLIel, "slds-is-current"); 
       
+  },
+  backToInvList : function(component, event, helper) {
+    window.open('/lightning/n/BOATBUILDING__Boat_Inventory', '_self');
   }
  })

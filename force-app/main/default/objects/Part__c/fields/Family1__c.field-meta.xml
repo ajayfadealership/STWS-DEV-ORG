@@ -203,16 +203,44 @@
                 <label>Trailer</label>
             </value>
             <value>
-                <fullName>Men&#39;s Wakesurf Equipment</fullName>
+                <fullName>Men&apos;s Wakesurf Equipment</fullName>
                 <default>false</default>
-                <label>Men&#39;s Wakesurf Equipment</label>
+                <label>Men&apos;s Wakesurf Equipment</label>
             </value>
             <value>
-                <fullName>Men&#39;s Snowboard Equipment &amp; Apparel</fullName>
+                <fullName>Men&apos;s Snowboard Equipment &amp; Apparel</fullName>
                 <default>false</default>
-                <label>Men&#39;s Snowboard Equipment &amp; Apparel</label>
+                <label>Men&apos;s Snowboard Equipment &amp; Apparel</label>
+            </value>
+            <value>
+                <fullName>Clothing</fullName>
+                <default>false</default>
+                <label>Clothing</label>
+            </value>
+            <value>
+                <fullName>Kid&apos;s Wakeboard Equipment</fullName>
+                <default>false</default>
+                <label>Kid&apos;s Wakeboard Equipment</label>
+            </value>
+            <value>
+                <fullName>Exhaust Parts</fullName>
+                <default>false</default>
+                <label>Exhaust Parts</label>
+            </value>
+            <value>
+                <fullName>Wetsuits</fullName>
+                <default>false</default>
+                <label>Wetsuits</label>
             </value>
         </valueSetDefinition>
+        <valueSettings>
+            <controllingFieldValue>Men</controllingFieldValue>
+            <valueName>Clothing</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Wake</controllingFieldValue>
+            <valueName>Wetsuits</valueName>
+        </valueSettings>
         <valueSettings>
             <controllingFieldValue>Engine Parts</controllingFieldValue>
             <controllingFieldValue>Boat Parts</controllingFieldValue>
@@ -366,6 +394,10 @@
             <valueName>Surf Ropes</valueName>
         </valueSettings>
         <valueSettings>
+            <controllingFieldValue>Engine Parts</controllingFieldValue>
+            <valueName>Exhaust Parts</valueName>
+        </valueSettings>
+        <valueSettings>
             <controllingFieldValue>Boat Parts</controllingFieldValue>
             <valueName>Swimsuits</valueName>
         </valueSettings>
@@ -431,12 +463,16 @@
         </valueSettings>
         <valueSettings>
             <controllingFieldValue>Wakesurf</controllingFieldValue>
-            <controllingFieldValue>Wakeboards</controllingFieldValue>
-            <valueName>Men&#39;s Wakesurf Equipment</valueName>
+            <controllingFieldValue>Wakeboard</controllingFieldValue>
+            <valueName>Men&apos;s Wakesurf Equipment</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Wakeboard</controllingFieldValue>
+            <valueName>Kid&apos;s Wakeboard Equipment</valueName>
         </valueSettings>
         <valueSettings>
             <controllingFieldValue>Snowboards</controllingFieldValue>
-            <valueName>Men&#39;s Snowboard Equipment &amp; Apparel</valueName>
+            <valueName>Men&apos;s Snowboard Equipment &amp; Apparel</valueName>
         </valueSettings>
     </valueSet>
 </CustomField>

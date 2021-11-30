@@ -296,7 +296,7 @@ public with sharing class TechWorkOrderControllerClone {
 							                    						servicewritercom, 
 							                    							SelectedTimeEntry.Related_Work_Order_Job__c, 
 							                    								SelectedTimeEntry.Related_Work_Order_Job__r.BOATBUILDING__Work_Order_Warranty_Work_Order__r.BOATBUILDING__Contact__c, 
-							                    									SelectedTimeEntry.Related_Work_Order_Job__r.BOATBUILDING__Work_Order_Warranty_Work_Order__r.BOATBUILDING__Account__c, 'Tech Comment');
+							                    									SelectedTimeEntry.Related_Work_Order_Job__r.BOATBUILDING__Work_Order_Warranty_Work_Order__r.BOATBUILDING__Account__c, 'Tech Comment', '');
                     
                 }
                 catch(Exception ex) {

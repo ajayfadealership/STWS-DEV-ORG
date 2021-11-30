@@ -3,7 +3,7 @@
     <fullName>Technician_Efficiency__c</fullName>
     <deprecated>false</deprecated>
     <externalId>false</externalId>
-    <formula>( Billed_Hour__c /  Working_Hours__c )</formula>
+    <formula>( Allowed_hours_on_JOB__c  /  Working_Hours__c )</formula>
     <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
     <label>Technician Efficiency</label>
     <precision>18</precision>

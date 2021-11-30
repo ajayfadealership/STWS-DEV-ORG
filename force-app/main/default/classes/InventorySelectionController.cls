@@ -42,4 +42,32 @@ public with sharing class InventorySelectionController {
    		}
    		return lstInvW;
    }
+   
+   @AuraEnabled
+   public static List<InventoryListWrapper> getInvListId(String KeyWord) {
+   		
+   		List<InventoryListWrapper> lstInvW = new List<InventoryListWrapper>();
+   		if(String.isNotBlank(KeyWord)) {
+	   		List<BOATBUILDING__Inventory__c> lstInv = [Select 
+		   														Id, Name, BOATBUILDING__Manufacturer__c,
+		   														BOATBUILDING__Model__c, BOATBUILDING__Model_Variant__c,
+		   														BOATBUILDING__Year__c, BOATBUILDING__Stage__c, (Select Id from Attachments where Name like '%side__c%' limit 1)
+	   												  From
+	   												  			BOATBUILDING__Inventory__c
+	   												  Where 
+	   												  			Id =: KeyWord];
+	   												  			  
+	   		System.debug('lstInv: '+lstInv);
+	   		for(BOATBUILDING__Inventory__c objInv: lstInv) {
+	   			InventoryListWrapper objILW = new InventoryListWrapper();
+	   			objILW.AttId = '';
+	   			if(!objInv.Attachments.isEmpty()) {
+	   				objILW.AttId = objInv.Attachments[0].Id;
+	   			}
+	   			objILW.objInv = objInv;
+	   			lstInvW.add(objILW);  
+	   		}
+   		}
+   		return lstInvW;
+   }
 }

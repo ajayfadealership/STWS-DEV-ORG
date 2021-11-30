@@ -3,7 +3,7 @@
     <fullName>Manufacture_Invoice2__c</fullName>
     <deprecated>false</deprecated>
     <externalId>false</externalId>
-    <label>Manufacture Invoice</label>
+    <label>Manufacture Invoice Amount</label>
     <precision>18</precision>
     <required>false</required>
     <scale>2</scale>

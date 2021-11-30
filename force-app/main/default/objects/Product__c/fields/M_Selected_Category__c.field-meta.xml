@@ -418,9 +418,9 @@
                 <label>Trim Level 550 (requires Raptor 575 engine)</label>
             </value>
             <value>
-                <fullName>World&#39;s Edition Package (see separate sheet for contents)</fullName>
+                <fullName>World&apos;s Edition Package (see separate sheet for contents)</fullName>
                 <default>false</default>
-                <label>World&#39;s Edition Package (see separate sheet for contents)</label>
+                <label>World&apos;s Edition Package (see separate sheet for contents)</label>
             </value>
             <value>
                 <fullName>Spray Pattern Worlds (required Worlds Package)</fullName>
@@ -853,24 +853,24 @@
                 <label>Triple Trosion Axle w/ Disc Brakes</label>
             </value>
             <value>
-                <fullName>World&#39;s Trailer, Tandom (requires World&#39;s pkg)</fullName>
+                <fullName>World&apos;s Trailer, Tandom (requires World&apos;s pkg)</fullName>
                 <default>false</default>
-                <label>World&#39;s Trailer, Tandom (requires World&#39;s pkg)</label>
+                <label>World&apos;s Trailer, Tandom (requires World&apos;s pkg)</label>
             </value>
             <value>
-                <fullName>World&#39;s Trailer, Triple Upgrade (requires World&#39;s pkg)</fullName>
+                <fullName>World&apos;s Trailer, Triple Upgrade (requires World&apos;s pkg)</fullName>
                 <default>false</default>
-                <label>World&#39;s Trailer, Triple Upgrade (requires World&#39;s pkg)</label>
+                <label>World&apos;s Trailer, Triple Upgrade (requires World&apos;s pkg)</label>
             </value>
             <value>
-                <fullName>World&#39;s Trailer, Tandom + Elite Shield (requires World&#39;s pkg)</fullName>
+                <fullName>World&apos;s Trailer, Tandom + Elite Shield (requires World&apos;s pkg)</fullName>
                 <default>false</default>
-                <label>World&#39;s Trailer, Tandom + Elite Shield (requires World&#39;s pkg)</label>
+                <label>World&apos;s Trailer, Tandom + Elite Shield (requires World&apos;s pkg)</label>
             </value>
             <value>
-                <fullName>World&#39;s Trailer, Triple Upgrade + Elite Shield (requires World&#39;s pkg)</fullName>
+                <fullName>World&apos;s Trailer, Triple Upgrade + Elite Shield (requires World&apos;s pkg)</fullName>
                 <default>false</default>
-                <label>World&#39;s Trailer, Triple Upgrade + Elite Shield (requires World&#39;s pkg)</label>
+                <label>World&apos;s Trailer, Triple Upgrade + Elite Shield (requires World&apos;s pkg)</label>
             </value>
             <value>
                 <fullName>Roush Edition Trailer - Tandem Axle</fullName>
@@ -883,14 +883,14 @@
                 <label>Roush Edition Trailer - Triple Axle Upgrade</label>
             </value>
             <value>
-                <fullName>Substitute Base Trailer for Std World&#39;s Trailer</fullName>
+                <fullName>Substitute Base Trailer for Std World&apos;s Trailer</fullName>
                 <default>false</default>
-                <label>Substitute Base Trailer for Std World&#39;s Trailer</label>
+                <label>Substitute Base Trailer for Std World&apos;s Trailer</label>
             </value>
             <value>
-                <fullName>No Trailer (World&#39;s Only)</fullName>
+                <fullName>No Trailer (World&apos;s Only)</fullName>
                 <default>false</default>
-                <label>No Trailer (World&#39;s Only)</label>
+                <label>No Trailer (World&apos;s Only)</label>
             </value>
             <value>
                 <fullName>Elite Shield Coating, Select Color (No Two Tone or Pin Stripes)</fullName>
@@ -1063,14 +1063,14 @@
                 <label>18&quot; Spare Tire, Underbelly Mount</label>
             </value>
             <value>
-                <fullName>18&quot; Spare Tire, Underbelly Mount, World&#39;s Edition only</fullName>
+                <fullName>18&quot; Spare Tire, Underbelly Mount, World&apos;s Edition only</fullName>
                 <default>false</default>
-                <label>18&quot; Spare Tire, Underbelly Mount, World&#39;s Edition only</label>
+                <label>18&quot; Spare Tire, Underbelly Mount, World&apos;s Edition only</label>
             </value>
             <value>
-                <fullName>Surface Mount Lighting with Clear LED&#39;s</fullName>
+                <fullName>Surface Mount Lighting with Clear LED&apos;s</fullName>
                 <default>false</default>
-                <label>Surface Mount Lighting with Clear LED&#39;s</label>
+                <label>Surface Mount Lighting with Clear LED&apos;s</label>
             </value>
             <value>
                 <fullName>Runway Lighting - White</fullName>
@@ -1545,19 +1545,19 @@
         </valueSettings>
         <valueSettings>
             <controllingFieldValue>Base Trailer (9A).</controllingFieldValue>
-            <valueName>World&#39;s Trailer, Tandom (requires World&#39;s pkg)</valueName>
+            <valueName>World&apos;s Trailer, Tandom (requires World&apos;s pkg)</valueName>
         </valueSettings>
         <valueSettings>
             <controllingFieldValue>Base Trailer (9A).</controllingFieldValue>
-            <valueName>World&#39;s Trailer, Triple Upgrade (requires World&#39;s pkg)</valueName>
+            <valueName>World&apos;s Trailer, Triple Upgrade (requires World&apos;s pkg)</valueName>
         </valueSettings>
         <valueSettings>
             <controllingFieldValue>Base Trailer (9A).</controllingFieldValue>
-            <valueName>World&#39;s Trailer, Tandom + Elite Shield (requires World&#39;s pkg)</valueName>
+            <valueName>World&apos;s Trailer, Tandom + Elite Shield (requires World&apos;s pkg)</valueName>
         </valueSettings>
         <valueSettings>
             <controllingFieldValue>Base Trailer (9A).</controllingFieldValue>
-            <valueName>World&#39;s Trailer, Triple Upgrade + Elite Shield (requires World&#39;s pkg)</valueName>
+            <valueName>World&apos;s Trailer, Triple Upgrade + Elite Shield (requires World&apos;s pkg)</valueName>
         </valueSettings>
         <valueSettings>
             <controllingFieldValue>Base Trailer (9A).</controllingFieldValue>
@@ -1569,11 +1569,11 @@
         </valueSettings>
         <valueSettings>
             <controllingFieldValue>Base Trailer (9A).</controllingFieldValue>
-            <valueName>Substitute Base Trailer for Std World&#39;s Trailer</valueName>
+            <valueName>Substitute Base Trailer for Std World&apos;s Trailer</valueName>
         </valueSettings>
         <valueSettings>
             <controllingFieldValue>Base Trailer (9A).</controllingFieldValue>
-            <valueName>No Trailer (World&#39;s Only)</valueName>
+            <valueName>No Trailer (World&apos;s Only)</valueName>
         </valueSettings>
         <valueSettings>
             <controllingFieldValue>Trailer Axle Options.</controllingFieldValue>
@@ -2048,7 +2048,7 @@
         </valueSettings>
         <valueSettings>
             <controllingFieldValue>Trailer Wheel Options (9F)</controllingFieldValue>
-            <valueName>18&quot; Spare Tire, Underbelly Mount, World&#39;s Edition only</valueName>
+            <valueName>18&quot; Spare Tire, Underbelly Mount, World&apos;s Edition only</valueName>
         </valueSettings>
         <valueSettings>
             <controllingFieldValue>Trailer Light Options (9G)</controllingFieldValue>
@@ -2068,7 +2068,7 @@
         </valueSettings>
         <valueSettings>
             <controllingFieldValue>Trailer Light Options (9G)</controllingFieldValue>
-            <valueName>Surface Mount Lighting with Clear LED&#39;s</valueName>
+            <valueName>Surface Mount Lighting with Clear LED&apos;s</valueName>
         </valueSettings>
         <valueSettings>
             <controllingFieldValue>Trailer Light Options (9G)</controllingFieldValue>
@@ -2395,7 +2395,7 @@
         </valueSettings>
         <valueSettings>
             <controllingFieldValue>Package and Trim Level Options (1A)</controllingFieldValue>
-            <valueName>World&#39;s Edition Package (see separate sheet for contents)</valueName>
+            <valueName>World&apos;s Edition Package (see separate sheet for contents)</valueName>
         </valueSettings>
         <valueSettings>
             <controllingFieldValue>Package and Trim Level Options (1A)</controllingFieldValue>

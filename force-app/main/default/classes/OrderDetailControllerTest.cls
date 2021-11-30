@@ -11,6 +11,7 @@ public class OrderDetailControllerTest {
         objOrder.BOATBUILDING__Vendor_Name__c = objManuFacturer1.Id;
         insert objOrder;
         OrderDetailController.getRecordTypeDetail(objOrder.Id);
+        OrderDetailController.getRecordType('Order');
     }
 
 }

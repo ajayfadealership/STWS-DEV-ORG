@@ -5,7 +5,7 @@
     <description>State of the Prospect Type Account record</description>
     <externalId>false</externalId>
     <label>State</label>
-    <length>50</length>
+    <length>255</length>
     <required>false</required>
     <trackFeedHistory>false</trackFeedHistory>
     <type>Text</type>

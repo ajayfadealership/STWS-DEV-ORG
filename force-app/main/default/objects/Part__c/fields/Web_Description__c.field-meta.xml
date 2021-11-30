@@ -3,7 +3,7 @@
     <fullName>Web_Description__c</fullName>
     <deprecated>false</deprecated>
     <externalId>false</externalId>
-    <label>Web Description</label>
+    <label>Web Description(DEPRECATED)</label>
     <length>255</length>
     <required>false</required>
     <trackHistory>false</trackHistory>

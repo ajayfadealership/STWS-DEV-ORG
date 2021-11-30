@@ -23,7 +23,7 @@
             </value>
             <value>
                 <fullName>Work Order/Jobs</fullName>
-                <default>false</default>
+                <default>true</default>
                 <label>Work Order/Jobs</label>
             </value>
             <value>

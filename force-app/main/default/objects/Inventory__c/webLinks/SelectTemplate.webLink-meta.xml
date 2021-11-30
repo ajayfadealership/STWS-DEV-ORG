@@ -7,5 +7,5 @@
     <masterLabel>SelectTemplate</masterLabel>
     <openType>onClickJavaScript</openType>
     <protected>false</protected>
-    <url>window.open(&#39;/apex/BOATBUILDING__SelecteVFTemplate?invId={!Inventory__c.Id}&#39;);</url>
+    <url>window.open(&apos;/apex/BOATBUILDING__SelecteVFTemplate?invId={!Inventory__c.Id}&apos;);</url>
 </WebLink>

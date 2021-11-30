@@ -113,7 +113,7 @@ public class OrderEditControllerTest{
         objWrap.lineItemId =objLI.Id ;
         objWrap.quantity =Integer.valueof(objLI.Quantity__c);
         objWrap.received = Integer.valueof(objOrder.Received__c);
-     objWrap.backOrderQuantity =objWrap.quantity-objWrap.received ;
+        objWrap.backOrderQuantity =objWrap.quantity-objWrap.received ;
         objWrap.amount= objLI.BOATBUILDING__Amount__c;
         objWrap.cost = objLI.Cost__c;
         
@@ -122,7 +122,7 @@ public class OrderEditControllerTest{
         
         OrderEditController.getOrderDetail(objOrder.Id);
         OrderEditController.addInventory(objOrder.Id, lstWrap);
-              OrderEditController.addToInventoryWithBackOrder(objOrder.Id, lstWrap);
+        OrderEditController.addToInventoryWithBackOrder(objOrder.Id, lstWrap);
         OrderEditController.getLineItemDetail(objOrder.Id);
         
         

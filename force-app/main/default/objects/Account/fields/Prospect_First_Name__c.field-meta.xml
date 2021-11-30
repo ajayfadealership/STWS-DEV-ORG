@@ -5,7 +5,7 @@
     <description>Related to Prospect Account Record Type</description>
     <externalId>false</externalId>
     <label>First Name</label>
-    <length>50</length>
+    <length>255</length>
     <required>false</required>
     <trackFeedHistory>false</trackFeedHistory>
     <type>Text</type>

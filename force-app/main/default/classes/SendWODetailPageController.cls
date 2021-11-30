@@ -59,10 +59,10 @@ public with sharing class SendWODetailPageController {
             }
             catch(Exception ex) {
                 System.debug('Debug Log For Exception : '+ex);
-                return new PageReference('/apex/ServicePage');
+                return new PageReference('/'+objWO.Id);
             }
             
-                return new PageReference('/apex/CasePDFPageClone2?scontrolCaching=1&id='+objWO.Id+'&strCC='+strCC+'&strBody='+strBody+'&strSubject='+strSubject+'&btnStatus='+btnStatus+'&woemail='+objWO.Contact__r.Email);
+                return new PageReference('/apex/BOATBUILDING__CasePDFPageClone2?scontrolCaching=1&id='+objWO.Id+'&strCC='+strCC+'&strBody='+strBody+'&strSubject='+strSubject+'&btnStatus='+btnStatus+'&woemail='+objWO.Contact__r.Email);
             
         }
         return null;

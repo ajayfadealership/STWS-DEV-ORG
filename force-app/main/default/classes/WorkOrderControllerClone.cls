@@ -4,7 +4,7 @@ public with sharing class WorkOrderControllerClone {
     public BOATBUILDING__Work_Order_Job__c objJob { get; set; }
     public transient List<SelectOption> lstJobs { get; set; }
     public String selectedJob { get; set; }
-    public BOATBUILDING__Work_Order_Payment__c objPayment {get; set;}
+    public BOATBUILDING__Payments__c objPayment {get; set;}
     public String boatBuildingBalance {get; set;}
     public String baseUrl{get;set;}
     
@@ -47,12 +47,12 @@ public with sharing class WorkOrderControllerClone {
         lstJobs = new List<SelectOption>();
         lstJobs.add(new SelectOption('', '--None--'));
         boatBuildingBalance = '';
-        objPayment = new BOATBUILDING__Work_Order_Payment__c();
+        objPayment = new BOATBUILDING__Payments__c();
         
         Id workOrderRecordTypeId = Schema.SObjectType.BOATBUILDING__Work_Order__c.getRecordTypeInfosByName().get('Work Order').getRecordTypeId(); 
         objCase.RecordTypeId = workOrderRecordTypeId;
         
-        objPayment.BOATBUILDING__Related_to_Warranty_Work_Work_Order__c = objCase.Id;
+        objPayment.BOATBUILDING__Work_Warranty_Order__c = objCase.Id;
         Id wojId = Schema.SObjectType.BOATBUILDING__Work_Order_Job__c.getRecordTypeInfosByName().get('Canned Job').getRecordTypeId(); 
         List<BOATBUILDING__Work_Order_Job__c> listWOJob = [SELECT Id, Name, Job_Name__c FROM BOATBUILDING__Work_Order_Job__c Where RecordTypeId =: wojId ORDER By CreatedDate DESC LIMIT 999];
         for(BOATBUILDING__Work_Order_Job__c objJob :listWOJob){
@@ -65,7 +65,7 @@ public with sharing class WorkOrderControllerClone {
         selectedTech = '0'; 
         techList.add(new SelectOption('0', '--None--'));
         for(User objU: u) {
-        	techList.add(new SelectOption(objU.Id, objU.Name));
+            techList.add(new SelectOption(objU.Id, objU.Name));
         }
         Schema.DescribeFieldResult F = BOATBUILDING__Work_Order__c.BOATBUILDING__Store_Location__c.getDescribe();
         List <Schema.PicklistEntry> pickVals = F.getPicklistValues();        
@@ -78,7 +78,7 @@ public with sharing class WorkOrderControllerClone {
     
     @RemoteAction
     public static User getUserInfo(String strUserId) {
-    	return [Select Id, Name From User Where Id =: strUserId]; 
+        return [Select Id, Name From User Where Id =: strUserId]; 
     }
     
     @RemoteAction
@@ -135,7 +135,7 @@ public with sharing class WorkOrderControllerClone {
     @RemoteAction
     public static List<Object> getContact(String Conid, String sLocation){
         List<Object> contactlist = new List<Object>();
-        List <Contact> conlist= [Select MailingState, Account.BOATBUILDING__Customer_Balance__c,BOATBUILDING__Customer_Type__c,MailingStreet,Email,MailingPostalCode,MailingCity,Phone From Contact where Id =: Conid];
+        List <Contact> conlist= [Select MailingState, Account.BOATBUILDING__Account_Customer_Type__c, Account.BOATBUILDING__Customer_Balance__c,BOATBUILDING__Customer_Type__c,MailingStreet,Email,MailingPostalCode,MailingCity,Phone From Contact where Id =: Conid];
         if(conlist.size() > 0){
             contactlist.add(conlist);
             Decimal RegularSalestax = 0.00;
@@ -299,7 +299,7 @@ System.debug('Debug log for lstPrtWrpr: '+lstPrtWrpr);*/
     
     @RemoteAction
     public static String createWorkOrder(String Strjson) {
-    	Set<String> setLstJobId = new Set<String>(); 
+        Set<String> setLstJobId = new Set<String>(); 
         try {
             
             Id wojId = Schema.SObjectType.BOATBUILDING__Work_Order_Job__c.getRecordTypeInfosByName().get('Work Order Job').getRecordTypeId();
@@ -663,7 +663,7 @@ Customer_Pay = Decimal.valueOf((String)job.get('Customer_Pay'));
                 //try {
                 insert lstJob;
                 for(BOATBUILDING__Work_Order_Job__c objJb: lstJob) {
-                	setLstJobId.add(objJb.Id);
+                    setLstJobId.add(objJb.Id);
                 }
                 //}
                 //catch(Exception ex) {
@@ -1169,7 +1169,7 @@ Customer_Pay = Decimal.valueOf((String)job.get('Customer_Pay'));
                                     jobIdSet2.add(listId.Id);
                                     if(listId.BOATBUILDING__Work_Order_Job_Line_Items__r.size() > 0){
                                         for(BOATBUILDING__Work_Order_Job_Line_Item__c objlinitem : listId.BOATBUILDING__Work_Order_Job_Line_Items__r){
-                                            //Total_existing_job_line_items.add(objlinitem);  
+                                            Total_existing_job_line_items.add(objlinitem);  
                                             
                                         }
                                     }
@@ -1187,7 +1187,7 @@ Customer_Pay = Decimal.valueOf((String)job.get('Customer_Pay'));
                 //try {
                 upsert lstJob; 
                 for(BOATBUILDING__Work_Order_Job__c objJb: lstJob) {
-                	setLstJobId.add(objJb.Id);
+                    setLstJobId.add(objJb.Id);
                 }
                 if(jobIdSet.size() > 0 && jobIdSet2.size() > 0) {
                     //System.debug('List job for delete : '+[Select Id from BOATBUILDING__Work_Order_Job__c where Id In: jobIdSet AND Id NOT In: jobIdSet2]);
@@ -1229,10 +1229,41 @@ Customer_Pay = Decimal.valueOf((String)job.get('Customer_Pay'));
                     }
                     
                 }   
-                System.debug('log for Total_existing_job_line_items'+Total_existing_job_line_items);
-                
+                System.debug('log for Total_existing_job_line_items Update'+Total_existing_job_line_items);
+                List<String> uniqueexistingJobIdlst ;
+                if(Total_existing_job_line_items.size() > 0){
+                    uniqueexistingJobIdlst = new List<String>(MapOfExistingId.keySet());
+                    System.debug('log for uniqueexistingJobIdlst'+uniqueexistingJobIdlst);
+                    List<BOATBUILDING__Work_Order_Job__c> newlstjob = [Select id,Unique_Job_id__c from BOATBUILDING__Work_Order_Job__c where Unique_Job_id__c in : uniqueexistingJobIdlst];    
+                    for(BOATBUILDING__Work_Order_Job_Line_Item__c joblineitemlist2 : Total_existing_job_line_items) {
+                        BOATBUILDING__Work_Order_Job_Line_Item__c obj_job_line_item2 = new BOATBUILDING__Work_Order_Job_Line_Item__c();
+                        if(joblineitemlist2.Id != null) {
+                            obj_job_line_item2.Id = joblineitemlist2.Id;
+                        }
+                        obj_job_line_item2.Part_Name__c = joblineitemlist2.Part_Name__c;
+                        obj_job_line_item2.Part_Number__c = joblineitemlist2.Part_Number__c;
+                        obj_job_line_item2.Quantity__c = joblineitemlist2.Quantity__c;
+                        obj_job_line_item2.Price__c = joblineitemlist2.Price__c;
+                        for (String key : MapOfExistingId.keySet()) {
+                            String value = MapOfExistingId.get(key);
+                            if(value.equals(joblineitemlist2.Related_to_Job__c)){
+                                String keyvalue = key;
+                                for(BOATBUILDING__Work_Order_Job__c Jobid : newlstjob){
+                                    if(key.equals(Jobid.Unique_Job_id__c)){
+                                        if(obj_job_line_item2.Id == null) {
+                                            obj_job_line_item2.Related_to_Job__c = Jobid.id;
+                                        }
+                                        System.debug('log for Related_to_Job__c'+Jobid.id);
+                                    }   
+                                }
+                            }
+                        }
+                        lstJoblineitem.add(obj_job_line_item2);
+                        //mapPartNumberQuantity.put(obj_job_line_item2.Part_Number__c, Integer.valueOf(obj_job_line_item2.Quantity__c));
+                    }
+                }
                 //try { 
-                insert lstJoblineitem;
+                upsert lstJoblineitem;
                 /*}
 catch(Exception ex) {
 isError = true;
@@ -1242,34 +1273,34 @@ System.debug('Debug Log For Exception : '+ex);
             }  
             System.debug('>>>>>>>>>setLstJobId: '+setLstJobId);
             if(!setLstJobId.isEmpty()) {
-            	List<Event> lstEvent = new List<Event>();
-            	List<BOATBUILDING__Work_Order_Job__c> lstJb = [Select Id, Name, Job_Name__c, BOATBUILDING__Work_Order_Warranty_Work_Order__c, BOATBUILDING__Work_Order_Warranty_Work_Order__r.BOATBUILDING__Account__c,
-                                                            			BOATBUILDING__Work_Order_Warranty_Work_Order__r.BOATBUILDING__Contact__c, BOATBUILDING__Comments__c, BOATBUILDING__Customer_Comments__c From BOATBUILDING__Work_Order_Job__c WHERE Id IN: setLstJobId];
+                List<Event> lstEvent = new List<Event>();
+                List<BOATBUILDING__Work_Order_Job__c> lstJb = [Select Id, Name, Job_Name__c, BOATBUILDING__Work_Order_Warranty_Work_Order__c, BOATBUILDING__Work_Order_Warranty_Work_Order__r.BOATBUILDING__Account__c,
+                                                                        BOATBUILDING__Work_Order_Warranty_Work_Order__r.BOATBUILDING__Contact__c, BOATBUILDING__Comments__c, BOATBUILDING__Customer_Comments__c From BOATBUILDING__Work_Order_Job__c WHERE Id IN: setLstJobId];
                 for(BOATBUILDING__Work_Order_Job__c objJb: lstJb) {
-                	if(objJb.BOATBUILDING__Work_Order_Warranty_Work_Order__c != null 
-                		&& objJb.BOATBUILDING__Work_Order_Warranty_Work_Order__r.BOATBUILDING__Account__c != null 
-                			&& objJb.BOATBUILDING__Work_Order_Warranty_Work_Order__r.BOATBUILDING__Contact__c != null) {
-                				if(String.isNotBlank(objJb.BOATBUILDING__Comments__c)) {
-                					List<Event> lst = addCustomerComment('Service Writer Comment @ '+objJb.Job_Name__c,
-	                										objJb.BOATBUILDING__Comments__c, 
-											                    objJb.Id, 
-																	objJb.BOATBUILDING__Work_Order_Warranty_Work_Order__r.BOATBUILDING__Contact__c, 
-																		objJb.BOATBUILDING__Work_Order_Warranty_Work_Order__r.BOATBUILDING__Account__c, 'Service Writer Comment');
-									lstEvent.addAll(lst);									
-                				}
-                				if(String.isNotBlank(objJb.BOATBUILDING__Customer_Comments__c)) {
-                					List<Event> lst = addCustomerComment('Service Writer Comment @ '+objJb.Job_Name__c,
-	                										objJb.BOATBUILDING__Customer_Comments__c, 
-											                    objJb.Id, 
-																	objJb.BOATBUILDING__Work_Order_Warranty_Work_Order__r.BOATBUILDING__Contact__c, 
-																		objJb.BOATBUILDING__Work_Order_Warranty_Work_Order__r.BOATBUILDING__Account__c, 'Customer Comment');
-                					lstEvent.addAll(lst);
-                				}
-                	}
-                }                                             			
-            	if(!lstEvent.isEmpty()) {
-            		insert lstEvent;
-            	}
+                    if(objJb.BOATBUILDING__Work_Order_Warranty_Work_Order__c != null 
+                        && objJb.BOATBUILDING__Work_Order_Warranty_Work_Order__r.BOATBUILDING__Account__c != null 
+                            && objJb.BOATBUILDING__Work_Order_Warranty_Work_Order__r.BOATBUILDING__Contact__c != null) {
+                                if(String.isNotBlank(objJb.BOATBUILDING__Comments__c)) {
+                                    List<Event> lst = addCustomerComment('Service Writer Comment @ '+objJb.Job_Name__c,
+                                                            objJb.BOATBUILDING__Comments__c, 
+                                                                objJb.Id, 
+                                                                    objJb.BOATBUILDING__Work_Order_Warranty_Work_Order__r.BOATBUILDING__Contact__c, 
+                                                                        objJb.BOATBUILDING__Work_Order_Warranty_Work_Order__r.BOATBUILDING__Account__c, 'Service Writer Comment');
+                                    lstEvent.addAll(lst);                                   
+                                }
+                                if(String.isNotBlank(objJb.BOATBUILDING__Customer_Comments__c)) {
+                                    List<Event> lst = addCustomerComment('Service Writer Comment @ '+objJb.Job_Name__c,
+                                                            objJb.BOATBUILDING__Customer_Comments__c, 
+                                                                objJb.Id, 
+                                                                    objJb.BOATBUILDING__Work_Order_Warranty_Work_Order__r.BOATBUILDING__Contact__c, 
+                                                                        objJb.BOATBUILDING__Work_Order_Warranty_Work_Order__r.BOATBUILDING__Account__c, 'Customer Comment');
+                                    lstEvent.addAll(lst);
+                                }
+                    }
+                }                                                       
+                if(!lstEvent.isEmpty()) {
+                    insert lstEvent;
+                }
             }
             return 'Success';
         } catch(Exception ex) {
@@ -1280,134 +1311,134 @@ System.debug('Debug Log For Exception : '+ex);
     }
     
     public static List<Event> addCustomerComment(String subject, String customerComment, String whatId, String whoId, String accountId, String sectionName){
-	    BOATBUILDING__Work_Order_Job__c objWOJ = new BOATBUILDING__Work_Order_Job__c();
-	    BOATBUILDING__Work_Order__c objWO = new BOATBUILDING__Work_Order__c();
-	      if(sectionName == 'Work Order Section'){
-	        objWO   = [Select Id,BOATBUILDING__Boat__c,Name from BOATBUILDING__Work_Order__c where id =: whatId];
-	      }else{
-	        objWOJ   = [Select Id,BOATBUILDING__Work_Order_Warranty_Work_Order__r.BOATBUILDING__Boat__c,BOATBUILDING__Technician__c,Name,BOATBUILDING__Work_Order_Warranty_Work_Order__c, BOATBUILDING__Work_Order_Warranty_Work_Order__r.Name from BOATBUILDING__Work_Order_Job__c where id =: whatId];
-	      }
-	      
-	      List<Event> lstEvent = new List<Event>();
-	      Event e = new Event();
-	      e.whatId = whatId;
-	      e.whoId = whoId;
-	      e.Subject = subject;
-	      e.Description = customerComment;
-	      e.StartDateTime = System.Now();
-	      e.EndDateTime = System.Now()+1;
-	      if(sectionName == 'Customer Comment'){
-	        e.Type = 'Comment for Customer';
-	      }
-	      if(sectionName == 'Service Writer Comment'){
-	        e.Type = 'Comment for Technician';
-	        if(String.isNotBlank(objWOJ.BOATBUILDING__Technician__c)){
-	          e.OwnerId = objWOJ.BOATBUILDING__Technician__c;
-	        }
-	      }
-	      if(sectionName == 'Tech Comment'){
-	        e.Type = 'Comment from Technician';
-	        if(String.isNotBlank(objWOJ.BOATBUILDING__Technician__c)){
-	          e.OwnerId = objWOJ.BOATBUILDING__Technician__c;
-	        }
-	      }
-	      
-	      lstEvent.add(e);
-	
-	      Event e2 = new Event();
-	      e2.whatId = objWOJ.BOATBUILDING__Work_Order_Warranty_Work_Order__c;
-	     
-	      e2.Subject = subject+' (Comment on '+objWOJ.Name+')';
-	      e2.Description = customerComment;
-	      e2.StartDateTime = System.Now();
-	      e2.EndDateTime = System.Now()+1;
-	      
-	      if(sectionName == 'Customer Comment'){
-	        e2.Type = 'Comment for Customer';
-	      }
-	      if(sectionName == 'Service Writer Comment'){
-	        e2.Type = 'Comment for Technician';
-	        if(String.isNotBlank(objWOJ.BOATBUILDING__Technician__c)){
-	          e2.OwnerId = objWOJ.BOATBUILDING__Technician__c;
-	        }
-	      }
-	      if(sectionName == 'Tech Comment'){
-	        e2.Type = 'Comment from Technician';
-	        if(String.isNotBlank(objWOJ.BOATBUILDING__Technician__c)){
-	          e2.OwnerId = objWOJ.BOATBUILDING__Technician__c;
-	          e2.Subject = subject+' (Comment from Tech on '+objWOJ.Name+')';
-	        }
-	      }
-	      lstEvent.add(e2);
-	
-	      Event e3 = new Event();
-	      e3.whatId = accountId;
-	      if(sectionName == 'Work Order Section'){
-	       
-	        e3.Subject = 'Comment on '+objWO.Name;
-	      }else{
-	     
-	        e3.Subject = 'Comment on '+objWO.Name +'---Job:'+objWOJ.Name;
-	      }
-	      
-	    
-	      e3.Description = customerComment;
-	      e3.StartDateTime = System.Now();
-	      e3.EndDateTime = System.Now()+1;
-	      if(sectionName == 'Customer Comment'){
-	        e3.Type = 'Comment for Customer';
-	      }
-	      if(sectionName == 'Service Writer Comment'){
-	        e3.Type = 'Comment for Technician';
-	        if(String.isNotBlank(objWOJ.BOATBUILDING__Technician__c)){
-	          e3.OwnerId = objWOJ.BOATBUILDING__Technician__c;
-	        }
-	      }
-	      if(sectionName == 'Tech Comment'){
-	        e3.Type = 'Comment from Technician';
-	        if(String.isNotBlank(objWOJ.BOATBUILDING__Technician__c)){
-	          e3.OwnerId = objWOJ.BOATBUILDING__Technician__c;
-	          e3.Subject = subject+' (Comment from Tech on '+objWOJ.BOATBUILDING__Work_Order_Warranty_Work_Order__r.Name+'--'+objWOJ.Name+')';
-	        }
-	      }
-	      lstEvent.add(e3);
-	      if(String.isNotBlank(String.valueOf(objWOJ.BOATBUILDING__Work_Order_Warranty_Work_Order__r.BOATBUILDING__Boat__c)) || String.isNotBlank(String.valueOf(objWO.BOATBUILDING__Boat__c))){
-	        Event e4 = new Event();
-	        if(sectionName == 'Work Order Section'){
-	          e4.whatId = objWO.BOATBUILDING__Boat__c;
-	          e4.Subject = 'Comment on '+objWO.Name;
-	        }else{
-	          e4.whatId = objWOJ.BOATBUILDING__Work_Order_Warranty_Work_Order__r.BOATBUILDING__Boat__c;
-	          e4.Subject = 'Comment on '+objWO.Name +'---Job:'+objWOJ.Name;
-	        }
-	       
-	        
-	       
-	        e4.Description = customerComment;
-	        e4.StartDateTime = System.Now();
-	        e4.EndDateTime = System.Now()+1;
-	        if(sectionName == 'Customer Comment'){
-	          e4.Type = 'Comment for Customer';
-	        }
-	        if(sectionName == 'Service Writer Comment'){
-	          e4.Type = 'Comment for Technician';
-	          if(String.isNotBlank(objWOJ.BOATBUILDING__Technician__c)){
-	            e4.OwnerId = objWOJ.BOATBUILDING__Technician__c;
-	          }
-	        }
-	        if(sectionName == 'Tech Comment'){
-	          e4.Type = 'Comment from Technician';
-	          if(String.isNotBlank(objWOJ.BOATBUILDING__Technician__c)){
-	            e4.OwnerId = objWOJ.BOATBUILDING__Technician__c;
-	            e4.Subject = subject+' (Comment from Tech on '+objWOJ.BOATBUILDING__Work_Order_Warranty_Work_Order__r.Name+'--'+objWOJ.Name+')';
-	          }
-	        }
-	        lstEvent.add(e4);
-	      }
-	      
-	
-	      return lstEvent;
-	  }
+        BOATBUILDING__Work_Order_Job__c objWOJ = new BOATBUILDING__Work_Order_Job__c();
+        BOATBUILDING__Work_Order__c objWO = new BOATBUILDING__Work_Order__c();
+          if(sectionName == 'Work Order Section'){
+            objWO   = [Select Id,BOATBUILDING__Boat__c,Name from BOATBUILDING__Work_Order__c where id =: whatId];
+          }else{
+            objWOJ   = [Select Id,BOATBUILDING__Work_Order_Warranty_Work_Order__r.BOATBUILDING__Boat__c,BOATBUILDING__Technician__c,Name,BOATBUILDING__Work_Order_Warranty_Work_Order__c, BOATBUILDING__Work_Order_Warranty_Work_Order__r.Name from BOATBUILDING__Work_Order_Job__c where id =: whatId];
+          }
+          
+          List<Event> lstEvent = new List<Event>();
+          Event e = new Event();
+          e.whatId = whatId;
+          e.whoId = whoId;
+          e.Subject = subject;
+          e.Description = customerComment;
+          e.StartDateTime = System.Now();
+          e.EndDateTime = System.Now()+1;
+          if(sectionName == 'Customer Comment'){
+            e.Type = 'Comment for Customer';
+          }
+          if(sectionName == 'Service Writer Comment'){
+            e.Type = 'Comment for Technician';
+            if(String.isNotBlank(objWOJ.BOATBUILDING__Technician__c)){
+              e.OwnerId = objWOJ.BOATBUILDING__Technician__c;
+            }
+          }
+          if(sectionName == 'Tech Comment'){
+            e.Type = 'Comment from Technician';
+            if(String.isNotBlank(objWOJ.BOATBUILDING__Technician__c)){
+              e.OwnerId = objWOJ.BOATBUILDING__Technician__c;
+            }
+          }
+          
+          lstEvent.add(e);
+    
+          Event e2 = new Event();
+          e2.whatId = objWOJ.BOATBUILDING__Work_Order_Warranty_Work_Order__c;
+         
+          e2.Subject = subject+' (Comment on '+objWOJ.Name+')';
+          e2.Description = customerComment;
+          e2.StartDateTime = System.Now();
+          e2.EndDateTime = System.Now()+1;
+          
+          if(sectionName == 'Customer Comment'){
+            e2.Type = 'Comment for Customer';
+          }
+          if(sectionName == 'Service Writer Comment'){
+            e2.Type = 'Comment for Technician';
+            if(String.isNotBlank(objWOJ.BOATBUILDING__Technician__c)){
+              e2.OwnerId = objWOJ.BOATBUILDING__Technician__c;
+            }
+          }
+          if(sectionName == 'Tech Comment'){
+            e2.Type = 'Comment from Technician';
+            if(String.isNotBlank(objWOJ.BOATBUILDING__Technician__c)){
+              e2.OwnerId = objWOJ.BOATBUILDING__Technician__c;
+              e2.Subject = subject+' (Comment from Tech on '+objWOJ.Name+')';
+            }
+          }
+          lstEvent.add(e2);
+    
+          Event e3 = new Event();
+          e3.whatId = accountId;
+          if(sectionName == 'Work Order Section'){
+           
+            e3.Subject = 'Comment on '+objWO.Name;
+          }else{
+         
+            e3.Subject = 'Comment on '+objWO.Name +'---Job:'+objWOJ.Name;
+          }
+          
+        
+          e3.Description = customerComment;
+          e3.StartDateTime = System.Now();
+          e3.EndDateTime = System.Now()+1;
+          if(sectionName == 'Customer Comment'){
+            e3.Type = 'Comment for Customer';
+          }
+          if(sectionName == 'Service Writer Comment'){
+            e3.Type = 'Comment for Technician';
+            if(String.isNotBlank(objWOJ.BOATBUILDING__Technician__c)){
+              e3.OwnerId = objWOJ.BOATBUILDING__Technician__c;
+            }
+          }
+          if(sectionName == 'Tech Comment'){
+            e3.Type = 'Comment from Technician';
+            if(String.isNotBlank(objWOJ.BOATBUILDING__Technician__c)){
+              e3.OwnerId = objWOJ.BOATBUILDING__Technician__c;
+              e3.Subject = subject+' (Comment from Tech on '+objWOJ.BOATBUILDING__Work_Order_Warranty_Work_Order__r.Name+'--'+objWOJ.Name+')';
+            }
+          }
+          lstEvent.add(e3);
+          if(String.isNotBlank(String.valueOf(objWOJ.BOATBUILDING__Work_Order_Warranty_Work_Order__r.BOATBUILDING__Boat__c)) || String.isNotBlank(String.valueOf(objWO.BOATBUILDING__Boat__c))){
+            Event e4 = new Event();
+            if(sectionName == 'Work Order Section'){
+              e4.whatId = objWO.BOATBUILDING__Boat__c;
+              e4.Subject = 'Comment on '+objWO.Name;
+            }else{
+              e4.whatId = objWOJ.BOATBUILDING__Work_Order_Warranty_Work_Order__r.BOATBUILDING__Boat__c;
+              e4.Subject = 'Comment on '+objWO.Name +'---Job:'+objWOJ.Name;
+            }
+           
+            
+           
+            e4.Description = customerComment;
+            e4.StartDateTime = System.Now();
+            e4.EndDateTime = System.Now()+1;
+            if(sectionName == 'Customer Comment'){
+              e4.Type = 'Comment for Customer';
+            }
+            if(sectionName == 'Service Writer Comment'){
+              e4.Type = 'Comment for Technician';
+              if(String.isNotBlank(objWOJ.BOATBUILDING__Technician__c)){
+                e4.OwnerId = objWOJ.BOATBUILDING__Technician__c;
+              }
+            }
+            if(sectionName == 'Tech Comment'){
+              e4.Type = 'Comment from Technician';
+              if(String.isNotBlank(objWOJ.BOATBUILDING__Technician__c)){
+                e4.OwnerId = objWOJ.BOATBUILDING__Technician__c;
+                e4.Subject = subject+' (Comment from Tech on '+objWOJ.BOATBUILDING__Work_Order_Warranty_Work_Order__r.Name+'--'+objWOJ.Name+')';
+              }
+            }
+            lstEvent.add(e4);
+          }
+          
+    
+          return lstEvent;
+      }
     
     @RemoteAction
     public static BOATBUILDING__Promo_Code__c getPromocodeDetail(String strPCId) {
@@ -1541,12 +1572,14 @@ System.debug('Debug Log For Exception : '+ex);
     @RemoteAction
     public static string addPayment(Map<String, String> mapPaymentData, String workOrderId){
         
-        BOATBUILDING__Work_Order_Payment__c objPayment = new BOATBUILDING__Work_Order_Payment__c();
-        objPayment.BOATBUILDING__Related_to_Warranty_Work_Work_Order__c = workOrderId;        
+        BOATBUILDING__Payments__c objPayment = new BOATBUILDING__Payments__c();
+        objPayment.BOATBUILDING__Work_Warranty_Order__c = workOrderId;        
         objPayment.BOATBUILDING__Amount__c = Decimal.valueOf(mapPaymentData.get('Amount'));
         objPayment.BOATBUILDING__Payment_Type__c = mapPaymentData.get('PaymentType');
         objPayment.BOATBUILDING__Credit_Card_Type__c = mapPaymentData.get('CreditCardType');
         objPayment.BOATBUILDING__Check_Number__c = mapPaymentData.get('CheckNumber');
+        objPayment.RecordTypeId = Schema.SObjectType.BOATBUILDING__Payments__c.getRecordTypeInfosByName().get('Work Order').getRecordTypeId();
+                                    
         System.debug('objPayment----'+objPayment);
         try{
             insert objPayment;
@@ -1571,9 +1604,9 @@ System.debug('Debug Log For Exception : '+ex);
             objCN.BOATBUILDING__Work_Order__c = objWO.Id;
             insert objCN;
             
-            BOATBUILDING__Work_Order_Payment__c objPayment = new BOATBUILDING__Work_Order_Payment__c();
+            BOATBUILDING__Payments__c objPayment = new BOATBUILDING__Payments__c();
             objPayment.BOATBUILDING__Credit_Note__c = objCN.Id;  
-            objPayment.BOATBUILDING__Related_to_Warranty_Work_Work_Order__c = workOrderId;        
+            objPayment.BOATBUILDING__Work_Warranty_Order__c = workOrderId;        
             objPayment.BOATBUILDING__Amount__c = Decimal.valueOf(mapPaymentData.get('Amount'));
             objPayment.BOATBUILDING__Payment_Type__c = mapPaymentData.get('PaymentType');
             System.debug('objPayment----'+objPayment);
@@ -1743,127 +1776,127 @@ System.debug('Debug Log For Exception : '+ex);
         
         if(sLocation == '' || sLocation == null) {
         
-	        List<RecordType> lstInventoryRT = [SELECT           
-	                                           Id
-	                                           FROM    
-	                                           RecordType
-	                                           WHERE       
-	                                           DeveloperName = 'Inventory_for_Parts'
-	                                           AND
-	                                           SobjectType = 'BOATBUILDING__Inventory__c'
-	                                           LIMIT 
-	                                           1];
-	        
-	        List<PartResultDiv> lstPartResultDiv = new List<PartResultDiv>();
-	        Set<String> setPrtNum = new Set<String>();
-	        String prtDetail = '%'+strPrtDetail+'%';  
-	        if(lstInventoryRT.size() > 0) {
-	            List<BOATBUILDING__Inventory__c> lstInventory = [Select 
-	                                                             Id, 
-	                                                             Quantity__c, 
-	                                                             Part_Number__c, 
-	                                                             Part_Name__c, 
-	                                                             Part_MSRP_Price__c ,
-	                                                             (
-	                                                                Select Id, Name, BOATBUILDING__Quantity__c, BOATBUILDING__Store_Location__c 
-	                                                                From BOATBUILDING__Parts_Availability__r
-	                                                       		 )
-	                                                             From 
-	                                                             BOATBUILDING__Inventory__c 
-	                                                             Where 
-	                                                             (Part_Number__c LIKE: prtDetail OR Part_Name__c LIKE: prtDetail) AND RecordTypeId =: lstInventoryRT[0].Id];
-	            
-	            if(lstInventory.size() > 0) {
-	                for(BOATBUILDING__Inventory__c objInv: lstInventory) {
-	                    PartResultDiv objPRD = new PartResultDiv(objInv.Id, objInv.Part_Number__c, objInv.Part_Name__c, Integer.valueOf(objInv.Quantity__c), objInv.Part_MSRP_Price__c);
-            			objPRD.StoreLocation = '-None-';
-	                    lstPartResultDiv.add(objPRD); 
-	                    setPrtNum.add(objInv.Part_Number__c);
-	                }
-	            }
-	        }
-	        List<BOATBUILDING__Part__c> lstPrt = [Select 
-	                                              Part_Number__c, 
-	                                              Name, 
-	                                              Retail_Price__c, 
-	                                              Id 
-	                                              From 
-	                                              BOATBUILDING__Part__c 
-	                                              Where 
-	                                              (Part_Number__c LIKE: prtDetail OR Name LIKE: prtDetail) AND Part_Number__c NOT IN: setPrtNum];
-	        if(lstPrt.size() > 0) {                                     
-	            for(BOATBUILDING__Part__c objPrt: lstPrt) {
-	                PartResultDiv objPRD = new PartResultDiv(objPrt.Id, objPrt.Part_Number__c, objPrt.Name, 0, objPrt.Retail_Price__c);
-	            	objPRD.StoreLocation = '-None-'; 
-	                lstPartResultDiv.add(objPRD); 
-	            }                       
-	        }   
-	        if(lstPartResultDiv.size() > 0) {
-	            return lstPartResultDiv;
-	        } 
+            List<RecordType> lstInventoryRT = [SELECT           
+                                               Id
+                                               FROM    
+                                               RecordType
+                                               WHERE       
+                                               DeveloperName = 'Inventory_for_Parts'
+                                               AND
+                                               SobjectType = 'BOATBUILDING__Inventory__c'
+                                               LIMIT 
+                                               1];
+            
+            List<PartResultDiv> lstPartResultDiv = new List<PartResultDiv>();
+            Set<String> setPrtNum = new Set<String>();
+            String prtDetail = '%'+strPrtDetail+'%';  
+            if(lstInventoryRT.size() > 0) {
+                List<BOATBUILDING__Inventory__c> lstInventory = [Select 
+                                                                 Id, 
+                                                                 Quantity__c, 
+                                                                 Part_Number__c, 
+                                                                 Part_Name__c, 
+                                                                 Part_MSRP_Price__c ,
+                                                                 (
+                                                                    Select Id, Name, BOATBUILDING__Quantity__c, BOATBUILDING__Store_Location__c 
+                                                                    From BOATBUILDING__Parts_Availability__r
+                                                                 )
+                                                                 From 
+                                                                 BOATBUILDING__Inventory__c 
+                                                                 Where 
+                                                                 (Part_Number__c LIKE: prtDetail OR Part_Name__c LIKE: prtDetail) AND RecordTypeId =: lstInventoryRT[0].Id];
+                
+                if(lstInventory.size() > 0) {
+                    for(BOATBUILDING__Inventory__c objInv: lstInventory) {
+                        PartResultDiv objPRD = new PartResultDiv(objInv.Id, objInv.Part_Number__c, objInv.Part_Name__c, Integer.valueOf(objInv.Quantity__c), objInv.Part_MSRP_Price__c);
+                        objPRD.StoreLocation = '-None-';
+                        lstPartResultDiv.add(objPRD); 
+                        setPrtNum.add(objInv.Part_Number__c);
+                    }
+                }
+            }
+            List<BOATBUILDING__Part__c> lstPrt = [Select 
+                                                  Part_Number__c, 
+                                                  Name, 
+                                                  Retail_Price__c, 
+                                                  Id 
+                                                  From 
+                                                  BOATBUILDING__Part__c 
+                                                  Where 
+                                                  (Part_Number__c LIKE: prtDetail OR Name LIKE: prtDetail) AND Part_Number__c NOT IN: setPrtNum];
+            if(lstPrt.size() > 0) {                                     
+                for(BOATBUILDING__Part__c objPrt: lstPrt) {
+                    PartResultDiv objPRD = new PartResultDiv(objPrt.Id, objPrt.Part_Number__c, objPrt.Name, 0, objPrt.Retail_Price__c);
+                    objPRD.StoreLocation = '-None-'; 
+                    lstPartResultDiv.add(objPRD); 
+                }                       
+            }   
+            if(lstPartResultDiv.size() > 0) {
+                return lstPartResultDiv;
+            } 
         } else {
-        	List<RecordType> lstInventoryRT = [SELECT           
-	                                           Id
-	                                           FROM    
-	                                           RecordType
-	                                           WHERE       
-	                                           DeveloperName = 'Inventory_for_Parts'
-	                                           AND
-	                                           SobjectType = 'BOATBUILDING__Inventory__c'
-	                                           LIMIT 
-	                                           1];
-	        
-	        List<PartResultDiv> lstPartResultDiv = new List<PartResultDiv>();
-	        Set<String> setPrtNum = new Set<String>();
-	        String prtDetail = '%'+strPrtDetail+'%';  
-	        if(lstInventoryRT.size() > 0) {
-	            List<BOATBUILDING__Inventory__c> lstInventory = [Select 
-	                                                             Id, 
-	                                                             Quantity__c, 
-	                                                             Part_Number__c, 
-	                                                             Part_Name__c, 
-	                                                             Part_MSRP_Price__c ,
-	                                                             (
-	                                                                Select Id, Name, BOATBUILDING__Quantity__c, BOATBUILDING__Store_Location__c 
-	                                                                From BOATBUILDING__Parts_Availability__r
-	                                                       		 )
-	                                                             From 
-	                                                             BOATBUILDING__Inventory__c 
-	                                                             Where 
-	                                                             (Part_Number__c LIKE: prtDetail OR Part_Name__c LIKE: prtDetail) AND RecordTypeId =: lstInventoryRT[0].Id];
-	            
-	            if(lstInventory.size() > 0) {
-	                for(BOATBUILDING__Inventory__c objInv: lstInventory) {
-	                	for(BOATBUILDING__Parts_Availability__c objPA: objInv.BOATBUILDING__Parts_Availability__r) {
-	                		if(objPA.BOATBUILDING__Store_Location__c != null &&  sLocation == objPA.BOATBUILDING__Store_Location__c) {
-	                			PartResultDiv objPRD = new PartResultDiv(objInv.Id, objInv.Part_Number__c, objInv.Part_Name__c, Integer.valueOf(objPA.Quantity__c), objInv.Part_MSRP_Price__c);
-	                			objPRD.StoreLocation = sLocation;
-			                    lstPartResultDiv.add(objPRD);
-			                    setPrtNum.add(objInv.Part_Number__c);
-	                		}
-	                	}
-	                }
-	            }
-	        }
-	        List<BOATBUILDING__Part__c> lstPrt = [Select 
-	                                              Part_Number__c, 
-	                                              Name, 
-	                                              Retail_Price__c, 
-	                                              Id 
-	                                              From 
-	                                              BOATBUILDING__Part__c 
-	                                              Where 
-	                                              (Part_Number__c LIKE: prtDetail OR Name LIKE: prtDetail) AND Part_Number__c NOT IN: setPrtNum];
-	        if(lstPrt.size() > 0) {                                     
-	            for(BOATBUILDING__Part__c objPrt: lstPrt) {
-	            	PartResultDiv objPRD = new PartResultDiv(objPrt.Id, objPrt.Part_Number__c, objPrt.Name, 0, objPrt.Retail_Price__c);
-	            	objPRD.StoreLocation = '-None-';
-	                lstPartResultDiv.add(objPRD); 
-	            }                       
-	        }   
-	        if(lstPartResultDiv.size() > 0) {
-	            return lstPartResultDiv;
-	        } 
+            List<RecordType> lstInventoryRT = [SELECT           
+                                               Id
+                                               FROM    
+                                               RecordType
+                                               WHERE       
+                                               DeveloperName = 'Inventory_for_Parts'
+                                               AND
+                                               SobjectType = 'BOATBUILDING__Inventory__c'
+                                               LIMIT 
+                                               1];
+            
+            List<PartResultDiv> lstPartResultDiv = new List<PartResultDiv>();
+            Set<String> setPrtNum = new Set<String>();
+            String prtDetail = '%'+strPrtDetail+'%';  
+            if(lstInventoryRT.size() > 0) {
+                List<BOATBUILDING__Inventory__c> lstInventory = [Select 
+                                                                 Id, 
+                                                                 Quantity__c, 
+                                                                 Part_Number__c, 
+                                                                 Part_Name__c, 
+                                                                 Part_MSRP_Price__c ,
+                                                                 (
+                                                                    Select Id, Name, BOATBUILDING__Quantity__c, BOATBUILDING__Store_Location__c 
+                                                                    From BOATBUILDING__Parts_Availability__r
+                                                                 )
+                                                                 From 
+                                                                 BOATBUILDING__Inventory__c 
+                                                                 Where 
+                                                                 (Part_Number__c LIKE: prtDetail OR Part_Name__c LIKE: prtDetail) AND RecordTypeId =: lstInventoryRT[0].Id];
+                
+                if(lstInventory.size() > 0) {
+                    for(BOATBUILDING__Inventory__c objInv: lstInventory) {
+                        for(BOATBUILDING__Parts_Availability__c objPA: objInv.BOATBUILDING__Parts_Availability__r) {
+                            if(objPA.BOATBUILDING__Store_Location__c != null &&  sLocation == objPA.BOATBUILDING__Store_Location__c) {
+                                PartResultDiv objPRD = new PartResultDiv(objInv.Id, objInv.Part_Number__c, objInv.Part_Name__c, Integer.valueOf(objPA.Quantity__c), objInv.Part_MSRP_Price__c);
+                                objPRD.StoreLocation = sLocation;
+                                lstPartResultDiv.add(objPRD);
+                                setPrtNum.add(objInv.Part_Number__c);
+                            }
+                        }
+                    }
+                }
+            }
+            List<BOATBUILDING__Part__c> lstPrt = [Select 
+                                                  Part_Number__c, 
+                                                  Name, 
+                                                  Retail_Price__c, 
+                                                  Id 
+                                                  From 
+                                                  BOATBUILDING__Part__c 
+                                                  Where 
+                                                  (Part_Number__c LIKE: prtDetail OR Name LIKE: prtDetail) AND Part_Number__c NOT IN: setPrtNum];
+            if(lstPrt.size() > 0) {                                     
+                for(BOATBUILDING__Part__c objPrt: lstPrt) {
+                    PartResultDiv objPRD = new PartResultDiv(objPrt.Id, objPrt.Part_Number__c, objPrt.Name, 0, objPrt.Retail_Price__c);
+                    objPRD.StoreLocation = '-None-';
+                    lstPartResultDiv.add(objPRD); 
+                }                       
+            }   
+            if(lstPartResultDiv.size() > 0) {
+                return lstPartResultDiv;
+            } 
         }
         return null;
     }
@@ -1981,7 +2014,7 @@ System.debug('Debug Log For Exception : '+ex);
                         for(BOATBUILDING__Inventory__c objInv: lstInventory1) {
                             
                             if(objInv.BOATBUILDING__Parts_Availability__r.size() > 0) {
-                            	
+                                
                                 BOATBUILDING__Parts_Availability__c obj = objInv.BOATBUILDING__Parts_Availability__r[0];
                                 obj.Quantity__c -= mapPartNumberQuantity.get(objInv.Part_Number__c);
                                 lstPA.add(obj);

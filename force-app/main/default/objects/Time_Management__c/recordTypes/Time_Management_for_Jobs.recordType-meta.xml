@@ -4,6 +4,13 @@
     <active>true</active>
     <label>Time Management for Jobs</label>
     <picklistValues>
+        <picklist>Canned_Response_to_the_Customer__c</picklist>
+        <values>
+            <fullName>Other</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
         <picklist>Service_Location__c</picklist>
         <values>
             <fullName>Slot 1</fullName>

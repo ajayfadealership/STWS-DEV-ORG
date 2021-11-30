@@ -114,7 +114,7 @@
                                 </div>
                                 <div class="slds-form-element tab_mid">
                                     <a class="slds-button slds-button--brand" id="sndQuote" onclick="sendOrderJS(this);">Send Order</a>
-                                    <a class="slds-button slds-button--brand" id="cancel" onclick="window.top.location='/apex/ServicePage?subTabName=tab-default-3'">Cancel</a>
+                                    <a class="slds-button slds-button--brand" id="cancel" href="/{!objOrder.Id}" >Cancel</a>
                                 </div>
                             </div>
                         </div>

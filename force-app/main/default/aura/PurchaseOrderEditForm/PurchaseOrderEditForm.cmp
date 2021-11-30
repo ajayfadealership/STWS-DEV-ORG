@@ -1,167 +1,208 @@
 <aura:component controller="PurchaseOrderLightningController">
-    <aura:attribute name="objRecId" type="String"/>
-    <aura:attribute name="objManu" type="Manufacturer__c" default="{'sobjectType': 'Manufacturer__c'}" access="global"/>  
-    <aura:attribute name="showSpinner" type="Boolean" default="false" access="global"/>
-    <aura:attribute name="showform" type="Boolean" default="false" access="global"/>
-    <aura:attribute name="showlist" type="Boolean" default="true" access="global"/>
-    <aura:attribute name="detailSection" type="Boolean" default="false" access="global"/>
-    <aura:attribute name="lineItems" type="Object[]" access="global"/>
-    <aura:attribute name="lineItemPopTotal" type="Double" default="0.00" access="global"/>
-    <aura:attribute name="lineItemTotal" type="Double" default="0.00" access="global"/>
-    <aura:attribute name="poRecordTypeId" type="String" access="global"/> 
-    <aura:handler name="change" value="{!v.lineItemTotal}" action="{!c.calculateTotal}"/>
-    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
-    <div> 
+    <aura:attribute name="objRecId" type="String" />
+    <aura:attribute name="objManu" type="Manufacturer__c" default="{'sobjectType': 'Manufacturer__c'}"
+        access="global" />
+    <aura:attribute name="showSpinner" type="Boolean" default="false" access="global" />
+    <aura:attribute name="showform" type="Boolean" default="false" access="global" />
+    <aura:attribute name="showlist" type="Boolean" default="true" access="global" />
+    <aura:attribute name="detailSection" type="Boolean" default="false" access="global" />
+    <aura:attribute name="lineItems" type="Object[]" access="global" />
+    <aura:attribute name="lineItemPopTotal" type="Double" default="0.00" access="global" />
+    <aura:attribute name="lineItemTotal" type="Double" default="0.00" access="global" />
+    <aura:attribute name="poRecordTypeId" type="String" access="global" />
+    <aura:attribute name="vendorVal" type="String" access="global" />
+    <aura:handler name="change" value="{!v.lineItemTotal}" action="{!c.calculateTotal}" />
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    <div>
         <aura:if isTrue="{!or(v.objRecId == '', v.objRecId == null)}">
-            <button style="float: right;" title="Back to List" class="slds-button slds-button_neutral" onclick="{!c.showPOList}">Back to List</button> 
+            <button style="float: right;" title="Back to List" class="slds-button slds-button_neutral"
+                onclick="{!c.showPOList}">Back to List</button>
         </aura:if>
-    </div> 
-    <lightning:recordEditForm aura:id="refPurchaseOrder" onload="{!c.handleLoad}"
-                                                        recordTypeId="{!v.poRecordTypeId}"
-                                                        onsubmit="{!c.handleSubmit}"
-                                                        onsuccess="{!c.handleSuccess}"
-                                                        onerror="{!c.handleError}" 
-                                                        recordId="{!v.objRecId}" 
-                                                        objectApiName="BOATBUILDING__Order__c" >
+    </div>
+    <lightning:recordEditForm aura:id="refPurchaseOrder" onload="{!c.handleLoad}" recordTypeId="{!v.poRecordTypeId}"
+        onsubmit="{!c.handleSubmit}" onsuccess="{!c.handleSuccess}" onerror="{!c.handleError}" recordId="{!v.objRecId}"
+        objectApiName="BOATBUILDING__Order__c">
         <div class="slds-col slds-size--1-of-1">
-            <div class="slds-grid slds-wrap" >
+            <div class="slds-grid slds-wrap">
                 <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-2 slds-col--padded">
                     <div class="slds-form-element">
                         <div class="slds-form-element__control">
-                            <lightning:inputField fieldName="BOATBUILDING__Vendor_Name__c" aura:id="opVendorName" onchange="{!c.fetchManuDetails}"/> 
-                        </div> 
+                            <lightning:inputField fieldName="BOATBUILDING__Vendor_Name__c" value="{!v.vendorVal}"
+                                aura:id="opVendorName" onchange="{!c.fetchManuDetails}" />
+                        </div>
                     </div>
                 </div>
                 <div class="slds-col slds-size--1-of-1 slds-medium-size--2-of-4 slds-col--padded">
                     <div class="slds-form-element">
                         <div class="slds-form-element__control">
-                            <lightning:inputField fieldName="BOATBUILDING__Store_Location__c" aura:id="opStoreLocation"/>
+                            <lightning:inputField fieldName="BOATBUILDING__Store_Location__c"
+                                aura:id="opStoreLocation" />
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </lightning:recordEditForm> 
+    </lightning:recordEditForm>
 
     <aura:if isTrue="{!v.detailSection}">
-        <hr/>
-        <lightning:accordion aura:id="manuAcc" activeSectionName="LineItem" allowMultipleSectionsOpen="true" >
+        <hr />
+        <lightning:accordion aura:id="manuAcc" activeSectionName="LineItem" allowMultipleSectionsOpen="true">
             <lightning:accordionSection name="A" label="Manufacturer Details">
-                <div class="slds-col slds-size--1-of-1"> 
-                    <div class="slds-grid slds-wrap" >
+                <div class="slds-col slds-size--1-of-1">
+                    <div class="slds-grid slds-wrap">
                         <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-3 slds-col--padded">
                             <div class="slds-form-element">
                                 <div class="slds-form-element__control">
-                                    <lightning:input label="Vendor Name" type="text" value="{!v.objManu.Name}" aura:id="manuVendorName" disabled="true"/> 
-                                </div> 
+                                    <lightning:input label="Vendor Name" type="text" value="{!v.objManu.Name}"
+                                        aura:id="manuVendorName" disabled="true" />
+                                </div>
                             </div>
                         </div>
                         <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-3 slds-col--padded">
                             <div class="slds-form-element">
                                 <div class="slds-form-element__control">
-                                    <lightning:input label="Phone" type="text" value="{!v.objManu.BOATBUILDING__Phone__c}" aura:id="manuVendorPhone" disabled="true"/> 
-                                </div> 
+                                    <lightning:input label="Phone" type="text"
+                                        value="{!v.objManu.BOATBUILDING__Phone__c}" aura:id="manuVendorPhone"
+                                        disabled="true" />
+                                </div>
                             </div>
                         </div>
                         <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-3 slds-col--padded">
                             <div class="slds-form-element">
                                 <div class="slds-form-element__control">
-                                    <lightning:input label="Email" type="text" value="{!v.objManu.BOATBUILDING__Email__c}" aura:id="manuVendorEmail" disabled="true"/> 
-                                </div> 
+                                    <lightning:input label="Email" type="text"
+                                        value="{!v.objManu.BOATBUILDING__Email__c}" aura:id="manuVendorEmail"
+                                        disabled="true" />
+                                </div>
                             </div>
                         </div>
                         <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-3 slds-col--padded">
                             <div class="slds-form-element">
                                 <div class="slds-form-element__control">
-                                    <lightning:input label="Contact Person" type="text" value="{!v.objManu.BOATBUILDING__Contact_Person__r.Name}" aura:id="manuVendorConPer" disabled="true"/> 
-                                </div> 
+                                    <lightning:input label="Contact Person" type="text"
+                                        value="{!v.objManu.BOATBUILDING__Contact_Person__r.Name}"
+                                        aura:id="manuVendorConPer" disabled="true" />
+                                </div>
                             </div>
                         </div>
                         <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-3 slds-col--padded">
                             <div class="slds-form-element">
                                 <div class="slds-form-element__control">
-                                    <lightning:input label="Steet" type="text" value="{!v.objManu.BOATBUILDING__Street__c}" aura:id="manuVendorSteet" disabled="true"/> 
-                                </div> 
+                                    <lightning:input label="Steet" type="text"
+                                        value="{!v.objManu.BOATBUILDING__Street__c}" aura:id="manuVendorSteet"
+                                        disabled="true" />
+                                </div>
                             </div>
                         </div>
                         <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-3 slds-col--padded">
                             <div class="slds-form-element">
                                 <div class="slds-form-element__control">
-                                    <lightning:input label="City" type="text" value="{!v.objManu.BOATBUILDING__City__c}" aura:id="manuVendorCity" disabled="true"/> 
-                                </div> 
+                                    <lightning:input label="City" type="text" value="{!v.objManu.BOATBUILDING__City__c}"
+                                        aura:id="manuVendorCity" disabled="true" />
+                                </div>
                             </div>
                         </div>
                         <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-3 slds-col--padded">
                             <div class="slds-form-element">
                                 <div class="slds-form-element__control">
-                                    <lightning:input label="State" type="text" value="{!v.objManu.BOATBUILDING__State__c}" aura:id="manuVendorState" disabled="true"/> 
-                                </div> 
+                                    <lightning:input label="State" type="text"
+                                        value="{!v.objManu.BOATBUILDING__State__c}" aura:id="manuVendorState"
+                                        disabled="true" />
+                                </div>
                             </div>
                         </div>
                         <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-3 slds-col--padded">
                             <div class="slds-form-element">
                                 <div class="slds-form-element__control">
-                                    <lightning:input label="Zip" type="text" value="{!v.objManu.BOATBUILDING__Zip__c}" aura:id="manuVendorZip" disabled="true"/> 
-                                </div> 
+                                    <lightning:input label="Zip" type="text" value="{!v.objManu.BOATBUILDING__Zip__c}"
+                                        aura:id="manuVendorZip" disabled="true" />
+                                </div>
                             </div>
                         </div>
                         <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-3 slds-col--padded">
                             <div class="slds-form-element">
                                 <div class="slds-form-element__control">
-                                    <lightning:input label="Terms" type="text" value="{!v.objManu.BOATBUILDING__Terms__c}" aura:id="manuVendorTerms" disabled="true"/> 
-                                </div> 
+                                    <lightning:input label="Terms" type="text"
+                                        value="{!v.objManu.BOATBUILDING__Terms__c}" aura:id="manuVendorTerms"
+                                        disabled="true" />
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </lightning:accordionSection>
-            <lightning:accordionSection name="LineItem" label="{!'Line Items (' + v.lineItems.length + ')' + ' ( Total: $'+v.lineItemPopTotal+' ) '}">
-                <div class="slds-col slds-size--1-of-1"> 
-                    <div class="slds-grid slds-wrap" >
+            <lightning:accordionSection name="LineItem"
+                label="{!'Line Items (' + v.lineItems.length + ')' + ' ( Total: $'+v.lineItemPopTotal+' ) '}">
+                <div class="slds-col slds-size--1-of-1">
+                    <div class="slds-grid slds-wrap">
                         <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-1 slds-col--padded">
                             <div class="slds-form-element">
                                 <div class="slds-form-element__control">
                                     <span style="float: right;">
-                                        <lightning:button variant="base"  label="Add Parts" title="Add Parts"  iconName="action:add_relationship" iconPosition="right" onclick="{!c.addPartsToPO}"/>
+                                        <lightning:button variant="base" label="Add Parts" title="Add Parts"
+                                            iconName="action:add_relationship" iconPosition="right"
+                                            onclick="{!c.addPartsToPO}" />
                                     </span>
-                                </div> 
-                            </div> 
+                                </div>
+                            </div>
                         </div>
                         <aura:iteration items="{!v.lineItems}" var="objPOLI" indexVar="i">
-                            <c:PurchaseOrderLineItems objPOLI="{!objPOLI}" showPill="{!objPOLI.showPill}" lineItemTotal="{!v.lineItemTotal}"/>
-                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-6 slds-col--padded"> 
-                                <div class="slds-form-element"> 
+                            <c:PurchaseOrderLineItems vendorVal="{!v.vendorVal}" objPOLI="{!objPOLI}"
+                                showPill="{!objPOLI.showPill}" lineItemTotal="{!v.lineItemTotal}"
+                                SortingSequence="{!i}" />
+                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-6 slds-col--padded">
+                                <div class="slds-form-element">
                                     <label class="slds-form-element__label">&nbsp;</label>
                                     <div class="slds-form-element__control">
-                                        <a data-index="{!i}"  onclick="{!c.handleRemoveLineItem}">
-                                            <lightning:icon iconName="action:delete" alternativeText="Delete" size="xx-small" />
-                                        </a>  
-                                    </div> 
+                                        <a data-index="{!i}" onclick="{!c.handleRemoveLineItem}">
+                                            <lightning:icon iconName="action:delete" alternativeText="Delete"
+                                                size="xx-small" />
+                                        </a>
+                                    </div>
                                 </div>
                             </div>
                         </aura:iteration>
+                        <aura:if isTrue="{!v.lineItems.length > 5}">
+                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-1 slds-col--padded">
+                                <div class="slds-form-element">
+                                    <div class="slds-form-element__control">
+                                        <span style="float: right;">
+                                            <lightning:button variant="base" label="Add Parts" title="Add Parts"
+                                                iconName="action:add_relationship" iconPosition="right"
+                                                onclick="{!c.addPartsToPO}" />
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </aura:if>
                         <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-1 slds-col--padded">
                             &nbsp;
                         </div>
                         <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-1 slds-col--padded">
                             <div class="slds-form-element">
-                                
+
                                 <div class="slds-form-element__control">
                                     <span style="float: right;">
                                         <aura:if isTrue="{!and(v.objRecId != '', v.objRecId != null)}">
-                                            <lightning:button variant="brand" label="Update Purchase Order" title="Update Purchase Order"  iconName="utility:record_create" iconPosition="right" onclick="{!c.createPurchaseOrder}"/>
-                                            <lightning:button variant="brand" label="Generate Order" title="Generate Order"  iconName="standard:orders" iconPosition="right" onclick="{!c.generateOrderJS}"/>
+                                            <lightning:button variant="brand" label="Update Purchase Order"
+                                                title="Update Purchase Order" iconName="utility:record_create"
+                                                iconPosition="right" onclick="{!c.createPurchaseOrder}" />
+                                            <lightning:button variant="brand" label="Generate Order"
+                                                title="Generate Order" iconName="standard:orders" iconPosition="right"
+                                                onclick="{!c.generateOrderJS}" />
                                             <aura:set attribute="else">
-                                                <lightning:button variant="brand" label="Create Purchase Order" title="Create Purchase Order"  iconName="utility:record_create" iconPosition="right" onclick="{!c.createPurchaseOrder}"/>    
+                                                <lightning:button variant="brand" label="Create Purchase Order"
+                                                    title="Create Purchase Order" iconName="utility:record_create"
+                                                    iconPosition="right" onclick="{!c.createPurchaseOrder}" />
                                             </aura:set>
                                         </aura:if>
                                     </span>
-                                </div> 
-                            </div> 
-                        </div> 
-                    </div> 
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-            </lightning:accordionSection> 
+            </lightning:accordionSection>
         </lightning:accordion>
     </aura:if>
 </aura:component>

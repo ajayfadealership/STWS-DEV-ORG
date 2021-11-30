@@ -1,5 +1,5 @@
 <apex:page showHeader="false" sidebar="false" standardStylesheets="false" applyBodyTag="false" applyHtmlTag="false"
-     controller="BoatBuilderController">
+     controller="BoatBuilderController" renderAs="pdf">
     <html>
 
     <head>
@@ -15,33 +15,11 @@
             <div class="container"> 
 
                 <!-- Header Block -->
-                <div class="row" id="header-block">
-                    <!-- Logo Block -->
-                    <div class="col-5">
-                    		<apex:outputPanel rendered="{!if(CompanyBanner != '', true, false)}">
-                        		<img src="/servlet/servlet.FileDownload?file={!CompanyBanner}" style="height: 93px; width: {!width}%;"/>
-                        </apex:outputPanel>
-                    </div>
-
-                    <!-- Address Block-->
-                    <div class="col-7">
-                        <div class="row italic">
-                            <div class="col-6">
-                                <p class="title2">{!objSLC2.MasterLabel}</p> 
-                                <p class="address-line">{!objSLC2.Street__c} </p>
-                                <p class="address-line">{!objSLC2.City__c} {!objSLC2.State__c} {!objSLC2.BOATBUILDING__Zip_Postal_Code__c}</p>
-                                <p class="address-line">{!objSLC2.Phone__c}</p>
-                            </div> 
-                            <div class="col-6">
-                                <p class="title2">{!objSLC1.MasterLabel}</p> 
-                                <p class="address-line">{!objSLC1.Street__c} </p>
-                                <p class="address-line">{!objSLC1.City__c} {!objSLC1.State__c} {!objSLC1.BOATBUILDING__Zip_Postal_Code__c}</p>
-                                <p class="address-line">{!objSLC1.Phone__c}</p>
-                            </div>
-                        </div>
-                    </div>
+                <div class="col-12 center" style="padding-top: 13px;">
+                       <apex:outputPanel rendered="{!if(strDocId != '', true, false)}">
+                           <img src="/servlet/servlet.FileDownload?file={!strDocId}" style="height: 150px; width: 100%;"/>
+                    </apex:outputPanel>
                 </div>
-
                 <!-- Website Block -->
                 <div class="row" id="website-block">
                     <div class="col-12 center title italic">
@@ -90,12 +68,22 @@
                             <div id="image-block" class="row">
                                 <div class="col-6" style="margin: 0px 0px 0px 2%; float: right;">
                                     <apex:outputPanel rendered="{!if(quoteImg2 != '', true, false)}">
+                                        <apex:outputPanel rendered="{!isBowContent}">
+                                            <img src="/sfc/servlet.shepherd/version/renditionDownload?rendition=ORIGINAL_jpg&versionId={!quoteImg2}" style="width: 100%; " />
+                                        </apex:outputPanel>
+                                        <apex:outputPanel rendered="{!!isBowContent}">
                                             <img src="/servlet/servlet.FileDownload?file={!quoteImg2}" style="width: 100%; " />
+                                        </apex:outputPanel>
                                     </apex:outputPanel>
                                 </div>
                                 <div class="col-6" style="margin: 0px; float: right;">
                                     <apex:outputPanel rendered="{!if(quoteImg1 != '', true, false)}">
+                                        <apex:outputPanel rendered="{!isSideContent}">
+                                            <img src="/sfc/servlet.shepherd/version/renditionDownload?rendition=ORIGINAL_jpg&versionId={!quoteImg1}" style="width: 100%; " />
+                                        </apex:outputPanel>
+                                        <apex:outputPanel rendered="{!!isSideContent}">
                                             <img src="/servlet/servlet.FileDownload?file={!quoteImg1}" style="width: 100%; " />
+                                        </apex:outputPanel>
                                     </apex:outputPanel>
                                 </div>
                             </div>
@@ -329,9 +317,17 @@
                             </div>
                             <div class="col-6">
                                 <div class="row">
-                                    <div class="col-12 value-group">
-                                        <div class="col-5 label">Boat Tax: </div>
+                                    <div class="col-12 value-group" style="display : {!if(isCanadian , 'none', 'block')}">
+                                        <div class="col-5 label">Boat Tax: <br/> ({!objQuote2.State__c})</div>
                                         <div class="col-7 val"><apex:outputField value="{!objQuote2.Boat_Sales_Tax2__c}"/></div>
+                                    </div>
+                                    <div class="col-12 value-group" style="display : {!if(!isCanadian , 'none', 'block')}">
+                                        <div class="col-5 label"><b>GST(<apex:outputField value="{!objQuote2.GST__c}"/>)</b>: </div>
+                                        <div class="col-7 val"><apex:outputField value="{!objQuote2.GST_D__c}"/></div>
+                                    </div>
+                                    <div class="col-12 value-group" style="display : {!if(!isCanadian , 'none', 'block')}">
+                                        <div class="col-5 label"><b>PST(<apex:outputField value="{!objQuote2.PST__c}"/>)</b>: </div>
+                                        <div class="col-7 val"><apex:outputField value="{!objQuote2.PST_D__c}"/></div>
                                     </div>
                                     <div class="col-12 value-group">
                                         <div class="col-5 label">Trailer Tax: </div>
@@ -447,9 +443,14 @@
                                 <div class="row">
                                     <apex:repeat var="objSOC" value="{!objQOCW.lstSelectedOptionCategory}">
                                         <div class="col-1 b-opt-v"></div>
-                                        <div class="col-8 b-opt-v">{!objSOC.Name__c}</div>
+                                        <div class="col-7 b-opt-v">{!objSOC.Name__c}</div>
+                                        <div class="col-1 b-opt-v">
+                                            <apex:outputText value="{0, number, 0}">
+                                                <apex:param value="{!objSOC.Quantity__c}" />
+                                            </apex:outputText>
+                                        </div>
                                         <apex:outputPanel rendered="{!objQuote2.Show_MSRP_Option_Pricing__c}">
-                                            <div class="col-3 b-opt-v right">{!objSOC.Total_Price__c}</div>
+                                            <div class="col-3 b-opt-v right">{!objSOC.Total_Retail_Price__c}</div>
                                         </apex:outputPanel>
                                     </apex:repeat>
                                 </div>
@@ -462,9 +463,14 @@
                             <div class="row">
                                 <apex:repeat var="objSOC" value="{!objQOCW.lstSelectedOptionCategory}">
                                     <div class="col-1 b-opt-v"></div>
-                                    <div class="col-8 b-opt-v">{!objSOC.Name__c}</div>
+                                    <div class="col-7 b-opt-v">{!objSOC.Name__c}</div>
+                                    <div class="col-1 b-opt-v">
+                                        <apex:outputText value="{0, number, 0}">
+                                            <apex:param value="{!objSOC.Quantity__c}" />
+                                        </apex:outputText> 
+                                    </div>
                                     <apex:outputPanel rendered="{!objQuote2.Show_MSRP_Option_Pricing__c}">
-                                        <div class="col-3 b-opt-v right">{!objSOC.Total_Price__c}</div>
+                                        <div class="col-3 b-opt-v right">{!objSOC.Total_Retail_Price__c}</div>
                                     </apex:outputPanel>
                                 </apex:repeat>
                             </div>

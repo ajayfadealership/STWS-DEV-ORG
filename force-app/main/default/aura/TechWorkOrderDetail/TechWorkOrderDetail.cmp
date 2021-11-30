@@ -23,5 +23,20 @@
                 </aura:set>
             </aura:if>
         </lightning:accordionSection>
+        <lightning:accordionSection name="woPhotos" label="Upload Photos">
+             <div class="helptextClass"><lightning:helptext content="Upload photos for this work order."/></div>
+            <div class="slds-grid slds-wrap">
+               
+                <div class="slds-col slds-size_1-of-1  slds-medium-size_1-of-2 slds-large-size_2-of-4">
+                    <lightning:fileUpload multiple="true" recordId="{!v.recordId}" accept=".pdf, .png, .jpeg, .jpg" label="" onuploadfinished="{!c.uplaodFinished}" />
+                </div>
+                <div class="slds-col slds-size_1-of-1  slds-medium-size_1-of-2 slds-large-size_2-of-4 ">
+                    <lightning:button variant="base" label="Refresh" class="saveJobs" title="Click to see file preview" onclick="{! c.uplaodFinished }"  iconName="action:preview" iconPosition="right"/>
+                </div>
+            </div>
+                <c:WorkOrderPhotoInspectionPreview recordId="{!v.recordId}" aura:id="photoCmp"/> 
+            
+        </lightning:accordionSection>
+        
     </lightning:accordion>
 </aura:component>

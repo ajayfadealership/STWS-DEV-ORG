@@ -1,57 +1,71 @@
 public class PartTriggerHandler {
     public static void onAfterUpdate(Map<Id, Part__c> newMapPrt, Map<Id, Part__c> oldMapPrt) {
         if(runOnce()){
-            updateInventoryFromPart(newMapPrt);
+            updateInventoryFromPart(newMapPrt, oldMapPrt);
+            BOATBUILDING__WooCmmerce_Config__c objWC = BOATBUILDING__WooCmmerce_Config__c.getOrgDefaults();
+            if(objWC != null) {
+                Set<String> setPartId = new Set<String>();
+                Set<String> setPartIdShopify = new Set<String>();
+                for(Part__c objPart: newMapPrt.values()) {
+                    if(String.isNotBlank(objPart.Woocommerce_Id__c) && objPart.Quantity__c != null  && objPart.Quantity__c != oldMapPrt.get(objPart.Id).Quantity__c) {
+                        if(objPart.Part__c != null) {
+                            setPartId.add(objPart.Part__c);
+                        } else { 
+                            setPartId.add(objPart.Id); 
+                        } 
+                    } 
+                    if(String.isNotBlank(objPart.BOATBUILDING__Shopify_Product_Id__c) && objPart.Quantity__c != null  && objPart.Quantity__c != oldMapPrt.get(objPart.Id).Quantity__c) {
+                        if(objPart.Part__c != null) {
+                            setPartIdShopify.add(objPart.Part__c);
+                        } else { 
+                            setPartIdShopify.add(objPart.Id); 
+                        } 
+                    } 
+                } 
+                if(!setPartId.isEmpty() && setPartId.size() < 10) { 
+                    for(String str: setPartId) {  
+                        WooCommerce_Connect.savePartsToWooCommerce(str);
+                    }
+                }
+                if(!setPartIdShopify.isEmpty() && setPartIdShopify.size() <=2) { 
+                    for(String str: setPartIdShopify) {  
+                        Shopify_Connect.savePartsToShopifyFuture(str); 
+                    }
+                }
+            } 
         }
-        
-        /*try {
-Map<String, Part__c> mapPrt = new Map<String, Part__c>();
-for(Id srtPrtId: newMapPrt.keySet()) {
-mapPrt.put(newMapPrt.get(srtPrtId).Part_Number__c, newMapPrt.get(srtPrtId));
-} 
-
-List<Inventory__c> lstPartInv = new List<Inventory__c>();
-
-for(Inventory__c objInv: [SELECT Id, Part_MSRP_Price__c, Weight__c, Part_Name__c, Map_Price__c, Size__c, 
-Color__c, Cost__c, Minimum_Amount__c, Part_Location__c, Part_Number__c, BOATBUILDING__Family__c,
-BOATBUILDING__Category__c
-FROM Inventory__c WHERE Part_Number__c IN: mapPrt.keySet()]) 
-{
-Part__c objPrt = mapPrt.get(objInv.Part_Number__c);
-objInv.Part_Name__c = objPrt.Name;
-objInv.Part_MSRP_Price__c = objPrt.Retail_Price__c;
-objInv.Weight__c = objPrt.Weight__c;
-objInv.Map_Price__c = objPrt.Map_Price__c;
-objInv.Size__c = objPrt.Part_Size__c;
-objInv.Color__c = objPrt.Part_Color__c;
-objInv.Cost__c = objPrt.Part_Cost__c;
-objInv.Minimum_Amount__c = objPrt.Minimum_Amount__c;
-objInv.Part_Location__c = objPrt.Location__c;
-
-lstPartInv.add(objInv); 
-}
-if(!lstPartInv.isEmpty()) {
-update lstPartInv; 
-}
-} catch(Exception ex) {
-System.debug('Debug Log For Exception: ' + ex);
-}*/
     } 
      public static void onAfterInsert(List<Part__c> lstPart){
       	addInventoryByPart(lstPart);   
      } 
-    public static void updateInventoryFromPart(Map<Id, Part__c> newMapPrt) {
+    public static void updateInventoryFromPart(Map<Id, Part__c> newMapPrt, Map<Id, Part__c> oldMapPrt) {
         
         List<Inventory__c> listInv = [SELECT Id, Part_Number__c, BOATBUILDING__Family__c, 
                                       BOATBUILDING__Category__c, BOATBUILDING__Part__c 
                                       FROM Inventory__c WHERE BOATBUILDING__Part__c IN: newMapPrt.keySet()];        
         
         if(!listInv.isEmpty()){
+            List<Inventory__c> lstInvUpdate = new List<Inventory__c>();
             for(Inventory__c inv: listInv){
-                inv.BOATBUILDING__Category__c = newMapPrt.get(inv.BOATBUILDING__Part__c).BOATBUILDING__Category1__c;
-                inv.BOATBUILDING__Family__c = newMapPrt.get(inv.BOATBUILDING__Part__c).BOATBUILDING__Family1__c;
+                Boolean flag = true;
+                if(oldMapPrt.containsKey(inv.Id) && newMapPrt.get(inv.BOATBUILDING__Part__c).BOATBUILDING__Category1__c != oldMapPrt.get(inv.BOATBUILDING__Part__c).BOATBUILDING__Category1__c) {
+                    inv.BOATBUILDING__Category__c = newMapPrt.get(inv.BOATBUILDING__Part__c).BOATBUILDING__Category1__c; 
+                    flag = false;
+                }
+                if(oldMapPrt.containsKey(inv.Id) && newMapPrt.get(inv.BOATBUILDING__Part__c).BOATBUILDING__Family1__c != oldMapPrt.get(inv.BOATBUILDING__Part__c).BOATBUILDING__Family1__c) {
+                    inv.BOATBUILDING__Family__c = newMapPrt.get(inv.BOATBUILDING__Part__c).BOATBUILDING__Family1__c;
+                    flag = false;
+                }
+                if(!flag) {
+                    lstInvUpdate.add(inv);
+                }
             }
-            update listInv;
+            System.debug('>>>>>>>lstInvUpdate: '+lstInvUpdate);
+            
+            if(!lstInvUpdate.isEmpty()) {
+                update lstInvUpdate;
+            }
+            
         }
     }
        

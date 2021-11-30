@@ -37,6 +37,14 @@
                         </div>
                     </div>
                 </div>
+                
+                <div class = "slds-col slds-size--1-of-1 slds-medium-size--2-of-6 slds-col--padded">
+                    <div class = "slds-form-element">
+                        <div class = "slds-form-element__control">
+                            <lightning:inputField fieldName="BOATBUILDING__Invoice_for__c" />
+                        </div>
+                    </div>
+                </div>
                 <div class = "slds-col slds-size--1-of-1 slds-medium-size--2-of-6 slds-col--padded">
                     <div class = "slds-form-element">
                         <div class = "slds-form-element__control">
@@ -117,13 +125,7 @@
                     </div>
                 </div>
             </div>
-            <div class = "slds-col--padded">
-                <div class = "slds-form-element">
-                    <div class = "slds-form-element__control">
-                        <!--<lightning:button onclick="{!c.backToList}" label="Back To List" iconName="utility:back" class = "slds-m-top_medium"/> -->
-                    </div>
-                </div>
-            </div>
+          
         </div>
     </lightning:recordEditForm> 
     <aura:if isTrue="{!!empty(v.recordId)}">

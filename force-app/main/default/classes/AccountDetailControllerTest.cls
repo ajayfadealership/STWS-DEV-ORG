@@ -6,7 +6,7 @@ public class AccountDetailControllerTest {
         objAcc.Name='Test';
         objAcc.Phone='Test';
         objAcc.BOATBUILDING__Account_Customer_Type__c = 'Test';
-        objAcc.Id = AccountWizardController.createAccountApex(objAcc);
+           objAcc.Id = AccountWizardController.createAccountApex(objAcc);
 //        insert objAcc;
         ApexPages.currentPage().getParameters().put('Id',objAcc.Id);
         

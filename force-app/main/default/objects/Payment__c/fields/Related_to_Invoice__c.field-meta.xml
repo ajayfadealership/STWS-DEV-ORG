@@ -4,7 +4,7 @@
     <deprecated>false</deprecated>
     <externalId>false</externalId>
     <inlineHelpText>Specifies the Invoice to which the Payment is being made.</inlineHelpText>
-    <label>Related to Invoice</label>
+    <label>Related to Invoice(Deprecated)</label>
     <lookupFilter>
         <active>true</active>
         <filterItems>
@@ -15,6 +15,7 @@
         <isOptional>true</isOptional>
     </lookupFilter>
     <referenceTo>Invoice__c</referenceTo>
+    <relationshipLabel>Payments(Deprecated)</relationshipLabel>
     <relationshipName>Payments</relationshipName>
     <relationshipOrder>0</relationshipOrder>
     <reparentableMasterDetail>false</reparentableMasterDetail>

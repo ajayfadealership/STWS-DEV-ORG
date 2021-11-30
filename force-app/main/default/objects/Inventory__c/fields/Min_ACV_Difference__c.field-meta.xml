@@ -3,7 +3,7 @@
     <fullName>Min_ACV_Difference__c</fullName>
     <deprecated>false</deprecated>
     <externalId>false</externalId>
-    <formula>IF(RecordType.DeveloperName = &#39;Used_Boats&#39;, Minimum_Sell_Price__c - ACV__c,0)</formula>
+    <formula>IF(RecordType.DeveloperName = &apos;Used_Boats&apos;, Minimum_Sell_Price__c - ACV__c,0)</formula>
     <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
     <label>Min/ACV  Difference</label>
     <precision>18</precision>

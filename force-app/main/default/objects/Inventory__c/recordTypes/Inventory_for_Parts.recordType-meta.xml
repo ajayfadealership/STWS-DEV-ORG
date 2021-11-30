@@ -62,6 +62,17 @@
         </values>
     </picklistValues>
     <picklistValues>
+        <picklist>Credit_Approval__c</picklist>
+        <values>
+            <fullName>No</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Yes</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
         <picklist>Dealer_Status__c</picklist>
         <values>
             <fullName>Dealer Stock</fullName>
@@ -103,6 +114,17 @@
         </values>
         <values>
             <fullName>Website</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>External_Website__c</picklist>
+        <values>
+            <fullName>Boat Trader</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Only Inboards</fullName>
             <default>false</default>
         </values>
     </picklistValues>
@@ -260,6 +282,10 @@
     <picklistValues>
         <picklist>Floor_Plan_Bank__c</picklist>
         <values>
+            <fullName>North Pointe Send-It</fullName>
+            <default>false</default>
+        </values>
+        <values>
             <fullName>NorthPointe</fullName>
             <default>false</default>
         </values>
@@ -288,9 +314,120 @@
         </values>
     </picklistValues>
     <picklistValues>
+        <picklist>Instant_Quote_Margin__c</picklist>
+        <values>
+            <fullName>%2E10</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>%2E11</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>%2E12</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>%2E13</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>%2E14</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>%2E15</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>%2E16</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>%2E17</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>%2E18</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>%2E19</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>%2E20</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>%2E21</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>%2E22</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>%2E23</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>%2E24</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>%2E25</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>%2E26</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>%2E27</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>%2E28</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>%2E29</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>%2E30</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>%2E31</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>%2E32</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>%2E33</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>%2E34</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>%2E35</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
         <picklist>Location__c</picklist>
         <values>
             <fullName>Over Flow Lot</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Raleigh Showroom</fullName>
             <default>false</default>
         </values>
         <values>
@@ -310,6 +447,21 @@
         </values>
         <values>
             <fullName>Dealership</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Production_Status__c</picklist>
+        <values>
+            <fullName>Need to Color</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Need to Option and Color</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Ready for Production</fullName>
             <default>false</default>
         </values>
     </picklistValues>
@@ -383,6 +535,10 @@
         <picklist>Store_Location__c</picklist>
         <values>
             <fullName>Other</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>STWS</fullName>
             <default>false</default>
         </values>
     </picklistValues>
@@ -622,6 +778,113 @@
         </values>
     </picklistValues>
     <picklistValues>
+        <picklist>Web_Price_Margin__c</picklist>
+        <values>
+            <fullName>%2E10</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>%2E11</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>%2E12</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>%2E13</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>%2E14</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>%2E15</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>%2E16</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>%2E17</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>%2E18</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>%2E19</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>%2E20</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>%2E21</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>%2E22</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>%2E23</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>%2E24</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>%2E25</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>%2E26</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>%2E27</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>%2E28</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>%2E29</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>%2E30</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>%2E31</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>%2E32</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>%2E33</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>%2E34</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>%2E35</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
         <picklist>Web_Propulsion__c</picklist>
         <values>
             <fullName>Inboard</fullName>
@@ -641,6 +904,29 @@
         </values>
         <values>
             <fullName>V-drive</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Web_Status__c</picklist>
+        <values>
+            <fullName>Consignment</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>New Arrival</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>One-Owner</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Sale Pending</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Sold</fullName>
             <default>false</default>
         </values>
     </picklistValues>

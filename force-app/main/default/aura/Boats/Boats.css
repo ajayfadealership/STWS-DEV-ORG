@@ -1,0 +1,7 @@
+.THIS .border1{
+    border-radius: inherit !important;
+    margin: 6px;
+}
+.THIS lightning-primitive-header-actions {
+    display: none;
+}

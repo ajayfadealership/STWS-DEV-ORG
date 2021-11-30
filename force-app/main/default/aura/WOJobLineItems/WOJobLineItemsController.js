@@ -5,25 +5,14 @@
             var queryTerm = cmp.find('enter-search').get('v.value');
             if(queryTerm.length > 3){
                 helper.searchParts(cmp, evt, helper);
-                var results = [];
-
-                var result1 = {};
-                result1.text = 'Ajay';
-                result1.val='123';
-        
-                var result2 = {};
-                result2.text = 'Sajal';
-                result2.val='456';
-                results.push(result1);
-                results.push(result2);
-                //cmp.set("v.searchResults", results);  
+               
             }
         
     },
     handlonfocus : function (component, event, helper) {
         var searchAction = component.get("c.searchPartsfromInventoryAndParts");
         var queryTerm = 'recentlyViewed'; 
-        console.log('querytermmmmmmmmmmm');
+        //console.log('querytermmmmmmmmmmm');
         searchAction.setParams({
             "searchStr" : queryTerm
         });
@@ -31,10 +20,10 @@
             var state = response.getState();
             if(state === "SUCCESS"){
                 component.set("v.isSearchLoading", false);
-                console.log('searchResult',JSON.parse(response.getReturnValue()));
+                //console.log('searchResult',JSON.parse(response.getReturnValue()));
                 component.set("v.searchResults", JSON.parse(response.getReturnValue()));
             }else{
-                console.log('Onload search error',response.getError());
+                //console.log('Onload search error',response.getError());
             }
                 
         });
@@ -50,7 +39,7 @@
        }
     }, 
     itemSelected : function(component, event, helper){
-        console.log('liselected',JSON.stringify(event.target.dataset));
+        //console.log('liselected',JSON.stringify(event.target.dataset));
         var label = event.currentTarget.dataset.label;
         var value = event.currentTarget.dataset.value;
         //alert(label+'---'+value);
@@ -59,12 +48,12 @@
        component.set("v.selectedRecordId",value);
        
        var searchResultArray = component.get("v.searchResults");
-       console.log('searchResultArray',searchResultArray);
-       console.log('searchResultArrayValue',value);
+       //console.log('searchResultArray',searchResultArray);
+       //console.log('searchResultArrayValue',value);
        for(var i = 0; i < searchResultArray.length; i++){
-        console.log('selectedpartsbefore',searchResultArray[i]);
+        //console.log('selectedpartsbefore',searchResultArray[i]);
             if(searchResultArray[i].partId == value){
-                console.log('selectedparts',searchResultArray[i]);
+                //console.log('selectedparts',searchResultArray[i]);
                 component.set("v.JLI.BOATBUILDING__Quantity__c",searchResultArray[i].quantity); 
                 component.set("v.JLI.BOATBUILDING__Price__c",searchResultArray[i].partMSRP); 
                 component.set("v.JLI.BOATBUILDING__Dealer_Price__c",searchResultArray[i].partCost); 

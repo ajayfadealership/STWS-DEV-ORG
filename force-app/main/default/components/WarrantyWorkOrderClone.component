@@ -2003,10 +2003,10 @@
     
     $("#WwoNewJobBtn").click(function(){  
         if(document.getElementById('pge:frm:wrntyWrkOrdrCompCall:wrkOrdr:WwoconWrkId2_lkid').value != '000000000000000' &&  document.getElementById('pge:frm:wrntyWrkOrdrCompCall:wrkOrdr:WwoconWrkId2').value != ''&& document.getElementById('pge:frm:wrntyWrkOrdrCompCall:wrkOrdr:WwoboatLookId_lkid').value != '000000000000000' && document.getElementById('pge:frm:wrntyWrkOrdrCompCall:wrkOrdr:WwoboatLookId').value != ''){
-            if(document.getElementById('Wwonewjobworequested').value != '' && document.getElementById('WwoWorkTypeIdselect').value != '0' && document.getElementById('pge:frm:wrntyWrkOrdrCompCall:wrkOrdr:WwoTypeWorkId').value != ''
+            if(document.getElementById('Wwonewjobworequested').value != '' && document.getElementById('WwoWorkTypeIdselect').value != null && document.getElementById('WwoWorkTypeIdselect').value != '' && document.getElementById('pge:frm:wrntyWrkOrdrCompCall:wrkOrdr:WwoTypeWorkId').value != ''
                && document.getElementById('WwonewjobNameId').value != ''){
                 //$("#Wwohiddenbtn").css("display","");
-                $("#WwoShowjobList").css("display", "");
+                $("#WwoShowjobList").css("display", ""); 
                 var WwojobName = document.getElementById('WwonewjobNameId').value;
                 var Wwonewjobworequested = document.getElementById('Wwonewjobworequested').value;
                 var WwonewjobWorkTypeId = $("#WwoWorkTypeIdselect option:selected").text(); 
@@ -2034,7 +2034,7 @@
                 addClaimStatus(WwoDivnum, '');
                 $("#WwonewjobNameId").val("");
                 $("#Wwonewjobworequested").val("");  
-                $("#WwoWorkTypeIdselect").val("0");
+                $("#WwoWorkTypeIdselect").val("");
                 document.getElementById('pge:frm:wrntyWrkOrdrCompCall:wrkOrdr:WwoTypeWorkId').value = "";
             }
             else{

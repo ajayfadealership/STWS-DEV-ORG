@@ -354,8 +354,8 @@ public class NewQBConnectTest {
             String QBPaymentID = parseResponseDom(doc);
             System.debug('==QBPaymentID==='+QBPaymentID);
             
-            BOATBUILDING__Payment__c PaymentToUpdate = [Select id, BOATBUILDING__QuickBook_Payment_ID__c from BOATBUILDING__Payment__c where id =: PaymentId];
-            PaymentToUpdate.BOATBUILDING__QuickBook_Payment_ID__c = QBPaymentID;
+            BOATBUILDING__Payments__c PaymentToUpdate = [Select id, BOATBUILDING__QuickBook_WO_Payment_ID__c from BOATBUILDING__Payments__c where id =: PaymentId];
+            PaymentToUpdate.BOATBUILDING__QuickBook_WO_Payment_ID__c = QBPaymentID;
             
             update PaymentToUpdate;
         }else{
@@ -404,7 +404,7 @@ public class NewQBConnectTest {
             String QBPaymentID = parseResponseDom(doc);
             System.debug('==QBPaymentID==='+QBPaymentID);
             
-            BOATBUILDING__Work_Order_Payment__c WOPaymentToUpdate = [Select id, BOATBUILDING__QuickBook_WO_Payment_ID__c from BOATBUILDING__Work_Order_Payment__c where id =: PaymentId];
+            BOATBUILDING__Payments__c WOPaymentToUpdate = [Select id, BOATBUILDING__QuickBook_WO_Payment_ID__c from BOATBUILDING__Payments__c WHERE Id =: PaymentId];
             WOPaymentToUpdate.BOATBUILDING__QuickBook_WO_Payment_ID__c = QBPaymentID;
             
             update WOPaymentToUpdate;

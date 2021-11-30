@@ -2,7 +2,7 @@
 <CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
     <fullName>Trailer_Last_Service__c</fullName>
     <deprecated>false</deprecated>
-    <description>Specifies the Trailer&#39;s Last Service</description>
+    <description>Specifies the Trailer&apos;s Last Service</description>
     <externalId>false</externalId>
     <label>Trailer Last Service</label>
     <required>false</required>

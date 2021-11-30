@@ -3,7 +3,7 @@
     <fullName>Balance__c</fullName>
     <deprecated>false</deprecated>
     <externalId>false</externalId>
-    <formula>Total_Amount_on_Invoice__c - Total_Payment_Formula__c -  Discount_With_Promocode__c</formula>
+    <formula>if(NOT(ISNULL(Total_Payment__c)), Total_Amount_on_Invoice__c - Total_Payment__c - Discount_With_Promocode__c , Total_Amount_on_Invoice__c - Discount_With_Promocode__c)</formula>
     <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
     <inlineHelpText>Formula: Total Amount - Total Payment</inlineHelpText>
     <label>Balance</label>

@@ -5,108 +5,149 @@
     <aura:attribute name="showSpinner" type="boolean" default="false" access="global"/>
     <aura:attribute name="showform" type="boolean" default="false" access="global"/>
     <aura:attribute name="showlist" type="boolean" default="true" access="global"/>
+    <lightning:navigation aura:id = "navService" /> 
     <aura:if isTrue="{!v.showSpinner}">
         <lightning:spinner />
-    </aura:if>
-    
-    <lightning:recordEditForm aura:id="recordEditForm" onload="{!c.handleLoad}" onsubmit="{!c.handleSubmit}" onerror="{!c.handleError}" onsuccess="{!c.handleSuccess}" recordTypeId="{!v.attrRecordType}" objectApiName="BOATBUILDING__Part__c">
+</aura:if>
+     <div class="slds-grid slds-gutters slds-wrap slds-box slds-theme_default "> 
+                   <h2>
+                     <Center>
+                    <span class="slds-text-heading--small" style="text-align:center"> &nbsp;&nbsp; <b>Create New Part</b></span>
+                     </Center>
+                     </h2>
+                </div>
+           
+  <div class="slds-grid slds-gutters slds-wrap slds-box slds-theme_default "> 
+            
+      <lightning:recordEditForm aura:id="recordEditForm" onload="{!c.handleLoad}" onsubmit="{!c.handleSubmit}" onerror="{!c.handleError}" onsuccess="{!c.handleSuccess}" recordTypeId="{!v.attrRecordType}" objectApiName="BOATBUILDING__Part__c">
+        <div class="slds-grid slds-wrap" >
         <div class = "slds-col slds-size--1-of-1 slds-p-top_x-large slds-p-bottom_x-large" style="background: #fff;">
             <div class = "slds-grid slds-wrap" >
                 <div class = "slds-col slds-size--1-of-1 slds-medium-size--2-of-6 slds-col--padded">
                     <div class = "slds-form-element">
                         <div class = "slds-form-element__control">
-                            <lightning:inputField fieldName="BOATBUILDING__Vendor_Name__c" />
+                              <label class="slds-form-element__label" for="form-element-03">
+                            <abbr class="slds-required" title="required">* </abbr> Part Name</label>
+                            <lightning:inputField fieldName="Name" required="true" variant="label-hidden" />
                         </div>
                     </div>
                 </div>
                 <div class = "slds-col slds-size--1-of-1 slds-medium-size--2-of-6 slds-col--padded">
                     <div class = "slds-form-element">
                         <div class = "slds-form-element__control">
-                            <lightning:inputField fieldName="BOATBUILDING__Part_Number__c" />
+                              <label class="slds-form-element__label" for="form-element-03">
+                               <abbr>&nbsp;&nbsp;&nbsp;</abbr>Part </label>
+                            <lightning:inputField fieldName="BOATBUILDING__Part__c"  variant="label-hidden" />
                         </div>
                     </div>
                 </div>
                 <div class = "slds-col slds-size--1-of-1 slds-medium-size--2-of-6 slds-col--padded">
                     <div class = "slds-form-element">
                         <div class = "slds-form-element__control">
-                            <lightning:inputField fieldName="Name" />
+                             <label class="slds-form-element__label" for="form-element-03">
+                            <abbr class="slds-required" title="required">* </abbr> Vendor</label>
+                            <lightning:inputField fieldName="BOATBUILDING__Vendor_Name__c"   required="true"  variant="label-hidden" />
                         </div>
                     </div>
                 </div>
                 <div class = "slds-col slds-size--1-of-1 slds-medium-size--2-of-6 slds-col--padded">
                     <div class = "slds-form-element">
                         <div class = "slds-form-element__control">
-                            <lightning:inputField fieldName="BOATBUILDING__Retail_Price__c" />
+                             <label class="slds-form-element__label" for="form-element-03">
+                            <abbr class="slds-required" title="required">* </abbr>Part Number</label>
+                            <lightning:inputField fieldName="BOATBUILDING__Part_Number__c"  required="true"  variant="label-hidden" />
+                        </div>
+                    </div>
+                </div>
+                <div class = "slds-col slds-size--1-of-1 slds-medium-size--2-of-6 slds-col--padded">
+                    <div class = "slds-form-element">
+  
+                        <div class = "slds-form-element__control">
+                             <label class="slds-form-element__label" for="form-element-03">
+                            <abbr class="slds-required" title="required">* </abbr>SKU</label>
+                             <lightning:helptext iconName="utility:info" content="If the product doesn’t have a SKU Please enter the Part Number." />
+                            <lightning:inputField fieldName="BOATBUILDING__SKU__c" required="true" variant="label-hidden"   />
+                        </div> 
+                    </div>
+                </div>
+                <div class = "slds-col slds-size--1-of-1 slds-medium-size--2-of-6 slds-col--padded">
+                    <div class = "slds-form-element">
+                        <div class = "slds-form-element__control">
+                             <label class="slds-form-element__label" for="form-element-03">
+                                <abbr>&nbsp;&nbsp;</abbr>&nbsp;Barcode</label>
+                            <lightning:inputField fieldName="BOATBUILDING__Barcode__c" variant="label-hidden" />
                         </div>
                     </div>
                 </div>
                 <div class = "slds-col slds-size--1-of-1 slds-medium-size--2-of-6 slds-col--padded">
                     <div class = "slds-form-element">
                         <div class = "slds-form-element__control">
-                            <lightning:inputField fieldName="BOATBUILDING__Map_Price__c" />
+                            <label class="slds-form-element__label" for="form-element-03">
+                               <abbr>&nbsp;&nbsp;</abbr>Part Size</label>
+                            <lightning:inputField fieldName="BOATBUILDING__Part_Size__c" variant="label-hidden" />
                         </div>
                     </div>
                 </div>
                 <div class = "slds-col slds-size--1-of-1 slds-medium-size--2-of-6 slds-col--padded">
                     <div class = "slds-form-element">
                         <div class = "slds-form-element__control">
-                            <lightning:inputField fieldName="BOATBUILDING__Part_Color__c" />
+                            <label class="slds-form-element__label" for="form-element-03">
+                              <abbr>&nbsp;&nbsp;</abbr> Part Color</label>
+                            <lightning:inputField fieldName="BOATBUILDING__Part_Color__c"  variant="label-hidden" />
                         </div>
                     </div>
                 </div>
                 <div class = "slds-col slds-size--1-of-1 slds-medium-size--2-of-6 slds-col--padded">
                     <div class = "slds-form-element">
                         <div class = "slds-form-element__control">
-                            <lightning:inputField fieldName="BOATBUILDING__Part_Size__c" />
+                            <label class="slds-form-element__label" for="form-element-03">
+                              <abbr>&nbsp;&nbsp;</abbr> Part Gender</label>
+                            <lightning:inputField fieldName="BOATBUILDING__Part_Gender__c" variant="label-hidden"  />
                         </div>
                     </div>
                 </div>
                 <div class = "slds-col slds-size--1-of-1 slds-medium-size--2-of-6 slds-col--padded">
                     <div class = "slds-form-element">
                         <div class = "slds-form-element__control">
-                            <lightning:inputField fieldName="BOATBUILDING__Discount__c" />
+                             <label class="slds-form-element__label" for="form-element-03">
+                             <abbr class="slds-required" title="required">* </abbr>Part Cost</label>
+                            <lightning:inputField fieldName="BOATBUILDING__Part_Cost__c"  required="true" variant="label-hidden"  />
                         </div>
                     </div>
                 </div>
                 <div class = "slds-col slds-size--1-of-1 slds-medium-size--2-of-6 slds-col--padded">
                     <div class = "slds-form-element">
                         <div class = "slds-form-element__control">
-                            <lightning:inputField fieldName="BOATBUILDING__Part_Cost__c" />
+                            <label class="slds-form-element__label" for="form-element-03">
+                             <abbr class="slds-required" title="required">* </abbr>Retail Price</label>
+                            <lightning:inputField fieldName="BOATBUILDING__Retail_Price__c" required="true" variant="label-hidden" />
                         </div>
                     </div>
                 </div>
                 <div class = "slds-col slds-size--1-of-1 slds-medium-size--2-of-6 slds-col--padded">
                     <div class = "slds-form-element">
                         <div class = "slds-form-element__control">
-                            <lightning:inputField fieldName="BOATBUILDING__Category1__c" />
+                            <label class="slds-form-element__label" for="form-element-03">
+                              <abbr>&nbsp;&nbsp;</abbr> Part Year</label>
+                            <lightning:inputField fieldName="BOATBUILDING__Part_Year__c"  variant="label-hidden"/>
                         </div>
                     </div>
                 </div>
                 <div class = "slds-col slds-size--1-of-1 slds-medium-size--2-of-6 slds-col--padded">
                     <div class = "slds-form-element">
                         <div class = "slds-form-element__control">
-                            <lightning:inputField fieldName="BOATBUILDING__Family1__c" />
+                            <label class="slds-form-element__label" for="form-element-03">
+                      <abbr class="slds-required" title="required">* </abbr>Category</label>
+                            <lightning:inputField fieldName="BOATBUILDING__Category1__c" required="true"  variant="label-hidden"  />
                         </div>
                     </div>
                 </div>
                 <div class = "slds-col slds-size--1-of-1 slds-medium-size--2-of-6 slds-col--padded">
                     <div class = "slds-form-element">
                         <div class = "slds-form-element__control">
-                            <lightning:inputField fieldName="BOATBUILDING__Minimum_Amount__c" />
-                        </div>
-                    </div>
-                </div>
-                <div class = "slds-col slds-size--1-of-1 slds-medium-size--2-of-6 slds-col--padded">
-                    <div class = "slds-form-element">
-                        <div class = "slds-form-element__control">
-                            <lightning:inputField fieldName="BOATBUILDING__Weight__c" />
-                        </div>
-                    </div>
-                </div>
-                <div class = "slds-col slds-size--1-of-1 slds-medium-size--2-of-6 slds-col--padded">
-                    <div class = "slds-form-element">
-                        <div class = "slds-form-element__control">
-                            <lightning:inputField fieldName="BOATBUILDING__Location__c" />
+                            <label class="slds-form-element__label" for="form-element-03">
+                              <abbr>&nbsp;&nbsp;</abbr> Family</label>
+                            <lightning:inputField fieldName="BOATBUILDING__Family1__c" variant="label-hidden" />
                         </div>
                     </div>
                 </div>
@@ -114,50 +155,90 @@
                 <div class = "slds-col slds-size--1-of-1 slds-medium-size--2-of-6 slds-col--padded">
                     <div class = "slds-form-element">
                         <div class = "slds-form-element__control">
-                            <lightning:inputField fieldName="BOATBUILDING__Bin__c" />
+                            <label class="slds-form-element__label" for="form-element-03">
+                              <abbr>&nbsp;&nbsp;</abbr> Sub Family</label>
+                            <lightning:inputField fieldName="BOATBUILDING__Sub_Family__c"  variant="label-hidden"/>
                         </div>
                     </div>
                 </div>
                 <div class = "slds-col slds-size--1-of-1 slds-medium-size--2-of-6 slds-col--padded">
                     <div class = "slds-form-element">
                         <div class = "slds-form-element__control">
-                            <lightning:inputField fieldName="BOATBUILDING__Add_Inventory__c" />
+                             <label class="slds-form-element__label" for="form-element-03">
+                            <abbr class="slds-required" title="required">* </abbr> Weight</label>
+                            <lightning:inputField  fieldName="BOATBUILDING__Weight__c"  required="true"  variant="label-hidden"/>
                         </div>
                     </div>
                 </div>
                 <div class = "slds-col slds-size--1-of-1 slds-medium-size--2-of-6 slds-col--padded">
                     <div class = "slds-form-element">
                         <div class = "slds-form-element__control">
-                            <lightning:inputField fieldName="BOATBUILDING__Store_Location__c" />
+                             <label class="slds-form-element__label" for="form-element-03">
+                             <abbr>&nbsp;&nbsp;</abbr>Location</label>
+                            <lightning:inputField fieldName="BOATBUILDING__Location__c"  variant="label-hidden"/>
                         </div>
                     </div>
                 </div>
                 <div class = "slds-col slds-size--1-of-1 slds-medium-size--2-of-6 slds-col--padded">
                     <div class = "slds-form-element">
                         <div class = "slds-form-element__control">
-                            <lightning:inputField fieldName="BOATBUILDING__OEM_Part_Number__c" />
+                             <label class="slds-form-element__label" for="form-element-03">
+                            <abbr>&nbsp;&nbsp;</abbr> Bin</label>
+                            <lightning:inputField fieldName="BOATBUILDING__Bin__c" variant="label-hidden"  /> 
+                        </div>
+                    </div>
+                </div>
+               <div class = "slds-col slds-size--1-of-1 slds-medium-size--2-of-6 slds-col--padded">
+                    <div class = "slds-form-element">
+                        <div class = "slds-form-element__control">
+                              <label class="slds-form-element__label" for="form-element-03">
+                               <abbr>&nbsp;&nbsp;</abbr>OEM Part Number</label>
+                            <lightning:inputField fieldName="BOATBUILDING__OEM_Part_Number__c" variant="label-hidden" /> 
+                        </div>
+                    </div>
+                </div>
+               
+                <div class = "slds-col slds-size--1-of-1 slds-medium-size--2-of-6 slds-col--padded">
+                    <div class = "slds-form-element">
+                        <div class = "slds-form-element__control">
+                             <span class="slds-form-element__label">Add Inventory</span>
+                            <lightning:inputField fieldName="BOATBUILDING__Add_Inventory__c" variant="label-hidden" /> 
+                        </div>
+                    </div>
+                </div>
+               
+                <div class = "slds-col slds-size--1-of-1 slds-medium-size--2-of-6 slds-col--padded">
+                    <div class = "slds-form-element">
+                        <div class = "slds-form-element__control">
+                             <span class="slds-form-element__label">For Proshop</span>
+                        </div>
+                         <div class = "slds-form-element__control">
+                            <lightning:inputField fieldName="BOATBUILDING__For_Proshop__c" variant="label-hidden" /> 
                         </div>
                     </div>
                 </div>
                 
-            </div>
-            
-        </div>
-        <div class="slds-grid slds-grid--vertical-align-center slds-grid--align-center">
+              <div class="slds-form-element">
+                            <label class="slds-form-element__label" for="form-element-03" style="padding: 2px;">
+                                    <abbr>&nbsp;&nbsp;&nbsp;&nbsp;</abbr>Web Description</label>
+                                  <div class="slds-form-element__control" style = "width: 690%;padding: 15px;">
+                                <lightning:inputField fieldName="BOATBUILDING__Web_Description_long__c" variant="label-hidden" /> 
+                           </div>
+                     </div>
+                     <div class="slds-grid slds-grid--vertical-align-center slds-grid--align-center slds-col slds-size--1-of-1">
             <div class = "slds-col--padded">
                 <div class = "slds-form-element">
                     <div class = "slds-form-element__control">
-                        <lightning:button type="submit" iconName="utility:save" label="Create Part" class = "slds-m-top_medium"/>
+                        <lightning:button variant="brand" type="submit" iconName="utility:save" label="Create Part" class = "slds-m-top_medium"/>
                     </div>   
                 </div>
             </div>
-            <div class = "slds-col--padded">
-                <div class = "slds-form-element">
-                    <div class = "slds-form-element__control">
-                        <lightning:button onclick="{!c.backToList}" label="Back To List" iconName="utility:back" class = "slds-m-top_medium"/>
-                    </div>
-                </div>
-            </div>
+          
         </div>
-    </lightning:recordEditForm>        
+                </div>
+         </div>
+        
+        </div>
+    </lightning:recordEditForm>       
+    </div>
 </aura:component>

@@ -27,7 +27,7 @@ public class BBWizardControllerTest {
         BOATBUILDING__Quote__c objQuote = new BOATBUILDING__Quote__c();
         objQuote.BOATBUILDING__State__c = 'Other';
        
-        insert objQuote;
+        
         
         BOATBUILDING__Inventory__c objInv = new BOATBUILDING__Inventory__c();
         String str2 = String.valueOf(objInv.id);
@@ -53,10 +53,10 @@ public class BBWizardControllerTest {
         
         list<String> lstPP = new list<String>();
         BOATBUILDING__ProductPrice__c objPP = new BOATBUILDING__ProductPrice__c();
-        objPP.BOATBUILDING__Beam__c = 12234;
         objPP.BOATBUILDING__Product_Code__c = 'ghjk';
    
         objPP.BOATBUILDING__Sorting_Order__c =7890;
+        objPP.BOATBUILDING__Option_Category__c = 'Select 1 Color';
         
         insert objPP ;
         lstPP.add(objPP.Id);
@@ -65,6 +65,7 @@ public class BBWizardControllerTest {
         BOATBUILDING__Dealer_Option__c objDO = new BOATBUILDING__Dealer_Option__c ();
         objDO.BOATBUILDING__Cost__c = 2000;
         objDO.BOATBUILDING__Part_Number__c = 'xyz';
+        objDO.Quantity__c = 1;
         objDO.Name = 'test';
         insert objDO;
         lstDO.add('xyz');
@@ -76,10 +77,16 @@ public class BBWizardControllerTest {
         
         String lstDOJSON = JSON.serialize(lstDO1);
         BBWizardController.getApprovalCheck(acv.Id);
-        BBWizardController.updateStateApex(objQuote.Id,'Other');
+       
+        List<String> lst = new List<String>();
+        lst.add('xyza:1');
+        List<String> lstInv = new List<String>();
+        lstInv.add(objPP.Id+':1');
+        Quote__c objQt = BBWizardController.generateQuote(str1,str2,str3,str4,'100','100','100',lstPP,lstInv,lstDO,objQuote,lstDOJSON, lst);
+       // insert objQuote;
+        //BBWizardController.updateStateApex(objQuote.Id,'Other');
         BBWizardController.isNoSalesmanWithoutCost();
         BBWizardController.getState();
-        Quote__c objQt = BBWizardController.generateQuote(str1,str2,str3,str4,'100','100','100',lstPP,lstDO,objQuote,lstDOJSON);
         
         
     }      

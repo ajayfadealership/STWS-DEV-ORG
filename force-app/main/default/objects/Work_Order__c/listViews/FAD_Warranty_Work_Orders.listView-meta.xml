@@ -2,6 +2,7 @@
 <ListView xmlns="http://soap.sforce.com/2006/04/metadata">
     <fullName>FAD_Warranty_Work_Orders</fullName>
     <columns>NAME</columns>
+    <columns>CREATED_DATE</columns>
     <columns>Contact__c</columns>
     <columns>Boat__c</columns>
     <columns>Status__c</columns>

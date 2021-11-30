@@ -1,0 +1,11 @@
+<aura:component implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasSObjectName,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickActionWithoutHeader" access="global" >
+	<aura:attribute type="String" name= "recordId"></aura:attribute>
+    <aura:attribute name="sObjectName" type="String" />
+    <aura:html tag="style">
+        .slds-modal__container{
+        max-width: 50rem !important;
+        width:50% !important;
+        }
+    </aura:html>
+    <c:printWorkOrderQRCodeSheet onclose="{!c.closeQuickAction}" recordId="{!v.recordId}" objectApiName="{!v.sObjectName}"/>
+</aura:component>

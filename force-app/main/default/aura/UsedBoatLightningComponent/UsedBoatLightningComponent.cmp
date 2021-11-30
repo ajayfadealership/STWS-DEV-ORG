@@ -1,0 +1,336 @@
+<aura:component controller="UsedBoatLightningComponentController" implements="force:appHostable,flexipage:availableForAllPageTypes" access="global">
+    <aura:attribute name="invId" type="STRING" default=""/>
+    <aura:attribute name="invRecordTypeId" type="String" access="global"/> 
+    <aura:attribute name="lineItems" type="Object[]" access="global"/> 
+    <aura:attribute name="dealerOptions" type="Object[]" access="global"/> 
+    <aura:attribute name="lineItemsToInsert" type="String[]" access="global"/> 
+    <aura:attribute name="dealerOptionsToInsert" type="String[]" access="global"/> 
+    <aura:attribute name="newPLstDealerOptionWraper" type="DealerOptionWraper[]"/>
+    <aura:attribute name="newDO" type="Boolean" access="global" default="falase"/> 
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/> 
+    <!-- {!v.invRecordTypeId}     -->
+    <aura:if isTrue="{!v.newDO}">
+        <div style="position: fixed; top: 0; bottom: 0; left: 0; right: 0; background: rgba(0,0,0,0.5); z-index: 999;" id="doId">
+            <c:NewDealerOptionComponent newPLstDealerOptionWraperND="{!v.dealerOptions}" DealerOptionIdListCCCC="{!v.dealerOptionsToInsert}" doBool="{!v.newDO}" />
+        </div>
+    </aura:if>
+    <lightning:recordEditForm objectApiName="BOATBUILDING__Inventory__c" recordId="{!v.invId}" recordTypeId="{!v.invRecordTypeId}" aura:id="refUsedBoat" onsuccess="{!c.handleSuccess}">
+        <article class="slds-card card-wrapper_Orderpage" style="background: #fff; border-top:1px solid #d8dde6; padding: 1%;">
+            <header class="slds-card__header slds-grid">
+                <div class="slds-media slds-media--center slds-has-flexi-truncate">
+                    <div class="slds-media__body slds-truncate">
+                        <h2>
+                            <span class="slds-text-heading--small">Used Boat</span>
+                        </h2>
+                    </div>
+                </div>
+            </header>
+            <div class="slds-col slds-size--1-of-1"> 
+                <div class="slds-grid slds-wrap" >
+                    <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-3 slds-col--padded">
+                        <div class="slds-form-element">
+                            <div class="slds-form-element__control">
+                                <lightning:inputField fieldName="BOATBUILDING__Make__c" variant="label-stacked"/> 
+                            </div> 
+                        </div>
+                    </div>
+                    <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-3 slds-col--padded">
+                        <div class="slds-form-element">
+                            <div class="slds-form-element__control">
+                                <lightning:inputField fieldName="BOATBUILDING__Year__c" variant="label-stacked"/> 
+                            </div> 
+                        </div>
+                    </div>
+                    <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-3 slds-col--padded">
+                        <div class="slds-form-element">
+                            <div class="slds-form-element__control">
+                                <lightning:inputField fieldName="BOATBUILDING__Model__c" variant="label-stacked"/> 
+                            </div> 
+                        </div>
+                    </div>
+                    <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-3 slds-col--padded">
+                        <div class="slds-form-element">
+                            <div class="slds-form-element__control">
+                                <lightning:inputField fieldName="BOATBUILDING__Hull_Material__c" variant="label-stacked"/> 
+                            </div> 
+                        </div>
+                    </div>
+                    <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-3 slds-col--padded">
+                        <div class="slds-form-element">
+                            <div class="slds-form-element__control">
+                                <lightning:inputField fieldName="BOATBUILDING__Engine__c" variant="label-stacked"/> 
+                            </div> 
+                        </div>
+                    </div>
+                    <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-3 slds-col--padded">
+                        <div class="slds-form-element">
+                            <div class="slds-form-element__control">
+                                <lightning:inputField fieldName="BOATBUILDING__Suggested_List_Price__c" variant="label-stacked" required="true" aura:id="SLP"/> 
+                            </div> 
+                        </div>
+                    </div>
+                    <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-3 slds-col--padded">
+                        <div class="slds-form-element">
+                            <div class="slds-form-element__control">
+                                <lightning:inputField fieldName="BOATBUILDING__ACV__c" variant="label-stacked"/> 
+                            </div> 
+                        </div>
+                    </div>
+                    <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-3 slds-col--padded">
+                        <div class="slds-form-element">
+                            <div class="slds-form-element__control">
+                                <label style="color:#60605f;">Days on the lot</label>
+                                <lightning:inputField fieldName="BOATBUILDING__Days_on_Lot__c" variant="label-hidden" disabled="true"/> 
+                            </div> 
+                        </div>
+                    </div>
+                    <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-3 slds-col--padded">
+                        <div class="slds-form-element">
+                            <div class="slds-form-element__control">
+                                <lightning:inputField fieldName="BOATBUILDING__Hull_ID__c" variant="label-stacked"/> 
+                            </div> 
+                        </div>
+                    </div>
+                    <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-3 slds-col--padded">
+                        <div class="slds-form-element">
+                            <div class="slds-form-element__control">
+                                <lightning:inputField fieldName="BOATBUILDING__Boats_Registration_Number__c" variant="label-stacked"/> 
+                            </div> 
+                        </div>
+                    </div>
+                    <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-3 slds-col--padded">
+                        <div class="slds-form-element">
+                            <div class="slds-form-element__control">
+                                <lightning:inputField fieldName="BOATBUILDING__Trailer_License_Plate_Number__c" variant="label-stacked"/> 
+                            </div> 
+                        </div>
+                    </div>
+                    <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-3 slds-col--padded">
+                        <div class="slds-form-element">
+                            <div class="slds-form-element__control">
+                                <lightning:inputField fieldName="BOATBUILDING__Engine_SN__c" variant="label-stacked"/> 
+                            </div> 
+                        </div>
+                    </div>
+                    <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-3 slds-col--padded">
+                        <div class="slds-form-element">
+                            <div class="slds-form-element__control">
+                                <label style="color:#60605f;">Curtailments Start Date</label>
+                                <lightning:inputField fieldName="BOATBUILDING__Curtailment_Start_Date__c" variant="label-hidden"/> 
+                            </div> 
+                        </div>
+                    </div>
+                    <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-3 slds-col--padded">
+                        <div class="slds-form-element">
+                            <div class="slds-form-element__control">
+                                <lightning:inputField fieldName="BOATBUILDING__Location__c" variant="label-stacked"/> 
+                            </div> 
+                        </div>
+                    </div>
+                    <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-3 slds-col--padded">
+                        <div class="slds-form-element">
+                            <div class="slds-form-element__control">
+                                <lightning:inputField fieldName="BOATBUILDING__Owner__c" variant="label-stacked"/> 
+                            </div> 
+                        </div>
+                    </div>
+                    <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-3 slds-col--padded">
+                        <div class="slds-form-element">
+                            <div class="slds-form-element__control">
+                                <lightning:inputField fieldName="BOATBUILDING__Vehicle_Type__c" variant="label-stacked"/> 
+                            </div> 
+                        </div>
+                    </div>
+                    <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-3 slds-col--padded">
+                        <div class="slds-form-element">
+                            <div class="slds-form-element__control">
+                                <label style="color:#60605f;">Length</label>
+                                <lightning:inputField fieldName="BOATBUILDING__Boat_Length_in_feets__c"  variant="label-hidden"/> 
+                            </div> 
+                        </div>
+                    </div>
+                    <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-3 slds-col--padded">
+                        <div class="slds-form-element">
+                            <div class="slds-form-element__control">
+                                <lightning:inputField fieldName="BOATBUILDING__Boat_Type__c" variant="label-stacked"/> 
+                            </div> 
+                        </div>
+                    </div>
+                    <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-3 slds-col--padded">
+                        <div class="slds-form-element">
+                            <div class="slds-form-element__control">
+                                <lightning:inputField fieldName="BOATBUILDING__Beam__c" variant="label-stacked"/> 
+                            </div> 
+                        </div>
+                    </div>
+                    <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-3 slds-col--padded">
+                        <div class="slds-form-element">
+                            <div class="slds-form-element__control">
+                                <lightning:inputField fieldName="BOATBUILDING__Net_Weight__c" variant="label-stacked"/> 
+                            </div> 
+                        </div>
+                    </div>
+                    <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-3 slds-col--padded">
+                        <div class="slds-form-element">
+                            <div class="slds-form-element__control">
+                                <lightning:inputField fieldName="BOATBUILDING__Cost__c" variant="label-stacked"/> 
+                            </div> 
+                        </div>
+                    </div>
+                    <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-3 slds-col--padded">
+                        <div class="slds-form-element">
+                            <div class="slds-form-element__control">
+                                <lightning:inputField fieldName="BOATBUILDING__Date_on_FloorPlan__c" variant="label-stacked"/> 
+                            </div> 
+                        </div>
+                    </div>
+                    <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-3 slds-col--padded">
+                        <div class="slds-form-element">
+                            <div class="slds-form-element__control">
+                                <label style="color:#60605f;">Costline</label>
+                                <lightning:inputField fieldName="BOATBUILDING__Costline__c" variant="label-hidden"/> 
+                            </div> 
+                        </div>
+                    </div>
+                    <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-3 slds-col--padded">
+                        <div class="slds-form-element">
+                            <div class="slds-form-element__control">
+                                <lightning:inputField fieldName="BOATBUILDING__Trailer_VIN__c" variant="label-stacked"/> 
+                            </div> 
+                        </div>
+                    </div>
+                    <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-3 slds-col--padded">
+                        <div class="slds-form-element">
+                            <div class="slds-form-element__control">
+                                <lightning:inputField fieldName="BOATBUILDING__Interest_Start_Date__c" variant="label-stacked"/> 
+                            </div> 
+                        </div>
+                    </div>
+                    <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-3 slds-col--padded">
+                        <div class="slds-form-element">
+                            <div class="slds-form-element__control">
+                                <label style="color:#60605f;">Status</label>
+                                <lightning:inputField fieldName="BOATBUILDING__UsedBoatStatus__c" variant="label-hidden"/> 
+                            </div> 
+                        </div>
+                    </div>
+                    <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-3 slds-col--padded">
+                        <div class="slds-form-element">
+                            <div class="slds-form-element__control">
+                                <lightning:inputField fieldName="BOATBUILDING__Dealer_Prep__c" variant="label-stacked"/> 
+                            </div> 
+                        </div>
+                    </div>
+                    
+                    
+                </div>
+            </div>
+            
+        </article>
+    </lightning:recordEditForm>    
+    <div id="tab-default-1a" class="slds-tabs--default__content slds-show slds-col slds-size--1-of-1" role="tabpanel" aria-labelledby="tab-default-2a__item" style="background: #fff; padding: 2%;">
+        <aura:iteration items="{!v.lineItems}" var="lscM">
+            <article class="slds-card">
+                <header class="slds-card__header slds-grid">
+                    <div class="slds-media slds-media--center slds-has-flexi-truncate"> 
+                        <div class="slds-media__body slds-truncate">                                            
+                            <h2><span class="slds-text-heading--small">Manufacture option for {!lscM.strSelectedOption}</span></h2>
+                        </div> 
+                    </div>
+                    
+                </header>
+                <div class="slds-card__body">
+                    <table class="slds-table slds-table--bordered slds-no-row-hover slds-table--cell-buffer">
+                        <thead>
+                            <tr class="slds-text-heading--label">
+                                <th scope="col">Description</th>
+                            </tr>
+                        </thead>
+                        
+                        <tbody>
+                            <aura:iteration items="{!lscM.lstProductPriceForSelectedCategory}" var="lsc" >
+                                <tr class="slds-hint-parent">   
+                                    <td>
+                                        <div class="slds-form-element">
+                                            <div class="slds-form-element__control">
+                                                <label class="slds-checkbox">
+                                                    <!-- <input type="checkbox" name="options" id="checkbox-01" />  -->
+                                                    <c:UBLineItemCheckBox ProductPriceIdListCCCC="{!v.lineItemsToInsert}" strId="{!lsc.objProductPriceForSelectedCategory.Id}" objDOCheck="false"/>
+                                                    <span class="slds-checkbox--faux"></span>
+                                                    <span class="slds-form-element__label">  {!lsc.objProductPriceForSelectedCategory.BOATBUILDING__ProductSelected_Category__c} </span>
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </aura:iteration>
+                        </tbody>
+                    </table>
+                </div>
+            </article>
+        </aura:iteration>
+        <br/>
+        <br/>
+        <article class="slds-card card-wrapper">
+            <header class="slds-card__header slds-grid">
+                <div class="slds-media slds-media--center slds-has-flexi-truncate">
+                    <div class="slds-media__body slds-truncate">
+                        <table>
+                            <tr>
+                                <td>
+                                    <h2><span class="slds-text-heading--small">Dealer Options</span></h2>
+                                </td>
+                                <td style="text-align: right;">
+                                    <a onclick="{!c.addDOPOPup}"><lightning:icon iconName="action:add_relationship" size="x-small" class="checkClass"/></a>
+                                </td> 
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </header>
+            <div class="slds-card__body">
+                <table class="slds-table slds-table--bordered slds-no-row-hover slds-table--cell-buffer slds-table--custom">
+                    <thead>
+                        <tr class="slds-text-heading--label">
+                            <th scope="col">Description </th>
+                            <th scope="col">&nbsp; </th>
+                            <th scope="col"> 
+                                Dealer Price
+                            </th>
+                            <th scope="col">Retail Price </th>
+                            <th scope="col">Part Number</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <aura:iteration items="{!v.dealerOptions}" var="varDO" >
+                            <tr class="slds-hint-parent">   
+                                <td>
+                                    <label class="slds-checkbox">
+                                        <c:UBLineItemCheckBox ProductPriceIdListCCCC="{!v.dealerOptionsToInsert}" strId="{!varDO.objDealerOption.BOATBUILDING__Part_Number__c}" objDOCheck="{!varDO.isSelect}"/>
+                                        <span class="slds-checkbox--faux"></span>
+                                        <span class="slds-form-element__label">{!varDO.objDealerOption.Name}</span>
+                                    </label> 
+                                </td> 
+                                <td>&nbsp;</td>
+                                <td>
+                                    {!varDO.objDealerOption.BOATBUILDING__Cost__c}
+                                </td>
+                                <td>{!varDO.objDealerOption.BOATBUILDING__Retail_Price__c}</td>
+                                <td> 
+                                    {!varDO.objDealerOption.BOATBUILDING__Part_Number__c} &nbsp; 
+                                    <aura:if isTrue="{!varDO.ShowRemoveIcon}">
+                                        <c:DeleteDOComponent newPLstDealerOptionWraperDLT="{!v.dealerOptions}" DealerOptionIdListCCCC="{!v.dealerOptionsToInsert}" objDO="{!varDO.objDealerOption}" objDODLCheck="{!varDO.ShowRemoveIcon}"/>
+                                    </aura:if>
+                                </td> 
+                            </tr>
+                        </aura:iteration>
+                    </tbody>
+                </table>
+            </div>  
+        </article>
+        <br/>
+        <div style="text-align: center; padding: 3% 4%; ">
+            <lightning:button variant="brand" label="Create Boat" title="Create Boat"  iconName="utility:record_create" iconPosition="right" onclick="{!c.createBoat}"/>    
+        </div>
+    </div>  
+</aura:component>

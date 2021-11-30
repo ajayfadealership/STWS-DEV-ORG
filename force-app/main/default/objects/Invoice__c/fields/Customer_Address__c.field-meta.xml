@@ -7,6 +7,7 @@
     <inlineHelpText>Specifies the Mailing Address of the Customer.</inlineHelpText>
     <label>Customer Address</label>
     <required>false</required>
+    <trackFeedHistory>false</trackFeedHistory>
     <trackHistory>false</trackHistory>
     <trackTrending>false</trackTrending>
     <type>TextArea</type>

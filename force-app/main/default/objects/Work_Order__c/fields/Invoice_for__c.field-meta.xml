@@ -6,7 +6,7 @@
     <externalId>false</externalId>
     <label>Invoice for</label>
     <referenceTo>Invoice__c</referenceTo>
-    <relationshipLabel>Work Request</relationshipLabel>
+    <relationshipLabel>Work Requests</relationshipLabel>
     <relationshipName>Work_Orders</relationshipName>
     <required>false</required>
     <trackFeedHistory>false</trackFeedHistory>

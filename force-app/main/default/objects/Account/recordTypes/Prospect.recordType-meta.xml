@@ -2,6 +2,7 @@
 <RecordType xmlns="http://soap.sforce.com/2006/04/metadata">
     <fullName>Prospect</fullName>
     <active>true</active>
+    <compactLayoutAssignment>Account_Compact_Layout</compactLayoutAssignment>
     <description>Using Email Services</description>
     <label>Prospect</label>
     <picklistValues>
@@ -142,6 +143,25 @@
         </values>
     </picklistValues>
     <picklistValues>
+        <picklist>Buying_Time_Frame__c</picklist>
+        <values>
+            <fullName>Less than 2 weeks</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Less than 6 months</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Less than a month</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Over 6 months</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
         <picklist>Communication_Type_With_Customer__c</picklist>
         <values>
             <fullName>Email</fullName>
@@ -207,6 +227,10 @@
         </values>
         <values>
             <fullName>Nautique</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Other</fullName>
             <default>false</default>
         </values>
         <values>
@@ -574,13 +598,6 @@
         </values>
         <values>
             <fullName>Supra</fullName>
-            <default>false</default>
-        </values>
-    </picklistValues>
-    <picklistValues>
-        <picklist>Lake_Location__c</picklist>
-        <values>
-            <fullName>Lake Norman</fullName>
             <default>false</default>
         </values>
     </picklistValues>
@@ -971,6 +988,17 @@
         </values>
     </picklistValues>
     <picklistValues>
+        <picklist>Purchase_payment_method__c</picklist>
+        <values>
+            <fullName>Cash</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Finance</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
         <picklist>Rating</picklist>
         <values>
             <fullName>Cold</fullName>
@@ -1019,6 +1047,10 @@
         <picklist>Store_Location__c</picklist>
         <values>
             <fullName>Other</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>STWS</fullName>
             <default>false</default>
         </values>
     </picklistValues>

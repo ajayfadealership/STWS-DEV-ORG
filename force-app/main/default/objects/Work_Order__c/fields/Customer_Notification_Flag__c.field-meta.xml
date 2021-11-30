@@ -4,12 +4,12 @@
     <deprecated>false</deprecated>
     <externalId>false</externalId>
     <formula>IMAGE( 
-	IF( ISPICKVAL( Status__c ,&#39;closed&#39;)  || ISPICKVAL( Status__c ,&#39;Closed Internal&#39;) ,
+	IF( ISPICKVAL( Status__c ,&apos;closed&apos;)  || ISPICKVAL( Status__c ,&apos;Closed Internal&apos;) ,
 
-		&#39;/resource/BOATBUILDING__flag_blue&#39;,
-		IF(NOW() - Customer_Last_updated__c &lt;= $Setup.Trigger_Configuration__c.Customer_Notification_Frequency__c ,&#39;/resource/BOATBUILDING__flag_green&#39;,&#39;/resource/BOATBUILDING__flag_red&#39;)
+		&apos;/resource/BOATBUILDING__flag_blue&apos;,
+		IF(NOW() - Customer_Last_updated__c &lt;= $Setup.Trigger_Configuration__c.Customer_Notification_Frequency__c ,&apos;/resource/BOATBUILDING__flag_green&apos;,&apos;/resource/BOATBUILDING__flag_red&apos;)
 	),
-&#39;&#39;, 30, 30)</formula>
+&apos;&apos;, 30, 30)</formula>
     <label>Customer Notification Flag</label>
     <required>false</required>
     <trackHistory>false</trackHistory>

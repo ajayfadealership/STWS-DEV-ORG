@@ -3,7 +3,7 @@
     <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
     <aura:attribute name="objAccount" type="Account" default="{'sobjectType': 'Account'}"/>
     <aura:handler  event="c:AccountParentToChild" action="{!c.HandelAccountEvent}"/> 
-    <article class="slds-card">
+    <article class="slds-card slds-p-around_x-small">
         <div class="slds-path"> 
             <div class="slds-grid slds-path__track">
                 <div class="slds-grid slds-path__scroller-container">
@@ -23,7 +23,7 @@
                                 </li>
                                 <li class="slds-path__item slds-is-incomplete" id="2LI" role="presentation">
                                     <a aria-selected="false" class="slds-path__link" href="javascript:void(0);" id="path-7" role="option" tabindex="-1">
-                                        <span class="slds-path__stage">
+                                        <span class="slds-path__stage"> 
                                             <!--  <svg class="slds-icon slds-icon_x-small" aria-hidden="true">
                                                 <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/assets/icons/utility-sprite/svg/symbols.svg#check" />
                                             </svg> -->

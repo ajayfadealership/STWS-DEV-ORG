@@ -6,6 +6,9 @@
     <columns>CREATED_DATE</columns>
     <columns>Status__c</columns>
     <columns>Assigned_to__c</columns>
+    <columns>Boat_Make__c</columns>
+    <columns>Boat_Model__c</columns>
+    <columns>Boat_Year__c</columns>
     <filterScope>Everything</filterScope>
     <filters>
         <field>RECORDTYPE</field>

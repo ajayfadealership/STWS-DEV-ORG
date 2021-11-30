@@ -7,5 +7,5 @@
     <masterLabel>Schedule</masterLabel>
     <openType>onClickJavaScript</openType>
     <protected>false</protected>
-    <url>window.top.location = &#39;/apex/BOATBUILDING__ScheduleInventory?invId={!Inventory__c.Id}&amp;type=inventory&#39;;</url>
+    <url>window.top.location = &apos;/apex/BOATBUILDING__ScheduleInventory?invId={!Inventory__c.Id}&amp;type=inventory&apos;;</url>
 </WebLink>

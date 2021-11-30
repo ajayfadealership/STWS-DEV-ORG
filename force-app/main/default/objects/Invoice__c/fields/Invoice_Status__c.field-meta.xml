@@ -6,6 +6,7 @@
     <inlineHelpText>Specifies the Status of the Invoice.Setting to &quot;Cancelled&quot; updates the Inventory Quantity.</inlineHelpText>
     <label>Invoice Status</label>
     <required>false</required>
+    <trackFeedHistory>false</trackFeedHistory>
     <trackHistory>false</trackHistory>
     <trackTrending>false</trackTrending>
     <type>Picklist</type>
@@ -26,6 +27,11 @@
                 <fullName>Final</fullName>
                 <default>false</default>
                 <label>Final</label>
+            </value>
+            <value>
+                <fullName>Quote</fullName>
+                <default>true</default>
+                <label>Quote</label>
             </value>
         </valueSetDefinition>
     </valueSet>

@@ -26,6 +26,11 @@
                 <default>false</default>
                 <label>Over Flow Lot</label>
             </value>
+            <value>
+                <fullName>Raleigh Showroom</fullName>
+                <default>false</default>
+                <label>Raleigh Showroom</label>
+            </value>
         </valueSetDefinition>
     </valueSet>
 </CustomField>

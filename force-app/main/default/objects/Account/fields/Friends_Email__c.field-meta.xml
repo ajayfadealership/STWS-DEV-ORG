@@ -3,7 +3,7 @@
     <fullName>Friends_Email__c</fullName>
     <deprecated>false</deprecated>
     <externalId>false</externalId>
-    <label>Friend&#39;s Email</label>
+    <label>Friend&apos;s Email</label>
     <length>255</length>
     <required>false</required>
     <trackFeedHistory>false</trackFeedHistory>

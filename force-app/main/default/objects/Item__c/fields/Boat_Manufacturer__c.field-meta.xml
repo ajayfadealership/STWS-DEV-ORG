@@ -7,15 +7,16 @@
     <externalId>false</externalId>
     <label>Boat Manufacturer</label>
     <lookupFilter>
-        <active>true</active>
+        <active>false</active>
         <filterItems>
             <field>Manufacturer__c.RecordType.Name</field>
             <operation>equals</operation>
             <value>Boat Manufacturer</value>
         </filterItems>
-        <isOptional>false</isOptional>
+        <isOptional>true</isOptional>
     </lookupFilter>
     <referenceTo>Manufacturer__c</referenceTo>
+    <relationshipLabel>Items (Boat Manufacturer)</relationshipLabel>
     <relationshipName>Items</relationshipName>
     <required>false</required>
     <trackFeedHistory>false</trackFeedHistory>

@@ -246,7 +246,7 @@
                                 <div class="slds-form-element">
                                     <label class="slds-form-element__label">Related Work Order</label>
                                     <div class="slds-form-element__control">
-                                        <apex:inputField value="{!objPayment.Related_to_Warranty_Work_Work_Order__c}" styleClass="slds-input" id="RelatedworkOrder" />
+                                        <apex:inputField value="{!objPayment.Work_Warranty_Order__c}" styleClass="slds-input" id="RelatedworkOrder" />
                                     </div>
                                 </div>
                             </div>
@@ -858,7 +858,7 @@
                                         <div class="slds-form-element__control">
                                             <!-- <apex:inputField value="{!objJob.Work_Type__c}" styleClass="slds-input" id="WorkTypeId" /> -->
                                             <select id="WorkTypeIdSelect" class="slds-select">
-                                                <option value="0">--None--</option>
+                                                <option value="">--None--</option>
                                             </select>
                                         </div>
                                     </div>
@@ -1011,7 +1011,7 @@
                                 <div class="slds-form-element">
                                     <label class="slds-form-element__label">Related Work Order</label>
                                     <div class="slds-form-element__control">
-                                        <apex:inputField value="{!objPayment.Related_to_Warranty_Work_Work_Order__c}" styleClass="slds-input" id="RelatedworkOrder1" />
+                                        <apex:inputField value="{!objPayment.Work_Warranty_Order__c}" styleClass="slds-input" id="RelatedworkOrder1" />
                                     </div>
                                 </div>
                             </div>
@@ -2061,8 +2061,9 @@
                                     if(lstContact[0].MailingPostalCode != undefined) {
                                         document.getElementById("WoZipId").value = lstContact[0].MailingPostalCode;
                                     }
-                                    if(lstContact[0].BOATBUILDING__Customer_Type__c != undefined) {
-                                        document.getElementById("custType").value = lstContact[0].BOATBUILDING__Customer_Type__c;
+                                    //BOATBUILDING__Account_Customer_Type__c
+                                    if(lstContact[0].AccountId != undefined && lstContact[0].Account.BOATBUILDING__Account_Customer_Type__c != undefined) {
+                                        document.getElementById("custType").value = lstContact[0].Account.BOATBUILDING__Account_Customer_Type__c;
                                     }
 //                                     console.log(lstContact[0].Account.BOATBUILDING__Customer_Balance__c);  
                                     if(lstContact[0].AccountId != undefined && lstContact[0].Account.BOATBUILDING__Customer_Balance__c != undefined && lstContact[0].Account.BOATBUILDING__Customer_Balance__c > 0) {
@@ -3190,8 +3191,9 @@
     }
     
     $("#NewJobBtn").click(function(){  
+        console.log(">>>>>: ", document.getElementById('WorkTypeIdSelect').value);
         if(document.getElementById('pge:frm:wrkOrdrCompCall:wrkOrdr:conWrkId2_lkid').value != '000000000000000' &&  document.getElementById('pge:frm:wrkOrdrCompCall:wrkOrdr:conWrkId2').value != ''&& document.getElementById('pge:frm:wrkOrdrCompCall:wrkOrdr:boatLookId_lkid').value != '000000000000000' && document.getElementById('pge:frm:wrkOrdrCompCall:wrkOrdr:boatLookId').value != ''){
-            if( document.getElementById('WorkTypeIdSelect').value != '0' && document.getElementById('pge:frm:wrkOrdrCompCall:wrkOrdr:TypeWorkId').value != ''
+            if( document.getElementById('WorkTypeIdSelect').value != null &&  document.getElementById('WorkTypeIdSelect').value != '' && document.getElementById('pge:frm:wrkOrdrCompCall:wrkOrdr:TypeWorkId').value != ''
                && document.getElementById('newjobNameId').value != ''
                && document.getElementById('pge:frm:wrkOrdrCompCall:wrkOrdr:WostoreLocation').value != null && document.getElementById('pge:frm:wrkOrdrCompCall:wrkOrdr:WostoreLocation').value != ''){
                 //$("#createwoorder").css("display","");
@@ -3222,7 +3224,7 @@
                 bind_WorkType(WorkTypeSelect,newjobWorkTypeId);
                 $("#newjobNameId").val("");
                 $("#newjobworequested").val(""); 
-                $("#WorkTypeIdSelect").val("0");
+                $("#WorkTypeIdSelect").val("");
                 document.getElementById('pge:frm:wrkOrdrCompCall:wrkOrdr:TypeWorkId').value = "0"; 
             }
             else{

@@ -1,4 +1,9 @@
 ({
+    
+    Init : function(component, event, helper) {
+        component.set("v.objPOLI.SortingOrder",component.get("v.SortingSequence"))
+        
+    },
     searchPartKeyUp : function(component, event, helper) {
         var searchkeyword = component.find('searchPrtInp').get('v.value');
         if(searchkeyword.length > 2){
@@ -8,7 +13,7 @@
         }
     },
     handlonfocus : function(component, event, helper) { 
-        helper.searchPartsforRecent(component, event, helper);
+        helper.searchPartsforRecent(component, event, helper); 
     },
     selectValue : function(component, event, helper) { 
         var prtList = component.get("v.searchResults"); 

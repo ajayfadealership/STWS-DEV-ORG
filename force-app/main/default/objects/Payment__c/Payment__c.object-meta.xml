@@ -154,13 +154,13 @@
     <enableSharing>true</enableSharing>
     <enableStreamingApi>true</enableStreamingApi>
     <externalSharingModel>ControlledByParent</externalSharingModel>
-    <label>Invoice Payment</label>
+    <label>Invoice Payment(Deprecated)</label>
     <nameField>
         <label>Payment Name</label>
         <type>Text</type>
     </nameField>
     <pluralLabel>Payments</pluralLabel>
-    <searchLayouts/>
+    <searchLayouts></searchLayouts>
     <sharingModel>ControlledByParent</sharingModel>
     <visibility>Public</visibility>
 </CustomObject>

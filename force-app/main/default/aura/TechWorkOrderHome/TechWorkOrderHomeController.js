@@ -9,22 +9,20 @@
         helper.loadDataTable(component, event, helper);
         helper.getCurrentUserHlpr(component, event, helper);
     },
-    findWO : function(component, event, helper) {
-        var selectedUser = component.get("v.objUserP");
-         var action = component.get("c.getTechnicianJobByDate");
-        action.setParams({"technician" : selectedUser.Id});
-        console.log('>>>>>>>>>>findWO>>selectedUser: ',selectedUser.Id); 
-    },
+ 
     getWOList : function(component, event, helper){
+        var selectedUser = component.get("v.objUserP");
         var action = component.get("c.getTechnicianJobByDate");
-        action.setParams({"dateRange" : component.find("dateRange").get("v.value")});
+        action.setParams({"dateRange" : component.find("dateRange").get("v.value"),
+                          "technician" : selectedUser.Id            
+                         });
         action.setCallback(this, function(res) {
             console.log('>>>>>:response value '+JSON.stringify(res.getReturnValue()));
             var rtnValue = res.getReturnValue();
-                rtnValue.forEach(objVal => {
-                    objVal.linkLabel =  objVal.WOName;
-                    objVal.WOName = '/'+ objVal.WOId;
-                    console.log(objVal);
+            rtnValue.forEach(objVal => {
+                objVal.linkLabel =  objVal.WOName;
+                objVal.WOName = '/'+ objVal.WOId;
+                console.log(objVal);
                 });
             component.set("v.WOList", rtnValue);
         });

@@ -21,6 +21,7 @@
                     var finalDate = checkinTime[0].split("-");
                     var finalTM = checkinTime[1].split(".");
                     var finalDT = finalDate[1]+'/'+finalDate[2]+'/'+finalDate[0]+' '+finalTM[0];
+                    component.set("v.tmId", element.Id);
                     component.set("v.clckIn", finalDT);
                     component.set("v.clckOut", "");
                     component.set("v.clckInBTNDis", true);
@@ -64,6 +65,9 @@
                 var finalDate = checkinTime[0].split("-");
                 var finalTM = checkinTime[1].split(".");
                 var finalDT = finalDate[1]+'/'+finalDate[2]+'/'+finalDate[0]+' '+finalTM[0];
+                
+                component.set("v.tmId", objTMRes.Id);
+                console.log('>>>>: ',component.get("v.tmId"));
                 component.set("v.clckOut", finalDT);
                 if(!objJob.BOATBUILDING__Completed__c) {
                     component.set("v.clckInBTNDis", false);
@@ -72,6 +76,9 @@
                 }
                 component.set("v.clckOutBTNDis", true);
                 component.set("v.objTMRec", objTMRes); 
+                component.set("v.reloadForm", false); 
+        		component.set("v.reloadForm", true);
+                $A.get('e.force:refreshView').fire();
            }
         });
         $A.enqueueAction(action);
@@ -106,6 +113,8 @@
                     component.set("v.clckOutBTNDis", true);
                     component.set("v.clckIn", "");
                     component.set("v.clckOut", "");
+                    component.set("v.tmId", "");
+                    
                 } else {
                     component.set("v.clckInBTNDis", true);
                     component.set("v.clckOutBTNDis", true);

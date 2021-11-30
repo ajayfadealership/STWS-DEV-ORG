@@ -3,7 +3,7 @@
     <fullName>Total_Price__c</fullName>
     <deprecated>false</deprecated>
     <externalId>false</externalId>
-    <label>Total Price</label>
+    <label>Retail Price</label>
     <precision>18</precision>
     <required>false</required>
     <scale>2</scale>

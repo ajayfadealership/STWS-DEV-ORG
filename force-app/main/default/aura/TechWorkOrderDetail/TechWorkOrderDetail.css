@@ -1,2 +1,9 @@
-.THIS {
+.THIS .saveJobs{
+    float: right;
+  margin-right: 5%;
+    font-size: 14.5px;
+    margin-top:4%;
+}
+.THIS .helptextClass{
+    margin-bottom: -1.3%;
 }

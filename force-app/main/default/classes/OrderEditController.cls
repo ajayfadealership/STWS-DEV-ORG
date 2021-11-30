@@ -20,62 +20,65 @@ public with sharing class OrderEditController {
                 oneValue = pickListValuesList[0];
             }
             /*if(sCount == 2 && (setPicklistSL.contains('Other') || setPicklistSL.contains('other'))) {
-                sCount = 1;
-                List<String> lstAll2 = new List<String>(); 
-                lstAll2.addAll(setPicklistSL); 
-                if(lstAll2[0] == 'Other' || lstAll2[0] == 'other') {
-                    oneValue = lstAll2[1];
-                } else if(lstAll2[1] == 'Other' || lstAll2[1] == 'other') {
-                    oneValue = lstAll2[0];
-                }
-            }*/
+sCount = 1;
+List<String> lstAll2 = new List<String>(); 
+lstAll2.addAll(setPicklistSL); 
+if(lstAll2[0] == 'Other' || lstAll2[0] == 'other') {
+oneValue = lstAll2[1];
+} else if(lstAll2[1] == 'Other' || lstAll2[1] == 'other') {
+oneValue = lstAll2[0];
+}
+}*/
             Set<String> setPartNumbers =  new Set<String>();
+            Map<String, OrderEditWrapper> mapPartNoToWrap = new Map<String, OrderEditWrapper>();
             for(OrderEditWrapper obj:lstlistItem){
                 if(obj.received > 0){
                     setPartNumbers.add(obj.partNo);
+                    mapPartNoToWrap.put(obj.partNo, obj);
                 }
             }
+            
             System.debug('>>>: '+lstlistItem);
             Id InvenRecId = Schema.SObjectType.BOATBUILDING__Inventory__c.getRecordTypeInfosByName().get('Inventory for Parts').getRecordTypeId();        
-            List<BOATBUILDING__Part__c> lstPart = [Select 
-                                                                Bin__c, Vendor_Name__c,  Retail_Price__c,  Part_Number__c,  Name,  Id, Dealer_Price__c, Part_Cost__c, Category1__c, 
-                                                                Discount__c, Family1__c, Location__c, Map_Price__c, Minimum_Amount__c, Part_Color__c, Part_Size__c, Taxable__c, Weight__c
-                                                        From 
-                                                                BOATBUILDING__Part__c 
-                                                        WHERE 
-                                                                Part_Number__c 
-                                                        IN
-                                                                :setPartNumbers]; 
+            List<BOATBUILDING__Part__c> lstPart = [SELECT 
+                                                   Bin__c, Vendor_Name__c,  Retail_Price__c,  Part_Number__c,  Name, 
+                                                   Id, Dealer_Price__c, Part_Cost__c, Category1__c, 
+                                                   Discount__c, Family1__c, Location__c, Map_Price__c, Minimum_Amount__c,
+                                                   Part_Color__c, Part_Size__c, Taxable__c, Weight__c
+                                                   FROM BOATBUILDING__Part__c 
+                                                   WHERE Part_Number__c  IN :mapPartNoToWrap.keySet()];
+            
             Map<String, BOATBUILDING__Part__c> mapPart = new Map<String, BOATBUILDING__Part__c>();
             for(BOATBUILDING__Part__c objP: lstPart) {
                 mapPart.put(objP.Part_Number__c, objP);
             }
+            
             List<BOATBUILDING__Inventory__c> lstUpdatedInventory = new List<BOATBUILDING__Inventory__c>();
             List<BOATBUILDING__Inventory__c> lstInventory =[SELECT 
-                                                                    Id, Vendor__c, Cost__c, Part_Number__c, Part_MSRP_Price__c, Description__c, Quantity__c,
-                                                                    Taxable__c, Weight__c,
-                                                                    (Select Id, IsDeleted, Name, BOATBUILDING__Inventory__c, 
-                                                                    BOATBUILDING__Quantity__c, BOATBUILDING__Store_Location__c 
-                                                                    From BOATBUILDING__Parts_Availability__r)
+                                                            Id, Vendor__c, Cost__c, Part_Number__c, Part_MSRP_Price__c, 
+                                                            Description__c, Quantity__c,
+                                                            Taxable__c, Weight__c,
+                                                            (Select Id, IsDeleted, Name, BOATBUILDING__Inventory__c, 
+                                                             BOATBUILDING__Quantity__c, BOATBUILDING__Store_Location__c 
+                                                             From BOATBUILDING__Parts_Availability__r)
                                                             FROM 
-                                                                    BOATBUILDING__Inventory__c WHERE RecordTypeId =:invenRecId AND BOATBUILDING__Part_Number__c IN:setPartNumbers];
-            for(Inventory__c obj: lstInventory) {
-                System.debug('objINV: '+obj);
-                System.debug('objINV.BOATBUILDING__Parts_Availability__r: '+obj.BOATBUILDING__Parts_Availability__r);
-            }
+                                                            BOATBUILDING__Inventory__c WHERE RecordTypeId =:invenRecId 
+                                                            AND BOATBUILDING__Part_Number__c IN:mapPartNoToWrap.keySet()];
+            /*for(Inventory__c obj: lstInventory) {
+System.debug('objINV: '+obj);
+System.debug('objINV.BOATBUILDING__Parts_Availability__r: '+obj.BOATBUILDING__Parts_Availability__r);
+}*/
             Map<String,BOATBUILDING__Inventory__c> mapInv = new Map<String,BOATBUILDING__Inventory__c>();
             
             for(BOATBUILDING__Inventory__c objInv :lstInventory){
-                mapInv.put(objInv.BOATBUILDING__Part_Number__c,objInv);
+                mapInv.put(objInv.BOATBUILDING__Part_Number__c, objInv);
             }
             
-            for(OrderEditWrapper obj:lstlistItem){
+            Decimal amntOnOrder = 0.00;
+            for(OrderEditWrapper obj: lstlistItem){
                 if(obj.received > 0){
-                    if(mapPart.containsKey(obj.partNo)) {
-                        BOATBUILDING__Inventory__c objInventory = new BOATBUILDING__Inventory__c();
-                        if(mapInv.containskey(obj.partNo)){
-                            objInventory = mapInv.get(obj.partNo) ;   
-                        } 
+                    BOATBUILDING__Inventory__c objInventory = new BOATBUILDING__Inventory__c();
+                    if(mapPart.containsKey(obj.partNo) && !mapInv.containskey(obj.partNo)){
                         if(objInventory.BOATBUILDING__Quantity__c != null){
                             objInventory.BOATBUILDING__Quantity__c  += obj.received ;
                         }else{
@@ -90,7 +93,7 @@ public with sharing class OrderEditController {
                         objInventory.Description__c = mapPart.get(obj.partNo).Name;
                         objInventory.Cost__c = mapPart.get(obj.partNo).BOATBUILDING__Part_Cost__c;
                         objInventory.Category__c = mapPart.get(obj.partNo).BOATBUILDING__Category1__c;
-                        objInventory.Bin__c = mapPart.get(obj.partNo).Bin__c    ;
+                        objInventory.Bin__c = mapPart.get(obj.partNo).Bin__c;
                         objInventory.Color__c = mapPart.get(obj.partNo).BOATBUILDING__Part_Color__c;
                         objInventory.Part_Location__c = mapPart.get(obj.partNo).BOATBUILDING__Location__c; 
                         objInventory.Map_Price__c = mapPart.get(obj.partNo).BOATBUILDING__Map_Price__c;
@@ -98,79 +101,95 @@ public with sharing class OrderEditController {
                         objInventory.Taxable__c= mapPart.get(obj.partNo).BOATBUILDING__Taxable__c;
                         objInventory.Weight__c = mapPart.get(obj.partNo).BOATBUILDING__Weight__c;
                         objInventory.Part_MSRP_Price__c = mapPart.get(obj.partNo).BOATBUILDING__Retail_Price__c;
-                        lstUpdatedInventory.add(objInventory); 
+                        lstUpdatedInventory.add(objInventory);
+                    } else {
+                        objInventory = mapInv.get(obj.partNo);
+                        if(objInventory != null) {
+                            lstUpdatedInventory.add(objInventory); 
+                        }
                     }
                 }
             }
-            upsert lstUpdatedInventory;
-            for(Inventory__c obj: lstUpdatedInventory) {
-                System.debug('obj: '+obj);
-                for(OrderEditWrapper objOrderEditWrapper:lstlistItem){
-                    if(obj.Part_Number__c == objOrderEditWrapper.partNo) {
-                        if(objOrderEditWrapper.received > 0 && sCount > 1){
-                            if(obj.BOATBUILDING__Parts_Availability__r.isEmpty()) {
-                                for(Parts_Availability__c objPA: objOrderEditWrapper.lstPA) {
-                                    Parts_Availability__c objPAIN = new Parts_Availability__c();
-                                    objPAIN = objPA;
-                                    objPAIN.Inventory__c = obj.Id;
-                                    lstPA.add(objPAIN);
+            
+            if(!lstUpdatedInventory.isEmpty()){
+                upsert lstUpdatedInventory;
+                for(Inventory__c obj: lstUpdatedInventory){
+                    System.debug('obj: '+obj);
+                    if(mapPartNoToWrap.containsKey(obj.Part_Number__c)){
+                        OrderEditWrapper objOrderEditWrapper = mapPartNoToWrap.get(obj.Part_Number__c);
+                        if(objOrderEditWrapper.received > 0) {
+                            if(sCount > 1){
+                                if(obj.BOATBUILDING__Parts_Availability__r.isEmpty() && objOrderEditWrapper.lstPA != null ) {
+                                    for(Parts_Availability__c objPA: objOrderEditWrapper.lstPA) {
+                                        Parts_Availability__c objPAIN = new Parts_Availability__c();
+                                        objPAIN = objPA;
+                                        objPAIN.Inventory__c = obj.Id; 
+                                        lstPA.add(objPAIN);
+                                    }
+                                } else if(!obj.BOATBUILDING__Parts_Availability__r.isEmpty()) {
+                                    System.debug('obj.BOATBUILDING__Parts_Availability__r: '+obj.BOATBUILDING__Parts_Availability__r);
+                                    Map<String, Parts_Availability__c> mapStoreLocToPA = new Map<String, Parts_Availability__c>();
+                                    for(Parts_Availability__c objPA : obj.BOATBUILDING__Parts_Availability__r) {
+                                        mapStoreLocToPA.put(objPA.Store_Location__c, objPA);
+                                    }
+                                    System.debug('objOrderEditWrapper.lstPA: '+objOrderEditWrapper.lstPA);
+                                    for(Parts_Availability__c objPA: objOrderEditWrapper.lstPA) {
+                                        if(mapStoreLocToPA.containsKey(objPA.BOATBUILDING__Store_Location__c)){
+                                            Parts_Availability__c objPAIN = mapStoreLocToPA.get(objPA.BOATBUILDING__Store_Location__c);
+                                            objPAIN.Store_Location__c = objPA.BOATBUILDING__Store_Location__c;
+                                            if(objPAIN.BOATBUILDING__Quantity__c != null) {
+                                                objPAIN.BOATBUILDING__Quantity__c += objPA.BOATBUILDING__Quantity__c;
+                                            } else { 
+                                                objPAIN.BOATBUILDING__Quantity__c = objPA.BOATBUILDING__Quantity__c;
+                                            } 
+                                            lstPA.add(objPAIN); 
+                                        } else {
+                                            Parts_Availability__c objPAIN = new Parts_Availability__c();
+                                            objPAIN.Store_Location__c = objPA.BOATBUILDING__Store_Location__c;
+                                            objPAIN.Inventory__c = obj.Id;
+                                            objPAIN.BOATBUILDING__Quantity__c = objOrderEditWrapper.received;
+                                            lstPA.add(objPAIN);
+                                        }
+                                    }
                                 }
-                            } else if(!obj.BOATBUILDING__Parts_Availability__r.isEmpty()) {
-                                System.debug('obj.BOATBUILDING__Parts_Availability__r: '+obj.BOATBUILDING__Parts_Availability__r);
+                            } else if(sCount == 1){
                                 Map<String, Parts_Availability__c> mapStoreLocToPA = new Map<String, Parts_Availability__c>();
                                 for(Parts_Availability__c objPA : obj.BOATBUILDING__Parts_Availability__r) {
                                     mapStoreLocToPA.put(objPA.Store_Location__c, objPA);
                                 }
-                                System.debug('objOrderEditWrapper.lstPA: '+objOrderEditWrapper.lstPA);
-                                for(Parts_Availability__c objPA: objOrderEditWrapper.lstPA) {
-                                    if(mapStoreLocToPA.containsKey(objPA.BOATBUILDING__Store_Location__c)){
-                                        Parts_Availability__c objPAIN = mapStoreLocToPA.get(objPA.BOATBUILDING__Store_Location__c);
-                                        objPAIN.Store_Location__c = objPA.BOATBUILDING__Store_Location__c;
-                                        if(objPAIN.BOATBUILDING__Quantity__c != null) {
-                                            objPAIN.BOATBUILDING__Quantity__c += objPA.BOATBUILDING__Quantity__c;
-                                        } else { 
-                                            objPAIN.BOATBUILDING__Quantity__c = objPA.BOATBUILDING__Quantity__c;
-                                        } 
-                                        lstPA.add(objPAIN); 
-                                    } else {
-                                        Parts_Availability__c objPAIN = new Parts_Availability__c();
-                                        objPAIN.Store_Location__c = objPA.BOATBUILDING__Store_Location__c;
-                                        objPAIN.Inventory__c = obj.Id;
-                                        objPAIN.BOATBUILDING__Quantity__c = objOrderEditWrapper.received;
-                                        lstPA.add(objPAIN);
-                                    }
+                                Parts_Availability__c objPAIN;
+                                if(mapStoreLocToPA.containsKey(oneValue)) {
+                                    objPAIN = mapStoreLocToPA.get(oneValue);
+                                } else {
+                                    objPAIN = new Parts_Availability__c();
+                                    objPAIN.Inventory__c = obj.Id;
                                 }
+                                objPAIN.Store_Location__c = oneValue;
+                                objPAIN.BOATBUILDING__Quantity__c = objOrderEditWrapper.received;
+                                lstPA.add(objPAIN);
                             }
-                        } else if(sCount == 1){
-                            Map<String, Parts_Availability__c> mapStoreLocToPA = new Map<String, Parts_Availability__c>();
-                            for(Parts_Availability__c objPA : obj.BOATBUILDING__Parts_Availability__r) {
-                                mapStoreLocToPA.put(objPA.Store_Location__c, objPA);
+                            if(obj.Cost__c != null){
+                                amntOnOrder += Integer.valueOf(objOrderEditWrapper.received) * obj.Cost__c;
                             }
-                            Parts_Availability__c objPAIN;
-                            if(mapStoreLocToPA.containsKey(oneValue)) {
-                                objPAIN = mapStoreLocToPA.get(oneValue);
-                            } else {
-                                objPAIN = new Parts_Availability__c();
-                                objPAIN.Inventory__c = obj.Id;
-                            }
-                            objPAIN.Store_Location__c = oneValue;
-                            objPAIN.BOATBUILDING__Quantity__c = objOrderEditWrapper.received;
-                            lstPA.add(objPAIN);
                         }
-                    }
-                } 
+                    } 
+                }
+                if(!lstPA.isEmpty()) 
+                    upsert lstPA;
             }
-            if(!lstPA.isEmpty()) 
-                upsert lstPA;
-            BOATBUILDING__Order__c objOrder = [Select Id, RecordTypeId, Vendor_Name__c, PO_Date__c From Order__c Where Id =: strOrderId];
+            
+            BOATBUILDING__Order__c objOrder = new BOATBUILDING__Order__c();//[Select Id, RecordTypeId, Vendor_Name__c, PO_Date__c, BOATBUILDING__Shipping_Charges__c, BOATBUILDING__Discount_Price__c From Order__c Where Id =: strOrderId];
+            objOrder.Id = strOrderId;
             objOrder.RecordTypeId = Schema.SObjectType.BOATBUILDING__Order__c.getRecordTypeInfosByName().get('Purchase Order Approved').getRecordTypeId(); 
             objOrder.Is_Approved__c = true;
+            objOrder.Amount_On_Order__c = amntOnOrder;
             update objOrder;
             return 'SUCCESS';
         } catch(Exception ex) {
-    		System.debug('Error: '+ex.getMessage()+' Line Number: '+ex.getLineNumber());
-    		return 'Error: '+ex.getMessage()+' Line Number: '+ex.getLineNumber()+' : '+ex.getStackTraceString();
-    	}
+            System.debug('Error: '+ex.getMessage()+' Line Number: '+ex.getLineNumber());
+            throw new AuraHandledException('Error: '+ex.getMessage()+' Line Number: '+ex.getLineNumber()+' : '+ex.getStackTraceString());    
+            //return 'Error: '+ex.getMessage()+' Line Number: '+ex.getLineNumber()+' : '+ex.getStackTraceString(); 
+        }
     }
     
     @AuraEnabled
@@ -186,18 +205,18 @@ public with sharing class OrderEditController {
                         setPartNumbers.add(objOrderEditWrapper.partNo);
                     }
                 }
-                 
+                
                 if(isBackOrder) {
                     List<BOATBUILDING__Part__c> lstPart = [Select 
-                                                            Bin__c, Vendor_Name__c,  Retail_Price__c,  Part_Number__c,  Name,  Id, Dealer_Price__c, Part_Cost__c, Category1__c, 
-                                                            Discount__c, Family1__c, Location__c, Map_Price__c, Minimum_Amount__c, Part_Color__c, Part_Size__c, Taxable__c, Weight__c
-                                                    From 
-                                                            BOATBUILDING__Part__c 
-                                                    WHERE 
-                                                            Part_Number__c 
-                                                    IN
-                                                            :setPartNumbers]; 
-                    BOATBUILDING__Order__c objOrder = [Select Id, RecordTypeId, Vendor_Name__c, PO_Date__c From Order__c Where Id =: strOrderId];
+                                                           Bin__c, Vendor_Name__c,  Retail_Price__c,  Part_Number__c,  Name,  Id, Dealer_Price__c, Part_Cost__c, Category1__c, 
+                                                           Discount__c, Family1__c, Location__c, Map_Price__c, Minimum_Amount__c, Part_Color__c, Part_Size__c, Taxable__c, Weight__c
+                                                           From 
+                                                           BOATBUILDING__Part__c 
+                                                           WHERE 
+                                                           Part_Number__c 
+                                                           IN
+                                                           :setPartNumbers]; 
+                    BOATBUILDING__Order__c objOrder = [Select Id, RecordTypeId, Vendor_Name__c, PO_Date__c, BOATBUILDING__Shipping_Charges__c, BOATBUILDING__Discount_Price__c From Order__c Where Id =: strOrderId];
                     BOATBUILDING__Order__c objBackPurchaseOrder = new BOATBUILDING__Order__c();
                     objBackPurchaseOrder.RecordTypeId = Schema.SObjectType.BOATBUILDING__Order__c.getRecordTypeInfosByName().get('Purchase Order').getRecordTypeId(); 
                     objBackPurchaseOrder.Vendor_Name__c = objOrder.Vendor_Name__c;
@@ -239,25 +258,30 @@ public with sharing class OrderEditController {
                     }
                     insert lstPOLI;
                     objBackPurchaseOrder.Amount_On_Order__c = amntOnOrder;
+                    if(objOrder.BOATBUILDING__Shipping_Charges__c != null) {
+                        //objBackPurchaseOrder.Amount_On_Order__c += objOrder.BOATBUILDING__Shipping_Charges__c;
+                    }
+                    if(objOrder.BOATBUILDING__Discount_Price__c != null) {
+                        //objBackPurchaseOrder.Amount_On_Order__c -= objOrder.BOATBUILDING__Discount_Price__c;
+                    }
                     update objBackPurchaseOrder;            
                 }
                 return 'SUCCESS';
             } catch(Exception ex) {
                 System.debug('Error: '+ex.getMessage()+' Line Number: '+ex.getLineNumber());
-    		    return 'Error: '+ex.getMessage()+' Line Number: '+ex.getLineNumber()+' : '+ex.getStackTraceString();
+                return 'Error: '+ex.getMessage()+' Line Number: '+ex.getLineNumber()+' : '+ex.getStackTraceString();
             }
         } else {
             return strResponse;
         }
     }
     
-
     @AuraEnabled
     public static List<OrderEditWrapper> getLineItemDetail(String recordOrderId){
         List<BOATBUILDING__Line_Items__c> lstlineItem = [SELECT Id, BOATBUILDING__Order__c, BOATBUILDING__Amount__c,
                                                          BOATBUILDING__Cost__c,BOATBUILDING__Discount__c,BOATBUILDING__Part_Number_del__c,
                                                          BOATBUILDING__Quantity__c,BOATBUILDING__Total_Cost__c,BOATBUILDING__Name__c
-                                                         FROM BOATBUILDING__Line_Items__c WHERE BOATBUILDING__Order__c =: recordOrderId];
+                                                         FROM BOATBUILDING__Line_Items__c WHERE BOATBUILDING__Order__c =: recordOrderId ORDER by BOATBUILDING__Sorting_sequence__c];
         
         List<OrderEditWrapper> lstWrapper = new List<OrderEditWrapper>();
         System.debug('>>>>lstLineItem -'+ lstlineItem);
@@ -270,7 +294,7 @@ public with sharing class OrderEditController {
             // objOrderEditWrapper.totalOfQuantity +=Integer.valueof(objlstlineItem.BOATBUILDING__Quantity__c);
             objOrderEditWrapper.partNo= objlstlineItem.BOATBUILDING__Part_Number_del__c;
             objOrderEditWrapper.description= objlstlineItem.BOATBUILDING__Name__c;
-            objOrderEditWrapper.received= 0;
+            objOrderEditWrapper.received = null;
             objOrderEditWrapper.lstPA = new List<BOATBUILDING__Parts_Availability__c>();
             lstWrapper.add(objOrderEditWrapper);
         }
@@ -279,15 +303,19 @@ public with sharing class OrderEditController {
     
     @AuraEnabled
     public static BOATBUILDING__Order__c getOrderDetail(String recordId){
-        BOATBUILDING__Order__c objOrder = [SELECT Id, BOATBUILDING__Vendor_Name__c,BOATBUILDING__Grand_Total__c,BOATBUILDING__Shipping_Charges__c,
-                                           BOATBUILDING__Discount_Price__c,BOATBUILDING__Amount_On_Order__c FROM BOATBUILDING__Order__c WHERE Id =: recordId];
+        BOATBUILDING__Order__c objOrder = [SELECT Id, BOATBUILDING__Vendor_Name__c,BOATBUILDING__Grand_Total__c,
+                                           BOATBUILDING__Shipping_Charges__c,
+                                           BOATBUILDING__Discount_Price__c,BOATBUILDING__Amount_On_Order__c 
+                                           FROM BOATBUILDING__Order__c WHERE Id =: recordId];
         return objOrder;
     }
+    
     @AuraEnabled
     public static Id getRecTypeId(){
         Id recid = Schema.SObjectType.BOATBUILDING__Order__c.getRecordTypeInfosByName().get('Order').getRecordTypeId();        
         return recid;
     }
+    
     @AuraEnabled
     public static List<Object> getSlocationDetails(){
         Integer sCount = 0;
@@ -300,13 +328,14 @@ public with sharing class OrderEditController {
         }  
         sCount = ple.size(); 
         if(sCount == 2 && (setPicklistSL.contains('Other') || setPicklistSL.contains('other'))) {
-        	//sCount = 1;
+            //sCount = 1;
         } 
-
+        
         lstObj.add(sCount);
         lstObj.add(setPicklistSL);
         //1. Count
         //2. Slocation Set
         return lstObj;
+        
     }
 }

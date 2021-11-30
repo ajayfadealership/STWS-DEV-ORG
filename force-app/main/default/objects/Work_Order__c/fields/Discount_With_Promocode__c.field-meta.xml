@@ -3,7 +3,7 @@
     <fullName>Discount_With_Promocode__c</fullName>
     <deprecated>false</deprecated>
     <externalId>false</externalId>
-    <formula>IF( Promo_Code__r.IsActive__c , IF(ISPICKVAL(Promo_Code__r.Discount_In__c, &#39;Amount&#39;), Promo_Code__r.Discount_Amount__c , IF(ISPICKVAL(Promo_Code__r.Discount_In__c, &#39;Percentage&#39;), ( Total_Amt_No_Shipping__c * Promo_Code__r.Discount_Percentage__c ), 0)), 0.00)</formula>
+    <formula>IF( Promo_Code__r.IsActive__c , IF(ISPICKVAL(Promo_Code__r.Discount_In__c, &apos;Amount&apos;), Promo_Code__r.Discount_Amount__c , IF(ISPICKVAL(Promo_Code__r.Discount_In__c, &apos;Percentage&apos;), ( Total_Amt_No_Shipping__c * Promo_Code__r.Discount_Percentage__c ), 0)), 0.00)</formula>
     <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
     <label>Discount With Promocode</label>
     <precision>18</precision>

@@ -1,0 +1,568 @@
+<aura:component implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,lightning:actionOverride,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction" Controller="InventoryCustomViewLightning" access="global">
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    <aura:attribute name="fetchData" type="object" access="global"/>
+    <aura:attribute name="fetchDataLocal" type="object" access="global"/>
+    <aura:attribute name="recordTypeMap" type="Map" access="global" />
+    <aura:attribute name="yearMap" type="Map" access="global" />
+    <aura:attribute name="StoreLocationMap" type="Map" access="global" />
+    <aura:attribute name="boatTypeMap" type="Map" access="global" />
+    <aura:attribute name="makeMap" type="Map" access="global" />
+    <aura:attribute name="modelMap" type="Map" access="global" />
+    <aura:attribute name="statusMap" type="Map" access="global" />
+    <aura:handler name="change" value="{!v.fetchDataLocal}" action="{!c.resetCount}" />
+    <aura:attribute name="storeLocaiton" type="String" access="global" />
+    <aura:attribute name="recordType" type="String" access="global" />
+    <aura:attribute name="Year" type="String" access="global" />
+    <aura:attribute name="type" type="String" access="global" />
+    <aura:attribute name="boatType" type="String" access="global" />
+    <aura:attribute name="status" type="String" access="global" />
+   
+    <aura:attribute name="Make" type="String" access="global" />
+    <aura:attribute name="Model" type="String" access="global" />
+    <aura:attribute name="searchvalue" type="String" access="global" />
+    <aura:attribute name="spinner" type="Boolean" default="false" access="global"/>
+    <aura:attribute name="spinner2" type="Boolean" default="false" access="global"/>
+    <aura:attribute name="filterChangedFieldName" type="String" access="global" default="load" />
+    
+    <aura:if isTrue="{!v.spinner}">
+        <div aura:id="spinnerId" class="slds-spinner_container">
+            <div class="slds-spinner--brand  slds-spinner slds-spinner--large slds-is-relative" role="alert">
+                <span class="slds-assistive-text">Loading...</span>
+                <div class="slds-spinner__dot-a"></div>
+                <div class="slds-spinner__dot-b"></div>
+            </div>
+        </div>
+    </aura:if>
+    <aura:if isTrue="{!v.spinner2}">
+        <div aura:id="spinnerId" class="slds-spinner_container">
+            <div class="slds-spinner--brand  slds-spinner slds-spinner--large slds-is-relative" role="alert">
+                <span class="slds-assistive-text">Loading...</span>
+                <div class="slds-spinner__dot-a"></div>
+                <div class="slds-spinner__dot-b"></div>
+            </div>
+        </div>
+    </aura:if>
+    <div class="slds-grid slds-gutters slds-wrap slds-box slds-theme_default "> 
+        <div class="slds-media__body">
+            <header class="slds-media slds-media--center slds-has-flexi-truncate" >
+                <lightning:icon iconName="custom:custom88" title="custom88" />
+                <h2>
+                    <span class="slds-text-heading--small"> &nbsp;&nbsp; <b>Inventory</b></span>
+                </h2>
+            </header>
+        </div> 
+        
+    </div>
+    
+    <div class="slds-grid slds-gutters slds-wrap slds-box slds-theme_default ">     
+        
+        <div class="slds-col slds-size_1-of-3  slds-medium-size_1-of-1 slds-large-size_1-of-3">
+            
+           
+            <lightning:select name="type" aura:id="Type" label="Type"  value="{!v.type}" onchange="{!c.typeChanged}">
+                <option value="All" selected="true">All</option>
+                <aura:iteration items="{!v.recordTypeMap}" var="rt" indexVar="key">
+                    
+                    <option text="{!rt.key+' ('+rt.value+')'}" value="{!rt.key}" />
+                </aura:iteration>
+            </lightning:select>
+        </div>
+        <div class="slds-col slds-size_1-of-3  slds-medium-size_1-of-1 slds-large-size_1-of-3">
+            
+            <lightning:select name="status" aura:id="status" label="Status"  value="{!v.status}" onchange="{!c.statusChanged}" >
+                <option value="All"  selected="true">All</option>
+                <aura:iteration items="{!v.statusMap}" var="stl" indexVar="key">
+                    <option text="{!stl.key+' ('+stl.value+')'}" value="{!stl.key}" />
+                </aura:iteration>
+            </lightning:select>
+        </div>
+        <div class="slds-col slds-size_1-of-3  slds-medium-size_1-of-1 slds-large-size_1-of-3">
+            
+            <lightning:select name="year" aura:id="year" label="Year"  value="{!v.Year}" onchange="{!c.yearChanged}">
+                <option value="All" selected="true">All</option>
+                <aura:iteration items="{!v.yearMap}" var="stl" indexVar="key">
+                    
+                    <option text="{!stl.key+' ('+stl.value+')'}" value="{!stl.key}" />
+                </aura:iteration>
+            </lightning:select>
+        </div>
+        <div class="slds-col slds-size_1-of-3  slds-medium-size_1-of-1 slds-large-size_1-of-3">
+            
+            <lightning:select name="boatType" aura:id="boatType" label="Boat Type"  value="{!v.boatType}" onchange="{!c.boatTypeChanged}">
+                <option value="All" selected="true">All</option>
+                <aura:iteration items="{!v.boatTypeMap}" var="stl" indexVar="key">
+                    
+                    <option text="{!stl.key+' ('+stl.value+')'}" value="{!stl.key}" />
+                </aura:iteration>
+            </lightning:select>
+        </div>
+        
+        <div class="slds-col slds-size_1-of-3  slds-medium-size_1-of-1 slds-large-size_1-of-3">
+            
+            <lightning:select name="makeType" aura:id="boatmake" label="Make"  value="{!v.Make}" onchange="{!c.makeChanged}">
+                <option value="All" selected="true">All</option>
+                <aura:iteration items="{!v.makeMap}" var="stl" indexVar="key">
+                    
+                    <option text="{!stl.key+' ('+stl.value+')'}" value="{!stl.key}" />
+                </aura:iteration>
+            </lightning:select>
+        </div>
+        <div class="slds-col slds-size_1-of-3  slds-medium-size_1-of-1 slds-large-size_1-of-3">
+            
+            <lightning:select name="makeType" aura:id="boatmake" label="Model"  value="{!v.Model}" onchange="{!c.modelChanged}">
+                <option value="All" selected="true">All</option>
+                <aura:iteration items="{!v.modelMap}" var="stl" indexVar="key">
+                    
+                    <option text="{!stl.key+' ('+stl.value+')'}" value="{!stl.key}" />
+                </aura:iteration>
+            </lightning:select>
+        </div>
+        <div class="slds-col slds-size_1-of-3  slds-medium-size_1-of-1 slds-large-size_1-of-3">
+            
+            <lightning:select name="storeLocation" aura:id="stLocaiton" label="Store Location"  value="{!v.storeLocaiton}" onchange="{!c.storeLocationChanged}">
+                <option value="All" selected="true">All</option>
+                <aura:iteration items="{!v.StoreLocationMap}" var="stl" indexVar="key">
+                    
+                    <option text="{!stl.key+' ('+stl.value+')'}" value="{!stl.key}" />
+                </aura:iteration>
+            </lightning:select>
+        </div>
+        <div class="slds-col slds-size_1-of-3  slds-medium-size_1-of-1 slds-large-size_1-of-3">
+            <lightning:input onkeyup="{! c.handleKeyUp }"
+                             aura:id="enter-search"
+                             name="enter-search"
+                             label="Search"
+                             
+                             type="search"
+                             />
+        </div>
+        <div class="slds-p-top_large">
+            <aura:iteration items="{!v.fetchDataLocal}" var="obj" >
+                <article class="slds-card slds-box slds-theme_default">
+                    <div class="slds-col slds-size--6-of-6">
+                        <div class="slds-grid slds-wrap">
+                            <div class="slds-col slds-size--3-of-6">
+                                <div class="slds-grid slds-wrap" >
+                                    <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-3 slds-col--padded">
+                                        <div class="slds-form-element">
+                                            <div class="slds-form-element__control">
+                                                <div class="media-left">
+                                                    <aura:if isTrue="{!and(obj.Attachments[0].Id != '', obj.Attachments[0].Id != null)}">
+                                                        <a href="{!'/servlet/servlet.FileDownload?file='+obj.Attachments[0].Id}">
+                                                            <img src="{!'/servlet/servlet.FileDownload?file='+obj.Attachments[0].Id}"/>
+                                                        </a>
+                                                        <aura:set attribute="else">
+                                                            
+                                                            <lightning:icon iconName="action:new_note" alternativeText="New note" title="New note" />
+                                                        </aura:set>
+                                                    </aura:if>
+                                                    
+                                                </div>
+                                            </div> 
+                                        </div>
+                                    </div>
+                                    <div class="slds-col slds-size--2-of-3">
+                                        <div class="slds-grid slds-wrap" >
+                                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-2 slds-col--padded">
+                                                <div class="slds-form-element">
+                                                    <div class="slds-form-element__control">
+                                                        <span class="key-name">  <b>Inventory</b></span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-2 slds-col--padded">
+                                                <div class="slds-form-element">
+                                                    <div class="slds-form-element__control">
+                                                        <span class="key-val"><a onclick="{!c.redirect}" title="{!obj.Id}">{!obj.Name}</a></span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-2 slds-col--padded">
+                                                <div class="slds-form-element">
+                                                    <div class="slds-form-element__control">
+                                                        <span class="key-name"><b>Year</b></span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-2 slds-col--padded">
+                                                <div class="slds-form-element">
+                                                    <div class="slds-form-element__control">
+                                                        <span class="key-val">{!obj.BOATBUILDING__Year__c}</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            
+                                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-2 slds-col--padded">
+                                                <div class="slds-form-element">
+                                                    <div class="slds-form-element__control">
+                                                        <span class="key-name"><b>Manufacture</b></span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-2 slds-col--padded">
+                                                <div class="slds-form-element">
+                                                    <div class="slds-form-element__control">
+                                                        <span class="key-val">{!obj.BOATBUILDING__Manufacturer__c}</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-2 slds-col--padded">
+                                                <div class="slds-form-element">
+                                                    <div class="slds-form-element__control">
+                                                        <span class="key-name"><b>Model</b></span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-2 slds-col--padded">
+                                                <div class="slds-form-element">
+                                                    <div class="slds-form-element__control">
+                                                        <span class="key-val">{!obj.BOATBUILDING__Model__c}</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-2 slds-col--padded">
+                                                <div class="slds-form-element">
+                                                    <div class="slds-form-element__control">
+                                                        <span class="key-name"><b>Model Variant</b></span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-2 slds-col--padded">
+                                                <div class="slds-form-element">
+                                                    <div class="slds-form-element__control">
+                                                        <span class="key-val">{!obj.BOATBUILDING__Model_Variant__c}</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-2 slds-col--padded">
+                                                <div class="slds-form-element">
+                                                    <div class="slds-form-element__control">
+                                                        <span class="key-name"><b> Type</b></span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-2 slds-col--padded">
+                                                <div class="slds-form-element">
+                                                    <div class="slds-form-element__control">
+                                                        <span class="key-val">{!obj.RecordType.Name}</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-2 slds-col--padded">
+                                                <div class="slds-form-element">
+                                                    <div class="slds-form-element__control">
+                                                        <span class="key-name"><b>Boat Type</b></span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-2 slds-col--padded">
+                                                <div class="slds-form-element">
+                                                    <div class="slds-form-element__control">
+                                                        <span class="key-val">{!obj.BOATBUILDING__Boat_Type__c}</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-2 slds-col--padded">
+                                                <div class="slds-form-element">
+                                                    <div class="slds-form-element__control">
+                                                        <span class="key-name"><b>HIN NO.</b></span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-2 slds-col--padded">
+                                                <div class="slds-form-element">
+                                                    <div class="slds-form-element__control">
+                                                        <span class="key-val">{!obj.BOATBUILDING__HIN_Number__c}</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-2 slds-col--padded">
+                                                <div class="slds-form-element">
+                                                    <div class="slds-form-element__control">
+                                                        <span class="key-name"><b>Engine SN</b></span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-2 slds-col--padded">
+                                                <div class="slds-form-element">
+                                                    <div class="slds-form-element__control">
+                                                        <span class="key-val">{!obj.BOATBUILDING__Engine_SN__c}</span>
+                                                    </div>
+                                                </div>
+                                                
+                                            </div>
+                                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-2 slds-col--padded">
+                                                <div class="slds-form-element">
+                                                    <div class="slds-form-element__control">
+                                                        <span class="key-name">  <b>Trailer VIN</b></span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-2 slds-col--padded">
+                                                <div class="slds-form-element">
+                                                    <div class="slds-form-element__control">
+                                                        <span class="key-val">{!obj.BOATBUILDING__Trailer_VIN__c}</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-2 slds-col--padded">
+                                                <div class="slds-form-element">
+                                                    <div class="slds-form-element__control">
+                                                        <span class="key-name"><b>Boat Length(Feet)</b></span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-2 slds-col--padded">
+                                                <div class="slds-form-element">
+                                                    <div class="slds-form-element__control">
+                                                        <span class="key-val">{!obj.BOATBUILDING__Boat_Length_in_feets__c}</span>
+                                                    </div>
+                                                </div>
+                                            </div>   
+                                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-2 slds-col--padded">
+                                                <div class="slds-form-element">
+                                                    <div class="slds-form-element__control">
+                                                        <span class="key-name"><b>Price</b></span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <aura:if  isTrue="{!obj.RecordType.Name =='New Boats'}" >
+                                                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-2 slds-col--padded">
+                                                    <div class="slds-form-element">
+                                                        <div class="slds-form-element__control">
+                                                            <span class="key-val"><ui:outputCurrency value="{!obj.BOATBUILDING__Total_MSRP_Price__c}"/></span>
+                                                            
+                                                        </div>
+                                                    </div>
+                                                    
+                                                </div>
+                                                <aura:set attribute="else">
+                                                    <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-2 slds-col--padded">
+                                                        <div class="slds-form-element">
+                                                            <div class="slds-form-element__control">
+                                                                <span class="key-val"> <ui:outputCurrency value="{!obj.BOATBUILDING__Suggested_List_Price__c}"/></span>
+                                                            </div>
+                                                        </div>
+                                                        
+                                                    </div>
+                                                </aura:set>
+                                            </aura:if>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <a class="slds-button slds-button--neutral slds-button--brand" onclick="{!c.navigate}"  data-recId="{!obj.Id}" target="_blank" style="position: absolute; right: 13%;top: calc(50% - 20px);padding:5px 12px; font-size: 14px; z-index: 1000;">Quote</a>       
+                            
+                            <div class="slds-col slds-size--3-of-6">
+                                <div class="slds-grid slds-wrap" >
+                                    <div class="slds-col slds-size--2-of-3">
+                                        <div class="slds-grid slds-wrap" >
+                                            
+                                             <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-2 slds-col--padded">
+                                                <div class="slds-form-element">
+                                                    <div class="slds-form-element__control">
+                                                        <span class="key-name"><b> Store Location</b></span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-2 slds-col--padded">
+                                                <div class="slds-form-element">
+                                                    <div class="slds-form-element__control">
+                                                        <span class="key-val">{!obj.BOATBUILDING__Store_Location__c}</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-2 slds-col--padded">
+                                                <div class="slds-form-element">
+                                                    <div class="slds-form-element__control">
+                                                        <span class="key-name"><b>Location</b></span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-2 slds-col--padded">
+                                                <div class="slds-form-element">
+                                                    <div class="slds-form-element__control">
+                                                        <span class="key-val">{!obj.BOATBUILDING__Location__c}</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-2 slds-col--padded">
+                                                <div class="slds-form-element">
+                                                    <div class="slds-form-element__control">
+                                                        <span class="key-name"><b>Stage</b></span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-2 slds-col--padded">
+                                                <div class="slds-form-element">
+                                                    <div class="slds-form-element__control">
+                                                        <span class="key-val">{!obj.BOATBUILDING__Stage__c}</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            
+                                              
+                                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-2 slds-col--padded">
+                                                <div class="slds-form-element">
+                                                    <div class="slds-form-element__control">
+                                                        <span class="key-name"><b>Days in the lot</b></span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-2 slds-col--padded">
+                                                <div class="slds-form-element">
+                                                    <div class="slds-form-element__control">
+                                                        <span class="key-val">{!obj.BOATBUILDING__Days_on_Lot__c}</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-2 slds-col--padded">
+                                                <div class="slds-form-element">
+                                                    <div class="slds-form-element__control">
+                                                        <span class="key-name"><b>Status for Days on the Lot</b></span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-2 slds-col--padded">
+                                                <div class="slds-form-element">
+                                                    <div class="slds-form-element__control">
+                                                        <span class="key-val">
+                                                            <ui:outputRichText value="{!obj.BOATBUILDING__Status_for_Days_on_the_Lot__c}"/>
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            
+                                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-2 slds-col--padded">
+                                                <div class="slds-form-element">
+                                                    <div class="slds-form-element__control">
+                                                        <span class="key-name"><b>Interest Start Date</b></span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-2 slds-col--padded">
+                                                <div class="slds-form-element">
+                                                    <div class="slds-form-element__control">
+                                                        <span class="key-val">{!obj.BOATBUILDING__Interest_Start_Date__c}</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-2 slds-col--padded">
+                                                <div class="slds-form-element">
+                                                    <div class="slds-form-element__control">
+                                                        <span class="key-name"><b>Status for Interest Date</b></span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-2 slds-col--padded">
+                                                <div class="slds-form-element">
+                                                    <div class="slds-form-element__control">
+                                                        <span class="key-val">
+                                                            <ui:outputRichText value="{!obj.BOATBUILDING__Status_for_Interest_Start_Date__c}"/>
+                                                            
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            
+                                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-2 slds-col--padded">
+                                                <div class="slds-form-element">
+                                                    <div class="slds-form-element__control">
+                                                        <span class="key-name"><b>Curtailments Start Date</b></span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-2 slds-col--padded">
+                                                <div class="slds-form-element">
+                                                    <div class="slds-form-element__control">
+                                                        <span class="key-val">{!obj.BOATBUILDING__Curtailment_Start_Date__c}</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-2 slds-col--padded">
+                                                <div class="slds-form-element">
+                                                    <div class="slds-form-element__control">
+                                                        <span class="key-name"><b>Status for Curtailment Date</b></span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-2 slds-col--padded">
+                                                <div class="slds-form-element">
+                                                    <div class="slds-form-element__control">
+                                                        <span class="key-val">
+                                                            
+                                                            <ui:outputRichText value="{!obj.BOATBUILDING__Status_for_Curtailment_Start_Date__c}"/>
+                                                            
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                           
+                                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-2 slds-col--padded">
+                                                <div class="slds-form-element">
+                                                    <div class="slds-form-element__control">
+                                                        <span class="key-name"><b>Main color</b></span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-2 slds-col--padded">
+                                                <div class="slds-form-element">
+                                                    <div class="slds-form-element__control">
+                                                        <span class="key-val">{!obj.BOATBUILDING__Main_color__c}</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            
+                                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-2 slds-col--padded">
+                                                <div class="slds-form-element">
+                                                    <div class="slds-form-element__control">
+                                                        <span class="key-name"><b>Accent color</b></span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-2 slds-col--padded">
+                                                <div class="slds-form-element">
+                                                    <div class="slds-form-element__control">
+                                                        <span class="key-val">{!obj.BOATBUILDING__Accent_color__c}</span>
+                                                    </div>
+                                                </div>
+                                                
+                                            </div>
+
+                                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-2 slds-col--padded">
+                                                <div class="slds-form-element">
+                                                    <div class="slds-form-element__control">
+                                                        <span class="key-name"><b>Owner</b></span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-2 slds-col--padded">
+                                                <div class="slds-form-element">
+                                                    <div class="slds-form-element__control">
+                                                        <span class="key-val">{!obj.BOATBUILDING__Owner__c}</span>
+                                                    </div>
+                                                </div>
+                                                
+                                            </div>
+                                       </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </article>
+            </aura:iteration>
+        </div> 
+        
+    </div>  
+    <aura:if isTrue="{!v.fetchDataLocal.length == 0}">
+        <div class="slds-notify_container slds-is-relative">
+            <div class="slds-notify slds-notify_toast slds-theme_error" role="alert">
+                <div class="slds-notify__content">
+                    <h2 class="slds-text-heading_small">No Records Found...</h2>
+                </div>
+            </div>
+        </div>
+    </aura:if>       
+</aura:component>

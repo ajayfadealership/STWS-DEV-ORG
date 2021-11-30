@@ -14,9 +14,12 @@
             console.log(response.getReturnValue()); 
             if (state === "SUCCESS") {
                 component.set("v.objManu", response.getReturnValue()); 
-                component.set("v.detailSection", true);  
+                component.set("v.vendorVal", response.getReturnValue().Id); 
+                component.set("v.detailSection", true);   
                 console.log(component.get("v.detailSection"));
             } else {
+                console.log('Error',response.getError());
+                component.set("v.detailSection", true);  
                 component.set("v.objManu", {'sobjectType': 'BOATBUILDING__Manufacturer__c'});
             }
         });

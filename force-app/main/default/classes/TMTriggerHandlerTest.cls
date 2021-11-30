@@ -23,7 +23,7 @@ public class TMTriggerHandlerTest {
         insert objTime;        
         List<Time_Management__c> lstTM = new List<Time_Management__c>();
         lstTM.add(objTime);        
-        TMTriggerHandler.updateName(lstTM);     
+        TMTriggerHandler.updateName(lstTM,new Map<Id, BOATBUILDING__Time_Management__c>());     
        
     }
     testmethod static void Test2(){
@@ -45,7 +45,7 @@ public class TMTriggerHandlerTest {
         insert objTime;        
         List<Time_Management__c> lstTM = new List<Time_Management__c>();
         lstTM.add(objTime);       
-        TMTriggerHandler.updateName(lstTM);        
+        TMTriggerHandler.updateName(lstTM, new Map<Id, BOATBUILDING__Time_Management__c>());        
     }
     testmethod static void Test3(){
         Account objAcc = new Account();
@@ -66,7 +66,7 @@ public class TMTriggerHandlerTest {
         insert objTime;        
         List<Time_Management__c> lstTM = new List<Time_Management__c>();
         lstTM.add(objTime);        
-        TMTriggerHandler.updateName(lstTM);      
+        TMTriggerHandler.updateName(lstTM, new Map<Id, BOATBUILDING__Time_Management__c>());      
     }
      testmethod static void Test4(){
         Account objAcc = new Account();
@@ -88,7 +88,7 @@ public class TMTriggerHandlerTest {
                
         List<Time_Management__c> lstTM = new List<Time_Management__c>();
         lstTM.add(objTime);        
-        TMTriggerHandler.updateName(lstTM);        
+        TMTriggerHandler.updateName(lstTM, new Map<Id, BOATBUILDING__Time_Management__c>());        
     }
     testmethod static void Test5(){
         Account objAcc = new Account();
@@ -115,7 +115,7 @@ public class TMTriggerHandlerTest {
         insert objTime;   
         List<Time_Management__c> lstTM = new List<Time_Management__c>();
         lstTM.add(objTime);       
-        TMTriggerHandler.updateName(lstTM);        
+        TMTriggerHandler.updateName(lstTM, new Map<Id, BOATBUILDING__Time_Management__c>());        
     }
 	   
     testmethod static void Test6(){
@@ -137,7 +137,7 @@ public class TMTriggerHandlerTest {
         insert objTime;   
         List<Time_Management__c> lstTM = new List<Time_Management__c>();
         lstTM.add(objTime);       
-        TMTriggerHandler.updateName(lstTM);        
+        TMTriggerHandler.updateName(lstTM, new Map<Id, BOATBUILDING__Time_Management__c>());        
     }
 
 }

@@ -3,7 +3,8 @@
     <fullName>Balance__c</fullName>
     <deprecated>false</deprecated>
     <externalId>false</externalId>
-    <formula>Deducted_Total_Due_Amount__c -  Total_Payment_payment__c</formula>
+    <formula>if(ISBLANK(Total_Payment_payment__c) , Deducted_Total_Due_Amount__c, Deducted_Total_Due_Amount__c- Total_Payment_payment__c)</formula>
+    <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
     <inlineHelpText>Formula : Total Amount Due</inlineHelpText>
     <label>Balance</label>
     <precision>18</precision>

@@ -1,4 +1,4 @@
-<apex:page docType="html-5.0" controller="UsedBoatFormController" sidebar="false" showHeader="false" id="pge" action="{!checkAccess}">
+<apex:page docType="html-5.0" controller="UsedBoatFormController" sidebar="false" showHeader="false" id="pge" >
     <apex:stylesheet value="{!URLFOR($Resource.BoatBuilderSR, '/css/styles.css')}"/>
     <apex:stylesheet value="{!URLFOR($Resource.BoatBuilderSR, '/assets/styles/salesforce-lightning-design-system.min.css')}"/>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"/>
@@ -101,7 +101,7 @@
         function changeIncheckBox(rowNum,jsSelectedOption, objCheckbox){
                 //for spinner
             $('.popup').addClass('active');
-                    if(document.getElementById(objCheckbox.id).checked){
+                    if(objCheckbox){
                         callChangeIncheckBox(rowNum,jsSelectedOption);
                     }else{
                         callChangeIncheckBoxSub(rowNum,jsSelectedOption);
@@ -168,7 +168,25 @@
 						<td>
 							<input type="text" id="decId"  class="slds-input"/>
 						</td> 
-					</tr>
+                    </tr>
+                    <tr>
+						<td colspan="2">
+							&nbsp;
+						</td>
+                    </tr>
+                    <tr>
+						<td>
+							Quantity
+						</td>
+						<td>
+							<input type="text" id="qtId"  class="slds-input" value="1"/>
+						</td> 
+                    </tr>
+                    <tr>
+						<td colspan="2">
+							&nbsp;
+						</td>
+                    </tr>
 					<tr>
 						<td>
 							Dealer Price
@@ -176,7 +194,12 @@
 						<td>
 							<input type="text" id="delId" onkeypress="return isNumberKey(event);" value="0.00" class="slds-input"/>
 						</td>
-					</tr>
+                    </tr>
+                    <tr>
+						<td colspan="2">
+							&nbsp;
+						</td>
+                    </tr>
 					<tr>
 						<td>
 							Retail Price
@@ -184,7 +207,12 @@
 						<td>
 							<input type="text" id="retId" onkeypress="return isNumberKey(event);" value="0.00" class="slds-input"/>
 						</td>
-					</tr>
+                    </tr>
+                    <tr>
+						<td colspan="2">
+							&nbsp;
+						</td>
+                    </tr>
 					<tr>
 						<td colspan="2" style="text-align: center;">
 							<a class="slds-button slds-button--neutral slds-button--brand" onclick="addDealerOptionToList(this);">Add</a>
@@ -290,8 +318,8 @@
                                         <div class="slds-form-element">
                                             <div class="slds-form-element__control">
                                                <!-- <apex:outputLabel value="{!dealerStatus}"/>-->
-<!--                                                <input type="text" placeholder="Length" class="slds-input" /> -->
-                                                <apex:inputField value="{!objInventory.Boat_Length_in_feets__c}" id="ifLen" onchange="fieldValidation(this);" styleClass="slds-input"/>
+<!--                                                <input type="text" placeholder="Length" class="slds-input" /> onchange="fieldValidation(this);"-->
+                                                <apex:inputField value="{!objInventory.Boat_Length_in_feets__c}" id="ifLen"  styleClass="slds-input"/>
                                                 <span id="spanlen" style="color:red;display:none;">Enter value in 0'00" format.</span>
                                             </div>
                                         </div>
@@ -367,8 +395,8 @@
                                         <div class="slds-form-element">
                                             <div class="slds-form-element__control">
                                                <!-- <apex:inputField value="{!objProduct.M_Dealer_Comments__c}"/>-->
-<!--                                                <input type="text" placeholder="Beam" class="slds-input" /> -->
-                                               <apex:inputField value="{!objInventory.Beam__c}" id="ifBm" onchange="fieldValidation(this);" styleClass="slds-input"/>
+<!--                                                <input type="text" placeholder="Beam" class="slds-input" /> onchange="fieldValidation(this);"-->
+                                               <apex:inputField value="{!objInventory.Beam__c}" id="ifBm"  styleClass="slds-input"/>
                                                <span id="spanBeam" style="color:red;display:none;">Enter value in 0'00" format.</span>
                                             </div>
                                         </div>
@@ -545,6 +573,7 @@
                                 </div>
                             
                             </div>
+
                             <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-2 slds-p-left--x-large slds-p-right--x-large">
                                 <div class="slds-grid slds-wrap">
                                     <div class="slds-col slds-size--1-of-1 slds-size--1-of-2">
@@ -554,6 +583,43 @@
                                         <div class="slds-form-element">
                                             <div class="slds-form-element__control">
                                                <apex:inputField value="{!objInventory.Trailer_VIN__c}" styleClass="slds-input"/>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="slds-col slds-size--1-of-1">
+                        <div class="slds-grid slds-wrap">
+                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-2 slds-p-left--x-large">
+                                <div class="slds-grid slds-wrap">
+                                    <div class="slds-col slds-size--1-of-1 slds-size--1-of-2">
+                                        <label class="slds-form-element__label" for="text-input-01">Boats Registration Number</label>
+                                    </div>
+                                    <div class="slds-col slds-size--1-of-2">
+                                        <div class="slds-form-element">
+                                            <div class="slds-form-element__control">
+                                               <!--<apex:outputLabel value="{!selectedModelSecondPage}"/>-->
+<!--                                                <input type="decimal" placeholder="Hull ID" class="slds-input" /> -->
+                                               <apex:inputField value="{!objInventory.Boats_Registration_Number__c}" styleClass="slds-input"/>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            
+                            </div>
+
+                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-2 slds-p-left--x-large slds-p-right--x-large">
+                                <div class="slds-grid slds-wrap">
+                                    <div class="slds-col slds-size--1-of-1 slds-size--1-of-2">
+                                        <label class="slds-form-element__label" for="text-input-01">Trailer License Plate Number</label>
+                                    </div>
+                                    <div class="slds-col slds-size--1-of-2">
+                                        <div class="slds-form-element">
+                                            <div class="slds-form-element__control">
+                                               <apex:inputField value="{!objInventory.Trailer_License_Plate_Number__c}" styleClass="slds-input"/>
                                             </div>
                                         </div>
                                     </div>
@@ -720,8 +786,8 @@
                                         <thead>
                                             <tr class="slds-text-heading--label">
                                                 <th scope="col">Description</th>
-<!--                                                 <th scope="col">&nbsp;</th> -->
-<!--                                                 <th scope="col">Retail Price</th> -->
+                                                <th scope="col">&nbsp;</th>
+                                                <th scope="col" style="text-align: right;">Quantity</th>
 <!--                                                 <th scope="col">Part Number</th> -->
                                             </tr>
                                         </thead>
@@ -735,7 +801,7 @@
                                                             <div class="slds-form-element__control">
                                                                 <label class="slds-checkbox">
 <!--                                                                     <input type="checkbox" name="options" id="checkbox-01" /> -->
-                                                                       <apex:inputCheckbox value="{!lsc.checkBox}" id="ic1" onchange="changeIncheckBox('{!rowNumber}','{!lscM.strSelectedOption}', this)"/>
+                                                                       <apex:inputCheckbox value="{!lsc.checkBox}" id="ic1" onchange="changeIncheckBox('{!rowNumber}','{!lscM.strSelectedOption}', this.checked)"/>
                                                                     <span class="slds-checkbox--faux"></span>
 <!--                                                                        <span class="slds-form-element__label"> Category</span> -->
                                                                     <span class="slds-form-element__label">  {!lsc.objProductPriceForSelectedCategory.ProductSelected_Category__c} </span>
@@ -743,8 +809,10 @@
                                                             </div>
                                                         </div>
                                                     </td>
-<!--                                                     <td>&nbsp;</td> -->
-<!--                                                     <td >Price</td> -->
+                                                    <td>&nbsp;</td>
+                                                    <td style="text-align: right;">
+                                                        <apex:inputField value="{!lsc.objProductPriceForSelectedCategory.Quantity__c}" onchange="changeIncheckBox('{!rowNumber}','{!lscM.strSelectedOption}', true)" id="otqt" styleClass="slds-input" style="max-width: 60px;" />
+                                                    </td> 
 <!--                                                     <td >$<apex:outputText value="{!lsc.objProductPriceForSelectedCategory.ProductRetail_Price__c}" id="ot0"/></td> -->
 <!--                                                     <td>Code</td> -->
 <!--                                                     <td>{!lsc.objProductPriceForSelectedCategory.Product_Code__c}</td>  -->
@@ -778,12 +846,13 @@
 					        <apex:param name="desDOPP" assignTo="{!decDO}" value=""/>
 					        <apex:param name="delDOPP" assignTo="{!delDO}" value=""/>
 					        <apex:param name="recDOPP" assignTo="{!retDO}" value=""/> 
-					        <apex:param name="prtNoDOPP" assignTo="{!pnDO}" value=""/>
+                            <apex:param name="prtNoDOPP" assignTo="{!pnDO}" value=""/>
+                            <apex:param name="qtDOPP" assignTo="{!QT}" value=""/>
 					    </apex:actionFunction>
 					     <apex:actionFunction name="deleteDealerOptionCheckBoxSub" action="{!getDeleteDealerOptionPriceSub}" id="af6" rerender="dealOptOP" oncomplete="completedTask();">
 					        <apex:param name="rN" assignTo="{!dealerPartNumber}" value=""/>
 					    </apex:actionFunction>
-					    <apex:actionFunction name="callDealerOptionCheckBox" action="{!getDealerOptionPrice}" id="af4" rerender="pcDiv1,pcDiv2" oncomplete="completedTask();">
+					    <apex:actionFunction name="callDealerOptionCheckBox" action="{!getDealerOptionPrice}" id="af4" rerender="pcDiv1,pcDiv2,dealOptOP" oncomplete="completedTask();">
 						        <apex:param name="rN" assignTo="{!dealerPartNumber}" value=""/>
 						<!--         <apex:param name="sOC" assignTo="{!selectedOptionCategory}" value=""/> -->
 						    </apex:actionFunction>
@@ -809,7 +878,8 @@
 		          				console.log(obj);
 		          				var dec = '';
 		          				var retPrice = 0.00;
-		          				var dealPrice = 0.00;
+                                  var dealPrice = 0.00;
+                                  var qt = 1;
 		          				var prtNo = Math.floor(Math.random()*100000);
 		          				
 		          				if($("#decId").val() != null && $("#decId").val() != '') {
@@ -820,10 +890,15 @@
 		          				}
 		          				if($("#delId").val() != null && $("#delId").val() != '') {
 		          					dealPrice = $("#delId").val();
-		          				}
+                                }
+                                if($("#qtId").val() != null && $("#qtId").val() != '') {
+		          					qt = $("#qtId").val();
+		          				} else {
+                                    qt = 1;
+                                }
 		          				
 		          				if(dec != '' && retPrice != '' && dealPrice != '') {
-		          					addDealOptToLst(dec, dealPrice, retPrice, prtNo);
+		          					addDealOptToLst(dec, dealPrice, retPrice, prtNo, qt);
 		          				} else {
 		          					alert("Please fill all the details.")
 		          				}
@@ -843,7 +918,7 @@
 					        function changeDealerOption(partNumber, obj){
 					            console.log('All Values : '+ partNumber + ' ' + obj);
 					            $('.popup').addClass('active');
-					            if(document.getElementById(obj.id).checked){
+					            if(obj){
 					                callDealerOptionCheckBox(partNumber);
 					            }else{
 					                callDealerOptionCheckBoxSub(partNumber);
@@ -856,7 +931,8 @@
 			                        <thead>
 			                            <tr class="slds-text-heading--label">
 			                                <th scope="col">Description </th>
-			                                <th scope="col">&nbsp; </th>
+                                            <th scope="col">&nbsp; </th>
+                                            <th scope="col">Quantity</th>
 		                                    <th scope="col">
 			                                    Dealer Price
 			                                </th>
@@ -870,17 +946,21 @@
 				                                <tr class="slds-hint-parent">   
 				                                    <td>
 				                                        <label class="slds-checkbox">
-				                                          <apex:inputCheckbox value="{!varDO.isSelect}" id="ic77"  onchange="changeDealerOption('{!varDO.objDealerOption.Part_Number__c}', this)"/>
+				                                          <apex:inputCheckbox value="{!varDO.isSelect}" id="ic77"  onchange="changeDealerOption('{!varDO.objDealerOption.Part_Number__c}', this.checked)"/>
 				                                          <span class="slds-checkbox--faux"></span>
 				                                          <span class="slds-form-element__label">{!varDO.objDealerOption.Name}</span>
 				                                        </label>
 				                                    </td>
-				                                    <td>&nbsp;</td>
+                                                    <td>&nbsp;</td>
+                                                    <td>
+                                                        <apex:inputField value="{!varDO.objDealerOption.Quantity__c}" id="otqtDO" onchange="changeDealerOption('{!varDO.objDealerOption.Part_Number__c}', true)" styleClass="slds-input" style="max-width: 60px;" />    
+                                                    </td>
 				                                    <td>
-				                                    		<apex:outputField value="{!varDO.objDealerOption.Cost__c}" id="ot22"/>
-				                                    	</td>
-				                                      
-				                                    <td><apex:outputField value="{!varDO.objDealerOption.Retail_Price__c}" id="ot24"/></td>
+				                                    	${!varDO.totalDealerPrice}
+                                                    </td>
+				                                    <td>
+                                                        ${!varDO.totalRetailPrice}
+                                                    </td>
 				                                    <td> 
 				                                    		{!varDO.objDealerOption.Part_Number__c} &nbsp;
 				                                    		<apex:outputPanel rendered="{!varDO.ShowRemoveIcon}">

@@ -77,14 +77,17 @@ public class InvoiceLightningControllerTest {
         string strLineItem = JSON.serialize(lstPOLIW);
         InvoiceLightningController.getLineItems(objInvoice.Id);
         InvoiceLightningController.searchPartsfromInvoiceAndParts('Test');
-        InvoiceLightningController.InvRecordTypeId();
-        InvoiceLightningController.updateInvoicewithLineItems(objInvoice.Id,strLineItem);
+        InvoiceLightningController.InvRecordTypeId('');
+        InvoiceLightningController.updateInvoicewithLineItems(objInvoice.Id,strLineItem,objAccount );
         InvoiceLightningController.getSalesTaxCustomSetting();
+        InvoiceLightningController.UpdateInvoicewithLineItemsWithSelectedAccount(objInvoice.Id,strLineItem);
         InvoiceLightningController.deleteInvoiceLineItem(objInvLineItem.Id);
+        InvoiceLightningController.searchPartsfromInventoryAndParts('test');
 
     } 
     private static testmethod void MyTest2(){
-        InvoiceLightningController.InvRecordTypeId();
+        InvoiceLightningController.InvRecordTypeId('');
+        InvoiceLightningController.searchPartsfromInventoryAndParts('recentlyViewed');
         
     }
 

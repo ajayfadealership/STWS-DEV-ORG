@@ -1,5 +1,5 @@
 public with sharing class RiggingHandler {
-    public static void onAfterInsertWO(Map<Id, Work_Order__c> mapWO) {
+    public static void onAfterInsertWO(Map<Id, Work_Order__c> mapWO, Map<Id, Work_Order__c> mapOldWO) {
     		System.debug('onAfterInsertWO: WO: '+mapWO);
     		List<Work_Order__c> lstWO = [Select 
     												Id, Boat__c, Boat__r.Boat_HIN_No__c, BOATBUILDING__Deducted_Total_Due_Amount__c, Inventory__c, Status__c
@@ -8,46 +8,26 @@ public with sharing class RiggingHandler {
 										 		
 		Set<String> setInvId = new Set<String>();								 		
 		for(Work_Order__c objWO: lstWO) {
-			if(objWO.Inventory__c != null && 
-				objWO.Status__c.containsIgnoreCase('closed')) {
+			if(objWO.Inventory__c != null && objWO.Status__c != null && objWO.Status__c.containsIgnoreCase('closed') ) 
+			{
 				setInvId.add(objWO.Inventory__c);
 			} 
 		}
-		System.debug('>>>>: '+setInvId);
+		System.debug('>>>>: '+setInvId); 
 		if(!setInvId.isEmpty()) {
 			List<Inventory__c> lstInv = [Select Id, BOATBUILDING__Rigging_Cost__c, Cost__c, (Select Id, Deducted_Total_Due_Amount__c From BOATBUILDING__Work_Orders__r) From BOATBUILDING__Inventory__c Where Id IN: setInvId];
-	    		for(Inventory__c objInv: lstInv) {
-	    			Decimal AmnCount = 0.00;
-	    			Decimal MainCost = 0.00;
-	    			Decimal RiggingExisting = 0.00;
-	    			
-	    			if(objInv.Cost__c != null) {
-	    				MainCost = objInv.Cost__c;
-	    			}
-	    			
-	    			if(objInv.Rigging_Cost__c != null) {
-	    				RiggingExisting = objInv.Rigging_Cost__c;
-	    			}
-	    			objInv.Cost__c = MainCost - RiggingExisting;
+	    		for(Inventory__c objInv : lstInv) 
+				{
+	    			Decimal AmnCount = 0.00; 
 	    			
 	    			for(Work_Order__c objWO: objInv.BOATBUILDING__Work_Orders__r) {
-	    				if(objWO.Deducted_Total_Due_Amount__c != null) {
+	    				if(objWO.Deducted_Total_Due_Amount__c != null) 
+						{
 	    					System.debug('>>>: '+objWO.Deducted_Total_Due_Amount__c); 
 	    					AmnCount += objWO.Deducted_Total_Due_Amount__c ;
 	    				} 
 	    			}
-	    			if(objInv.Rigging_Cost__c != null) {
-	    				objInv.Rigging_Cost__c += AmnCount;
-	    			} else {
-	    				objInv.Rigging_Cost__c = AmnCount;
-	    			}
-	    			if(objInv.Rigging_Cost__c != null && objInv.Cost__c != null && objInv.BOATBUILDING__Cost_With_Rigging__c != null) {
-	    				objInv.BOATBUILDING__Cost_With_Rigging__c += objInv.Cost__c + objInv.Rigging_Cost__c;
-	    			} else if(objInv.Rigging_Cost__c != null && objInv.Cost__c != null) {
-	    				objInv.BOATBUILDING__Cost_With_Rigging__c = objInv.Cost__c + objInv.Rigging_Cost__c;
-	    			} else {
-	    				objInv.BOATBUILDING__Cost_With_Rigging__c = 0.00;
-	    			}
+	    			objInv.Rigging_Cost__c = AmnCount;
 	    		}
 	    		update lstInv;
 		} 

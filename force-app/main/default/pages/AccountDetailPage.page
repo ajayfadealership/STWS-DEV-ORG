@@ -1,4 +1,4 @@
-<apex:page standardController="Account" showHeader="false" extensions="AccountDetailExtensionController" >
+<apex:page standardController="Customer_Inquiry__c" showHeader="false" extensions="AccountDetailExtensionController" >
     <apex:slds />
     <!--<apex:stylesheet value="{!URLFOR($Resource.BoatBuilderSR, 'assets/styles/salesforce-lightning-design-system.min.css')}" />-->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"/>
@@ -26,19 +26,19 @@
         } 
     </style>
     <apex:form id="frm">
-        <title>Account Details</title>
+        <title>Customer Details</title>
         <div class="slds-grid slds-wrap slds-col--padded">
             <div class="slds-col--padded slds-col slds-size--1-of-1 Customer-Heading">
                 <h2 class=" heading"><br/>
-                    <span class="slds-text-heading--small"><b>Account Details</b></span>
+                    <span class="slds-text-heading--small"><b>Customer Details</b></span>
                 </h2>
             </div>
         </div>
         
-        <a href="javascript:void(0);" onclick="window.top.location = '/{!Account.id}';" class="slds-button slds-button--neutral slds-button--brand" style="border: 1px solid white; box-shadow: 3px 5px 15px #888888;position: fixed; z-index: 99; left: 90%; top: 2%;">
-            Back to Account
+        <a href="javascript:void(0);" onclick="window.top.location = '/{!Customer_Inquiry__c.id}';" class="slds-button slds-button--neutral slds-button--brand" style="border: 1px solid white; box-shadow: 3px 5px 15px #888888;position: fixed; z-index: 99; left: 90%; top: 2%;">
+            Back to Customer
         </a>
-        <apex:commandLink value="Print" Action="{!printaccount}" target="_blank" immediate="true" styleClass="slds-button slds-button--neutral slds-button--brand" style="color: white;   border: 1px solid white; box-shadow: 3px 5px 15px #888888; position: fixed; z-index: 99; left: 85%; top: 2%; height: 6%; width: 4%; background-color: #0070d2 !important; background: #0070d2 !important; padding: 0px;" rendered="{!IF(Account.Lead_Source__c == 'Finance Application' || Account.Lead_Source__c == 'Joint Finance Application' || Account.RecordType.Name == 'Prospect Credit App',true,false)}" />
+        <apex:commandLink value="Print" Action="{!printaccount}" target="_blank" immediate="true" styleClass="slds-button slds-button--neutral slds-button--brand" style="color: white;   border: 1px solid white; box-shadow: 3px 5px 15px #888888; position: fixed; z-index: 99; left: 85%; top: 2%; height: 6%; width: 4%; background-color: #0070d2 !important; background: #0070d2 !important; padding: 0px;" rendered="{!IF(Customer_Inquiry__c.Lead_Source__c == 'Finance Application' || Customer_Inquiry__c.Lead_Source__c == 'Joint Finance Application' || Customer_Inquiry__c.RecordType.Name == 'Prospect Credit App',true,false)}" />
         <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-1 slds-col--padded" style="padding: 1%; margin-top: 2%; border-bottom: solid 1px #ccc!important; border-top: solid 1px #ccc!important;">
             <apex:outputPanel rendered="true">
                 <div class="slds-grid slds-wrap">
@@ -48,7 +48,7 @@
                                 <div class="slds-form-element">
                                     <label class="slds-form-element__label">First Name</label>
                                     <div class="slds-form-element__control">
-                                        <apex:inputText disabled="true" value="{!Account.Prospect_First_Name__c}" styleClass="slds-input"/>
+                                        <apex:inputText disabled="true" value="{!Customer_Inquiry__c.First_Name__c}" styleClass="slds-input"/>
                                     </div>
                                 </div> 
                             </div>
@@ -56,7 +56,7 @@
                                 <div class="slds-form-element">
                                     <label class="slds-form-element__label">Last Name</label>
                                     <div class="slds-form-element__control">
-                                        <apex:inputText disabled="true" value="{!Account.Prospect_Last_Name__c}" styleClass="slds-input"/>
+                                        <apex:inputText disabled="true" value="{!Customer_Inquiry__c.Last_Name__c}" styleClass="slds-input"/>
                                     </div>
                                 </div> 
                             </div>
@@ -64,7 +64,7 @@
                                 <div class="slds-form-element">
                                     <label class="slds-form-element__label">Contact Phone</label>
                                     <div class="slds-form-element__control">
-                                        <apex:inputText disabled="true" value="{!Account.Lead_Account_History__r.BOATBUILDING__Contact_Phone__c }" styleClass="slds-input"/>
+                                        <apex:inputText disabled="true" value="{!Customer_Inquiry__c.Phone__c }" styleClass="slds-input"/>
                                     </div>
                                 </div> 
                             </div>
@@ -72,7 +72,7 @@
                                 <div class="slds-form-element">
                                     <label class="slds-form-element__label">Contact Email</label>
                                     <div class="slds-form-element__control">
-                                        <apex:inputText disabled="true" value="{!Account.Lead_Account_History__r.BOATBUILDING__Contact_Email__c }" styleClass="slds-input"/>
+                                        <apex:inputText disabled="true" value="{!Customer_Inquiry__c.Email__c }" styleClass="slds-input"/>
                                     </div>
                                 </div> 
                             </div>
@@ -88,31 +88,31 @@
                                 <div class="slds-form-element">
                                     <label class="slds-form-element__label">Prospect Lead Source</label>
                                     <div class="slds-form-element__control">
-                                        <apex:inputText disabled="true" value="{!Account.Lead_Source__c}" styleClass="slds-input"/>
+                                        <apex:inputText disabled="true" value="{!Customer_Inquiry__c.Lead_Source__c}" styleClass="slds-input"/>
                                     </div>
                                 </div> 
                             </div>
-                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
-                                <div class="slds-form-element">
-                                    <label class="slds-form-element__label">Lead Status</label>
-                                    <div class="slds-form-element__control">
-                                        <apex:inputText disabled="true" value="{!Account.Lead_Status__c}" styleClass="slds-input"/>
-                                    </div>
-                                </div> 
-                            </div>
-                            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
-                                <div class="slds-form-element">
-                                    <label class="slds-form-element__label">Customer Type</label>
-                                    <div class="slds-form-element__control">
-                                        <apex:inputText disabled="true" value="{!Account.Account_Customer_Type__c}" styleClass="slds-input"/>
-                                    </div>
-                                </div> 
-                            </div>
+<!--                             <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded"> -->
+<!--                                 <div class="slds-form-element"> -->
+<!--                                     <label class="slds-form-element__label">Lead Status</label> -->
+<!--                                     <div class="slds-form-element__control"> -->
+<!--                                         <apex:inputText disabled="true" value="{!Customer_Inquiry__c.Lead_Status__c}" styleClass="slds-input"/> -->
+<!--                                     </div> -->
+<!--                                 </div>  -->
+<!--                             </div> -->
+<!--                             <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded"> -->
+<!--                                 <div class="slds-form-element"> -->
+<!--                                     <label class="slds-form-element__label">Customer Type</label> -->
+<!--                                     <div class="slds-form-element__control"> -->
+<!--                                         <apex:inputText disabled="true" value="{!Customer_Inquiry__c.Account_Customer_Type__c}" styleClass="slds-input"/> -->
+<!--                                     </div> -->
+<!--                                 </div>  -->
+<!--                             </div> -->
                             <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
                                 <div class="slds-form-element">
                                     <label class="slds-form-element__label">Owner</label>
                                     <div class="slds-form-element__control">
-                                        <apex:inputText disabled="true" value="{!Account.Owner.Name}" styleClass="slds-input"/>
+                                        <apex:inputText disabled="true" value="{!Customer_Inquiry__c.Owner.Name}" styleClass="slds-input"/>
                                     </div>
                                 </div> 
                             </div>
@@ -128,7 +128,7 @@
                                 <div class="slds-form-element">
                                     <label class="slds-form-element__label">Product ID</label>
                                     <div class="slds-form-element__control">
-                                        <apex:inputText disabled="true" value="{!Account.Product_ID__c}" styleClass="slds-input"/>
+                                        <apex:inputText disabled="true" value="{!Customer_Inquiry__c.Product_Id__c}" styleClass="slds-input"/>
                                     </div>
                                 </div> 
                             </div>
@@ -136,7 +136,7 @@
                                 <div class="slds-form-element">
                                     <label class="slds-form-element__label">Desired Boat Model</label>
                                     <div class="slds-form-element__control">
-                                        <apex:inputText disabled="true" value="{!Account.Desire_boat_model__c}" styleClass="slds-input"/>
+                                        <apex:inputText disabled="true" value="{!Customer_Inquiry__c.Desired_Boat__c}" styleClass="slds-input"/>
                                     </div>
                                 </div> 
                             </div>
@@ -144,7 +144,7 @@
                                 <div class="slds-form-element">
                                     <label class="slds-form-element__label">Comments/Messages</label>
                                     <div class="slds-form-element__control">
-                                        <apex:inputTextarea disabled="true" value="{!Account.Comments__c}" styleClass="slds-input"/>
+                                        <apex:inputTextarea disabled="true" value="{!Customer_Inquiry__c.Comment__c}" styleClass="slds-input"/>
                                     </div>
                                 </div> 
                             </div>
@@ -176,7 +176,7 @@
                                 <div class="slds-form-element">
                                     <label class="slds-form-element__label">Billing Street</label>
                                     <div class="slds-form-element__control">
-                                        <apex:inputText disabled="true" value="{!Account.BillingStreet}" styleClass="slds-input"/>
+                                        <apex:inputText disabled="true" value="{!Customer_Inquiry__c.Street__c}" styleClass="slds-input"/>
                                     </div>
                                 </div> 
                             </div>
@@ -184,7 +184,7 @@
                                 <div class="slds-form-element">
                                     <label class="slds-form-element__label">Billing City</label>
                                     <div class="slds-form-element__control">
-                                        <apex:inputText disabled="true" value="{!Account.BillingCity}" styleClass="slds-input"/>
+                                        <apex:inputText disabled="true" value="{!Customer_Inquiry__c.City__c}" styleClass="slds-input"/>
                                     </div>
                                 </div> 
                             </div>
@@ -192,7 +192,7 @@
                                 <div class="slds-form-element">
                                     <label class="slds-form-element__label">Billing State</label>
                                     <div class="slds-form-element__control">
-                                        <apex:inputText disabled="true" value="{!Account.BillingState}" styleClass="slds-input"/>
+                                        <apex:inputText disabled="true" value="{!Customer_Inquiry__c.State__c}" styleClass="slds-input"/>
                                     </div>
                                 </div> 
                             </div>
@@ -200,15 +200,15 @@
                                 <div class="slds-form-element">
                                     <label class="slds-form-element__label">Billing PostalCode</label>
                                     <div class="slds-form-element__control">
-                                        <apex:inputText disabled="true" value="{!Account.BillingPostalCode}" styleClass="slds-input"/>
+                                        <apex:inputText disabled="true" value="{!Customer_Inquiry__c.Zip_Code__c}" styleClass="slds-input"/>
                                     </div>
                                 </div> 
-                            </div>
+                            </div> 
                             <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
                                 <div class="slds-form-element">
                                     <label class="slds-form-element__label">Billing Country</label>
                                     <div class="slds-form-element__control">
-                                        <apex:inputText disabled="true" value="{!Account.BillingCountry}" styleClass="slds-input"/>
+                                        <apex:inputText disabled="true" value="{!Customer_Inquiry__c.Country__c}" styleClass="slds-input"/>
                                     </div>
                                 </div> 
                             </div>
@@ -246,7 +246,7 @@
 <div class="slds-form-element">
 <label class="slds-form-element__label">Shipping Street</label>
 <div class="slds-form-element__control">
-<apex:inputText disabled="true" value="{!Account.ShippingStreet}" styleClass="slds-input"/>
+<apex:inputText disabled="true" value="{!Customer_Inquiry__c.ShippingStreet}" styleClass="slds-input"/>
 </div>
 </div> 
 </div>
@@ -254,7 +254,7 @@
 <div class="slds-form-element">
 <label class="slds-form-element__label">Shipping City</label>
 <div class="slds-form-element__control">
-<apex:inputText disabled="true" value="{!Account.ShippingCity}" styleClass="slds-input"/>
+<apex:inputText disabled="true" value="{!Customer_Inquiry__c.ShippingCity}" styleClass="slds-input"/>
 </div>
 </div> 
 </div>
@@ -262,7 +262,7 @@
 <div class="slds-form-element">
 <label class="slds-form-element__label">Shipping State</label>
 <div class="slds-form-element__control">
-<apex:inputText disabled="true" value="{!Account.ShippingState}" styleClass="slds-input"/>
+<apex:inputText disabled="true" value="{!Customer_Inquiry__c.ShippingState}" styleClass="slds-input"/>
 </div>
 </div> 
 </div>
@@ -270,7 +270,7 @@
 <div class="slds-form-element">
 <label class="slds-form-element__label">Shipping PostalCode</label>
 <div class="slds-form-element__control">
-<apex:inputText disabled="true" value="{!Account.ShippingPostalCode}" styleClass="slds-input"/>
+<apex:inputText disabled="true" value="{!Customer_Inquiry__c.ShippingPostalCode}" styleClass="slds-input"/>
 </div>
 </div> 
 </div>
@@ -278,7 +278,7 @@
 <div class="slds-form-element">
 <label class="slds-form-element__label">Shipping Country</label>
 <div class="slds-form-element__control">
-<apex:inputText disabled="true" value="{!Account.ShippingCountry}" styleClass="slds-input"/>
+<apex:inputText disabled="true" value="{!Customer_Inquiry__c.ShippingCountry}" styleClass="slds-input"/>
 </div>
 </div> 
 </div>
@@ -288,7 +288,7 @@
 </apex:outputPanel>-->
         </div> 
         
-        <apex:outputPanel rendered="{!IF(Account.Lead_Source__c == 'Schedule a Ride',true,false)}">
+        <apex:outputPanel rendered="{!IF(Customer_Inquiry__c.Lead_Source__c == 'Schedule a Ride',true,false)}">
             <div class="slds-grid slds-wrap slds-col--padded">
                 <div class="slds-col--padded slds-col slds-size--1-of-1 Customer-Heading">
                     <h2 class=" heading"><br/>
@@ -298,32 +298,32 @@
             </div>
             <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-1 slds-col--padded" style="padding: 1%; margin-top: 2%; border-bottom: solid 1px #ccc!important; border-top: solid 1px #ccc!important;">
                 <apex:outputPanel rendered="true">
-                    <div class="slds-grid slds-wrap">
-                        <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-1 slds-col--padded">
-                            <div class="slds-grid slds-wrap" style="margin-top: 1%;">                                                     
-                                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
-                                    <div class="slds-form-element">
-                                        <label class="slds-form-element__label">Preferred Date</label>
-                                        <div class="slds-form-element__control">
-                                            <apex:inputText disabled="true" value="{!Account.BOATBUILDING__Schedule_Ride_Preferred_Date__c }" styleClass="slds-input"/>
-                                        </div>
-                                    </div> 
-                                </div>
-                                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
-                                    <div class="slds-form-element">
-                                        <label class="slds-form-element__label">Boat you want to drive</label>
-                                        <div class="slds-form-element__control">
-                                            <apex:inputText disabled="true" value="{!Account.BOATBUILDING__Schedule_Ride_Boat_you_want_to_drive__c }" styleClass="slds-input"/>
-                                        </div>
-                                    </div> 
-                                </div>                
-                            </div>
-                        </div>
-                    </div>
+<!--                     <div class="slds-grid slds-wrap"> -->
+<!--                         <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-1 slds-col--padded"> -->
+<!--                             <div class="slds-grid slds-wrap" style="margin-top: 1%;">                                                      -->
+<!--                                 <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded"> -->
+<!--                                     <div class="slds-form-element"> -->
+<!--                                         <label class="slds-form-element__label">Preferred Date</label> -->
+<!--                                         <div class="slds-form-element__control"> -->
+<!--                                             <apex:inputText disabled="true" value="{!Customer_Inquiry__c.BOATBUILDING__Schedule_Ride_Preferred_Date__c }" styleClass="slds-input"/> -->
+<!--                                         </div> -->
+<!--                                     </div>  -->
+<!--                                 </div> -->
+<!--                                 <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded"> -->
+<!--                                     <div class="slds-form-element"> -->
+<!--                                         <label class="slds-form-element__label">Boat you want to drive</label> -->
+<!--                                         <div class="slds-form-element__control"> -->
+<!--                                             <apex:inputText disabled="true" value="{!Customer_Inquiry__c.BOATBUILDING__Schedule_Ride_Boat_you_want_to_drive__c }" styleClass="slds-input"/> -->
+<!--                                         </div> -->
+<!--                                     </div>  -->
+<!--                                 </div>                 -->
+<!--                             </div> -->
+<!--                         </div> -->
+<!--                     </div> -->
                 </apex:outputPanel>            
             </div> 
         </apex:outputPanel>
-        <apex:outputPanel rendered="{!IF(Account.Lead_Source__c == 'Get a Quote',true,false)}">
+        <apex:outputPanel rendered="{!IF(Customer_Inquiry__c.Lead_Source__c == 'Get a Quote',true,false)}">
             <div class="slds-grid slds-wrap slds-col--padded">
                 <div class="slds-col--padded slds-col slds-size--1-of-1 Customer-Heading">
                     <h2 class=" heading"><br/>
@@ -340,33 +340,33 @@
                                     <div class="slds-form-element">
                                         <label class="slds-form-element__label">Source</label>
                                         <div class="slds-form-element__control">
-                                            <apex:inputText disabled="true" value="{!Account.Source__c}" styleClass="slds-input"/>
+                                            <apex:inputText disabled="true" value="{!Customer_Inquiry__c.Lead_Source__c}" styleClass="slds-input"/>
                                         </div>
                                     </div> 
                                 </div>
-                                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
-                                    <div class="slds-form-element">
-                                        <label class="slds-form-element__label">Get A Quote Comments/Questions:</label>
-                                        <div class="slds-form-element__control">
-                                            <apex:inputTextarea disabled="true" value="{!Account.Get_A_Quote_Comments_Questions__c}" styleClass="slds-input"/>
-                                        </div>
-                                    </div> 
-                                </div>
-                                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
-                                    <div class="slds-form-element">
-                                        <label class="slds-form-element__label">Description</label>
-                                        <div class="slds-form-element__control">
-                                            <apex:inputText disabled="true" value="{!Account.Description}" styleClass="slds-input"/>
-                                        </div>
-                                    </div> 
-                                </div>                 
+<!--                                 <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded"> -->
+<!--                                     <div class="slds-form-element"> -->
+<!--                                         <label class="slds-form-element__label">Get A Quote Comments/Questions:</label> -->
+<!--                                         <div class="slds-form-element__control"> -->
+<!--                                             <apex:inputTextarea disabled="true" value="{!Customer_Inquiry__c.Get_A_Quote_Comments_Questions__c}" styleClass="slds-input"/> -->
+<!--                                         </div> -->
+<!--                                     </div>  -->
+<!--                                 </div> -->
+<!--                                 <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded"> -->
+<!--                                     <div class="slds-form-element"> -->
+<!--                                         <label class="slds-form-element__label">Description</label> -->
+<!--                                         <div class="slds-form-element__control"> -->
+<!--                                             <apex:inputText disabled="true" value="{!Customer_Inquiry__c.Description}" styleClass="slds-input"/> -->
+<!--                                         </div> -->
+<!--                                     </div>  -->
+<!--                                 </div>                  -->
                             </div>
                         </div>
                     </div>
                 </apex:outputPanel>            
             </div> 
         </apex:outputPanel>
-        <apex:outputPanel rendered="{!IF(Account.Lead_Source__c == 'Value your trade',true,false)}">
+        <apex:outputPanel rendered="{!IF(Customer_Inquiry__c.Lead_Source__c == 'Value your trade',true,false)}">
             <div class="slds-grid slds-wrap slds-col--padded">
                 <div class="slds-col--padded slds-col slds-size--1-of-1 Customer-Heading">
                     <h2 class=" heading"><br/>
@@ -379,38 +379,38 @@
                     <div class="slds-grid slds-wrap">
                         <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-1 slds-col--padded">
                             <div class="slds-grid slds-wrap" style="margin-top: 1%;">                                                     
-                                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
-                                    <div class="slds-form-element">
-                                        <label class="slds-form-element__label">Trade Value - Your Boat Year</label>
-                                        <div class="slds-form-element__control">
-                                            <apex:inputText disabled="true" value="{!Account.Trade_Value_Your_Boat_Year__c}" styleClass="slds-input"/>
-                                        </div>
-                                    </div> 
-                                </div>
-                                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
-                                    <div class="slds-form-element">
-                                        <label class="slds-form-element__label">Trade Value - Your Boat Manufacturer</label>
-                                        <div class="slds-form-element__control">
-                                            <apex:inputText disabled="true" value="{!Account.Trade_Value_Your_Boat_Manufacturer__c}" styleClass="slds-input"/>
-                                        </div>
-                                    </div> 
-                                </div>
-                                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
-                                    <div class="slds-form-element">
-                                        <label class="slds-form-element__label">Trade Value - Your Boat Model</label>
-                                        <div class="slds-form-element__control">
-                                            <apex:inputText disabled="true" value="{!Account.Trade_Value_Your_Boat_Model__c}" styleClass="slds-input"/>
-                                        </div>
-                                    </div> 
-                                </div>
-                                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
-                                    <div class="slds-form-element">
-                                        <label class="slds-form-element__label">Trade Value - Your Boat Engine Hours</label>
-                                        <div class="slds-form-element__control">
-                                            <apex:inputText disabled="true" value="{!Account.Trade_Value_Your_Boat_Engine_Hours__c}" styleClass="slds-input"/>
-                                        </div>
-                                    </div> 
-                                </div>                            
+<!--                                 <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded"> -->
+<!--                                     <div class="slds-form-element"> -->
+<!--                                         <label class="slds-form-element__label">Trade Value - Your Boat Year</label> -->
+<!--                                         <div class="slds-form-element__control"> -->
+<!--                                             <apex:inputText disabled="true" value="{!Customer_Inquiry__c.Trade_Value_Your_Boat_Year__c}" styleClass="slds-input"/> -->
+<!--                                         </div> -->
+<!--                                     </div>  -->
+<!--                                 </div> -->
+<!--                                 <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded"> -->
+<!--                                     <div class="slds-form-element"> -->
+<!--                                         <label class="slds-form-element__label">Trade Value - Your Boat Manufacturer</label> -->
+<!--                                         <div class="slds-form-element__control"> -->
+<!--                                             <apex:inputText disabled="true" value="{!Customer_Inquiry__c.Trade_Value_Your_Boat_Manufacturer__c}" styleClass="slds-input"/> -->
+<!--                                         </div> -->
+<!--                                     </div>  -->
+<!--                                 </div> -->
+<!--                                 <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded"> -->
+<!--                                     <div class="slds-form-element"> -->
+<!--                                         <label class="slds-form-element__label">Trade Value - Your Boat Model</label> -->
+<!--                                         <div class="slds-form-element__control"> -->
+<!--                                             <apex:inputText disabled="true" value="{!Customer_Inquiry__c.Trade_Value_Your_Boat_Model__c}" styleClass="slds-input"/> -->
+<!--                                         </div> -->
+<!--                                     </div>  -->
+<!--                                 </div> -->
+<!--                                 <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded"> -->
+<!--                                     <div class="slds-form-element"> -->
+<!--                                         <label class="slds-form-element__label">Trade Value - Your Boat Engine Hours</label> -->
+<!--                                         <div class="slds-form-element__control"> -->
+<!--                                             <apex:inputText disabled="true" value="{!Customer_Inquiry__c.Trade_Value_Your_Boat_Engine_Hours__c}" styleClass="slds-input"/> -->
+<!--                                         </div> -->
+<!--                                     </div>  -->
+<!--                                 </div>                             -->
                             </div>
                         </div>
                     </div>
@@ -419,38 +419,38 @@
                     <div class="slds-grid slds-wrap">
                         <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-1 slds-col--padded">
                             <div class="slds-grid slds-wrap" style="margin-top: 1%;">                                                     
-                                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
-                                    <div class="slds-form-element">
-                                        <label class="slds-form-element__label">Trade Value - Your Boat Added Accessorie</label>
-                                        <div class="slds-form-element__control">
-                                            <apex:inputText disabled="true" value="{!Account.Trade_Value_Your_Boat_Added_Accessorie__c}" styleClass="slds-input"/>
-                                        </div>
-                                    </div> 
-                                </div>
-                                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
-                                    <div class="slds-form-element">
-                                        <label class="slds-form-element__label">Trade Details</label>
-                                        <div class="slds-form-element__control">
-                                            <apex:inputText disabled="true" value="{!Account.Do_they_have_a_trade__c}" styleClass="slds-input"/>
-                                        </div>
-                                    </div> 
-                                </div>
-                                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
-                                    <div class="slds-form-element">
-                                        <label class="slds-form-element__label">Trade Value - Comments/Questions</label>
-                                        <div class="slds-form-element__control">
-                                            <apex:inputText disabled="true" value="{!Account.Trade_Value_Comments_Questions__c}" styleClass="slds-input"/>
-                                        </div>
-                                    </div> 
-                                </div>
-                                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
-                                    <div class="slds-form-element">
-                                        <label class="slds-form-element__label">Desired Boat Value Low</label>
-                                        <div class="slds-form-element__control">
-                                            <apex:inputText disabled="true" value="{!Account.Desired_Boat_Value_Low__c}" styleClass="slds-input"/>
-                                        </div>
-                                    </div> 
-                                </div>                        
+<!--                                 <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded"> -->
+<!--                                     <div class="slds-form-element"> -->
+<!--                                         <label class="slds-form-element__label">Trade Value - Your Boat Added Accessorie</label> -->
+<!--                                         <div class="slds-form-element__control"> -->
+<!--                                             <apex:inputText disabled="true" value="{!Customer_Inquiry__c.Trade_Value_Your_Boat_Added_Accessorie__c}" styleClass="slds-input"/> -->
+<!--                                         </div> -->
+<!--                                     </div>  -->
+<!--                                 </div> -->
+<!--                                 <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded"> -->
+<!--                                     <div class="slds-form-element"> -->
+<!--                                         <label class="slds-form-element__label">Trade Details</label> -->
+<!--                                         <div class="slds-form-element__control"> -->
+<!--                                             <apex:inputText disabled="true" value="{!Customer_Inquiry__c.Do_they_have_a_trade__c}" styleClass="slds-input"/> -->
+<!--                                         </div> -->
+<!--                                     </div>  -->
+<!--                                 </div> -->
+<!--                                 <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded"> -->
+<!--                                     <div class="slds-form-element"> -->
+<!--                                         <label class="slds-form-element__label">Trade Value - Comments/Questions</label> -->
+<!--                                         <div class="slds-form-element__control"> -->
+<!--                                             <apex:inputText disabled="true" value="{!Customer_Inquiry__c.Trade_Value_Comments_Questions__c}" styleClass="slds-input"/> -->
+<!--                                         </div> -->
+<!--                                     </div>  -->
+<!--                                 </div> -->
+<!--                                 <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded"> -->
+<!--                                     <div class="slds-form-element"> -->
+<!--                                         <label class="slds-form-element__label">Desired Boat Value Low</label> -->
+<!--                                         <div class="slds-form-element__control"> -->
+<!--                                             <apex:inputText disabled="true" value="{!Customer_Inquiry__c.Desired_Boat_Value_Low__c}" styleClass="slds-input"/> -->
+<!--                                         </div> -->
+<!--                                     </div>  -->
+<!--                                 </div>                         -->
                             </div>
                         </div>
                     </div>
@@ -459,14 +459,14 @@
                     <div class="slds-grid slds-wrap">
                         <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-1 slds-col--padded">
                             <div class="slds-grid slds-wrap" style="margin-top: 1%;">                                                     
-                                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
-                                    <div class="slds-form-element">
-                                        <label class="slds-form-element__label">Desired Boat Value High</label>
-                                        <div class="slds-form-element__control">
-                                            <apex:inputText disabled="true" value="{!Account.Desired_Boat_Value_High__c}" styleClass="slds-input"/>
-                                        </div>
-                                    </div> 
-                                </div>                                                                                         
+<!--                                 <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded"> -->
+<!--                                     <div class="slds-form-element"> -->
+<!--                                         <label class="slds-form-element__label">Desired Boat Value High</label> -->
+<!--                                         <div class="slds-form-element__control"> -->
+<!--                                             <apex:inputText disabled="true" value="{!Customer_Inquiry__c.Desired_Boat_Value_High__c}" styleClass="slds-input"/> -->
+<!--                                         </div> -->
+<!--                                     </div>  -->
+<!--                                 </div>                                                                                          -->
                             </div>
                         </div>
                     </div>
@@ -474,7 +474,7 @@
             </div> 
             
         </apex:outputPanel>
-        <apex:outputPanel rendered="{!IF(Account.Lead_Source__c == 'Parts Request',true,false)}">
+        <apex:outputPanel rendered="{!IF(Customer_Inquiry__c.Lead_Source__c == 'Parts Request',true,false)}">
             <div class="slds-grid slds-wrap slds-col--padded">
                 <div class="slds-col--padded slds-col slds-size--1-of-1 Customer-Heading">
                     <h2 class=" heading"><br/>
@@ -484,129 +484,129 @@
             </div>
             <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-1 slds-col--padded" style="padding: 1%; margin-top: 2%; border-bottom: solid 1px #ccc!important; border-top: solid 1px #ccc!important;">
                 <apex:outputPanel rendered="true">
-                    <div class="slds-grid slds-wrap">
-                        <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-1 slds-col--padded">
-                            <div class="slds-grid slds-wrap" style="margin-top: 1%;">
-                                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
-                                    <div class="slds-form-element">
-                                        <label class="slds-form-element__label">Parts Request - Your Boat Year</label>
-                                        <div class="slds-form-element__control">
-                                            <apex:inputText disabled="true" value="{!Account.Parts_Request_Your_Boat_Year__c}" styleClass="slds-input"/>
-                                        </div>
-                                    </div> 
-                                </div>
-                                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
-                                    <div class="slds-form-element">
-                                        <label class="slds-form-element__label">Parts Request - Your Boat Manufacturer</label>
-                                        <div class="slds-form-element__control">
-                                            <apex:inputText disabled="true" value="{!Account.Parts_Request_Your_Boat_Manufacturer__c}" styleClass="slds-input"/>
-                                        </div>
-                                    </div> 
-                                </div>
-                                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
-                                    <div class="slds-form-element">
-                                        <label class="slds-form-element__label">Parts Request - Your Boat Model</label>
-                                        <div class="slds-form-element__control">
-                                            <apex:inputText disabled="true" value="{!Account.Parts_Request_Your_Boat_Model__c}" styleClass="slds-input"/>
-                                        </div>
-                                    </div> 
-                                </div>
-                                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
-                                    <div class="slds-form-element">
-                                        <label class="slds-form-element__label">Parts Request - Your HIN Number</label>
-                                        <div class="slds-form-element__control">
-                                            <apex:inputText disabled="true" value="{!Account.Parts_Request_Your_HIN_Number__c}" styleClass="slds-input"/>
-                                        </div>
-                                    </div> 
-                                </div>                 
-                            </div>
-                        </div>
-                    </div>
+<!--                     <div class="slds-grid slds-wrap"> -->
+<!--                         <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-1 slds-col--padded"> -->
+<!--                             <div class="slds-grid slds-wrap" style="margin-top: 1%;"> -->
+<!--                                 <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded"> -->
+<!--                                     <div class="slds-form-element"> -->
+<!--                                         <label class="slds-form-element__label">Parts Request - Your Boat Year</label> -->
+<!--                                         <div class="slds-form-element__control"> -->
+<!--                                             <apex:inputText disabled="true" value="{!Customer_Inquiry__c.Parts_Request_Your_Boat_Year__c}" styleClass="slds-input"/> -->
+<!--                                         </div> -->
+<!--                                     </div>  -->
+<!--                                 </div> -->
+<!--                                 <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded"> -->
+<!--                                     <div class="slds-form-element"> -->
+<!--                                         <label class="slds-form-element__label">Parts Request - Your Boat Manufacturer</label> -->
+<!--                                         <div class="slds-form-element__control"> -->
+<!--                                             <apex:inputText disabled="true" value="{!Customer_Inquiry__c.Parts_Request_Your_Boat_Manufacturer__c}" styleClass="slds-input"/> -->
+<!--                                         </div> -->
+<!--                                     </div>  -->
+<!--                                 </div> -->
+<!--                                 <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded"> -->
+<!--                                     <div class="slds-form-element"> -->
+<!--                                         <label class="slds-form-element__label">Parts Request - Your Boat Model</label> -->
+<!--                                         <div class="slds-form-element__control"> -->
+<!--                                             <apex:inputText disabled="true" value="{!Customer_Inquiry__c.Parts_Request_Your_Boat_Model__c}" styleClass="slds-input"/> -->
+<!--                                         </div> -->
+<!--                                     </div>  -->
+<!--                                 </div> -->
+<!--                                 <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded"> -->
+<!--                                     <div class="slds-form-element"> -->
+<!--                                         <label class="slds-form-element__label">Parts Request - Your HIN Number</label> -->
+<!--                                         <div class="slds-form-element__control"> -->
+<!--                                             <apex:inputText disabled="true" value="{!Customer_Inquiry__c.Parts_Request_Your_HIN_Number__c}" styleClass="slds-input"/> -->
+<!--                                         </div> -->
+<!--                                     </div>  -->
+<!--                                 </div>                  -->
+<!--                             </div> -->
+<!--                         </div> -->
+<!--                     </div> -->
                 </apex:outputPanel>
                 <apex:outputPanel rendered="true">
-                    <div class="slds-grid slds-wrap">
-                        <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-1 slds-col--padded">
-                            <div class="slds-grid slds-wrap" style="margin-top: 1%;">
-                                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
-                                    <div class="slds-form-element">
-                                        <label class="slds-form-element__label">Parts Request - Your Boat Engine Hours</label>
-                                        <div class="slds-form-element__control">
-                                            <apex:inputText disabled="true" value="{!Account.Parts_Request_Your_Boat_Engine_Hours__c}" styleClass="slds-input"/>
-                                        </div>
-                                    </div> 
-                                </div>
-                                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
-                                    <div class="slds-form-element">
-                                        <label class="slds-form-element__label">Parts Request - Required Part Number</label>
-                                        <div class="slds-form-element__control">
-                                            <apex:inputText disabled="true" value="{!Account.Parts_Request_Required_Part_Number__c}" styleClass="slds-input"/>
-                                        </div>
-                                    </div> 
-                                </div>
-                                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
-                                    <div class="slds-form-element">
-                                        <label class="slds-form-element__label">Parts Request - Description of parts</label>
-                                        <div class="slds-form-element__control">
-                                            <apex:inputText disabled="true" value="{!Account.Parts_Request_Description_of_parts__c}" styleClass="slds-input"/>
-                                        </div>
-                                    </div> 
-                                </div>
-                                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
-                                    <div class="slds-form-element">
-                                        <label class="slds-form-element__label">Parts Request - Phone</label>
-                                        <div class="slds-form-element__control">
-                                            <apex:inputText disabled="true" value="{!Account.Parts_Request_Phone__c}" styleClass="slds-input"/>
-                                        </div>
-                                    </div> 
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+<!--                     <div class="slds-grid slds-wrap"> -->
+<!--                         <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-1 slds-col--padded"> -->
+<!--                             <div class="slds-grid slds-wrap" style="margin-top: 1%;"> -->
+<!--                                 <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded"> -->
+<!--                                     <div class="slds-form-element"> -->
+<!--                                         <label class="slds-form-element__label">Parts Request - Your Boat Engine Hours</label> -->
+<!--                                         <div class="slds-form-element__control"> -->
+<!--                                             <apex:inputText disabled="true" value="{!Customer_Inquiry__c.Parts_Request_Your_Boat_Engine_Hours__c}" styleClass="slds-input"/> -->
+<!--                                         </div> -->
+<!--                                     </div>  -->
+<!--                                 </div> -->
+<!--                                 <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded"> -->
+<!--                                     <div class="slds-form-element"> -->
+<!--                                         <label class="slds-form-element__label">Parts Request - Required Part Number</label> -->
+<!--                                         <div class="slds-form-element__control"> -->
+<!--                                             <apex:inputText disabled="true" value="{!Customer_Inquiry__c.Parts_Request_Required_Part_Number__c}" styleClass="slds-input"/> -->
+<!--                                         </div> -->
+<!--                                     </div>  -->
+<!--                                 </div> -->
+<!--                                 <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded"> -->
+<!--                                     <div class="slds-form-element"> -->
+<!--                                         <label class="slds-form-element__label">Parts Request - Description of parts</label> -->
+<!--                                         <div class="slds-form-element__control"> -->
+<!--                                             <apex:inputText disabled="true" value="{!Customer_Inquiry__c.Parts_Request_Description_of_parts__c}" styleClass="slds-input"/> -->
+<!--                                         </div> -->
+<!--                                     </div>  -->
+<!--                                 </div> -->
+<!--                                 <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded"> -->
+<!--                                     <div class="slds-form-element"> -->
+<!--                                         <label class="slds-form-element__label">Parts Request - Phone</label> -->
+<!--                                         <div class="slds-form-element__control"> -->
+<!--                                             <apex:inputText disabled="true" value="{!Customer_Inquiry__c.Parts_Request_Phone__c}" styleClass="slds-input"/> -->
+<!--                                         </div> -->
+<!--                                     </div>  -->
+<!--                                 </div> -->
+<!--                             </div> -->
+<!--                         </div> -->
+<!--                     </div> -->
                 </apex:outputPanel>
                 <apex:outputPanel rendered="true">
-                    <div class="slds-grid slds-wrap">
-                        <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-1 slds-col--padded">
-                            <div class="slds-grid slds-wrap" style="margin-top: 1%;">
-                                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
-                                    <div class="slds-form-element">
-                                        <label class="slds-form-element__label">Parts Request - Street Address</label>
-                                        <div class="slds-form-element__control">
-                                            <apex:inputText disabled="true" value="{!Account.Parts_Request_Street_Address__c}" styleClass="slds-input"/>
-                                        </div>
-                                    </div> 
-                                </div>
-                                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
-                                    <div class="slds-form-element">
-                                        <label class="slds-form-element__label">Parts Request - City</label>
-                                        <div class="slds-form-element__control">
-                                            <apex:inputText disabled="true" value="{!Account.Parts_Request_City__c}" styleClass="slds-input"/>
-                                        </div>
-                                    </div> 
-                                </div>
-                                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
-                                    <div class="slds-form-element">
-                                        <label class="slds-form-element__label">Parts Request - Zip/Postal Code</label>
-                                        <div class="slds-form-element__control">
-                                            <apex:inputText disabled="true" value="{!Account.Parts_Request_Zip_Postal_Code__c}" styleClass="slds-input"/>
-                                        </div>
-                                    </div> 
-                                </div>
-                                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
-                                    <div class="slds-form-element">
-                                        <label class="slds-form-element__label">Parts Request - State / Province</label>
-                                        <div class="slds-form-element__control">
-                                            <apex:inputText disabled="true" value="{!Account.Parts_Request_State_Province__c}" styleClass="slds-input"/>
-                                        </div>
-                                    </div> 
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+<!--                     <div class="slds-grid slds-wrap"> -->
+<!--                         <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-1 slds-col--padded"> -->
+<!--                             <div class="slds-grid slds-wrap" style="margin-top: 1%;"> -->
+<!--                                 <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded"> -->
+<!--                                     <div class="slds-form-element"> -->
+<!--                                         <label class="slds-form-element__label">Parts Request - Street Address</label> -->
+<!--                                         <div class="slds-form-element__control"> -->
+<!--                                             <apex:inputText disabled="true" value="{!Customer_Inquiry__c.Parts_Request_Street_Address__c}" styleClass="slds-input"/> -->
+<!--                                         </div> -->
+<!--                                     </div>  -->
+<!--                                 </div> -->
+<!--                                 <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded"> -->
+<!--                                     <div class="slds-form-element"> -->
+<!--                                         <label class="slds-form-element__label">Parts Request - City</label> -->
+<!--                                         <div class="slds-form-element__control"> -->
+<!--                                             <apex:inputText disabled="true" value="{!Customer_Inquiry__c.Parts_Request_City__c}" styleClass="slds-input"/> -->
+<!--                                         </div> -->
+<!--                                     </div>  -->
+<!--                                 </div> -->
+<!--                                 <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded"> -->
+<!--                                     <div class="slds-form-element"> -->
+<!--                                         <label class="slds-form-element__label">Parts Request - Zip/Postal Code</label> -->
+<!--                                         <div class="slds-form-element__control"> -->
+<!--                                             <apex:inputText disabled="true" value="{!Customer_Inquiry__c.Parts_Request_Zip_Postal_Code__c}" styleClass="slds-input"/> -->
+<!--                                         </div> -->
+<!--                                     </div>  -->
+<!--                                 </div> -->
+<!--                                 <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded"> -->
+<!--                                     <div class="slds-form-element"> -->
+<!--                                         <label class="slds-form-element__label">Parts Request - State / Province</label> -->
+<!--                                         <div class="slds-form-element__control"> -->
+<!--                                             <apex:inputText disabled="true" value="{!Customer_Inquiry__c.Parts_Request_State_Province__c}" styleClass="slds-input"/> -->
+<!--                                         </div> -->
+<!--                                     </div>  -->
+<!--                                 </div> -->
+<!--                             </div> -->
+<!--                         </div> -->
+<!--                     </div> -->
                 </apex:outputPanel>              
             </div>
             
         </apex:outputPanel>
-        <apex:outputPanel rendered="{!IF(Account.Lead_Source__c == 'Service Request',true,false)}">
+        <apex:outputPanel rendered="{!IF(Customer_Inquiry__c.Lead_Source__c == 'Service Request',true,false)}">
             <div class="slds-grid slds-wrap slds-col--padded">
                 <div class="slds-col--padded slds-col slds-size--1-of-1 Customer-Heading">
                     <h2 class=" heading"><br/>
@@ -616,154 +616,154 @@
             </div>
             <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-1 slds-col--padded" style="padding: 1%; margin-top: 2%; border-bottom: solid 1px #ccc!important; border-top: solid 1px #ccc!important;">
                 <apex:outputPanel rendered="true">
-                    <div class="slds-grid slds-wrap">
-                        <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-1 slds-col--padded">
-                            <div class="slds-grid slds-wrap" style="margin-top: 1%;">
-                                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
-                                    <div class="slds-form-element">
-                                        <label class="slds-form-element__label">Service Request Street</label>
-                                        <div class="slds-form-element__control">
-                                            <apex:inputText disabled="true" value="{!Account.Service_Request_Street_Address__c}" styleClass="slds-input"/>
-                                        </div>
-                                    </div> 
-                                </div>
-                                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
-                                    <div class="slds-form-element">
-                                        <label class="slds-form-element__label">Service Request City</label>
-                                        <div class="slds-form-element__control">
-                                            <apex:inputText disabled="true" value="{!Account.Service_Request_City__c}" styleClass="slds-input"/>
-                                        </div>
-                                    </div> 
-                                </div>
-                                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
-                                    <div class="slds-form-element">
-                                        <label class="slds-form-element__label">Service Request State</label>
-                                        <div class="slds-form-element__control">
-                                            <apex:inputText disabled="true" value="{!Account.Service_Request_State_Province__c}" styleClass="slds-input"/>
-                                        </div>
-                                    </div> 
-                                </div>
-                                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
-                                    <div class="slds-form-element">
-                                        <label class="slds-form-element__label">Service Request Postal Code</label>
-                                        <div class="slds-form-element__control">
-                                            <apex:inputText disabled="true" value="{!Account.Service_Request_Zip_Postal_Code__c}" styleClass="slds-input"/>
-                                        </div>
-                                    </div> 
-                                </div>                 
-                            </div>
-                        </div>
-                    </div>
+<!--                     <div class="slds-grid slds-wrap"> -->
+<!--                         <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-1 slds-col--padded"> -->
+<!--                             <div class="slds-grid slds-wrap" style="margin-top: 1%;"> -->
+<!--                                 <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded"> -->
+<!--                                     <div class="slds-form-element"> -->
+<!--                                         <label class="slds-form-element__label">Service Request Street</label> -->
+<!--                                         <div class="slds-form-element__control"> -->
+<!--                                             <apex:inputText disabled="true" value="{!Customer_Inquiry__c.Service_Request_Street_Address__c}" styleClass="slds-input"/> -->
+<!--                                         </div> -->
+<!--                                     </div>  -->
+<!--                                 </div> -->
+<!--                                 <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded"> -->
+<!--                                     <div class="slds-form-element"> -->
+<!--                                         <label class="slds-form-element__label">Service Request City</label> -->
+<!--                                         <div class="slds-form-element__control"> -->
+<!--                                             <apex:inputText disabled="true" value="{!Customer_Inquiry__c.Service_Request_City__c}" styleClass="slds-input"/> -->
+<!--                                         </div> -->
+<!--                                     </div>  -->
+<!--                                 </div> -->
+<!--                                 <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded"> -->
+<!--                                     <div class="slds-form-element"> -->
+<!--                                         <label class="slds-form-element__label">Service Request State</label> -->
+<!--                                         <div class="slds-form-element__control"> -->
+<!--                                             <apex:inputText disabled="true" value="{!Customer_Inquiry__c.Service_Request_State_Province__c}" styleClass="slds-input"/> -->
+<!--                                         </div> -->
+<!--                                     </div>  -->
+<!--                                 </div> -->
+<!--                                 <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded"> -->
+<!--                                     <div class="slds-form-element"> -->
+<!--                                         <label class="slds-form-element__label">Service Request Postal Code</label> -->
+<!--                                         <div class="slds-form-element__control"> -->
+<!--                                             <apex:inputText disabled="true" value="{!Customer_Inquiry__c.Service_Request_Zip_Postal_Code__c}" styleClass="slds-input"/> -->
+<!--                                         </div> -->
+<!--                                     </div>  -->
+<!--                                 </div>                  -->
+<!--                             </div> -->
+<!--                         </div> -->
+<!--                     </div> -->
                 </apex:outputPanel>
                 <apex:outputPanel rendered="true">
-                    <div class="slds-grid slds-wrap">
-                        <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-1 slds-col--padded">
-                            <div class="slds-grid slds-wrap" style="margin-top: 1%;">
-                                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
-                                    <div class="slds-form-element">
-                                        <label class="slds-form-element__label">Service Request - Phone</label>
-                                        <div class="slds-form-element__control">
-                                            <apex:inputText disabled="true" value="{!Account.Service_Request_Phone__c}" styleClass="slds-input"/>
-                                        </div>
-                                    </div> 
-                                </div>
+<!--                     <div class="slds-grid slds-wrap"> -->
+<!--                         <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-1 slds-col--padded"> -->
+<!--                             <div class="slds-grid slds-wrap" style="margin-top: 1%;"> -->
+<!--                                 <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded"> -->
+<!--                                     <div class="slds-form-element"> -->
+<!--                                         <label class="slds-form-element__label">Service Request - Phone</label> -->
+<!--                                         <div class="slds-form-element__control"> -->
+<!--                                             <apex:inputText disabled="true" value="{!Customer_Inquiry__c.Service_Request_Phone__c}" styleClass="slds-input"/> -->
+<!--                                         </div> -->
+<!--                                     </div>  -->
+<!--                                 </div> -->
                                 
-                                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
-                                    <div class="slds-form-element">
-                                        <label class="slds-form-element__label">Service Request - Your Boat Manufacturer</label>
-                                        <div class="slds-form-element__control">
-                                            <apex:inputText disabled="true" value="{!Account.Service_Request_Your_Boat_Manufacturer__c}" styleClass="slds-input"/>
-                                        </div>
-                                    </div> 
-                                </div> 
-                                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
-                                    <div class="slds-form-element">
-                                        <label class="slds-form-element__label">Service Request - Your Boat Model</label>
-                                        <div class="slds-form-element__control">
-                                            <apex:inputText disabled="true" value="{!Account.Service_Request_Your_Boat_Model__c}" styleClass="slds-input"/>
-                                        </div>
-                                    </div> 
-                                </div>
-                                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
-                                    <div class="slds-form-element">
-                                        <label class="slds-form-element__label">Service Request - Your Boat Year</label>
-                                        <div class="slds-form-element__control">
-                                            <apex:inputText disabled="true" value="{!Account.Service_Request_Your_Boat_Year__c}" styleClass="slds-input"/>
-                                        </div>
-                                    </div> 
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+<!--                                 <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded"> -->
+<!--                                     <div class="slds-form-element"> -->
+<!--                                         <label class="slds-form-element__label">Service Request - Your Boat Manufacturer</label> -->
+<!--                                         <div class="slds-form-element__control"> -->
+<!--                                             <apex:inputText disabled="true" value="{!Customer_Inquiry__c.Service_Request_Your_Boat_Manufacturer__c}" styleClass="slds-input"/> -->
+<!--                                         </div> -->
+<!--                                     </div>  -->
+<!--                                 </div>  -->
+<!--                                 <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded"> -->
+<!--                                     <div class="slds-form-element"> -->
+<!--                                         <label class="slds-form-element__label">Service Request - Your Boat Model</label> -->
+<!--                                         <div class="slds-form-element__control"> -->
+<!--                                             <apex:inputText disabled="true" value="{!Customer_Inquiry__c.Service_Request_Your_Boat_Model__c}" styleClass="slds-input"/> -->
+<!--                                         </div> -->
+<!--                                     </div>  -->
+<!--                                 </div> -->
+<!--                                 <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded"> -->
+<!--                                     <div class="slds-form-element"> -->
+<!--                                         <label class="slds-form-element__label">Service Request - Your Boat Year</label> -->
+<!--                                         <div class="slds-form-element__control"> -->
+<!--                                             <apex:inputText disabled="true" value="{!Customer_Inquiry__c.Service_Request_Your_Boat_Year__c}" styleClass="slds-input"/> -->
+<!--                                         </div> -->
+<!--                                     </div>  -->
+<!--                                 </div> -->
+<!--                             </div> -->
+<!--                         </div> -->
+<!--                     </div> -->
                 </apex:outputPanel>
                 <apex:outputPanel rendered="true">
-                    <div class="slds-grid slds-wrap">
-                        <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-1 slds-col--padded">
-                            <div class="slds-grid slds-wrap" style="margin-top: 1%;">
-                                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
-                                    <div class="slds-form-element">
-                                        <label class="slds-form-element__label">Service Request - Have we serviced before</label>
-                                        <div class="slds-form-element__control">
-                                            <apex:inputText disabled="true" value="{!Account.Service_Request_Have_we_serviced_befor__c}" styleClass="slds-input"/>
-                                        </div>
-                                    </div> 
-                                </div>
-                                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
-                                    <div class="slds-form-element">
-                                        <label class="slds-form-element__label">Service Request - Last Service Date</label>
-                                        <div class="slds-form-element__control">
-                                            <apex:inputText disabled="true" value="{!Account.Service_Request_Last_Service_Date__c}" styleClass="slds-input"/>
-                                        </div>
-                                    </div> 
-                                </div>
-                                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
-                                    <div class="slds-form-element">
-                                        <label class="slds-form-element__label">Service Request - Preferred Appointment</label>
-                                        <div class="slds-form-element__control">
-                                            <apex:inputText disabled="true" value="{!Account.Service_Request_Preferred_Appointment__c}" styleClass="slds-input"/>
-                                        </div>
-                                    </div> 
-                                </div>
-                                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
-                                    <div class="slds-form-element">
-                                        <label class="slds-form-element__label">Service Request - Work Completed</label>
-                                        <div class="slds-form-element__control">
-                                            <apex:inputText disabled="true" value="{!Account.Service_Request_Work_Completed__c}" styleClass="slds-input"/>
-                                        </div>
-                                    </div> 
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+<!--                     <div class="slds-grid slds-wrap"> -->
+<!--                         <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-1 slds-col--padded"> -->
+<!--                             <div class="slds-grid slds-wrap" style="margin-top: 1%;"> -->
+<!--                                 <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded"> -->
+<!--                                     <div class="slds-form-element"> -->
+<!--                                         <label class="slds-form-element__label">Service Request - Have we serviced before</label> -->
+<!--                                         <div class="slds-form-element__control"> -->
+<!--                                             <apex:inputText disabled="true" value="{!Customer_Inquiry__c.Service_Request_Have_we_serviced_befor__c}" styleClass="slds-input"/> -->
+<!--                                         </div> -->
+<!--                                     </div>  -->
+<!--                                 </div> -->
+<!--                                 <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded"> -->
+<!--                                     <div class="slds-form-element"> -->
+<!--                                         <label class="slds-form-element__label">Service Request - Last Service Date</label> -->
+<!--                                         <div class="slds-form-element__control"> -->
+<!--                                             <apex:inputText disabled="true" value="{!Customer_Inquiry__c.Service_Request_Last_Service_Date__c}" styleClass="slds-input"/> -->
+<!--                                         </div> -->
+<!--                                     </div>  -->
+<!--                                 </div> -->
+<!--                                 <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded"> -->
+<!--                                     <div class="slds-form-element"> -->
+<!--                                         <label class="slds-form-element__label">Service Request - Preferred Appointment</label> -->
+<!--                                         <div class="slds-form-element__control"> -->
+<!--                                             <apex:inputText disabled="true" value="{!Customer_Inquiry__c.Service_Request_Preferred_Appointment__c}" styleClass="slds-input"/> -->
+<!--                                         </div> -->
+<!--                                     </div>  -->
+<!--                                 </div> -->
+<!--                                 <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded"> -->
+<!--                                     <div class="slds-form-element"> -->
+<!--                                         <label class="slds-form-element__label">Service Request - Work Completed</label> -->
+<!--                                         <div class="slds-form-element__control"> -->
+<!--                                             <apex:inputText disabled="true" value="{!Customer_Inquiry__c.Service_Request_Work_Completed__c}" styleClass="slds-input"/> -->
+<!--                                         </div> -->
+<!--                                     </div>  -->
+<!--                                 </div> -->
+<!--                             </div> -->
+<!--                         </div> -->
+<!--                     </div> -->
                 </apex:outputPanel>
                 <apex:outputPanel rendered="true">
-                    <div class="slds-grid slds-wrap">
-                        <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-1 slds-col--padded">
-                            <div class="slds-grid slds-wrap" style="margin-top: 1%;">
-                                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
-                                    <div class="slds-form-element">
-                                        <label class="slds-form-element__label">Service Request - Your Boat Engine Hours</label>
-                                        <div class="slds-form-element__control">
-                                            <apex:inputText disabled="true" value="{!Account.Service_Request_Your_Boat_Engine_Hours__c}" styleClass="slds-input"/>
-                                        </div>
-                                    </div> 
-                                </div>
-                                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
-                                    <div class="slds-form-element">
-                                        <label class="slds-form-element__label">Service Request - Your HIN Number</label>
-                                        <div class="slds-form-element__control">
-                                            <apex:inputText disabled="true" value="{!Account.Service_Request_Your_HIN_Number__c}" styleClass="slds-input"/>
-                                        </div>
-                                    </div> 
-                                </div>                                
-                            </div>
-                        </div>
-                    </div>
+<!--                     <div class="slds-grid slds-wrap"> -->
+<!--                         <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-1 slds-col--padded"> -->
+<!--                             <div class="slds-grid slds-wrap" style="margin-top: 1%;"> -->
+<!--                                 <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded"> -->
+<!--                                     <div class="slds-form-element"> -->
+<!--                                         <label class="slds-form-element__label">Service Request - Your Boat Engine Hours</label> -->
+<!--                                         <div class="slds-form-element__control"> -->
+<!--                                             <apex:inputText disabled="true" value="{!Customer_Inquiry__c.Service_Request_Your_Boat_Engine_Hours__c}" styleClass="slds-input"/> -->
+<!--                                         </div> -->
+<!--                                     </div>  -->
+<!--                                 </div> -->
+<!--                                 <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded"> -->
+<!--                                     <div class="slds-form-element"> -->
+<!--                                         <label class="slds-form-element__label">Service Request - Your HIN Number</label> -->
+<!--                                         <div class="slds-form-element__control"> -->
+<!--                                             <apex:inputText disabled="true" value="{!Customer_Inquiry__c.Service_Request_Your_HIN_Number__c}" styleClass="slds-input"/> -->
+<!--                                         </div> -->
+<!--                                     </div>  -->
+<!--                                 </div>                                 -->
+<!--                             </div> -->
+<!--                         </div> -->
+<!--                     </div> -->
                 </apex:outputPanel>
             </div>
             
         </apex:outputPanel>
-        <apex:outputPanel rendered="{!IF(Account.RecordType.Name == 'Prospect Credit App' || Account.Lead_Source__c == 'Joint Finance Application',true,false)}">
+        <apex:outputPanel rendered="{!IF(Customer_Inquiry__c.RecordType.Name == 'Prospect Credit App' || Customer_Inquiry__c.Lead_Source__c == 'Joint Finance Application',true,false)}">
             <div class="slds-grid slds-wrap slds-col--padded">
                 <div class="slds-col--padded slds-col slds-size--1-of-1 Customer-Heading">
                     <h2 class=" heading"><br/>
@@ -780,7 +780,7 @@
                                     <div class="slds-form-element">
                                         <label class="slds-form-element__label">Date Of Birth(mm/dd/yyy)</label>
                                         <div class="slds-form-element__control">
-                                            <apex:inputText disabled="true" value="{!Account.SFA_Date_of_Birth__c}" styleClass="slds-input"/>
+                                            <apex:inputText disabled="true" value="{!Customer_Inquiry__c.Date_of_Birth__c}" styleClass="slds-input"/>
                                         </div>
                                     </div> 
                                 </div>
@@ -788,7 +788,7 @@
                                     <div class="slds-form-element">
                                         <label class="slds-form-element__label">SFA-Social Security Number</label>
                                         <div class="slds-form-element__control">
-                                            <apex:inputText disabled="true" value="{!Account.SFA_Social_Security_Number__c}" styleClass="slds-input"/>
+                                            <apex:inputText disabled="true" value="{!Customer_Inquiry__c.Social_Security_Number__c}" styleClass="slds-input"/>
                                         </div>
                                     </div> 
                                 </div>
@@ -796,7 +796,7 @@
                                     <div class="slds-form-element">
                                         <label class="slds-form-element__label">Joint Applicant First Name</label>
                                         <div class="slds-form-element__control">
-                                            <apex:inputText disabled="true" value="{!Account.Joint_Applicant_First_Name__c}" styleClass="slds-input"/>
+                                            <apex:inputText disabled="true" value="{!Customer_Inquiry__c.CoApp_First_Name__c}" styleClass="slds-input"/>
                                         </div>
                                     </div> 
                                 </div>      
@@ -804,7 +804,7 @@
                                     <div class="slds-form-element">
                                         <label class="slds-form-element__label">Joint Applicant Last Name</label>
                                         <div class="slds-form-element__control">
-                                            <apex:inputText disabled="true" value="{!Account.Joint_Applicant_Last_Name__c}" styleClass="slds-input"/>
+                                            <apex:inputText disabled="true" value="{!Customer_Inquiry__c.CoApp_Last_Name__c}" styleClass="slds-input"/>
                                         </div>
                                     </div> 
                                 </div>                                
@@ -820,7 +820,7 @@
                                     <div class="slds-form-element">
                                         <label class="slds-form-element__label">SFA - Drivers License</label>
                                         <div class="slds-form-element__control">
-                                            <apex:inputText disabled="true" value="{!Account.SFA_Drivers_License__c}" styleClass="slds-input"/>
+                                            <apex:inputText disabled="true" value="{!Customer_Inquiry__c.Drivers_License_Number__c}" styleClass="slds-input"/>
                                         </div>
                                     </div> 
                                 </div> 
@@ -829,7 +829,7 @@
                                     <div class="slds-form-element">
                                         <label class="slds-form-element__label">SFA - Landlord/Mortgage Holder</label>
                                         <div class="slds-form-element__control">
-                                            <apex:inputText disabled="true" value="{!Account.SFA_Landlord_Mortgage_Holder__c}" styleClass="slds-input"/>
+                                            <apex:inputText disabled="true" value="{!Customer_Inquiry__c.Mortgage_LenderLandlord_Name__c}" styleClass="slds-input"/>
                                         </div>
                                     </div>
                                 </div> 
@@ -837,7 +837,7 @@
                                     <div class="slds-form-element">
                                         <label class="slds-form-element__label">Joint Applicant Email</label>
                                         <div class="slds-form-element__control">
-                                            <apex:inputText disabled="true" value="{!Account.Joint_Applicant_Email__c}" styleClass="slds-input"/>
+                                            <apex:inputText disabled="true" value="{!Customer_Inquiry__c.CoApp_Email__c}" styleClass="slds-input"/>
                                         </div>
                                     </div> 
                                 </div>          
@@ -845,7 +845,7 @@
                                     <div class="slds-form-element">
                                         <label class="slds-form-element__label">Joint Applicant Phone</label>
                                         <div class="slds-form-element__control">
-                                            <apex:inputText disabled="true" value="{!Account.Joint_Applicant_Phone__c}" styleClass="slds-input"/>
+                                            <apex:inputText disabled="true" value="{!Customer_Inquiry__c.CoApp_Phone__c}" styleClass="slds-input"/>
                                         </div>
                                     </div> 
                                 </div>              
@@ -858,9 +858,9 @@
                         <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-1 slds-col--padded">
                             <div class="slds-grid slds-wrap" style="margin-top: 1%;"> <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
                                 <div class="slds-form-element">
-                                    <label class="slds-form-element__label">SFA - Monthly Rent/Mortgage</label>
+                                    <label class="slds-form-element__label">SFA - Own/Rent</label>
                                     <div class="slds-form-element__control">
-                                        <apex:inputText disabled="true" value="{!Account.SFA_Monthly_Rent_Mortgage__c}" styleClass="slds-input"/>
+                                        <apex:inputText disabled="true" value="{!Customer_Inquiry__c.Property_Ownership__c}" styleClass="slds-input"/>
                                     </div>
                                 </div> 
                                 </div> 
@@ -868,7 +868,8 @@
                                     <div class="slds-form-element">
                                         <label class="slds-form-element__label">SFA - Property Owner</label>
                                         <div class="slds-form-element__control">
-                                            <apex:inputText disabled="true" value="{!Account.SFA_Property_Owner__c}" styleClass="slds-input"/>
+<!--                                             <apex:inputText disabled="true" value="{!Customer_Inquiry__c.SFA_Property_Owner__c}" styleClass="slds-input"/> -->
+                                            <apex:inputText disabled="true" value="{!blankSet}" styleClass="slds-input"/>
                                         </div>
                                     </div> 
                                 </div>  
@@ -876,7 +877,7 @@
                                     <div class="slds-form-element">
                                         <label class="slds-form-element__label">Joint Applicant Date of Birth</label>
                                         <div class="slds-form-element__control">
-                                            <apex:inputText disabled="true" value="{!Account.Joint_Applicant_Date_of_Birth__c}" styleClass="slds-input"/>
+                                            <apex:inputText disabled="true" value="{!Customer_Inquiry__c.CoApp_Date_of_Birth__c}" styleClass="slds-input"/>
                                         </div>
                                     </div> 
                                 </div>
@@ -884,7 +885,7 @@
                                     <div class="slds-form-element">
                                         <label class="slds-form-element__label">Relationship to Applicant</label>
                                         <div class="slds-form-element__control">
-                                            <apex:inputText disabled="true" value="{!Account.Relationship_to_Applicant__c}" styleClass="slds-input"/>
+                                            <apex:inputText disabled="true" value="{!Customer_Inquiry__c.CoApp_Relationship_to_Applicant__c}" styleClass="slds-input"/>
                                         </div>
                                     </div> 
                                 </div>                           
@@ -900,7 +901,7 @@
                                     <div class="slds-form-element">
                                         <label class="slds-form-element__label">SFA - Years at current address</label>
                                         <div class="slds-form-element__control">
-                                            <apex:inputText disabled="true" value="{!Account.SFA_Years_at_current_address__c}" styleClass="slds-input"/>
+                                            <apex:inputText disabled="true" value="{!Customer_Inquiry__c.Years_at_Address__c}" styleClass="slds-input"/>
                                         </div>
                                     </div>
                                 </div>
@@ -908,7 +909,7 @@
                                     <div class="slds-form-element">
                                         <label class="slds-form-element__label">SFA - Months at current address</label>
                                         <div class="slds-form-element__control">
-                                            <apex:inputText disabled="true" value="{!Account.SFA_Months_at_current_address__c}" styleClass="slds-input"/>
+                                            <apex:inputText disabled="true" value="{!Customer_Inquiry__c.Months_at_Address__c}" styleClass="slds-input"/>
                                         </div>
                                     </div> 
                                 </div> 
@@ -916,7 +917,7 @@
                                     <div class="slds-form-element">
                                         <label class="slds-form-element__label">Joint Applicant Social Security Number</label>
                                         <div class="slds-form-element__control">
-                                            <apex:inputText disabled="true" value="{!Account.Joint_Applicant_Social_Security_Number__c}" styleClass="slds-input"/>
+                                            <apex:inputText disabled="true" value="{!Customer_Inquiry__c.CoApp_Social_Security_Number__c}" styleClass="slds-input"/>
                                         </div>
                                     </div> 
                                 </div>   
@@ -924,7 +925,7 @@
                                     <div class="slds-form-element">
                                         <label class="slds-form-element__label">Joint Applicant Drivers License</label>
                                         <div class="slds-form-element__control">
-                                            <apex:inputText disabled="true" value="{!Account.Joint_Applicant_Drivers_License__c}" styleClass="slds-input"/>
+                                            <apex:inputText disabled="true" value="{!Customer_Inquiry__c.CoApp_Drivers_License_Number__c}" styleClass="slds-input"/>
                                         </div>
                                     </div> 
                                 </div>
@@ -940,7 +941,7 @@
                                     <div class="slds-form-element">
                                         <label class="slds-form-element__label">SFA - Occupation</label>
                                         <div class="slds-form-element__control">
-                                            <apex:inputText disabled="true" value="{!Account.SFA_Occupation__c}" styleClass="slds-input"/>
+                                            <apex:inputText disabled="true" value="{!Customer_Inquiry__c.Current_Occupation__c}" styleClass="slds-input"/>
                                         </div>
                                     </div> 
                                 </div> 
@@ -948,7 +949,7 @@
                                     <div class="slds-form-element">
                                         <label class="slds-form-element__label">SFA - Employer Name</label>
                                         <div class="slds-form-element__control">
-                                            <apex:inputText disabled="true" value="{!Account.SFA_Employer_Name__c}" styleClass="slds-input"/>
+                                            <apex:inputText disabled="true" value="{!Customer_Inquiry__c.Current_Employer_Name__c}" styleClass="slds-input"/>
                                         </div>
                                     </div> 
                                 </div>  
@@ -956,7 +957,7 @@
                                     <div class="slds-form-element">
                                         <label class="slds-form-element__label">Joint Applicant Street Address</label>
                                         <div class="slds-form-element__control">
-                                            <apex:inputText disabled="true" value="{!Account.Joint_Applicant_Street_Address__c}" styleClass="slds-input"/>
+                                            <apex:inputText disabled="true" value="{!Customer_Inquiry__c.CoApp_Street__c}" styleClass="slds-input"/>
                                         </div>
                                     </div> 
                                 </div>
@@ -965,7 +966,7 @@
                                     <div class="slds-form-element">
                                         <label class="slds-form-element__label">Joint Applicant City</label>
                                         <div class="slds-form-element__control">
-                                            <apex:inputText disabled="true" value="{!Account.Joint_Applicant_City__c}" styleClass="slds-input"/>
+                                            <apex:inputText disabled="true" value="{!Customer_Inquiry__c.CoApp_City__c}" styleClass="slds-input"/>
                                         </div>
                                     </div> 
                                 </div>         
@@ -981,15 +982,15 @@
                                     <div class="slds-form-element">
                                         <label class="slds-form-element__label">SFA -Employer Phone</label>
                                         <div class="slds-form-element__control">
-                                            <apex:inputText disabled="true" value="{!Account.SFA_Employer_Phone__c}" styleClass="slds-input"/>
+                                            <apex:inputText disabled="true" value="{!Customer_Inquiry__c.Current_Employer_Phone__c}" styleClass="slds-input"/>
                                         </div>
                                     </div> 
                                 </div>
                                 <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
                                     <div class="slds-form-element">
-                                        <label class="slds-form-element__label">SFA - Salary (Annually Gross)</label>
+                                        <label class="slds-form-element__label">SFA - Salary (Monthly)</label>
                                         <div class="slds-form-element__control">
-                                            <apex:inputText disabled="true" value="{!Account.SFA_Salary_Annually_Gross__c}" styleClass="slds-input"/>
+                                            <apex:inputText disabled="true" value="{!Customer_Inquiry__c.Current_Monthly_Salary__c}" styleClass="slds-input"/>
                                         </div>
                                     </div> 
                                 </div>  
@@ -998,7 +999,7 @@
                                     <div class="slds-form-element">
                                         <label class="slds-form-element__label">Joint Applicant State</label>
                                         <div class="slds-form-element__control">
-                                            <apex:inputText disabled="true" value="{!Account.Joint_Applicant_State__c}" styleClass="slds-input"/>
+                                            <apex:inputText disabled="true" value="{!Customer_Inquiry__c.CoApp_State__c}" styleClass="slds-input"/>
                                         </div>
                                     </div> 
                                 </div>                                    
@@ -1007,7 +1008,7 @@
                                     <div class="slds-form-element">
                                         <label class="slds-form-element__label">Joint Applicant Zip/Postal Code</label>
                                         <div class="slds-form-element__control">
-                                            <apex:inputText disabled="true" value="{!Account.Joint_Applicant_Zip_Postal_Code__c}" styleClass="slds-input"/>
+                                            <apex:inputText disabled="true" value="{!Customer_Inquiry__c.CoApp_Zip_Code__c}" styleClass="slds-input"/>
                                         </div>
                                     </div> 
                                 </div> 
@@ -1024,7 +1025,7 @@
                                     <div class="slds-form-element">
                                         <label class="slds-form-element__label">SFA - Years at employer</label>
                                         <div class="slds-form-element__control">
-                                            <apex:inputText disabled="true" value="{!Account.SFA_Years_at_employer__c}" styleClass="slds-input"/>
+                                            <apex:inputText disabled="true" value="{!Customer_Inquiry__c.Years_with_Current_Employer__c}" styleClass="slds-input"/>
                                         </div>
                                     </div> 
                                 </div>
@@ -1032,7 +1033,7 @@
                                     <div class="slds-form-element">
                                         <label class="slds-form-element__label">SFA - Months at Employer</label>
                                         <div class="slds-form-element__control">
-                                            <apex:inputText disabled="true" value="{!Account.SFA_Months_at_Employer__c}" styleClass="slds-input"/>
+                                            <apex:inputText disabled="true" value="{!Customer_Inquiry__c.Months_with_Current_Employer__c}" styleClass="slds-input"/>
                                         </div>
                                     </div> 
                                 </div>     
@@ -1040,7 +1041,7 @@
                                     <div class="slds-form-element">
                                         <label class="slds-form-element__label">Joint Applicant Country</label>
                                         <div class="slds-form-element__control">
-                                            <apex:inputText disabled="true" value="{!Account.Joint_Applicant_County__c}" styleClass="slds-input"/>
+                                            <apex:inputText disabled="true" value="{!Customer_Inquiry__c.CoApp_Country__c}" styleClass="slds-input"/>
                                         </div>
                                     </div> 
                                 </div>   
@@ -1048,7 +1049,7 @@
                                     <div class="slds-form-element">
                                         <label class="slds-form-element__label">Joint Applicant Landlord/Mortgage Holder</label>
                                         <div class="slds-form-element__control">
-                                            <apex:inputText disabled="true" value="{!Account.Joint_Applicant_Landlord_Mortgage_Holder__c}" styleClass="slds-input"/>
+                                            <apex:inputText disabled="true" value="{!Customer_Inquiry__c.CoApp_Mortgage_LenderLandlord_Name__c}" styleClass="slds-input"/>
                                         </div>
                                     </div> 
                                 </div>
@@ -1072,7 +1073,8 @@
                                     <div class="slds-form-element">
                                         <label class="slds-form-element__label">Joint Applicant Property Owner</label>
                                         <div class="slds-form-element__control">
-                                            <apex:inputText disabled="true" value="{!Account.Joint_Applicant_Property_Owner__c}" styleClass="slds-input"/>
+                                            <apex:inputText disabled="true" value="{!Customer_Inquiry__c.CoApp_Property_Ownership__c}" styleClass="slds-input"/>
+<!-- 												<apex:inputText disabled="true" value="{!blankSet}" styleClass="slds-input"/> -->
                                         </div>
                                     </div> 
                                 </div>       
@@ -1080,7 +1082,7 @@
                                     <div class="slds-form-element">
                                         <label class="slds-form-element__label">Joint Applicant Monthly Payment</label>
                                         <div class="slds-form-element__control">
-                                            <apex:inputText disabled="true" value="{!Account.Joint_Applicant_Monthly_Rent_Mortgage__c}" styleClass="slds-input"/>
+                                            <apex:inputText disabled="true" value="{!Customer_Inquiry__c.CoApp_Monthly_Payment__c}" styleClass="slds-input"/>
                                         </div>
                                     </div> 
                                 </div>                    
@@ -1103,7 +1105,7 @@
                                     <div class="slds-form-element">
                                         <label class="slds-form-element__label">Joint Applicant Years at current address</label>
                                         <div class="slds-form-element__control">
-                                            <apex:inputText disabled="true" value="{!Account.Joint_Applicant_Years_at_current_address__c}" styleClass="slds-input"/>
+                                            <apex:inputText disabled="true" value="{!Customer_Inquiry__c.CoApp_Years_at_Address__c}" styleClass="slds-input"/>
                                         </div>
                                     </div> 
                                 </div>        
@@ -1111,7 +1113,7 @@
                                     <div class="slds-form-element">
                                         <label class="slds-form-element__label">Joint Applicant Months Current Address</label>
                                         <div class="slds-form-element__control">
-                                            <apex:inputText disabled="true" value="{!Account.Joint_Applicant_Months_Current_Address__c}" styleClass="slds-input"/>
+                                            <apex:inputText disabled="true" value="{!Customer_Inquiry__c.CoApp_Months_at_Address__c}" styleClass="slds-input"/>
                                         </div>
                                     </div> 
                                 </div>         
@@ -1133,7 +1135,7 @@
                                     <div class="slds-form-element">
                                         <label class="slds-form-element__label">Joint Applicant Occupation</label>
                                         <div class="slds-form-element__control">
-                                            <apex:inputText disabled="true" value="{!Account.Joint_Applicant_Occupation__c}" styleClass="slds-input"/>
+                                            <apex:inputText disabled="true" value="{!Customer_Inquiry__c.CoApp_Current_Occupation__c}" styleClass="slds-input"/>
                                         </div>
                                     </div> 
                                 </div>
@@ -1141,7 +1143,7 @@
                                     <div class="slds-form-element">
                                         <label class="slds-form-element__label">Joint Applicant Employer Name</label>
                                         <div class="slds-form-element__control">
-                                            <apex:inputText disabled="true" value="{!Account.Joint_Applicant_Employer_Name__c}" styleClass="slds-input"/>
+                                            <apex:inputText disabled="true" value="{!Customer_Inquiry__c.CoApp_Current_Employer_Name__c}" styleClass="slds-input"/>
                                         </div>
                                     </div> 
                                 </div>                    
@@ -1163,15 +1165,15 @@
                                     <div class="slds-form-element">
                                         <label class="slds-form-element__label">Joint Applicant Current Employer Phone</label>
                                         <div class="slds-form-element__control">
-                                            <apex:inputText disabled="true" value="{!Account.Joint_Applicant_Employer_Phone__c}" styleClass="slds-input"/>
+                                            <apex:inputText disabled="true" value="{!Customer_Inquiry__c.CoApp_Current_Employer_Phone__c}" styleClass="slds-input"/>
                                         </div>
                                     </div> 
                                 </div>    
                                 <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-4 slds-small-size--1-of-2 slds-col--padded">
                                     <div class="slds-form-element">
-                                        <label class="slds-form-element__label">Joint Applicant Salary (Annually Gross)</label>
-                                        <div class="slds-form-element__control">
-                                            <apex:inputText disabled="true" value="{!Account.Joint_Applicant_Salary_Annually_Gross__c}" styleClass="slds-input"/>
+                                        <label class="slds-form-element__label">Joint Applicant Salary (Monthly)</label>
+                                        <div class="slds-form-element__control"> 
+                                            <apex:inputText disabled="true" value="{!Customer_Inquiry__c.CoApp_Current_Monthly_Salary__c}" styleClass="slds-input"/>
                                         </div>
                                     </div> 
                                 </div>        
@@ -1193,7 +1195,7 @@
                                     <div class="slds-form-element">
                                         <label class="slds-form-element__label">Joint Applicant Years at Employer</label>
                                         <div class="slds-form-element__control">
-                                            <apex:inputText disabled="true" value="{!Account.Joint_Applicant_Years_at_Employer__c}" styleClass="slds-input"/>
+                                            <apex:inputText disabled="true" value="{!Customer_Inquiry__c.CoApp_Years_with_Current_Employer__c}" styleClass="slds-input"/>
                                         </div>
                                     </div> 
                                 </div>
@@ -1201,7 +1203,7 @@
                                     <div class="slds-form-element">
                                         <label class="slds-form-element__label">Joint Applicant Months at Employer</label>
                                         <div class="slds-form-element__control">
-                                            <apex:inputText disabled="true" value="{!Account.Joint_Applicant_Months_at_Employer__c}" styleClass="slds-input"/>
+                                            <apex:inputText disabled="true" value="{!Customer_Inquiry__c.CoApp_Months_with_Current_Employer__c}" styleClass="slds-input"/>
                                         </div>
                                     </div> 
                                 </div>                    

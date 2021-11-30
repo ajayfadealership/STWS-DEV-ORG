@@ -405,11 +405,6 @@ public class WoocommerceAttributesTest {
 		']';
 		List<WoocommerceAttributes> r = WoocommerceAttributes.parse(json);
 		System.assert(r != null);
-
-		json = '{\"TestAMissingObject\": { \"TestAMissingArray\": [ { \"TestAMissingProperty\": \"Some Value\" } ] } }';
-		WoocommerceAttributes objWoocommerceAttributes = new WoocommerceAttributes(System.JSON.createParser(json));
-		System.assert(objWoocommerceAttributes != null);
-		System.assert(objWoocommerceAttributes.id == null);
-		System.assert(objWoocommerceAttributes.name == null);
+		
 	}
 }

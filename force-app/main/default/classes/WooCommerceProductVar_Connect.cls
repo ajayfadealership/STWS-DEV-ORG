@@ -26,6 +26,16 @@ global class WooCommerceProductVar_Connect implements Queueable, Database.Allows
     global void execute(QueueableContext context) {
         //Part__c objPart = new Part__c();(Part__c)scope[0];
         String debugString = '';
+        Set<String> setPartNumber = new Set<String>();
+        for(Part__c objPartVar : lstPart) {
+            setPartNumber.add(objPartVar.BOATBUILDING__Part_Number__c);
+        }
+        List<BOATBUILDING__Inventory__c> lstInventory = [SELECT Id, BOATBUILDING__Part_Number__c, Quantity__c FROM BOATBUILDING__Inventory__c 
+                                                        WHERE BOATBUILDING__Part_Number__c IN :setPartNumber];
+        Map<String, Integer> mapInvQt = new Map<String, Integer>();
+        for(BOATBUILDING__Inventory__c objInventory : lstInventory) {
+            mapInvQt.put(objInventory.BOATBUILDING__Part_Number__c, objInventory.Quantity__c != null ? Integer.valueOf(objInventory.Quantity__c) : 0);
+        }
         for(Part__c objPart: lstPart) {
             String strAttJSON = '';
             Map<String, Set<String>> mapAttNameOptionForPro = new Map<String, Set<String>>();
@@ -74,7 +84,7 @@ global class WooCommerceProductVar_Connect implements Queueable, Database.Allows
             String partCost = '0.00';
             String partNumber = '';
             String DlrPricing = '';
-            String WooComId = '';
+            String WooComId = ''; 
             
             if(objPart.BOATBUILDING__WooCommerce_Id__c != null) {
                 WooComId = objPart.BOATBUILDING__WooCommerce_Id__c;
@@ -94,9 +104,35 @@ global class WooCommerceProductVar_Connect implements Queueable, Database.Allows
             if(objPart.SKU__c != null) {
                 SKU = objPart.SKU__c;
             }
-            if(objPart.BOATBUILDING__Part_Number__c != null) {
-                Barcode = objPart.BOATBUILDING__Part_Number__c;
-            }
+            String metaData = '"meta_data" : [';
+	        if(objPart.BOATBUILDING__Barcode__c != null) {
+	            metaData += '{ "key": "_wpm_gtin_code", "value" : "'+objPart.BOATBUILDING__Barcode__c.replaceAll('"','\\\\"')+'"}';
+	            //barCodeJSON 
+	        }
+	        
+	        if(objPart.BOATBUILDING__Part_Color__c != null) { 
+	        	if(String.isNotBlank(objPart.BOATBUILDING__Barcode__c)) { 
+	        		metaData += ',';
+	        	} 
+	            metaData += '{ "key": "part_color", "value" : "'+objPart.BOATBUILDING__Part_Color__c.replaceAll('"','\\\\"')+'"}';
+	            //barCodeJSON
+	        }
+	        if(objPart.BOATBUILDING__Part_Size__c != null) { 
+	        	if(String.isNotBlank(objPart.BOATBUILDING__Part_Color__c) || String.isNotBlank(objPart.BOATBUILDING__Barcode__c)) {
+	        		metaData += ','; 
+	        	}
+	            metaData += '{ "key": "part_size", "value" : "'+objPart.BOATBUILDING__Part_Size__c.replaceAll('"','\\\\"')+'"}';
+	            //barCodeJSON
+	        }
+	        
+	        if(objPart.BOATBUILDING__Part_Gender__c != null) {
+	        	if(String.isNotBlank(objPart.BOATBUILDING__Part_Size__c) || String.isNotBlank(objPart.BOATBUILDING__Part_Color__c) || String.isNotBlank(objPart.BOATBUILDING__Barcode__c)) {
+	        		metaData += ',';
+	        	}
+	            metaData += '{ "key": "part_gender", "value" : "'+objPart.BOATBUILDING__Part_Gender__c.replaceAll('"','\\\\"')+'"}';
+	            //barCodeJSON
+	        }
+	        metaData += ']';
             
             if(objPart.Weight__c != null && objPart.Weight__c.containsIgnoreCase('lbs')) {
                 Weight = objPart.Weight__c.toLowerCase().replace('lbs','');
@@ -104,29 +140,28 @@ global class WooCommerceProductVar_Connect implements Queueable, Database.Allows
                 Weight = objPart.Weight__c; 
             }
             
-            if(objPart.Quantity__c != null) {
-                Quantity = String.valueOf(objPart.Quantity__c);
-            }
-            if(objPart.BOATBUILDING__Web_Description_long__c != null) {
+            Quantity = String.valueOf(mapInvQt.get(objPart.Part_Number__c));
+            // if(objPart.Quantity__c != null) {
+            //     Quantity = String.valueOf(objPart.Quantity__c);
+            // }
+            if(objPart.BOATBUILDING__Push_Description__c && objPart.BOATBUILDING__Web_Description_long__c != null) {
                 Description = String.valueOf(objPart.BOATBUILDING__Web_Description_long__c).replaceAll('\r\n', ' ');
-            }
+            } 
             
             if(objPart.BOATBUILDING__Part_Cost__c != null) {  
                 partCost = String.valueOf(objPart.BOATBUILDING__Part_Cost__c);
             }
             
-            String Attachment = '';
             
+            String Attachment = '';
+            System.debug('lstImgUrl>>>: '+lstImgUrl);
             if(!lstImgUrl.isEmpty()) {
-                Attachment = '"images": [';
-                for(String strUrl: lstImgUrl) {
-                    Attachment += '{';
-                    Attachment +=   '"src": "' + strUrl + '"';
-                    Attachment += '},';
-                }
-                
-                Attachment = Attachment.subString(0, Attachment.length()-1);
-                Attachment += ']';
+                Attachment = '"image": ';
+                Attachment += '{';
+                Attachment +=   '"id": ' + lstImgUrl[0] ;
+                Attachment += '}';   
+                //Attachment = Attachment.subString(0, Attachment.length()-1);
+                Attachment += '';
             }
             
             String str_Product_JSON =   '{';
@@ -166,9 +201,12 @@ global class WooCommerceProductVar_Connect implements Queueable, Database.Allows
                 str_Product_JSON +=                             ',';
                 str_Product_JSON += strAttJSON;
             }
-            str_Product_JSON +=         '}';
+            if(String.isNotBlank(metaData)) {
+	        	str_Product_JSON += ',' + metaData;
+	        }
+            str_Product_JSON +=         '}'; 
             
-            System.debug('str_Product_JSON: '+str_Product_JSON);
+            System.debug('str_Product_JSON Var: '+str_Product_JSON);
             
             HttpRequest req = new HttpRequest();
             if(String.isNotBlank(WooComId)) {
@@ -184,6 +222,7 @@ global class WooCommerceProductVar_Connect implements Queueable, Database.Allows
             } else {
                 req.setEndPoint(objWC.BOATBUILDING__API_URL__c+'/wp-json/wc/v3/products/'+strPrntProductId+'/variations?consumer_key='+objWC.BOATBUILDING__Consumer_key__c+'&consumer_secret='+objWC.BOATBUILDING__Consumer_secret__c);
             }
+            System.debug('req.setEndPoint Var: '+req.getEndPoint());
             req.setTimeout(120000);
             Http h = new Http(); 
             HttpResponse res = h.send(req);

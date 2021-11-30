@@ -5,6 +5,7 @@
     <externalId>false</externalId>
     <label>Trade In Pay-Off Date</label>
     <required>false</required>
+    <trackFeedHistory>false</trackFeedHistory>
     <trackHistory>false</trackHistory>
     <trackTrending>false</trackTrending>
     <type>DateTime</type>

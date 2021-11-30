@@ -12,14 +12,14 @@
         <valueSetDefinition>
             <sorted>false</sorted>
             <value>
-                <fullName>Men&#39;s</fullName>
+                <fullName>Men&apos;s</fullName>
                 <default>false</default>
-                <label>Men&#39;s</label>
+                <label>Men&apos;s</label>
             </value>
             <value>
-                <fullName>Women&#39;s</fullName>
+                <fullName>Women&apos;s</fullName>
                 <default>false</default>
-                <label>Women&#39;s</label>
+                <label>Women&apos;s</label>
             </value>
             <value>
                 <fullName>Youth</fullName>

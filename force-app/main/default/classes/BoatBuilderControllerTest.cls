@@ -8,7 +8,16 @@ public with sharing class BoatBuilderControllerTest
         String getManufacturerName;
         String selectedYearThirdPage;
         String selectedProductDCId;
-        
+        BOATBUILDING__System_Configure__c objSC = new BOATBUILDING__System_Configure__c();
+        objSC.BOATBUILDING__Quote_Disclaimer__c = 'ABCD';
+        objSC.BOATBUILDING__Site_URL__c = 'www.google.com';
+        objSC.BOATBUILDING__Quote_PDF__c  = 'Test';
+        objSC.BOATBUILDING__Quote_PDF_NT__c  = 'Test';
+        objSC.BOATBUILDING__Quote_PDF_NT_skp__c   = 'Test';
+        objSC.BOATBUILDING__Quote_PDF_skp__c    = 'Test';
+        objSC.BOATBUILDING__BillOfSale__c      = 'Test';
+        objSC.BOATBUILDING__BillOfSaleNT__c       = 'Test';
+        insert objSC;
         BOATBUILDING__Manufacturer__c objManufacturer1 = new BOATBUILDING__Manufacturer__c();
         objManufacturer1.Manufacturer_name__c = '12345';
         objManufacturer1.Name = 'Skiers Choice(Moomba)';
@@ -76,6 +85,7 @@ public with sharing class BoatBuilderControllerTest
         insert objDealerOption;
         
         ApexPages.currentPage().getParameters().put('invId',objInventory1.id);
+        //ApexPages.currentPage().getParameters().put('SelectedType', 'test');
         BoatBuilderController objBoatBuilderController1 = new BoatBuilderController();
         objBoatBuilderController1.lstKeySet = lstKeySet;
         objBoatBuilderController1.objCustomerName = objCustomerName;
@@ -283,6 +293,8 @@ public with sharing class BoatBuilderControllerTest
         objQLI.Quote__c = objQuote1.Id;
         insert objQLI;
         
+        ApexPages.StandardController sc = new ApexPages.StandardController(objQuote1);
+        BoatBuilderController testAccPlan = new BoatBuilderController(sc);
         
         BOATBUILDING__Quote_Line_Item__c objQL2= new BOATBUILDING__Quote_Line_Item__c();
         objQL2.Name = 'Test QLI';
@@ -375,6 +387,7 @@ public with sharing class BoatBuilderControllerTest
         ApexPages.currentPage().getParameters().put('invId',objInventory5.id);
         BoatBuilderController objBoatBuilderController5 = new BoatBuilderController();
         objBoatBuilderController5.getModel();
+        objBoatBuilderController5.checkAccess();
         Pagereference pf6 = objBoatBuilderController5.getModelVariant();
         
         objBoatBuilderController5.objItem = objItem5;
@@ -405,7 +418,8 @@ public with sharing class BoatBuilderControllerTest
         objBoatBuilderController5.totalPrice = 10000;
         Pagereference pf4 = objBoatBuilderController5.placeOrderForInventory();
         apexpages.currentpage().getparameters().put('quoteId',objQuote1.Id);
-        //Pagereference pf5 = objBoatBuilderController5.sendQuote();
+        Pagereference pf5 = objBoatBuilderController5.sendQuote();
+        BoatBuilderController.getCanSendEmails();
         //Pagereference pf6 = objBoatBuilderController5.saveAndSendQuote();
         objBoatBuilderController5.selectedModel= objProduct5.Id;
         

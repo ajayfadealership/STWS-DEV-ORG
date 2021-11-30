@@ -3,7 +3,7 @@
     <fullName>Efficiency__c</fullName>
     <deprecated>false</deprecated>
     <externalId>false</externalId>
-    <formula>(No_of_Labors__c / (TWO_Worked_Hour__c * 10))</formula>
+    <formula>(No_of_Labors__c / TWO_Worked_Hour__c ) * 100</formula>
     <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
     <label>Efficiency</label>
     <precision>18</precision>

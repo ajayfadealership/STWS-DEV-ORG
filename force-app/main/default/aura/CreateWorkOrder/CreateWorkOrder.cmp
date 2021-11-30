@@ -1,0 +1,9 @@
+<aura:component implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId" access="global" >
+	<lightning:navigation aura:id="navService"/>
+    <lightning:recordForm
+        recordId=""
+        objectApiName="BOATBUILDING__Work_Order__c"
+        layoutType="Full"
+                          recordTypeId="0126F000000jRqgQAE"
+        mode="Edit" onsuccess="{!c.navigateToSchedule}" />
+</aura:component>

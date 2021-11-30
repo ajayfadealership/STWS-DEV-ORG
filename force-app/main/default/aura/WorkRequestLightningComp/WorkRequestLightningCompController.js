@@ -3,6 +3,15 @@
         var action = component.get("c.getRecTypeId");
         action.setCallback(this, function(response) {
             component.set("v.attrRecordType", response.getReturnValue());
+
+            var itemId = component.find("item").get("v.value");
+            console.log("itemId", itemId);
+            if(itemId != undefined && itemId != null) {
+                helper.getItemDetailsHelper(component, itemId);
+            } else {
+                var obj = new Object();
+                component.set("v.objItem", obj);
+            }
         });
         $A.enqueueAction(action);
     },

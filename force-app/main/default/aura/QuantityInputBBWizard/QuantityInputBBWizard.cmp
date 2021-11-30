@@ -1,0 +1,9 @@
+<aura:component>
+    <aura:attribute name="Quantity" type="Decimal"/>
+    <aura:attribute name="isCheck" type="Boolean"/>
+    <aura:attribute name="strId" type="String"/> 
+    <aura:attribute name="ProductPriceIdListCCCC" type="String[]"/>
+    <aura:attribute name="ProductPriceIdListQTCCCC" type="String[]"/>
+    <aura:attribute name="ProductPriceIdListCCCCBlank" type="String[]" default="{}"/>
+    <lightning:input type="number" class="uiInputWidth" value="{!v.Quantity}" onchange="{!c.updateTotal}"/>
+</aura:component>

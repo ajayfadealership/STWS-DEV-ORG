@@ -12,12 +12,17 @@
         action2.setParams({"recordOrderId" : component.get("v.attrRecordId")});
         action2.setCallback(this, function(res) {
             console.log('>>>>>: '+JSON.stringify(res.getReturnValue()));
+            for(var i = 0; i < res.getReturnValue().length; i++) {
+                if(res.getReturnValue().received == undefined) {
+                    res.getReturnValue()[i].received = '';
+                }
+            }
             component.set("v.listlineItem", res.getReturnValue());
         });
         $A.enqueueAction(action2);
         helper.getStoreLocationAndCount(component);
     },
-     handleSuccess: function(component, event, helper) {
+    handleSuccess: function(component, event, helper) {
         var payload = event.getParams().response;
         var type = component.get("v.clickType")
         console.log('>>>>>>: '+type);
@@ -25,7 +30,9 @@
             console.log("addToInventoryWithBackOrder");
             component.set('v.showSpinner', true);
             var objListItem = component.get("v.listlineItem");
+            
             objListItem.forEach(element => {
+                element.received = element.received == undefined || element.received == null || element.received == '' ? 0 : element.received;
                 element.backOrderQuantity = element.quantity - element.received;
             });
                 console.log('>>>>>:addtoinventory '+JSON.stringify(objListItem));
@@ -74,12 +81,21 @@
             action.setCallback(this, function(response) {
                 component.set("v.clickType", "");
                 console.log('>>>>>methodCalling '+ response.getReturnValue());
-                if(response.getReturnValue().includes("Error")) {
+                var state = response.getState();
+                if(state == 'ERROR') {
+                    var errors = response.getError();
+                    var message = 'Unknown error'; // Default error message
+                    // Retrieve the error message sent by the server
+                    if (errors && Array.isArray(errors) && errors.length > 0) {
+                        message = errors[0].message;
+                    }
+                    // Display the message
+                    console.error(message);
                     var errorEvent = $A.get("e.force:showToast");
                     errorEvent.setParams({
                         "type" : "error",
-                        "title": "Error!",
-                        "message": response.getReturnValue()
+                        "title": "Error!", 
+                        "message": message
                     });
                     errorEvent.fire();
                 } else {
@@ -128,12 +144,15 @@
     },
     //JS for Add to inventory method component.set('v.showSpinner', true);
     addToInventoryjs:function(component,event,helper){
+        
         component.set("v.clickType", "AddI");
         component.find("recordEditForm").submit();
     },
     
     calculate: function(component,event,helper){
+        console.log('calculate: ');
         var objListItem = component.get("v.listlineItem");
+        console.log('>>>>>objListItem: '+objListItem);
         console.log('>>>>>: '+objListItem.length);
         
         var quantity= 0;
@@ -160,11 +179,11 @@
         });
         var shipping = 0.00;
         if(component.find("shippingCharge").get("v.value") != '' && component.find("shippingCharge").get("v.value") != null)
-            shipping = component.find("shippingCharge").get("v.value");
+            shipping = parseFloat(component.find("shippingCharge").get("v.value"));
         console.log('>>>>>shipping'+shipping);
         var discount = 0.00;
         if(component.find("discount").get("v.value") != '' && component.find("discount").get("v.value") != null)
-            discount = component.find("discount").get("v.value");
+            discount = parseFloat(component.find("discount").get("v.value"));
         console.log('>>>>>discount'+discount);
         console.log('>>>>>amount'+amount);
         var grandTotal = parseFloat(amount) + parseFloat(shipping) - parseFloat(discount);
@@ -178,67 +197,74 @@
         component.set("v.totalOfTotal",total);
         component.set("v.totalOfQuantity",quantity);
         component.set("v.totalOfCost",cost);
-        
-
-},
-onLoadCalculation: function(component,event,helper){
-    var objListItem = component.get("v.listlineItem");
-    console.log('>>>>>: '+objListItem.length);
-    
-    var quantity= 0;
-    var cost = 0;
-    var total = 0;
-    var totalReceived= 0;
-    var backOrderQuantity = 0;
-    var backOrderAmount = 0;
-    var amount= 0;   
-    
-    objListItem.forEach(objVal => {
-        if(objVal.received !=''){
-        totalReceived += parseInt(objVal.received);
-    }
-                        backOrderQuantity += objVal.quantity-objVal.received;
-                        amount += objVal.received *objVal.cost;
-                        backOrderAmount += (objVal.quantity-objVal.received)*objVal.cost;
-        quantity += objVal.quantity;
-        cost += objVal.cost;
-        total += objVal.quantity*objVal.cost; 
-    });
-    var shipping = component.find("shippingCharge").get("v.value");
-    console.log('>>>>>shipping'+shipping);
-    var discount = component.find("discount").get("v.value");
-
-    var grandTotal = amount + shipping -discount ;
-
-    component.set("v.orderGrandTotal",grandTotal);
-
-
-    component.set("v.totalOfBackOrderQuantity",backOrderQuantity);
-    component.set("v.totalOfBackOrderAmount",backOrderAmount);
-    console.log('>>'+quantity );
-    component.set("v.totalOfTotal",total);
-    component.set("v.totalOfQuantity",quantity);
-    component.set("v.totalOfCost",cost);
-
-},
-    save : function(component,event,helper) {
-        
-        
-        //alert('Order Status Successfully Updated');
     },
-        send: function(component,event,helper){
-            var orderId = event.getSource().get('v.name');  
-            var vfUrl = '/apex/BOATBUILDING__SendOrderDetailPage?Id='+orderId;
-            window.parent.location =vfUrl;
-            
-        },
-            print: function(component,event,helper){
-                var orderId = event.getSource().get('v.name'); 
-                var btnStatus= event.getSource().get('v.title'); 
-                var vfUrl = '/apex/BOATBUILDING__Order_As_PDF_Exampleskp?Id='+orderId +'&btnStatus='+btnStatus;
-                window.parent.location =vfUrl;
-                
-            }
+    onLoadCalculation: function(component,event,helper){
+        console.log('onLoadCalculation: ');
+        var objListItem = component.get("v.listlineItem");
+        console.log('>>>>>: '+objListItem.length);
+        
+        var quantity= 0;
+        var cost = 0;
+        var total = 0;
+        var totalReceived= 0;
+        var backOrderQuantity = 0;
+        var backOrderAmount = 0;
+        var amount= 0;   
+        
+        objListItem.forEach(objVal => {
+            if(objVal.received !=''){
+            totalReceived += parseInt(objVal.received);
+        }
+                            backOrderQuantity += objVal.quantity-objVal.received;
+                            amount += objVal.received *objVal.cost;
+                            backOrderAmount += (objVal.quantity-objVal.received)*objVal.cost;
+            quantity += objVal.quantity;
+            cost += objVal.cost;
+            total += objVal.quantity*objVal.cost; 
+        });
+        var shipping = 0.00;
+        if(component.find("shippingCharge").get("v.value") != undefined && component.find("shippingCharge").get("v.value") != '')
+            shipping = parseFloat(component.find("shippingCharge").get("v.value"));
+        console.log('>>>>>shipping'+shipping);
+        var discount = 0.00; 
+        if(component.find("discount").get("v.value") != undefined && component.find("discount").get("v.value") != '')
+            discount = parseFloat(component.find("discount").get("v.value"));
+
+        var grandTotal = amount + shipping -discount ;
+
+        component.set("v.orderGrandTotal",grandTotal);
 
 
+        component.set("v.totalOfBackOrderQuantity",backOrderQuantity);
+        component.set("v.totalOfBackOrderAmount",backOrderAmount);
+        console.log('>>'+quantity );
+        component.set("v.totalOfTotal",total);
+        component.set("v.totalOfQuantity",quantity);
+        component.set("v.totalOfCost",cost);
+
+    },
+    save : function(component,event,helper) {
+        component.find("recordEditForm").submit();
+    },
+    send: function(component,event,helper){
+        var orderId = event.getSource().get('v.name');  
+        var vfUrl = '/apex/BOATBUILDING__SendOrderDetailPage?Id='+orderId;
+        window.parent.location =vfUrl;
+        
+    },
+    print: function(component,event,helper){
+        var orderId = event.getSource().get('v.name'); 
+        var btnStatus= event.getSource().get('v.title'); 
+        var vfUrl = '/apex/BOATBUILDING__Order_As_PDF_Exampleskp?Id='+orderId +'&btnStatus='+btnStatus;
+        window.parent.location =vfUrl;
+        
+    },
+    ReceiveAll : function(component,event,helper) {
+        var objListItem = component.get("v.listlineItem");
+        console.log('>>>>>:addtoinventory '+JSON.stringify(objListItem));
+        var recId = component.get("v.attrRecordId");
+    },
+    receiveAllPartAtLocation : function(component,event,helper) {
+        component.set('v.ShowStoreLocation',true);         
+    }
 })

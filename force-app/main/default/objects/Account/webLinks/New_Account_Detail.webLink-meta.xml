@@ -7,6 +7,6 @@
     <linkType>page</linkType>
     <masterLabel>Lead Detail</masterLabel>
     <openType>sidebar</openType>
-    <page>AccountDetailPage</page>
+    <page>AccountDetailPage2</page>
     <protected>false</protected>
 </WebLink>

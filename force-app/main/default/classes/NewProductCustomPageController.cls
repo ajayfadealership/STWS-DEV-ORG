@@ -47,7 +47,7 @@ public with sharing class NewProductCustomPageController {
         lstOptionCategory = new List<SelectOption>();
         lstSCategory = new List<SelectOption>();
         
-        List<BOATBUILDING__Manufacturer__c> lstTempManufacturer = [Select Id, Name from BOATBUILDING__Manufacturer__c]; 
+        List<BOATBUILDING__Manufacturer__c> lstTempManufacturer = [Select Id, Name from BOATBUILDING__Manufacturer__c Where BOATBUILDING__Boat_Builder__c = true]; 
         lstManufacturer .add(new SelectOption('','--None--'));
         lstYear .add(new SelectOption('','--None--'));
         lstModel .add(new SelectOption('','--None--'));

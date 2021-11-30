@@ -3,9 +3,15 @@
     <fullName>Total_Amount_Job__c</fullName>
     <deprecated>false</deprecated>
     <externalId>false</externalId>
-    <formula>IF(Discount__c &lt;= (Total_Amount_on_Parts_del__c + Total_Cost_Labor__c + Shop_Supplies_Total__c + Total_Misc__c + Shipping_Charge__c),
+    <formula>if( Work_Order_Warranty_Work_Order__r.RecordType.DeveloperName == &apos;Work_Order&apos;, 
+
+IF(Discount__c &lt;= (Total_Amount_on_Parts_del__c + Total_Cost_Labor__c + Shop_Supplies_Total__c + Total_Misc__c + Shipping_Charge__c),
 (Total_Amount_on_Parts_del__c + Total_Cost_Labor__c + Shop_Supplies_Total__c + Total_Misc__c + Shipping_Charge__c) - Discount__c ,
-Total_Amount_on_Parts_del__c + Total_Cost_Labor__c + Shop_Supplies_Total__c + Total_Misc__c + Shipping_Charge__c)</formula>
+Total_Amount_on_Parts_del__c + Total_Cost_Labor__c + Shop_Supplies_Total__c + Total_Misc__c + Shipping_Charge__c), 
+
+IF(Discount__c &lt;= (Total_Part_Cost__c + Total_Cost_Labor__c + Shop_Supplies_Total__c + Total_Misc__c + Shipping_Charge__c),
+(Total_Part_Cost__c + Total_Cost_Labor__c + Shop_Supplies_Total__c + Total_Misc__c + Shipping_Charge__c) - Discount__c ,
+Total_Part_Cost__c + Total_Cost_Labor__c + Shop_Supplies_Total__c + Total_Misc__c + Shipping_Charge__c))</formula>
     <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
     <label>Total Amount Job</label>
     <precision>18</precision>

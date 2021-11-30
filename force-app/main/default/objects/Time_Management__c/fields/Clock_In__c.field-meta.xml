@@ -3,7 +3,6 @@
     <fullName>Clock_In__c</fullName>
     <deprecated>false</deprecated>
     <externalId>false</externalId>
-    <inlineHelpText>Specifies the Log-In time of the user to work on the specified Job.</inlineHelpText>
     <label>Clock In</label>
     <required>false</required>
     <trackHistory>false</trackHistory>

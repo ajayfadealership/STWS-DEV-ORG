@@ -21,7 +21,7 @@ onSuccess: function(e){
     var result = e;
     
     
-       alert(&#39;Changes were published successfuly&#39;);
+       alert(&apos;Changes were published successfuly&apos;);
    
 }, onFailure: function(error){
 console.log(error);
@@ -29,7 +29,7 @@ console.log(error);
 
 
 if (warning == true) {
-sforce.connection.sessionId=&#39;{!GETSESSIONID()}&#39;; 
+sforce.connection.sessionId=&apos;{!GETSESSIONID()}&apos;; 
 sforce.apex.execute(&quot;BOATBUILDING.UpdateInventoryOnWebsite&quot;,&quot;updateOnWeb&quot;,{invId:invId}, callback);
 //alert(&quot;Course has been created.&quot;);
 

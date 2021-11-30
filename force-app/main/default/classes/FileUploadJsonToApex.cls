@@ -1,5 +1,5 @@
 public class FileUploadJsonToApex {
-	
+	public Integer id {get;set;} 
 	public Guid guid {get;set;}
 
 	public FileUploadJsonToApex(JSONParser parser) {
@@ -7,7 +7,9 @@ public class FileUploadJsonToApex {
 			if (parser.getCurrentToken() == System.JSONToken.FIELD_NAME) {
 				String text = parser.getText();
 				if (parser.nextToken() != System.JSONToken.VALUE_NULL) { 
-					if (text == 'guid') {
+					if (text == 'id') {
+						id = parser.getIntegerValue();
+					}else if (text == 'guid') {
 						guid = new Guid(parser);
 					} else {
 						System.debug(LoggingLevel.WARN, 'FileUploadJsonToApex consuming unrecognized property: '+text);
@@ -20,7 +22,7 @@ public class FileUploadJsonToApex {
 	
 	public class Guid {
 		public String rendered {get;set;} 
-		public String raw {get;set;} 
+		//public String raw {get;set;} 
 
 		public Guid(JSONParser parser) {
 			while (parser.nextToken() != System.JSONToken.END_OBJECT) {
@@ -29,8 +31,6 @@ public class FileUploadJsonToApex {
 					if (parser.nextToken() != System.JSONToken.VALUE_NULL) {
 						if (text == 'rendered') {
 							rendered = parser.getText();
-						} else if (text == 'raw') {
-							raw = parser.getText();
 						} else {
 							System.debug(LoggingLevel.WARN, 'Guid consuming unrecognized property: '+text);
 							consumeObject(parser);

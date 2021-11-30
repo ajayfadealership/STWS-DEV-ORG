@@ -1,11 +1,20 @@
-trigger InvoiceTrigger on Invoice__c (before insert, after insert, after update, before update) {
+trigger InvoiceTrigger on Invoice__c (before insert, after insert, after update, before update, before delete) {
     
     if(Trigger.isBefore && Trigger.isInsert){
         InvoiceHandlerClass.onBeforeInsert(Trigger.new);
+        
+    }
+     if(Trigger.isBefore && Trigger.isUpdate){
+        InvoiceHandlerClass.onBeforeUpdate(Trigger.new);
+        
+    }
+    if(Trigger.isBefore && trigger.isDelete) {
+        System.debug('>>>>>>>: After Delete');
+        InvoiceHandlerClass.onBeforeDelete(trigger.oldMap);
     }
     
     if(trigger.isAfter) {
-    	System.debug('>>>>>>>: After');
+        
 	    if(trigger.isInsert || trigger.isUpdate) {
 	    	System.debug('>>>>>>>: Insert Update');
 	    	for(Invoice__c objInv: trigger.new) {
@@ -20,55 +29,30 @@ trigger InvoiceTrigger on Invoice__c (before insert, after insert, after update,
     } 
      
     
-    Boolean isOff = BOATBUILDING__TriggerSetting__c.getOrgDefaults().BOATBUILDING__InvoiceTriggerCheckBox__c;
-    if(isOff==true){
+    Boolean isOn = BOATBUILDING__TriggerSetting__c.getOrgDefaults().BOATBUILDING__InvoiceTriggerCheckBox__c;
+    if(isOn){
         if(trigger.isBefore) {
             if(trigger.isInsert || trigger.isUpdate) {
                 Set<String> setQtId = new Set<String>(); 
                 for(BOATBUILDING__Invoice__c objInv: trigger.new) {
                     
-                    if(objInv.BOATBUILDING__State_Province__c != null && objInv.BOATBUILDING__Quote__c != null) {
-                    	setQtId.add(objInv.BOATBUILDING__Quote__c);
-                        //System.debug('@'+objInv.BOATBUILDING__Non_Taxable__c);
-                       /* BoatBuilderUtil objBoatBuilderUtil = new BoatBuilderUtil(objInv.BOATBUILDING__State_Province__c);
-                        Decimal RegularSalestax = objBoatBuilderUtil.getRegularSalestax();
-                        Decimal VehicleSalestax = objBoatBuilderUtil.getVehicleSalestax();
-                        
-                        Decimal CappingAmountForVehicleSalesTax = 0.00;
-                        Date dateOfTaxCapChange = Date.newInstance(2017,9,23);
-                        Decimal NetSellingPriceFormula = 0.00;
-                        
-                        if(objInv.CreatedDate <= dateOfTaxCapChange && objInv.BOATBUILDING__State_Province__c.equalsIgnoreCase('South Carolina')) {
-                            CappingAmountForVehicleSalesTax = 300.00;
-                        } else { 
-                            CappingAmountForVehicleSalesTax = objBoatBuilderUtil.getCappingAmountForVehicleSalesTax();
-                        }
-                        
-                        if(objInv.BOATBUILDING__Net_Selling_Price_Formula__c != null) {
-                            NetSellingPriceFormula = objInv.BOATBUILDING__Net_Selling_Price_Formula__c;	
-                        }
-                        
-                        Decimal BSTF = 0.00;
-                        BSTF = (NetSellingPriceFormula * VehicleSalestax)/100;
-                        if(CappingAmountForVehicleSalesTax > 0) {
-                            if(BSTF<= CappingAmountForVehicleSalesTax) {
-                                objInv.BOATBUILDING__Boat_Sales_Tax_Formula_Backend__c = BSTF;
-                            } 
-                            else {
-                                objInv.BOATBUILDING__Boat_Sales_Tax_Formula_Backend__c = CappingAmountForVehicleSalesTax;
-                            } 
-                        } else {
-                            objInv.BOATBUILDING__Boat_Sales_Tax_Formula_Backend__c = BSTF;
-                        }*/
-                        
-                        
-                        
+                    if(objInv.BOATBUILDING__State_Province__c != null) {
+                        if(objInv.BOATBUILDING__Quote__c != null)
+                    	    setQtId.add(objInv.BOATBUILDING__Quote__c);
                     } 
                     
                     if(objInv.BOATBUILDING__Billing_State_Province__c != null && !objInv.BOATBUILDING__Non_Taxable__c) {
-                        BoatBuilderUtil objBoatBuilderUtil = new BoatBuilderUtil(objInv.BOATBUILDING__Billing_State_Province__c);
+                        System.debug('>>>>>: '+objInv.BOATBUILDING__Billing_State_Province__c);
+                        BoatBuilderUtil objBoatBuilderUtil = new BoatBuilderUtil(objInv.BOATBUILDING__Billing_State_Province__c, objInv.RecordTypeId);
                         Decimal RegularSalestax = objBoatBuilderUtil.getRegularSalestax();
                         objInv.BOATBUILDING__Sales_TaxPer_Backend__c = RegularSalestax;
+                        System.debug('>>>>>objBoatBuilderUtil.isCanadianTax(): '+objBoatBuilderUtil.isCanadianTax());
+                        if(objBoatBuilderUtil.isCanadianTax()) {
+                            objInv.BOATBUILDING__GST__c = objBoatBuilderUtil.getGST(); 
+                            objInv.BOATBUILDING__PST__c = objBoatBuilderUtil.getPST();
+                            System.debug('>>>>>objInv.BOATBUILDING__GST__c: '+objInv.BOATBUILDING__GST__c);
+                            System.debug('>>>>>objInv.BOATBUILDING__PST__c: '+objInv.BOATBUILDING__PST__c);
+                        }
                     } else {
                         objInv.BOATBUILDING__Boat_Sales_Tax_Formula_Backend__c = 0.00;
                         objInv.BOATBUILDING__Sales_TaxPer_Backend__c = 0.00;
@@ -95,38 +79,6 @@ trigger InvoiceTrigger on Invoice__c (before insert, after insert, after update,
             }
         } 
         
-        
-        
-        if(trigger.isBefore && trigger.isInsert) {
-            InvoiceHandlerClass.onBeforeInsert(Trigger.new); //code added
-            List<BOATBUILDING__Invoice__c> lstInvoice = [Select Id, BOATBUILDING__Invoice_Number__c,BOATBUILDING__Invoice_Number_Formula__c From BOATBUILDING__Invoice__c Order By BOATBUILDING__Invoice_Number_Formula__c DESC LIMIT 1];
-            Integer count = 0;
-            if(lstInvoice.size() > 0) {
-                if(lstInvoice[0].BOATBUILDING__Invoice_Number_Formula__c  != null) {
-                    count = Integer.valueOf(lstInvoice[0].BOATBUILDING__Invoice_Number_Formula__c);
-                } 
-                else { 
-                    count = 1;
-                }
-            }
-            else {
-                count  = 1;
-            }
-            List<BOATBUILDING__Invoice__c > lstInv = new List<BOATBUILDING__Invoice__c >();
-            Set<String> setInvNum = new Set<String>();
-            for(BOATBUILDING__Invoice__c objInvoice: Trigger.new) {
-            	setInvNum.add(objInvoice.BOATBUILDING__Invoice_Number__c);
-            }
-            for(BOATBUILDING__Invoice__c objInvoice: Trigger.new) {
-            	count++;
-            	if(!setInvNum.contains('000'+count)) {
-                	objInvoice.BOATBUILDING__Invoice_Number__c = '000'+count;
-            	} else {
-            		count++;
-            		objInvoice.BOATBUILDING__Invoice_Number__c = '000'+count; 
-            	}
-            }
-        }
         //Code added
         if(trigger.isAfter && trigger.isInsert) {
             InvoiceHandlerClass.onAfterInsert(Trigger.new); 

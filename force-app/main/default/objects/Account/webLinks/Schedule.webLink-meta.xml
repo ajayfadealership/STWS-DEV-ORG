@@ -7,5 +7,5 @@
     <masterLabel>Schedule</masterLabel>
     <openType>onClickJavaScript</openType>
     <protected>false</protected>
-    <url>window.open(&#39;/apex/BOATBUILDING__ScheduleFromAccount?CustId={!Account.Id}&#39;);</url>
+    <url>window.open(&apos;/apex/BOATBUILDING__ScheduleFromAccount?CustId={!Account.Id}&apos;);</url>
 </WebLink>

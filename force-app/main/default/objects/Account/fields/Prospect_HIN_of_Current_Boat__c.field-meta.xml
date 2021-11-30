@@ -5,7 +5,7 @@
     <description>Specifies the HIN of the Current Boat</description>
     <externalId>false</externalId>
     <label>HIN of Current Boat</label>
-    <length>50</length>
+    <length>255</length>
     <required>false</required>
     <trackFeedHistory>false</trackFeedHistory>
     <type>Text</type>

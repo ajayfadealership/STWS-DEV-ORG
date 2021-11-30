@@ -139,6 +139,21 @@
         </values>
     </picklistValues>
     <picklistValues>
+        <picklist>Source__c</picklist>
+        <values>
+            <fullName>App</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>In Store</fullName>
+            <default>true</default>
+        </values>
+        <values>
+            <fullName>Online</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
         <picklist>State__c</picklist>
         <values>
             <fullName>North Carolina</fullName>
@@ -167,11 +182,19 @@
             <fullName>Received</fullName>
             <default>false</default>
         </values>
+        <values>
+            <fullName>WO Created</fullName>
+            <default>false</default>
+        </values>
     </picklistValues>
     <picklistValues>
         <picklist>Store_Location__c</picklist>
         <values>
             <fullName>Other</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>STWS</fullName>
             <default>false</default>
         </values>
     </picklistValues>

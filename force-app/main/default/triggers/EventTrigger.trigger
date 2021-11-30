@@ -9,7 +9,7 @@ trigger EventTrigger on Event (after insert, after update) {
             if(Trigger.isInsert)
             {
                 EventTriggerHandler.afterInsert(Trigger.new);
-                EventTriggerHandler.afterInsertCount(Trigger.newMap);
+                EventTriggerHandler.updateSalesServiceActivityScore(Trigger.newMap);
             }
             if(Trigger.isUpdate){
                 EventTriggerHandler.afterUpdate(Trigger.new);

@@ -141,146 +141,10 @@ public with sharing class ServiceInspectionFormController {
                         update objWO;
                     }  
                 }
-                /*if(mapDF.get('BOATBUILDING__Horn_EC__c') != null){
-                    objDF.BOATBUILDING__Horn_EC__c = decimal.valueOf(mapDF.get('BOATBUILDING__Horn_EC__c'));
-                    
-                }
-                
-                if(mapDF.get('BOATBUILDING__Impeller_EC__c') != null){
-                    objDF.BOATBUILDING__Impeller_EC__c = decimal.valueOf(mapDF.get('BOATBUILDING__Impeller_EC__c'));
-                }
-                if(mapDF.get('BOATBUILDING__Gel_Coat_EC__c') != null){
-                    objDF.BOATBUILDING__Gel_Coat_EC__c = decimal.valueOf(mapDF.get('BOATBUILDING__Gel_Coat_EC__c'));
-                }
-                if(mapDF.get('BOATBUILDING__Stereo_EC__c') != null){
-                    objDF.BOATBUILDING__Stereo_EC__c = decimal.valueOf(mapDF.get('BOATBUILDING__Stereo_EC__c'));
-                }
-                if(mapDF.get('BOATBUILDING__Impeller_Housing_EC__c') != null){
-                    objDF.BOATBUILDING__Impeller_Housing_EC__c = decimal.valueOf(mapDF.get('BOATBUILDING__Impeller_Housing_EC__c'));
-                }
-                if(mapDF.get('BOATBUILDING__Propeller_EC__c') != null){
-                    objDF.BOATBUILDING__Propeller_EC__c = decimal.valueOf(mapDF.get('BOATBUILDING__Propeller_EC__c'));
-                }
-                if(mapDF.get('BOATBUILDING__Speakers_EC__c') != null){
-                    objDF.BOATBUILDING__Speakers_EC__c = decimal.valueOf(mapDF.get('BOATBUILDING__Speakers_EC__c'));
-                }
-                if(mapDF.get('BOATBUILDING__Battery_ies_EC__c') != null){
-                    objDF.BOATBUILDING__Battery_ies_EC__c = decimal.valueOf(mapDF.get('BOATBUILDING__Battery_ies_EC__c'));
-                }
-                if(mapDF.get('BOATBUILDING__Depth_Finder_EC__c') != null){
-                    objDF.BOATBUILDING__Depth_Finder_EC__c = decimal.valueOf(mapDF.get('BOATBUILDING__Depth_Finder_EC__c'));
-                }
-                if(mapDF.get('BOATBUILDING__Belts_EC__c') != null){
-                    objDF.BOATBUILDING__Belts_EC__c = decimal.valueOf(mapDF.get('BOATBUILDING__Belts_EC__c'));
-                }
-                if(mapDF.get('BOATBUILDING__Hinges_EC__c') != null){
-                    objDF.BOATBUILDING__Hinges_EC__c = decimal.valueOf(mapDF.get('BOATBUILDING__Hinges_EC__c'));
-                }
-                if(mapDF.get('BOATBUILDING__Gauges_EC__c') != null){
-                    objDF.BOATBUILDING__Gauges_EC__c = decimal.valueOf(mapDF.get('BOATBUILDING__Gauges_EC__c'));
-                }
-                if(mapDF.get('BOATBUILDING__Hoses_EC__c') != null){
-                    objDF.BOATBUILDING__Hoses_EC__c = decimal.valueOf(mapDF.get('BOATBUILDING__Hoses_EC__c'));
-                }
-                if(mapDF.get('BOATBUILDING__Latches_EC__c') != null){
-                    objDF.BOATBUILDING__Latches_EC__c = decimal.valueOf(mapDF.get('BOATBUILDING__Latches_EC__c'));
-                }
-                if(mapDF.get('BOATBUILDING__Bilge_Pump_EC__c') != null){
-                    objDF.BOATBUILDING__Bilge_Pump_EC__c = decimal.valueOf(mapDF.get('BOATBUILDING__Bilge_Pump_EC__c'));
-                }
-                if(mapDF.get('BOATBUILDING__Ballast_Pump_EC__c') != null){
-                    objDF.BOATBUILDING__Ballast_Pump_EC__c = decimal.valueOf(mapDF.get('BOATBUILDING__Ballast_Pump_EC__c'));
-                }
-                if(mapDF.get('BOATBUILDING__Swim_Platform_Hardware_EC__c') != null){
-                    objDF.BOATBUILDING__Swim_Platform_Hardware_EC__c = decimal.valueOf(mapDF.get('BOATBUILDING__Swim_Platform_Hardware_EC__c'));
-                }
-                if(mapDF.get('BOATBUILDING__Interior_Lights_EC__c') != null){
-                    objDF.BOATBUILDING__Interior_Lights_EC__c = decimal.valueOf(mapDF.get('BOATBUILDING__Interior_Lights_EC__c'));
-                }
-                if(mapDF.get('BOATBUILDING__Battery_Cables_EC__c') != null){
-                    objDF.BOATBUILDING__Battery_Cables_EC__c = decimal.valueOf(mapDF.get('BOATBUILDING__Battery_Cables_EC__c'));
-                }
-                if(mapDF.get('BOATBUILDING__Prop_Shaft_Packing_EC__c') != null){
-                    objDF.BOATBUILDING__Prop_Shaft_Packing_EC__c = decimal.valueOf(mapDF.get('BOATBUILDING__Prop_Shaft_Packing_EC__c'));
-                }
-                if(mapDF.get('BOATBUILDING__Cockpit_Lights_EC__c') != null){
-                    objDF.BOATBUILDING__Cockpit_Lights_EC__c = decimal.valueOf(mapDF.get('BOATBUILDING__Cockpit_Lights_EC__c'));
-                }
-                if(mapDF.get('BOATBUILDING__Paddlewheel_EC__c') != null){
-                    objDF.BOATBUILDING__Paddlewheel_EC__c = decimal.valueOf(mapDF.get('BOATBUILDING__Paddlewheel_EC__c'));
-                }
-                if(mapDF.get('BOATBUILDING__Exterior_Details_EC__c') != null){
-                    objDF.BOATBUILDING__Exterior_Details_EC__c = decimal.valueOf(mapDF.get('BOATBUILDING__Exterior_Details_EC__c'));
-                }
-                if(mapDF.get('BOATBUILDING__Docking_Lights_EC__c') != null){
-                    objDF.BOATBUILDING__Docking_Lights_EC__c = decimal.valueOf(mapDF.get('BOATBUILDING__Docking_Lights_EC__c'));
-                }
-                if(mapDF.get('BOATBUILDING__Bilge_Inspection_EC__c') != null){
-                    objDF.BOATBUILDING__Bilge_Inspection_EC__c = decimal.valueOf(mapDF.get('BOATBUILDING__Bilge_Inspection_EC__c'));
-                }
-                if(mapDF.get('BOATBUILDING__Nav_Light_EC__c') != null){
-                    objDF.BOATBUILDING__Nav_Light_EC__c = decimal.valueOf(mapDF.get('BOATBUILDING__Nav_Light_EC__c'));
-                }
-                if(mapDF.get('BOATBUILDING__Anodes_Zincs_EC__c') != null){
-                    objDF.BOATBUILDING__Anodes_Zincs_EC__c = decimal.valueOf(mapDF.get('BOATBUILDING__Anodes_Zincs_EC__c'));
-                }
-                if(mapDF.get('BOATBUILDING__Canvas_Cover_EC__c') != null){
-                    objDF.BOATBUILDING__Canvas_Cover_EC__c = decimal.valueOf(mapDF.get('BOATBUILDING__Canvas_Cover_EC__c'));
-                }
-                if(mapDF.get('BOATBUILDING__Anchor_Light_EC__c') != null){
-                    objDF.BOATBUILDING__Anchor_Light_EC__c = decimal.valueOf(mapDF.get('BOATBUILDING__Anchor_Light_EC__c'));
-                }
-                if(mapDF.get('BOATBUILDING__Spark_Plugs_EC__c') != null){
-                    objDF.BOATBUILDING__Spark_Plugs_EC__c = decimal.valueOf(mapDF.get('BOATBUILDING__Spark_Plugs_EC__c'));
-                }
-                if(mapDF.get('BOATBUILDING__Bimini_Top_EC__c') != null){
-                    objDF.BOATBUILDING__Bimini_Top_EC__c = decimal.valueOf(mapDF.get('BOATBUILDING__Bimini_Top_EC__c'));
-                }
-                if(mapDF.get('BOATBUILDING__Fire_Extinguisher_EC__c') != null){
-                    objDF.BOATBUILDING__Fire_Extinguisher_EC__c = decimal.valueOf(mapDF.get('BOATBUILDING__Fire_Extinguisher_EC__c'));
-                }
-                if(mapDF.get('BOATBUILDING__Rudder_Assembly_EC__c') != null){
-                    objDF.BOATBUILDING__Rudder_Assembly_EC__c = decimal.valueOf(mapDF.get('BOATBUILDING__Rudder_Assembly_EC__c'));
-                }
-                if(mapDF.get('BOATBUILDING__Vinyl_EC__c') != null){
-                    objDF.BOATBUILDING__Vinyl_EC__c = decimal.valueOf(mapDF.get('BOATBUILDING__Vinyl_EC__c'));
-                }
-                if(mapDF.get('BOATBUILDING__Interior_Detail_EC__c') != null){
-                    objDF.BOATBUILDING__Interior_Detail_EC__c = decimal.valueOf(mapDF.get('BOATBUILDING__Interior_Detail_EC__c'));
-                }
-                if(mapDF.get('BOATBUILDING__Tracking_Fins_EC__c') != null){
-                    objDF.BOATBUILDING__Tracking_Fins_EC__c = decimal.valueOf(mapDF.get('BOATBUILDING__Tracking_Fins_EC__c'));
-                }
-                if(mapDF.get('BOATBUILDING__Carpet_EC__c') != null){
-                    objDF.BOATBUILDING__Carpet_EC__c = decimal.valueOf(mapDF.get('BOATBUILDING__Carpet_EC__c'));
-                }
-                if(mapDF.get('BOATBUILDING__Trailer_Condition_EC__c') != null){
-                    objDF.BOATBUILDING__Trailer_Condition_EC__c = decimal.valueOf(mapDF.get('BOATBUILDING__Trailer_Condition_EC__c'));
-                }
-                if(mapDF.get('BOATBUILDING__Trailer_Brakes_EC__c') != null){
-                    objDF.BOATBUILDING__Trailer_Brakes_EC__c = decimal.valueOf(mapDF.get('BOATBUILDING__Trailer_Brakes_EC__c'));
-                }
-                if(mapDF.get('BOATBUILDING__Guide_Pole_Covers_EC__c') != null){
-                    objDF.BOATBUILDING__Guide_Pole_Covers_EC__c = decimal.valueOf(mapDF.get('BOATBUILDING__Guide_Pole_Covers_EC__c'));
-                }
-                if(mapDF.get('BOATBUILDING__Trailer_Lights_EC__c') != null){
-                    objDF.BOATBUILDING__Trailer_Lights_EC__c = decimal.valueOf(mapDF.get('BOATBUILDING__Trailer_Lights_EC__c'));
-                }
-                if(mapDF.get('BOATBUILDING__Trailer_Tires_EC__c') != null){
-                    objDF.BOATBUILDING__Trailer_Tires_EC__c = decimal.valueOf(mapDF.get('BOATBUILDING__Trailer_Tires_EC__c'));
-                }*/
-                
-                
             }
             System.debug('objDF: '+objDF);
             
             objDF.Technician__c = UserInfo.getUserId();
-            
-            /*if(objDF.Id == null) {
-List<RecordType> lstRecType = [SELECT Id FROM RecordType WHERE DeveloperName = 'Schedule' AND SObjectType = 'BOATBUILDING__Time_Management__c' LIMIT 1];
-BOATBUILDING__Time_Management__c objTM = new BOATBUILDING__Time_Management__c();
-objTM.RecordTypeId = lstRecType[0].Id;
-}*/
             
             upsert objDF;
             
@@ -290,23 +154,6 @@ objTM.RecordTypeId = lstRecType[0].Id;
             tk.OwnerId = UserInfo.getUserId();
             tk.WhatId = objDF.Id;
             insert tk;
-            /*
-String siteURL = BOATBUILDING__System_Configure__c.getOrgDefaults().BOATBUILDING__Site_URL__c;
-
-Messaging.SingleEmailMessage mail = new Messaging.SingleEmailMessage();
-
-
-List<String> sendTo = new List<String>();
-sendTo.add(UserInfo.getUserEmail());
-mail.setToAddresses(sendTo);
-
-mail.setSubject('Inspection Form');
-String body = 'Hello ' +UserInfo.getName() + ', <br/> Please find the following inspection form URL:<br/>'+siteURL+'/apex/BOATBUILDING__ServiceIFPDF?Id='+objDF.Id+'<br/><br/>Thank you.';
-mail.setHtmlBody(body);
-List<Messaging.SingleEmailMessage> mails = new List<Messaging.SingleEmailMessage>();
-mails.add(mail);
-Messaging.sendEmail(mails);
-*/
             return objDF.Id;
         } catch(Exception ex) {
             return 'Error: '+ex.getMessage() + ' : ' + ex.getLineNumber();

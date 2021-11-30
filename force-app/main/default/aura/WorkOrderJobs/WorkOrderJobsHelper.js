@@ -7,32 +7,37 @@
     
     updatejobTotalHelper : function(component, event, helper){
         this.showSpinner(component,event,helper);
-       console.log('line 10',component.get("v.WOJ.BOATBUILDING__No_of_Labors__c"));
-       console.log('line 11',component.get("v.laborPriceMultiplier"));
+       //console.log('line 10',component.get("v.WOJ.BOATBUILDING__No_of_Labors__c"));
+       //console.log('line 11',component.get("v.laborPriceMultiplier"));
         var totalLabor = component.get("v.WOJ.BOATBUILDING__No_of_Labors__c") * component.get("v.laborPriceMultiplier");
-        console.log('TLlLLLLL', totalLabor);
+        if(!isNaN(totalLabor)){
+            component.set("v.laborTotalWarranty",totalLabor.toFixed(2));
+        }else{
+            component.set("v.laborTotalWarranty",0.00);
+        }
+        //console.log('TLlLLLLL', totalLabor);
         var misc1 = isNaN(parseFloat(component.get("v.WOJ.BOATBUILDING__Misc_Charge__c"))) ? 0.00 : component.get("v.WOJ.BOATBUILDING__Misc_Charge__c") ;
         var misc2 = isNaN(parseFloat(component.get("v.WOJ.BOATBUILDING__Misc_Charge_2__c"))) ? 0.00 : component.get("v.WOJ.BOATBUILDING__Misc_Charge_2__c");
         var misc3 = isNaN(parseFloat(component.get("v.WOJ.BOATBUILDING__Misc_Charge_3__c"))) ? 0.00 : component.get("v.WOJ.BOATBUILDING__Misc_Charge_3__c");
         var miscTotal = parseFloat(misc1)+parseFloat(misc2)+parseFloat(misc3);
-        console.log('this line executed 17');
+        //console.log('this line executed 17');
         component.set("v.totalMiscCharges", miscTotal);
-        console.log('this line executed 19');
+        //console.log('this line executed 19');
         if(typeof component.get("v.WOJ") != "undefined")
         component.set("v.WOJ.totalMiscCharges", miscTotal);
-        console.log('this line executed 21');
+        //console.log('this line executed 21');
         var totalMisc = !isNaN(component.get("v.totalMiscCharges")) ? component.get("v.totalMiscCharges") : 0.00 ;
-        console.log('this line executed 23');
+        //console.log('this line executed 23');
         var totalparts = !isNaN(component.get("v.partsTotal")) ? component.get("v.partsTotal") : 0.00;
 
-        console.log('$$$$$$$',totalparts);
+        //console.log('$$$$$$$',totalparts);
         var shopSuppliescap = !isNaN(component.get("v.shopSuppliesCapping"))? component.get("v.shopSuppliesCapping") : 0.00;
         var shopSuppliesPer = !isNaN(component.get("v.shopSuppliePercent")) ? component.get("v.shopSuppliePercent") : 0.00;
         var ShippingCharges = !isNaN(component.get("v.WOJ.BOATBUILDING__Shipping_Charge__c")) ? component.get("v.WOJ.BOATBUILDING__Shipping_Charge__c") : 0.00 ;
-        console.log('Shipping Charge'+ShippingCharges);
+        //console.log('Shipping Charge'+ShippingCharges);
         var totalShopSupplies = 0.00;
         if(shopSuppliescap > 0.00 && !isNaN(totalLabor)){
-            console.log('shopSuppliescap',shopSuppliescap);
+            //console.log('shopSuppliescap',shopSuppliescap);
             totalShopSupplies = (totalLabor/100) * shopSuppliesPer <= shopSuppliescap ? (totalLabor/100) * shopSuppliesPer : shopSuppliescap;
 
         }
@@ -45,10 +50,10 @@
             totalLabor = 0.00;
         }
        
-        console.log('total labor'+component.get("v.WOJ.Name"),totalLabor);
-        console.log('total Shop Suppllies',totalShopSupplies+'-----'+ShippingCharges);
+        //console.log('total labor'+component.get("v.WOJ.Name"),totalLabor);
+        //console.log('total Shop Suppllies',totalShopSupplies+'-----'+ShippingCharges);
         if(component.get("v.recordType") != "Warranty Work Order"){
-            console.log('&&&',totalparts);
+            //console.log('&&&',totalparts);
             if(!isNaN(totalLabor) && typeof totalLabor != "undefined"){
                 jobTotal = jobTotal + parseFloat(totalLabor)
             }
@@ -71,7 +76,7 @@
             }
              
             
-            console.log('&&&',jobTotal);
+            //console.log('&&&',jobTotal);
             if(!isNaN(laborAndSS)){
                 component.set("v.laborAndSSTotal",laborAndSS.toFixed(2));
             }
@@ -89,9 +94,9 @@
             }
            
         }
-        console.log('line 33'+jobTotal);
+        //console.log('line 33'+jobTotal);
         var discount = component.get("v.WOJ.BOATBUILDING__Discount__c");
-        console.log('total discount'+discount);
+        //console.log('total discount'+discount);
         if(!isNaN(discount)){
             jobTotal = parseFloat(jobTotal) - parseFloat(discount);
         }
@@ -107,17 +112,17 @@
             }
             if(component.get("v.recordType") == "Warranty Work Order"){
                
-                console.log("recordType***before",component.get("v.WOJ.BOATBUILDING__Total_Paid__c"));
+                //console.log("recordType***before",component.get("v.WOJ.BOATBUILDING__Total_Paid__c"));
                 var totalClaimPaid =  component.get("v.WOJ.BOATBUILDING__Total_Paid__c");
-                console.log("recordType********",totalClaimPaid);
+                //console.log("recordType********",totalClaimPaid);
                 if(!isNaN(totalClaimPaid)){
-                    console.log("recordType********",totalClaimPaid);
+                    //console.log("recordType********",totalClaimPaid);
                     if(isNaN(jobTotal)){
                         jobTotal = 0.00;
                     }
-                    console.log('jobTotal in warranty',jobTotal);
+                    //console.log('jobTotal in warranty',jobTotal);
                    
-                    console.log('jobTotal in warranty after Shipping',jobTotal);
+                    //console.log('jobTotal in warranty after Shipping',jobTotal);
                     //jobTotal = parseFloat(jobTotal) + parseFloat(totalClaimPaid); 
                     //jobTotal = jobTotal.toFixed(2);
                     
@@ -127,14 +132,15 @@
                     jobTotal = jobTotal.toFixed(2);
                 }
             }
-            console.log("recordType????",component.get("v.recordType"));
-            console.log('totalJob---'+jobTotal);
+            //console.log("recordType????",component.get("v.recordType"));
+            //console.log('totalJob---'+jobTotal);
             if(!isNaN(jobTotal)){
+               // console.log('inside if');
                 component.set("v.jobTotal",jobTotal);
                 component.set("v.WOJ.BOATBUILDING__Total_Amount_Job__c",jobTotal);
             }
             else{
-                console.log('111111',jobTotal);
+                //console.log('111111',jobTotal);
                 component.set("v.jobTotal",0.00);
                 component.set("v.WOJ.BOATBUILDING__Total_Amount_Job__c",0.00);
             }
@@ -149,8 +155,11 @@
         //tax calcualtion per job
         var isJobTaxable = component.get("v.WOJ.BOATBUILDING__Taxable__c");
         if(isJobTaxable == true && component.get("v.recordType") != 'Warranty Work Order'){
-            var storeLocation = component.get("v.WOJ.BOATBUILDING__Work_Order_Warranty_Work_Order__r.BOATBUILDING__Store_Location__c")
+            //console.log('wojjj',JSON.stringify(component.get("v.WOJ")));
+            var storeLocation = component.get("v.storeLocation");
+            //console.log('storeLocation',storeLocation);
             if(typeof storeLocation != "undefined"){
+               // console.log('method is calling');
                 this.jobTaxCalcualtion(component, event, helper, storeLocation);
             }
         }
@@ -173,7 +182,7 @@
             "searchStr" : queryTerm
         });
         searchAction.setCallback(this, function(response){
-                console.log('searchResult',response.getReturnValue());
+                //console.log('searchResult',response.getReturnValue());
                 component.set("v.searchResults", response.getReturnValue());
         });
 
@@ -181,6 +190,7 @@
 
     },
     jobTaxCalcualtion : function(component, event, helper, storeLocation){
+      //  console.log("this is tax calcualtion");
         this.showSpinner(component,event,helper);
         var totalLabor = component.get("v.WOJ.BOATBUILDING__No_of_Labors__c") * component.get("v.laborPriceMultiplier");
         var totalMisc = component.get("v.totalMiscCharges");
@@ -198,13 +208,14 @@
         }
 
         var woJob = component.get("v.WOJ");
+       // console.log('job log',woJob);
         var wojWithJLI = component.get("v.wojWithJLI");
         if(typeof wojWithJLI != "undefined"){
                 var salestaxConfig = wojWithJLI.salesTaxConfig;
             
                 if(typeof woJob != "undefined" && typeof wojWithJLI.salesTaxConfig != "undefined" && typeof storeLocation != "undefined" && salestaxConfig[storeLocation] != "undefined" && woJob.BOATBUILDING__Taxable__c == true){
                     
-                    console.log('sales tax config---', salestaxConfig);
+                   // console.log('sales tax config---', salestaxConfig);
                     var jobTotal = 0.00;
                     var salestaxconfigObject = salestaxConfig[storeLocation];
                     if(typeof salestaxconfigObject != "undefined"){
@@ -230,7 +241,7 @@
                         
                     }
                     if(isMiscTaxable == true){
-                        console.log('total MISC'+totalMisc);
+                        //console.log('total MISC'+totalMisc);
                         if(typeof totalMisc != "undefined" && !isNaN(totalMisc))
                         jobTotal = parseFloat(jobTotal) + parseFloat(totalMisc);
                     }
@@ -240,26 +251,26 @@
                         if(typeof totalDiscountOnWorkOrderJobs !="undefined" && !isNaN(totalDiscountOnWorkOrderJobs))
                         jobTotal = parseFloat(jobTotal) - totalDiscountOnWorkOrderJobs;
                     }
-                    console.log('salestaxPercent'+salestaxPercent);
-                    console.log('jobTotalAfterSalestax',jobTotal);
+                    //console.log('salestaxPercent'+salestaxPercent);
+                    //console.log('jobTotalAfterSalestax',jobTotal);
                     var totalTax = (parseFloat(jobTotal)/100) * parseFloat(salestaxPercent);
-                    console.log('total tax'+totalTax);
+                    //console.log('total tax'+totalTax);
                     
                     var jobTotalWithoutTax = component.get("v.jobTotal"); 
-                    console.log(isNaN(jobTotalWithoutTax));
-                    console.log(isNaN(totalTax));
-                    console.log('jobTotalWithoutTax', component.get("v.jobTotal"));
+                    //console.log(isNaN(jobTotalWithoutTax));
+                    //console.log(isNaN(totalTax));
+                    //console.log('jobTotalWithoutTax', component.get("v.jobTotal"));
                     if(!isNaN(jobTotalWithoutTax) && !isNaN(totalTax) && component.get("v.WOJ.BOATBUILDING__Taxable__c") == true){
                         var jobTotalWithTax = parseFloat(jobTotalWithoutTax) + totalTax; 
-                        console.log('jobTotalWithTax inside', jobTotalWithTax);
+                        //console.log('jobTotalWithTax inside', jobTotalWithTax);
                         var ShippingCharges = isNaN(component.get("v.WOJ.BOATBUILDING__Shipping_Charge__c")) ? 0.00 : component.get("v.WOJ.BOATBUILDING__Shipping_Charge__c");
-                        console.log('Shippinghcarges',ShippingCharges);
-                        console.log('wojjjjjjjj',woJob);
+                        //console.log('Shippinghcarges',ShippingCharges);
+                        //console.log('wojjjjjjjj',woJob);
                         if(typeof ShippingCharges !="undefined" && !isNaN(ShippingCharges)){
                             jobTotalWithTax = parseFloat(jobTotalWithTax) + parseFloat(ShippingCharges);
                         }
-                        console.log('jobTotalWithTax after shipping', jobTotalWithTax);
-                        console.log('code came here');
+                        //console.log('jobTotalWithTax after shipping', jobTotalWithTax);
+                        //console.log('code came here');
                         component.set("v.jobTotalwTax", jobTotalWithTax.toFixed(2));
                         component.set("v.taxOnJob", totalTax.toFixed(2));
                         component.set("v.WOJ.jobTotalwTax",jobTotalWithTax.toFixed(2));
@@ -268,6 +279,7 @@
                 }
             }
             else{
+               // console.log('inside elsessssss part');
                 component.set("v.WOJ.jobTotalwTax",0.00);
                 component.set("v.WOJ.taxOnJob",0.00);
             }
@@ -279,8 +291,9 @@
     },
 
     saveJobWithJLI : function(component, event, helper){
-        console.log('saveJobFromJobCMP',JSON.parse(JSON.stringify(component.get("v.WOJ"))));
+        ////console.log('saveJobFromJobCMP',JSON.parse(JSON.stringify(component.get("v.WOJ"))));
         var objWOJ = component.get("v.WOJ");
+        console.log('saveJobFromJobCMP',JSON.stringify(component.get("v.WOJ")));
         var woObject = new Object();
         if(typeof objWOJ.BOATBUILDING__Work_Order_Warranty_Work_Order__c != "undefined"){
             woObject.workOrderId = objWOJ.BOATBUILDING__Work_Order_Warranty_Work_Order__c;
@@ -290,9 +303,9 @@
         }
         if(typeof objWOJ.BOATBUILDING__Technician__c != "undefined"){
             woObject.technicianId = objWOJ.BOATBUILDING__Technician__c;
-            console.log('if part of Tech');
+            ////console.log('if part of Tech');
         }else{
-            console.log('else part of Tech');
+            ////console.log('else part of Tech');
         }
         if(typeof objWOJ.BOATBUILDING__Approved_By_Customer__c != "undefined"){
             woObject.isApprovedByCustomer = objWOJ.BOATBUILDING__Approved_By_Customer__c;
@@ -383,12 +396,12 @@
         }
         if(typeof objWOJ.BOATBUILDING__Misc_Charge__c != "undefined"){
             woObject.miscCharge1 = objWOJ.BOATBUILDING__Misc_Charge__c;
-            console.log('if part of misc charge');
+            ////console.log('if part of misc charge');
             
         }
         else{
             
-                console.log('else part of misc charge');
+               // //console.log('else part of misc charge');
             
         }
         if(typeof objWOJ.BOATBUILDING__Misc_Description_2__c != "undefined"){
@@ -415,18 +428,26 @@
             for(var i = 0 ; i < objWOJ.BOATBUILDING__Work_Order_Job_Line_Items__r.length; i++){
                 var lineItem = new Object();
                 var currentLI = objWOJ.BOATBUILDING__Work_Order_Job_Line_Items__r[i];
-                if(typeof currentLI.Id != "undefined"){
-                    lineItem.lineItemId = currentLI.Id;
+                let isCJ = component.get("v.isCannedJob");
+                if(isCJ){
+                    lineItem.parentJob = objWOJ.Id;
+                }else{
+                    if(typeof currentLI.Id != "undefined" && woObject.Id != "CJ"){
+                        lineItem.lineItemId = currentLI.Id;
+                    }
+                    if(typeof currentLI.BOATBUILDING__Related_to_Job__c != "undefined" && woObject.Id != "CJ"){
+                        lineItem.parentJob = currentLI.BOATBUILDING__Related_to_Job__c;
+                    }
                 }
-                if(typeof currentLI.BOATBUILDING__Related_to_Job__c != "undefined"){
-                    lineItem.parentJob = currentLI.BOATBUILDING__Related_to_Job__c;
-                }
+               
+
                 if(typeof currentLI.BOATBUILDING__Price__c != "undefined"){
                     lineItem.retailPrice = currentLI.BOATBUILDING__Price__c
                 }
                 if(typeof currentLI.BOATBUILDING__Quantity__c != "undefined"){
                     lineItem.quantity = currentLI.BOATBUILDING__Quantity__c
                 }
+               // alert(' currentLI.BOATBUILDING__Dealer_Price__c'+ currentLI.BOATBUILDING__Dealer_Price__c);
                 if(typeof currentLI.BOATBUILDING__Dealer_Price__c != "undefined"){
                     lineItem.cost = currentLI.BOATBUILDING__Dealer_Price__c
                 }
@@ -438,10 +459,10 @@
                  }
                 
                 if(typeof currentLI.BOATBUILDING__Part__c != "undefined"){
-                    lineItem.partId = currentLI.BOATBUILDING__Part__c
+                    lineItem.partId = currentLI.BOATBUILDING__Part__c;
                 }
                 if(typeof currentLI.BOATBUILDING__Select_Part__c != "undefined"){
-                    lineItem.inventoryId = currentLI.BOATBUILDING__Select_Part__c
+                    lineItem.inventoryId = currentLI.BOATBUILDING__Select_Part__c;
                 }
                 lstJobLineItems.push(lineItem);
             }
@@ -463,7 +484,7 @@
           
       },
       calculateWarrantyAmount : function(component, event, helper){
-        if(component.get("v.recordType") == 'Warranty Work Order'){
+        if(component.get("v.recordType") == 'Warranty Work Order' && typeof component.get("v.WOJ") != "undefined"){
             var claimPaid = isNaN(parseFloat(component.get("v.WOJ.BOATBUILDING__Claim_Labor_Paid_Amount__c"))) ? 0.00 : component.get("v.WOJ.BOATBUILDING__Claim_Labor_Paid_Amount__c") ;
             var partPaid = isNaN(parseFloat(component.get("v.WOJ.BOATBUILDING__Parts_Paid_Amount__c"))) ? 0.00 : component.get("v.WOJ.BOATBUILDING__Parts_Paid_Amount__c");
             var miscPaid = isNaN(parseFloat(component.get("v.WOJ.BOATBUILDING__Misc_Charge_Paid__c"))) ? 0.00 : component.get("v.WOJ.BOATBUILDING__Misc_Charge_Paid__c");
@@ -474,12 +495,14 @@
             
            
             
+
             if(!isNaN(totalPaid)){
+                
                 component.set("v.WOJ.BOATBUILDING__Total_Paid__c",totalPaid);
                
                 
             } 
         }
-            helper.updatejobTotalHelper(component, event, helper);
+            this.updatejobTotalHelper(component, event, helper);
       }
 })

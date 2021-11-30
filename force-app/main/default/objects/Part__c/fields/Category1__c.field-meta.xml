@@ -12,14 +12,9 @@
         <valueSetDefinition>
             <sorted>false</sorted>
             <value>
-                <fullName>Engine Parts</fullName>
+                <fullName>API Test</fullName>
                 <default>false</default>
-                <label>Engine Parts</label>
-            </value>
-            <value>
-                <fullName>Boat Parts</fullName>
-                <default>false</default>
-                <label>Boat Parts</label>
+                <label>API Test</label>
             </value>
             <value>
                 <fullName>Boat Accessories</fullName>
@@ -27,9 +22,24 @@
                 <label>Boat Accessories</label>
             </value>
             <value>
-                <fullName>API Test</fullName>
+                <fullName>Boat Parts</fullName>
                 <default>false</default>
-                <label>API Test</label>
+                <label>Boat Parts</label>
+            </value>
+            <value>
+                <fullName>Engine Parts</fullName>
+                <default>false</default>
+                <label>Engine Parts</label>
+            </value>
+            <value>
+                <fullName>Snowboards</fullName>
+                <default>false</default>
+                <label>Snowboards</label>
+            </value>
+            <value>
+                <fullName>Wakeboard</fullName>
+                <default>false</default>
+                <label>Wakeboard</label>
             </value>
             <value>
                 <fullName>Wakesurf</fullName>
@@ -37,14 +47,14 @@
                 <label>Wakesurf</label>
             </value>
             <value>
-                <fullName>Wakeboards</fullName>
+                <fullName>Men</fullName>
                 <default>false</default>
-                <label>Wakeboards</label>
+                <label>Men</label>
             </value>
             <value>
-                <fullName>Snowboards</fullName>
+                <fullName>Wake</fullName>
                 <default>false</default>
-                <label>Snowboards</label>
+                <label>Wake</label>
             </value>
         </valueSetDefinition>
     </valueSet>

@@ -349,39 +349,39 @@ public class DoAuthentication{
                         //objProductPrice.ACV__c = Decimal.valueof(objresprodprice.ProductPrice.ACV);
                         
                         //objProductPrice.Beam__c = Decimal.valueof(objresprodprice.ProductPrice.Beam);
-                        objProductPrice.Boat_Type__c = objresprodprice.ProductPrice.Boat_Type;
-                        objProductPrice.Cost__c = Decimal.valueof(objresprodprice.ProductPrice.Cost);
+                        //objProductPrice.Boat_Type__c = objresprodprice.ProductPrice.Boat_Type;
+                        //objProductPrice.Cost__c = Decimal.valueof(objresprodprice.ProductPrice.Cost);
                         //objProductPrice.Costline__c = Decimal.valueof(objresprodprice.ProductPrice.Costline);
-                        objProductPrice.Curtailments_Start_Date__c = Date.valueof(objresprodprice.ProductPrice.Curtailments_Start_Date);
-                        objProductPrice.Date_on_FloorPlan__c = Date.valueof(objresprodprice.ProductPrice.Date_on_FloorPlan);
+                        //objProductPrice.Curtailments_Start_Date__c = Date.valueof(objresprodprice.ProductPrice.Curtailments_Start_Date);
+                        //objProductPrice.Date_on_FloorPlan__c = Date.valueof(objresprodprice.ProductPrice.Date_on_FloorPlan);
                         //objProductPrice.Days_on_the_Lot__c = Decimal.valueof(objresprodprice.ProductPrice.Days_on_the_Lot);
                         //objProductPrice.Dealer_Prep__c = Decimal.valueof(objresprodprice.ProductPrice.Dealer_Prep);
                         objProductPrice.Dealer_Price__c = Decimal.valueof(objresprodprice.ProductPrice.Dealer_Price);
-                        objProductPrice.Engine__c = objresprodprice.ProductPrice.Engine;
-                        objProductPrice.Engine_SN__c = objresprodprice.ProductPrice.Engine_SN;
-                        objProductPrice.Hull_ID__c = objresprodprice.ProductPrice.Hull_ID;
+                        //objProductPrice.Engine__c = objresprodprice.ProductPrice.Engine;
+                        //objProductPrice.Engine_SN__c = objresprodprice.ProductPrice.Engine_SN;
+                        //objProductPrice.Hull_ID__c = objresprodprice.ProductPrice.Hull_ID;
                         //objProductPrice.Hull_Material__c = objresprodprice.ProductPrice.Hull_Material;
-                        objProductPrice.Interest_Start_Date__c = Date.valueof(objresprodprice.ProductPrice.Interest_Start_Date);
+                        //objProductPrice.Interest_Start_Date__c = Date.valueof(objresprodprice.ProductPrice.Interest_Start_Date);
                         //objProductPrice.Length__c = Decimal.valueof(objresprodprice.ProductPrice.Length);
-                        objProductPrice.Location__c = objresprodprice.ProductPrice.Location;
+                        //objProductPrice.Location__c = objresprodprice.ProductPrice.Location;
                         objProductPrice.Model_Variant__c = objresprodprice.ProductPrice.Model_Variant;
-                        objProductPrice.Net_Weight__c = Decimal.valueof(objresprodprice.ProductPrice.Net_Weight);
+                        //objProductPrice.Net_Weight__c = Decimal.valueof(objresprodprice.ProductPrice.Net_Weight);
                         objProductPrice.Option_Category__c = objresprodprice.ProductPrice.Option_Category;
-                        objProductPrice.Options__c = objresprodprice.ProductPrice.Options;
-                        objProductPrice.Owner__c = objresprodprice.ProductPrice.Owner;
+                        //objProductPrice.Options__c = objresprodprice.ProductPrice.Options;
+                        //objProductPrice.Owner__c = objresprodprice.ProductPrice.Owner;
                         objProductPrice.Product_Code__c = objresprodprice.ProductPrice.Product_Code;
                         objProductPrice.ProductManufacturer__c = objresprodprice.ProductPrice.ProductManufacturer;
                         objProductPrice.Product_Model__c = objresprodprice.ProductPrice.Product_Model;
                         objProductPrice.ProductRetail_Price__c = Decimal.valueof(objresprodprice.ProductPrice.ProductRetail_Price);
-                        objProductPrice.Select_Category__c = objresprodprice.ProductPrice.Select_Category;
+                        //objProductPrice.Select_Category__c = objresprodprice.ProductPrice.Select_Category;
                         
                         
                         objProductPrice.ProductSelected_Category__c = objresprodprice.ProductPrice.ProductSelected_Category;
                         objProductPrice.Sorting_Order__c = 1;//Decimal.valueof(objresprodprice.ProductPrice.Sorting_Order);
-                        objProductPrice.Status__c = objresprodprice.ProductPrice.Status;
+                        //objProductPrice.Status__c = objresprodprice.ProductPrice.Status;
                         //objProductPrice.Suggested_List_Price__c = Decimal.valueof(objresprodprice.ProductPrice.Suggested_List_Price);
-                        objProductPrice.Trailer_ID__c = objresprodprice.ProductPrice.Trailer_ID;
-                        objProductPrice.Vehicle_Type__c = objresprodprice.ProductPrice.Vehicle_Type;
+                        //objProductPrice.Trailer_ID__c = objresprodprice.ProductPrice.Trailer_ID;
+                        //objProductPrice.Vehicle_Type__c = objresprodprice.ProductPrice.Vehicle_Type;
                         objProductPrice.Year__c = objresprodprice.ProductPrice.Year;
                         
                         lstProductPrice.add(objProductPrice);

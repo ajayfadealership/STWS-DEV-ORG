@@ -92,7 +92,7 @@ private class QuoteTriggerHandlerTest {
         objQuote.BOATBUILDING__BOat_Sold_by__c = userinfo.getName();
         insert objQuote;
                     
-        BOATBUILDING__All_Payment__c objpt = new BOATBUILDING__All_Payment__c();
+        BOATBUILDING__Payments__c objpt = new BOATBUILDING__Payments__c();
         objpt.Amount__c = 20;
         objpt.Quote__c = objQuote.Id;
         objpt.Payment_Type__c = 'Cash';

@@ -23,7 +23,7 @@ public with sharing class ServicePageController {
     public Boolean work { get; set; }
     public Boolean schedule { get; set; }
     public Boolean timeBool { get; set; }
-    public BOATBUILDING__Payment__c objpayment{get;set;}
+    public BOATBUILDING__Payments__c objpayment{get;set;}
     public String UR { get; set; }
     public String UId { get; set; }
     public String pageURL { get; set; }
@@ -89,10 +89,10 @@ public with sharing class ServicePageController {
     public Boolean partRequest { get; set; }
     // Constructor
     public ServicePageController() { 
-    	partRequest = true;
-    	if(UserInfo.getOrganizationId().contains('00D46000000Y3Kl')) {
-    		partRequest = false;
-    	}
+        partRequest = true;
+        if(UserInfo.getOrganizationId().contains('00D46000000Y3Kl')) {
+            partRequest = false;
+        }
         UR = ''; 
         User u = [Select Id, UserRoleId, UserRole.Name From User Where Id =: UserInfo.getUserId()];
         if(u.UserRoleId != null) {
@@ -114,7 +114,7 @@ public with sharing class ServicePageController {
         objInvoice.RecordTypeId = Schema.SObjectType.BOATBUILDING__Invoice__c.getRecordTypeInfosByName().get('Standard Invoice').getRecordTypeId();
         objInvoice.Sold_By_Ref__c = UserInfo.getUserId();
         //objCase = new Case();
-        objpayment = new BOATBUILDING__Payment__c();
+        objpayment = new BOATBUILDING__Payments__c();
         objDateTime = System.now().format();
         objTM = new BOATBUILDING__Time_Management__c();
         List<RecordType> lstRect = [SELECT          
@@ -345,10 +345,10 @@ public with sharing class ServicePageController {
        
     
     public class InvoiceLineItemWrapper {
-    	public String PartNumber { get; set; }
-    	public String PartName { get; set; }
-    	public Decimal Quantity { get; set; }
-    	public Decimal MSRP { get; set; }
+        public String PartNumber { get; set; }
+        public String PartName { get; set; }
+        public Decimal Quantity { get; set; }
+        public Decimal MSRP { get; set; }
     }
        
         
@@ -365,47 +365,47 @@ public with sharing class ServicePageController {
         
         
         for(BOATBUILDING__Inventory__c objInv: lstInv) {
-        	setPrtNum.add(objInv.Part_Number__c);
-        	InvoiceLineItemWrapper objILIW = new InvoiceLineItemWrapper();
-        	objILIW.PartNumber = objInv.Part_Number__c;
-        	objILIW.PartName = objInv.Part_Name__c;
-        	if(objInv.Quantity__c != null) {
-        		objILIW.Quantity = objInv.Quantity__c;	
-        	} else {
-        		objILIW.Quantity = 0;
-        	}
-        	if(objInv.Quantity__c != null) {
-        		objILIW.MSRP = objInv.Part_MSRP_Price__c;
-        	} else {
-        		objILIW.MSRP = 0.00;
-        	}
-        	
-        	lstILIW.add(objILIW);
+            setPrtNum.add(objInv.Part_Number__c);
+            InvoiceLineItemWrapper objILIW = new InvoiceLineItemWrapper();
+            objILIW.PartNumber = objInv.Part_Number__c;
+            objILIW.PartName = objInv.Part_Name__c;
+            if(objInv.Quantity__c != null) {
+                objILIW.Quantity = objInv.Quantity__c;  
+            } else {
+                objILIW.Quantity = 0;
+            }
+            if(objInv.Quantity__c != null) {
+                objILIW.MSRP = objInv.Part_MSRP_Price__c;
+            } else {
+                objILIW.MSRP = 0.00;
+            }
+            
+            lstILIW.add(objILIW);
         }
         for(BOATBUILDING__Part__c obPrt: lstPrt) {
-        	if(!setPrtNum.contains(obPrt.Part_Number__c)) {
-	        	setPrtNum.add(obPrt.Part_Number__c);
-	        	InvoiceLineItemWrapper objILIW = new InvoiceLineItemWrapper();
-	        	objILIW.PartNumber = obPrt.Part_Number__c;
-	        	objILIW.PartName = obPrt.Name;
-	        	if(obPrt.Quantity__c != null) {
-	        		objILIW.Quantity = obPrt.Quantity__c;
-        		} else {
-        			objILIW.Quantity = 0;
-        		}
-        		if(obPrt.Retail_Price__c != null) { 
-	        		objILIW.MSRP = obPrt.Retail_Price__c;
-        		} else {
-        			objILIW.MSRP = 0.00;
-        		}
-	        	lstILIW.add(objILIW);
-        	}
+            if(!setPrtNum.contains(obPrt.Part_Number__c)) {
+                setPrtNum.add(obPrt.Part_Number__c);
+                InvoiceLineItemWrapper objILIW = new InvoiceLineItemWrapper();
+                objILIW.PartNumber = obPrt.Part_Number__c;
+                objILIW.PartName = obPrt.Name;
+                if(obPrt.Quantity__c != null) {
+                    objILIW.Quantity = obPrt.Quantity__c;
+                } else {
+                    objILIW.Quantity = 0;
+                }
+                if(obPrt.Retail_Price__c != null) { 
+                    objILIW.MSRP = obPrt.Retail_Price__c;
+                } else {
+                    objILIW.MSRP = 0.00;
+                }
+                lstILIW.add(objILIW);
+            }
         }
         return lstILIW;
     } 
     //Pending
     public static List<BOATBUILDING__Part__c> lstPartRecs(String prtDetail, String searchCriteriaValue) {
-    	
+        
         if(searchCriteriaValue == '0') {
             return null;
         }
@@ -473,11 +473,11 @@ public with sharing class ServicePageController {
                 LIKE
                             :str]; 
         } else {
-        	return new List<BOATBUILDING__Part__c>();
+            return new List<BOATBUILDING__Part__c>();
         }
     }
     public static List<BOATBUILDING__Inventory__c> lstinvRecs(String prtDetail, String searchCriteriaValue) {
-    	List<RecordType> lstRecTypeInv = [SELECT
+        List<RecordType> lstRecTypeInv = [SELECT
                                                     Id,
                                                     Name
                                             FROM
@@ -604,7 +604,7 @@ public with sharing class ServicePageController {
                 LIKE
                             :str]; 
         } else {
-        	return new List<BOATBUILDING__Inventory__c>();
+            return new List<BOATBUILDING__Inventory__c>();
         }
     }     
     
@@ -713,9 +713,9 @@ public with sharing class ServicePageController {
                                             WHERE
                                                         Part_Number__c IN: mapInventoryWithDiscount.keySet()];
         
-		Set<String> setInvPN = new Set<String>();                                                         
+        Set<String> setInvPN = new Set<String>();                                                         
         for(BOATBUILDING__Inventory__c objI: lstLineItem) {
-        	setInvPN.add(objI.Part_Number__c);
+            setInvPN.add(objI.Part_Number__c);
         }
                                                         
         List<BOATBUILDING__Part__c> lstOfParts = [SELECT 
@@ -733,7 +733,7 @@ public with sharing class ServicePageController {
                                                 FROM  
                                                         BOATBUILDING__Part__c 
                                                Where 
-                                               			Part_Number__c IN: mapInventoryWithDiscount.keySet()];
+                                                        Part_Number__c IN: mapInventoryWithDiscount.keySet()];
                     
         Map<String,String> mapPartNumberToVendorId = new Map<String,String>();
         
@@ -846,10 +846,10 @@ public with sharing class ServicePageController {
                     }
                 }
             }
-        	
-        	for(Part__c objPrt: lstOfParts) {
-        		if(!setInvPN.contains(objPrt.Part_Number__c) && mapPartNumberToVendorId.containsKey(objPrt.Part_Number__c)) {
-        			BOATBUILDING__Invoice_Line_Item__c objILI = new BOATBUILDING__Invoice_Line_Item__c();
+            
+            for(Part__c objPrt: lstOfParts) {
+                if(!setInvPN.contains(objPrt.Part_Number__c) && mapPartNumberToVendorId.containsKey(objPrt.Part_Number__c)) {
+                    BOATBUILDING__Invoice_Line_Item__c objILI = new BOATBUILDING__Invoice_Line_Item__c();
                     objILI.Name = objPrt.Name;
                     objILI.Quantity__c = Decimal.valueOf(mapInventoryWithQuantity.get(objPrt.Part_Number__c));
                     objILI.Discount_Price__c = Decimal.valueOf(mapInventoryWithDiscount.get(objPrt.Part_Number__c));
@@ -857,8 +857,8 @@ public with sharing class ServicePageController {
                     objILI.Part_Cost__c = objPrt.Retail_Price__c;
                     objILI.Part_Number__c = objPrt.Part_Number__c;
                     lstILI.add(objILI);
-        		} 
-        	}
+                } 
+            }
             if(mapMiscPartName != null && mapMiscPartName.keySet().size() > 0) {
                 for(String strKey: mapMiscPartName.keySet()) {
                     BOATBUILDING__Invoice_Line_Item__c objILI = new BOATBUILDING__Invoice_Line_Item__c();
@@ -1212,23 +1212,24 @@ public with sharing class ServicePageController {
     @RemoteAction
     public static string addPayment(Map<String, String> mapPaymentData, String InvoiceID){
         
-        BOATBUILDING__Payment__c objPayment = new BOATBUILDING__Payment__c();
-        objPayment.BOATBUILDING__Related_to_Invoice__c = InvoiceID;        
+        BOATBUILDING__Payments__c objPayment = new BOATBUILDING__Payments__c();
+        objPayment.BOATBUILDING__Invoice__c = InvoiceID;        
         //objPayment.BOATBUILDING__Amount__c = Decimal.valueOf(mapPaymentData.get('Amount'));
         System.debug('>>>mapPaymentData: '+mapPaymentData);
         if(mapPaymentData.get('PaymentType') == 'Cash') {
-        	if(mapPaymentData.get('ChangeRTN') != null && decimal.valueOf(mapPaymentData.get('ChangeRTN')) > 0) {
-        		objPayment.BOATBUILDING__Amount__c = Decimal.valueOf(mapPaymentData.get('Amount')) - Decimal.valueOf(mapPaymentData.get('ChangeRTN'));
-        		objPayment.BOATBUILDING__Received_Cash__c = Decimal.valueOf(mapPaymentData.get('Amount'));
-        		objPayment.BOATBUILDING__Return_Change__c = Decimal.valueOf(mapPaymentData.get('ChangeRTN')); 
-        	}		
+            if(mapPaymentData.get('ChangeRTN') != null && decimal.valueOf(mapPaymentData.get('ChangeRTN')) > 0) {
+                objPayment.BOATBUILDING__Amount__c = Decimal.valueOf(mapPaymentData.get('Amount')) - Decimal.valueOf(mapPaymentData.get('ChangeRTN'));
+                objPayment.BOATBUILDING__Received_Cash__c = Decimal.valueOf(mapPaymentData.get('Amount'));
+                objPayment.BOATBUILDING__Return_Change__c = Decimal.valueOf(mapPaymentData.get('ChangeRTN')); 
+            }       
         } else {
-        	objPayment.BOATBUILDING__Amount__c = Decimal.valueOf(mapPaymentData.get('Amount'));
+            objPayment.BOATBUILDING__Amount__c = Decimal.valueOf(mapPaymentData.get('Amount'));
         }
         
         objPayment.BOATBUILDING__Payment_Type__c = mapPaymentData.get('PaymentType');
         objPayment.BOATBUILDING__Credit_Card_Type__c = mapPaymentData.get('CreditCardType');
         objPayment.BOATBUILDING__Check_Number__c = mapPaymentData.get('CheckNumber');
+        objPayment.RecordTypeId = Schema.SObjectType.BOATBUILDING__Payments__c.getRecordTypeInfosByName().get('Standard Invoice').getRecordTypeId();
         System.debug('objPayment----'+objPayment);
          try{
             insert objPayment;

@@ -3,7 +3,7 @@
     <fullName>Sold_By_required_for_Final_Quote</fullName>
     <active>true</active>
     <errorConditionFormula>AND(
- ISPICKVAL( Status__c ,&#39;Final&#39;),
+ ISPICKVAL( Status__c ,&apos;Final&apos;),
  ISBLANK( TEXT(Boat_Sold_By__c) )
 )</errorConditionFormula>
     <errorMessage>Boat Sold by is Required for Final Quote</errorMessage>

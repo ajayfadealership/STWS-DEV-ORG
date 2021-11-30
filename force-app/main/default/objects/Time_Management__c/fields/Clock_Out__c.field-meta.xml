@@ -3,7 +3,6 @@
     <fullName>Clock_Out__c</fullName>
     <deprecated>false</deprecated>
     <externalId>false</externalId>
-    <inlineHelpText>Specifies the Log out time of the user who worked on the specified Job.</inlineHelpText>
     <label>Clock Out</label>
     <required>false</required>
     <trackHistory>false</trackHistory>

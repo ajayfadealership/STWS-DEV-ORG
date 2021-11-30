@@ -3,7 +3,7 @@
     <fullName>Friends_Last_Name__c</fullName>
     <deprecated>false</deprecated>
     <externalId>false</externalId>
-    <label>Friend&#39;s Last Name</label>
+    <label>Friend&apos;s Last Name</label>
     <length>255</length>
     <required>false</required>
     <trackFeedHistory>false</trackFeedHistory>

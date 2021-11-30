@@ -7,7 +7,9 @@
     <aura:attribute name="clckOutBTNDis" type="Boolean" default="true" access="global"/>
     <aura:attribute name="objTMRec" type="Object" access="global"/>
     <aura:attribute name="showSpinner" type="Boolean" default="false"/>
-    <!--test comment -->
+    <aura:attribute name="reloadForm" type="Boolean" default="true"/>
+    <aura:attribute name="tmId" type="String" default=""/>
+    <!--test comment --> 
     <aura:if isTrue="{!v.showSpinner}">
         <lightning:spinner alternativeText="Loading" size="large"/>
     </aura:if>
@@ -27,19 +29,19 @@
                 <lightning:accordion aura:id="WOJId" activeSectionName="" allowMultipleSectionsOpen="true">
                     <aura:if isTrue="{!v.objJob.BOATBUILDING__Work_Order_Job_Line_Items__r.length > 0}">
                         <lightning:accordionSection name="WJOLIDetails" label="{! 'Parts ( ' + v.objJob.BOATBUILDING__Work_Order_Job_Line_Items__r.length + ' )' }">
-                                <lightning:layout multipleRows="true">
-                                    <aura:iteration items="{!v.objJob.BOATBUILDING__Work_Order_Job_Line_Items__r}" var="objJobLI">
-                                        <lightning:layoutItem padding="around-small" size="4">
-                                            <lightning:input type="text" value="{!objJobLI.BOATBUILDING__Part_Name__c}"  label="Part Name" readonly=""/>
-                                        </lightning:layoutItem>
-                                        <lightning:layoutItem padding="around-small" size="4">
-                                            <lightning:input type="text" value="{!objJobLI.BOATBUILDING__Part_Number__c}"  label="Part Number" readonly=""/>
-                                        </lightning:layoutItem>
-                                        <lightning:layoutItem padding="around-small" size="4">
-                                            <lightning:input type="text" value="{!objJobLI.BOATBUILDING__Quantity__c}"  label="Quantity" readonly="" />
-                                        </lightning:layoutItem>
-                                    </aura:iteration>
-                                </lightning:layout>
+                            <lightning:layout multipleRows="true">
+                                <aura:iteration items="{!v.objJob.BOATBUILDING__Work_Order_Job_Line_Items__r}" var="objJobLI">
+                                    <lightning:layoutItem padding="around-small" size="4">
+                                        <lightning:input type="text" value="{!objJobLI.BOATBUILDING__Part_Name__c}"  label="Part Name" readonly=""/>
+                                    </lightning:layoutItem>
+                                    <lightning:layoutItem padding="around-small" size="4">
+                                        <lightning:input type="text" value="{!objJobLI.BOATBUILDING__Part_Number__c}"  label="Part Number" readonly=""/>
+                                    </lightning:layoutItem>
+                                    <lightning:layoutItem padding="around-small" size="4">
+                                        <lightning:input type="text" value="{!objJobLI.BOATBUILDING__Quantity__c}"  label="Quantity" readonly="" />
+                                    </lightning:layoutItem>
+                                </aura:iteration>
+                            </lightning:layout>
                         </lightning:accordionSection>
                         <aura:set attribute="else">
                             <lightning:accordionSection name="WJOLIDetailsNoP" label="Parts ( 0 )">
@@ -50,41 +52,41 @@
                 </lightning:accordion>
             </lightning:layoutItem>
         </lightning:layout>
-            <div class="slds-grid slds-gutters slds-wrap">
-                <div class="slds-col slds-size--1-of-2 slds-medium-size--1-of-2 slds-large-size--4-of-12">
-                    <b>Allowed Hours :</b>&nbsp;{!v.objJob.BOATBUILDING__No_of_Labors__c} 
-                </div>
-                <div class="slds-col slds-size--1-of-2 slds-medium-size--1-of-2 slds-large-size--4-of-12">
-                    <b>Worked Hours :</b>&nbsp;{!v.objJob.BOATBUILDING__TWO_Worked_Hour__c} 
-                </div>
-                <div class="slds-col slds-size--1-of-2 slds-medium-size--1-of-2 slds-large-size--4-of-12 slds-p-top_small">
-                    <b>Efficiency :</b>&nbsp; {!v.objJob.BOATBUILDING__Efficiency__c}%
-                </div>
-           </div>
-           <div class="slds-grid slds-gutters slds-wrap slds-p-top_small slds-p-bottom_large">
-                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-2 slds-large-size--3-of-12 slds-p-top_small">
-                    <lightning:button label="Clock-In" disabled="{!v.clckInBTNDis}" variant="brand" onclick="{!c.clockIn}"/>
-                </div>
-                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-2 slds-large-size--3-of-12 slds-p-top_small">
-                    <lightning:input type="text" value="{!v.clckIn}" variant = "label-hidden" label="Clock In" disabled="true" />
-                </div>
-                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-2 slds-large-size--3-of-12 slds-p-top_small">
-                    <lightning:button label="Clock-Out" disabled="{!v.clckOutBTNDis}" variant="brand" onclick="{!c.clockOut}"/> 
-
-                </div>
-                <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-2 slds-large-size--3-of-12 slds-p-top_small">
-                    <lightning:input type="text" value="{!v.clckOut}" variant = "label-hidden" label="Clock Out" disabled="true" />
-
-                </div>
+        <div class="slds-grid slds-gutters slds-wrap">
+            <div class="slds-col slds-size--1-of-2 slds-medium-size--1-of-2 slds-large-size--4-of-12">
+                <b>Allowed Hours :</b>&nbsp;{!v.objJob.BOATBUILDING__No_of_Labors__c} 
             </div>
-            
-                       
-                    
-                    
-                   
-        
+            <div class="slds-col slds-size--1-of-2 slds-medium-size--1-of-2 slds-large-size--4-of-12">
+                <b>Worked Hours :</b>&nbsp;{!v.objJob.BOATBUILDING__TWO_Worked_Hour__c} 
+            </div>
+            <div class="slds-col slds-size--1-of-2 slds-medium-size--1-of-2 slds-large-size--4-of-12 slds-p-top_small">
+                <b>Efficiency :</b>&nbsp; {!v.objJob.BOATBUILDING__Efficiency__c}%
+            </div>
+        </div>
+        <div class="slds-grid slds-gutters slds-wrap slds-p-top_small slds-p-bottom_large">
+            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-2 slds-large-size--3-of-12 slds-p-top_small">
+                <lightning:button label="Clock-In" disabled="{!v.clckInBTNDis}" variant="brand" onclick="{!c.clockIn}"/>
+            </div>
+            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-2 slds-large-size--3-of-12 slds-p-top_small">
+                <!--<lightning:input type="text" value="{!v.clckIn}" variant = "label-hidden" label="Clock In" disabled="true" />-->
+                <lightning:recordEditForm recordId="{!v.tmId}" objectApiName="BOATBUILDING__Time_Management__c">
+                    <lightning:outputField fieldName="BOATBUILDING__Clock_In__c" />
+                </lightning:recordEditForm>
+            </div>
+            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-2 slds-large-size--3-of-12 slds-p-top_small">
+                <lightning:button label="Clock-Out" disabled="{!v.clckOutBTNDis}" variant="brand" onclick="{!c.clockOut}"/> 
+                
+            </div>
+            <div class="slds-col slds-size--1-of-1 slds-medium-size--1-of-2 slds-large-size--3-of-12 slds-p-top_small">
+                <!--<lightning:input type="text" value="{!v.clckOut}" variant = "label-hidden" label="Clock Out" disabled="true" />-->  
+                <aura:if isTrue="{!v.reloadForm}">
+                    <lightning:recordEditForm recordId="{!v.tmId}" objectApiName="BOATBUILDING__Time_Management__c">
+                        <lightning:outputField fieldName="BOATBUILDING__Clock_Out__c" />
+                    </lightning:recordEditForm>
+                </aura:if>
+            </div>
+        </div>
         <lightning:accordionSection name="" label="Tech Comments" class="addMiscCharges">
-
             <div class="slds-grid slds-gutters slds-wrap">
                 <div class="slds-col slds-size_4-of-4">
                     <aura:if isTrue="{!!empty(v.objJob.Id)}">
@@ -96,12 +98,10 @@
             </div>
         </lightning:accordionSection> 
         <lightning:accordionSection name="woPhotos" label="Upload Photos">
-                
-                
-                <lightning:fileUpload multiple="true" recordId="{!v.objJob.Id}" accept=".pdf, .png, .jpeg, .jpg" label="Upload photos for this work order" onuploadfinished="{!c.uplaodFinished}" />
-                <lightning:button variant="base" label="Refresh Preview" class="saveJobs" title="Click to see file preview" onclick="{! c.uplaodFinished }"  iconName="action:preview" iconPosition="right"/>
-                <c:WorkOrderPhotoInspectionPreview recordId="{!v.objJob.Id}" aura:id="photoCmp"/> 
-            </lightning:accordionSection>
+            <lightning:fileUpload multiple="true" recordId="{!v.objJob.Id}" accept=".pdf, .png, .jpeg, .jpg" label="Upload photos for this work order" onuploadfinished="{!c.uplaodFinished}" />
+            <lightning:button variant="base" label="Refresh Preview" class="saveJobs" title="Click to see file preview" onclick="{! c.uplaodFinished }"  iconName="action:preview" iconPosition="right"/>
+            <c:WorkOrderPhotoInspectionPreview recordId="{!v.objJob.Id}" aura:id="photoCmp"/> 
+        </lightning:accordionSection>
     </lightning:accordionSection>
-   
+    
 </aura:component>

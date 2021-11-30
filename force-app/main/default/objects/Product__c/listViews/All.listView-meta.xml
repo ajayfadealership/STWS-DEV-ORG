@@ -9,5 +9,10 @@
     <columns>M_Model_Variant__c</columns>
     <columns>M_Year__c</columns>
     <filterScope>Everything</filterScope>
+    <filters>
+        <field>Product_Manufacturer__c</field>
+        <operation>equals</operation>
+        <value>Harris</value>
+    </filters>
     <label>All</label>
 </ListView>

@@ -43,7 +43,7 @@
          
          <div class="slds-col slds-size_1-of-1 slds-p-top_medium">
           
-          <lightning:accordionSection name="A" label="View All Comments">
+       <!--   <lightning:accordionSection name="A" label="View All Comments">-->
             <ul class="slds-timeline">
                 <aura:iteration items="{!v.allEvents}" var="item">
                     <li>
@@ -83,6 +83,10 @@
                                   <lightning:icon class="serviceWriterComment" iconName="custom:custom103" alternativeText="alternativeText" />
 
                                  </aura:if>
+                                 <aura:if isTrue="{!item.Type == 'noValue'}">
+                                  <lightning:icon class="serviceWriterComment" iconName="custom:custom103" alternativeText="alternativeText" />
+
+                                 </aura:if>
                                  <aura:if isTrue="{!item.Type == 'Meeting'}">
                                   <lightning:icon class="serviceWriterComment" iconName="action:share_post" alternativeText="alternativeText" />
 
@@ -91,6 +95,14 @@
                                   <lightning:icon class="serviceWriterComment" iconName="standard:event" alternativeText="alternativeText" />
 
                                  </aura:if>
+                                 <aura:if isTrue="{!item.Type == 'Inspection Form Created'}">
+                                  <lightning:icon class="serviceWriterComment" iconName="standard:event" alternativeText="alternativeText" />
+                                  
+                                 </aura:if> <aura:if isTrue="{!item.Type == 'Inspection Form Responded'}">
+                                  <lightning:icon class="serviceWriterComment" iconName="standard:event" alternativeText="alternativeText" />
+                                  
+                                 </aura:if>
+
                                 
                               </div>
                             </div>
@@ -188,7 +200,7 @@
                 </aura:iteration>
                       
             </ul>
-          </lightning:accordionSection>
+         <!-- </lightning:accordionSection>-->  
           
          </div>
          
